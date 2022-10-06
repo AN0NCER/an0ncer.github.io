@@ -235,8 +235,12 @@ b{
     .search > input[type="text"]{
         width: 100%;
     }
+    .anime_info > .anime_main > .anime_cnt > h3,
     .anime_info > .anime_main > .anime_cnt > span{
         width: auto;
+    }
+    .a_time, .a_episodes, .a_score{
+        font-size: 11px;
     }
 }
 
