@@ -137,6 +137,7 @@ background: #f3f3f3;
     font-size: 14px;
     margin-bottom: 7px;
     color: #C4C8CB;
+    width: 295px;
 }
 .anime_info > .anime_main > .anime_cnt > p{
     font-size: 14px;
@@ -233,6 +234,9 @@ b{
     }
     .search > input[type="text"]{
         width: 100%;
+    }
+    .anime_info > .anime_main > .anime_cnt > span{
+        width: auto;
     }
 }
 
