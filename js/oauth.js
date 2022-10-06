@@ -40,7 +40,7 @@ async function GetAccessToken(code) {
     form.append('client_id', client_id);
     form.append('client_secret', client_secret);
     form.append('code', code);
-    form.append('redirect_uri', 'https://localhost:8888/authorized.php');
+    form.append('redirect_uri', 'https://an0ncer.github.io/authorized.html');
     return await new Promise((resolve) => {
         fetch('https://shikimori.one/oauth/token', {
             method: 'POST',
