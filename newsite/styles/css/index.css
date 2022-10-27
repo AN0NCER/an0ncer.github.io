@@ -8,6 +8,9 @@ body {
   background: #282D39;
 }
 
+header {
+  overflow: hidden;
+}
 header .poster {
   position: relative;
   display: flex;
@@ -50,7 +53,7 @@ header .poster .watch .go svg {
 }
 header .poster .obj1, header .poster .obj2 {
   position: absolute;
-  bottom: -5px;
+  bottom: -7px;
 }
 header .poster .obj1 img, header .poster .obj2 img {
   width: 86px;
@@ -69,7 +72,7 @@ header .poster .obj1 .btn_obj svg, header .poster .obj2 .btn_obj svg {
   fill: #fff;
 }
 header .poster .obj1 {
-  left: 0;
+  left: -2px;
 }
 header .poster .obj1 .btn_obj {
   left: 10px;
@@ -81,7 +84,7 @@ header .poster .obj1 .btn_obj svg {
   border-radius: 3px;
 }
 header .poster .obj2 {
-  right: 0;
+  right: -2px;
 }
 header .poster .obj2 .btn_obj {
   right: 10px;

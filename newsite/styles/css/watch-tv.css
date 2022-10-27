@@ -36,11 +36,7 @@
 }
 
 .episodes::-webkit-scrollbar {
-  border-radius: 3px;
-  width: 5px;
-  height: 8px;
-  display: hidden;
-  background-color: #aaa; /* or add it to the track */
+  display: none;
 }
 
 /* Add a thumb */

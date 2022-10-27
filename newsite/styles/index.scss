@@ -10,6 +10,7 @@ body {
 }
 
 header {
+    overflow: hidden;
     .poster {
         position: relative;
         display: flex;
@@ -51,7 +52,7 @@ header {
 
         .obj1, .obj2{
             position: absolute;
-            bottom: -5px;
+            bottom: -7px;
             img{
                 width: 86px;
             }
@@ -71,7 +72,7 @@ header {
         }
 
         .obj1{
-            left: 0;
+            left: -2px;
             .btn_obj{
                 left: 10px;
                 svg{
@@ -83,7 +84,7 @@ header {
             }
         }
         .obj2{
-            right: 0;
+            right: -2px;
             .btn_obj{
                 right: 10px;
                 svg{
