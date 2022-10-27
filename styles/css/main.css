@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #282D39;
+}
+
+.episodes {
+  margin: 10px;
+  overflow: hidden;
+  overflow-x: auto;
+  border-radius: 3px;
+}
+.episodes .value {
+  display: inline-flex;
+  background: #15171E;
+  border-radius: 3px;
+  width: auto;
+  position: relative;
+}
+.episodes .value .episode {
+  margin: 3px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Manrope, serif;
+  font-weight: bold;
+  color: #555657;
+  z-index: 2;
+  position: relative;
+}
+.episodes .value .sel {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: #28B2F5;
+  margin: 3px;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.episodes::-webkit-scrollbar {
+  border-radius: 3px;
+  width: 5px;
+  height: 8px;
+  display: hidden;
+  background-color: #aaa; /* or add it to the track */
+}
+
+/* Add a thumb */
+.episodes::-webkit-scrollbar-thumb {
+  background: #000;
+  border-radius: 3px;
+}
+
+.dubbing_settings {
+  border-radius: 3px;
+  display: inline-flex;
+  flex-direction: column;
+  font-family: Manrope, serif;
+  background: #15171E;
+  margin: 10px;
+}
+.dubbing_settings .dub, .dubbing_settings .sub {
+  display: none;
+  padding: 3px;
+}
+.dubbing_settings .dub .dub_icon, .dubbing_settings .dub .sub_icon, .dubbing_settings .sub .dub_icon, .dubbing_settings .sub .sub_icon {
+  display: flex;
+  align-items: center;
+}
+.dubbing_settings .dub .dub_icon svg, .dubbing_settings .dub .sub_icon svg, .dubbing_settings .sub .dub_icon svg, .dubbing_settings .sub .sub_icon svg {
+  width: 15px;
+  fill: #28B2F5;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+.dubbing_settings .dub .dub_icon .icon_t, .dubbing_settings .dub .sub_icon .icon_t, .dubbing_settings .sub .dub_icon .icon_t, .dubbing_settings .sub .sub_icon .icon_t {
+  font-weight: bold;
+  color: #28B2F5;
+  margin-left: 10px;
+  font-size: 14px;
+}
+.dubbing_settings .dub .value, .dubbing_settings .sub .value {
+  display: flex;
+  position: relative;
+  flex-wrap: wrap;
+  margin-left: 5px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-right: 5px;
+}
+.dubbing_settings .dub .value .val, .dubbing_settings .sub .value .val {
+  padding: 10px;
+  color: #555657;
+  font-size: 13px;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+.dubbing_settings .dub .value .sel_dub, .dubbing_settings .sub .value .sel_dub {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  border-radius: 3px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #28B2F5;
+}
