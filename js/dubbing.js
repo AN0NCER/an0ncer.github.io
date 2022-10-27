@@ -108,17 +108,8 @@ const dubbing = {
       }
     }
   };
-  
-  dubbing.dub.show();
-  dubbing.sub.show();
-  dubbing.dub.add("Name", 900, 12, 12, "#");
-  dubbing.dub.add("Name", 901, 12, 12, "#");
-  dubbing.dub.add("Name", 902, 12, 12, "#");
-  dubbing.dub.add("Name", 903, 12, 12, "#");
-  dubbing.dub.add("Name", 904, 12, 12, "#");
-  dubbing.sub.add("Subtitles", 457, 12, 12, "#");
+
   dubbing.events.onclick((e) => {
-    console.log(e.id);
     dubbing.sel.select(e.id);
   });
   

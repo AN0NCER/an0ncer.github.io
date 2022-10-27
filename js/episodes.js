@@ -54,17 +54,6 @@ const episodes = {
     }
   }
   
-  for(let i = 1; i <= 12; i++){
-    episodes.add(i);
-  }
-  
-  episodes.events.onchangeselect((i)=>{
-    console.log(i);
-  });
-  episodes.events.onclicked((e,i)=>{
-    console.log(i);
-  });
-  
   const width = document.body.clientWidth;
   episodes.select(9, ()=>{}, (anim) => {
     $('.episodes').scrollLeft(parseInt(anim.animations[0].currentValue) + 132 - width);

@@ -16,8 +16,17 @@
                 <div class="sel"></div>
             </div>
         </div>
-        <iframe id="kodik-player" src="//aniqit.com/serial/23932/0404e7569accbbe77f8fa19b64a52f78/720p" width="610"
-            height="370" frameborder="0" allowfullscreen></iframe>
+        <div class="frame-kodik" style="
+        display: flex;
+    ">
+            <iframe id="kodik-player" src="//aniqit.com/serial/23932/0404e7569accbbe77f8fa19b64a52f78/720p?hide_selectors=true" width="610"
+            height="400" scrolling="no" frameborder="0" allowfullscreen style="
+            width: 100%;
+            margin: 10px;
+            display: flex;
+            border-radius: 3px;
+        "></iframe>
+        </div>
         <div class="dubbing_settings">
             <div class="dub">
                 <div class="dub_icon">
@@ -59,21 +68,8 @@
 <script src="/js/dubbing.js"></script>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
-    urlParams.get('shikimori');
+    
 </script>
-<script type="text/javascript">
-    var kodikIframe = document.getElementById("kodik-player").contentWindow;
-
-    console.log(kodikIframe);
-
-    kodikIframe.postMessage(
-        {
-            key: "7ee795cd3e4f7078e7f5d430569d6559",
-            value: {
-                method: "change_episode",
-                episode: 1
-            }
-        }, '*');
-</script>
+<script src="/js/kodik.js"></script>
 
 </html>
