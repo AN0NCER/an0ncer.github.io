@@ -4,7 +4,7 @@ let client_id = "EKv75uNamao_d3uzFREIfo71l6cpyG2IEUIpBxFgcAM";
 let client_secret = "WKDClcJlc3grYpBWDbxqQyAFEW0SquPgrvTdXeAfhds";
 let called_oauth = false;
 
-let oauth_url = "https://shikimori.one/oauth/authorize?client_id=" + client_id + "&redirect_uri=https%3A%2F%2Fan0ncer.github.io%2Fauthorized.html&response_type=code&scope=";
+let oauth_url = "https://shikimori.one/oauth/authorize?client_id=" + client_id + "&redirect_uri=https%3A%2F%2Fan0ncer.github.io%2Fauthorized.html&response_type=code&scope=user_rates+messages+comments+topics+content+clubs+friends+ignores";
 
 $(document).ready(() => {
     if (Cookies.get(cookie_access_token) && Cookies.get(cookie_access_token) != "undefined") {
