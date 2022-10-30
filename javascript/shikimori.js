@@ -182,7 +182,7 @@ const shikimoriUser = {
 
         access: null,
 
-        getUrl: function () { return "https://shikimori.one/oauth/authorize?client_id=" + this.client_id + "&redirect_uri=" + encodeURIComponent(this.redirect_url) + "&response_type=code&scope=user_rates+messages+comments+topics+content+clubs+friends+ignores"; },
+        getUrl: function () { return "https://shikimori.one/oauth/authorize?client_id=" + this.client_id + "&redirect_uri=" + encodeURIComponent(this.redirect_url) + "&response_type=code&scope=user_rates+comments+topics"; },
 
         getBodyAccessToken: function () {
             const form = new FormData();
