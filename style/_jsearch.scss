@@ -1,0 +1,274 @@
+$input_width: 600px;
+$input_height: 45px;
+$input_padding: 0 45px 0 10px;
+
+$bg_color: #1e232f;
+$primary_color: #2eb2f7;
+$a_color: #686a77;
+
+.anime_search {
+  font-family: Inter;
+  width: 100%;
+  max-width: $input_width;
+  position: relative;
+  margin: 30px;
+  .anime_search_input {
+    border: 0px solid $primary_color;
+    border-radius: 3px;
+    .search_input {
+      display: flex;
+      input {
+        z-index: 5;
+        width: 100%;
+        max-width: $input_width;
+        height: $input_height;
+        padding: $input_padding;
+        background: $bg_color;
+        color: #fff;
+        font-size: 14px;
+        border-radius: 3px 0px 0px 3px;
+        border-top: 0px solid $primary_color;
+        border-left: 0px solid $primary_color;
+        border-bottom: 0px solid $primary_color;
+        border-right: none;
+      }
+      input:focus {
+        outline: none;
+        //border: 1px solid $primary_color;
+      }
+      input::placeholder {
+        font-size: 0;
+      }
+      input:focus ~ .version {
+        top: -15px;
+      }
+      input:focus ~ .placeholder {
+        top: -10px;
+        left: 0px;
+        bottom: 100px;
+        color: #686a77;
+        font-size: 11px;
+      }
+      input:focus ~ .icon_search {
+        background-position-x: 20px;
+      }
+      input:not(:placeholder-shown) ~ .icon_search {
+        background-position-x: 20px;
+      }
+      input:not(:placeholder-shown) ~ .version {
+        top: -15px;
+      }
+      input:not(:placeholder-shown) ~ .placeholder {
+        top: -10px;
+        left: 0px;
+        bottom: 100px;
+        color: #686a77;
+        font-size: 11px;
+      }
+      .input {
+        position: relative;
+        display: flex;
+        width: 100%;
+        font-size: 14px;
+      }
+      .placeholder {
+        color: #686a77;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 10px;
+        z-index: 6;
+        display: flex;
+        align-items: center;
+        transition: 0.3s ease-in-out;
+      }
+      .version {
+        position: absolute;
+        text-align: right;
+        width: 100%;
+        z-index: 1;
+        color: #686a77;
+        font-size: 9px;
+        top: 0px;
+        transition: 0.3s ease-in-out;
+      }
+      .icon_search {
+        position: absolute;
+        z-index: 6;
+        top: 0;
+        bottom: 0;
+        right: 10px;
+        width: 16px;
+        background: url(/images/magnifying-glass.png);
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position-x: 0;
+        transition: 0.3s ease-in-out;
+      }
+      .dropdown {
+        min-width: 70px;
+        position: relative;
+        min-height: $input_height;
+        .dropbtn {
+          z-index: 33;
+          height: 100%;
+          border: none;
+          background: $bg_color;
+          color: #fff;
+          font-size: 12px;
+          cursor: pointer;
+          width: 100%;
+          border-radius: 0px 3px 3px 0px;
+          border-top: 0px solid $primary_color;
+          border-right: 0px solid $primary_color;
+          border-bottom: 0px solid $primary_color;
+          border-left: 1px solid $a_color;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: relative;
+          .text {
+            padding-left: 10px;
+          }
+          .icon {
+            padding-left: 10px;
+            padding-right: 20px;
+          }
+          svg {
+            padding: 5px;
+            fill: $a_color;
+            width: 9px;
+          }
+        }
+        .dropbtn:focus{
+          outline: none;
+        }
+        .dropdown-content {
+          display: flex;
+          flex-direction: column;
+          position: absolute;
+          width: 100%;
+          button {
+            z-index: 1;
+            height: $input_height;
+            opacity: 0;
+            background: #1e232f;
+            color: #fff;
+            border: none;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            border-left: 1px solid $a_color;
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.supp{
+  position: absolute;
+  display: flex;
+  background: $bg_color;
+  color: #686a77;
+  height: 34px;
+  align-items: center;
+  border-radius: 3px;
+  top: 0;
+  opacity: 0;
+  .variation{
+    padding: 0 10px;
+    position: relative;
+    font-size: 14px;
+    z-index: 2;
+  }
+  .select{
+    position: absolute;
+    display: flex;
+    height: 100%;
+    background: #2eb2f7;
+    border-radius: 3px;
+    z-index: 1;
+  }
+}
+
+.supp_help{
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  color: #686a77;
+  display: flex;
+  align-items: center;
+  opacity: .5;
+}
+
+.results {
+  width: 100%;
+  display: none;
+  position: absolute;
+  z-index: 1;
+  flex-direction: column;
+  opacity: 0;
+  border-radius: 3px;
+  overflow: hidden;
+  a {
+    text-decoration: none;
+    color: #fff;
+    width: 100%;
+
+    .result_anime {
+      background: #1e232f;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 15px 0;
+      margin: 0;
+      .title {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        width: 100%;
+        margin-left: 10px;
+        font-size: 14px;
+      }
+      .year,
+      .score {
+        margin-right: 10px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        svg {
+          width: 12px;
+          fill: #28B2F5;
+          margin-right: 5px;
+        }
+      }
+      .enter {
+        display: none;
+        font-size: 10px;
+        background: #384157;
+        border-radius: 2px;
+        text-transform: uppercase;
+        transition: 0.5s ease-in-out;
+        padding: 5px 0;
+        margin-right: 0;
+        max-width: 0px;
+        margin-left: 0px;
+      }
+    }
+    .result_select {
+      background: #1f2635;
+      .enter {
+        
+        margin-right: 10px;
+        padding: 5px 5px;
+        max-width: 200px;
+        margin-left: 10px;
+      }
+    }
+  }
+}

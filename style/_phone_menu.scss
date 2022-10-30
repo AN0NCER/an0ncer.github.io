@@ -1,0 +1,45 @@
+.phone_menu{
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    .btn_menu{
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        background: rgba(10, 48, 78, 0.4);
+        border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        //-webkit-backdrop-filter: blur(10px);
+        max-width: 450px;
+        .icon_btn{
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            height: 30px;
+            width: 30px;
+            cursor: pointer;
+            svg{
+                height: 22px;
+                fill: #a0aabb;
+            }
+        }
+        .icon_btn:hover{
+            svg{
+                fill: #28B2F5;
+            }
+        }
+        .selected{
+            svg{
+                fill: #28B2F5;
+            }
+        }
+    }
+}

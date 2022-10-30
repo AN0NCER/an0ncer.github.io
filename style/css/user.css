@@ -1,0 +1,286 @@
+@charset "UTF-8";
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: #282d39;
+}
+
+.account {
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 100px;
+  position: relative;
+}
+.account .user_info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  z-index: 2;
+  position: relative;
+  color: #fff;
+}
+.account .user_info .avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 5px;
+  background: #282d39;
+}
+.account .user_info .avatar img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+.account .user_info .nick_name {
+  font-family: Inter;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 5px;
+}
+.account .position {
+  display: flex;
+}
+.account .btn_log_out {
+  margin-top: 20px;
+  border-radius: 3px;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d42323;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: Inter;
+  font-weight: bold;
+  font-size: 14px;
+}
+.account .btn_log_out svg {
+  width: 20px;
+  fill: #fff;
+  margin-right: 20px;
+}
+
+.account::before {
+  content: " ";
+  border-radius: 5px;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: -20px;
+  right: -20px;
+  bottom: 0;
+  background: #000;
+  transform: translateY(calc(-50% + 20px));
+  background-image: url(https://github.com/AN0NCER/resources/blob/main/51678256_p0.png?raw=true);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.phone_menu {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.phone_menu .btn_menu {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  background: rgba(10, 48, 78, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  max-width: 450px;
+}
+.phone_menu .btn_menu .icon_btn {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+}
+.phone_menu .btn_menu .icon_btn svg {
+  height: 22px;
+  fill: #a0aabb;
+}
+.phone_menu .btn_menu .icon_btn:hover svg {
+  fill: #28B2F5;
+}
+.phone_menu .btn_menu .selected svg {
+  fill: #28B2F5;
+}
+
+.authorization {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Inter, sans-serif;
+}
+.authorization .authorization__wrapper {
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 6px;
+  max-width: 400px;
+}
+.authorization .authorization__wrapper .authorization_logo {
+  display: flex;
+  margin: 20px 0;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: #2eb2f7;
+  width: 50px;
+  height: 50px;
+  border-radius: 3px;
+  font-size: 24px;
+  font-weight: bold;
+}
+.authorization .authorization__wrapper .authorization_title {
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+}
+.authorization .authorization__wrapper .authorization_variation_text {
+  color: #fff;
+  margin: 20px 0 0 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  text-align: center;
+}
+.authorization .authorization__wrapper .authorization_variation_text .variation__line {
+  content: "";
+  height: 1px;
+  width: 60px;
+  background: #fff;
+  position: relative;
+  display: flex;
+  margin: 0 10px;
+}
+.authorization .authorization__wrapper .authorization_variation_duo {
+  display: flex;
+  width: 100%;
+  margin-top: 20px;
+}
+.authorization .authorization__wrapper .authorization_variation_duo .auth__button {
+  margin: 0 5px;
+  cursor: pointer;
+  width: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  border-radius: 5px;
+  position: relative;
+}
+.authorization .authorization__wrapper .authorization_variation_duo .auth__button .button__icon {
+  display: flex;
+  width: 30px;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+.authorization .authorization__wrapper .authorization_variation_duo .auth__button .button__icon svg {
+  height: 20px;
+}
+.authorization .authorization__wrapper .authorization_variation_duo .auth__button .button__text {
+  font-size: 16px;
+  font-weight: bold;
+  width: 100%;
+  margin: 0 10px;
+  display: flex;
+  justify-content: center;
+  color: #000000;
+}
+.authorization .authorization__wrapper .authorization_variation_duo .auth__button .google {
+  color: #525357;
+}
+.authorization .authorization__wrapper .authorization_support_text {
+  color: #8692a0;
+  font-size: 11px;
+  margin-top: 20px;
+}
+.authorization .authorization__wrapper .authorization_support_text a {
+  color: #8692a0;
+}
+.authorization .authorization__wrapper .authorzation_detail {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  font-size: 13px;
+  width: 100%;
+  color: #fff;
+}
+.authorization .authorization__wrapper .authorzation_detail .detail_info {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+.authorization .authorization__wrapper .authorzation_detail .detail_info .detail_icon {
+  background: #222930;
+  width: 25px;
+  height: 25px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.authorization .authorization__wrapper .authorzation_detail .detail_info .detail_icon svg {
+  width: 9px;
+  fill: #fff;
+}
+.authorization .authorization__wrapper .authorzation_detail .detail_info .detail_text {
+  margin-left: 10px;
+  color: #ebf0f0;
+}
+
+.disabled::before {
+  content: "";
+  position: absolute;
+  background: rgba(82, 83, 87, 0.6705882353);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 5px;
+}
+
+.disabled::after {
+  content: "В разработке";
+  position: absolute;
+  top: -10px;
+  right: -5px;
+  font-size: 9px;
+  padding: 5px 10px;
+  background: #f6de51;
+  border-radius: 3px;
+}
+
+@media screen and (max-width: 400px) {
+  .authorization .authorization__wrapper {
+    height: 100%;
+    justify-content: center;
+  }
+}

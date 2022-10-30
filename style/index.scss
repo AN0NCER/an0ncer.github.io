@@ -1,0 +1,42 @@
+body{
+    background: #282d39;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    svg{
+        width: 18px;
+        fill: #fff;
+    }
+}
+
+.block_anim{
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    .block_header{
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        font-family: Inter;
+        margin-bottom: 20px;
+        .block_title{
+            color: #fff;
+            font-size: 14px;
+        }
+        .block_more{
+            color: #28B2F5;
+            font-size: 11px;
+        }
+    }
+}
+
+main{
+    padding-top: 100px;
+}
+
+@import './jsearch';
+@import './phone_menu';
+@import './cards';
