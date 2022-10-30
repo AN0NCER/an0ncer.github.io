@@ -43,7 +43,7 @@ $(document).ready(async () => {
         // Optional parameters
         direction: 'horizontal',
         //slidesPerView: 1,
-        loop: true,
+        loop: false,
         effect: 'slide',
         pagination: {
             el: '.swiper-pagination',

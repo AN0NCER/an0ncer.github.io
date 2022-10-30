@@ -178,7 +178,7 @@ const shikimoriUser = {
         base_url: "https://shikimori.one/oauth/token",
         client_id: "EKv75uNamao_d3uzFREIfo71l6cpyG2IEUIpBxFgcAM",
         client_secret: "WKDClcJlc3grYpBWDbxqQyAFEW0SquPgrvTdXeAfhds",
-        redirect_url: "https://an0ncer.github.io/authorized.html",
+        redirect_url: "https://an0ncer.github.io/user.html",
 
         access: null,
 
