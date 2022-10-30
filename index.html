@@ -31,19 +31,8 @@
     <div class="unselectable" style="display: flex;">
         <div class="swiper">
             <!-- Additional required wrapper -->
-            <div class="swiper-wrapper">
+            <div class="swiper-wrapper" id="slide-engine">
                 <!-- Slides -->
-                <div class="swiper-slide">
-                    <img src="https://img.rl0.ru/afisha/e630x315p0x0f1260x720q85i/s2.afisha.ru/mediastorage/89/90/9a6f49ac22c042c6b13b44f99089.jpeg"
-                        alt="">
-                </div>
-                <div class="swiper-slide">
-                    <img src="https://img.championat.com/s/735x490/news/big/i/c/vyshel-epichnyj-trejler-anime-chelovek-benzopila-k-skoroj-premere-shou_16635894302145291245.jpg"
-                        alt="">
-                </div>
-                <div class="swiper-slide">
-                    <img src="https://i1.sndcdn.com/artworks-YcuktyUlKehSXWz1-uoDVjA-t500x500.jpg" alt="">
-                </div>
             </div>
             <!-- Add Pagination -->
             <div class="swiper-pagination"></div>
@@ -94,11 +83,12 @@
     <script src="/javascript/jmenu.js"></script>
     <script src="/javascript/shikimori.js"></script>
     <script src="/javascript/aspjknml.js"></script>
+    <script src="/javascript/engine_sw.js"></script>
 
     <style>
         .swiper {
             width: 100%;
-            height: 250px;
+            height: 300px;
             background: #020B26;
             margin-left: 20px;
             margin-right: 20px;
@@ -137,18 +127,6 @@
         }
     </style>
     <script>
-        const swiper = new Swiper('.swiper', {
-            // Optional parameters
-            direction: 'horizontal',
-            //slidesPerView: 1,
-            loop: true,
-            effect: 'slide',
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: false,
-            },
-        });
-
         new Swiper('.swiper_anim', {
             // Optional parameters
             direction: 'horizontal',
