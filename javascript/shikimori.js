@@ -246,6 +246,13 @@ const shikimoriApi = {
             let response = await request.fetch();
             event(response);
             return response;
+        },
+        roles: async function(id, event=()=>{}){
+            let url = this.url + '/' + id + '/roles';
+            let request = shikimoriFetch("GET", url);
+            let response = await request.fetch();
+            event(response);
+            return response;
         }
     },
     Users: {

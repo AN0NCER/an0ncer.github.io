@@ -1,0 +1,356 @@
+body {
+  background: #282d39;
+  overflow-x: hidden;
+}
+
+.mobile-header {
+  height: 528px;
+  position: relative;
+}
+.mobile-header .bg-paralax-img {
+  position: fixed;
+  width: 100%;
+  height: inherit;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 1;
+}
+.mobile-header .bg-paralax-img::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+.mobile-header .relative-control {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+}
+.mobile-header .relative-control .btn_back {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  cursor: pointer;
+}
+.mobile-header .relative-control .btn_save {
+  position: absolute;
+  right: 20px;
+  top: 0;
+  cursor: pointer;
+}
+.mobile-header .relative-control .btn_love {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+.mobile-header .relative-control .btn_love .btn_with_object .obj {
+  transform: rotateY(180deg);
+}
+.mobile-header .relative-control .btn_love .btn_with_object .btn {
+  bottom: 5px;
+  left: 5px;
+}
+.mobile-header .relative-control .btn_share {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.mobile-header .relative-control .btn_share .btn_with_object .btn {
+  bottom: 5px;
+  right: 5px;
+}
+
+.btn_glass_abs {
+  width: 35px;
+  height: 35px;
+  background: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn_glass_abs svg {
+  height: 15px;
+  fill: #FFFFFF;
+}
+
+.btn_with_object {
+  position: relative;
+}
+.btn_with_object .obj {
+  width: 101px;
+  height: 101px;
+}
+.btn_with_object .btn {
+  width: 59px;
+  height: 59px;
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.btn_with_object .btn svg {
+  fill: #fff;
+  width: 20px;
+}
+
+.btn_go_to_player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn_go_to_player .btn_play {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
+  cursor: pointer;
+}
+.btn_go_to_player .btn_play svg {
+  width: 30px;
+  transform: translateX(4px) translateY(1px);
+}
+
+main {
+  background: #282d39;
+  position: relative;
+  z-index: 4;
+  padding-top: 20px;
+  font-family: "Manrope";
+}
+main .title-with-raiting {
+  margin-left: 20px;
+  margin-right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+main .title-with-raiting .title .russian {
+  color: #fff;
+  font-weight: bold;
+  font-size: 18px;
+}
+main .title-with-raiting .title .name {
+  color: #fff;
+  opacity: 0.5;
+  font-size: 11px;
+}
+main .title-with-raiting .raiting {
+  display: flex;
+  color: #fff;
+  font-weight: bold;
+  align-items: center;
+}
+main .title-with-raiting .raiting svg {
+  height: 14px;
+  margin-right: 10px;
+  fill: #2487F1;
+}
+main .janres {
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-right: 20px;
+  display: flex;
+}
+main .janres .val {
+  padding: 4px 10px;
+  border: 1px solid #2487F1;
+  border-radius: 16px;
+  font-size: 12px;
+  color: #fff;
+  margin-right: 10px;
+  transition: 0.3s ease-in-out;
+}
+main .janres .val:hover {
+  background: #2487F1;
+}
+main .description {
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+main .description .title {
+  color: #fff;
+  font-weight: bold;
+  font-size: 18px;
+}
+main .description .content {
+  margin-top: 10px;
+  color: #fff;
+  opacity: 0.6;
+  font-size: 14px;
+  line-height: 150%;
+}
+main .description .content-hide {
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+main .description .btn-description {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2487F1;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 20px;
+  cursor: pointer;
+}
+main .status-witch-pg {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+  background: rgba(21, 23, 30, 0.3);
+  border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
+  height: 40px;
+  align-items: center;
+}
+
+.video-player {
+  margin-top: 20px;
+}
+.video-player .frame-kodik {
+  display: flex;
+}
+.video-player .frame-kodik iframe {
+  width: 100%;
+  display: flex;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.dubbing_settings {
+  border-radius: 3px;
+  display: inline-flex;
+  flex-direction: column;
+  font-family: Manrope, serif;
+  background: #15171E;
+  margin-top: 10px;
+  margin-left: 17px;
+  margin-right: 17px;
+}
+.dubbing_settings .dub, .dubbing_settings .sub {
+  display: none;
+  padding: 3px;
+}
+.dubbing_settings .dub .dub_icon, .dubbing_settings .dub .sub_icon, .dubbing_settings .sub .dub_icon, .dubbing_settings .sub .sub_icon {
+  display: flex;
+  align-items: center;
+}
+.dubbing_settings .dub .dub_icon svg, .dubbing_settings .dub .sub_icon svg, .dubbing_settings .sub .dub_icon svg, .dubbing_settings .sub .sub_icon svg {
+  width: 15px;
+  fill: #28B2F5;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+.dubbing_settings .dub .dub_icon .icon_t, .dubbing_settings .dub .sub_icon .icon_t, .dubbing_settings .sub .dub_icon .icon_t, .dubbing_settings .sub .sub_icon .icon_t {
+  font-weight: bold;
+  color: #28B2F5;
+  margin-left: 10px;
+  font-size: 14px;
+}
+.dubbing_settings .dub .value, .dubbing_settings .sub .value {
+  display: flex;
+  position: relative;
+  flex-wrap: wrap;
+  margin-left: 5px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-right: 5px;
+}
+.dubbing_settings .dub .value .val, .dubbing_settings .sub .value .val {
+  padding: 10px;
+  color: #555657;
+  font-size: 13px;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+.dubbing_settings .dub .value .sel_dub, .dubbing_settings .sub .value .sel_dub {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  border-radius: 3px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #28B2F5;
+}
+
+.episodes {
+  margin-left: 17px;
+  margin-right: 17px;
+  overflow: hidden;
+  overflow-x: auto;
+  border-radius: 3px;
+}
+.episodes .value {
+  display: inline-flex;
+  background: #15171E;
+  border-radius: 3px;
+  width: auto;
+  position: relative;
+}
+.episodes .value .episode {
+  margin: 3px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Manrope, serif;
+  font-weight: bold;
+  color: #555657;
+  z-index: 2;
+  position: relative;
+}
+.episodes .value .sel {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: #28B2F5;
+  margin: 3px;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.episodes::-webkit-scrollbar {
+  display: none;
+}
+
+/* Add a thumb */
+.episodes::-webkit-scrollbar-thumb {
+  background: #28B2F5;
+  border-radius: 3px;
+}
