@@ -6,13 +6,33 @@ body {
 }
 
 header {
+  width: 100%;
+  height: 60px;
+  background: #1E2530;
   display: flex;
-  justify-content: space-between;
-  margin: 20px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-bottom: 20px;
 }
-header svg {
-  width: 18px;
-  fill: #fff;
+header .header-content {
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+header .header-content span {
+  font-family: "Inter";
+  font-weight: bold;
+  color: #fff;
+  font-size: 15px;
+}
+header .header-content div {
+  cursor: pointer;
+}
+header .header-content div svg {
+  height: 20px;
+  fill: #D5D5D7;
 }
 
 .block_anim {

@@ -1,4 +1,4 @@
-let url = "";
+/*let url = "";
 
 let dataLocal = {
     kodik_seasson: 1,
@@ -104,3 +104,10 @@ function Visual(response) {
 function SetPlayer() {
     $('#kodik-player').attr('src', url + '?hide_selectors=true&season=' + dataLocal.kodik_seasson + '&episode=' + dataLocal.kodik_episode);
 }
+*/
+
+shikimoriUser.Events.oninit((e)=>{
+    console.log(shikimoriUser);
+});
+
+shikimoriUser.init();

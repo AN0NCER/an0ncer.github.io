@@ -1,3 +1,38 @@
+const TemplateShikimori = {
+    Headers: {
+        base: () => {
+            return {
+                "User-Agent": "Tunime"
+            }
+        },
+
+        bearer: () => {
+            return {
+                "User-Agent": "Tunime",
+                "Authorization": `${usr.Oauth.access.token_type} ${usr.Oauth.access.access_token}` 
+            }
+        }
+    },
+
+    Body: {
+        Access: () => {
+            const form = new FormData();
+            form.append('grant_type', 'authorization_code');
+            form.append('client_id', usr.Oauth.auth_url.client_id);
+            form.append('client_secret', usr.Oauth.auth_url.client_secret);
+            form.append('redirect_uri', usr.Oauth.auth_url.redirect_uri);
+            return form;
+        },
+        Refresh: () => {
+            const form = new FormData();
+            form.append('grant_type', 'refresh_token');
+            form.append('client_id', usr.Oauth.auth_url.client_id);
+            form.append('client_secret', usr.Oauth.auth_url.client_secret);
+            form.append('refresh_token', usr.Oauth.access.refresh_token);
+            return form;
+        }
+    }
+}
 function shikimoriFetch(method = "GET", url = "", headers = {}, body = "") {
     return {
         method: method,
@@ -152,13 +187,6 @@ const shikimoriUser = {
         return code;
     },
 
-    loadScripts: (src) => {
-        var s = document.createElement("script");
-        s.type = "text/javascript";
-        s.src = src;
-        $("head").append(s);
-    },
-
     Storage: {
         token: "access_token",
         Set: function (value, name = this.token) {
@@ -179,10 +207,11 @@ const shikimoriUser = {
         client_id: "EKv75uNamao_d3uzFREIfo71l6cpyG2IEUIpBxFgcAM",
         client_secret: "WKDClcJlc3grYpBWDbxqQyAFEW0SquPgrvTdXeAfhds",
         redirect_url: "https://an0ncer.github.io/user.html",
+        scope: 'user_rates+messages+comments+topics+clubs+friends+ignores',
 
         access: null,
 
-        getUrl: function () { return "https://shikimori.one/oauth/authorize?client_id=" + this.client_id + "&redirect_uri=" + encodeURIComponent(this.redirect_url) + "&response_type=code&scope=user_rates+comments+topics"; },
+        getUrl: function () { return "https://shikimori.one/oauth/authorize?client_id=" + this.client_id + "&redirect_uri=" + encodeURIComponent(this.redirect_url) + "&response_type=code&scope=" + this.scope; },
 
         getBodyAccessToken: function () {
             const form = new FormData();
@@ -231,23 +260,23 @@ const shikimoriApi = {
                 q += '?' + new URLSearchParams(query).toString();
             }
             let url = this.url + q;
-            let request = shikimoriFetch("GET", url, { "User-Agent": "Tunime"});
-            if(shikimoriUser.Oauth.access != null){
-                request = shikimoriFetch("GET", url, { "User-Agent": "Tunime", "Authorization": `${shikimoriUser.Oauth.access.token_type} ${shikimoriUser.Oauth.access.access_token}`});
+            let request = shikimoriFetch("GET", url, { "User-Agent": "Tunime" });
+            if (shikimoriUser.Oauth.access != null) {
+                request = shikimoriFetch("GET", url, { "User-Agent": "Tunime", "Authorization": `${shikimoriUser.Oauth.access.token_type} ${shikimoriUser.Oauth.access.access_token}` });
 
             }
             let response = await request.fetch();
             event(response);
             return response;
         },
-        id: async function (id, event=()=>{}){
+        id: async function (id, event = () => { }) {
             let url = this.url + '/' + id;
             let request = shikimoriFetch("GET", url);
             let response = await request.fetch();
             event(response);
             return response;
         },
-        roles: async function(id, event=()=>{}){
+        roles: async function (id, event = () => { }) {
             let url = this.url + '/' + id + '/roles';
             let request = shikimoriFetch("GET", url);
             let response = await request.fetch();
@@ -290,9 +319,9 @@ const shikimoriApi = {
         },
 
         whoami: async function (event = () => { }) {
-            if (shikimoriUser.authorized) {
+            if (usr.authorized) {
                 let url = this.url + '/whoami'
-                let request = shikimoriFetch("GET", url, { "User-Agent": "Tunime", "Authorization": `${shikimoriUser.Oauth.access.token_type} ${shikimoriUser.Oauth.access.access_token}` });
+                let request = shikimoriFetch("GET", url, TemplateShikimori.Headers.bearer());
                 let response = await request.fetch();
                 event(response);
                 return response;
@@ -400,4 +429,134 @@ const shikimoriApi = {
             return response;
         },
     }
+}
+let usr = {
+    authorized: false,
+    isteste: false,
+
+    Authorizate: async function (code) {
+        let request = shikimoriFetch("POST", this.Oauth.base_url, TemplateShikimori.Headers.base(), TemplateShikimori.Body.Access());
+        request.body.append('code', code);
+        let response = await request.fetch();
+        if (response.failed) {
+            return;
+        }
+        this.Oauth.access = response;
+        this.Storage.Set(response);
+        this.authorized = true;
+        this.Events.Onauthorized();
+    },
+
+    Refresh: async function () {
+        let request = shikimoriFetch("POST", this.Oauth.base_url, TemplateShikimori.Headers.base(), TemplateShikimori.Body.Refresh());
+        let response = await request.fetch();
+        if (response.failed) {
+            return;
+        }
+        this.Oauth.access = response;
+        this.Storage.Set(response);
+        this.authorized = true;
+        this.Events.Onrefresh();
+    },
+
+    Oauth: {
+        access: null,
+        auth_url: {
+            client_id: 'EKv75uNamao_d3uzFREIfo71l6cpyG2IEUIpBxFgcAM',
+            client_secret: 'WKDClcJlc3grYpBWDbxqQyAFEW0SquPgrvTdXeAfhds',
+            redirect_uri: 'https://an0ncer.github.io/user.html',
+            response_type: 'code',
+            scope: "user_rates+messages+comments+topics+clubs+friends+ignores"
+        },
+        base_url: "https://shikimori.one/oauth/token",
+
+        GetUrl: function () {
+            return "https://shikimori.one/oauth/authorize?client_id=" + this.auth_url.client_id + "&redirect_uri=" + encodeURIComponent(this.auth_url.redirect_uri) + "&response_type=" + this.auth_url.response_type + "&scope=" + this.auth_url.scope;
+        }
+    },
+
+    Storage: {
+        keys: {
+            access: 'access_token',
+            whoami: 'access_whoami'
+        },
+
+        Get: function (key = this.keys.access) {
+            return JSON.parse(localStorage.getItem(key));
+        },
+
+        Set: function (value, key = this.keys.access) {
+            if (typeof (value) == 'object') {
+                value = JSON.stringify(value);
+            }
+            localStorage.setItem(key, value);
+        },
+
+        Clear: function () {
+            for (let val in this.keys) {
+                localStorage.removeItem(this.keys[val]);
+            }
+        },
+
+        Remove: function (key = this.keys.access) {
+            localStorage.removeItem(key);
+        }
+
+    },
+
+    Events: {
+        refresh: [],
+        Onrefresh: function (e) {
+            if (typeof (e) == 'function') {
+                this.refresh.push(e);
+                return;
+            }
+            if (this.refresh.length != 0) {
+                this.refresh.forEach(func => func(e));
+                return;
+            }
+        },
+        authorized: [],
+        Onauthorized: function (e) {
+            if (typeof (e) == 'function') {
+                this.authorized.push(e);
+                return;
+            }
+            if (this.authorized.length != 0) {
+                this.authorized.forEach(func => func(e));
+                return;
+            }
+        }
+    },
+
+    expires_in: function (access = this.Oauth.access) {
+        if (access) {
+            if (new Date((access.created_at + access.expires_in) * 1000) > new Date()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else return false;
+    },
+
+    test_on: function () {
+        this.Oauth.auth_url.client_id = "bce7ad35b631293ff006be882496b29171792c8839b5094115268da7a97ca34c";
+        this.Oauth.auth_url.client_secret = "811459eada36b14ff0cf0cc353f8162e72a7d6e6c7930b647a5c587d1beffe68";
+        this.Oauth.auth_url.redirect_uri = 'urn:ietf:wg:oauth:2.0:oob';
+        this.isteste = true;
+    }
+}
+
+usr.test_on();
+
+async function Main(event = () => { }) {
+    if (!usr.authorized) {
+        if (usr.Storage.Get()) {
+            usr.Oauth.access = usr.Storage.Get();
+            if (usr.expires_in()) {
+                await usr.Refresh();
+            }
+        }
+    }
+    event(usr.authorized);
 }
