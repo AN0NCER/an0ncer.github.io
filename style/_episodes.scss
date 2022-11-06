@@ -1,22 +1,25 @@
-$margin_episodes: 17px;
+$margin: 20px 20px 10px 20px;
+$w: 55px;
+$h: $w + 15px;
+$bg_color: #15171E;
+$pr_color: #5FBEF3;
 
 .episodes{
-  margin-left: $margin_episodes;
-  margin-right: $margin_episodes;
+  margin: $margin;
   overflow: hidden;
   overflow-x: auto;
   border-radius:3px;
   
   .value{
     display: inline-flex;
-    background: #15171E;
+    background: $bg_color;
     border-radius:3px;
     width: auto;
     position: relative;
     .episode{
       margin: 3px;
-      width: 40px;
-      height: 40px;
+      width: $w;
+      height: $h;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -25,12 +28,17 @@ $margin_episodes: 17px;
       color: #555657;
       z-index: 2;
       position: relative;
+      flex-direction: column;
+      .ep-name{
+        font-size: 11px;
+        margin-top: 5px;
+      }
     }
     .sel{
       position: absolute;
-      width: 40px;
-      height: 40px;
-      background: #28B2F5;
+      width: $w;
+      height: $h;
+      background: $pr_color;
       margin: 3px;
       border-radius: 3px;
       z-index: 1;
@@ -38,11 +46,15 @@ $margin_episodes: 17px;
   }
 }
 .episodes::-webkit-scrollbar {
-  display: none;
+  border-radius:3px;
+  width: 5px;
+  height: 8px;
+  display: hidden;
+  background-color: #aaa; /* or add it to the track */
 }
 
 /* Add a thumb */
 .episodes::-webkit-scrollbar-thumb {
-  background: #28B2F5;
+  background: #000;
   border-radius:3px;
 }

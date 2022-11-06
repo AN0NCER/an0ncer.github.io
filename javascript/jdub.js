@@ -1,115 +1,183 @@
 const dubbing = {
-    dub: {
-      dom: ".dubbing_settings > .dub",
-      element: $(".dubbing_settings > .dub"),
-      show: function () {
-        this.element.css("display", "flex");
+
+  list_enabled: false,
+  
+  dub:{
+      name: 'DUB',
+      list:{},
+      example: {
+          id: 0,
+          title: '',
+          episodes_count: 0,
+          last_episode: 0,
+          link: ''
       },
-      add: function (title, id, ec, le, link) {
-        let html = `<div class="val" data-id="${id}" data-episodes-count="${ec}" data-last-episode="${le}" data-link="${link}" data-type="dub">${title}</div>`;
-        $(this.dom + ">.value").append(html);
-        $(`.val[data-id="${id}"]`).click((h) => {
-          let el = $(h.currentTarget);
-          let id = el.data("id");
-          let ec = el.data("episodes-count");
-          let le = el.data("last-episode");
-          let link = el.data("link");
-          dubbing.events.onclick({ id, ec, le, link });
-        });
-      }
-    },
-    sub: {
-      dom: ".dubbing_settings > .sub",
-      element: $(".dubbing_settings > .sub"),
-      show: function () {
-        this.element.css("display", "flex");
+      enable: true,
+      length: 0,
+      select_id: 0,
+
+      Add: function(data = this.example){
+          this.list[data.id] = data;
+          $('.dub-suluction-dub').append(`<div class="val" data-id="${data.id}">${data.title}</div>`);
+          $('.dub-suluction-dub > .val[data-id="'+data.id+'"]').click(()=>this.onclick(this.list[data.id]));
+          this.length += 1;
+          dubbing.events.addcount(this);
+          this.AddPopular(data.id);
+          // console.log(this.list[data.id]);
+          // delete this.list[data.id];
+          // console.log(this.list);
       },
-      add: function (title, id, ec, le, link) {
-        let html = `<div class="val" data-id="${id}" data-episodes-count="${ec}" data-last-episode="${le}" data-link="${link}" data-type="sub">${title}</div>`;
-        $(this.dom + ">.value").append(html);
-        $(`.val[data-id="${id}"]`).click((h) => {
-          let el = $(h.currentTarget);
-          let id = el.data("id");
-          let ec = el.data("episodes-count");
-          let le = el.data("last-episode");
-          let link = el.data("link");
-          dubbing.events.onclick({ id, ec, le, link });
-        });
-      }
-    },
-    events: {
-      click: [],
-      onclick: function (event) {
-        if (typeof event == "function") {
-          this.click.push(event);
-          return;
-        }
-        if (this.click) {
-          this.click.forEach((value) => value(event));
-          return;
-        }
-      }
-    },
-    sel: {
-      dom: $(`.sub > .value > .sel_dub`),
-      selected: {
-        type: "",
-        element: "",
-        id: ""
+
+      Select: function(id = 0){
+          if(this.list[id]){
+              this.select_id = id;
+              $('.select-dub > span').text(this.list[id].title);
+              return this.list[id];
+          }
       },
-      select: function (id) {
-        let element = $(`.val[data-id="${id}"]`);
-        if(element.length == 0){
-          return;
-        }
-        let type = element.data('type');
-        if(type != this.selected.type && this.selected.type){
-          anime({
-            targets: `.${this.selected.type} > .value .sel_dub`,
-            width: 0,
-            duration: 200,
-            easing: 'cubicBezier(.5, .05, .1, .3)'
-          });
-          anime({
-            targets: `.val[data-id="${this.selected.id}"]`,
-            color: '#555657',
-            duration: 200,
-            easing: 'cubicBezier(.5, .05, .1, .3)'
-          });
-        }
-        if(type == this.selected.type){
-          anime({
-            targets: `.val[data-id="${this.selected.id}"]`,
-            color: '#555657',
-            duration: 200,
-            easing: 'cubicBezier(.5, .05, .1, .3)'
-          });
-        }
-          anime({
-            targets: `.${type} > .value .sel_dub`,
-            width: element.outerWidth(),
-            height: element.outerHeight(),
-            duration: 200,
-            left: element.position().left,
-            top: element.position().top,
-            easing: 'cubicBezier(.5, .05, .1, .3)'
-          });
-          anime({
-            targets: `.val[data-id="${id}"]`,
-            color: '#ffffff',
-            duration: 200,
-            easing: 'cubicBezier(.5, .05, .1, .3)'
-          });
-          this.selected = {
-            type: type,
-            element: element,
-            id: id
+
+      Get: function(id = this.select_id){
+          if(this.list[id]){
+              return this.list[id];
+          }
+      },
+
+      onclick: function(data){
+          if(data){
+              this.Select(data.id);
+              dubbing.Hide();
+          }
+      },
+
+      AddPopular: function(id){
+          if(this.length < 5){
+              $('.more-dub-select').append(`<div class="val" data-id="${this.list[id].id}">${this.list[id].title}</div>`);
+              $('.more-dub-select > .val[data-id="'+id+'"]').click(()=>this.onclick(this.list[id]));
           }
       }
-    }
-  };
+  },
+
+  sub: {
+      name: 'SUB',
+      list:{},
+      example: {
+          id: 0,
+          title: '',
+          episodes_count: 0,
+          last_episode: 0,
+          link: ''
+      },
+      enable: false,
+      length: 0,
+      select_id: 0,
+
+      Add: function(data = this.example){
+          this.list[data.id] = data;
+          $('.dub-suluction-sub').append(`<div class="val" data-id="${data.id}">${data.title}</div>`);
+          $('.dub-suluction-sub > .val[data-id="'+data.id+'"]').click(()=>this.onclick(this.list[data.id]));
+          this.length += 1;
+          dubbing.events.addcount(this);
+          this.AddPopular(data.id);
+      },
+
+      AddPopular: function(id){
+          if(this.length < 5){
+              $('.more-sub-select').append(`<div class="val" data-id="${this.list[id].id}">${this.list[id].title}</div>`);
+              $('.more-sub-select > .val[data-id="'+id+'"]').click(()=>this.onclick(this.list[id]));
+          }
+      },
+
+      Select: function(id = 0){
+          if(this.list[id]){
+              this.select_id = id;
+              $('.select-sub > span').text(this.list[id].title);
+              return this.list[id];
+          }
+      },
+
+      Get: function(id = this.select_id){
+          if(this.list[id]){
+              return this.list[id];
+          }
+      },
+
+      onclick: function(data){
+          if(data){
+              this.Select(data.id);
+              dubbing.Hide();
+          }
+      },
+  },
+
+  events:{
+      addcount: function(object){
+          if(object){
+              if(object.name && object.name == 'DUB'){
+                  $('.dub-count').text(object.length);
+              }else if(object.name && object.name == 'SUB'){
+                  $('.sub-count').text(object.length);
+              }
+          }
+      }
+  },
+
+  Show: function(){
+      let c = 'dub-selection-hide';
+      if(this.dub.enable){
+          if(!this.list_enabled){
+              $('.dub-suluction-dub').removeClass(c);
+          }else{
+              $('.dub-suluction-dub').addClass(c);
+          }
+          this.list_enabled = !this.list_enabled;
+      }else if(this.sub.enable){
+          if(!this.list_enabled){
+              $('.dub-suluction-sub').removeClass(c);
+          }else{
+              $('.dub-suluction-sub').addClass(c);
+          }
+          this.list_enabled = !this.list_enabled;
+      }
+  },
+
+  Hide: function(){
+      if(this.list_enabled){
+          this.Show();
+      }
+  },
   
-  dubbing.events.onclick((e) => {
-    dubbing.sel.select(e.id);
-  });
-  
+  Change: function(name){
+      if(this.list_enabled){
+          this.Show();
+      }
+      if(name == 'DUB' && this.dub.enable == false){
+          $('.sub-selection').removeClass('dub-sel-selected');
+          $('.dub-selection').addClass('dub-sel-selected');
+          $('.content-selection-dub').removeClass('content-dub-hide');
+          $('.content-selection-sub').addClass('content-dub-hide');
+          this.dub.enable = true;
+          this.sub.enable = false;
+      }else if(name == 'SUB' && this.sub.enable == false){
+          $('.dub-selection').removeClass('dub-sel-selected');
+          $('.sub-selection').addClass('dub-sel-selected');
+          $('.content-selection-dub').addClass('content-dub-hide');
+          $('.content-selection-sub').removeClass('content-dub-hide');
+          this.dub.enable = false;
+          this.sub.enable = true;
+      }
+  }
+}
+
+$('.select-dub').click(()=>{
+  dubbing.Show();
+});
+$('.select-sub').click(()=>{
+  dubbing.Show();
+})
+
+$('.sub-selection').click(()=>{
+  dubbing.Change('SUB');
+});
+$('.dub-selection').click(()=>{
+  dubbing.Change('DUB');
+});
