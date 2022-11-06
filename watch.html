@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Название аниме</title>
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <link rel="stylesheet" href="/style/css/main.css">
@@ -143,7 +143,7 @@
             <div class="pg pg-rating">PG-13</div>
         </div>
 
-        <div class="block-title">
+        <div class="block-title title-gallery">
             <div class="title">Галерея</div>
         </div>
 
@@ -203,7 +203,7 @@
 
         
 
-        <div class="block-title">
+        <div class="block-title title-hero">
             <div class="title">Главные герои</div>
         </div>
 
@@ -227,7 +227,7 @@
             </div> -->
         </div>
 
-        <div class="block-title">
+        <div class="block-title title-similiar">
             <div class="title">Похожие</div>
         </div>
 
@@ -350,199 +350,6 @@
     <script src="/javascript/shikimori.js"></script>
     <script src="/javascript/aspjknml.js"></script>
     <script src="/javascript/pages/watch.js"></script>
-
-    <style>.dubbing-template {
-        max-width: 500px;
-        width: 100%;
-        background: #1E2530;
-        font-family: Inter;
-        border-radius: 5px;
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-
-    .dubbing-template .titles-selection-dub {
-        display: flex;
-        width: 100%;
-    }
-
-    .dubbing-template .titles-selection-dub .dub-selection,
-    .dubbing-template .titles-selection-dub .sub-selection {
-        background: rgba(21, 23, 30, 0.5);
-        display: flex;
-        width: 100%;
-        padding-top: 10px;
-        padding-left: 10px;
-        padding-bottom: 10px;
-        align-items: center;
-    }
-
-    .dubbing-template .titles-selection-dub .dub-selection .dub-icon-tit,
-    .dubbing-template .titles-selection-dub .sub-selection .dub-icon-tit {
-        display: flex;
-        align-items: center;
-        font-weight: bold;
-        color: #15A7EE;
-        opacity: 0.3;
-    }
-
-    .dubbing-template .titles-selection-dub .dub-selection .dub-icon-tit svg,
-    .dubbing-template .titles-selection-dub .sub-selection .dub-icon-tit svg {
-        height: 25px;
-        fill: #15A7EE;
-        margin-right: 10px;
-        opacity: 0.3;
-    }
-
-    .dubbing-template .titles-selection-dub .dub-selection .dub-count,
-    .dubbing-template .titles-selection-dub .dub-selection .sub-count,
-    .dubbing-template .titles-selection-dub .sub-selection .dub-count,
-    .dubbing-template .titles-selection-dub .sub-selection .sub-count {
-        margin-left: 10px;
-        color: #fff;
-        opacity: 0.3;
-    }
-
-    .dubbing-template .titles-selection-dub .dub-sel-selected {
-        background: #1E2530;
-    }
-
-    .dubbing-template .titles-selection-dub .dub-sel-selected .dub-icon-tit {
-        opacity: 1;
-    }
-
-    .dubbing-template .titles-selection-dub .dub-sel-selected .dub-icon-tit svg {
-        opacity: 1;
-    }
-
-    .dubbing-template .titles-selection-dub .dub-sel-selected .dub-count {
-        margin-left: 10px;
-        color: #fff;
-        opacity: 0.3;
-    }
-
-    .dubbing-template .content-selection-dub,
-    .dubbing-template .content-selection-sub {
-        display: flex;
-        flex-direction: column;
-        padding-bottom: 10px;
-        margin-top: 10px;
-        position: relative;
-    }
-
-    .dubbing-template .content-selection-dub .select-dub,
-    .dubbing-template .content-selection-dub .select-sub,
-    .dubbing-template .content-selection-sub .select-dub,
-    .dubbing-template .content-selection-sub .select-sub {
-        width: 100%;
-        margin-top: 10px;
-        margin-left: 10px;
-        margin-right: 10px;
-        height: 35px;
-        border-radius: 3px;
-        background: #15A7EE;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-    }
-
-    .dubbing-template .content-selection-dub .select-dub svg,
-    .dubbing-template .content-selection-dub .select-sub svg,
-    .dubbing-template .content-selection-sub .select-dub svg,
-    .dubbing-template .content-selection-sub .select-sub svg {
-        height: 8px;
-        fill: #fff;
-        position: absolute;
-        right: 20px;
-    }
-
-    .dubbing-template .content-selection-dub .more-dub-select,
-    .dubbing-template .content-selection-dub .more-sub-select,
-    .dubbing-template .content-selection-sub .more-dub-select,
-    .dubbing-template .content-selection-sub .more-sub-select {
-        display: flex;
-        margin-right: 10px;
-        margin-left: 10px;
-        margin-top: 10px;
-        overflow-x: auto;
-        height: 60px;
-        align-items: center;
-    }
-
-    .dubbing-template .content-selection-dub .more-dub-select .val,
-    .dubbing-template .content-selection-dub .more-sub-select .val,
-    .dubbing-template .content-selection-sub .more-dub-select .val,
-    .dubbing-template .content-selection-sub .more-sub-select .val {
-        color: #fff;
-        opacity: 0.5;
-        margin-right: 10px;
-        padding-left: 10px;
-        padding-right: 10px;
-        white-space: nowrap;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .dubbing-template .content-selection-dub .more-dub-select::-webkit-scrollbar,
-    .dubbing-template .content-selection-dub .more-sub-select::-webkit-scrollbar,
-    .dubbing-template .content-selection-sub .more-dub-select::-webkit-scrollbar,
-    .dubbing-template .content-selection-sub .more-sub-select::-webkit-scrollbar {
-        border-radius: 3px;
-        width: 5px;
-        height: 8px;
-        background-color: rgba(0, 0, 0, 0);
-    }
-
-    .dubbing-template .content-selection-dub .more-dub-select::-webkit-scrollbar-thumb,
-    .dubbing-template .content-selection-dub .more-sub-select::-webkit-scrollbar-thumb,
-    .dubbing-template .content-selection-sub .more-dub-select::-webkit-scrollbar-thumb,
-    .dubbing-template .content-selection-sub .more-sub-select::-webkit-scrollbar-thumb {
-        background: #15171E;
-        border-radius: 3px;
-    }
-
-    .dubbing-template .content-selection-dub .dub-suluction-sub,
-    .dubbing-template .content-selection-dub .dub-suluction-dub,
-    .dubbing-template .content-selection-sub .dub-suluction-sub,
-    .dubbing-template .content-selection-sub .dub-suluction-dub {
-        position: absolute;
-        top: 50px;
-        left: 10px;
-        right: 10px;
-        z-index: 5;
-        background: #15171E;
-        border-radius: 5px;
-    }
-
-    .dubbing-template .content-selection-dub .dub-suluction-sub .val,
-    .dubbing-template .content-selection-dub .dub-suluction-dub .val,
-    .dubbing-template .content-selection-sub .dub-suluction-sub .val,
-    .dubbing-template .content-selection-sub .dub-suluction-dub .val {
-        color: #fff;
-        height: 40px;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        padding-left: 20px;
-    }
-
-    .dubbing-template .content-selection-dub .dub-selection-hide,
-    .dubbing-template .content-selection-sub .dub-selection-hide {
-        display: none;
-    }
-
-    .dubbing-template .content-dub-hide {
-        display: none;
-    }
-
-    .flex-fix {
-        display: flex;
-        width: 100%;
-    }</style>
 </body>
 
 </html>

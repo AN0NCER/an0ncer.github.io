@@ -1,0 +1,149 @@
+.phone_menu {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.phone_menu .btn_menu {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  background: rgba(10, 48, 78, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  max-width: 450px;
+}
+.phone_menu .btn_menu .icon_btn {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+}
+.phone_menu .btn_menu .icon_btn svg {
+  height: 22px;
+  fill: #a0aabb;
+}
+.phone_menu .btn_menu .icon_btn:hover svg {
+  fill: #28B2F5;
+}
+.phone_menu .btn_menu .selected svg {
+  fill: #28B2F5;
+}
+
+body {
+  background: #272C38;
+}
+
+header {
+  background: #101318;
+  width: 100%;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  z-index: 5;
+}
+header svg {
+  position: absolute;
+  width: 15px;
+  fill: #fff;
+  right: 30px;
+  opacity: 0.5;
+}
+
+main {
+  background: #272C38;
+  width: 100%;
+  min-height: 20px;
+  transform: translateY(70px);
+  font-family: Inter;
+}
+main .results {
+  display: flex;
+  margin-left: 20px;
+  margin-right: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.search {
+  width: 100%;
+  height: 40px;
+  margin: 10px 20px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  background: #1e232f;
+  padding-left: 10px;
+  padding-right: 30px;
+  color: #fff;
+  font-size: 13pt;
+}
+.search::-moz-placeholder {
+  color: #fff;
+  opacity: 0.5;
+}
+.search:-ms-input-placeholder {
+  color: #fff;
+  opacity: 0.5;
+}
+.search::placeholder {
+  color: #fff;
+  opacity: 0.5;
+}
+
+.anime-card {
+  margin-bottom: 10px;
+}
+.anime-card .anime-image {
+  position: relative;
+}
+.anime-card .anime-image img {
+  width: 160px;
+  border-radius: 5px;
+}
+.anime-card .anime-title {
+  max-width: 140px;
+  font-size: 13px;
+  color: #fff;
+  word-wrap: break-word;
+  white-space: nowrap;
+  line-height: 1.65;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.play-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.play-btn .btn {
+  width: 35px;
+  height: 35px;
+  background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
+  overflow: hidden;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.play-btn .btn svg {
+  width: 10px;
+}

@@ -15,15 +15,28 @@ const visual = {
         }
     },
     setTime: function (response) {
-        $('.text-witch-pg > .episodes_aired').text(`${response.episodes_aired}EP`);
-        $('.duration > .content > b').text(`${getTimeFromMins(response.episodes_aired * response.duration)}`);
+        if (response.episodes_aired == 0 && response.status == 'released') {
+            $('.text-witch-pg > .episodes_aired').text(`${response.episodes}EP`);
+            $('.duration > .content > b').text(`${getTimeFromMins(response.episodes * response.duration)}`);
+        } else {
+            $('.text-witch-pg > .episodes_aired').text(`${response.episodes_aired}EP`);
+            $('.duration > .content > b').text(`${getTimeFromMins(response.episodes_aired * response.duration)}`);
+        }
     },
     setStatus: function (response) {
         $('.status > .content > b').text(response.status == 'anons' ? "Анонс" : response.status == 'ongoing' ? "Онгоинг" : "Вышел");
         $('.pg-rating').text(response.rating)
     },
     setGallery: function (id) {
-        shikimoriApi.Animes.screenshots(id, (r) => {
+        shikimoriApi.Animes.screenshots(id, async (r) => {
+            if (r.failed && r.status == 429) {
+                await sleep(1000);
+                this.setGallery(id);
+                return;
+            }
+            if (r.length == 0) {
+                $('.title-gallery').css('display', 'none');
+            }
             //console.log(r);
             for (let index = 0; index < r.length; index++) {
                 const element = r[index];
@@ -41,6 +54,9 @@ const visual = {
                 this.setHeroes(id);
                 return;
             }
+            if (r.length == 0) {
+                $('.title-hero').css('display', 'none');
+            }
             for (let index = 0; index < r.length; index++) {
                 const element = r[index];
                 if (element.roles.includes('Main')) {
@@ -51,6 +67,8 @@ const visual = {
                     ${element.character.russian}
                     </div>
                 </div>`)
+                } else {
+                    $('.title-hero').css('display', 'none');
                 }
             }
         })
@@ -63,6 +81,9 @@ const visual = {
                 return;
             }
             //console.log(r);
+            if (r.length == 0) {
+                $('.title-similiar').css('display', 'none');
+            }
             for (let index = 0; index < r.length; index++) {
                 const element = r[index];
                 let html = `<a href="/watch.html?id=${element.id}"><div class="anime-card"><div class="anime-image">
@@ -96,6 +117,13 @@ const visual = {
         $('.btn_back').click(() => {
             window.location.href = '/index.html';
         })
+        $('.btn_play').click(() => {
+            document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+    },
+    hidePlayer: function () {
+        $('.episodes').css('display', 'none');
+        $('.dubbing').css('display', 'none');
     }
 }
 
@@ -119,6 +147,7 @@ let dataLocal = {
     kodik_episode: 1,
     kodik_dub: ''
 }
+let user_rates = null;
 
 if (storage.get(shikimoriID)) {
     dataLocal = storage.get(shikimoriID);
@@ -127,16 +156,28 @@ if (storage.get(shikimoriID)) {
 Main(async (e) => {
     logged = e;
     shikimoriApi.Animes.id(shikimoriID, (r) => {
-        //console.log(r);
+        console.log(r);
         if (r.kind != 'tv') {
             is_anime = false;
         }
+        if(r.kind === 'movie'){
+            $('.episodes').css('display', 'none');
+        }
         visual.init(shikimoriID, r);
+        if (e) {
+            UserLogged(r.user_rate);
+        }
     }, logged);
 });
 
 kodikApi.search({ shikimori_id: shikimoriID }, (r) => {
     console.log(r);
+    if (r.total == 0) {
+        visual.hidePlayer();
+        url = "/404.html";
+        SetPlayer();
+        return;
+    }
     for (let index = 0; index < r.results.length; index++) {
         let translation = r.results[index].translation;
         //console.log(translation);
@@ -187,6 +228,54 @@ function SelectEpisode() {
 
 function SetPlayer() {
     $('#kodik-player').attr('src', url + '?hide_selectors=true&season=' + dataLocal.kodik_seasson + '&episode=' + dataLocal.kodik_episode);
+}
+
+function UserLogged(ur) {
+    user_rates = ur;
+    if (user_rates) {
+        if (ur.status == 'planned' || ur.status == 'watching' || ur.status == 'rewatching') {
+            $('.btn_save > .btn_glass_abs > svg').remove();
+            $('.btn_save > .btn_glass_abs').append(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"/></svg>`);
+            $('.btn_save > .btn_glass_abs').addClass('saved');
+        }
+    }
+
+    $('.btn_save').click(async () => {
+        console.log(user_rates);
+        if (user_rates) {
+            shikimoriApi.User_rates.id(user_rates.id, (response) => {
+
+            }).DELETE();
+            //remove
+            $('.btn_save > .btn_glass_abs > svg').remove();
+            $('.btn_save > .btn_glass_abs').append(`<svg width="12" height="15" viewBox="0 0 12 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.84479 0H1.4064C0.629656 0 0 0.629656 0 1.4064V14.0611C0 14.7848 0.784946 15.2354 1.40991 14.8709L5.62559 12.4115L9.84186 14.8706C10.4659 15.2096 11.2512 14.7848 11.2512 14.0611V1.4064C11.2512 0.629656 10.6212 0 9.84479 0ZM9.84479 13.2436L5.62559 10.7824L1.4064 13.2436V1.5822C1.4064 1.48346 1.48346 1.4064 1.55583 1.4064H9.64262C9.76861 1.4064 9.84479 1.48346 9.84479 1.5822V13.2436Z" fill="white" /></svg>`);
+            $('.btn_save > .btn_glass_abs').removeClass('saved');
+            user_rates = null;
+        } else {
+            //add
+            shikimoriApi.User_rates.user_rates({}, (response) => {
+                if (response.failed) {
+                    return;
+                }
+                user_rates = response;
+                $('.btn_save > .btn_glass_abs > svg').remove();
+                $('.btn_save > .btn_glass_abs').append(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"/></svg>`);
+                $('.btn_save > .btn_glass_abs').addClass('saved');
+            }, { "user_rate": { "status": "planned", "target_id": shikimoriID, "target_type": "Anime", "user_id": usr.Storage.Get('access_whoami').id } }).POST();
+        }
+    });
+
+    episodes.events.onchangeselect((i) => {
+        if (user_rates) {
+            shikimoriApi.User_rates.id(user_rates.id, (response) => {
+                console.log(response);
+                if (response.failed) {
+                    return;
+                }
+                user_rates = response;
+            }).PATCH({ "user_rate": { "episodes": i, "status": "watching" } });
+        }
+    });
 }
 
 //https://ru.stackoverflow.com/questions/646511/Сконвертировать-минуты-в-часыминуты-при-помощи-momentjs

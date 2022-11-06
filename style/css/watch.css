@@ -1,6 +1,8 @@
 body {
   background: #101318;
   overflow-x: hidden;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .mobile-header {
@@ -10,9 +12,11 @@ body {
 .mobile-header .bg-paralax-img {
   position: fixed;
   width: 100%;
+  max-width: 900px;
   height: inherit;
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
   z-index: 1;
 }
 .mobile-header .bg-paralax-img::after {
@@ -85,6 +89,13 @@ body {
 .btn_glass_abs svg {
   height: 15px;
   fill: #FFFFFF;
+}
+
+.saved {
+  background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
+}
+.saved svg {
+  fill: #fff;
 }
 
 .btn_with_object {
