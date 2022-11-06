@@ -1,12 +1,32 @@
-var version = '6';
+var version = '7';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     '/',
     '/index.html',
+    '/404.html',
+    '/search.html',
+    '/watch.html',
     '/style/css/main.css',
     '/style/css/index.css',
+    '/style/css/search.css',
+    '/style/css/user.css',
+    '/style/css/watch.css',
     '/javascript/library/jqery.min.js',
-    '/javascript/library/anime.min.js'
+    '/javascript/library/anime.min.js',
+    '/javascript/library/swiper-bundle.min.js',
+    '/javascript/library/aspjknml.js',
+    '/javascript/library/engine_sw.js',
+    '/javascript/library/jdub.js',
+    '/javascript/library/jeps.js',
+    '/javascript/library/jmenu.js',
+    '/javascript/library/jsearch.js',
+    '/javascript/library/server.js',
+    '/javascript/library/shikimori.js',
+    '/javascript/library/pages/index.js',
+    '/javascript/library/pages/search.js',
+    '/javascript/library/pages/user.js',
+    '/javascript/library/pages/watch.js',
+    '/data/swiper.json'
 ];
 
 var dataCacheName = 'pwa-tunime-data-v' + version;
