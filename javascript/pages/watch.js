@@ -54,13 +54,12 @@ const visual = {
                 this.setHeroes(id);
                 return;
             }
-            if (r.length == 0) {
-                $('.title-hero').css('display', 'none');
-            }
+            let append = false;
             for (let index = 0; index < r.length; index++) {
                 const element = r[index];
                 if (element.roles.includes('Main')) {
                     //console.log(element);
+                    append = true;
                     $('.heroes').append(`<div class="persone"><div class="img"><img src="https://nyaa.shikimori.one${element.character.image.original}">
                     </div>
                     <div class="name">
@@ -68,6 +67,9 @@ const visual = {
                     </div>
                 </div>`)
                 }
+            }
+            if(append == false){
+                $('.title-hero').css('display', 'none');
             }
         })
     },
