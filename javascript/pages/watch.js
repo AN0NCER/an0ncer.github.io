@@ -67,8 +67,6 @@ const visual = {
                     ${element.character.russian}
                     </div>
                 </div>`)
-                } else {
-                    $('.title-hero').css('display', 'none');
                 }
             }
         })
