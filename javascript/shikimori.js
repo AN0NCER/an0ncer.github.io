@@ -612,7 +612,6 @@ let usr = {
         this.isteste = true;
     }
 }
-
 usr.test_on();
 
 async function Main(event = () => { }) {

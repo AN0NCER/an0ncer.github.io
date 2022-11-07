@@ -1,0 +1,65 @@
+@import './phone_menu';
+
+$bg: #101318;
+
+body{
+    background: $bg;
+}
+
+main{
+    margin-top: 20px;
+    font-family: Inter;
+}
+
+.content{
+    display: flex;
+    margin-left: 20px;
+    margin-right: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.anime-card{
+    margin-bottom: 10px;
+    .anime-image{
+        position: relative;
+        img{
+            width: 160px;
+            border-radius: 5px;
+        }
+    }
+    .anime-title{
+        max-width: 140px;
+        font-size: 13px;
+        color: #fff;
+        word-wrap: break-word;
+        white-space: nowrap;
+        line-height: 1.65;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}
+
+.play-btn{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .btn{
+        width: 35px;
+        height: 35px;
+        background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
+        overflow: hidden;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        svg{
+            width: 10px;
+        }
+    }
+}
