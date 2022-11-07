@@ -1,4 +1,4 @@
-var version = '8';
+var version = '9';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     '/',
@@ -12,6 +12,7 @@ var appShellFilesToCache = [
     '/style/css/search.css',
     '/style/css/user.css',
     '/style/css/watch.css',
+    '/style/css/list.css',
     '/style/css/min/swiper-bundle.min.css',
     '/javascript/library/jqery.min.js',
     '/javascript/library/anime.min.js',
@@ -21,11 +22,11 @@ var appShellFilesToCache = [
     '/javascript/library/jdub.js',
     '/javascript/library/jeps.js',
     '/javascript/library/jmenu.js',
-    '/javascript/library/jsearch.js',
     '/javascript/library/server.js',
     '/javascript/library/shikimori.js',
     '/javascript/library/pages/index.js',
     '/javascript/library/pages/search.js',
+    '/javascript/library/pages/list.js',
     '/javascript/library/pages/user.js',
     '/javascript/library/pages/watch.js',
     '/data/swiper.json'
