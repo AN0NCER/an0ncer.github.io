@@ -276,6 +276,18 @@ function UserLogged(ur) {
             }).PATCH({ "user_rate": { "episodes": i, "status": "watching" } });
         }
     });
+
+    //Set episode if not dataLocal
+    //Episodes get if logged user and isset user_rates
+    if(!storage.get(shikimoriID)){
+        if(user_rates){
+            if(user_rates.episodes != 0){
+                episodes.select(user_rates.episodes);
+            }
+        }
+    }
+
+    //console.log(user_rates);
 }
 
 //https://ru.stackoverflow.com/questions/646511/Сконвертировать-минуты-в-часыминуты-при-помощи-momentjs
