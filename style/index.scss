@@ -79,6 +79,55 @@ main{
     top: 24px;
     box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
 }
+.pwa{
+  display: flex;
+  margin-top: 20px;
+  pwa-show{
+    margin-right: 20px;
+    margin-left: 20px;
+    background: #101318;
+    width: 100%;
+    display: flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 5px;
+    font-family: 'Inter';
+    align-items: center;
+    .icon{
+      //border: 1px solid #585B63;
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      margin-left: 20px;
+      svg{
+        fill: #fff;
+        height: 30px;
+      }
+    }
+  }
+
+  .content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .version{
+      color: #fff;
+      font-size: 16px;
+    }
+    .date{
+      color: #fff;
+      opacity: .5;
+      font-size: 12px;
+      margin-bottom: 2px;
+      margin-top: 3px;
+    }
+  }
+
+}
 
 @import './phone_menu';
 @import './cards';

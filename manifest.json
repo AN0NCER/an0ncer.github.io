@@ -7,7 +7,7 @@
     "background_color": "#101318",
     "display": "standalone",
     "scope": "/",
-    "start_url": "/index.html",
+    "start_url": "/?mode=standalone",
     "icons": [
         {
             "src": "/icon-192x192.png",

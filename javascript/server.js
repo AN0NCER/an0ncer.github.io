@@ -9,3 +9,16 @@ function registerServiceWorker() {
 }
 
 registerServiceWorker();
+
+class PWAShow extends HTMLElement {
+    constructor() {
+        super();
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            
+        }else{
+           this.style.display = "none";
+        }
+    }
+}
+
+customElements.define('pwa-show', PWAShow);
