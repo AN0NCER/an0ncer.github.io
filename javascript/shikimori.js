@@ -612,7 +612,10 @@ let usr = {
         this.isteste = true;
     }
 }
-usr.test_on();
+
+if(location.hostname == "192.168.31.233"){
+    usr.test_on();
+}
 
 async function Main(event = () => { }) {
     if (!usr.authorized) {

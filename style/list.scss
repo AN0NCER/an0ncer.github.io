@@ -2,33 +2,50 @@
 
 $bg: #101318;
 
-body{
+body {
     background: $bg;
 }
 
-main{
-    margin-top: 20px;
+main {
     font-family: Inter;
+    max-width: 1100px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.content{
+.content {
     display: flex;
     margin-left: 20px;
     margin-right: 20px;
     flex-wrap: wrap;
-    justify-content: space-between;
+    //justify-content: space-between;
+
+    a {
+        height: 263px;
+        width: 160px;
+        margin-bottom: 10px;
+        margin-right: 10px;
+        &:empty{
+            background: #fff;
+            border-radius: 5px;
+            opacity: .04;
+        }
+    }
 }
 
-.anime-card{
-    margin-bottom: 10px;
-    .anime-image{
+.anime-card {
+
+    .anime-image {
         position: relative;
-        img{
+
+        img {
             width: 160px;
             border-radius: 5px;
         }
     }
-    .anime-title{
+
+    .anime-title {
         max-width: 140px;
         font-size: 13px;
         color: #fff;
@@ -40,7 +57,7 @@ main{
     }
 }
 
-.play-btn{
+.play-btn {
     position: absolute;
     top: 0;
     left: 0;
@@ -49,7 +66,8 @@ main{
     display: flex;
     align-items: center;
     justify-content: center;
-    .btn{
+
+    .btn {
         width: 35px;
         height: 35px;
         background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
@@ -58,8 +76,18 @@ main{
         display: flex;
         align-items: center;
         justify-content: center;
-        svg{
+
+        svg {
             width: 10px;
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .content{
+        justify-content: space-between;
+        a{
+            margin-right: 0;
         }
     }
 }
