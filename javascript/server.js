@@ -13,12 +13,22 @@ registerServiceWorker();
 class PWAShow extends HTMLElement {
     constructor() {
         super();
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-            
+        if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
+
         }else{
            this.style.display = "none";
         }
     }
 }
 
+class PWAHide extends HTMLElement{
+    constructor() {
+        super();
+        if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
+            this.style.display = "none";
+        }
+    }
+}
+
 customElements.define('pwa-show', PWAShow);
+customElements.define('pwa-hide', PWAHide);
