@@ -15,7 +15,7 @@ const TemplateShikimori = {
             }
         },
 
-        bearerjson: ()=>{
+        bearerjson: () => {
             return {
                 "User-Agent": "Tunime",
                 "Authorization": `${usr.Oauth.access.token_type} ${usr.Oauth.access.access_token}`,
@@ -406,13 +406,11 @@ const shikimoriApi = {
         },
 
         unread_messages: async function (id, event = () => { }) {
-            if (shikimoriUser.authorized) {
-                let url = this.url + "/" + id + "/unread_messages";
-                let request = shikimoriFetch("GET", url, TemplateShikimori.Headers.bearer());
-                let response = await request.fetch();
-                event(response);
-                return response;
-            }
+            let url = this.url + "/" + id + "/unread_messages";
+            let request = shikimoriFetch("GET", url, TemplateShikimori.Headers.bearer());
+            let response = await request.fetch();
+            event(response);
+            return response;
         },
 
         history: async function (id, query = {}, event = () => { }) {
@@ -438,62 +436,62 @@ const shikimoriApi = {
     User_rates: {
         url: 'https://shikimori.one/api/v2/user_rates',
         id: function (id, event = () => { }) {
-            let url = this.url + "/" + id;
-            let request = shikimoriFetch("GET", url, TemplateShikimori.Headers.base());
-            return {
-                DELETE: async function () {
-                    request.setMethod("DELETE");
-                    request.setHeaders(TemplateShikimori.Headers.bearer());
-                    let response = await request.fetch();
-                    event(response);
-                    return response;
-                },
+    let url = this.url + "/" + id;
+    let request = shikimoriFetch("GET", url, TemplateShikimori.Headers.base());
+    return {
+        DELETE: async function () {
+            request.setMethod("DELETE");
+            request.setHeaders(TemplateShikimori.Headers.bearer());
+            let response = await request.fetch();
+            event(response);
+            return response;
+        },
 
-                PATCH: async function(body) {
-                    request.setMethod("PATCH");
-                    request.setHeaders(TemplateShikimori.Headers.bearerjson());
-                    request.setBody(body)
-                    let response = await request.fetch();
-                    event(response);
-                    return response;
-                }
-            }
-            //let response = await request.fetch();
-            //event(response);
-            //return response;
+        PATCH: async function (body) {
+            request.setMethod("PATCH");
+            request.setHeaders(TemplateShikimori.Headers.bearerjson());
+            request.setBody(body)
+            let response = await request.fetch();
+            event(response);
+            return response;
+        }
+    }
+    //let response = await request.fetch();
+    //event(response);
+    //return response;
+},
+user_rates: function (q = {}, e = () => { }, d = undefined) {
+    let query = "";
+    if (Object.keys(q).length > 0) {
+        query += '?' + new URLSearchParams(q).toString();
+    }
+    let url = this.url + query;
+    let request = shikimoriFetch("GET", url, TemplateShikimori.Headers.base());
+    return {
+        GET: async function () {
+            let response = await request.fetch();
+            e(response);
+            return (response);
         },
-        user_rates: function (q = {}, e = () => { }, d = undefined) {
-            let query = "";
-            if (Object.keys(q).length > 0) {
-                query += '?' + new URLSearchParams(q).toString();
-            }
-            let url = this.url + query;
-            let request = shikimoriFetch("GET", url, TemplateShikimori.Headers.base());
-            return {
-                GET: async function () {
-                    let response = await request.fetch();
-                    e(response);
-                    return (response);
-                },
-                POST: async function () {
-                    request.setMethod("POST");
-                    request.setBody(d);
-                    request.setHeaders(TemplateShikimori.Headers.bearerjson());
-                    let response = await request.fetch();
-                    e(response);
-                    return response;
-                }
-            }
-            // let q = "";
-            // if (Object.keys(query).length > 0) {
-            //     q += '?' + new URLSearchParams(query).toString();
-            // }
-            // let url = this.url + q;
-            // let request = shikimoriFetch("GET", url, { "User-Agent": "Tunime" });
-            // let response = await request.fetch();
-            // event(response);
-            // return response;
-        },
+        POST: async function () {
+            request.setMethod("POST");
+            request.setBody(d);
+            request.setHeaders(TemplateShikimori.Headers.bearerjson());
+            let response = await request.fetch();
+            e(response);
+            return response;
+        }
+    }
+    // let q = "";
+    // if (Object.keys(query).length > 0) {
+    //     q += '?' + new URLSearchParams(query).toString();
+    // }
+    // let url = this.url + q;
+    // let request = shikimoriFetch("GET", url, { "User-Agent": "Tunime" });
+    // let response = await request.fetch();
+    // event(response);
+    // return response;
+},
     }
 }
 let usr = {
@@ -613,7 +611,7 @@ let usr = {
     }
 }
 
-if(location.hostname == "192.168.31.233"){
+if (location.hostname == "192.168.31.233") {
     usr.test_on();
 }
 
