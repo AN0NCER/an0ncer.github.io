@@ -408,7 +408,7 @@ const shikimoriApi = {
         unread_messages: async function (id, event = () => { }) {
             if (shikimoriUser.authorized) {
                 let url = this.url + "/" + id + "/unread_messages";
-                let request = shikimoriFetch("GET", url, { "User-Agent": "Tunime", "Authorization": `${shikimoriUser.Oauth.access.token_type} ${shikimoriUser.Oauth.access.access_token}` });
+                let request = shikimoriFetch("GET", url, TemplateShikimori.Headers.bearer());
                 let response = await request.fetch();
                 event(response);
                 return response;
