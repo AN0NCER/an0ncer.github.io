@@ -105,10 +105,11 @@ body {
     }
 }
 
-.saved{
+.saved {
     background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
-    svg{
-        fill:#fff;
+
+    svg {
+        fill: #fff;
     }
 }
 
@@ -190,6 +191,7 @@ footer {
 
     .title {
         margin-right: 10px;
+
         .russian {
             color: #fff;
             font-weight: bold;
@@ -323,7 +325,7 @@ footer {
     margin-top: 10px;
     line-height: 150%;
 
-    a{
+    a {
         color: #98D4FD;
     }
 
@@ -388,37 +390,74 @@ footer {
     }
 }
 
-.gallery{
+.gallery {
     margin-left: 20px;
     margin-top: 10px;
-    .galery-slider{
+
+    .galery-slider {
         display: flex;
         overflow-x: auto;
-        .slide{
+
+        &::-webkit-scrollbar {
+            width: 1em;
+        }
+
+        &::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: #5FBEF3;
+            min-width: 100px;
+            border-radius: 3px;
+        }
+
+        .slide {
             margin-right: 10px;
-            img{
+
+            img {
                 height: 100px;
                 border-radius: 3px;
             }
         }
     }
 }
-.similiar{
+
+.similiar {
     margin-left: 20px;
     margin-top: 10px;
-    .similiar-slider{
+
+    .similiar-slider {
         display: flex;
         overflow-x: auto;
-        .anime-card{
+
+        &::-webkit-scrollbar {
+            width: 1em;
+        }
+
+        &::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: #5FBEF3;
+            min-width: 100px;
+            border-radius: 3px;
+        }
+
+        .anime-card {
             margin-right: 10px;
-            .anime-image{
+
+            .anime-image {
                 position: relative;
-                img{
+
+                img {
                     height: 200px;
                     border-radius: 5px;
                 }
             }
-            .anime-title{
+
+            .anime-title {
                 max-width: 140px;
                 font-size: 13px;
                 color: #fff;
@@ -431,7 +470,7 @@ footer {
         }
     }
 
-    .play-btn{
+    .play-btn {
         position: absolute;
         top: 0;
         left: 0;
@@ -440,7 +479,8 @@ footer {
         display: flex;
         align-items: center;
         justify-content: center;
-        .btn{
+
+        .btn {
             width: 35px;
             height: 35px;
             background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
@@ -449,14 +489,28 @@ footer {
             display: flex;
             align-items: center;
             justify-content: center;
-            svg{
+
+            svg {
                 width: 10px;
             }
         }
     }
 }
-.pg-rating{
+
+.pg-rating {
     text-transform: uppercase;
+}
+
+@media screen and (min-width: 500px) {
+    .gallery {
+        .galery-slider {
+            .slide {
+                img {
+                    height: 150px;
+                }
+            }
+        }
+    }
 }
 
 @import './episodes';

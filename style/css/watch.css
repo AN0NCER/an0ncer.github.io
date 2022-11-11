@@ -359,6 +359,17 @@ footer {
   display: flex;
   overflow-x: auto;
 }
+.gallery .galery-slider::-webkit-scrollbar {
+  width: 1em;
+}
+.gallery .galery-slider::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.gallery .galery-slider::-webkit-scrollbar-thumb {
+  background-color: #5FBEF3;
+  min-width: 100px;
+  border-radius: 3px;
+}
 .gallery .galery-slider .slide {
   margin-right: 10px;
 }
@@ -374,6 +385,17 @@ footer {
 .similiar .similiar-slider {
   display: flex;
   overflow-x: auto;
+}
+.similiar .similiar-slider::-webkit-scrollbar {
+  width: 1em;
+}
+.similiar .similiar-slider::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.similiar .similiar-slider::-webkit-scrollbar-thumb {
+  background-color: #5FBEF3;
+  min-width: 100px;
+  border-radius: 3px;
 }
 .similiar .similiar-slider .anime-card {
   margin-right: 10px;
@@ -423,6 +445,11 @@ footer {
   text-transform: uppercase;
 }
 
+@media screen and (min-width: 500px) {
+  .gallery .galery-slider .slide img {
+    height: 150px;
+  }
+}
 .episodes {
   margin: 20px 20px 10px 20px;
   overflow: hidden;
