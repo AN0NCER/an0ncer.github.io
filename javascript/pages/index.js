@@ -20,7 +20,8 @@ Main((e) => {
                 CountNotification(id);
                 return;
             }
-            console.log(response.messages + response.news + response.notifications);
+            console.log();
+            $('.btn-notification > .count').text((response.messages + response.news + response.notifications))
         });
     }
 });
