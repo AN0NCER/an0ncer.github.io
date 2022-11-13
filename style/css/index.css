@@ -151,6 +151,84 @@ main {
   margin-top: 3px;
 }
 
+.block_flex {
+  display: flex;
+}
+
+.mt--10 {
+  margin-top: 10px;
+}
+
+.mt--20 {
+  margin-top: 20px;
+}
+
+.dis--none {
+  display: none;
+}
+
+.continue-watch {
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 20px;
+  background: #101318;
+  color: #fff;
+  font-family: Inter;
+  width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.continue-watch > div:nth-child(1) {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+.continue-watch > div:nth-child(1) > div:nth-child(1) {
+  margin-left: 20px;
+  margin-right: 20px;
+  display: flex;
+  width: 100%;
+}
+.continue-watch > div:nth-child(1) > div:nth-child(1) div {
+  font-size: 13px;
+}
+.continue-watch > div:nth-child(1) > div:nth-child(1) div:nth-child(2) {
+  opacity: 0.3;
+  font-size: 13px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.continue-watch > div:nth-child(1) > div:nth-child(1) div:nth-child(3) {
+  opacity: 0.3;
+  font-size: 13px;
+}
+.continue-watch > div:nth-child(1) > div:nth-child(2) {
+  display: flex;
+  min-width: 40px;
+  height: 40px;
+  background: #28B2F5;
+  align-items: center;
+  margin-right: 20px;
+  justify-content: center;
+  border-radius: 50%;
+}
+.continue-watch > div:nth-child(1) > div:nth-child(2) svg {
+  width: 13px;
+  fill: #fff;
+  transform: translateX(2px);
+}
+.continue-watch > div:nth-child(2) {
+  position: relative;
+  max-height: 400px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.continue-watch > div:nth-child(2) img {
+  width: 100%;
+}
+
 .phone_menu {
   position: fixed;
   bottom: 20px;

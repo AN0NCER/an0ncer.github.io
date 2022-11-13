@@ -55,6 +55,15 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
     });
 }
 
+if(usr.Storage.Get('last-watch')){
+    $('#last-watch').attr("href", 'watch.html?id=' + usr.Storage.Get('last-watch').id + '&player=true');
+    $('.last-episode').text(usr.Storage.Get('last-watch').episode);
+    $('.last-name').text(usr.Storage.Get('last-watch').name);
+    $('.last-year').text(usr.Storage.Get('last-watch').year)
+    $(".last-image").attr("src", usr.Storage.Get('last-watch').image);
+    $('#last-watch').removeClass('dis--none');
+}
+
 //https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep/39914235#39914235
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

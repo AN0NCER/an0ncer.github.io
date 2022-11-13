@@ -68,7 +68,7 @@ const visual = {
                 </div>`)
                 }
             }
-            if(append == false){
+            if (append == false) {
                 $('.title-hero').css('display', 'none');
             }
         })
@@ -149,6 +149,9 @@ let dataLocal = {
 }
 let user_rates = null;
 
+let shikiResponse = null;
+let kodikResponse = null;
+
 if (storage.get(shikimoriID)) {
     dataLocal = storage.get(shikimoriID);
 }
@@ -157,21 +160,24 @@ Main(async (e) => {
     logged = e;
     shikimoriApi.Animes.id(shikimoriID, (r) => {
         console.log(r);
+        shikiResponse = r;
         if (r.kind != 'tv') {
             is_anime = false;
         }
-        if(r.kind === 'movie'){
+        if (r.kind === 'movie') {
             $('.episodes').css('display', 'none');
         }
         visual.init(shikimoriID, r);
         if (e) {
             UserLogged(r.user_rate);
         }
+        Loaded();
     }, logged);
 });
 
 kodikApi.search({ shikimori_id: shikimoriID }, (r) => {
     console.log(r);
+    kodikResponse = r;
     if (r.total == 0) {
         visual.hidePlayer();
         url = "/404.html";
@@ -190,9 +196,11 @@ episodes.events.onchangeselect((i) => {
     if (dataLocal.kodik_episode != i) {
         dataLocal.kodik_episode = i;
         storage.set(shikimoriID, dataLocal);
+        SetLastAnime();
         SetPlayer();
     }
 });
+
 
 $('.dubbing > select').change(() => {
     dataLocal.kodik_dub = $('.dubbing > select > option:selected').data('id');
@@ -279,15 +287,37 @@ function UserLogged(ur) {
 
     //Set episode if not dataLocal
     //Episodes get if logged user and isset user_rates
-    if(!storage.get(shikimoriID)){
-        if(user_rates){
-            if(user_rates.episodes != 0){
+    if (!storage.get(shikimoriID)) {
+        if (user_rates) {
+            if (user_rates.episodes != 0) {
                 episodes.select(user_rates.episodes);
             }
         }
     }
 
     //console.log(user_rates);
+}
+
+function SetLastAnime() {
+    let key = 'last-watch';
+    let data = {
+        id: shikimoriID,
+        episode: dataLocal.kodik_episode,
+        name: shikiResponse.russian,
+        year: new Date(shikiResponse.aired_on).getFullYear(),
+        image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
+    };
+    storage.set(key, data);
+}
+
+function Loaded() {
+    $(document).ready(() => {
+        let player = new URLSearchParams(window.location.search).get('player');
+        if (player) {
+        document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
+
+        }
+    });
 }
 
 //https://ru.stackoverflow.com/questions/646511/Сконвертировать-минуты-в-часыминуты-при-помощи-momentjs
@@ -300,4 +330,9 @@ function getTimeFromMins(mins) {
 //https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep/39914235#39914235
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+//https://stackoverflow.com/questions/5915096/get-a-random-item-from-a-javascript-array
+Array.prototype.random = function () {
+    return this[Math.floor((Math.random() * this.length))];
 }
