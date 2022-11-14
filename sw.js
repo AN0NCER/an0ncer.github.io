@@ -1,4 +1,4 @@
-var version = '13';
+var version = '17';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     '/',
@@ -17,18 +17,18 @@ var appShellFilesToCache = [
     '/javascript/library/jqery.min.js',
     '/javascript/library/anime.min.js',
     '/javascript/library/swiper-bundle.min.js',
-    '/javascript/library/aspjknml.js',
-    '/javascript/library/engine_sw.js',
-    '/javascript/library/jdub.js',
-    '/javascript/library/jeps.js',
-    '/javascript/library/jmenu.js',
-    '/javascript/library/server.js',
-    '/javascript/library/shikimori.js',
-    '/javascript/library/pages/index.js',
-    '/javascript/library/pages/search.js',
-    '/javascript/library/pages/list.js',
-    '/javascript/library/pages/user.js',
-    '/javascript/library/pages/watch.js',
+    '/javascript/aspjknml.js',
+    '/javascript/engine_sw.js',
+    '/javascript/jdub.js',
+    '/javascript/jeps.js',
+    '/javascript/jmenu.js',
+    '/javascript/server.js',
+    '/javascript/shikimori.js',
+    '/javascript/pages/index.js',
+    '/javascript/pages/search.js',
+    '/javascript/pages/list.js',
+    '/javascript/pages/user.js',
+    '/javascript/pages/watch.js',
     '/data/swiper.json'
 ];
 
@@ -48,19 +48,11 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-    console.log('[SW]: Fetch');
-
-    console.log(event);
-
-    console.log('[SW]: '+event.request);
-
     event.respondWith(
         caches.match(event.request).then((response) => {
-            if(response){
-                console.log('[SW]: returning' + event.request.url + 'from cache');
+            if (response) {
                 return response;
-            }else{
-                console.log('[SW]: returning' + event.request.url + 'from net');
+            } else {
                 return fetch(event.request);
             }
         })

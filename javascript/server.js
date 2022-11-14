@@ -1,9 +1,9 @@
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js', { scope: '/' }).then(() => {
-            console.log('Service Worker registered successfully.');
+            console.log('[SW]: Registered successfully.');
         }).catch(error => {
-            console.log('Service Worker registration failed:', error);
+            console.log('[SW]: Registration failed:', error);
         });
     }
 }
@@ -32,3 +32,19 @@ class PWAHide extends HTMLElement{
 
 customElements.define('pwa-show', PWAShow);
 customElements.define('pwa-hide', PWAHide);
+
+async function detectSWUpdate() {
+    const registration = await navigator.serviceWorker.ready;
+
+    registration.addEventListener("updatefound", event => {
+        const newSW = registration.installing;
+        newSW.addEventListener("statechange", event => {
+            if (newSW.state == "installed") {
+                console.log('[SW]: New service worker is installed, but waiting activation');
+                // New service worker is installed, but waiting activation
+            }
+        });
+    })
+}
+
+detectSWUpdate();
