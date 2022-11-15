@@ -170,20 +170,65 @@ main {
 
 .block_flex{
   display: flex;
+  &:empty{
+    display: none;
+  }
 }
 
-.mt--10{
-  margin-top: 10px;
+.mt{
+  &--10{
+    margin-top: 10px;
+  }
+  &--20{
+    margin-top: 20px;
+  }
 }
-
-.mt--20{
-  margin-top: 20px;
+.mb{
+  &--10{
+    margin-bottom: 10px;
+  }
+  &--20{
+    margin-bottom: 20px;
+  }
+}
+.ml{
+  &--20{
+    margin-left: 20px;
+  }
+}
+.mr{
+  &--20{
+    margin-right: 20px;
+  }
 }
 
 .dis--none{
   display: none;
 }
 
+pwa-update{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-family: Inter;
+  background: #101318;
+  padding: 20px;
+  border-radius: 5px;
+
+  a{
+    color: #5FBEF3;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  div{
+    color: #fff;
+  }
+
+  &:empty{
+    display: none;
+  }
+}
 
 ///Continue Watch
 .continue-watch {

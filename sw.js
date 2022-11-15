@@ -1,11 +1,10 @@
-var version = '17';
+var version = '18';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     '/',
     '/index.html',
     '/404.html',
     '/search.html',
-    '/watch.html',
     '/list.html',
     '/style/css/main.css',
     '/style/css/index.css',
@@ -36,7 +35,7 @@ var dataCacheName = 'pwa-tunime-data-v' + version;
 
 self.addEventListener('install', event => {
     console.log('[SW]: Installed');
-
+    self.skipWaiting();
     event.waitUntil(caches.open(cacheName).then((cache) => {
         console.log('[SW]: Caching App Shell');
         return cache.addAll(appShellFilesToCache);
@@ -45,6 +44,11 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
     console.log('[SW]: Activate');
+    //Cleaning caching
+    caches.keys().then(function (names) {
+        for (let name of names)
+            if (name != cacheName && name != 'pwa-tunime-v'+(version-1) && name != 'pwa-tunime-v'+(version-2)) caches.delete(name);
+    });
 });
 
 self.addEventListener('fetch', event => {
