@@ -135,8 +135,13 @@ const storage = {
         localStorage.setItem(key, JSON.stringify(val));
     }
 }
+AsyncPlayer();
 
 const shikimoriID = new URLSearchParams(window.location.search).get('id');
+const kodikIframe = document.getElementById("kodik-player").contentWindow;
+
+let play_time = 0;
+let play_duration = 0;
 
 let logged = false;
 let is_anime = true;
@@ -147,6 +152,7 @@ let dataLocal = {
     kodik_episode: 1,
     kodik_dub: ''
 }
+let dataLast = null;
 let user_rates = null;
 
 let shikiResponse = null;
@@ -154,6 +160,15 @@ let kodikResponse = null;
 
 if (storage.get(shikimoriID)) {
     dataLocal = storage.get(shikimoriID);
+}
+try{
+    if (shikimoriID == usr.Storage.Get('last-watch').id) {
+        dataLast = usr.Storage.Get('last-watch');
+        dataLocal.kodik_episode = dataLast.episode;
+        console.log(dataLast);
+    }
+}catch{
+    
 }
 
 Main(async (e) => {
@@ -298,11 +313,13 @@ function UserLogged(ur) {
     //console.log(user_rates);
 }
 
-function SetLastAnime() {
+function SetLastAnime(cnt = false, drt = 0, i = 0) {
     let key = 'last-watch';
     let data = {
         id: shikimoriID,
-        episode: dataLocal.kodik_episode,
+        continue: cnt,
+        duration: drt,
+        episode: cnt ? dataLocal.kodik_episode + i : dataLocal.kodik_episode + i,
         name: shikiResponse.russian,
         year: new Date(shikiResponse.aired_on).getFullYear(),
         image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
@@ -312,12 +329,47 @@ function SetLastAnime() {
 
 function Loaded() {
     $(document).ready(() => {
-        let player = new URLSearchParams(window.location.search).get('player');
-        if (player) {
-        document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
+        let query = new URLSearchParams(window.location.search);
+        //Перемотка к плееру
+        if (query.get('player')) {
+            document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
+        }
 
+        if (dataLast) {
+            //Продолжение просмотра
+            if (dataLast.continue) {
+                AsyncPlayer(() => {
+                    kodikIframe.postMessage({
+                        key: "kodik_player_api", value: { method: "play" }
+                    }, '*');
+                });
+            }
         }
     });
+}
+
+//Function await loaded player
+async function AsyncPlayer(e = () => { }) {
+    try {
+        if (!document.getElementById("kodik-player").contentWindow.document) {
+            e();
+        } else {
+            let i = setInterval(() => {
+                try {
+                    if (!document.getElementById("kodik-player").contentWindow.document) {
+                        console.log(true);
+                    } else {
+                        console.log(false);
+                    }
+                } catch (error) {
+                    clearInterval(i);
+                    e();
+                }
+            }, 1000);
+        }
+    } catch (error) {
+        e();
+    }
 }
 
 //https://ru.stackoverflow.com/questions/646511/Сконвертировать-минуты-в-часыминуты-при-помощи-momentjs
@@ -335,4 +387,45 @@ function sleep(ms) {
 //https://stackoverflow.com/questions/5915096/get-a-random-item-from-a-javascript-array
 Array.prototype.random = function () {
     return this[Math.floor((Math.random() * this.length))];
+}
+
+//Управление плеером
+function kodikMessageListener(message) {
+    //Продолжительность
+    if (message.data.key == 'kodik_player_duration_update') {
+        play_duration = message.data.value;
+    }
+
+    //Пауза
+    if (message.data.key == 'kodik_player_pause') {
+        let prc = 5;
+        if (play_duration - play_time <= (play_duration / 100 * prc)) {
+            SetLastAnime(false, play_time, 1);
+        } else {
+            SetLastAnime(true, play_time)
+        }
+    }
+
+    //Воспроизведение
+    if (message.data.key == 'kodik_player_play') {
+        console.log('play');
+        let query = new URLSearchParams(window.location.search);
+        if (query.get('player') && dataLast && dataLast.continue) {
+            kodikIframe.postMessage({
+                key: "kodik_player_api", value: { method: "seek", seconds: dataLast.duration }
+            }, '*');
+            dataLast = null;
+        }
+    }
+
+    //Текущее время
+    if (message.data.key == 'kodik_player_time_update') {
+        play_time = message.data.value;
+    }
+}
+
+if (window.addEventListener) {
+    window.addEventListener('message', kodikMessageListener);
+} else {
+    window.attachEvent('onmessage', kodikMessageListener);
 }

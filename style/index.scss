@@ -258,6 +258,9 @@ pwa-update{
       //All Text
       div {
         font-size: 13px;
+        .last-time{
+          opacity: 0.5;
+        }
       }
 
       //Title
@@ -279,18 +282,22 @@ pwa-update{
     //Icon
     &>div:nth-child(2) {
       display: flex;
-      min-width: 40px;
+      //min-width: 40px;
       height: 40px;
       background: #28B2F5;
       align-items: center;
       margin-right: 20px;
       justify-content: center;
-      border-radius: 50%;
+      border-radius: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      font-size: 12px;
 
       svg {
         width: 13px;
         fill: #fff;
         transform: translateX(2px);
+        margin-right: 10px;
       }
     }
   }

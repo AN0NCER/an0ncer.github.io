@@ -230,6 +230,9 @@ pwa-update:empty {
 .continue-watch > div:nth-child(1) > div:nth-child(1) div {
   font-size: 13px;
 }
+.continue-watch > div:nth-child(1) > div:nth-child(1) div .last-time {
+  opacity: 0.5;
+}
 .continue-watch > div:nth-child(1) > div:nth-child(1) div:nth-child(2) {
   opacity: 0.3;
   font-size: 13px;
@@ -242,18 +245,21 @@ pwa-update:empty {
 }
 .continue-watch > div:nth-child(1) > div:nth-child(2) {
   display: flex;
-  min-width: 40px;
   height: 40px;
   background: #28B2F5;
   align-items: center;
   margin-right: 20px;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 12px;
 }
 .continue-watch > div:nth-child(1) > div:nth-child(2) svg {
   width: 13px;
   fill: #fff;
   transform: translateX(2px);
+  margin-right: 10px;
 }
 .continue-watch > div:nth-child(2) {
   position: relative;

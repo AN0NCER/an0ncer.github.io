@@ -55,12 +55,20 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
     });
 }
 
-if(usr.Storage.Get('last-watch')){
-    $('#last-watch').attr("href", 'watch.html?id=' + usr.Storage.Get('last-watch').id + '&player=true');
-    $('.last-episode').text(usr.Storage.Get('last-watch').episode);
-    $('.last-name').text(usr.Storage.Get('last-watch').name);
-    $('.last-year').text(usr.Storage.Get('last-watch').year)
-    $(".last-image").attr("src", usr.Storage.Get('last-watch').image);
+let last_watch = usr.Storage.Get('last-watch');
+if(last_watch){
+    console.log(last_watch);
+    $('#last-watch').attr("href", `watch.html?id=${last_watch.id}&player=true&continue=${last_watch.continue}`);
+    if(last_watch.continue){
+        let time = Math.floor(last_watch.duration / 60) +':'+last_watch.duration % 60;
+        $('.last-time').text(`(${time})`);
+    }else{
+        $('.last-time').empty();
+    }
+    $('.last-episode').text(last_watch.episode);
+    $('.last-name').text(last_watch.name);
+    $('.last-year').text(last_watch.year + " год")
+    $(".last-image").attr("src", last_watch.image);
     $('#last-watch').removeClass('dis--none');
 }
 
