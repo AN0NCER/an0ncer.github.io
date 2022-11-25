@@ -8,79 +8,211 @@ body {
   background: #282d39;
 }
 
-.account {
-  margin-left: 20px;
-  margin-right: 20px;
-  padding-top: 100px;
-  position: relative;
+header {
+  background: #101318;
+  display: flex;
+  flex-direction: column;
+  max-width: 1100px;
+  margin: 0 auto;
 }
-.account .user_info {
+header .content {
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-right: 20px;
+  padding-bottom: 10px;
+  color: #fff;
+}
+header .content .account {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-direction: column;
-  z-index: 2;
-  position: relative;
-  color: #fff;
 }
-.account .user_info .avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-  padding: 5px;
-  background: #282d39;
-}
-.account .user_info .avatar img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-}
-.account .user_info .nick_name {
-  font-family: Inter;
-  font-weight: bold;
-  font-size: 20px;
-  margin-top: 5px;
-}
-.account .position {
+header .content .account--block {
   display: flex;
+  align-items: center;
 }
-.account .btn_log_out {
-  margin-top: 20px;
-  border-radius: 3px;
-  width: 100%;
-  height: 40px;
+header .content .account--image {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #d42323;
-  color: #fff;
-  text-transform: uppercase;
+}
+header .content .account--image img {
+  width: 50px;
+  border-radius: 5px;
+}
+header .content .account--info {
+  margin-left: 20px;
   font-family: Inter;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+header .content .account--title {
   font-weight: bold;
+  font-size: 16px;
+}
+header .content .account--share--btn {
+  background: #28B2F5;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+header .content .account--share--btn svg {
+  width: 18px;
+  fill: #fff;
+  transform: translateX(1px);
+}
+header .menu {
+  font-family: Manrope;
+  color: #fff;
+}
+header .menu--box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+}
+header .menu--btn {
+  padding: 8px 15px;
+  border-radius: 6px;
+  margin-left: 5px;
+  margin-right: 5px;
+  opacity: 0.5;
   font-size: 14px;
 }
-.account .btn_log_out svg {
-  width: 20px;
-  fill: #fff;
-  margin-right: 20px;
+header .menu--btn--select {
+  opacity: 1;
+  font-weight: bold;
 }
 
-.account::before {
-  content: " ";
-  border-radius: 5px;
-  z-index: 1;
+.list--history {
+  display: flex;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-family: Manrope;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+}
+.list--history:nth-child(1)::before {
+  display: none;
+}
+.list--history:nth-last-child(1)::after {
+  display: none;
+}
+.list--history::after {
+  content: "";
+  width: 1px;
+  height: 50%;
+  background: #fff;
   position: absolute;
-  top: 0;
-  left: -20px;
-  right: -20px;
-  bottom: 0;
-  background: #000;
-  transform: translateY(calc(-50% + 20px));
-  background-image: url(https://github.com/AN0NCER/resources/blob/main/51678256_p0.png?raw=true);
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  left: 5px;
+  bottom: -6px;
+}
+.list--history::before {
+  content: "";
+  width: 1px;
+  height: 50%;
+  background: #fff;
+  position: absolute;
+  left: 5px;
+  top: -4px;
+}
+.list--history--icon {
+  margin-right: 20px;
+  position: relative;
+}
+.list--history--icon svg {
+  width: 11px;
+  fill: #fff;
+}
+.list--history--text {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+.list--history--text > span:nth-child(1) {
+  width: 100%;
+  height: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.list--history--text > span:nth-child(2) {
+  font-size: 14px;
+  margin-top: 5px;
+}
+.list--history--text a {
+  color: #28B2F5;
+}
+.list--history--date {
+  font-size: 12px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+}
+.list--history--block {
+  background: rgba(16, 19, 24, 0.5176470588);
+  padding: 12px 12px;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.main--status {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.main--status--title {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+  font-size: 16px;
+  font-family: Manrope;
+}
+
+.main--settings {
+  max-width: 1100px;
+  margin: 0 auto;
+  font-family: Manrope;
+}
+.main--settings--title {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+}
+.main--settings--logout {
+  width: 100%;
+}
+.main--settings--logout--btn {
+  margin-left: 20px;
+  margin-right: 20px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #28B2F5;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hide {
+  display: none;
 }
 
 .phone_menu {

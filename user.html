@@ -15,7 +15,48 @@
 </head>
 
 <body class="unselectable">
-    <main class="account">
+    <header>
+        <div class="content">
+            <div class="account">
+                <div class="account--block">
+                    <div class="account--image">
+                        <img src="" alt="Profile">
+                    </div>
+                    <div class="account--info">
+                        <div class="account--title">Nickname</div>
+                        <div class="account--year"><span>?</span> полных лет</div>
+                    </div>
+                </div>
+                <div class="account--share">
+                    <div class="account--share--btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path
+                                d="M352 224H305.5c-45 0-81.5 36.5-81.5 81.5c0 22.3 10.3 34.3 19.2 40.5c6.8 4.7 12.8 12 12.8 20.3c0 9.8-8 17.8-17.8 17.8h-2.5c-2.4 0-4.8-.4-7.1-1.4C210.8 374.8 128 333.4 128 240c0-79.5 64.5-144 144-144h80V34.7C352 15.5 367.5 0 386.7 0c8.6 0 16.8 3.2 23.2 8.9L548.1 133.3c7.6 6.8 11.9 16.5 11.9 26.7s-4.3 19.9-11.9 26.7l-139 125.1c-5.9 5.3-13.5 8.2-21.4 8.2H384c-17.7 0-32-14.3-32-32V224zM80 96c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16H400c8.8 0 16-7.2 16-16V384c0-17.7 14.3-32 32-32s32 14.3 32 32v48c0 44.2-35.8 80-80 80H80c-44.2 0-80-35.8-80-80V112C0 67.8 35.8 32 80 32h48c17.7 0 32 14.3 32 32s-14.3 32-32 32H80z" />
+                        </svg></div>
+                </div>
+            </div>
+        </div>
+        <div class="menu">
+            <div class="menu--box">
+                <div class="menu--btn menu--btn--select" id="menu--statistick">Статистика</div>
+                <div class="menu--btn" id="menu--settings">Настройки</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main--status">
+        <div class="main--status--title">История</div>
+        <div class="main--status--history"></div>
+    </main>
+
+    <main class="main--settings hide">
+        <div class="main--settings--title">Управление Аккаунтом</div>
+        <div class="main--settings--logout">
+            <div class="main--settings--logout--btn">
+                Выйти
+            </div>
+        </div>
+    </main>
+    <!-- <main class="account">
         <div class="user_info">
             <div class="avatar">
                 <img src="" alt="avatar">
@@ -28,7 +69,7 @@
                         d="M160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96C43 32 0 75 0 128V384c0 53 43 96 96 96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H96c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32h64zM504.5 273.4c4.8-4.5 7.5-10.8 7.5-17.4s-2.7-12.9-7.5-17.4l-144-136c-7-6.6-17.2-8.4-26-4.6s-14.5 12.5-14.5 22v72H192c-17.7 0-32 14.3-32 32l0 64c0 17.7 14.3 32 32 32H320v72c0 9.6 5.7 18.2 14.5 22s19 2 26-4.6l144-136z" />
                 </svg>Выйти</div>
         </div>
-    </main>
+    </main> -->
 
 
     <!--Scripts-->
