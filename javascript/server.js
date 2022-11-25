@@ -1,3 +1,5 @@
+navigator.serviceWorker.addEventListener('controllerchange',  ()  => window.location.reload());
+
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js', { scope: '/' }).then(() => {
@@ -60,24 +62,3 @@ customElements.define('pwa-show', PWAShow);
 customElements.define('pwa-hide', PWAHide);
 customElements.define('pwa-update', PWAUpdate);
 
-// async function detectSWUpdate() {
-//     const registration = await navigator.serviceWorker.ready;
-
-//     registration.addEventListener("updatefound", event => {
-//         const newSW = registration.installing;
-//         newSW.addEventListener("statechange", event => {
-//             if (newSW.state == "installed") {
-//                 console.log('[SW]: New service worker is installed, but waiting activation');
-//                 // alert('New Version Found');
-//                 // navigator.serviceWorker.register('sw.js', { scope: '/' }).then(() => {
-//                 //     console.log('[SW]: Registered update success.');
-//                 // }).catch(error => {
-//                 //     console.log('[SW]: Registration update failed:', error);
-//                 // });
-//             }
-//         });
-//     })
-// }
-
-//detectSWUpdate();
-//navigator.setAppBadge(unreadCount);

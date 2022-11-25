@@ -1,4 +1,4 @@
-var version = '25';
+var version = '29';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     '/',
@@ -47,7 +47,7 @@ self.addEventListener('activate', event => {
     //Cleaning caching
     caches.keys().then(function (names) {
         for (let name of names)
-            if (name != cacheName && name != 'pwa-tunime-v'+(version-1) && name != 'pwa-tunime-v'+(version-2)) caches.delete(name);
+            if (name != cacheName) caches.delete(name);
     });
 });
 
