@@ -2,7 +2,8 @@ $('.search').keyup(()=>{
     let value = $('.search').val();
     shikimoriApi.Animes.animes({
         search: value,
-        limit: 16
+        limit: 16,
+        censored: parametrs.censored
     }, (response)=>{
         if(response){
             $('.results').empty();

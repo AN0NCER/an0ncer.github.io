@@ -49,6 +49,16 @@
     </main>
 
     <main class="main--settings hide">
+        <div class="main--settings--title">Страница Поиск</div>
+        <div class="main--settings--checkbox">
+            <label class="main--settings--checkbox">
+                <div class="main--settings--checkbox--title">Цензура</div>
+                <div class="main--settings--checkbox--switch">
+                    <input type="checkbox" data-param="censored">
+                    <span class="main--settings--checkbox--switch--slider"></span>
+                </div>
+            </label>
+        </div>
         <div class="main--settings--title">Управление Аккаунтом</div>
         <div class="main--settings--logout">
             <div class="main--settings--logout--btn">
@@ -56,21 +66,6 @@
             </div>
         </div>
     </main>
-    <!-- <main class="account">
-        <div class="user_info">
-            <div class="avatar">
-                <img src="" alt="avatar">
-            </div>
-            <div class="nick_name"></div>
-        </div>
-        <div class="position">
-            <div class="btn_log_out"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path
-                        d="M160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96C43 32 0 75 0 128V384c0 53 43 96 96 96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H96c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32h64zM504.5 273.4c4.8-4.5 7.5-10.8 7.5-17.4s-2.7-12.9-7.5-17.4l-144-136c-7-6.6-17.2-8.4-26-4.6s-14.5 12.5-14.5 22v72H192c-17.7 0-32 14.3-32 32l0 64c0 17.7 14.3 32 32 32H320v72c0 9.6 5.7 18.2 14.5 22s19 2 26-4.6l144-136z" />
-                </svg>Выйти</div>
-        </div>
-    </main> -->
-
 
     <!--Scripts-->
     <!--Library-->
@@ -79,6 +74,7 @@
     <script src="/javascript/library/swiper-bundle.min.js"></script>
     <!--Custom library-->
     <script src="/javascript/server.js"></script>
+    <script src="/javascript/parametrs.js"></script>
     <script src="/javascript/jmenu.js"></script>
     <script src="/javascript/shikimori.js"></script>
     <script src="/javascript/pages/user.js"></script>
