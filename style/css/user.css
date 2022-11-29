@@ -180,6 +180,30 @@ header .menu--btn--select {
   font-size: 16px;
   font-family: Manrope;
 }
+.main--status--statistics {
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-family: Manrope;
+  justify-content: space-between;
+  color: #fff;
+}
+.main--status--statistics--block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.main--status--statistics--block--value {
+  font-weight: bold;
+}
+.main--status--statistics--block--title {
+  font-size: 12px;
+  opacity: 0.5;
+}
 
 .main--settings {
   max-width: 1100px;

@@ -208,6 +208,31 @@ header {
         font-size: 16px;
         font-family: Manrope;
     }
+
+    &--statistics{
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        display: flex;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+        font-family: Manrope;
+        justify-content: space-between;
+        color: #fff;
+        &--block{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            &--value{
+                font-weight: bold;
+            }
+            &--title{
+                font-size: 12px;
+                opacity: .5;
+            }
+        }
+    }
 }
 
 .main--settings {

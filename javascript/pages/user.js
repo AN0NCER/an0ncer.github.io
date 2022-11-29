@@ -79,6 +79,17 @@ function Stats(id){
             return;
         }
         console.log(response);
+        response.stats.full_statuses.anime.forEach(element => {
+            if(element.grouped_id == "planned"){
+                $('.main--status--statistics--block--value#planned').text(element.size);
+            }
+            if(element.grouped_id == "watching"){
+                $('.main--status--statistics--block--value#watching').text(element.size);
+            }
+            if(element.grouped_id == "completed"){
+                $('.main--status--statistics--block--value#completed').text(element.size);
+            }
+        });
     });
 }
 
