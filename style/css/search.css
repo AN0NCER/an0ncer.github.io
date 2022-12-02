@@ -47,34 +47,125 @@ body {
 header {
   background: #101318;
   width: 100%;
-  min-height: 20px;
+  max-width: 1100px;
   display: flex;
-  align-items: center;
-  position: fixed;
+  flex-direction: column;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 0 auto;
   z-index: 5;
 }
-header svg {
+header .search-block {
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+header .search-block svg {
   position: absolute;
   width: 15px;
   fill: #fff;
   right: 30px;
   opacity: 0.5;
 }
+header .search-menu {
+  margin-top: 10px;
+  display: flex;
+  max-width: 100%;
+  overflow-x: auto;
+  color: #fff;
+  font-family: Inter;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-bottom: 20px;
+}
+header .search-menu div {
+  margin-right: 20px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+header .search-menu .select {
+  opacity: 1;
+}
 
 main {
   background: #272C38;
   width: 100%;
   min-height: 20px;
-  transform: translateY(70px);
   font-family: Inter;
 }
-main .results {
+main .results, main .block {
   display: flex;
   margin-left: 20px;
   margin-right: 20px;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+main .recomandation {
+  width: 100%;
+  margin-top: 20px;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+main .recomandation .title {
+  color: #fff;
+  opacity: 0.5;
+}
+main .recomandation .list {
+  display: flex;
+  width: 100%;
+  margin-top: 20px;
+  max-width: 1100px;
+  overflow-x: auto;
+}
+main .recomandation .list a {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+main .recomandation .list a:empty {
+  height: 263px;
+  min-width: 160px;
+  background: #fff;
+  border-radius: 5px;
+  opacity: 0.04;
+}
+main .recomandation .list .status {
+  display: flex;
+  height: 240px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.404);
+  border-radius: 5px;
+}
+main .genres {
+  width: 100%;
+  margin-top: 20px;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+main .genres .title {
+  color: #fff;
+  opacity: 0.5;
+}
+main .genres .list {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+main .genres .list div {
+  padding: 5px 10px;
+  color: rgba(255, 255, 255, 0.505);
+  background: #101318;
+  margin-right: 10px;
+  margin-bottom: 2px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+main .genres .list .sel {
+  background: #2296F0;
+  color: #fff;
 }
 
 .search {
@@ -110,7 +201,7 @@ main .results {
   position: relative;
 }
 .anime-card .anime-image img {
-  width: 160px;
+  height: 240px;
   border-radius: 5px;
 }
 .anime-card .anime-title {

@@ -492,7 +492,17 @@ user_rates: function (q = {}, e = () => { }, d = undefined) {
     // event(response);
     // return response;
 },
-    }
+    },
+    Genres:{
+        url: 'https://shikimori.one/api/genres',
+        genres: async function(event = () => {}){
+            let url = this.url;
+            let request = shikimoriFetch("GET", url, TemplateShikimori.Headers.base());
+            let response = await request.fetch();
+            event(response);
+            return response;
+        }
+    },
 }
 let usr = {
     authorized: false,
