@@ -161,14 +161,14 @@ let kodikResponse = null;
 if (storage.get(shikimoriID)) {
     dataLocal = storage.get(shikimoriID);
 }
-try{
+try {
     if (shikimoriID == usr.Storage.Get('last-watch').id) {
         dataLast = usr.Storage.Get('last-watch');
         dataLocal.kodik_episode = dataLast.episode;
         console.log(dataLast);
     }
-}catch{
-    
+} catch {
+
 }
 
 Main(async (e) => {
