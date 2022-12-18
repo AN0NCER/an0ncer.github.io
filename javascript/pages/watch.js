@@ -1,6 +1,9 @@
 const visual = {
-    setHeader: function (response) {
-        $('.bg-paralax-img').css('background-image', 'url(https://kawai.shikimori.one' + response.image.original + ')');
+    setHeader: function () {
+        fetch('https://api.jikan.moe/v4/anime/'+shikimoriID+'/full').then(async (response)=>{
+            let data = await response.json();
+            $('.bg-paralax-img').css('background-image', 'url('+data.data.images.webp.large_image_url+')');
+        });
     },
     setMain: function (response) {
         $(document).attr("title", response.russian);
@@ -102,7 +105,7 @@ const visual = {
     },
     init: function (id, response) {
         this.watchFunction();
-        this.setHeader(response);
+        this.setHeader();
         this.setMain(response);
         this.setGenres(response);
         this.setTime(response);
