@@ -302,6 +302,7 @@ footer {
 }
 .player iframe {
   width: 100%;
+  aspect-ratio: 16/9;
   display: flex;
   border-radius: 5px;
   margin-top: 10px;
