@@ -1,8 +1,8 @@
 const visual = {
     setHeader: function () {
-        fetch('https://api.jikan.moe/v4/anime/'+shikimoriID+'/full').then(async (response)=>{
+        fetch('https://api.jikan.moe/v4/anime/' + shikimoriID + '/full').then(async (response) => {
             let data = await response.json();
-            $('.bg-paralax-img').css('background-image', 'url('+data.data.images.webp.large_image_url+')');
+            $('.bg-paralax-img').css('background-image', 'url(' + data.data.images.webp.large_image_url + ')');
         });
     },
     setMain: function (response) {
@@ -123,6 +123,18 @@ const visual = {
         $('.btn_play').click(() => {
             document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
         });
+        $('.btn_share').click(()=>{
+            if (navigator.canShare) {
+                navigator.share({
+                  title: shikiResponse.russian,
+                  text: shikiResponse.russian,
+                  url: window.location.origin + window.location.pathname + '?id='+shikimoriID + '&share'
+                })
+                .catch((error) => console.log('Sharing failed', error));
+              } else {
+                // Fallback to an alternative sharing solution
+              }
+        });
     },
     hidePlayer: function () {
         $('.episodes').css('display', 'none');
@@ -138,6 +150,7 @@ const storage = {
         localStorage.setItem(key, JSON.stringify(val));
     }
 }
+
 AsyncPlayer();
 
 const shikimoriID = new URLSearchParams(window.location.search).get('id');
