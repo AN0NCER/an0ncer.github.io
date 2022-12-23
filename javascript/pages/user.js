@@ -126,7 +126,7 @@ function DaysText(d){
     if(d == 0) return 'сегодня';
     if(d == 1) return `${d} день назад`;
     if(d > 1 && d < 5) return `${d} дня назад`;
-    if(d >= 6 && d < 20){
+    if(d >= 5 && d < 20){
         return `${d} дней назад`;
     }
     if(d >= 20 && d < 100){
