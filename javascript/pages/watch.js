@@ -123,17 +123,17 @@ const visual = {
         $('.btn_play').click(() => {
             document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
         });
-        $('.btn_share').click(()=>{
+        $('.btn_share').click(() => {
             if (navigator.canShare) {
                 navigator.share({
-                  title: shikiResponse.russian,
-                  text: shikiResponse.russian,
-                  url: window.location.origin + window.location.pathname + '?id='+shikimoriID + '&share'
+                    title: shikiResponse.russian,
+                    text: shikiResponse.russian,
+                    url: window.location.origin + window.location.pathname + '?id=' + shikimoriID + '&share'
                 })
-                .catch((error) => console.log('Sharing failed', error));
-              } else {
+                    .catch((error) => console.log('Sharing failed', error));
+            } else {
                 // Fallback to an alternative sharing solution
-              }
+            }
         });
     },
     hidePlayer: function () {
@@ -304,6 +304,7 @@ function UserLogged(ur) {
         }
     });
 
+    //Событие изменения епизода когда полтзователь авторизирован
     episodes.events.onchangeselect((i) => {
         if (user_rates) {
             shikimoriApi.User_rates.id(user_rates.id, (response) => {
@@ -328,6 +329,13 @@ function UserLogged(ur) {
 
     //console.log(user_rates);
 }
+
+episodes.events.onchangeselect((i) => {
+    if(dataLast && dataLast.episode != i){
+        //Если выбран другой эпизод очищаем таймкод
+        dataLast = null;
+    }
+});
 
 function SetLastAnime(cnt = false, drt = 0, i = 0) {
     let key = 'last-watch';
