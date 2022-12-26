@@ -31,3 +31,14 @@ In this example, the **`calculatePercentage`** function takes two arguments: **`
 >Note: To convert a percentage to a decimal number, you need to divide the percentage value by 100. For example, 50% is 0.5 in decimal format.
 
 ___
+
+I keep making news slider (trailers). The functionality will include:
+
+- Trailer data (video, audio, id, anime, image)
+- Direct inclusion of video + audio from google server
+- Additional **`YT.Player`** library if there are problems with the main server
+
+This list of trailers will be changed every Sunday. To do this, I am writing a node js and python script that will select the actual trailers of this week.
+
+All changes are in another branch (**main-page**)
+___
