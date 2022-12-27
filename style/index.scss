@@ -151,26 +151,49 @@ header {
   }
 }
 
-.swiper {
+.swiper-treilers {
   border-radius: 7px;
   padding-bottom: 20px;
+  position: relative;
+  overflow: hidden;
 
   .swiper-wrapper {
     .swiper-slide {
       &>.player {
-        iframe{
+        iframe {
           width: 100%;
           aspect-ratio: 16/9;
           position: absolute;
           z-index: 1;
+          border-radius: 7px;
         }
+
         video {
           aspect-ratio: 16/9;
           width: 100%;
           position: absolute;
           z-index: 1;
+          border-radius: 7px;
         }
 
+      }
+
+      &>.image-player>.btn {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #51B2FF 0%, #2672DA 95.83%);
+        cursor: pointer;
+        border-radius: 50%;
+        position: absolute;
+        display: grid;
+        place-items: center;
+        z-index: 2;
+
+        svg {
+          fill: #fff;
+          width: 17.3px;
+          transform: translateX(2px);
+        }
       }
 
       &>.image-player {
@@ -178,23 +201,9 @@ header {
         display: flex;
         align-items: center;
         justify-content: center;
-      }
 
-      &>.image-player>.btn {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, #51B2FF 0%, #2672DA 95.83%);
-        ;
-        cursor: pointer;
-        border-radius: 50%;
-        position: absolute;
-        display: grid;
-        place-items: center;
-        z-index: 2;
-        svg {
-          fill: #fff;
-          width: 17.3px;
-          transform: translateX(2px);
+        &>.hide {
+          display: none;
         }
       }
 
@@ -229,11 +238,32 @@ header {
 
     .swiper-pagination-bullet {
       background: #282B2F;
+      transition: .3s ease-in-out;
+      opacity: 1;
     }
 
     .swiper-pagination-bullet-active {
       background: #398BE0;
+      width: 50px;
+      border-radius: 6px;
     }
+  }
+}
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  z-index: 99;
+
+  svg {
+    width: 50px;
+    fill: #fff;
+    animation: rotate 3s ease-in-out infinite;
   }
 }
 
@@ -243,9 +273,10 @@ header {
   margin-right: 20px;
 }
 
-.hide{
+.hide {
   display: none;
 }
+
 @import './phone_menu';
 @import './cards';
 
@@ -258,5 +289,17 @@ header {
 @media screen and (min-width:700px) {
   .mobile {
     display: none;
+  }
+}
+
+// Animations
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }
