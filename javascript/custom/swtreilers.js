@@ -217,6 +217,7 @@ function YTPlayerStateChange(e){
 //Создаем слайдер
 const t_swiper = new Swiper('.swiper-treilers', {
     // Parametrs
+    spaceBetween: 10,
     pagination: {
         el: '.swiper-pagination',
         type: 'bullets',

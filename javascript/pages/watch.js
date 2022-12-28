@@ -178,10 +178,9 @@ if (storage.get(shikimoriID)) {
     dataLocal = storage.get(shikimoriID);
 }
 try {
-    if (shikimoriID == usr.Storage.Get('last-watch').id) {
-        dataLast = usr.Storage.Get('last-watch');
+    if (shikimoriID == !Array.isArray(usr.Storage.Get('last-watch'))?[usr.Storage.Get('last-watch')].find(item => item.id == shikimoriID).id:usr.Storage.Get('last-watch').find(item => item.id == shikimoriID).id) {
+        dataLast = !Array.isArray(usr.Storage.Get('last-watch'))?[usr.Storage.Get('last-watch')].find(item => item.id == shikimoriID):usr.Storage.Get('last-watch').find(item => item.id == shikimoriID);
         dataLocal.kodik_episode = dataLast.episode;
-        console.log(dataLast);
     }
 } catch {
 
@@ -227,7 +226,7 @@ episodes.events.onchangeselect((i) => {
     if (dataLocal.kodik_episode != i) {
         dataLocal.kodik_episode = i;
         storage.set(shikimoriID, dataLocal);
-        SetLastAnime();
+        updateHistory();
         SetPlayer();
     }
 });
@@ -337,19 +336,67 @@ episodes.events.onchangeselect((i) => {
     }
 });
 
-function SetLastAnime(cnt = false, drt = 0, i = 0) {
-    let key = 'last-watch';
-    let data = {
+/*
+    Функция обновления истории простора
+    cnt {boolean} - Досмотренна ли серия (true) или нет (false)
+    durration {int} - Момент на котором остановился пользователь (в секундах)
+    i {int} - Прибавление эпизода
+*/
+function updateHistory(cnt = false, durration = 0, i = 0) {
+    const key = 'last-watch';
+    let history = storage.get(key)
+    //Проверем на пустоту
+    if(history == null){
+        history = [{
+            id: shikimoriID,
+            continue: cnt,
+            duration: durration,
+            fullduration: play_duration,
+            episode: cnt ? dataLocal.kodik_episode + i : dataLocal.kodik_episode + i,
+            name: shikiResponse.russian,
+            image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
+        }];
+    }
+    // Проверяем, является ли history массивом
+    if (!Array.isArray(history)) {
+      history = [history];
+    }
+    console.log(history);
+    // Находим индекс элемента с заданным id в массиве history
+    const index = history.findIndex(item => item.id === shikimoriID);
+  
+    // Если элемент с таким id не найден, то добавляем его на первое место
+    if (index === -1) {
+      history.unshift({
         id: shikimoriID,
         continue: cnt,
-        duration: drt,
+        duration: durration,
+        fullduration: play_duration,
         episode: cnt ? dataLocal.kodik_episode + i : dataLocal.kodik_episode + i,
         name: shikiResponse.russian,
-        year: new Date(shikiResponse.aired_on).getFullYear(),
+        image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
+    });
+    } else {
+      // В противном случае изменяем элемент и переносим его на первое место
+      history[index] = {
+        id: shikimoriID,
+        continue: cnt,
+        duration: durration,
+        fullduration: play_duration,
+        episode: cnt ? dataLocal.kodik_episode + i : dataLocal.kodik_episode + i,
+        name: shikiResponse.russian,
         image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
     };
-    storage.set(key, data);
-}
+      history.unshift(history.splice(index, 1)[0]);
+    }
+  
+    // Если в истории больше 5 элементов, то удаляем последний
+    if (history.length > 5) {
+      history.pop();
+    }
+
+    storage.set(key, history);
+  }
 
 function Loaded() {
     $(document).ready(() => {
@@ -424,9 +471,9 @@ function kodikMessageListener(message) {
     if (message.data.key == 'kodik_player_pause') {
         let prc = 5;
         if (play_duration - play_time <= (play_duration / 100 * prc)) {
-            SetLastAnime(false, play_time, 1);
+            updateHistory(false, play_time, 1);
         } else {
-            SetLastAnime(true, play_time)
+            updateHistory(true, play_time);
         }
     }
 
