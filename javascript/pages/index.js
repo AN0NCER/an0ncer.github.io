@@ -226,7 +226,7 @@ function calculatePercentage(part, whole) {
 
 //Получаем положение пользователя по ipа
 function GetUserPosition(){
-    fetch('http://api.sypexgeo.net/json/').then(async(response)=>{
+    fetch('https://api.sypexgeo.net/json/').then(async(response)=>{
         const data = await response.json();
         console.log(data);
 
