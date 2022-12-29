@@ -3,6 +3,11 @@ let genres = [];
 let kind = '';
 $('.search').keyup(() => {
     let value = $('.search').val();
+    Search(value);
+});
+
+//Функция поиска
+function Search(value) {
     shikimoriApi.Animes.animes({
         search: value,
         limit: 16,
@@ -18,10 +23,16 @@ $('.search').keyup(() => {
             }
         }
     });
-});
+}
+
+//Проверяем есть ли запрос из вне
+let searchParams = new URLSearchParams(window.location.search).get('val');
+if(searchParams){
+    Search(searchParams);
+}
 
 //Загрузка kind
-$('.search-menu > div').click((t)=>{
+$('.search-menu > div').click((t) => {
     kind = ChangeKind(t);
     console.log(kind);
     $('.search-menu > .select').removeClass('select');
@@ -32,9 +43,9 @@ $('.search-menu > div').click((t)=>{
 shikimoriApi.Genres.genres((response) => {
     for (let index = 0; index < response.length; index++) {
         const element = response[index];
-        if(element.kind == 'anime'){
+        if (element.kind == 'anime') {
             $('.genres > .list').append(`<div data-id="${element.id}">${element.russian}</div>`);
-            $(`.genres > .list > div[data-id="${element.id}"]`).click((t)=>ChangeGenres(t));
+            $(`.genres > .list > div[data-id="${element.id}"]`).click((t) => ChangeGenres(t));
         }
     }
 });
@@ -67,7 +78,7 @@ Main((e) => {
                         $(`.recomandation > .list`).append(`<a href="/watch.html?id=${id}" data-id="${id}"></a>`);
                         LoadAnime(id);
                     });
-                    AnylizeSimiliar(response, ()=>{SaveSimiliarList()});
+                    AnylizeSimiliar(response, () => { SaveSimiliarList() });
                 } else {
                     AnylizeSimiliar(response, () => {
                         $('.recomandation > .list').empty();
@@ -157,22 +168,22 @@ function LoadAnime(id) {
     });
 }
 
-function ChangeGenres(target){
+function ChangeGenres(target) {
     let id = $(target.currentTarget).data('id');
     let find = genres.findIndex(x => x == id);
-    if(find == -1){
+    if (find == -1) {
         genres.push(id);
         $(target.currentTarget).addClass('sel');
-    }else{
+    } else {
         genres.splice(find, 1);
         $(target.currentTarget).removeClass('sel');
     }
 }
 
 
-function ChangeKind(target){
+function ChangeKind(target) {
     let kind = $(target.currentTarget).data('kind');
-    if(kind == 'clear'){
+    if (kind == 'clear') {
         return '';
     }
     return kind;

@@ -12,8 +12,13 @@
 
 img {
     pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 a{
     text-decoration: none;
+    user-select: none;
+    -webkit-user-drag: none;
 }
+

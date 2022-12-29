@@ -1,78 +1,274 @@
+//Жанр для вывода новых аниме
+let genres = '';
+
+//Авторизация пользователя true / false
+//Метод Main вызывается файлом shikimori.js
 Main((e) => {
-    console.log(e);
-
-    shikimoriApi.Animes.animes({ kind: 'tv', order: 'ranked', status: 'ongoing', limit: 8, season: new Date().getFullYear() }, async (response) => {
-        for (let index = 0; index < response.length; index++) {
-            const element = response[index];
-            let html = `<div class="swiper-slide-anim"> <a href="/watch.html?id=${element.id}"> <div class="card_anime"> <img src="https://nyaa.shikimori.one${element.image.original}" alt="${element.russian}"> <div class="card_user"></div> <div class="card_content"> <div class="episodes"> ${element.episodes_aired} Серий </div><div class="title">${element.russian}</div><div class="score"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>${element.score}</div></div></div></a> </div>`;
-            $('#newanime').append(html);
-        }
-    });
-
     if (e) {
         CountNotification();
+        ShowUser();
+    }
+    //Функция отображение пользователя
+    async function ShowUser(){
+        let data = usr.Storage.Get(usr.Storage.keys.whoami);
+        console.log(data);
+
+        $('.image-profile > img').attr('src', data.avatar);
+        $('.name > b').text(data.nickname);
+        $('.name > span').text('С возврашением,')
     }
 
-    function CountNotification(id = usr.Storage.Get(usr.Storage.keys.whoami).id) {
+    //Подсчитывает количество уведомлений на аккаунте в shikimori
+    async function CountNotification(id = usr.Storage.Get(usr.Storage.keys.whoami).id) {
         shikimoriApi.Users.unread_messages(id, async (response) => {
             if (response.failed && response.status == 429) {
                 await sleep(1000);
                 CountNotification(id);
                 return;
             }
-            console.log();
-            $('.btn-notification > .count').text((response.messages + response.news + response.notifications))
+            let count = response.messages + response.news + response.notifications;
+            
+            if(count > 0){
+                $('.notification > .dot').removeClass('hide');
+            }
         });
     }
 });
 
-new Swiper('.swiper_anim', {
-    // Optional parameters
-    direction: 'horizontal',
-    slidesPerView: 'auto',
-    spaceBetween: 0,
-    //slidesPerView: 1,
-    loop: false,
-    slideClass: 'swiper-slide-anim',
-    coverflowEffect: {
-        rotate: 30,
-        slideShadows: false,
-        scale: .5
-    }
-});
+//Загрузка данных
+GetAnimeShikimori();
+GetUpdatetAnime();
+GitHubRelease();
+GetUserPosition();
 
-function _0x42aa(_0x54c002, _0x274c6e) { const _0x16262c = _0x1626(); return _0x42aa = function (_0x42aa5e, _0x4e35b6) { _0x42aa5e = _0x42aa5e - 0x9b; let _0x39dc96 = _0x16262c[_0x42aa5e]; return _0x39dc96; }, _0x42aa(_0x54c002, _0x274c6e); } function _0x1626() { const _0x48d31d = ['\x22\x20alt=\x22', 'results', '\x22>\x20<div\x20class=\x22card_user\x22></div>\x20<div\x20class=\x22card_content\x22>\x20<div\x20class=\x22episodes\x22>\x20', 'failed', 'Animes', '#updateanime', '<div\x20class=\x22swiper-slide-anim\x22>\x20<a\x20href=\x22/watch.html?id=', 'original', '74504FKsAuK', 'append', '19551eqRKLS', 'length', 'anime-serial', 'list', 'push', 'image', '4143340ZDguPg', '</div></div></div></a>\x20</div>', '33390WPZLqZ', 'animes', 'russian', '\x20Серий\x20</div><div\x20class=\x22title\x22>', '</div><div\x20class=\x22score\x22>\x20<svg\x20xmlns=\x22http://www.w3.org/2000/svg\x22\x20viewBox=\x220\x200\x20576\x20512\x22><path\x20d=\x22M316.9\x2018C311.6\x207\x20300.4\x200\x20288.1\x200s-23.4\x207-28.8\x2018L195\x20150.3\x2051.4\x20171.5c-12\x201.8-22\x2010.2-25.7\x2021.7s-.7\x2024.2\x207.9\x2032.7L137.8\x20329\x20113.2\x20474.7c-2\x2012\x203\x2024.2\x2012.9\x2031.3s23\x208\x2033.8\x202.3l128.3-68.5\x20128.3\x2068.5c10.8\x205.7\x2023.9\x204.9\x2033.8-2.3s14.9-19.3\x2012.9-31.3L438.5\x20329\x20542.7\x20225.9c8.6-8.5\x2011.7-21.2\x207.9-32.7s-13.7-19.9-25.7-21.7L381.2\x20150.3\x20316.9\x2018z\x22/></svg>', '26viqyvQ', 'ready', '1246748oxWjLd', '1328lkyMWN', 'toString', '1660635tRsWUi', '65412vTSQWf', '9lDjrXi', '11VPXNyZ', '210dRdCoe', '1781nPDgaI']; _0x1626 = function () { return _0x48d31d; }; return _0x1626(); } const _0x17d245 = _0x42aa; (function (_0x13e148, _0x19fa7e) { const _0x313376 = _0x42aa, _0x25dbbb = _0x13e148(); while (!![]) { try { const _0x14e59b = -parseInt(_0x313376(0xa1)) / 0x1 * (parseInt(_0x313376(0xb0)) / 0x2) + -parseInt(_0x313376(0xb7)) / 0x3 * (-parseInt(_0x313376(0xb2)) / 0x4) + -parseInt(_0x313376(0xb9)) / 0x5 * (parseInt(_0x313376(0xab)) / 0x6) + parseInt(_0x313376(0xa3)) / 0x7 * (parseInt(_0x313376(0xb3)) / 0x8) + parseInt(_0x313376(0xb5)) / 0x9 + parseInt(_0x313376(0xa9)) / 0xa * (-parseInt(_0x313376(0xb8)) / 0xb) + -parseInt(_0x313376(0xb6)) / 0xc * (-parseInt(_0x313376(0xba)) / 0xd); if (_0x14e59b === _0x19fa7e) break; else _0x25dbbb['push'](_0x25dbbb['shift']()); } catch (_0x4d398c) { _0x25dbbb['push'](_0x25dbbb['shift']()); } } }(_0x1626, 0xae2a9), $(document)[_0x17d245(0xb1)](async () => { const _0x597224 = _0x17d245; let _0x4afa0f = await kodikApi[_0x597224(0xa6)]({ 'sort': 'updated_at', 'limit': 0x8, 'types': _0x597224(0xa5) }); if (!_0x4afa0f[_0x597224(0x9c)]) { let _0x54a3c9 = []; for (let _0x24831a = 0x0; _0x24831a < _0x4afa0f[_0x597224(0xbc)][_0x597224(0xa4)]; _0x24831a++) { _0x54a3c9[_0x597224(0xa7)](_0x4afa0f[_0x597224(0xbc)][_0x24831a]['shikimori_id']); } _0x4afa0f = await shikimoriApi[_0x597224(0x9d)][_0x597224(0xac)]({ 'ids': _0x54a3c9[_0x597224(0xb4)](), 'limit': 0x8 }); for (let _0xc07eb7 = 0x0; _0xc07eb7 < _0x4afa0f['length']; _0xc07eb7++) { const _0x378e11 = _0x4afa0f[_0xc07eb7]; let _0x12d25d = _0x597224(0x9f) + _0x378e11['id'] + '\x22>\x20<div\x20class=\x22card_anime\x22>\x20<img\x20src=\x22https://nyaa.shikimori.one' + _0x378e11[_0x597224(0xa8)][_0x597224(0xa0)] + _0x597224(0xbb) + _0x378e11['russian'] + _0x597224(0x9b) + _0x378e11['episodes_aired'] + _0x597224(0xae) + _0x378e11[_0x597224(0xad)] + _0x597224(0xaf) + _0x378e11['score'] + _0x597224(0xaa); $(_0x597224(0x9e))[_0x597224(0xa2)](_0x12d25d); } } }));
+//Установка возможность компьютерам пролистывать с помощью мышки
+scrollElementWithMouse('.section-genres');
+scrollElementWithMouse('.section-anime');
+scrollElementWithMouse('.section-update');
 
-if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
-    fetch("https://api.github.com/repos/AN0NCER/an0ncer.github.io/releases").then(async (response) => {
-        if (response.ok) {
-            let data = await response.json();
-            console.log(data[0]);
-            let date = new Date(data[0].published_at);
-            $('pwa-show > .content > .version > b').text(data[0].tag_name);
-            $('pwa-show > .content > .date > span').text(`${date.getFullYear()}.${date.getMonth()}.${date.getDay()}`);
-        }
-    });
-}
-
-let last_watch = usr.Storage.Get('last-watch');
-if(last_watch){
-    console.log(last_watch);
-    $('#last-watch').attr("href", `watch.html?id=${last_watch.id}&player=true&continue=${last_watch.continue}`);
-    if(last_watch.continue){
-        let time = Math.floor(last_watch.duration / 60) +':'+last_watch.duration % 60;
-        $('.last-time').text(`(${time})`);
-    }else{
-        $('.last-time').empty();
-    }
-    $('.last-episode').text(last_watch.episode);
-    $('.last-name').text(last_watch.name);
-    $('.last-year').text(last_watch.year + " год")
-    $(".last-image").attr("src", last_watch.image);
-    $('#last-watch').removeClass('dis--none');
-}
+//Загружаем историю последних просмотров пользователя
+GetHistoryWatch();
 
 //https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep/39914235#39914235
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+//Функция для прокручивания елемента с помощью мышки
+function scrollElementWithMouse(dom) {
+    const element = $(dom)[0];
+
+    let isDragging = false;
+    let currentX;
+    let initialMouseX;
+    let scrollLeft;
+
+    element.addEventListener('mousedown', (e) => {
+        initialMouseX = e.clientX;
+        scrollLeft = element.scrollLeft;
+        isDragging = true;
+    });
+
+    element.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            currentX = e.clientX - initialMouseX;
+            element.scrollLeft = scrollLeft - currentX;
+        }
+    });
+
+    element.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+
+    element.addEventListener('mouseleave', () => {
+        isDragging = false;
+    });
+
+    element.addEventListener('wheel', (e) => {
+        // Проверить, достигнут ли конец элемента
+        if (Math.abs(element.scrollLeft - (element.scrollWidth - element.clientWidth)) <= 2 && e.deltaY > 0) {
+            return;
+        }
+        //Проверить если число явсляется отрицательным и мы на начале элемента то прокручивать на врех дальше
+        if (e.deltaY < 0 && element.scrollLeft == 0) {
+            return;
+        }
+        e.preventDefault();
+        element.scrollLeft += e.deltaY;
+    });
+}
+
+//Фукция запроса новых аниме с shikimori
+function GetAnimeShikimori() {
+    shikimoriApi.Animes.animes({ kind: 'tv', order: 'ranked', status: 'ongoing', limit: 8, genre: genres, season: new Date().getFullYear() }, async (response) => {
+        if (response.failed && response.status == 429) {
+            await sleep(1000);
+            GetAnimeShikimori();
+            return;
+        }
+
+        const element = $('.section-anime');
+
+        //Очищение елемента
+        element.empty();
+
+        for (let i = 0; i < response.length; i++) {
+            const html = CreateElementAnime(response[i]);
+            element.append(html);
+        }
+    });
+}
+
+//функция создания елемента истории просмотра
+function CreateElementHistory(data) {
+    //Для старых версий
+    const prcnt = data.fullduration?calculatePercentage(data.duration, data.fullduration):calculatePercentage(data.duration, data.duration);
+    const time = Math.floor(data.duration / 60) + ':' + (data.duration % 60).toString().padEnd(2, '0');
+    const link = `watch.html?id=${data.id}&player=true&continue=${data.continue}`;
+    return `<div class="swiper-slide"><div class="frame-info"><div class="frame-status">
+            <div class="status">Эпизод: <b>${data.episode}</b> [${time}]</div>
+            <div class="name">${data.name}</div>
+        </div>
+        <a href="${link}">
+            <div class="btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" /></svg>Продолжить</div></a></div><div class="frame-anime">
+        <div class="progress-watch" style="width: ${prcnt}%;"></div>
+        <img src="${data.image}"
+            alt="${data.name}">
+        <a href="${link}">
+            <div class="btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" /></svg></div></a></div></div>`;
+}
+
+//Функция создание елемента anime-card
+function CreateElementAnime(data) {
+    return `<a href="/watch.html?id=${data.id}">
+    <div class="card-anime" data-anime="${data.id}">
+        <div class="content-img">
+            <div class="saved"></div>
+            <div class="title">${data.russian}</div>
+            <img src="https://nyaa.shikimori.one${data.image.original}" alt="${data.russian}">
+        </div>
+        <div class="content-inf">
+            <div class="inf-year">${new Date(data.aired_on).getFullYear()}</div>
+            <div class="inf-rtng"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"></path></svg>${data.score}</div>
+        </div>
+    </div>
+</a>`;
+}
+
+//Функция обновленных аниме с kodik player
+async function GetUpdatetAnime() {
+    let response = await kodikApi.list({ sort: 'updated_at', limit: 8, types: 'anime-serial' });
+    if (response.failed) {
+        await sleep(1000);
+        GetUpdatetAnime();
+        return;
+    }
+    let ids = [];
+    for (let index = 0; index < response.results.length; index++) {
+        ids.push(response.results[index].shikimori_id);
+    }
+    //Получаем данные с shikimori сервера
+    ShikimoriAnime(ids);
+
+    //Достает данные с shikimori cо взятых id из kodik сервера
+    function ShikimoriAnime(ids) {
+        shikimoriApi.Animes.animes({ ids: ids.toString(), limit: 8 }, async (response) => {
+            if (response.failed && response.status == 429) {
+                await sleep(1000);
+                ShikimoriAnime(ids);
+                return;
+            }
+
+            const element = $('.section-update');
+
+            for (let i = 0; i < response.length; i++) {
+                const html = CreateElementAnime(response[i]);
+                element.append(html);
+            }
+        });
+    }
+}
+
+//Функция получения данных с GitHub
+async function GitHubRelease() {
+    fetch("https://api.github.com/repos/AN0NCER/an0ncer.github.io/releases").then(async (response) => {
+        if (response.ok) {
+            let data = await response.json();
+            let date = new Date(data[0].published_at);
+            $('.github > .version > span').text(data[0].tag_name);
+            $('.github > .date').text(`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`);
+        }
+    });
+}
+
+//Функция для загрузки истории просмотра пользователя
+function GetHistoryWatch() {
+    let last_watch = usr.Storage.Get('last-watch');
+
+    //Для старых версий проверям тип обьекта
+    if (Object.prototype.toString.call(last_watch) == '[object Object]') {
+        last_watch = [last_watch];
+    }
+
+    if (last_watch) {
+        const element = $('.swiper-continue > .swiper-wrapper');
+        for (let i = 0; i < last_watch.length; i++) {
+            const html = CreateElementHistory(last_watch[i]);
+            element.append(html);
+        }
+    }
+}
+
+//Функция просчета процента от числа
+function calculatePercentage(part, whole) {
+    return (part / whole) * 100;
+}
+
+//Получаем положение пользователя по ipа
+function GetUserPosition(){
+    fetch('http://api.sypexgeo.net/json/').then(async(response)=>{
+        const data = await response.json();
+        console.log(data);
+
+        $('.position > span').text(data.country.name_en + ', ' + data.city.name_en);
+    });
+}
+
+//Слайдер для блока продолжение просмотра
+new Swiper('.swiper-continue', {
+    // Parametrs
+    slidesPerView: 1,
+    spaceBetween: 10,
+    breakpoints: {
+        740: {
+            slidesPerView: 2
+        }
+    },
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+    },
+});
+
+//Событие нажатие на жанр
+$('.genres').click((e)=>{
+    const target = $(e.currentTarget);
+    if(target.hasClass('selected')){
+        return;
+    }
+
+    //Снимаем выдиление с другого елемента и перезначаем его
+    $('.section-genres > .selected').removeClass('selected');
+    target.addClass('selected');
+    genres = target.data('id');
+    console.log(genres);
+    GetAnimeShikimori()
+})
+
+//Событие нажатие поиска аниме
+$('.search > .btn').click((e) => {
+    //Получение значения посика
+    let value = $(e.currentTarget.parentNode)[0].firstElementChild.value;
+
+    window.location.href = '/search.html?val='+value;
+});
