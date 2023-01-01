@@ -100,7 +100,7 @@ function scrollElementWithMouse(dom) {
 
 //Фукция запроса новых аниме с shikimori
 function GetAnimeShikimori() {
-    shikimoriApi.Animes.animes({ kind: 'tv', order: 'ranked', status: 'ongoing', limit: 8, genre: genres, season: new Date().getFullYear() }, async (response) => {
+    shikimoriApi.Animes.animes({ kind: 'tv', order: 'ranked', status: 'ongoing', limit: 8, genre: genres, season: `${new Date().getFullYear()-1}_${new Date().getFullYear()}` }, async (response) => {
         if (response.failed && response.status == 429) {
             await sleep(1000);
             GetAnimeShikimori();
@@ -108,7 +108,6 @@ function GetAnimeShikimori() {
         }
 
         const element = $('.section-anime');
-
         //Очищение елемента
         element.empty();
 
