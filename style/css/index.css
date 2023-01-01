@@ -266,6 +266,13 @@ header > .notification > .dot {
   margin-left: 10px;
   color: #fff;
   font-size: 14px;
+  width: 100%;
+}
+.swiper-continue .swiper-wrapper .swiper-slide .frame-info .frame-status > .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: calc(100% - 10px);
 }
 .swiper-continue .swiper-wrapper .swiper-slide .frame-info > a {
   display: flex;
