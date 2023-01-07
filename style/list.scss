@@ -30,6 +30,7 @@ main {
             background: #fff;
             border-radius: 5px;
             opacity: .04;
+            animation: loading 1.5s infinite;
         }
     }
 }
@@ -86,6 +87,19 @@ main {
         svg {
             width: 10px;
         }
+    }
+}
+
+/*Animation*/
+@keyframes loading {
+    0%{
+        opacity: .04;
+    }
+    50%{
+        opacity: .1;
+    }
+    100%{
+        opacity: .04;
     }
 }
 
