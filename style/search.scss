@@ -149,7 +149,8 @@ main {
         display: flex;
         justify-content: space-between;
         align-items: end;
-        .status{
+
+        .status {
             opacity: .4;
             font-size: 12px;
         }
@@ -279,6 +280,85 @@ main {
     }
 }
 
+.genres,
+.voice {
+    display: flex;
+
+    .title {
+        width: 100%;
+        margin-top: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+        color: #fff;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+        overflow-x: scroll;
+        overflow-y: hidden;
+
+        .block--1,
+        .block--2,
+        .block--3 {
+            display: flex;
+            margin-top: 10px;
+
+            &>div:first-child {
+                margin-left: 20px;
+            }
+
+            &>div:last-child {
+                margin-right: 20px;
+            }
+
+            &>div {
+                display: flex;
+                color: #A9AAAC;
+                background: #282B2F;
+                align-items: center;
+                border-radius: 5px;
+                height: 35px;
+                padding-left: 25px;
+                white-space: nowrap;
+                padding-right: 25px;
+                margin-right: 10px;
+                font-size: 16px;
+
+                &>div {
+                    color: #398BE0;
+                    font-size: 12px;
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+}
+
+.github {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Manrope;
+    margin-top: 50px;
+    color: #404246;
+
+    svg {
+        height: 50px;
+        fill: #404246;
+    }
+
+    .title {
+        margin-top: 10px;
+    }
+}
+
+footer {
+    margin-top: 110px;
+}
+
 
 
 @keyframes loading {
@@ -302,363 +382,5 @@ main {
 
     100% {
         transform: rotate(360deg);
-    }
-}
-
-// @media screen and (min-width:1100px){
-//     .recomend{
-//         margin: 0 auto;
-//     }
-// }
-
-// header {
-//     display: flex;
-//     position: relative;
-//     justify-content: center;
-
-//     .input-search {
-//         width: 100%;
-//         position: relative;
-//         display: grid;
-//         place-items: center;
-//         height: 40px;
-
-//         .btn {
-//             position: absolute;
-//             right: 0;
-//             background: transparent;
-//             opacity: .7;
-//             transition: .3s ease-in-out;
-//         }
-
-//         .icon {
-//             position: absolute;
-//             left: 10px;
-//             display: flex;
-//             transition: .3s ease-in-out;
-
-//             svg {
-//                 width: 16px;
-//                 fill: #fff;
-//                 opacity: 0.7;
-//             }
-//         }
-
-//         &>input:focus {
-//             &::placeholder {
-//                 padding-left: 0px;
-//             }
-//         }
-
-//         input:focus~.icon {
-//             opacity: 0;
-//         }
-
-//         input:not(:placeholder-shown)~.icon {
-//             opacity: 0;
-//         }
-//     }
-
-//     input {
-//         width: 100%;
-//         border-radius: 7px;
-//         height: 40px;
-//         border: none;
-//         background: #282D39;
-//         color: #fff;
-//         padding-left: 10px;
-//         font-family: Manrope;
-
-//         &::placeholder {
-//             padding-left: 30px;
-//             color: #fff;
-//             opacity: 0.7;
-//             transition: .3s ease-in-out;
-//         }
-//     }
-
-//     .btn {
-//         min-width: 40px;
-//         height: 40px;
-//         background: linear-gradient(135deg, #51B2FF 0%, #2672DA 95.83%);
-//         display: grid;
-//         place-items: center;
-//         border-radius: 7px;
-//         cursor: pointer;
-
-//         svg {
-//             height: 18px;
-//             fill: #fff;
-//         }
-//     }
-
-//     .btn-search, .btn-back {
-//         transition: .3s ease-in-out;
-//         overflow: hidden;
-//     }
-
-//     .btn-back {
-//         margin-right: 10px;
-//         overflow: hidden;
-//         transition: .3s ease-in-out;
-//     }
-
-//     .btn-filter{
-//         overflow: hidden;
-//         transition: .3s ease-in-out;
-//     }
-// }
-
-// header.state_common {
-//     .btn-filter{
-//         width: 0px;
-//         min-width: 0px;
-//         max-width: 0px;
-//     }
-
-//     .btn-back{
-//         width: 0px;
-//         min-width: 0px;
-//         max-width: 0px;
-//         margin-right: 0;
-//     }
-
-//     .btn-search {
-//         width: 40px;
-//         min-width: 40px;
-//         max-width: 40px;
-//         margin-left: 10px;
-//     }
-// }
-
-// header.state_focus {
-//     .btn-filter{
-//         width: 40px;
-//         min-width: 40px;
-//         max-width: 40px;
-//     }
-
-//     .btn-back{
-//         width: 40px;
-//         min-width: 40px;
-//         max-width: 40px;
-//         margin-right: 10px;
-//     }
-
-//     .btn-search {
-//         width: 0px;
-//         min-width: 0px;
-//         max-width: 0px;
-//         margin-left: 0px;
-//     }
-// }
-
-// header {
-//     background: $bg;
-//     width: 100%;
-//     max-width: 1100px;
-//     display: flex;
-//     flex-direction: column;
-//     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-//     margin: 0 auto;
-//     z-index: 5;
-
-//     .search-block {
-//         align-items: center;
-//         display: flex;
-//         position: relative;
-
-//         svg {
-//             position: absolute;
-//             width: 15px;
-//             fill: #fff;
-//             right: 30px;
-//             opacity: .5;
-//         }
-//     }
-
-//     .search-menu{
-//         margin-top: 10px;
-//         display: flex;
-//         max-width: 100%;
-//         overflow-x: auto;
-//         color: #fff;
-//         font-family: Inter;
-//         margin-left: 20px;
-//         margin-right: 20px;
-//         padding-bottom: 20px;
-//         div{
-//             margin-right: 20px;
-//             opacity: .5;
-//             cursor: pointer;
-//         }
-//         .select{
-//             opacity: 1;
-//         }
-//     }
-
-// }
-
-main {
-    background: $bg;
-    width: 100%;
-    min-height: 20px;
-    font-family: Inter;
-
-    .results,
-    .block {
-        display: flex;
-        margin-left: 20px;
-        margin-right: 20px;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-
-    .recomandation {
-        width: 100%;
-        margin-top: 20px;
-        max-width: 1100px;
-        margin-left: auto;
-        margin-right: auto;
-
-        .title {
-            color: #fff;
-            opacity: 0.5;
-        }
-
-        .list {
-            display: flex;
-            width: 100%;
-            margin-top: 20px;
-            max-width: 1100px;
-            overflow-x: auto;
-
-            a {
-                margin-right: 10px;
-                margin-bottom: 10px;
-
-                &:empty {
-                    height: 263px;
-                    min-width: 160px;
-                    background: #fff;
-                    border-radius: 5px;
-                    opacity: .04;
-                }
-            }
-
-            .status {
-                display: flex;
-                height: 240px;
-                width: 100%;
-                align-items: center;
-                justify-content: center;
-                color: #fff;
-                background: rgba(255, 255, 255, 0.404);
-                border-radius: 5px;
-            }
-        }
-    }
-
-    .genres {
-        width: 100%;
-        margin-top: 20px;
-        max-width: 1100px;
-        margin-left: auto;
-        margin-right: auto;
-
-        .title {
-            color: #fff;
-            opacity: 0.5;
-        }
-
-        .list {
-            margin-top: 20px;
-            display: flex;
-            flex-wrap: wrap;
-
-            div {
-                padding: 5px 10px;
-                color: rgba(255, 255, 255, 0.505);
-                background: $bg;
-                margin-right: 10px;
-                margin-bottom: 2px;
-                border-radius: 3px;
-                cursor: pointer;
-            }
-
-            .sel {
-                background: #2296F0;
-                color: #fff;
-            }
-        }
-    }
-}
-
-// .search {
-//     width: 100%;
-//     height: 40px;
-//     margin: 10px 20px;
-//     border: none;
-//     outline: none;
-//     border-radius: 5px;
-//     background: #1e232f;
-//     padding-left: 10px;
-//     padding-right: 30px;
-//     color: #fff;
-//     font-size: 13pt;
-
-//     &::placeholder {
-//         color: #fff;
-//         opacity: .5;
-//     }
-// }
-
-.anime-card {
-    margin-bottom: 10px;
-
-    .anime-image {
-        position: relative;
-
-        img {
-            height: 240px;
-            border-radius: 5px;
-        }
-    }
-
-    .anime-title {
-        max-width: 140px;
-        font-size: 13px;
-        color: #fff;
-        word-wrap: break-word;
-        white-space: nowrap;
-        line-height: 1.65;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-}
-
-.play-btn {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .btn {
-        width: 35px;
-        height: 35px;
-        background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
-        overflow: hidden;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-            width: 10px;
-        }
     }
 }

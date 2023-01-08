@@ -4,7 +4,14 @@ Main((e) => {
     Recomendation(e);
 });
 
+//Отображаем доступные жанры
+ShowGenres();
+//Отображаем доступные озвучки
+ShowVoice();
+
 scrollElementWithMouse('.recomend > .content');
+scrollElementWithMouse('.genres > .content');
+scrollElementWithMouse('.voice > .content');
 
 //Статусы поиска
 const states = [
@@ -120,17 +127,6 @@ $('.search-menu > div').click((t) => {
     $(t.currentTarget).addClass('select');
 })
 
-//Загрузка жанров
-shikimoriApi.Genres.genres((response) => {
-    for (let index = 0; index < response.length; index++) {
-        const element = response[index];
-        if (element.kind == 'anime') {
-            $('.genres > .list').append(`<div data-id="${element.id}">${element.russian}</div>`);
-            $(`.genres > .list > div[data-id="${element.id}"]`).click((t) => ChangeGenres(t));
-        }
-    }
-});
-
 
 function AddAnime(element, dom) {
     let html = `<a href="/watch.html?id=${element.id}"><div class="anime-card"><div class="anime-image"><img src="https://nyaa.shikimori.one${element.image.original}" alt="${element.russian}"><div class="play-btn"><div class="btn"><svg viewBox="0 0 30 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.70312 0.551381C4.54688 -0.159557 3.09375 -0.182995 1.91406 0.481068C0.734375 1.14513 0 2.39513 0 3.75451V31.2545C0 32.6139 0.734375 33.8639 1.91406 34.5279C3.09375 35.192 4.54688 35.1608 5.70312 34.4576L28.2031 20.7076C29.3203 20.0279 30 18.817 30 17.5045C30 16.192 29.3203 14.9889 28.2031 14.3014L5.70312 0.551381Z" fill="white" /></svg></div></div></div><div class="anime-title">${element.russian}</div></div></a>`;
@@ -155,6 +151,43 @@ function ChangeKind(target) {
         return '';
     }
     return kind;
+}
+//Получаем доступные озвуки аниме
+function ShowVoice(){
+    kodikApi.translations({types: 'anime-serial', translation_type: 'voice', sort: 'count'}, (response)=>{
+        console.log(response);
+
+        let i = 1;
+
+        for (let index = 0; index < response.results.length; index++) {
+            const element = response.results[index];
+            if(element.count >= 10){
+                $('.voice > .content > .block--'+i).append('<div>'+element.title+'<div>'+element.count+'</div></div>');
+                i==1?i=2:i==2?i=3:i=1;
+            }
+        }
+    })
+}
+
+//Получаем жанры аниме
+function ShowGenres() {
+    shikimoriApi.Genres.genres(async (response) => {
+        if(response.failed){
+            await sleep(1000);
+            return ShowGenres();
+        }
+
+        //Разбиваем на 3 строки
+        let i = 1;
+
+        for (let index = 0; index < response.length; index++) {
+            const element = response[index];
+            if (element.kind == 'anime') {
+                $('.genres > .content > .block--'+i).append('<div>'+element.russian+'</div>');
+                i==1?i=2:i==2?i=3:i=1;
+            }
+        }
+    });
 }
 
 //Пауза для рекомендации, загрузки и обновления онформации
@@ -207,7 +240,7 @@ async function Recomendation(logged) {
     await AnylizeSimiliar(userRates);
     //Сохраняем список
     SaveRecomendation(ids);
-    
+
     //Проходимся и обновляем список аниме рекомендации
     if (saveSimiliar.length > 0 && $(dom + '>.content>a').length == 0) {
         const element = $(dom + '> .content');
@@ -410,7 +443,6 @@ function scrollElementWithMouse(dom) {
         element.scrollLeft += e.deltaY;
     });
 }
-
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
