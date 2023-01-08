@@ -118,6 +118,10 @@ main {
   width: 10px;
 }
 
+footer {
+  margin-top: 110px;
+}
+
 @media screen and (max-width: 500px) {
   .content {
     justify-content: space-between;
