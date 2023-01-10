@@ -311,10 +311,12 @@ main {
 }
 
 .genres,
+.history,
 .voice {
   display: flex;
 }
 .genres .title,
+.history .title,
 .voice .title {
   width: 100%;
   margin-top: 20px;
@@ -323,6 +325,7 @@ main {
   color: #fff;
 }
 .genres .content,
+.history .content,
 .voice .content {
   display: flex;
   flex-direction: column;
@@ -334,6 +337,9 @@ main {
 .genres .content .block--1,
 .genres .content .block--2,
 .genres .content .block--3,
+.history .content .block--1,
+.history .content .block--2,
+.history .content .block--3,
 .voice .content .block--1,
 .voice .content .block--2,
 .voice .content .block--3 {
@@ -343,6 +349,9 @@ main {
 .genres .content .block--1 > div:first-child,
 .genres .content .block--2 > div:first-child,
 .genres .content .block--3 > div:first-child,
+.history .content .block--1 > div:first-child,
+.history .content .block--2 > div:first-child,
+.history .content .block--3 > div:first-child,
 .voice .content .block--1 > div:first-child,
 .voice .content .block--2 > div:first-child,
 .voice .content .block--3 > div:first-child {
@@ -351,6 +360,9 @@ main {
 .genres .content .block--1 > div:last-child,
 .genres .content .block--2 > div:last-child,
 .genres .content .block--3 > div:last-child,
+.history .content .block--1 > div:last-child,
+.history .content .block--2 > div:last-child,
+.history .content .block--3 > div:last-child,
 .voice .content .block--1 > div:last-child,
 .voice .content .block--2 > div:last-child,
 .voice .content .block--3 > div:last-child {
@@ -359,6 +371,9 @@ main {
 .genres .content .block--1 > div,
 .genres .content .block--2 > div,
 .genres .content .block--3 > div,
+.history .content .block--1 > div,
+.history .content .block--2 > div,
+.history .content .block--3 > div,
 .voice .content .block--1 > div,
 .voice .content .block--2 > div,
 .voice .content .block--3 > div {
@@ -377,6 +392,9 @@ main {
 .genres .content .block--1 > div > div,
 .genres .content .block--2 > div > div,
 .genres .content .block--3 > div > div,
+.history .content .block--1 > div > div,
+.history .content .block--2 > div > div,
+.history .content .block--3 > div > div,
 .voice .content .block--1 > div > div,
 .voice .content .block--2 > div > div,
 .voice .content .block--3 > div > div {
