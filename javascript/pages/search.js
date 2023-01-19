@@ -114,7 +114,10 @@ function searchAPI(val, page = 1) {
 
         search.ChangeState(4);
 
-        console.log(response);
+        if(response.length != 0){
+            scrollingEnd = false;
+            scrollPage = page;
+        }
 
         //Добаляем затычки для аниме в раземере ответа
         for (let i = 0; i < response.length; i++) {
@@ -127,10 +130,8 @@ function searchAPI(val, page = 1) {
             var width = $(this).width();
             var height = $(this).height();
             if (width > height) {
-                console.log("Горизонтальное изображение");
                 $(this).closest('.preview').addClass('hor');
             } else {
-                console.log("Вертикальное изображение");
                 $(this).closest('.preview').addClass('ver');
             }
         });
@@ -138,6 +139,19 @@ function searchAPI(val, page = 1) {
 
     });
 }
+//Означает доскролено ли до конца елемента
+let scrollingEnd = true;
+//Текущая страница результатов
+let scrollPage = 1;
+
+//Отслеживаем прокрутку до конца елемнета
+trackElementReachEnd('.scroll-end-func', () => {
+    if(document.querySelector('.scroll-end-func').getBoundingClientRect().height != 0 && !scrollingEnd){
+        console.log('Ended');
+        scrollingEnd = true;
+        searchAPI(InputSearch.val(), scrollPage + 1);
+    }
+});
 
 //Возвращает готовый елемент результат поиска
 function ElementResponse(response) {
@@ -155,25 +169,6 @@ if (searchParams) {
     Search(searchParams);
 }
 
-function ChangeGenres(target) {
-    let id = $(target.currentTarget).data('id');
-    let find = genres.findIndex(x => x == id);
-    if (find == -1) {
-        genres.push(id);
-        $(target.currentTarget).addClass('sel');
-    } else {
-        genres.splice(find, 1);
-        $(target.currentTarget).removeClass('sel');
-    }
-}
-
-function ChangeKind(target) {
-    let kind = $(target.currentTarget).data('kind');
-    if (kind == 'clear') {
-        return '';
-    }
-    return kind;
-}
 //Получаем доступные озвуки аниме
 function ShowVoice() {
     kodikApi.translations({ types: 'anime-serial', translation_type: 'voice', sort: 'count' }, (response) => {
@@ -461,6 +456,18 @@ function scrollElementWithMouse(dom) {
         }
         e.preventDefault();
         element.scrollLeft += e.deltaY;
+    });
+}
+
+function trackElementReachEnd(className, callback) {
+    window.addEventListener('scroll', () => {
+        const target = document.querySelector(className);
+        const targetHeight = target.offsetHeight;
+        const scrollPosition = window.pageYOffset;
+        const viewportHeight = window.innerHeight;
+        if (scrollPosition + viewportHeight >= targetHeight) {
+            callback();
+        }
     });
 }
 

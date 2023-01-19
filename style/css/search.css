@@ -470,10 +470,11 @@ main.state_result .voice {
 .response-anime {
   overflow: hidden;
   font-family: Manrope;
+  cursor: pointer;
 }
 .response-anime .preview {
   display: flex;
-  height: 240px;
+  height: 300px;
   justify-content: center;
   position: relative;
   overflow: hidden;
@@ -541,6 +542,9 @@ footer {
 @media screen and (max-width: 500px) {
   .result .content {
     grid-template-columns: 1fr 1fr;
+  }
+  .response-anime .preview {
+    height: 240px;
   }
 }
 @-webkit-keyframes loading {

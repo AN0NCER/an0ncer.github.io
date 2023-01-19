@@ -420,10 +420,11 @@ main.state_result {
 .response-anime {
     overflow: hidden;
     font-family: Manrope;
+    cursor: pointer;
 
     .preview {
         display: flex;
-        height: 240px;
+        height: 300px;
         justify-content: center;
         position: relative;
         overflow: hidden;
@@ -501,6 +502,11 @@ footer {
     .result {
         .content {
             grid-template-columns: 1fr 1fr;
+        }
+    }
+    .response-anime{
+        .preview{
+            height: 240px;
         }
     }
 }
