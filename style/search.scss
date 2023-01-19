@@ -135,11 +135,72 @@ main {
     }
 }
 
+.search.state_search {
+    .btn-back {
+        width: 40px;
+        min-width: 40px;
+        max-width: 40px;
+        margin-right: 10px;
+    }
+}
+
+.search.state_result {
+    .btn-back {
+        width: 40px;
+        min-width: 40px;
+        max-width: 40px;
+        margin-right: 10px;
+    }
+}
+
+main.state_common {
+    .result {
+        display: none;
+    }
+}
+
+main.state_focus {
+    .recomend {
+        max-height: 0px;
+        overflow: hidden;
+    }
+
+    .genres,
+    .voice {
+        max-height: 0px;
+        overflow: hidden;
+    }
+}
+
+main.state_search {
+
+    .recomend,
+    .history,
+    .genres,
+    .voice {
+        max-height: 0px;
+        overflow: hidden;
+    }
+}
+
+main.state_result {
+
+    .recomend,
+    .history,
+    .genres,
+    .voice {
+        max-height: 0px;
+        overflow: hidden;
+    }
+}
+
 
 .recomend {
     display: flex;
     width: 100%;
     color: #fff;
+    transition: .3s ease-in-out;
+    max-height: 400px;
 
     &>.title {
         margin-top: 20px;
@@ -281,6 +342,12 @@ main {
 }
 
 .genres,
+.voice {
+    max-height: 250px;
+    transition: .3s ease-in-out;
+}
+
+.genres,
 .history,
 .voice {
     display: flex;
@@ -338,6 +405,71 @@ main {
     }
 }
 
+.result {
+    margin-right: 20px;
+    margin-top: 20px;
+
+    .content {
+        display: grid;
+        column-gap: 10px;
+        row-gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(191px, 1fr));
+    }
+}
+
+.response-anime {
+    overflow: hidden;
+    font-family: Manrope;
+
+    .preview {
+        display: flex;
+        height: 240px;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        border-radius: 3px;
+
+        img {
+            width: 100%;
+        }
+
+        .title {
+            position: absolute;
+            font-weight: bold;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            left: 0;
+            right: 0;
+            padding: 5px;
+            text-align: center;
+            color: #fff;
+            font-size: 13px;
+        }
+    }
+
+    .hor {
+        img {
+            width: auto;
+            height: 100%;
+        }
+    }
+
+    .info{
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
+        span.score{
+            display: flex;
+            align-items: center;
+            svg{
+                width: 10px;
+                margin-right: 5px;
+                fill: #FFE600;
+            }
+        }
+    }
+}
+
 .github {
     display: flex;
     flex-direction: column;
@@ -356,11 +488,22 @@ main {
     }
 }
 
+.result {
+    margin-left: 20px;
+    color: #fff;
+}
+
 footer {
     margin-top: 110px;
 }
 
-
+@media screen and (max-width: 500px) {
+    .result {
+        .content {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+}
 
 @keyframes loading {
     0% {

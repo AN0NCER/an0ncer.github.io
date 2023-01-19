@@ -1,3 +1,6 @@
+//Поле ввода поиска
+const InputSearch = $('.input-search > input');
+
 //Начало программы, авторизация
 Main((e) => {
     //Получаем рекомендации пользователя
@@ -55,82 +58,101 @@ let search = {
     }
 }
 
-// search.ChangeState(1);
-
-//Отслеживаем события поиска
+//Cобытия поиска
 SearchEvent();
 
 //Функция отслеживания событий поиска
 function SearchEvent() {
-    const element = $('.input-search > input');
-
     let typingTimeout;
 
     //Фокус поиска
-    element.focus(() => {
+    InputSearch.focus(() => {
         //Изменяем состояние поиска
-        search.ChangeState(1);
+        if ($('.response-anime').length <= 0) {
+            search.ChangeState(1);
+        }
     })
 
     //Поиск вне фокуса
-    element.blur(() => {
+    InputSearch.blur(() => {
         //Изменяем состояние поиска
-        if (element.val().length == 0) {
+        if (InputSearch.val().length == 0) {
             search.ChangeState(0);
 
         }
     });
 
     //Нужно определить статус ввода текста
+    InputSearch.keydown(() => {
+        clearInterval(typingTimeout);
+    });
 
-
+    InputSearch.keyup(() => {
+        if (InputSearch.val().length > 0 && search.state != states[3]) {
+            $('.result > .content').empty();
+            search.ChangeState(3);
+        } else if (InputSearch.val().length == 0) {
+            search.ChangeState(1);
+        }
+        clearInterval(typingTimeout);
+        typingTimeout = setTimeout(() => {
+            if (InputSearch.val().length > 0) {
+                //Производится поиск
+                searchAPI(InputSearch.val());
+            }
+        }, 1500);
+    });
 }
 
-//Search
-let genres = [];
-let kind = '';
-$('.search').keyup(() => {
-    let value = $('.search').val();
-    Search(value);
-});
-
-//Функция поиска
-function Search(value) {
-    shikimoriApi.Animes.animes({
-        search: value,
-        limit: 16,
-        censored: parametrs.censored,
-        genres: genres,
-        kind: kind
-    }, (response) => {
-        if (response) {
-            $('.results').empty();
-            for (let index = 0; index < response.length; index++) {
-                const element = response[index];
-                AddAnime(element, '.results');
-            }
+//функция запроса поиска
+function searchAPI(val, page = 1) {
+    shikimoriApi.Animes.animes({ search: val, limit: 16, censored: parametrs.censored, page: page }, async (response) => {
+        if (response.failed) {
+            await sleep(1000);
+            return searchAPI(val, page);
         }
+
+        search.ChangeState(4);
+
+        console.log(response);
+
+        //Добаляем затычки для аниме в раземере ответа
+        for (let i = 0; i < response.length; i++) {
+            $('.result > .content').append(ElementResponse(response[i]));
+        }
+
+
+        // temp
+        $(".response-anime > .preview > img").on("load", function () {
+            var width = $(this).width();
+            var height = $(this).height();
+            if (width > height) {
+                console.log("Горизонтальное изображение");
+                $(this).closest('.preview').addClass('hor');
+            } else {
+                console.log("Вертикальное изображение");
+                $(this).closest('.preview').addClass('ver');
+            }
+        });
+
+
     });
+}
+
+//Возвращает готовый елемент результат поиска
+function ElementResponse(response) {
+    const url = "https://nyaa.shikimori.one/";
+    return `<div class="response-anime">
+                <div class="preview">
+                    <img src="${url}${response.image.original}" alt="Сага о Винланде 2">
+                    <div class="title">${response.russian}</div>
+                </div><div class="info"><span class="year">${new Date(response.aired_on).getFullYear()}</span><span class="score"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"></path></svg>${response.score}</span></div></div>`;
 }
 
 //Проверяем есть ли запрос из вне
 let searchParams = new URLSearchParams(window.location.search).get('val');
 if (searchParams) {
     Search(searchParams);
-}
-
-//Загрузка kind
-$('.search-menu > div').click((t) => {
-    kind = ChangeKind(t);
-    console.log(kind);
-    $('.search-menu > .select').removeClass('select');
-    $(t.currentTarget).addClass('select');
-})
-
-
-function AddAnime(element, dom) {
-    let html = `<a href="/watch.html?id=${element.id}"><div class="anime-card"><div class="anime-image"><img src="https://nyaa.shikimori.one${element.image.original}" alt="${element.russian}"><div class="play-btn"><div class="btn"><svg viewBox="0 0 30 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.70312 0.551381C4.54688 -0.159557 3.09375 -0.182995 1.91406 0.481068C0.734375 1.14513 0 2.39513 0 3.75451V31.2545C0 32.6139 0.734375 33.8639 1.91406 34.5279C3.09375 35.192 4.54688 35.1608 5.70312 34.4576L28.2031 20.7076C29.3203 20.0279 30 18.817 30 17.5045C30 16.192 29.3203 14.9889 28.2031 14.3014L5.70312 0.551381Z" fill="white" /></svg></div></div></div><div class="anime-title">${element.russian}</div></div></a>`;
-    $(dom).append(html);
 }
 
 function ChangeGenres(target) {
@@ -153,17 +175,15 @@ function ChangeKind(target) {
     return kind;
 }
 //Получаем доступные озвуки аниме
-function ShowVoice(){
-    kodikApi.translations({types: 'anime-serial', translation_type: 'voice', sort: 'count'}, (response)=>{
-        console.log(response);
-
+function ShowVoice() {
+    kodikApi.translations({ types: 'anime-serial', translation_type: 'voice', sort: 'count' }, (response) => {
         let i = 1;
 
         for (let index = 0; index < response.results.length; index++) {
             const element = response.results[index];
-            if(element.count >= 10){
-                $('.voice > .content > .block--'+i).append('<div>'+element.title+'<div>'+element.count+'</div></div>');
-                i==1?i=2:i==2?i=3:i=1;
+            if (element.count >= 10) {
+                $('.voice > .content > .block--' + i).append('<div>' + element.title + '<div>' + element.count + '</div></div>');
+                i == 1 ? i = 2 : i == 2 ? i = 3 : i = 1;
             }
         }
     })
@@ -172,7 +192,7 @@ function ShowVoice(){
 //Получаем жанры аниме
 function ShowGenres() {
     shikimoriApi.Genres.genres(async (response) => {
-        if(response.failed){
+        if (response.failed) {
             await sleep(1000);
             return ShowGenres();
         }
@@ -183,8 +203,8 @@ function ShowGenres() {
         for (let index = 0; index < response.length; index++) {
             const element = response[index];
             if (element.kind == 'anime') {
-                $('.genres > .content > .block--'+i).append('<div>'+element.russian+'</div>');
-                i==1?i=2:i==2?i=3:i=1;
+                $('.genres > .content > .block--' + i).append('<div>' + element.russian + '</div>');
+                i == 1 ? i = 2 : i == 2 ? i = 3 : i = 1;
             }
         }
     });
