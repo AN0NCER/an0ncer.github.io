@@ -12,6 +12,9 @@ Main((e) => {
     } else {
         window.location.href = "index.html";
     }
+
+    //Добавляем в историю назад кнопку
+    localStorage.setItem('history-back', '/list.html');
 });
 
 function ShowAnime(element) {

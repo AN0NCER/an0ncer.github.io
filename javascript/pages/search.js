@@ -8,6 +8,8 @@ const BtnBack = $('.search > .btn-back');
 let scrollingEnd = true;
 //Текущая страница результатов
 let scrollPage = 1;
+//Пауза для рекомендации, загрузки и обновления онформации
+let pasuse = false;
 
 //Статусы поиска
 const states = [
@@ -22,6 +24,12 @@ const states = [
 Main((e) => {
     //Получаем рекомендации пользователя
     Recomendation(e);
+
+    //Отображаем историю
+    ShowHistory();
+
+    //Добавляем в историю назад кнопку
+    localStorage.setItem('history-back', '/search.html');
 });
 
 //Отображаем доступные жанры
@@ -71,6 +79,19 @@ let search = {
     }
 }
 
+//Проверяем есть ли запрос из вне
+let searchParams = new URLSearchParams(window.location.search).get('val');
+if (searchParams) {
+    InputSearch.val(searchParams);
+    if (InputSearch.val().length > 0) {
+        //Изменяем на статус загрузки
+        search.ChangeState(3);
+        //Производится поиск
+        searchAPI(InputSearch.val());
+    }
+}
+
+
 //Object работы с историей поиска аниме
 let s_history = {
     key: 'search-history',
@@ -104,14 +125,11 @@ let s_history = {
         localStorage.setItem(this.key, JSON.stringify(this.data));
     },
 
-    clearHistory: function(){
+    clearHistory: function () {
         this.data = [];
         localStorage.setItem(this.key, JSON.stringify(this.data));
     }
 }
-
-//Отображаем историю
-ShowHistory();
 
 //Функция отслеживания событий поиска
 function SearchEvent() {
@@ -158,11 +176,14 @@ function SearchEvent() {
 
 //функция запроса поиска
 function searchAPI(val, page = 1) {
+    pasuse = true;
     shikimoriApi.Animes.animes({ search: val, limit: 16, censored: parametrs.censored, page: page }, async (response) => {
         if (response.failed) {
             await sleep(1000);
             return searchAPI(val, page);
         }
+
+        pasuse = false;
 
         search.ChangeState(4);
 
@@ -192,8 +213,24 @@ function searchAPI(val, page = 1) {
         $(".response-anime").unbind('click').on('click', (e) => {
             let target = $(e.currentTarget);
             const id = target.data('id');
-            alert(id);
             s_history.addHistory(id);
+
+            //Если это уже есть в списке перенести на первое место
+            if ($(`.history > .content > a[data-id="${id}"]`).length > 0) {
+                $(`.history > .content > a[data-id="${id}"]`).detach().prependTo($('.history > .content'));
+            } else {
+                if ($(`.history > .content > a`).length >= 10) {
+                    $(`.history > .content > a:last`).remove();
+                }
+
+                $(`.history > .content`).prepend(`<a href="/watch.html?id=${id}" data-id="${id}">
+                <div class="card-anime" data-anime="${id}"><div class="content-img"><div class="saved"></div>
+                <div class="title">${$(`.result > .content > .response-anime[data-id="${id}"] > .preview > .title`).text()}</div>
+                <img src="${$(`.result > .content > .response-anime[data-id="${id}"] > .preview > img`).attr('src')}" alt="${$(`.result > .content > .response-anime[data-id="${id}"] > .preview > .title`).text()}">
+                </div><div class="content-inf"><div class="inf-year">${$(`.result > .content > .response-anime[data-id="${id}"] > .info > .year`).text()}</div><div class="inf-rtng"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"></path></svg>${$(`.result > .content > .response-anime[data-id="${id}"] > .info > .score`).text()}</div></div></div></a>`);
+            }
+
+            window.location.href = "/watch.html?id=" + id;
         });
     });
 }
@@ -207,7 +244,7 @@ trackElementReachEnd('.scroll-end-func', () => {
 });
 
 //Нажатие на кнопку back or clear
-BtnBack.click(()=>{
+BtnBack.click(() => {
     InputSearch.val('');
     $('.result > .content').empty();
     scrollingEnd = true;
@@ -222,12 +259,6 @@ function ElementResponse(response) {
                     <img src="${url}${response.image.original}" alt="Сага о Винланде 2">
                     <div class="title">${response.russian}</div>
                 </div><div class="info"><span class="year">${new Date(response.aired_on).getFullYear()}</span><span class="score"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"></path></svg>${response.score}</span></div></div>`;
-}
-
-//Проверяем есть ли запрос из вне
-let searchParams = new URLSearchParams(window.location.search).get('val');
-if (searchParams) {
-    Search(searchParams);
 }
 
 //Получаем доступные озвуки аниме
@@ -269,12 +300,15 @@ function ShowGenres() {
 //Получаем историю просмотров
 function ShowHistory() {
     s_history.loadHistory((data) => {
-        if (data) {
-            //есть данные
+        if (data && data.length > 0) {
+            //есть данные            
             for (let i = 0; i < data.length; i++) {
                 $('.history > .content').append(`<a href="/watch.html?id=${data[i]}" data-id="${data[i]}"></a>`);
                 loadHistory(data[i]);
             }
+        } else {
+            //Истории нет, нужно скрыть вкладку истории
+            $('.history').css('display', 'none');
         }
     });
 
@@ -299,9 +333,6 @@ function ShowHistory() {
         });
     }
 }
-
-//Пауза для рекомендации, загрузки и обновления онформации
-let pasuse = false;
 
 //Функция подбора аниме для пользователя
 async function Recomendation(logged) {
@@ -346,14 +377,11 @@ async function Recomendation(logged) {
     }
 
     //Проверяем что сегодня уже данные обновлены
-    if(saveSimiliarDate){
-        if(saveSimiliarDate == new Date().toJSON().slice(0, 10)){
+    if (saveSimiliarDate) {
+        if (saveSimiliarDate == new Date().toJSON().slice(0, 10)) {
             Status("Загружено");
             return;
         }
-    }else{
-        saveSimiliarDate = new Date().toJSON().slice(0, 10);
-        localStorage.setItem('save-similar-date', saveSimiliarDate);
     }
 
     Status("обновляем");
@@ -396,6 +424,9 @@ async function Recomendation(logged) {
     }
 
     Status("обновлено");
+
+    saveSimiliarDate = new Date().toJSON().slice(0, 10);
+    localStorage.setItem('save-similar-date', saveSimiliarDate);
 
     //Функция отображения для не авторизированых пользователей
     function NoLogged() {

@@ -41,6 +41,9 @@ Main(async () => {
     if(usr.authorized){
         
     }
+
+    //Добавляем в историю назад кнопку
+    localStorage.setItem('history-back', '/user.html');
 });
 
 // $(document).ready(()=>{
