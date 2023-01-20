@@ -513,7 +513,12 @@ let usr = {
         request.body.append('code', code);
         let response = await request.fetch();
         if (response.failed) {
-            return;
+            if(response.status == 429){
+                await sleep(1000);
+                return await this.Authorizate(code);
+            }else{
+                return;
+            }
         }
         this.Oauth.access = response;
         this.Storage.Set(response);
@@ -525,7 +530,12 @@ let usr = {
         let request = shikimoriFetch("POST", this.Oauth.base_url, TemplateShikimori.Headers.base(), TemplateShikimori.Body.Refresh());
         let response = await request.fetch();
         if (response.failed) {
-            return;
+            if(response.status == 429){
+                await sleep(1000);
+                return await this.Refresh();
+            }else{
+                return;
+            }
         }
         this.Oauth.access = response;
         this.Storage.Set(response);
@@ -635,4 +645,8 @@ async function Main(event = () => { }) {
         }
     }
     event(usr.authorized);
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

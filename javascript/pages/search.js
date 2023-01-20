@@ -1,6 +1,20 @@
 //Поле ввода поиска
 const InputSearch = $('.input-search > input');
 
+//scroll до конца елемента
+let scrollingEnd = true;
+//Текущая страница результатов
+let scrollPage = 1;
+
+//Статусы поиска
+const states = [
+    { id: "common", class: 'state_common' },
+    { id: "focus", class: 'state_focus' },
+    { id: "filter", class: 'state_filter' },
+    { id: "search", class: 'state_search' },
+    { id: "result", class: 'state_result' }
+];
+
 //Начало программы, авторизация
 Main((e) => {
     //Получаем рекомендации пользователя
@@ -12,19 +26,16 @@ ShowGenres();
 //Отображаем доступные озвучки
 ShowVoice();
 
+
 scrollElementWithMouse('.recomend > .content');
 scrollElementWithMouse('.genres > .content');
 scrollElementWithMouse('.voice > .content');
+scrollElementWithMouse('.history > .content');
 
-//Статусы поиска
-const states = [
-    { id: "common", class: 'state_common' },
-    { id: "focus", class: 'state_focus' },
-    { id: "filter", class: 'state_filter' },
-    { id: "search", class: 'state_search' },
-    { id: "result", class: 'state_result' }
-];
+//Cобытия [input] поиска
+SearchEvent();
 
+//Работа со статусами поисков
 let search = {
     //Текущий статус поиска
     state: states[0],
@@ -58,8 +69,47 @@ let search = {
     }
 }
 
-//Cобытия поиска
-SearchEvent();
+//Object работы с историей поиска аниме
+let s_history = {
+    key: 'search-history',
+    data: [],
+
+    loadHistory: function (event) {
+        let data = localStorage.getItem(this.key);
+        if (data)
+            this.data = JSON.parse(data);
+        event(this.data);
+    },
+
+    addHistory: function (id) {
+        if (this.data == []) {
+            this.data = localStorage.getItem(this.key) ? JSON.parse(localStorage.getItem(this.key)) : [];
+        }
+        // Check if the id already exists in the history
+        let index = this.data.indexOf(id);
+        if (index !== -1) {
+            // If it does, move it to the first position
+            this.data.splice(index, 1);
+            this.data.unshift(id);
+        } else {
+            // If it doesn't, add it to the first position
+            this.data.unshift(id);
+            // And check if we have reached the maximum history length
+            if (this.data.length > 10) {
+                this.data.pop();
+            }
+        }
+        localStorage.setItem(this.key, JSON.stringify(this.data));
+    },
+
+    clearHistory: function(){
+        this.data = [];
+        localStorage.setItem(this.key, JSON.stringify(this.data));
+    }
+}
+
+//Отображаем историю
+ShowHistory();
 
 //Функция отслеживания событий поиска
 function SearchEvent() {
@@ -114,7 +164,7 @@ function searchAPI(val, page = 1) {
 
         search.ChangeState(4);
 
-        if(response.length != 0){
+        if (response.length != 0) {
             scrollingEnd = false;
             scrollPage = page;
         }
@@ -125,7 +175,7 @@ function searchAPI(val, page = 1) {
         }
 
 
-        // temp
+        //Определяем загруженых ихображенй их пропорции
         $(".response-anime > .preview > img").on("load", function () {
             var width = $(this).width();
             var height = $(this).height();
@@ -136,18 +186,19 @@ function searchAPI(val, page = 1) {
             }
         });
 
-
+        //Добавляем событие нажатие на елемент
+        $(".response-anime").unbind('click').on('click', (e) => {
+            let target = $(e.currentTarget);
+            const id = target.data('id');
+            alert(id);
+            s_history.addHistory(id);
+        });
     });
 }
-//Означает доскролено ли до конца елемента
-let scrollingEnd = true;
-//Текущая страница результатов
-let scrollPage = 1;
 
 //Отслеживаем прокрутку до конца елемнета
 trackElementReachEnd('.scroll-end-func', () => {
-    if(document.querySelector('.scroll-end-func').getBoundingClientRect().height != 0 && !scrollingEnd){
-        console.log('Ended');
+    if (document.querySelector('.scroll-end-func').getBoundingClientRect().height != 0 && !scrollingEnd) {
         scrollingEnd = true;
         searchAPI(InputSearch.val(), scrollPage + 1);
     }
@@ -156,7 +207,7 @@ trackElementReachEnd('.scroll-end-func', () => {
 //Возвращает готовый елемент результат поиска
 function ElementResponse(response) {
     const url = "https://nyaa.shikimori.one/";
-    return `<div class="response-anime">
+    return `<div class="response-anime" data-id="${response.id}">
                 <div class="preview">
                     <img src="${url}${response.image.original}" alt="Сага о Винланде 2">
                     <div class="title">${response.russian}</div>
@@ -203,6 +254,40 @@ function ShowGenres() {
             }
         }
     });
+}
+
+//Получаем историю просмотров
+function ShowHistory() {
+    s_history.loadHistory((data) => {
+        if (data) {
+            //есть данные
+            for (let i = 0; i < data.length; i++) {
+                $('.history > .content').append(`<a href="/watch.html?id=${data[i]}" data-id="${data[i]}"></a>`);
+                loadHistory(data[i]);
+            }
+        }
+    });
+
+    async function loadHistory(id) {
+        shikimoriApi.Animes.id(id, async (data) => {
+            if (data.failed) {
+                await sleep(1000);
+                return loadHistory(id);
+            }
+            $(`.history > .content > a[data-id="${id}"]`).append(`
+            <div class="card-anime" data-anime="${data.id}">
+                <div class="content-img">
+                    <div class="saved"></div>
+                    <div class="title">${data.russian}</div>
+                    <img src="https://nyaa.shikimori.one${data.image.original}" alt="${data.russian}">
+                </div>
+                <div class="content-inf">
+                    <div class="inf-year">${new Date(data.aired_on).getFullYear()}</div>
+                    <div class="inf-rtng"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"></path></svg>${data.score}</div>
+                </div>
+            </div>`);
+        });
+    }
 }
 
 //Пауза для рекомендации, загрузки и обновления онформации
