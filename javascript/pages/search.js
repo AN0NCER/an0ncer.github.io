@@ -315,6 +315,8 @@ async function Recomendation(logged) {
 
     //Получаем сохраненную рекомендацию
     let saveSimiliar = JSON.parse(localStorage.getItem('save-similar'));
+    //Дата проверки recomendation
+    let saveSimiliarDate = localStorage.getItem('save-similar-date');
     //Делаем проверку на наличие рекомендация, или делаем пустой массив
     saveSimiliar = saveSimiliar ? saveSimiliar : [];
 
@@ -331,6 +333,17 @@ async function Recomendation(logged) {
         }
 
         Status("");
+    }
+
+    //Проверяем что сегодня уже данные обновлены
+    if(saveSimiliarDate){
+        if(saveSimiliarDate == new Date().toJSON().slice(0, 10)){
+            Status("Загружено");
+            return;
+        }
+    }else{
+        saveSimiliarDate = new Date().toJSON().slice(0, 10);
+        localStorage.setItem('save-similar-date', saveSimiliarDate);
     }
 
     Status("обновляем");
