@@ -46,6 +46,14 @@ body {
   margin: 0 auto;
 }
 
+body.state_result .phone_menu, body.state_focus .phone_menu, body.state_search .phone_menu {
+  display: none;
+}
+
+body.state_search {
+  overflow-y: hidden;
+}
+
 .btn {
   overflow: hidden;
   min-width: 40px;
@@ -219,7 +227,8 @@ main.state_focus .search--loading {
 main.state_search .recomend,
 main.state_search .history,
 main.state_search .genres,
-main.state_search .voice {
+main.state_search .voice,
+main.state_search .github {
   max-height: 0px;
   overflow: hidden;
 }

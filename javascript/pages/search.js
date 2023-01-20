@@ -1,6 +1,9 @@
 //Поле ввода поиска
 const InputSearch = $('.input-search > input');
 
+//Кнопка очищение ввода
+const BtnBack = $('.search > .btn-back');
+
 //scroll до конца елемента
 let scrollingEnd = true;
 //Текущая страница результатов
@@ -25,7 +28,6 @@ Main((e) => {
 ShowGenres();
 //Отображаем доступные озвучки
 ShowVoice();
-
 
 scrollElementWithMouse('.recomend > .content');
 scrollElementWithMouse('.genres > .content');
@@ -202,6 +204,14 @@ trackElementReachEnd('.scroll-end-func', () => {
         scrollingEnd = true;
         searchAPI(InputSearch.val(), scrollPage + 1);
     }
+});
+
+//Нажатие на кнопку back or clear
+BtnBack.click(()=>{
+    InputSearch.val('');
+    $('.result > .content').empty();
+    scrollingEnd = true;
+    search.ChangeState(0);
 });
 
 //Возвращает готовый елемент результат поиска

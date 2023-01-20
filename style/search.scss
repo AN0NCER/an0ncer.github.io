@@ -9,6 +9,16 @@ body {
     margin: 0 auto;
 }
 
+body.state_result, body.state_focus, body.state_search{
+    .phone_menu{
+        display: none;
+    }
+}
+
+body.state_search{
+    overflow-y: hidden;
+}
+
 .btn {
     overflow: hidden;
     min-width: 40px;
@@ -185,7 +195,8 @@ main.state_search {
     .recomend,
     .history,
     .genres,
-    .voice {
+    .voice,
+    .github {
         max-height: 0px;
         overflow: hidden;
     }
