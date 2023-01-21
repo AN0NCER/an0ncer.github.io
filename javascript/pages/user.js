@@ -67,11 +67,16 @@ $(document).ready(()=>{
     });
 
     $('.main--settings--logout--btn').click(()=>{LogOut()});
+    $('.main--settings--clear-cache--btn').click(()=>{ClearCache()});
 });
 
 function LogOut() {
     usr.Storage.Clear();
     window.location.replace("/user.html");
+}
+
+function ClearCache(){
+    window.location.reload(true);
 }
 
 function Stats(id){

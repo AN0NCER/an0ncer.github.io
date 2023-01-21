@@ -209,7 +209,7 @@ header {
         font-family: Manrope;
     }
 
-    &--statistics{
+    &--statistics {
         border-top: 1px solid rgba(255, 255, 255, 0.3);
         border-bottom: 1px solid rgba(255, 255, 255, 0.3);
         display: flex;
@@ -220,14 +220,17 @@ header {
         font-family: Manrope;
         justify-content: space-between;
         color: #fff;
-        &--block{
+
+        &--block {
             display: flex;
             flex-direction: column;
             align-items: center;
-            &--value{
+
+            &--value {
                 font-weight: bold;
             }
-            &--title{
+
+            &--title {
                 font-size: 12px;
                 opacity: .5;
             }
@@ -264,6 +267,33 @@ header {
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+    }
+
+    &--clear-cache {
+        margin-top: 10px;
+        width: 100%;
+
+        &--btn {
+            margin-left: 20px;
+            margin-right: 20px;
+            height: 40px;
+            border-radius: 5px;
+            border: 1px solid #f52828;
+            color: #fff;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        &--tips{
+            margin-top: 10px;
+            margin-left: 20px;
+            margin-right: 20px;
+            color: #fff;
+            opacity: 0.4;
+            font-size: 11px;
         }
     }
 
