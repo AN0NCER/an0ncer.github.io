@@ -512,4 +512,12 @@ footer {
     }
 }
 
+@media screen and (max-width: 600px) {
+    .player{
+        iframe{
+            aspect-ratio: 16 / 10;
+        }
+    }
+}
+
 @import './episodes';

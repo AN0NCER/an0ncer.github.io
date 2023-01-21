@@ -449,6 +449,11 @@ footer {
     height: 150px;
   }
 }
+@media screen and (max-width: 600px) {
+  .player iframe {
+    aspect-ratio: 16/10;
+  }
+}
 .episodes {
   margin: 20px 20px 10px 20px;
   overflow: hidden;

@@ -143,6 +143,11 @@ main {
     opacity: 0.04;
   }
 }
+
+footer {
+  margin-top: 110px;
+}
+
 @media screen and (max-width: 500px) {
   .content {
     justify-content: space-between;
