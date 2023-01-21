@@ -20,7 +20,7 @@ var appShellFilesToCache = [
     '/javascript/library/anime.min.js',
     '/javascript/library/swiper-bundle.min.js',
     //Javascript
-    '/javascript/aspjknml.js',
+    '/javascript/kodik.js',
     '/javascript/jdub.js',
     '/javascript/jeps.js',
     '/javascript/jmenu.js',

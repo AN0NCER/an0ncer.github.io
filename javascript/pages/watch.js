@@ -118,7 +118,13 @@ const visual = {
     },
     watchFunction: function () {
         $('.btn_back').click(() => {
-            window.location.href = '/index.html';
+            let history = localStorage.getItem('history-back');
+            if (history) {
+                localStorage.removeItem('history-back');
+                window.location.href = history;
+            } else {
+                window.location.href = '/index.html';
+            }
         })
         $('.btn_play').click(() => {
             document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
@@ -178,8 +184,8 @@ if (storage.get(shikimoriID)) {
     dataLocal = storage.get(shikimoriID);
 }
 try {
-    if (shikimoriID == !Array.isArray(usr.Storage.Get('last-watch'))?[usr.Storage.Get('last-watch')].find(item => item.id == shikimoriID).id:usr.Storage.Get('last-watch').find(item => item.id == shikimoriID).id) {
-        dataLast = !Array.isArray(usr.Storage.Get('last-watch'))?[usr.Storage.Get('last-watch')].find(item => item.id == shikimoriID):usr.Storage.Get('last-watch').find(item => item.id == shikimoriID);
+    if (shikimoriID == !Array.isArray(usr.Storage.Get('last-watch')) ? [usr.Storage.Get('last-watch')].find(item => item.id == shikimoriID).id : usr.Storage.Get('last-watch').find(item => item.id == shikimoriID).id) {
+        dataLast = !Array.isArray(usr.Storage.Get('last-watch')) ? [usr.Storage.Get('last-watch')].find(item => item.id == shikimoriID) : usr.Storage.Get('last-watch').find(item => item.id == shikimoriID);
         dataLocal.kodik_episode = dataLast.episode;
     }
 } catch {
@@ -330,7 +336,7 @@ function UserLogged(ur) {
 }
 
 episodes.events.onchangeselect((i) => {
-    if(dataLast && dataLast.episode != i){
+    if (dataLast && dataLast.episode != i) {
         //Если выбран другой эпизод очищаем таймкод
         dataLast = null;
     }
@@ -346,7 +352,7 @@ function updateHistory(cnt = false, durration = 0, i = 0) {
     const key = 'last-watch';
     let history = storage.get(key)
     //Проверем на пустоту
-    if(history == null){
+    if (history == null) {
         history = [{
             id: shikimoriID,
             continue: cnt,
@@ -359,44 +365,44 @@ function updateHistory(cnt = false, durration = 0, i = 0) {
     }
     // Проверяем, является ли history массивом
     if (!Array.isArray(history)) {
-      history = [history];
+        history = [history];
     }
     console.log(history);
     // Находим индекс элемента с заданным id в массиве history
     const index = history.findIndex(item => item.id === shikimoriID);
-  
+
     // Если элемент с таким id не найден, то добавляем его на первое место
     if (index === -1) {
-      history.unshift({
-        id: shikimoriID,
-        continue: cnt,
-        duration: durration,
-        fullduration: play_duration,
-        episode: cnt ? dataLocal.kodik_episode + i : dataLocal.kodik_episode + i,
-        name: shikiResponse.russian,
-        image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
-    });
+        history.unshift({
+            id: shikimoriID,
+            continue: cnt,
+            duration: durration,
+            fullduration: play_duration,
+            episode: cnt ? dataLocal.kodik_episode + i : dataLocal.kodik_episode + i,
+            name: shikiResponse.russian,
+            image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
+        });
     } else {
-      // В противном случае изменяем элемент и переносим его на первое место
-      history[index] = {
-        id: shikimoriID,
-        continue: cnt,
-        duration: durration,
-        fullduration: play_duration,
-        episode: cnt ? dataLocal.kodik_episode + i : dataLocal.kodik_episode + i,
-        name: shikiResponse.russian,
-        image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
-    };
-      history.unshift(history.splice(index, 1)[0]);
+        // В противном случае изменяем элемент и переносим его на первое место
+        history[index] = {
+            id: shikimoriID,
+            continue: cnt,
+            duration: durration,
+            fullduration: play_duration,
+            episode: cnt ? dataLocal.kodik_episode + i : dataLocal.kodik_episode + i,
+            name: shikiResponse.russian,
+            image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
+        };
+        history.unshift(history.splice(index, 1)[0]);
     }
-  
+
     // Если в истории больше 5 элементов, то удаляем последний
     if (history.length > 5) {
-      history.pop();
+        history.pop();
     }
 
     storage.set(key, history);
-  }
+}
 
 function Loaded() {
     $(document).ready(() => {

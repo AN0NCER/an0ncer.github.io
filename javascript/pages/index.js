@@ -33,6 +33,9 @@ Main((e) => {
             }
         });
     }
+
+    //Добавляем в историю назад кнопку
+    localStorage.setItem('history-back', '/index.html');
 });
 
 //Загрузка данных
