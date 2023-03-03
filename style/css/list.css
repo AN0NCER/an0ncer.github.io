@@ -68,8 +68,7 @@ main {
   background: #fff;
   border-radius: 5px;
   opacity: 0.04;
-  -webkit-animation: loading 1.5s infinite;
-          animation: loading 1.5s infinite;
+  animation: loading 1.5s infinite;
 }
 
 .anime-card .anime-image {
@@ -121,17 +120,6 @@ main {
 }
 
 /*Animation*/
-@-webkit-keyframes loading {
-  0% {
-    opacity: 0.04;
-  }
-  50% {
-    opacity: 0.1;
-  }
-  100% {
-    opacity: 0.04;
-  }
-}
 @keyframes loading {
   0% {
     opacity: 0.04;

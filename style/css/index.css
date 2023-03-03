@@ -45,6 +45,7 @@ header > .account > .information > .name b {
 }
 header > .account > .information > .position {
   display: flex;
+  align-items: center;
 }
 header > .account > .information > .position svg {
   width: 12px;
@@ -120,13 +121,6 @@ header > .notification > .dot {
   -moz-transition: 0.3s ease-in-out;
   transition: 0.3s ease-in-out;
 }
-.search > input:-ms-input-placeholder {
-  padding-left: 30px;
-  color: #fff;
-  opacity: 0.7;
-  -ms-transition: 0.3s ease-in-out;
-  transition: 0.3s ease-in-out;
-}
 .search > input::placeholder {
   padding-left: 30px;
   color: #fff;
@@ -149,9 +143,6 @@ header > .notification > .dot {
 .search > input:focus::-moz-placeholder {
   padding-left: 0px;
 }
-.search > input:focus:-ms-input-placeholder {
-  padding-left: 0px;
-}
 .search > input:focus::placeholder {
   padding-left: 0px;
 }
@@ -159,9 +150,6 @@ header > .notification > .dot {
   opacity: 0;
 }
 .search input:not(:-moz-placeholder-shown) ~ .icon {
-  opacity: 0;
-}
-.search input:not(:-ms-input-placeholder) ~ .icon {
   opacity: 0;
 }
 .search input:not(:placeholder-shown) ~ .icon {
@@ -479,8 +467,7 @@ footer {
 .loading svg {
   width: 50px;
   fill: #fff;
-  -webkit-animation: rotate 3s ease-in-out infinite;
-          animation: rotate 3s ease-in-out infinite;
+  animation: rotate 3s ease-in-out infinite;
 }
 
 .w800 {
@@ -604,14 +591,6 @@ footer {
 @media screen and (min-width: 700px) {
   .mobile {
     display: none;
-  }
-}
-@-webkit-keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
   }
 }
 @keyframes rotate {

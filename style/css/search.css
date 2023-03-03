@@ -120,13 +120,6 @@ main {
   -moz-transition: 0.3s ease-in-out;
   transition: 0.3s ease-in-out;
 }
-.search .input-search input:-ms-input-placeholder {
-  padding-left: 30px;
-  color: #fff;
-  opacity: 0.7;
-  -ms-transition: 0.3s ease-in-out;
-  transition: 0.3s ease-in-out;
-}
 .search .input-search input::placeholder {
   padding-left: 30px;
   color: #fff;
@@ -155,9 +148,6 @@ main {
 .search .input-search > input:focus::-moz-placeholder {
   padding-left: 0px;
 }
-.search .input-search > input:focus:-ms-input-placeholder {
-  padding-left: 0px;
-}
 .search .input-search > input:focus::placeholder {
   padding-left: 0px;
 }
@@ -165,9 +155,6 @@ main {
   opacity: 0;
 }
 .search .input-search input:not(:-moz-placeholder-shown) ~ .icon {
-  opacity: 0;
-}
-.search .input-search input:not(:-ms-input-placeholder) ~ .icon {
   opacity: 0;
 }
 .search .input-search input:not(:placeholder-shown) ~ .icon {
@@ -282,8 +269,7 @@ main.state_result .search--loading {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  -webkit-animation: gradient 3s infinite linear;
-          animation: gradient 3s infinite linear;
+  animation: gradient 3s infinite linear;
   position: relative;
   border-radius: 7px;
   margin-left: 20px;
@@ -292,8 +278,7 @@ main.state_result .search--loading {
 .recomend .content > .loading svg {
   width: 50px;
   fill: #fff;
-  -webkit-animation: rotate 3s ease-in-out infinite;
-          animation: rotate 3s ease-in-out infinite;
+  animation: rotate 3s ease-in-out infinite;
   position: relative;
 }
 .recomend .content > .loading h1 {
@@ -322,8 +307,7 @@ main.state_result .search--loading {
   margin-right: 10px;
   height: 270px;
   opacity: 0.04;
-  -webkit-animation: loading 1.5s infinite;
-          animation: loading 1.5s infinite;
+  animation: loading 1.5s infinite;
 }
 .recomend .content > a:last-child {
   padding-right: 20px;
@@ -565,8 +549,7 @@ main.state_result .search--loading {
   margin-right: 10px;
   height: 270px;
   opacity: 0.04;
-  -webkit-animation: loading 1.5s infinite;
-          animation: loading 1.5s infinite;
+  animation: loading 1.5s infinite;
 }
 .history .content a:nth-child(1) {
   margin-left: 20px;
@@ -606,34 +589,22 @@ footer {
 .inner.one {
   left: 0%;
   top: 0%;
-  -webkit-animation: rotate-one 1s linear infinite;
-          animation: rotate-one 1s linear infinite;
+  animation: rotate-one 1s linear infinite;
   border-bottom: 3px solid #EFEFFA;
 }
 
 .inner.two {
   right: 0%;
   top: 0%;
-  -webkit-animation: rotate-two 1s linear infinite;
-          animation: rotate-two 1s linear infinite;
+  animation: rotate-two 1s linear infinite;
   border-right: 3px solid #EFEFFA;
 }
 
 .inner.three {
   right: 0%;
   bottom: 0%;
-  -webkit-animation: rotate-three 1s linear infinite;
-          animation: rotate-three 1s linear infinite;
+  animation: rotate-three 1s linear infinite;
   border-top: 3px solid #EFEFFA;
-}
-
-@-webkit-keyframes rotate-one {
-  0% {
-    transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
-  }
-  100% {
-    transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
-  }
 }
 
 @keyframes rotate-one {
@@ -644,28 +615,12 @@ footer {
     transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
   }
 }
-@-webkit-keyframes rotate-two {
-  0% {
-    transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
-  }
-  100% {
-    transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
-  }
-}
 @keyframes rotate-two {
   0% {
     transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
   }
   100% {
     transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
-  }
-}
-@-webkit-keyframes rotate-three {
-  0% {
-    transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
-  }
-  100% {
-    transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
   }
 }
 @keyframes rotate-three {
@@ -684,17 +639,6 @@ footer {
     height: 240px;
   }
 }
-@-webkit-keyframes loading {
-  0% {
-    opacity: 0.04;
-  }
-  50% {
-    opacity: 0.1;
-  }
-  100% {
-    opacity: 0.04;
-  }
-}
 @keyframes loading {
   0% {
     opacity: 0.04;
@@ -704,14 +648,6 @@ footer {
   }
   100% {
     opacity: 0.04;
-  }
-}
-@-webkit-keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
   }
 }
 @keyframes rotate {
