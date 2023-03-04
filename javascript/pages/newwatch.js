@@ -61,7 +61,7 @@ const player = {
          * @param {Object} data - данные с kodik
          */
         init: function (data) {
-            if(parametrs.dub_anime)
+            if (parametrs.dub_anime)
                 this.key = 'save-translations-' + $ID;
             this.saved = JSON.parse(localStorage.getItem(this.key));
             this.saved = this.saved ? this.saved : [];
@@ -171,8 +171,8 @@ const player = {
         events: {
             clicked: [],
 
-            onclicked: function(e){
-                if(typeof(e) == "function" && e.length > 0){
+            onclicked: function (e) {
+                if (typeof (e) == "function" && e.length > 0) {
                     this.clicked.push(e);
                 }
             }
@@ -259,6 +259,8 @@ const player = {
 
     events: {
         loaded: [],
+        paused: [],
+        played: [],
 
         /**
          * Подписывается на обработчик загрузки плеера
@@ -268,7 +270,24 @@ const player = {
             if (typeof (e) == "function" && e.length > 0) {
                 this.loaded.push(e);
             }
+        },
+
+        onpause: function (e) {
+            if (typeof (e) == "function" && e.length > 0) {
+                this.paused.push(e);
+            }
+        },
+
+        onplayed: function (e) {
+            if (typeof (e) == "function" && e.length > 0) {
+                this.played.push(e);
+            }
         }
+    },
+
+    video_data: {
+        duration: 0, //Продолжительность эпизода
+        time: 0 //Текущее время просмотра
     },
 
     /**
@@ -367,6 +386,30 @@ const player = {
 
     },
 
+    playerMessage: function (message) {
+        //Продолжительность всего видео
+        if (message.data.key == 'kodik_player_duration_update') {
+            this.video_data.duration = message.data.value;
+        }
+
+        //Текущее время видео
+        if (message.data.key == 'kodik_player_time_update') {
+            this.video_data.time = message.data.value;
+        }
+
+        //Статус плеера изменен на паузу
+        if (message.data.key == 'kodik_player_pause') {
+            //Вызываем событие
+            this.events.paused.forEach(event => event(this.video_data));
+        }
+
+        //Статус плеера изменен на воспроизведение
+        if (message.data.key == 'kodik_player_play') {
+            //Вызываем событие
+            this.events.played.forEach(event => event(this.video_data));
+        }
+    },
+
     /**
      * Инизиализирует обьект на правильную работу
      * @param {Object} data - ответ с ресурса kodikDB
@@ -374,8 +417,54 @@ const player = {
     init: function (data) {
         this.data = data;
         this.translation.init(this.data);
+
+
+        //Прослушиваем данные которые присылает нам плеер kodik
+        if (window.addEventListener) {
+            window.addEventListener('message', this.playerMessage);
+        } else {
+            window.attachEvent('onmessage', this.playerMessage);
+        }
     }
 }
+
+//Управление историей
+const History = {
+    shikiData: undefined,
+    key: 'last-watch',
+    maxItems: 5,
+    get() {
+        return JSON.parse(localStorage.getItem(this.key)) ?? [];
+    },
+    set(history) {
+        localStorage.setItem(this.key, JSON.stringify(history));
+    },
+    add(cnt = false, duration = 0, i = 0) {
+        if (!this.shikiData) {
+            return;
+        }
+        const history = this.get();
+        const { russian, screenshots } = this.shikiData;
+        const episode = cnt ? player.episodes.selected_episode + i : player.episodes.selected_episode + i;
+        const image = `https://nyaa.shikimori.one/${screenshots[0].original}`;
+
+        const item = { id: $ID, continue: cnt, duration, fullduration: play_duration, episode, name: russian, image };
+
+        const index = history.findIndex(item => item.id === $ID);
+
+        if (index !== -1) {
+            history.splice(index, 1);
+        }
+
+        history.unshift(item);
+
+        if (history.length > this.maxItems) {
+            history.pop();
+        }
+
+        this.set(history);
+    }
+};
 
 /*
  * Создание событий к визулу
@@ -440,6 +529,12 @@ Main((e) => {
         load_page.loaded();
     });
 
+    //Загрузка данных аниме плеера kodik
+    kodikApi.search({ shikimori_id: $ID }, (r) => {
+        //Инициализируем плеер
+        player.init(r.results);
+    });
+
     //Подписываемся на обработчик событий для загрузки плеера
     //Этот обработчик будет загружать из сохранения последние аниме
     player.events.onloaded(async (i) => {
@@ -447,7 +542,7 @@ Main((e) => {
         if (i == 1) {
             let save = JSON.parse(localStorage.getItem($ID));
 
-            if(!save){
+            if (!save) {
                 return;
             }
 
@@ -457,7 +552,7 @@ Main((e) => {
 
     //Подписываемся на обработчик событий выбора эпизода
     //Этот обработчик будет сохранять последние выбраное аниме аниме
-    player.episodes.events.onclicked((e, d)=>{
+    player.episodes.events.onclicked((e, d) => {
         const data = {
             kodik_episode: e,
             kodik_dub: d
@@ -465,12 +560,6 @@ Main((e) => {
 
         //Сохраняем последние выбранное аниме
         localStorage.setItem($ID, JSON.stringify(data));
-    });
-
-    //Загрузка данных аниме плеера kodik
-    kodikApi.search({ shikimori_id: $ID }, (r) => {
-        //Инициализируем плеер
-        player.init(r.results);
     });
 });
 
@@ -480,6 +569,8 @@ Main((e) => {
  */
 async function LoadAnime(e = () => { }) {
     const data = await LoadAnimeShikimori($ID);
+
+    History.shikiData = data;
 
     //console.log(data);
 
