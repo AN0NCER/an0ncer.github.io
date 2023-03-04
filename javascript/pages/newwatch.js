@@ -172,7 +172,7 @@ const player = {
             clicked: [],
 
             onclicked: function(e){
-                if(typeof(e) == "function" && e.length == 0){
+                if(typeof(e) == "function" && e.length > 0){
                     this.clicked.push(e);
                 }
             }
@@ -207,11 +207,11 @@ const player = {
                     //Проверяем если эпизод не выбран, выбираем его, делаем анимацию выбора, изменяем плеер
                     if (!player.episodes.selected_episode || player.episodes.selected_episode != episode) {
                         //Вызываем подписанные события
-                        player.episodes.events.clicked.forEach(event => event());
+                        player.episodes.events.clicked.forEach(event => event(episode, player.translation.id));
                         //Выбираем эпизод
                         player.episodes.selected_episode = episode;
                         //Анимируем выбор эпизода
-                        AnimateSelect(episode);
+                        player.episodes.AnimateSelect(episode);
                         //Указываем плееру что были обновленны данные
                         player.update();
                     }
@@ -441,17 +441,30 @@ Main((e) => {
     });
 
     //Подписываемся на обработчик событий для загрузки плеера
+    //Этот обработчик будет загружать из сохранения последние аниме
     player.events.onloaded(async (i) => {
         //Если загружен только 1-й раз то загружаем наше сохранение
         if (i == 1) {
-            //
             let save = JSON.parse(localStorage.getItem($ID));
+
             if(!save){
                 return;
             }
+
             player.loadAnime(save.kodik_episode, save.kodik_dub);
-            console.log(save);
         }
+    });
+
+    //Подписываемся на обработчик событий выбора эпизода
+    //Этот обработчик будет сохранять последние выбраное аниме аниме
+    player.episodes.events.onclicked((e, d)=>{
+        const data = {
+            kodik_episode: e,
+            kodik_dub: d
+        }
+
+        //Сохраняем последние выбранное аниме
+        localStorage.setItem($ID, JSON.stringify(data));
     });
 
     //Загрузка данных аниме плеера kodik
@@ -468,7 +481,7 @@ Main((e) => {
 async function LoadAnime(e = () => { }) {
     const data = await LoadAnimeShikimori($ID);
 
-    console.log(data);
+    //console.log(data);
 
     await SetAnimeImageAndTitle(data);
     SetGenres(data);
