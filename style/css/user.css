@@ -271,11 +271,12 @@ header .menu--btn--select {
 .main--settings > .main--settings--checkbox > label .main--settings--checkbox--title {
   color: #fff;
   font-size: 14px;
+  margin-right: 10px;
 }
 .main--settings > .main--settings--checkbox > label .main--settings--checkbox--switch {
   position: relative;
   display: inline-block;
-  width: 60px;
+  min-width: 60px;
   height: 34px;
 }
 .main--settings > .main--settings--checkbox > label .main--settings--checkbox--switch input {

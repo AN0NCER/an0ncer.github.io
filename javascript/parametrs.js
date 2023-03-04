@@ -1,8 +1,10 @@
 const keysParametrs = 'parametrs';
 let parametrs = {
-    censored: true
+    censored: true, //Делать цензуру на 18+ hentay
+    dub_anime: false, //Сохранять переводы для каждого аниме отдельно
 }
 
+//Метод загрузки параметров
 let synchparam = () => {
     let ls = JSON.parse(localStorage.getItem(keysParametrs));
     if (ls) {
@@ -14,16 +16,19 @@ let synchparam = () => {
     }
 };
 
+//Метод сохранения параметров
 let saveparametrs = () => {
     localStorage.setItem(keysParametrs, JSON.stringify(parametrs));
 }
 
+//Загружаем параметры
 synchparam();
 
 let param = {
     keys: {
         default: 'NAN',
-        censored: 'censored'
+        censored: 'censored',
+        dub_anime: 'dub_anime'
     },
     register: function (i,k){
         return{

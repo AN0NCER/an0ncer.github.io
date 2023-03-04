@@ -61,6 +61,8 @@ const player = {
          * @param {Object} data - данные с kodik
          */
         init: function (data) {
+            if(parametrs.dub_anime)
+                this.key = 'save-translations-' + $ID;
             this.saved = JSON.parse(localStorage.getItem(this.key));
             this.saved = this.saved ? this.saved : [];
 
@@ -166,6 +168,16 @@ const player = {
         last_episode: 0,
         selected_episode: 1,
 
+        events: {
+            clicked: [],
+
+            onclicked: function(e){
+                if(typeof(e) == "function" && e.length == 0){
+                    this.clicked.push(e);
+                }
+            }
+        },
+
         ShowEpisodes: function () {
             AddEpisodes(this.last_episode);
 
@@ -180,46 +192,9 @@ const player = {
                 Init(); //Инициализация функционала
                 player.episodes.selected_episode = 1;
                 //Анимируем выбор первого эпизода автоматически
-                AnimateSelect();
+                player.episodes.AnimateSelect(this.selected_episode);
                 //Даем плееру задачу обновить свои данные
                 player.update();
-            }
-
-            /**
-             * Делает анимацию выбора эпизода
-             * @param {Int} i - выбранный епизод
-             * @param {Event} e - событие после выполнение анимации 
-             * @param {Event} u - событие обновление данных анимции - передается текущая анимация anime
-             * @returns 
-             */
-            function AnimateSelect(i = 1, e, u) {
-                const element = $('.episodes > .value > .episode')[(i - 1)];
-                if (!element) {
-                    return;
-                }
-                if (this.selected) {
-                    anime({ targets: this.selected, color: "#555657", easing: 'easeOutElastic(1, 1)' });
-                }
-                this.selected = element;
-                const left = $(element).position().left;
-                const top = $(element).position().top + $('.episodes > .value').scrollTop();
-                anime({
-                    targets: '.sel',
-                    top: top,
-                    easing: 'easeOutElastic(1, 1)'
-                });
-                anime({
-                    targets: '.sel',
-                    left: left,
-                    complete: function (anim) { if (e) { e(); } },
-                    update: function (anim) { if (u) { u(anim); } },
-                    easing: 'easeOutElastic(1, 1)'
-                });
-                anime({
-                    targets: element,
-                    color: "#020202",
-                    easing: 'easeOutElastic(1, 1)'
-                })
             }
 
             /**
@@ -231,6 +206,8 @@ const player = {
                     let episode = $(target).data('index'); //Епизод
                     //Проверяем если эпизод не выбран, выбираем его, делаем анимацию выбора, изменяем плеер
                     if (!player.episodes.selected_episode || player.episodes.selected_episode != episode) {
+                        //Вызываем подписанные события
+                        player.episodes.events.clicked.forEach(event => event());
                         //Выбираем эпизод
                         player.episodes.selected_episode = episode;
                         //Анимируем выбор эпизода
@@ -240,6 +217,43 @@ const player = {
                     }
                 });
             }
+        },
+
+        /**
+             * Делает анимацию выбора эпизода
+             * @param {Int} i - выбранный епизод
+             * @param {Event} e - событие после выполнение анимации 
+             * @param {Event} u - событие обновление данных анимции - передается текущая анимация anime
+             * @returns 
+             */
+        AnimateSelect: function (i = 1, e, u) {
+            const element = $('.episodes > .value > .episode')[(i - 1)];
+            if (!element) {
+                return;
+            }
+            if (this.selected) {
+                anime({ targets: this.selected, color: "#555657", easing: 'easeOutElastic(1, 1)' });
+            }
+            this.selected = element;
+            const left = $(element).position().left;
+            const top = $(element).position().top + $('.episodes > .value').scrollTop();
+            anime({
+                targets: '.sel',
+                top: top,
+                easing: 'easeOutElastic(1, 1)'
+            });
+            anime({
+                targets: '.sel',
+                left: left,
+                complete: function (anim) { if (e) { e(); } },
+                update: function (anim) { if (u) { u(anim); } },
+                easing: 'easeOutElastic(1, 1)'
+            });
+            anime({
+                targets: element,
+                color: "#020202",
+                easing: 'easeOutElastic(1, 1)'
+            })
         }
     },
 
@@ -339,6 +353,21 @@ const player = {
     },
 
     /**
+     * 
+     * @param {Int} e - Эпизод аниме 
+     * @param {Int} d - ID дубляжа
+     */
+    loadAnime: function (e, d) {
+        this.episodes.selected_episode = e;
+        this.translation.select(d);
+        this.episodes.AnimateSelect(e);
+    },
+
+    saveAnime: function () {
+
+    },
+
+    /**
      * Инизиализирует обьект на правильную работу
      * @param {Object} data - ответ с ресурса kodikDB
      */
@@ -412,8 +441,17 @@ Main((e) => {
     });
 
     //Подписываемся на обработчик событий для загрузки плеера
-    player.events.onloaded((i)=>{
-        console.log(i);
+    player.events.onloaded(async (i) => {
+        //Если загружен только 1-й раз то загружаем наше сохранение
+        if (i == 1) {
+            //
+            let save = JSON.parse(localStorage.getItem($ID));
+            if(!save){
+                return;
+            }
+            player.loadAnime(save.kodik_episode, save.kodik_dub);
+            console.log(save);
+        }
     });
 
     //Загрузка данных аниме плеера kodik
