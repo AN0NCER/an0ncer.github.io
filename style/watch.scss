@@ -805,6 +805,73 @@ Player
     }
 }
 
+/*
+Franchise
+*/
+
+.franchisa-anime{
+    display: grid;
+    margin-top: 20px;
+    grid-auto-rows: minmax(100px, auto);
+    grid-auto-columns: 250px;
+    grid-auto-flow: column;
+    overflow-x: auto;
+    grid-gap: 0 10px;
+    min-width: 100%;
+
+    a{
+        display: flex;
+        max-width: 250px;
+        border: 1px solid #5FBEF3;
+        border-radius: 3px;
+        position: relative;
+
+        .franchise{
+            position: relative;
+            z-index: 2;
+            padding: 10px;
+            color: #fff;
+
+            .title{
+                font-size: 15px;
+                font-weight: bold;
+                font-family: Manrope;
+            }
+            .type{
+                font-size: 12px;
+                margin-top: 5px;
+            }
+        }
+
+        .year{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 64px;
+            z-index: 1;
+            opacity: .1;
+        }
+    }
+
+    a.selected{
+        background: #5FBEF3;
+        .franchise{
+            color: #020202;
+        }
+    }
+
+    a:first-child{
+        margin-left: 20px;
+    }
+}
+
 .rm{
     &--mg{
         &--t{

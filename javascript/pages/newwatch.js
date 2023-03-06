@@ -596,6 +596,7 @@ async function LoadAnime(e = () => { }) {
     SetStatus(data);
     SetGallery();
     SetDescription(data);
+    SetFranchide();
 
     e();
 
@@ -660,6 +661,20 @@ async function LoadAnime(e = () => { }) {
         $('.title-with-raiting > .title > .russian').text(data.russian);
         $('.title-with-raiting > .title > .name').text(data.name);
         $('.title-with-raiting > .raiting > span').text(data.score);
+    }
+
+    async function SetFranchide() {
+        shikimoriApi.Animes.franchise($ID, (res)=>{
+            console.log(res.nodes);
+            if(res.nodes){
+                for (let i = 0; i < res.nodes.length; i++) {
+                    const element = res.nodes[i];
+                    console.log(element);
+                    const html = `<a href="watch.html?id=${element.id}" class="${$ID==element.id?'selected':''}"><div class="franchise"><div class="title">${element.name}</div><div class="type">${element.kind}</div></div><div class="year">${element.year}</div></a>`;
+                    $('.franchisa-anime').append(html);
+                }
+            }
+        });
     }
 
     /**
@@ -731,7 +746,7 @@ async function LoadAnime(e = () => { }) {
     function SetDescription(data) {
         console.log(data);
         if(!data.description){
-            $('.block-title').css('display','none');
+            $('.description').append(data.english[0]);
             return;
         }
         $('.description').append(data.description_html);
