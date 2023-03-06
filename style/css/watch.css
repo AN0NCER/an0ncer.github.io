@@ -618,13 +618,13 @@ Player
   border-radius: 3px;
   background: #203544;
   overflow: hidden;
-  position: absolute;
+  position: fixed;
   max-width: 860px;
-  bottom: 55px;
+  bottom: 60px;
   left: 20px;
   right: 20px;
   z-index: 9;
-  max-height: calc(100vh - 65px);
+  max-height: calc(100vh - 75px);
   overflow-y: auto;
 }
 .translations--list--element {

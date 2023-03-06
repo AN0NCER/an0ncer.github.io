@@ -192,7 +192,7 @@ const player = {
 
                 Init(); //Инициализация функционала
                 //При инициализации проверяем выбраный эпизод и если эпизод выше возможного то изменяем на 1ый эпизод
-                if(player.episodes.selected_episode > player.episodes.last_episode){
+                if (player.episodes.selected_episode > player.episodes.last_episode) {
                     player.episodes.selected_episode = 1;
                 }
                 //Анимируем выбор первого эпизода автоматически
@@ -445,7 +445,7 @@ const History = {
     set(history) {
         localStorage.setItem(this.key, JSON.stringify(history));
     },
-    
+
     add(cnt = false, duration = 0, i = 0, e = player.episodes.selected_episode) {
         if (!this.shikiData) {
             return;
@@ -513,7 +513,17 @@ function Functional() {
         //Пролистать до открытого списка
         if (show_list) {
             $('body').addClass('loading');
-            document.querySelector('.translations--list').scrollIntoView({ behavior: "smooth", block: "start" });
+            let element = document.getElementsByClassName('translations--current')[0];
+            let elementPosition = element.getBoundingClientRect().top;
+            let windowHeight = window.innerHeight;
+            let elementHeight = element.offsetHeight;
+            let bottomOffset = 10;
+            let offsetPosition = elementPosition + window.pageYOffset - windowHeight + elementHeight + bottomOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "auto"
+            });
         } else {
             $('body').removeClass('loading');
         }
@@ -574,7 +584,7 @@ Main((e) => {
     });
 
     //Подписываемся на обработчик событий пауза плеера
-    player.events.onpause((d)=>{
+    player.events.onpause((d) => {
         History.add(false, d.time);
     });
 });
@@ -664,28 +674,32 @@ async function LoadAnime(e = () => { }) {
     }
 
     async function SetFranchise() {
-        shikimoriApi.Animes.franchise($ID, (res)=>{
+        shikimoriApi.Animes.franchise($ID, async (res) => {
+            if (res.failed && res.status == 429) {
+                await sleep(1000);
+                return SetFranchise();
+            }
             //Проверяем если есть у нас фрашиза
-            if(res.nodes){
+            if (res.nodes) {
                 //Отоброжаем блок с франшизой
                 $('.franchise-title, .franchisa-anime').css("display", "");
                 for (let i = 0; i < res.nodes.length; i++) {
                     const element = res.nodes[i]; // Обьект с франшизой
 
                     //Отбираем мусор в франшизе
-                    if(element.kind == "Клип"){
+                    if (element.kind == "Клип") {
                         continue;
                     }
 
                     //Создаем елемент
-                    const html = `<a data-id="${element.id}" class="${$ID==element.id?'selected':''}"><div class="franchise"><div class="title">${element.name}</div><div class="type">${element.kind}</div></div><div class="year">${element.year}</div></a>`;
+                    const html = `<a data-id="${element.id}" class="${$ID == element.id ? 'selected' : ''}"><div class="franchise"><div class="title">${element.name}</div><div class="type">${element.kind}</div></div><div class="year">${element.year}</div></a>`;
 
                     //Добавляем елемент
                     $('.franchisa-anime').append(html);
                 }
 
                 //Событие нажатие
-                $('.franchisa-anime > a').click((e)=>{
+                $('.franchisa-anime > a').click((e) => {
                     //Перенаправляем пользователя без истории
                     window.location.replace("watch.html?id=" + $(e.currentTarget).data('id'));
                 });
@@ -761,7 +775,7 @@ async function LoadAnime(e = () => { }) {
      */
     function SetDescription(data) {
         console.log(data);
-        if(!data.description){
+        if (!data.description) {
             $('.description').append(data.english[0]);
             return;
         }
