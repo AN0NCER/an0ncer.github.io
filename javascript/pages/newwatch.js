@@ -134,6 +134,7 @@ const player = {
             $('.translations--current--object--icon-title > span').text(data.translation.title); //Title translation
             $('.translations--current--object--count').text(data.last_episode); //Last episode translation
             $('.translations--list').addClass('hide');
+            $('body').removeClass('loading');
 
             player.selectedTranslation(this.id)
         },
@@ -190,9 +191,12 @@ const player = {
                 }
 
                 Init(); //Инициализация функционала
-                player.episodes.selected_episode = 1;
+                //При инициализации проверяем выбраный эпизод и если эпизод выше возможного то изменяем на 1ый эпизод
+                if(player.episodes.selected_episode > player.episodes.last_episode){
+                    player.episodes.selected_episode = 1;
+                }
                 //Анимируем выбор первого эпизода автоматически
-                player.episodes.AnimateSelect(this.selected_episode);
+                player.episodes.AnimateSelect(player.episodes.selected_episode);
                 //Даем плееру задачу обновить свои данные
                 player.update();
             }
@@ -389,24 +393,24 @@ const player = {
     playerMessage: function (message) {
         //Продолжительность всего видео
         if (message.data.key == 'kodik_player_duration_update') {
-            this.video_data.duration = message.data.value;
+            player.video_data.duration = message.data.value;
         }
 
         //Текущее время видео
         if (message.data.key == 'kodik_player_time_update') {
-            this.video_data.time = message.data.value;
+            player.video_data.time = message.data.value;
         }
 
         //Статус плеера изменен на паузу
         if (message.data.key == 'kodik_player_pause') {
             //Вызываем событие
-            this.events.paused.forEach(event => event(this.video_data));
+            player.events.paused.forEach(event => event(player.video_data));
         }
 
         //Статус плеера изменен на воспроизведение
         if (message.data.key == 'kodik_player_play') {
             //Вызываем событие
-            this.events.played.forEach(event => event(this.video_data));
+            player.events.played.forEach(event => event(player.video_data));
         }
     },
 
@@ -433,22 +437,25 @@ const History = {
     shikiData: undefined,
     key: 'last-watch',
     maxItems: 5,
+
     get() {
         return JSON.parse(localStorage.getItem(this.key)) ?? [];
     },
+
     set(history) {
         localStorage.setItem(this.key, JSON.stringify(history));
     },
-    add(cnt = false, duration = 0, i = 0) {
+    
+    add(cnt = false, duration = 0, i = 0, e = player.episodes.selected_episode) {
         if (!this.shikiData) {
             return;
         }
         const history = this.get();
         const { russian, screenshots } = this.shikiData;
-        const episode = cnt ? player.episodes.selected_episode + i : player.episodes.selected_episode + i;
+        const episode = cnt ? e + i : e + i;
         const image = `https://nyaa.shikimori.one/${screenshots[0].original}`;
 
-        const item = { id: $ID, continue: cnt, duration, fullduration: play_duration, episode, name: russian, image };
+        const item = { id: $ID, continue: cnt, duration, fullduration: player.video_data.duration, episode, name: russian, image };
 
         const index = history.findIndex(item => item.id === $ID);
 
@@ -463,6 +470,7 @@ const History = {
         }
 
         this.set(history);
+        console.log(history);
     }
 };
 
@@ -560,6 +568,14 @@ Main((e) => {
 
         //Сохраняем последние выбранное аниме
         localStorage.setItem($ID, JSON.stringify(data));
+
+        //Добавляем истоию просмотра
+        History.add(false, 0, 0, e);
+    });
+
+    //Подписываемся на обработчик событий пауза плеера
+    player.events.onpause((d)=>{
+        History.add(false, d.time);
     });
 });
 
