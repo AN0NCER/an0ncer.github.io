@@ -729,6 +729,11 @@ async function LoadAnime(e = () => { }) {
      * @param {Object} data - обьект аниме 
      */
     function SetDescription(data) {
+        console.log(data);
+        if(!data.description){
+            $('.block-title').css('display','none');
+            return;
+        }
         $('.description').append(data.description_html);
     }
 }

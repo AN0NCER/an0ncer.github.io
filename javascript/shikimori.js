@@ -303,6 +303,13 @@ const shikimoriApi = {
             event(response);
             return response;
         },
+        franchise: async function (id, event = () => {}) {
+            let url = this.url + '/' + id + '/franchise';
+            let request = shikimoriFetch("GET", url);
+            let response = await request.fetch();
+            event(response);
+            return response;
+        },
         similar: async function (id, event = () => { }) {
             let url = this.url + '/' + id + '/similar';
             let request = shikimoriFetch('GET', url);
