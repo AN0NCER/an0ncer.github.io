@@ -596,7 +596,7 @@ async function LoadAnime(e = () => { }) {
     SetStatus(data);
     SetGallery();
     SetDescription(data);
-    SetFranchide();
+    SetFranchise();
 
     e();
 
@@ -663,16 +663,32 @@ async function LoadAnime(e = () => { }) {
         $('.title-with-raiting > .raiting > span').text(data.score);
     }
 
-    async function SetFranchide() {
+    async function SetFranchise() {
         shikimoriApi.Animes.franchise($ID, (res)=>{
-            console.log(res.nodes);
+            //Проверяем если есть у нас фрашиза
             if(res.nodes){
+                //Отоброжаем блок с франшизой
+                $('.franchise-title, .franchisa-anime').css("display", "");
                 for (let i = 0; i < res.nodes.length; i++) {
-                    const element = res.nodes[i];
-                    console.log(element);
-                    const html = `<a href="watch.html?id=${element.id}" class="${$ID==element.id?'selected':''}"><div class="franchise"><div class="title">${element.name}</div><div class="type">${element.kind}</div></div><div class="year">${element.year}</div></a>`;
+                    const element = res.nodes[i]; // Обьект с франшизой
+
+                    //Отбираем мусор в франшизе
+                    if(element.kind == "Клип"){
+                        continue;
+                    }
+
+                    //Создаем елемент
+                    const html = `<a data-id="${element.id}" class="${$ID==element.id?'selected':''}"><div class="franchise"><div class="title">${element.name}</div><div class="type">${element.kind}</div></div><div class="year">${element.year}</div></a>`;
+
+                    //Добавляем елемент
                     $('.franchisa-anime').append(html);
                 }
+
+                //Событие нажатие
+                $('.franchisa-anime > a').click((e)=>{
+                    //Перенаправляем пользователя без истории
+                    window.location.replace("watch.html?id=" + $(e.currentTarget).data('id'));
+                });
             }
         });
     }
