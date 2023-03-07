@@ -69,6 +69,39 @@ $(document).ready(() => {
   $(".main--settings--clear-cache--btn").click(() => {
     ClearCache();
   });
+  $(".main--settings--synch--btn").click(() => {
+    if (
+      confirm(
+        "Синхронизировать с сервера? \r\n ДА - C сервера в приложение \r\n Отменить - С телефона на сервер"
+      )
+    ) {
+      let data = synch.get();
+      if(data){
+        console.log(data);
+        for (let key in data) {
+          console.log(key);
+          localStorage.setItem(key, data[key]);     
+        }
+        alert('Готово');
+      }
+    } else {
+      let data = {};
+
+      for (var i = 0, len = localStorage.length; i < len; ++i) {
+        //console.log(localStorage.key(i));
+        if (
+          localStorage.key(i) == "access_token" ||
+          localStorage.key(i) == "access_whoami" ||
+          localStorage.key(i) == "bearer"
+        ) {
+          continue;
+        }
+        data[localStorage.key(i)] = localStorage.getItem(localStorage.key(i));
+        //console.log(localStorage.getItem(localStorage.key(i)));
+      }
+      synch.set(data);
+    }
+  });
 });
 
 function LogOut() {
@@ -103,6 +136,8 @@ function Stats(id) {
         );
       }
     });
+
+    synch.init(response);
   });
 }
 
@@ -193,3 +228,75 @@ if (parametrs.dub_anime) {
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+const synch = {
+  loaded: false,
+  style_id: undefined,
+  inserted: false,
+  data_saved: undefined,
+  founded: false,
+  style: undefined,
+
+  init: function (response) {
+    if (response) {
+      this.style_id = response.style_id;
+      this.load();
+    }
+  },
+
+  load: function () {
+    shikimoriApi.Styles.id(this.style_id, (response) => {
+      this.style = response.css;
+      if (response.css.search(/TunimeData/) != -1) {
+        //founded data from shikimori
+        this.founded = true;
+        const regex = /\[SYNCH\]\r\n([^]*)\r/;
+        const match = regex.exec(response.css);
+        if (match) {
+          const data = match[1].trim(); // убрать лишние пробелы и переносы строк
+          this.data_saved = data.replace("//", "");
+        }
+      }
+      this.loaded = true;
+    }).GET();
+  },
+
+  get: function () {
+    if (this.loaded && this.data_saved) {
+      return JSON.parse(decodeURIComponent(atob(this.data_saved)));
+    }
+  },
+
+  set: function (data) {
+    if (this.loaded) {
+      let css = this.style;
+
+      if (!this.founded) {
+        css += "\r\n//**TunimeData**";
+      }
+
+      if (!this.data_saved) {
+        css += "\r\n//" + "[SYNCH]";
+        css +=
+          "\r\n//" + btoa(encodeURIComponent(JSON.stringify(data))) + "\r\n";
+      } else {
+        const regex = /\[SYNCH\]\r\n([^]*)\r/;
+        css = css.replace(
+          regex,
+          "[SYNCH]\r\n//" +
+            btoa(encodeURIComponent(JSON.stringify(data))) +
+            "\r"
+        );
+      }
+
+      console.log(css);
+      shikimoriApi.Styles.id(this.style_id, (response) => {
+        console.log(response);
+      }).PATCH({ style: { css: css, name: "Tunime" } });
+    }
+    // if(this.loaded){
+    //   let css = ;
+    //
+    // }
+  },
+};

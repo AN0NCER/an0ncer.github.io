@@ -267,7 +267,7 @@ header .bg-paralax-img .btn-play .btn svg {
 }
 header .bg-paralax-img .btn-wrapper {
   position: absolute;
-  z-index: 10;
+  z-index: 14;
 }
 header .bg-paralax-img .btn-wrapper .obj {
   width: 101px;
@@ -279,7 +279,7 @@ header .bg-paralax-img .btn-wrapper .btn {
   height: 59px;
   display: grid;
   place-items: center;
-  z-index: 11;
+  z-index: 14;
 }
 header .bg-paralax-img .btn-wrapper .btn:empty {
   background: red;
@@ -559,6 +559,56 @@ Episodes
 }
 
 /*
+Heroes
+*/
+.hero-anime {
+  margin-top: 20px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+.hero-anime .val {
+  display: inline-flex;
+}
+.hero-anime .val a {
+  height: 90px;
+  overflow: hidden;
+  display: flex;
+  background: #203544;
+  color: #fff;
+  font-family: Manrope;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+.hero-anime .val a img {
+  height: 100%;
+  border-radius: 3px;
+}
+.hero-anime .val a .hero {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.hero-anime .val a .hero .name {
+  font-size: 18px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.hero-anime .val a .hero .name-en {
+  font-size: 16px;
+  opacity: 0.5;
+  white-space: nowrap;
+}
+.hero-anime .val a:first-child {
+  margin-left: 20px;
+}
+.hero-anime .val a:last-child {
+  margin-right: 20px;
+}
+
+/*
 Player
 */
 .player {
@@ -627,6 +677,8 @@ Player
 }
 .translations--list {
   margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
   border-radius: 3px;
   background: #203544;
   overflow: hidden;

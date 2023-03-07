@@ -61,4 +61,3 @@ class PWAUpdate extends HTMLElement {
 customElements.define('pwa-show', PWAShow);
 customElements.define('pwa-hide', PWAHide);
 customElements.define('pwa-update', PWAUpdate);
-
