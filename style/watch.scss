@@ -393,7 +393,7 @@ main {
             z-index: 8;
             flex-direction: column;
 
-            &--content{
+            &--content {
                 z-index: 10;
                 background: $bg;
                 padding-top: 20px;
@@ -525,17 +525,19 @@ Title block
     font-size: 18px;
 }
 
-.block-title.title-player{
+.block-title.title-player {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    & > .btn{
+
+    &>.btn {
         cursor: pointer;
         width: 30px;
         height: 30px;
         display: none;
         place-items: center;
-        svg{
+
+        svg {
             width: 18px;
             fill: #fff;
             opacity: .6;
@@ -809,7 +811,7 @@ Player
 Franchise
 */
 
-.franchisa-anime{
+.franchisa-anime {
     display: grid;
     margin-top: 20px;
     grid-auto-rows: minmax(100px, auto);
@@ -819,31 +821,32 @@ Franchise
     grid-gap: 0 10px;
     min-width: 100%;
 
-    a{
+    a {
         display: flex;
         max-width: 250px;
         border: 1px solid #5FBEF3;
         border-radius: 3px;
         position: relative;
 
-        .franchise{
+        .franchise {
             position: relative;
             z-index: 2;
             padding: 10px;
             color: #fff;
 
-            .title{
+            .title {
                 font-size: 15px;
                 font-weight: bold;
                 font-family: Manrope;
             }
-            .type{
+
+            .type {
                 font-size: 12px;
                 margin-top: 5px;
             }
         }
 
-        .year{
+        .year {
             position: absolute;
             top: 0;
             left: 0;
@@ -860,51 +863,127 @@ Franchise
         }
     }
 
-    a.selected{
+    a.selected {
         background: #5FBEF3;
-        .franchise{
+
+        .franchise {
             color: #020202;
         }
     }
 
-    a:first-child{
+    a:first-child {
         margin-left: 20px;
+    }
+
+    a:last-child{
+        margin-right: 20px;
     }
 }
 
-.rm{
-    &--mg{
-        &--t{
+.similiar-anime {
+    margin-top: 20px;
+    display: flex;
+    overflow: hidden;
+    overflow-x: auto;
+
+    a:first-child {
+        margin-left: 20px;
+    }
+
+    a:last-child {
+        .card-anime {
+            margin-right: 20px;
+        }
+    }
+}
+
+.card-anime {
+    font-family: Manrope;
+    margin-right: 10px;
+
+    .content-img {
+        position: relative;
+        border-radius: 7px;
+        overflow: hidden;
+
+        .title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius: 0px 0px 7px 7px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3.5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
+            text-align: center;
+            color: #fff;
+            font-size: 13px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        img {
+            height: 270px;
+            border-radius: 7px;
+        }
+    }
+
+    .content-inf {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        color: #fff;
+
+        .inf-rtng {
+            display: flex;
+            align-items: center;
+
+            svg {
+                width: 10px;
+                margin-right: 5px;
+                fill: #FFE600;
+            }
+        }
+    }
+}
+
+.rm {
+    &--mg {
+        &--t {
             margin-top: 0;
         }
     }
 }
 
 @media screen and (orientation:landscape) {
-    header{
-        .bg-paralax-img{
+    header {
+        .bg-paralax-img {
             height: 100vh;
         }
     }
-    .landscape-player.landscape{
+
+    .landscape-player.landscape {
         margin-top: 10px;
         margin-left: 20px;
         margin-right: 20px;
         display: flex;
 
-        .episodes{
+        .episodes {
             margin: 0;
             margin-right: 20px;
             min-width: calc(55px + 6px);
 
-            .value{
+            .value {
                 display: flex;
                 flex-direction: column;
                 max-height: calc(100vh - 20px);
                 overflow-x: hidden;
                 overflow-y: visible;
 
-                .episode{
+                .episode {
                     min-width: 55px;
                     max-width: 55px;
                     min-height: 70px;
@@ -913,53 +992,62 @@ Franchise
             }
         }
 
-        .player{
+        .player {
             width: 100%;
             max-height: calc(100vh - 20px);
-            iframe{
+
+            iframe {
                 margin: 0;
             }
         }
     }
-    .block-title.title-player.landscape{
+
+    .block-title.title-player.landscape {
         padding-bottom: 10px;
-        .title{
+
+        .title {
             font-size: 20px;
         }
-        &>.btn{
+
+        &>.btn {
             display: grid;
         }
     }
 }
 
 @media screen and (min-width: 900px) {
-    main{
+    main {
         margin-top: 20px;
-        .block{
-            &--1{
+
+        .block {
+            &--1 {
                 flex-direction: revert;
                 max-width: 900px;
                 width: 100%;
                 overflow-x: hidden;
 
-                &--content{
+                &--content {
                     padding-top: 0;
                     display: flex;
                     max-width: 521px;
                     flex-direction: column;
                 }
             }
-            &--2{
+
+            &--2 {
                 padding-top: 20px;
             }
         }
     }
-    header{
+
+    header {
         width: 370px;
-        .bg-paralax-img{
+
+        .bg-paralax-img {
             height: 528px;
             border-radius: 3px;
-            img{
+
+            img {
                 width: auto;
                 position: relative;
             }

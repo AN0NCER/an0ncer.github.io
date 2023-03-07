@@ -429,6 +429,11 @@ const player = {
         } else {
             window.attachEvent('onmessage', this.playerMessage);
         }
+
+        //Отслеживаем изменение ориентации экрана для правильного отображения выбраного эпизода
+        window.addEventListener("orientationchange", function () {
+            player.episodes.AnimateSelect(player.episodes.selected_episode);
+        })
     }
 }
 
@@ -607,6 +612,7 @@ async function LoadAnime(e = () => { }) {
     SetGallery();
     SetDescription(data);
     SetFranchise();
+    SetSimiliar();
 
     e();
 
@@ -705,6 +711,37 @@ async function LoadAnime(e = () => { }) {
                 });
             }
         });
+    }
+
+    async function SetSimiliar() {
+        shikimoriApi.Animes.similar($ID, async (r) => {
+            if (r.failed && r.status == 429) {
+                await sleep(1000);
+                return setSimilar();
+            }
+            for (let i = 0; i < r.length; i++) {
+                const element = r[i];
+                $('.similiar-anime').append(CreateElementAnime(element));
+            }
+        });
+
+        //Функция создание елемента anime-card
+        function CreateElementAnime(data) {
+            return `<a href="/watch.html?id=${data.id}">
+    <div class="card-anime" data-anime="${data.id}">
+        <div class="content-img">
+            <div class="saved"></div>
+            <div class="title">${data.russian}</div>
+            <img src="https://nyaa.shikimori.one${data.image.original}" alt="${data.russian}">
+        </div>
+        <div class="content-inf">
+            <div class="inf-year">${new Date(data.aired_on).getFullYear()}</div>
+            <div class="inf-rtng"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"></path></svg>${data.score}</div>
+        </div>
+    </div>
+</a>`;
+        }
+
     }
 
     /**

@@ -739,6 +739,70 @@ Franchise
 .franchisa-anime a:first-child {
   margin-left: 20px;
 }
+.franchisa-anime a:last-child {
+  margin-right: 20px;
+}
+
+.similiar-anime {
+  margin-top: 20px;
+  display: flex;
+  overflow: hidden;
+  overflow-x: auto;
+}
+.similiar-anime a:first-child {
+  margin-left: 20px;
+}
+.similiar-anime a:last-child .card-anime {
+  margin-right: 20px;
+}
+
+.card-anime {
+  font-family: Manrope;
+  margin-right: 10px;
+}
+.card-anime .content-img {
+  position: relative;
+  border-radius: 7px;
+  overflow: hidden;
+}
+.card-anime .content-img .title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0px 0px 7px 7px;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(3.5px);
+          backdrop-filter: blur(3.5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  text-align: center;
+  color: #fff;
+  font-size: 13px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.card-anime .content-img img {
+  height: 270px;
+  border-radius: 7px;
+}
+.card-anime .content-inf {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+}
+.card-anime .content-inf .inf-rtng {
+  display: flex;
+  align-items: center;
+}
+.card-anime .content-inf .inf-rtng svg {
+  width: 10px;
+  margin-right: 5px;
+  fill: #FFE600;
+}
 
 .rm--mg--t {
   margin-top: 0;
