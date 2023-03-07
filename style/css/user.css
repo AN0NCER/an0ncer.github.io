@@ -53,7 +53,7 @@ header .content .account--title {
   font-size: 16px;
 }
 header .content .account--share--btn {
-  background: #28B2F5;
+  background: #28b2f5;
   width: 35px;
   height: 35px;
   display: flex;
@@ -148,7 +148,7 @@ header .menu--btn--select {
   margin-top: 5px;
 }
 .list--history--text a {
-  color: #28B2F5;
+  color: #28b2f5;
 }
 .list--history--date {
   font-size: 12px;
@@ -227,7 +227,7 @@ header .menu--btn--select {
   margin-right: 20px;
   height: 40px;
   border-radius: 5px;
-  border: 1px solid #28B2F5;
+  border: 1px solid #28b2f5;
   color: #fff;
   font-size: 14px;
   display: flex;
@@ -266,7 +266,6 @@ header .menu--btn--select {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
 }
 .main--settings > .main--settings--checkbox > label .main--settings--checkbox--title {
   color: #fff;
@@ -307,13 +306,79 @@ header .menu--btn--select {
   border-radius: 50%;
 }
 .main--settings > .main--settings--checkbox > label .main--settings--checkbox--switch input:checked + .main--settings--checkbox--switch--slider {
-  background-color: #28B2F5;
+  background-color: #28b2f5;
 }
 .main--settings > .main--settings--checkbox > label .main--settings--checkbox--switch input:focus + .main--settings--checkbox--switch--slider {
-  box-shadow: 0 0 1px #28B2F5;
+  box-shadow: 0 0 1px #28b2f5;
 }
 .main--settings > .main--settings--checkbox > label .main--settings--checkbox--switch input:checked + .main--settings--checkbox--switch--slider:before {
   transform: translateX(26px);
+}
+.main--settings > .main--settings--checkbox > .main--settings > .main--settings--checkbox.main--settings--checkbox {
+  display: flex;
+  flex-direction: column;
+}
+
+.main--settings--checkbox > div.main--settings--checkbox {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+.main--settings--checkbox > div.main--settings--checkbox > label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.main--settings--checkbox > div.main--settings--checkbox > label .main--settings--checkbox--title {
+  color: #fff;
+  font-size: 14px;
+  margin-right: 10px;
+}
+.main--settings--checkbox > div.main--settings--checkbox > label .main--settings--checkbox--switch {
+  position: relative;
+  display: inline-block;
+  min-width: 60px;
+  height: 34px;
+}
+.main--settings--checkbox > div.main--settings--checkbox > label .main--settings--checkbox--switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.main--settings--checkbox > div.main--settings--checkbox > label .main--settings--checkbox--switch--slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+.main--settings--checkbox > div.main--settings--checkbox > label .main--settings--checkbox--switch--slider::before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+.main--settings--checkbox > div.main--settings--checkbox > label .main--settings--checkbox--switch input:checked + .main--settings--checkbox--switch--slider {
+  background-color: #28b2f5;
+}
+.main--settings--checkbox > div.main--settings--checkbox > label .main--settings--checkbox--switch input:focus + .main--settings--checkbox--switch--slider {
+  box-shadow: 0 0 1px #28b2f5;
+}
+.main--settings--checkbox > div.main--settings--checkbox > label .main--settings--checkbox--switch input:checked + .main--settings--checkbox--switch--slider:before {
+  transform: translateX(26px);
+}
+.main--settings--checkbox > div.main--settings--checkbox.disable {
+  max-height: 0px;
+  overflow: hidden;
+  margin-top: 0;
 }
 
 .hide {

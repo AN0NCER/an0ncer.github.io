@@ -2,6 +2,7 @@ const keysParametrs = 'parametrs';
 let parametrs = {
     censored: true, //Делать цензуру на 18+ hentay
     dub_anime: false, //Сохранять переводы для каждого аниме отдельно
+    dub_anime_franchise: false
 }
 
 //Метод загрузки параметров
@@ -28,7 +29,8 @@ let param = {
     keys: {
         default: 'NAN',
         censored: 'censored',
-        dub_anime: 'dub_anime'
+        dub_anime: 'dub_anime',
+        dub_anime_franchise: 'dub_anime_franchise'
     },
     register: function (i,k){
         return{
