@@ -518,6 +518,7 @@ function Functional() {
         //Пролистать до открытого списка
         if (show_list) {
             $('body').addClass('loading');
+            alert($('body').hasClass('loading'));
             let element = document.getElementsByClassName('translations--current')[0];
             let elementPosition = element.getBoundingClientRect().top;
             let windowHeight = window.innerHeight;
@@ -613,6 +614,7 @@ async function LoadAnime(e = () => { }) {
     SetDescription(data);
     SetFranchise();
     SetSimiliar();
+    SetStudio(data);
 
     e();
 
@@ -688,7 +690,10 @@ async function LoadAnime(e = () => { }) {
             //Проверяем если есть у нас фрашиза
             if (res.nodes) {
                 //Отоброжаем блок с франшизой
-                $('.franchise-title, .franchisa-anime').css("display", "");
+                if(res.nodes.length > 0){
+                    $('.franchise-title, .franchisa-anime').css("display", "");
+                }
+
                 for (let i = 0; i < res.nodes.length; i++) {
                     const element = res.nodes[i]; // Обьект с франшизой
 
@@ -717,7 +722,11 @@ async function LoadAnime(e = () => { }) {
         shikimoriApi.Animes.similar($ID, async (r) => {
             if (r.failed && r.status == 429) {
                 await sleep(1000);
-                return setSimilar();
+                return SetSimiliar();
+            }
+            $('.with-count > .similiar-count').text(r.length);
+            if(r.length > 0){
+                $('.similiar-title , .similiar-anime').css("display", "");
             }
             for (let i = 0; i < r.length; i++) {
                 const element = r[i];
@@ -817,5 +826,9 @@ async function LoadAnime(e = () => { }) {
             return;
         }
         $('.description').append(data.description_html);
+    }
+
+    function SetStudio(data) {
+        $('.studio > .title').text(data.studios[0].filtered_name);
     }
 }

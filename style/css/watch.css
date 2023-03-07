@@ -47,19 +47,19 @@ Page Loading Animation
   left: 0%;
   top: 0%;
   animation: rotate-one 1s linear infinite;
-  border-bottom: 3px solid #EFEFFA;
+  border-bottom: 3px solid #efeffa;
 }
 .page-loading .inner.two {
   right: 0%;
   top: 0%;
   animation: rotate-two 1s linear infinite;
-  border-right: 3px solid #EFEFFA;
+  border-right: 3px solid #efeffa;
 }
 .page-loading .inner.three {
   right: 0%;
   bottom: 0%;
   animation: rotate-three 1s linear infinite;
-  border-top: 3px solid #EFEFFA;
+  border-top: 3px solid #efeffa;
 }
 @keyframes rotate-one {
   0% {
@@ -178,10 +178,10 @@ header .bg-paralax-img .anime-status .cur-status .icon > .text {
   color: #fff;
 }
 header .bg-paralax-img .anime-status .select .more-status {
-  background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
+  background: linear-gradient(180deg, #2296f0 0%, #287bf1 100%);
 }
 header .bg-paralax-img .anime-status .select .icon {
-  background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
+  background: linear-gradient(180deg, #2296f0 0%, #287bf1 100%);
 }
 header .bg-paralax-img .anime-status .list-status {
   margin-top: 10px;
@@ -257,7 +257,7 @@ header .bg-paralax-img .btn-play .btn {
   display: grid;
   place-items: center;
   position: relative;
-  background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
+  background: linear-gradient(180deg, #2296f0 0%, #287bf1 100%);
   width: 60px;
   height: 60px;
 }
@@ -369,7 +369,7 @@ main .block--2 {
 .title-with-raiting .raiting svg {
   height: 14px;
   margin-right: 10px;
-  fill: #2487F1;
+  fill: #2487f1;
 }
 
 /*
@@ -383,8 +383,8 @@ main .block--2 {
   overflow-x: auto;
 }
 .genres a {
-  color: #5FBEF3;
-  border: 1px solid #5FBEF3;
+  color: #5fbef3;
+  border: 1px solid #5fbef3;
   height: 30px;
   padding: 0 10px;
   display: flex;
@@ -404,7 +404,7 @@ Data information
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  background: #5FBEF3;
+  background: #5fbef3;
   height: 45px;
 }
 .text-witch-pg .pg {
@@ -436,6 +436,18 @@ Title block
   color: #fff;
   font-weight: bold;
   font-size: 18px;
+}
+.block-title.with-count {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.block-title.with-count .count {
+  background: #98d4fd;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #020202;
 }
 
 .block-title.title-player {
@@ -494,7 +506,7 @@ Description
   font-size: 14px;
 }
 .description a {
-  color: #98D4FD;
+  color: #98d4fd;
 }
 .description p {
   font-size: 14px;
@@ -512,7 +524,7 @@ Episodes
 }
 .episodes > .value {
   display: inline-flex;
-  background: #15171E;
+  background: #15171e;
   border-radius: 3px;
   width: auto;
   position: relative;
@@ -521,7 +533,7 @@ Episodes
   position: absolute;
   width: 55px;
   height: 70px;
-  background: #5FBEF3;
+  background: #5fbef3;
   margin: 3px;
   border-radius: 3px;
   z-index: 1;
@@ -577,7 +589,7 @@ Player
 .translations--current--object {
   width: 100%;
   height: 45px;
-  background: #5FBEF3;
+  background: #5fbef3;
   color: #020202;
   display: flex;
   align-items: center;
@@ -603,7 +615,7 @@ Player
 .translations--current--helper {
   min-width: 45px;
   min-height: 45px;
-  background: #5FBEF3;
+  background: #5fbef3;
   margin-left: 10px;
   display: grid;
   place-items: center;
@@ -696,7 +708,7 @@ Franchise
 .franchisa-anime a {
   display: flex;
   max-width: 250px;
-  border: 1px solid #5FBEF3;
+  border: 1px solid #5fbef3;
   border-radius: 3px;
   position: relative;
 }
@@ -731,7 +743,7 @@ Franchise
   opacity: 0.1;
 }
 .franchisa-anime a.selected {
-  background: #5FBEF3;
+  background: #5fbef3;
 }
 .franchisa-anime a.selected .franchise {
   color: #020202;
@@ -801,7 +813,26 @@ Franchise
 .card-anime .content-inf .inf-rtng svg {
   width: 10px;
   margin-right: 5px;
-  fill: #FFE600;
+  fill: #ffe600;
+}
+
+footer {
+  background: #101318;
+  position: sticky;
+  z-index: 1;
+  padding: 20px;
+  font-family: "Manrope";
+}
+footer .studio {
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  font-size: 30px;
+  text-transform: uppercase;
+}
+footer .studio span {
+  font-size: 15px;
+  opacity: 0.5;
 }
 
 .rm--mg--t {
