@@ -169,6 +169,7 @@ header .bg-paralax-img .anime-status .cur-status .icon .safe-area {
 }
 header .bg-paralax-img .anime-status .cur-status .icon .safe-area svg {
   height: 15px;
+  fill: #fff;
 }
 header .bg-paralax-img .anime-status .cur-status .icon > .text {
   max-width: 0px;
@@ -176,6 +177,9 @@ header .bg-paralax-img .anime-status .cur-status .icon > .text {
   transition: 0.3s ease-in-out;
   font-size: 12px;
   color: #fff;
+}
+header .bg-paralax-img .anime-status .cur-status .icon.selected {
+  background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
 }
 header .bg-paralax-img .anime-status .select .more-status {
   background: linear-gradient(180deg, #2296f0 0%, #287bf1 100%);
@@ -203,6 +207,7 @@ header .bg-paralax-img .anime-status .list-status > .status {
   height: 35px;
   align-items: center;
   justify-content: flex-start;
+  cursor: pointer;
 }
 header .bg-paralax-img .anime-status .list-status > .status:first-child {
   border-radius: 3px 3px 0 0;

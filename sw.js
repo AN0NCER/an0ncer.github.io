@@ -21,8 +21,6 @@ var appShellFilesToCache = [
     '/javascript/library/swiper-bundle.min.js',
     //Javascript
     '/javascript/kodik.js',
-    '/javascript/jdub.js',
-    '/javascript/jeps.js',
     '/javascript/jmenu.js',
     '/javascript/server.js',
     '/javascript/shikimori.js',

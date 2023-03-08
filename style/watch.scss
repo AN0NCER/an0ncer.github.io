@@ -189,6 +189,7 @@ header {
 
                   svg {
                      height: 15px;
+                     fill: #fff;
                   }
                }
 
@@ -198,6 +199,10 @@ header {
                   transition: 0.3s ease-in-out;
                   font-size: 12px;
                   color: #fff;
+               }
+
+               &.selected{
+                  background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
                }
             }
          }
@@ -237,6 +242,7 @@ header {
                height: 35px;
                align-items: center;
                justify-content: flex-start;
+               cursor: pointer;
 
                .safe-area {
                   min-width: 35px;

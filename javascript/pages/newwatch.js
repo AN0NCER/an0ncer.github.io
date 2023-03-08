@@ -105,7 +105,6 @@ const player = {
       }
 
       if (!this.selected && data.length > 0) {
-        console.log(data);
         this.select(data[0].translation.id);
       }
 
@@ -506,9 +505,153 @@ const History = {
     }
 
     this.set(history);
-    console.log(history);
   },
 };
+
+//Управление пользователем
+const user = {
+  rate: undefined, //Даные пользователя об аниме
+  id: undefined, //Текущий статус аниме
+  logged: false, //Авторизирован ли пользователь
+
+  events: {
+    /**
+     * Изменяет статус аниме в shikimori
+     * @param {Int} id - выбраный статус
+     */
+    changeStatus: function (id) {
+      //Проверяем авторизирован ли пользоваетль
+      if (user.logged) {
+        //Проверяем есть ли у этого аниме rate (данные)
+        if (user.rate) {
+          //Если нажали на активный статус
+          if (user.id == id) {
+            //Удаляем данные об аниме
+            this.removeData();
+          } else {
+            //Обновляем данные на новые данные
+            this.updateData(id);
+          }
+        } else {
+          //Нет данных и статус не совпадает
+          if (user.id != id) {
+            //Создаем user rate
+            this.updateData(id);
+          }
+        }
+      }
+    },
+
+    /**
+     * Устанавливает эпизод аниме в user_rate
+     * @param {Int} e - Текущий эпизод аниме
+     * @param {String} s - Текущий статус
+     */
+    setEpisode: function (e, s = anime_status[1].sh[0]) {
+      if (user.logged) {
+        if (user.rate) {
+          shikimoriApi.User_rates.id(user.rate.id, async (res) => {
+            if (res.failed && res.status == 429) {
+              await sleep(1000);
+              return this.setEpisode(e);
+            }
+
+            user.rate = res;
+            user.status();
+            user.setStatus();
+          }).PATCH({ "user_rate": { "episodes": e, "status": s } });
+        }
+      }
+    },
+
+    /**
+     * Обновляет или создает user_rate
+     * @param {Int} id - статус 
+     */
+    updateData: function (id) {
+      shikimoriApi.User_rates.user_rates({}, async (res) => {
+        if (res.failed && res.status == 429) {
+          await sleep(1000);
+          return this.createData(id);
+        }
+        user.rate = res;
+        user.status();
+        user.setStatus();
+      }, { "user_rate": { "status": anime_status[id].sh[0], "target_id": $ID, "target_type": "Anime", "user_id": usr.Storage.Get('access_whoami').id } }).POST();
+    },
+
+    /**
+     * Удаляет user_rate
+     */
+    removeData: function () {
+      shikimoriApi.User_rates.id(user.rate.id, async (res) => {
+        if (res.failed && res.status == 429) {
+          await sleep(1000);
+          return this.removeData();
+        }
+      }).DELETE();
+      user.rate = undefined;
+      user.id = undefined;
+      user.unselect();
+    }
+  },
+
+  /**
+   * Инициализация пользователя
+   * @param {Object} obj - user_rate shikimori data
+   * @param {Boolean} lgd - авторизирован ли пользователь
+   */
+  init: function (obj, lgd) {
+    this.logged = lgd;
+    if (obj.user_rate) {
+      this.rate = obj.user_rate;
+      this.status();
+      this.setStatus();
+    }
+
+    $('.cur-status > .icon').click(() => {
+      this.events.changeStatus($('.cur-status').data('id'));
+    });
+    $('.list-status > .status').click((e) => {
+      this.events.changeStatus($(e.currentTarget).data('id'));
+    });
+  },
+
+  /**
+   * Достает статус из данных
+   */
+  status: function () {
+    const i = anime_status.findIndex(x => x.sh.includes(this.rate.status));
+    this.id = anime_status[i].id;
+  },
+
+  /**
+   * Устанавливает статус для аниме
+   * @param {Int} id - статус 
+   */
+  setStatus: function (id = this.id) {
+    //Отоброжаем скрытый елемент
+    $('.list-status > .hide').removeClass('hide');
+
+    //Изменяем текст на выбраный статус
+    $(`.cur-status > .icon > .text`).text(anime_status[id].name);
+    //Изменяем иконку на выбраный статус
+    $(`.cur-status > .icon > .safe-area`).html($(`.status[data-id="${id}"] > .safe-area > svg`).clone());
+
+    //Скрываем выбранный статус
+    $(`.status[data-id="${id}"]`).addClass('hide');
+
+    //Закрашиваем выбранный статус
+    $('.cur-status > .icon').addClass('selected');
+
+    //Изменяем ид выбраного статуса
+    $('.cur-status').data('id', id);
+  },
+
+  unselect: function () {
+    $('.cur-status > .icon').removeClass('selected');
+  }
+}
 
 /*
  * Создание событий к визулу
@@ -598,7 +741,7 @@ function Functional() {
   function ShareAnime() {
     navigator.share({
       title: "Название",
-      text:  "Описание",
+      text: "Описание",
       url: window.location.origin + window.location.pathname + '?id=' + $ID + '&share'
     }).catch((error) => console.log('Sharing failed', error));
   }
@@ -612,7 +755,7 @@ Main((e) => {
   LoadAnime(() => {
     //Завершаем анимацию загрузки страницы
     load_page.loaded();
-  });
+  }, e);
 
   //Загрузка данных аниме плеера kodik
   kodikApi.search({ shikimori_id: $ID }, (r) => {
@@ -654,14 +797,23 @@ Main((e) => {
   player.events.onpause((d) => {
     History.add(false, d.time);
   });
+
+  //Подписываемся на обрботчик событий
+  player.events.onplayed((e) => {
+    user.events.setEpisode(player.episodes.selected_episode);
+  })
 });
 
 /**
  * Делает загрузку аниме данных с shikimori а также загружает картинку аниме в высоком разрешении
  * @param {Event} e функция вызывается после загрузки аниме
+ * @param {Boolean} l авторизирован пользователь
  */
-async function LoadAnime(e = () => { }) {
+async function LoadAnime(e = () => { }, l = false) {
   const data = await LoadAnimeShikimori($ID);
+
+  //Загружаем пользователя
+  user.init(data, l);
 
   History.shikiData = data;
 
@@ -694,7 +846,7 @@ async function LoadAnime(e = () => { }) {
           resolve(LoadAnimeShikimori(id));
         }
         resolve(response);
-      });
+      }, l);
     });
   }
 
@@ -762,7 +914,7 @@ async function LoadAnime(e = () => { }) {
           const element = res.nodes[i]; // Обьект с франшизой
 
           //Отбираем мусор в франшизе
-          if (element.kind == "Клип") {
+          if (element.kind == "Клип" || element.kind == "Спешл") {
             continue;
           }
 
@@ -791,7 +943,6 @@ async function LoadAnime(e = () => { }) {
         res.nodes &&
         res.nodes.length > 0
       ) {
-        console.log(res.nodes);
         res.nodes.forEach((element) => {
           let data = JSON.parse(
             localStorage.getItem("save-translations-" + element.id)
@@ -934,8 +1085,6 @@ async function LoadAnime(e = () => { }) {
           $('.hero-anime > .val').append(`<a href="https://shikimori.one${element.character.url}"><img src="https://nyaa.shikimori.one${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div><div class="name-en">${element.character.name}</div></div></a>`);
         }
       }
-
-      console.log(r);
     })
   }
 
@@ -944,7 +1093,6 @@ async function LoadAnime(e = () => { }) {
    * @param {Object} data - обьект аниме
    */
   function SetDescription(data) {
-    console.log(data);
     if (!data.description) {
       $(".description").append(data.english[0]);
       return;
