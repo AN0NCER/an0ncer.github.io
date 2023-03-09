@@ -42,9 +42,11 @@ header {
 
       &>.name {
         font-size: 16px;
-        span{
+
+        span {
           font-size: 14px;
         }
+
         b {
           font-weight: 800;
         }
@@ -105,7 +107,7 @@ header {
   border-radius: 7px;
   position: relative;
 
-  
+
 
   .icon {
     position: absolute;
@@ -156,17 +158,17 @@ header {
     }
   }
 
-  & > input:focus{
-    &::placeholder{
+  &>input:focus {
+    &::placeholder {
       padding-left: 0px;
     }
   }
 
-  input:focus ~ .icon{
+  input:focus~.icon {
     opacity: 0;
   }
 
-  input:not(:placeholder-shown) ~ .icon{
+  input:not(:placeholder-shown)~.icon {
     opacity: 0;
   }
 }
@@ -292,7 +294,7 @@ header {
           font-size: 14px;
           width: 100%;
 
-          & > .name{
+          &>.name {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -546,6 +548,7 @@ footer {
 
 @import './phone_menu';
 @import './cards';
+@import './frame_dialog';
 
 @media screen and (max-width:700px) {
   .desktop {

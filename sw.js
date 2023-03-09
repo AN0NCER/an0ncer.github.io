@@ -1,4 +1,4 @@
-var version = '51';
+var version = '55';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     //Pages
@@ -19,11 +19,15 @@ var appShellFilesToCache = [
     '/javascript/library/jqery.min.js',
     '/javascript/library/anime.min.js',
     '/javascript/library/swiper-bundle.min.js',
+    '/javascript/library/swiper-bundle.min.js.map',
     //Javascript
     '/javascript/kodik.js',
     '/javascript/jmenu.js',
     '/javascript/server.js',
+    '/javascript/parametrs.js',
     '/javascript/shikimori.js',
+    //Engine
+    '/javascript/engine/orientation.js',
     //Pages
     '/javascript/pages/index.js',
     '/javascript/pages/search.js',
@@ -32,6 +36,7 @@ var appShellFilesToCache = [
     '/javascript/pages/watch.js',
     //Custom
     '/javascript/custom/swtreilers.js',
+    '/javascript/custom/updatedialog.js',
 ];
 
 var dataCacheName = 'pwa-tunime-data-v' + version;

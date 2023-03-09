@@ -583,6 +583,179 @@ footer {
   background: rgba(0, 0, 0, 0.7);
 }
 
+.frame-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(95, 95, 95, 0.2);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  z-index: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.frame-dialog .dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  padding: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  gap: 10px;
+  background: #101318;
+  border-radius: 3px;
+  width: 100%;
+  max-height: calc(100vh - 80px);
+  max-width: 700px;
+}
+.frame-dialog .dialog .wraper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 45px;
+  overflow-y: auto;
+  max-height: calc(100vh - 80px);
+  width: 100%;
+}
+.frame-dialog .dialog .wraper .info-block-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 20px;
+  gap: 10px;
+}
+.frame-dialog .dialog .wraper .info-block-content.first .info-block {
+  border: 1px solid #4FDA65;
+}
+.frame-dialog .dialog .wraper .info-block-content.first .info-block .icon svg {
+  fill: #4FDA65;
+}
+.frame-dialog .dialog .wraper .info-block-content.second .info-block {
+  border: 1px solid #4F97DA;
+}
+.frame-dialog .dialog .wraper .info-block-content.second .info-block .icon svg {
+  fill: #4F97DA;
+}
+.frame-dialog .dialog .wraper .info-block-content.third .info-block {
+  border: 1px solid #DA3584;
+}
+.frame-dialog .dialog .wraper .info-block-content.third .info-block .icon svg {
+  fill: #DA3584;
+}
+.frame-dialog .dialog .wraper > .title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 0px;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-between;
+}
+.frame-dialog .dialog .wraper > .title .text {
+  font-family: "Manrope";
+  font-weight: 800;
+  font-size: 18px;
+  color: #FFFFFF;
+}
+.frame-dialog .dialog .wraper > .title .version {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0px;
+  gap: 5px;
+  font-family: "Manrope";
+  font-weight: 800;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.frame-dialog .dialog .wraper > .title .version svg {
+  width: 15px;
+  fill: rgba(255, 255, 255, 0.5);
+}
+.frame-dialog .dialog .wraper .title-block {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 0px 0px;
+  gap: 10px;
+  font-family: "Manrope";
+  font-size: 14px;
+  color: #FFFFFF;
+}
+.frame-dialog .dialog .wraper .title-block span {
+  width: 6px;
+  height: 6px;
+}
+.frame-dialog .dialog .wraper .title-block.first span {
+  background: #4FDA65;
+}
+.frame-dialog .dialog .wraper .title-block.second span {
+  background: #4F97DA;
+}
+.frame-dialog .dialog .wraper .title-block.third span {
+  background: #DA3584;
+}
+.frame-dialog .dialog .wraper .info-block {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+  gap: 10px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  width: 100%;
+}
+.frame-dialog .dialog .wraper .info-block .icon svg {
+  width: 19px;
+  opacity: 0.4;
+}
+.frame-dialog .dialog .wraper .info-block .content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 5px;
+}
+.frame-dialog .dialog .wraper .info-block .content .title {
+  font-family: "Manrope";
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+}
+.frame-dialog .dialog .wraper .info-block .content .info {
+  font-family: "Manrope";
+  font-size: 11px;
+  color: #FFFFFF;
+}
+.frame-dialog .dialog .btn-submit {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  background: #101318;
+}
+.frame-dialog .dialog .btn-submit .submit {
+  display: grid;
+  place-items: center;
+  padding: 14px 0px;
+  background: #5FBEF3;
+  color: #020202;
+  font-family: "Manrope";
+  font-weight: 800;
+  font-size: 11px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100%;
+}
+
 @media screen and (max-width: 700px) {
   .desktop {
     display: none;
