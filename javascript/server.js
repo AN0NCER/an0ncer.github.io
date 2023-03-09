@@ -1,4 +1,8 @@
-navigator.serviceWorker.addEventListener('controllerchange',  ()  => window.location.reload());
+navigator.serviceWorker.addEventListener('controllerchange',  ()  => {
+    console.log('Update foudned');
+    localStorage.setItem('dialog-update', true);
+    window.location.reload();
+});
 
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
@@ -61,4 +65,3 @@ class PWAUpdate extends HTMLElement {
 customElements.define('pwa-show', PWAShow);
 customElements.define('pwa-hide', PWAHide);
 customElements.define('pwa-update', PWAUpdate);
-

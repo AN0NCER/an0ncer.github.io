@@ -1,94 +1,133 @@
 <!DOCTYPE html>
 <html lang="ru">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport"
-        content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <meta name="page" content="user">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0"
+    />
+    <meta name="page" content="user" />
     <title>User - Tunime</title>
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
-    <link rel="stylesheet" href="/style/css/main.css">
-    <link rel="stylesheet" href="/style/css/user.css">
-    <link rel="manifest" href="manifest.json">
-</head>
+    <link rel="stylesheet" href="/style/css/main.css" />
+    <link rel="stylesheet" href="/style/css/user.css" />
+    <link rel="manifest" href="manifest.json" />
+  </head>
 
-<body class="unselectable">
+  <body class="unselectable">
     <header>
-        <div class="content">
-            <div class="account">
-                <div class="account--block">
-                    <div class="account--image">
-                        <img src="" alt="Profile">
-                    </div>
-                    <div class="account--info">
-                        <div class="account--title">Nickname</div>
-                        <div class="account--year"><span>?</span> полных лет</div>
-                    </div>
-                </div>
-                <div class="account--share">
-                    <div class="account--share--btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                            <path
-                                d="M352 224H305.5c-45 0-81.5 36.5-81.5 81.5c0 22.3 10.3 34.3 19.2 40.5c6.8 4.7 12.8 12 12.8 20.3c0 9.8-8 17.8-17.8 17.8h-2.5c-2.4 0-4.8-.4-7.1-1.4C210.8 374.8 128 333.4 128 240c0-79.5 64.5-144 144-144h80V34.7C352 15.5 367.5 0 386.7 0c8.6 0 16.8 3.2 23.2 8.9L548.1 133.3c7.6 6.8 11.9 16.5 11.9 26.7s-4.3 19.9-11.9 26.7l-139 125.1c-5.9 5.3-13.5 8.2-21.4 8.2H384c-17.7 0-32-14.3-32-32V224zM80 96c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16H400c8.8 0 16-7.2 16-16V384c0-17.7 14.3-32 32-32s32 14.3 32 32v48c0 44.2-35.8 80-80 80H80c-44.2 0-80-35.8-80-80V112C0 67.8 35.8 32 80 32h48c17.7 0 32 14.3 32 32s-14.3 32-32 32H80z" />
-                        </svg></div>
-                </div>
+      <div class="content">
+        <div class="account">
+          <div class="account--block">
+            <div class="account--image">
+              <img src="" alt="Profile" />
             </div>
-        </div>
-        <div class="menu">
-            <div class="menu--box">
-                <div class="menu--btn menu--btn--select" id="menu--statistick">Статистика</div>
-                <div class="menu--btn" id="menu--settings">Настройки</div>
-                <!-- <div class="menu--btn" id="menu--settings">Обновления</div> -->
+            <div class="account--info">
+              <div class="account--title">Nickname</div>
+              <div class="account--year"><span>?</span> полных лет</div>
             </div>
+          </div>
+          <div class="account--share">
+            <div class="account--share--btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                <path
+                  d="M352 224H305.5c-45 0-81.5 36.5-81.5 81.5c0 22.3 10.3 34.3 19.2 40.5c6.8 4.7 12.8 12 12.8 20.3c0 9.8-8 17.8-17.8 17.8h-2.5c-2.4 0-4.8-.4-7.1-1.4C210.8 374.8 128 333.4 128 240c0-79.5 64.5-144 144-144h80V34.7C352 15.5 367.5 0 386.7 0c8.6 0 16.8 3.2 23.2 8.9L548.1 133.3c7.6 6.8 11.9 16.5 11.9 26.7s-4.3 19.9-11.9 26.7l-139 125.1c-5.9 5.3-13.5 8.2-21.4 8.2H384c-17.7 0-32-14.3-32-32V224zM80 96c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16H400c8.8 0 16-7.2 16-16V384c0-17.7 14.3-32 32-32s32 14.3 32 32v48c0 44.2-35.8 80-80 80H80c-44.2 0-80-35.8-80-80V112C0 67.8 35.8 32 80 32h48c17.7 0 32 14.3 32 32s-14.3 32-32 32H80z"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="menu">
+        <div class="menu--box">
+          <div class="menu--btn menu--btn--select" id="menu--statistick">
+            Статистика
+          </div>
+          <div class="menu--btn" id="menu--settings">Настройки</div>
+          <!-- <div class="menu--btn" id="menu--settings">Обновления</div> -->
+        </div>
+      </div>
     </header>
 
     <main class="main--status">
-        <div class="main--status--title">Статистика</div>
-        <div class="main--status--statistics">
-            <div class="main--status--statistics--block">
-                <div class="main--status--statistics--block--value" id="planned">?</div>
-                <div class="main--status--statistics--block--title">Запланировано</div>
-            </div>
-            <div class="main--status--statistics--block">
-                <div class="main--status--statistics--block--value" id="watching">?</div>
-                <div class="main--status--statistics--block--title">Смотрю</div>
-            </div>
-            <div class="main--status--statistics--block">
-                <div class="main--status--statistics--block--value" id="completed">?</div>
-                <div class="main--status--statistics--block--title">Просмотренно</div>
-            </div>
+      <div class="main--status--title">Статистика</div>
+      <div class="main--status--statistics">
+        <div class="main--status--statistics--block">
+          <div class="main--status--statistics--block--value" id="planned">
+            ?
+          </div>
+          <div class="main--status--statistics--block--title">
+            Запланировано
+          </div>
         </div>
-        <div class="main--status--title">История</div>
-        <div class="main--status--history"></div>
+        <div class="main--status--statistics--block">
+          <div class="main--status--statistics--block--value" id="watching">
+            ?
+          </div>
+          <div class="main--status--statistics--block--title">Смотрю</div>
+        </div>
+        <div class="main--status--statistics--block">
+          <div class="main--status--statistics--block--value" id="completed">
+            ?
+          </div>
+          <div class="main--status--statistics--block--title">Просмотренно</div>
+        </div>
+      </div>
+      <div class="main--status--title">История</div>
+      <div class="main--status--history"></div>
     </main>
 
     <main class="main--settings hide">
-        <div class="main--settings--title">Страница Поиск</div>
-        <div class="main--settings--checkbox">
-            <label class="main--settings--checkbox">
-                <div class="main--settings--checkbox--title">Цензура</div>
-                <div class="main--settings--checkbox--switch">
-                    <input type="checkbox" data-param="censored">
-                    <span class="main--settings--checkbox--switch--slider"></span>
-                </div>
-            </label>
-        </div>
-        <div class="main--settings--title">Управление Аккаунтом</div>
-        <div class="main--settings--logout">
-            <div class="main--settings--logout--btn">
-                Выйти
+      <div class="main--settings--title">Общие</div>
+      <div class="main--settings--checkbox">
+        <label class="main--settings--checkbox">
+          <div class="main--settings--checkbox--title">Цензура</div>
+          <div class="main--settings--checkbox--switch">
+            <input type="checkbox" data-param="censored" />
+            <span class="main--settings--checkbox--switch--slider"></span>
+          </div>
+        </label>
+      </div>
+      <div class="main--settings--title">Страница Просмотра</div>
+      <div class="main--settings--checkbox">
+        <label class="main--settings--checkbox">
+          <div class="main--settings--checkbox--title">
+            Избранные переводы для каждого аниме
+          </div>
+          <div class="main--settings--checkbox--switch">
+            <input type="checkbox" data-param="dub_anime" />
+            <span class="main--settings--checkbox--switch--slider"></span>
+          </div>
+        </label>
+        <div class="main--settings--checkbox disable" id="franchise-settings">
+          <label class="main--settings--checkbox">
+            <div class="main--settings--checkbox--title">
+              Переводы по франшизам
             </div>
-        </div>
-        <div class="main--settings--clear-cache">
-            <div class="main--settings--clear-cache--btn">
-                Очистить кэш
+            <div class="main--settings--checkbox--switch">
+              <input type="checkbox" data-param="dub_anime_franchise" />
+              <span class="main--settings--checkbox--switch--slider"></span>
             </div>
-            <div class="main--settings--clear-cache--tips">
-                Если страница отображается не корректно после обновления, то можете попробывать очистить кэш.
-            </div>
+          </label>
         </div>
+      </div>
+      <div class="main--settings--title">Управление Аккаунтом</div>
+      <div class="main--settings--logout">
+        <div class="main--settings--logout--btn">Выйти</div>
+      </div>
+      <div class="main--settings--clear-cache">
+        <div class="main--settings--clear-cache--btn">Очистить кэш</div>
+        <div class="main--settings--clear-cache--tips">
+          Если страница отображается не корректно после обновления, то можете
+          попробывать очистить кэш.
+        </div>
+        <!--Beta-->
+        <div class="main--settings--synch--btn" style="display: none;">Синхронизировать</div>
+        <div class="main--settings--clear-cache--tips" style="display: none;">
+          Синхронизирует настроки приложения (списки пользователя) на сайт shikimori
+        </div>
+      </div>
     </main>
 
     <!--Scripts-->
@@ -102,6 +141,5 @@
     <script src="/javascript/jmenu.js"></script>
     <script src="/javascript/shikimori.js"></script>
     <script src="/javascript/pages/user.js"></script>
-</body>
-
+  </body>
 </html>

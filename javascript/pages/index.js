@@ -199,6 +199,17 @@ async function GitHubRelease() {
             let date = new Date(data[0].published_at);
             $('.github > .version > span').text(data[0].tag_name);
             $('.github > .date').text(`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`);
+
+            //Если у пользователя нет ключа оюновления то он первый раз
+            if(localStorage.getItem(dialog.key)==null){
+                localStorage.setItem(dialog.key, true);
+            }
+            //Елси было обновление то показываем диалоговое окно
+            if(localStorage.getItem(dialog.key) == "true"){
+                dialog.show(()=>{
+                    localStorage.setItem(dialog.key, false);
+                }, data);
+            }
         }
     });
 }

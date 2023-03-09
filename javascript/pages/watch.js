@@ -1,508 +1,1108 @@
-const visual = {
-    setHeader: function () {
-        fetch('https://api.jikan.moe/v4/anime/' + shikimoriID + '/full').then(async (response) => {
-            let data = await response.json();
-            $('.bg-paralax-img').css('background-image', 'url(' + data.data.images.webp.large_image_url + ')');
-        });
-    },
-    setMain: function (response) {
-        $(document).attr("title", response.russian);
-        $('.title > .russian').text(response.russian);
-        $('.title > .name').text(response.name);
-        $('.raiting > span').text(response.score);
-    },
-    setGenres: function (response) {
-        for (let index = 0; index < response.genres.length; index++) {
-            const element = response.genres[index];
-            $('.genres').append(`<a href="#">${element.russian}</a>`)
-        }
-    },
-    setTime: function (response) {
-        if (response.episodes_aired == 0 && response.status == 'released') {
-            $('.text-witch-pg > .episodes_aired').text(`${response.episodes}EP`);
-            $('.duration > .content > b').text(`${getTimeFromMins(response.episodes * response.duration)}`);
-        } else {
-            $('.text-witch-pg > .episodes_aired').text(`${response.episodes_aired}EP`);
-            $('.duration > .content > b').text(`${getTimeFromMins(response.episodes_aired * response.duration)}`);
-        }
-    },
-    setStatus: function (response) {
-        $('.status > .content > b').text(response.status == 'anons' ? "Анонс" : response.status == 'ongoing' ? "Онгоинг" : "Вышел");
-        $('.pg-rating').text(response.rating)
-    },
-    setGallery: function (id) {
-        shikimoriApi.Animes.screenshots(id, async (r) => {
-            if (r.failed && r.status == 429) {
-                await sleep(1000);
-                this.setGallery(id);
-                return;
-            }
-            if (r.length == 0) {
-                $('.title-gallery').css('display', 'none');
-            }
-            //console.log(r);
-            for (let index = 0; index < r.length; index++) {
-                const element = r[index];
-                $('.galery-slider').append(`<div class="slide"><img src="https://shikimori.one${element.preview}"></div>`);
-            }
-        });
-    },
-    setDescription: function (response) {
-        $('.description').append(response.description_html);
-    },
-    setHeroes: function (id) {
-        shikimoriApi.Animes.roles(id, async (r) => {
-            if (r.failed && r.status == 429) {
-                await sleep(1000);
-                this.setHeroes(id);
-                return;
-            }
-            let append = false;
-            for (let index = 0; index < r.length; index++) {
-                const element = r[index];
-                if (element.roles.includes('Main')) {
-                    //console.log(element);
-                    append = true;
-                    $('.heroes').append(`<div class="persone"><div class="img"><img src="https://nyaa.shikimori.one${element.character.image.original}">
-                    </div>
-                    <div class="name">
-                    ${element.character.russian}
-                    </div>
-                </div>`)
-                }
-            }
-            if (append == false) {
-                $('.title-hero').css('display', 'none');
-            }
-        })
-    },
-    setSimilar: function (id) {
-        shikimoriApi.Animes.similar(id, async (r) => {
-            if (r.failed && r.status == 429) {
-                await sleep(1000);
-                this.setSimilar(id);
-                return;
-            }
-            //console.log(r);
-            if (r.length == 0) {
-                $('.title-similiar').css('display', 'none');
-            }
-            for (let index = 0; index < r.length; index++) {
-                const element = r[index];
-                let html = `<a href="/watch.html?id=${element.id}"><div class="anime-card"><div class="anime-image">
-                        <img src="https://nyaa.shikimori.one${element.image.original}" alt="${element.russian}"><div class="play-btn"><div class="btn"><svg viewBox="0 0 30 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.70312 0.551381C4.54688 -0.159557 3.09375 -0.182995 1.91406 0.481068C0.734375 1.14513 0 2.39513 0 3.75451V31.2545C0 32.6139 0.734375 33.8639 1.91406 34.5279C3.09375 35.192 4.54688 35.1608 5.70312 34.4576L28.2031 20.7076C29.3203 20.0279 30 18.817 30 17.5045C30 16.192 29.3203 14.9889 28.2031 14.3014L5.70312 0.551381Z" fill="white" /></svg></div></div></div>
-                    <div class="anime-title">
-                        ${element.russian}
-                    </div>
-                </div>
-            </a>`;
-                $('.similiar > .similiar-slider').append(html);
-            }
-        })
-    },
-    setStudio: function (response) {
-        $('.studio > .title').text(response.studios[0].filtered_name);
-    },
-    init: function (id, response) {
-        this.watchFunction();
-        this.setHeader();
-        this.setMain(response);
-        this.setGenres(response);
-        this.setTime(response);
-        this.setStatus(response);
-        this.setGallery(id);
-        this.setDescription(response);
-        this.setHeroes(id);
-        this.setSimilar(id);
-        this.setStudio(response);
-    },
-    watchFunction: function () {
-        $('.btn_back').click(() => {
-            let history = localStorage.getItem('history-back');
-            if (history) {
-                localStorage.removeItem('history-back');
-                window.location.href = history;
-            } else {
-                window.location.href = '/index.html';
-            }
-        })
-        $('.btn_play').click(() => {
-            document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
-        });
-        $('.btn_share').click(() => {
-            if (navigator.canShare) {
-                navigator.share({
-                    title: shikiResponse.russian,
-                    text: shikiResponse.russian,
-                    url: window.location.origin + window.location.pathname + '?id=' + shikimoriID + '&share'
-                })
-                    .catch((error) => console.log('Sharing failed', error));
-            } else {
-                // Fallback to an alternative sharing solution
-            }
-        });
-    },
-    hidePlayer: function () {
-        $('.episodes').css('display', 'none');
-        $('.dubbing').css('display', 'none');
-    }
-}
+//ID ресурса из Shikimori
+const $ID = new URLSearchParams(window.location.search).get("id");
 
-const storage = {
-    get: function (key) {
-        return JSON.parse(localStorage.getItem(key));
-    },
-    set: function (key, val) {
-        localStorage.setItem(key, JSON.stringify(val));
-    }
-}
+//Все возможные статусы пользователя к текущему аниме
+const anime_status = [
+  { id: 0, name: "Посмотрю", sh: ["planned"] },
+  { id: 1, name: "Смотрю", sh: ["watching", "rewatching", "on_hold"] },
+  { id: 2, name: "Просмотрел", sh: ["completed"] },
+  { id: 3, name: "Забросить", sh: ["dropped"] },
+];
 
-AsyncPlayer();
+//Обьект управляем анимацией загрузки страницы
+const load_page = {
+  query: ".page-loading",
 
-const shikimoriID = new URLSearchParams(window.location.search).get('id');
-const kodikIframe = document.getElementById("kodik-player").contentWindow;
+  /**
+   * Remove animation loading page
+   * @param {Event} e The event call when loaded.
+   */
+  loaded: async function (e = () => { }) {
+    $(this.query).css("opacity", 0);
+    await sleep(600);
+    $("body").removeClass("loading");
+    $(this.query).css("display", "none");
+    e();
+  },
 
-let play_time = 0;
-let play_duration = 0;
-
-let logged = false;
-let is_anime = true;
-let url = '';
-
-let dataLocal = {
-    kodik_seasson: 1,
-    kodik_episode: 1,
-    kodik_dub: ''
-}
-let dataLast = null;
-let user_rates = null;
-
-let shikiResponse = null;
-let kodikResponse = null;
-
-if (storage.get(shikimoriID)) {
-    dataLocal = storage.get(shikimoriID);
-}
-try {
-    if (shikimoriID == !Array.isArray(usr.Storage.Get('last-watch')) ? [usr.Storage.Get('last-watch')].find(item => item.id == shikimoriID).id : usr.Storage.Get('last-watch').find(item => item.id == shikimoriID).id) {
-        dataLast = !Array.isArray(usr.Storage.Get('last-watch')) ? [usr.Storage.Get('last-watch')].find(item => item.id == shikimoriID) : usr.Storage.Get('last-watch').find(item => item.id == shikimoriID);
-        dataLocal.kodik_episode = dataLast.episode;
-    }
-} catch {
-
-}
-
-Main(async (e) => {
-    logged = e;
-    shikimoriApi.Animes.id(shikimoriID, (r) => {
-        console.log(r);
-        shikiResponse = r;
-        if (r.kind != 'tv') {
-            is_anime = false;
-        }
-        if (r.kind === 'movie') {
-            $('.episodes').css('display', 'none');
-        }
-        visual.init(shikimoriID, r);
-        if (e) {
-            UserLogged(r.user_rate);
-        }
-        Loaded();
-    }, logged);
-});
-
-kodikApi.search({ shikimori_id: shikimoriID }, (r) => {
-    console.log(r);
-    kodikResponse = r;
-    if (r.total == 0) {
-        visual.hidePlayer();
-        url = "/404.html";
-        SetPlayer();
-        return;
-    }
-    for (let index = 0; index < r.results.length; index++) {
-        let translation = r.results[index].translation;
-        //console.log(translation);
-        $('.dubbing > select').append(`<option data-id="${translation.id}" data-episodes="${r.results[index].episodes_count}" data-last="${r.results[index].last_episode}" data-link="${r.results[index].link}" value="${translation.id}">${translation.title}</option>`);
-    }
-    SetDubbing();
-});
-
-episodes.events.onchangeselect((i) => {
-    if (dataLocal.kodik_episode != i) {
-        dataLocal.kodik_episode = i;
-        storage.set(shikimoriID, dataLocal);
-        updateHistory();
-        SetPlayer();
-    }
-});
-
-
-$('.dubbing > select').change(() => {
-    dataLocal.kodik_dub = $('.dubbing > select > option:selected').data('id');
-    url = $('.dubbing > select > option:selected').data('link');
-    SetPlayer();
-})
-
-function SetDubbing() {
-    if (dataLocal.kodik_dub) {
-        $('.dubbing > select').val(dataLocal.kodik_dub);
-        url = $('.dubbing > select > option:selected').data('link');
-    } else {
-        dataLocal.kodik_dub = $('.dubbing > select > option:selected').data('id');
-        url = $('.dubbing > select > option:selected').data('link');
-    }
-    SetPlayer();
-    ShowEpisodes();
-    SelectEpisode();
-}
-
-function ShowEpisodes() {
-    for (let i = 1; i <= $('.dubbing > select > option:selected').data('last'); i++) {
-        episodes.add(i);
-    }
-}
-
-function SelectEpisode() {
-    const width = document.body.clientWidth;
-    episodes.select(dataLocal.kodik_episode, () => { }, (anim) => {
-        $('.episodes').scrollLeft(parseInt(anim.animations[0].currentValue) + 132 - width);
-    });
-}
-
-function SetPlayer() {
-    $('#kodik-player').attr('src', url + '?hide_selectors=true&season=' + dataLocal.kodik_seasson + '&episode=' + dataLocal.kodik_episode);
-}
-
-function UserLogged(ur) {
-    user_rates = ur;
-    if (user_rates) {
-        if (ur.status == 'planned' || ur.status == 'watching' || ur.status == 'rewatching') {
-            $('.btn_save > .btn_glass_abs > svg').remove();
-            $('.btn_save > .btn_glass_abs').append(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"/></svg>`);
-            $('.btn_save > .btn_glass_abs').addClass('saved');
-        }
-    }
-
-    $('.btn_save').click(async () => {
-        console.log(user_rates);
-        if (user_rates) {
-            shikimoriApi.User_rates.id(user_rates.id, (response) => {
-
-            }).DELETE();
-            //remove
-            $('.btn_save > .btn_glass_abs > svg').remove();
-            $('.btn_save > .btn_glass_abs').append(`<svg width="12" height="15" viewBox="0 0 12 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.84479 0H1.4064C0.629656 0 0 0.629656 0 1.4064V14.0611C0 14.7848 0.784946 15.2354 1.40991 14.8709L5.62559 12.4115L9.84186 14.8706C10.4659 15.2096 11.2512 14.7848 11.2512 14.0611V1.4064C11.2512 0.629656 10.6212 0 9.84479 0ZM9.84479 13.2436L5.62559 10.7824L1.4064 13.2436V1.5822C1.4064 1.48346 1.48346 1.4064 1.55583 1.4064H9.64262C9.76861 1.4064 9.84479 1.48346 9.84479 1.5822V13.2436Z" fill="white" /></svg>`);
-            $('.btn_save > .btn_glass_abs').removeClass('saved');
-            user_rates = null;
-        } else {
-            //add
-            shikimoriApi.User_rates.user_rates({}, (response) => {
-                if (response.failed) {
-                    return;
-                }
-                user_rates = response;
-                $('.btn_save > .btn_glass_abs > svg').remove();
-                $('.btn_save > .btn_glass_abs').append(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"/></svg>`);
-                $('.btn_save > .btn_glass_abs').addClass('saved');
-            }, { "user_rate": { "status": "planned", "target_id": shikimoriID, "target_type": "Anime", "user_id": usr.Storage.Get('access_whoami').id } }).POST();
-        }
-    });
-
-    //Событие изменения епизода когда полтзователь авторизирован
-    episodes.events.onchangeselect((i) => {
-        if (user_rates) {
-            shikimoriApi.User_rates.id(user_rates.id, (response) => {
-                console.log(response);
-                if (response.failed) {
-                    return;
-                }
-                user_rates = response;
-            }).PATCH({ "user_rate": { "episodes": i, "status": "watching" } });
-        }
-    });
-
-    //Set episode if not dataLocal
-    //Episodes get if logged user and isset user_rates
-    if (!storage.get(shikimoriID)) {
-        if (user_rates) {
-            if (user_rates.episodes != 0) {
-                episodes.select(user_rates.episodes);
-            }
-        }
-    }
-
-    //console.log(user_rates);
-}
-
-episodes.events.onchangeselect((i) => {
-    if (dataLast && dataLast.episode != i) {
-        //Если выбран другой эпизод очищаем таймкод
-        dataLast = null;
-    }
-});
-
-/*
-    Функция обновления истории простора
-    cnt {boolean} - Досмотренна ли серия (true) или нет (false)
-    durration {int} - Момент на котором остановился пользователь (в секундах)
-    i {int} - Прибавление эпизода
-*/
-function updateHistory(cnt = false, durration = 0, i = 0) {
-    const key = 'last-watch';
-    let history = storage.get(key)
-    //Проверем на пустоту
-    if (history == null) {
-        history = [{
-            id: shikimoriID,
-            continue: cnt,
-            duration: durration,
-            fullduration: play_duration,
-            episode: cnt ? dataLocal.kodik_episode + i : dataLocal.kodik_episode + i,
-            name: shikiResponse.russian,
-            image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
-        }];
-    }
-    // Проверяем, является ли history массивом
-    if (!Array.isArray(history)) {
-        history = [history];
-    }
-    console.log(history);
-    // Находим индекс элемента с заданным id в массиве history
-    const index = history.findIndex(item => item.id === shikimoriID);
-
-    // Если элемент с таким id не найден, то добавляем его на первое место
-    if (index === -1) {
-        history.unshift({
-            id: shikimoriID,
-            continue: cnt,
-            duration: durration,
-            fullduration: play_duration,
-            episode: cnt ? dataLocal.kodik_episode + i : dataLocal.kodik_episode + i,
-            name: shikiResponse.russian,
-            image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
-        });
-    } else {
-        // В противном случае изменяем элемент и переносим его на первое место
-        history[index] = {
-            id: shikimoriID,
-            continue: cnt,
-            duration: durration,
-            fullduration: play_duration,
-            episode: cnt ? dataLocal.kodik_episode + i : dataLocal.kodik_episode + i,
-            name: shikiResponse.russian,
-            image: 'https://nyaa.shikimori.one/' + shikiResponse.screenshots[0].original
-        };
-        history.unshift(history.splice(index, 1)[0]);
-    }
-
-    // Если в истории больше 5 элементов, то удаляем последний
-    if (history.length > 5) {
-        history.pop();
-    }
-
-    storage.set(key, history);
-}
-
-function Loaded() {
-    $(document).ready(() => {
-        let query = new URLSearchParams(window.location.search);
-        //Перемотка к плееру
-        if (query.get('player')) {
-            document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-
-        if (dataLast) {
-            //Продолжение просмотра
-            if (dataLast.continue) {
-                AsyncPlayer(() => {
-                    kodikIframe.postMessage({
-                        key: "kodik_player_api", value: { method: "play" }
-                    }, '*');
-                });
-            }
-        }
-    });
-}
-
-//Function await loaded player
-async function AsyncPlayer(e = () => { }) {
-    try {
-        if (!document.getElementById("kodik-player").contentWindow.document) {
-            e();
-        } else {
-            let i = setInterval(() => {
-                try {
-                    if (!document.getElementById("kodik-player").contentWindow.document) {
-                        console.log(true);
-                    } else {
-                        console.log(false);
-                    }
-                } catch (error) {
-                    clearInterval(i);
-                    e();
-                }
-            }, 1000);
-        }
-    } catch (error) {
-        e();
-    }
-}
-
-//https://ru.stackoverflow.com/questions/646511/Сконвертировать-минуты-в-часыминуты-при-помощи-momentjs
-function getTimeFromMins(mins) {
-    let hours = Math.trunc(mins / 60);
-    let minutes = mins % 60;
-    return hours + 'ч. ' + minutes + 'мин.';
+  /**
+   * Showing animtion loading page
+   * @param {Event} e The event call when showed animation loading
+   */
+  show: async function (e = () => { }) {
+    $(this.query).css("display", "block");
+    $("body").addClass("loading");
+    $(this.query).css("opacity", 1);
+    await sleep(600);
+    e();
+  },
 };
 
-//https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep/39914235#39914235
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+//Управление плеером аниме
+const player = {
+  data: [],
+  loaded: false, //Загрузился ли плеер (нужно для его управления)
+  loaded_int: 0,
+  data_uri: undefined, //Ссылка на плеер kodik
 
-//https://stackoverflow.com/questions/5915096/get-a-random-item-from-a-javascript-array
-Array.prototype.random = function () {
-    return this[Math.floor((Math.random() * this.length))];
-}
+  uri: function (url) {
+    this.data_uri = url;
+  },
 
-//Управление плеером
-function kodikMessageListener(message) {
-    //Продолжительность
-    if (message.data.key == 'kodik_player_duration_update') {
-        play_duration = message.data.value;
+  translation: {
+    key: "save-translations",
+    id: undefined,
+    selected: false,
+
+    saved: [],
+
+    /**
+     * Инициализация управление переводами аниме
+     * @param {Object} data - данные с kodik
+     */
+    init: function (data) {
+      if (parametrs.dub_anime) this.key = "save-translations-" + $ID;
+      this.saved = JSON.parse(localStorage.getItem(this.key));
+      this.saved = this.saved ? this.saved : [];
+
+      for (let i = 0; i < data.length; i++) {
+        const element = data[i];
+        const translation = element.translation;
+        let finded = false;
+
+        //Ищем в сохраненый переводах
+        if (this.saved && this.saved.indexOf(translation.id) != -1) {
+          finded = true;
+        }
+
+        $(".translations--list")
+          .append(`<div class="translations--list--element" data-id="${translation.id
+            }">
+                <div class="translations--list--element--icon-title" data-id="${translation.id
+            }">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                        <path d="M192 0C139 0 96 43 96 96V256c0 53 43 96 96 96s96-43 96-96V96c0-53-43-96-96-96zM64 216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 89.1 66.2 162.7 152 174.4V464H120c-13.3 0-24 10.7-24 24s10.7 24 24 24h72 72c13.3 0 24-10.7 24-24s-10.7-24-24-24H216V430.4c85.8-11.7 152-85.3 152-174.4V216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 70.7-57.3 128-128 128s-128-57.3-128-128V216z"></path>
+                    </svg>
+                    <span>${translation.title}</span>
+                </div>
+                <div class="translations--list--element--count-save">
+                    <div class="translations--list--element--count-save--count">${element.last_episode ? element.last_episode : 1
+            }</div>
+                    <div class="translations--list--element--count-save--save ${finded ? "saved-translation" : ""
+            }" data-id="${translation.id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="${finded
+              ? "M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"
+              : "M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"
+            }"></path></svg>
+                    </div>
+                </div>
+            </div>`);
+
+        //Выбрать дефолт
+        if (!this.selected && finded) {
+          this.select(translation.id);
+        }
+      }
+
+      if (!this.selected && data.length > 0) {
+        this.select(data[0].translation.id);
+      }
+
+      //Нажатие на перевод
+      $(".translations--list--element--icon-title").click((e) => {
+        this.select($(e.currentTarget).data("id"));
+      });
+
+      //Добавить в избранное
+      $(".translations--list--element--count-save--save").click((e) => {
+        this.favorites($(e.currentTarget).data("id"));
+      });
+    },
+
+    /**
+     * Выберает озвучку аниме
+     * @param {Int} id - перевода
+     */
+    select: function (id) {
+      // Проверяем на существование такго обьекта в DOM
+      const element = $('.translations--list--element[data-id="' + id + '"]')[0];
+      const data = player.data.find((x) => x.translation.id == id);
+
+      if (this.selected) {
+        $($('.translations--list--element[data-id="' + this.id + '"]')[0]).removeClass("hide");
+      }
+
+      this.id = id; //Индентификатор озвучки
+      this.selected = true;
+
+      $(element).addClass("hide");
+      $(".translations--current--object--icon-title > span").text(data.translation.title); //Title translation
+      $(".translations--current--object--count").text(data.last_episode); //Last episode translation
+      $(".translations--list").addClass("hide");
+      $("body").removeClass("loading");
+
+      player.selectedTranslation(this.id);
+    },
+
+    /**
+     * Добавляет озвучку в избранное
+     * @param {Int} id - перевод
+     */
+    favorites: function (id) {
+      const element = $('.translations--list--element--count-save--save[data-id="' + id + '"]');
+      if (this.saved && this.saved.indexOf(id) != -1) {
+        //Удаляем с избранных
+        const index = this.saved.indexOf(id);
+        this.saved.splice(index, 1);
+
+        element.find("svg > path").attr("d", "M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z");
+        element.removeClass("saved-translation");
+      } else {
+        //Добавляем в избранное
+        this.saved.push(id);
+        element.find("svg > path").attr("d", "M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z");
+        element.addClass("saved-translation");
+      }
+
+      //Сохраняем избранное
+      localStorage.setItem(this.key, JSON.stringify(this.saved));
+    },
+  },
+
+  episodes: {
+    episodes_count: 0,
+    last_episode: 0,
+    selected_episode: 1,
+
+    events: {
+      clicked: [],
+
+      onclicked: function (e) {
+        if (typeof e == "function" && e.length > 0) {
+          this.clicked.push(e);
+        }
+      },
+    },
+
+    ShowEpisodes: function () {
+      AddEpisodes(this.last_episode);
+
+      function AddEpisodes(i = 1) {
+        $(".episodes > .value > .episode").remove();
+
+        for (let index = 1; index < i + 1; index++) {
+          const html = `<span class="episode" data-index="${index}">${index}<span class="ep-name">EP</span></span>`;
+          $(".episodes > .value").append(html);
+        }
+
+        Init(); //Инициализация функционала
+        //При инициализации проверяем выбраный эпизод и если эпизод выше возможного то изменяем на 1ый эпизод
+        if (player.episodes.selected_episode > player.episodes.last_episode) {
+          player.episodes.selected_episode = 1;
+        }
+        //Анимируем выбор первого эпизода автоматически
+        player.episodes.AnimateSelect(player.episodes.selected_episode);
+        //Даем плееру задачу обновить свои данные
+        player.update();
+      }
+
+      /**
+       *  Инициадизирует функционал кнопок епизодов
+       */
+      function Init() {
+        $(`.episode[data-index]`).on("click", function (e) {
+          const target = e.currentTarget;
+          let episode = $(target).data("index"); //Епизод
+          //Проверяем если эпизод не выбран, выбираем его, делаем анимацию выбора, изменяем плеер
+          if (
+            !player.episodes.selected_episode ||
+            player.episodes.selected_episode != episode
+          ) {
+            //Вызываем подписанные события
+            player.episodes.events.clicked.forEach((event) =>
+              event(episode, player.translation.id)
+            );
+            //Выбираем эпизод
+            player.episodes.selected_episode = episode;
+            //Анимируем выбор эпизода
+            player.episodes.AnimateSelect(episode);
+            //Указываем плееру что были обновленны данные
+            player.update();
+          }
+        });
+      }
+    },
+
+    /**
+     * Делает анимацию выбора эпизода
+     * @param {Int} i - выбранный епизод
+     * @param {Event} e - событие после выполнение анимации
+     * @param {Event} u - событие обновление данных анимции - передается текущая анимация anime
+     * @returns
+     */
+    AnimateSelect: function (i = 1, e, u) {
+      const element = $(".episodes > .value > .episode")[i - 1];
+      if (!element) {
+        return;
+      }
+      if (this.selected) {
+        anime({
+          targets: this.selected,
+          color: "#555657",
+          easing: "easeOutElastic(1, 1)",
+        });
+      }
+      this.selected = element;
+      const left = $(element).position().left;
+      const top =
+        $(element).position().top + $(".episodes > .value").scrollTop();
+      anime({
+        targets: ".sel",
+        top: top,
+        easing: "easeOutElastic(1, 1)",
+      });
+      anime({
+        targets: ".sel",
+        left: left,
+        complete: function (anim) {
+          if (e) {
+            e();
+          }
+        },
+        update: function (anim) {
+          if (u) {
+            u(anim);
+          }
+        },
+        easing: "easeOutElastic(1, 1)",
+      });
+      anime({
+        targets: element,
+        color: "#020202",
+        easing: "easeOutElastic(1, 1)",
+      });
+    },
+  },
+
+  events: {
+    loaded: [],
+    paused: [],
+    played: [],
+
+    /**
+     * Подписывается на обработчик загрузки плеера
+     * @param {Function} e - Событие которое будет вызвано
+     */
+    onloaded: function (e) {
+      if (typeof e == "function" && e.length > 0) {
+        this.loaded.push(e);
+      }
+    },
+
+    onpause: function (e) {
+      if (typeof e == "function" && e.length > 0) {
+        this.paused.push(e);
+      }
+    },
+
+    onplayed: function (e) {
+      if (typeof e == "function" && e.length > 0) {
+        this.played.push(e);
+      }
+    },
+  },
+
+  video_data: {
+    duration: 0, //Продолжительность эпизода
+    time: 0, //Текущее время просмотра
+  },
+
+  /**
+   * Вабрана озвучка аниме
+   * * @param {Int} id - перевод
+   */
+  selectedTranslation: function (id) {
+    //Id текущего елемента перевода
+    const idData = this.data.findIndex((x) => x.translation.id === id);
+    //Елемент который выбрал пользователь
+    const element = this.data[idData];
+
+    //Устанавливаем url адрес плеера
+    this.uri(element.link);
+
+    //Устанавливаем количество еаизодов
+    this.episodes.episodes_count = element.episodes_count;
+    this.episodes.last_episode = element.last_episode;
+
+    //Отображаем епизоды пользователю
+    this.episodes.ShowEpisodes();
+  },
+
+  /**
+   * Событие изменение данных плеера
+   */
+  update: function () {
+    //Выбранный эпизод
+    const episode = this.episodes.selected_episode;
+
+    //Проверяем эпизод на наличие данных
+    if (!episode) {
+      console.log("Ошибка с выбранным епизодом");
+      return;
     }
 
-    //Пауза
-    if (message.data.key == 'kodik_player_pause') {
-        let prc = 5;
-        if (play_duration - play_time <= (play_duration / 100 * prc)) {
-            updateHistory(false, play_time, 1);
+    //Проверяем на наличие ссылки на плеер
+    if (!this.data_uri) {
+      console.log("Ошибка с ссылкой на плеер", this.data_uri);
+      return;
+    }
+
+    //Указываем что плеер не загружен
+    this.loaded = false;
+
+    //Изменяем ссылку на плеер (не используем тег src для того чтобы не созранять его в истори браузера)
+    document
+      .querySelector("#kodik-player")
+      .contentWindow.location.replace(
+        this.data_uri + "?hide_selectors=true" + "&episode=" + episode
+      );
+
+    //Вызываем функцию которая будет отслеживать загрузился ли плеер и добавлять количество какой раз загрузился плеер
+    this.loading();
+  },
+
+  /**
+   * Функция ожидание загрузки плеера
+   */
+  loading: function () {
+    //Находим елемент на страницe
+    const element = document.querySelector("#kodik-player");
+    if (element) {
+      let interval;
+
+      interval = setInterval(() => {
+        try {
+          if (element.contentWindow.document) {
+          }
+          //Когда плеер загрузится будет ошибка CORS
+        } catch (error) {
+          //Очищаем интервао
+          clearInterval(interval);
+
+          //Устанавливаем значения
+          this.loaded = true;
+          this.loaded_int++;
+
+          //Вызываем событие
+          this.events.loaded.forEach((event) => event(this.loaded_int));
+        }
+      }, 100);
+    }
+  },
+
+  /**
+   *
+   * @param {Int} e - Эпизод аниме
+   * @param {Int} d - ID дубляжа
+   */
+  loadAnime: function (e, d) {
+    this.episodes.selected_episode = e;
+    this.translation.select(d);
+    this.episodes.AnimateSelect(e);
+  },
+
+  saveAnime: function () { },
+
+  playerMessage: function (message) {
+    //Продолжительность всего видео
+    if (message.data.key == "kodik_player_duration_update") {
+      player.video_data.duration = message.data.value;
+    }
+
+    //Текущее время видео
+    if (message.data.key == "kodik_player_time_update") {
+      player.video_data.time = message.data.value;
+    }
+
+    //Статус плеера изменен на паузу
+    if (message.data.key == "kodik_player_pause") {
+      //Вызываем событие
+      player.events.paused.forEach((event) => event(player.video_data));
+    }
+
+    //Статус плеера изменен на воспроизведение
+    if (message.data.key == "kodik_player_play") {
+      //Вызываем событие
+      player.events.played.forEach((event) => event(player.video_data));
+    }
+  },
+
+  /**
+   * Инизиализирует обьект на правильную работу
+   * @param {Object} data - ответ с ресурса kodikDB
+   */
+  init: function (data) {
+    this.data = data;
+    this.translation.init(this.data);
+
+    //Прослушиваем данные которые присылает нам плеер kodik
+    if (window.addEventListener) {
+      window.addEventListener("message", this.playerMessage);
+    } else {
+      window.attachEvent("onmessage", this.playerMessage);
+    }
+
+    //Отслеживаем изменение ориентации экрана для правильного отображения выбраного эпизода
+    window.addEventListener("orientationchange", function () {
+      player.episodes.AnimateSelect(player.episodes.selected_episode);
+    });
+  },
+};
+
+//Управление историей
+const History = {
+  shikiData: undefined,
+  key: "last-watch",
+  maxItems: 5,
+
+  get() {
+    return JSON.parse(localStorage.getItem(this.key)) ?? [];
+  },
+
+  set(history) {
+    localStorage.setItem(this.key, JSON.stringify(history));
+  },
+
+  add(cnt = false, duration = 0, i = 0, e = player.episodes.selected_episode) {
+    if (!this.shikiData) {
+      return;
+    }
+    const history = this.get();
+    const { russian, screenshots } = this.shikiData;
+    const episode = cnt ? e + i : e + i;
+    const image = `https://nyaa.shikimori.one/${screenshots[0].original}`;
+
+    const item = {
+      id: $ID,
+      continue: cnt,
+      duration,
+      fullduration: player.video_data.duration,
+      episode,
+      name: russian,
+      image,
+    };
+
+    const index = history.findIndex((item) => item.id === $ID);
+
+    if (index !== -1) {
+      history.splice(index, 1);
+    }
+
+    history.unshift(item);
+
+    if (history.length > this.maxItems) {
+      history.pop();
+    }
+
+    this.set(history);
+  },
+};
+
+//Управление пользователем
+const user = {
+  rate: undefined, //Даные пользователя об аниме
+  id: undefined, //Текущий статус аниме
+  logged: false, //Авторизирован ли пользователь
+
+  events: {
+    /**
+     * Изменяет статус аниме в shikimori
+     * @param {Int} id - выбраный статус
+     */
+    changeStatus: function (id) {
+      //Проверяем авторизирован ли пользоваетль
+      if (user.logged) {
+        //Проверяем есть ли у этого аниме rate (данные)
+        if (user.rate) {
+          //Если нажали на активный статус
+          if (user.id == id) {
+            //Удаляем данные об аниме
+            this.removeData();
+          } else {
+            //Обновляем данные на новые данные
+            this.updateData(id);
+          }
         } else {
-            updateHistory(true, play_time);
+          //Нет данных и статус не совпадает
+          if (user.id != id) {
+            //Создаем user rate
+            this.updateData(id);
+          }
         }
+      }
+    },
+
+    /**
+     * Устанавливает эпизод аниме в user_rate
+     * @param {Int} e - Текущий эпизод аниме
+     * @param {String} s - Текущий статус
+     */
+    setEpisode: function (e, s = anime_status[1].sh[0]) {
+      if (user.logged) {
+        if (user.rate) {
+          shikimoriApi.User_rates.id(user.rate.id, async (res) => {
+            if (res.failed && res.status == 429) {
+              await sleep(1000);
+              return this.setEpisode(e);
+            }
+
+            user.rate = res;
+            user.status();
+            user.setStatus();
+          }).PATCH({ "user_rate": { "episodes": e, "status": s } });
+        }
+      }
+    },
+
+    /**
+     * Обновляет или создает user_rate
+     * @param {Int} id - статус 
+     */
+    updateData: function (id) {
+      shikimoriApi.User_rates.user_rates({}, async (res) => {
+        if (res.failed && res.status == 429) {
+          await sleep(1000);
+          return this.createData(id);
+        }
+        user.rate = res;
+        user.status();
+        user.setStatus();
+      }, { "user_rate": { "status": anime_status[id].sh[0], "target_id": $ID, "target_type": "Anime", "user_id": usr.Storage.Get('access_whoami').id } }).POST();
+    },
+
+    /**
+     * Удаляет user_rate
+     */
+    removeData: function () {
+      shikimoriApi.User_rates.id(user.rate.id, async (res) => {
+        if (res.failed && res.status == 429) {
+          await sleep(1000);
+          return this.removeData();
+        }
+      }).DELETE();
+      user.rate = undefined;
+      user.id = undefined;
+      user.unselect();
+    }
+  },
+
+  /**
+   * Инициализация пользователя
+   * @param {Object} obj - user_rate shikimori data
+   * @param {Boolean} lgd - авторизирован ли пользователь
+   */
+  init: function (obj, lgd) {
+    this.logged = lgd;
+    if (obj.user_rate) {
+      this.rate = obj.user_rate;
+      this.status();
+      this.setStatus();
     }
 
-    //Воспроизведение
-    if (message.data.key == 'kodik_player_play') {
-        console.log('play');
-        let query = new URLSearchParams(window.location.search);
-        if (query.get('player') && dataLast && dataLast.continue) {
-            kodikIframe.postMessage({
-                key: "kodik_player_api", value: { method: "seek", seconds: dataLast.duration }
-            }, '*');
-            dataLast = null;
-        }
-    }
+    $('.cur-status > .icon').click(() => {
+      this.events.changeStatus($('.cur-status').data('id'));
+    });
+    $('.list-status > .status').click((e) => {
+      this.events.changeStatus($(e.currentTarget).data('id'));
+    });
+  },
 
-    //Текущее время
-    if (message.data.key == 'kodik_player_time_update') {
-        play_time = message.data.value;
-    }
+  /**
+   * Достает статус из данных
+   */
+  status: function () {
+    const i = anime_status.findIndex(x => x.sh.includes(this.rate.status));
+    this.id = anime_status[i].id;
+  },
+
+  /**
+   * Устанавливает статус для аниме
+   * @param {Int} id - статус 
+   */
+  setStatus: function (id = this.id) {
+    //Отоброжаем скрытый елемент
+    $('.list-status > .hide').removeClass('hide');
+
+    //Изменяем текст на выбраный статус
+    $(`.cur-status > .icon > .text`).text(anime_status[id].name);
+    //Изменяем иконку на выбраный статус
+    $(`.cur-status > .icon > .safe-area`).html($(`.status[data-id="${id}"] > .safe-area > svg`).clone());
+
+    //Скрываем выбранный статус
+    $(`.status[data-id="${id}"]`).addClass('hide');
+
+    //Закрашиваем выбранный статус
+    $('.cur-status > .icon').addClass('selected');
+
+    //Изменяем ид выбраного статуса
+    $('.cur-status').data('id', id);
+  },
+
+  unselect: function () {
+    $('.cur-status > .icon').removeClass('selected');
+  }
 }
 
-if (window.addEventListener) {
-    window.addEventListener('message', kodikMessageListener);
-} else {
-    window.attachEvent('onmessage', kodikMessageListener);
+/*
+ * Создание событий к визулу
+ */
+function Functional() {
+  const VFClick = [
+    { dom: ".anime-status > .cur-status > .more-status", func: ShowStatus },
+    { dom: ".translations--current--object", func: ShowTranslations },
+    { dom: ".title-player > .btn", func: SetPlayerDisplay },
+    { dom: ".btn-back", func: BackToMainPage },
+    { dom: ".btn-play > .btn", func: ShowPlayer },
+    { dom: ".btn-wrapper.rb > .btn", func: ShareAnime },
+  ];
+
+  let showdStatus = false;
+
+  for (let i = 0; i < VFClick.length; i++) {
+    const element = VFClick[i];
+    $(element.dom).click(element.func);
+  }
+
+  /**
+   * Отображает статус аниме
+   */
+  function ShowStatus() {
+    if (!showdStatus) $(".anime-status").addClass("show-more");
+    else $(".anime-status").removeClass("show-more");
+    showdStatus = !showdStatus;
+  }
+
+  /**
+   * Отображает все возможные озвучки аниме
+   */
+  function ShowTranslations() {
+    //Получаем bool скрыт ли лист переводов
+    const show_list = $(".translations--list").hasClass("hide") ? true : false;
+    //Скрываем либо показываем
+    show_list
+      ? $(".translations--list").removeClass("hide")
+      : $(".translations--list").addClass("hide");
+    //Пролистать до открытого списка
+    if (show_list && player.data.length > 1) {
+      $("body").addClass("loading");
+      let element = document.getElementsByClassName("translations--current")[0];
+      let elementPosition = element.getBoundingClientRect().top;
+      let windowHeight = window.innerHeight;
+      let elementHeight = element.offsetHeight;
+      let bottomOffset = 10;
+      let offsetPosition =
+        elementPosition +
+        window.pageYOffset -
+        windowHeight +
+        elementHeight +
+        bottomOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "auto",
+      });
+    } else {
+      $("body").removeClass("loading");
+    }
+  }
+
+  /**
+   * Выравнивает плеер по центру для горизонтальных экранов
+   */
+  function SetPlayerDisplay() {
+    // Получаем ссылку на элемент, до которого нужно долистать
+    const element = document.querySelector(".landscape-player");
+    // Наводим на плеер
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
+  }
+
+  function BackToMainPage() {
+    window.location.href = '/index.html';
+  }
+
+  function ShowPlayer() {
+    document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function ShareAnime() {
+    navigator.share({
+      title: "Название",
+      text: "Описание",
+      url: window.location.origin + window.location.pathname + '?id=' + $ID + '&share'
+    }).catch((error) => console.log('Sharing failed', error));
+  }
+}
+
+Main((e) => {
+  //Функционал страницы (контролеров)
+  Functional();
+
+  //Загрузка данных аниме shikimori
+  LoadAnime(() => {
+    //Завершаем анимацию загрузки страницы
+    load_page.loaded();
+  }, e);
+
+  //Загрузка данных аниме плеера kodik
+  kodikApi.search({ shikimori_id: $ID }, (r) => {
+    //Инициализируем плеер
+    player.init(r.results);
+  });
+
+  //Подписываемся на обработчик событий для загрузки плеера
+  //Этот обработчик будет загружать из сохранения последние аниме
+  player.events.onloaded(async (i) => {
+    //Если загружен только 1-й раз то загружаем наше сохранение
+    if (i == 1) {
+      let save = JSON.parse(localStorage.getItem($ID));
+
+      if (!save) {
+        return;
+      }
+
+      player.loadAnime(save.kodik_episode, save.kodik_dub);
+    }
+  });
+
+  //Подписываемся на обработчик событий выбора эпизода
+  //Этот обработчик будет сохранять последние выбраное аниме аниме
+  player.episodes.events.onclicked((e, d) => {
+    const data = {
+      kodik_episode: e,
+      kodik_dub: d,
+    };
+
+    //Сохраняем последние выбранное аниме
+    localStorage.setItem($ID, JSON.stringify(data));
+
+    //Добавляем истоию просмотра
+    History.add(false, 0, 0, e);
+  });
+
+  //Подписываемся на обработчик событий пауза плеера
+  player.events.onpause((d) => {
+    History.add(false, d.time);
+  });
+
+  //Подписываемся на обрботчик событий
+  player.events.onplayed((e) => {
+    user.events.setEpisode(player.episodes.selected_episode);
+  })
+});
+
+/**
+ * Делает загрузку аниме данных с shikimori а также загружает картинку аниме в высоком разрешении
+ * @param {Event} e функция вызывается после загрузки аниме
+ * @param {Boolean} l авторизирован пользователь
+ */
+async function LoadAnime(e = () => { }, l = false) {
+  const data = await LoadAnimeShikimori($ID);
+
+  //Загружаем пользователя
+  user.init(data, l);
+
+  History.shikiData = data;
+
+  //console.log(data);
+
+  await SetAnimeImageAndTitle(data);
+  SetGenres(data);
+  SetDuration(data);
+  SetStatus(data);
+  SetGallery();
+  SetDescription(data);
+  SetHeroes();
+  SetFranchise();
+  SetSimiliar();
+  SetStudio(data);
+
+  e();
+
+  //Получение аниме из Shikimori
+  /**
+   * Возвращает данные об аниме
+   * @param {Int} id - Anime
+   * @returns {Object} Возвращает обьект аниме
+   */
+  async function LoadAnimeShikimori(id) {
+    return new Promise((resolve) => {
+      shikimoriApi.Animes.id(id, async (response) => {
+        if (response.failed) {
+          await sleep(1000);
+          resolve(LoadAnimeShikimori(id));
+        }
+        resolve(response);
+      }, l);
+    });
+  }
+
+  /**
+   * Получает ссылку на изображение из ресурса api.jikan.moe
+   * @param {int} id - shikimori
+   * @returns Ссылку на изображение
+   */
+  async function LoadImageJikan(id) {
+    return new Promise((resolve) => {
+      fetch("https://api.jikan.moe/v4/anime/" + id + "/full").then(
+        async (response) => {
+          let data = await response.json();
+          resolve(data.data.images.webp.large_image_url);
+        }
+      );
+    });
+  }
+
+  /**
+   * Загружает изображение в ресурсы сайта
+   * @param {String} src ссылка на ресурс
+   * @returns String src - ссылка до ресура
+   */
+  async function AsyncLoadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous"; // to avoid CORS if used with Canvas
+      img.src = src;
+      img.onload = () => {
+        resolve(src);
+      };
+      img.onerror = (e) => {
+        reject(e);
+      };
+    });
+  }
+
+  /**
+   * Устанавливает изображение аниме и данные(название, рейтинг)
+   * @param {Object} data - обьект аниме
+   */
+  async function SetAnimeImageAndTitle(data) {
+    const image = await LoadImageJikan($ID);
+    $(".bg-paralax-img > img").attr("src", await AsyncLoadImage(image));
+    $(".title-with-raiting > .title > .russian").text(data.russian);
+    $(".title-with-raiting > .title > .name").text(data.name);
+    $(".title-with-raiting > .raiting > span").text(data.score);
+  }
+
+  async function SetFranchise() {
+    shikimoriApi.Animes.franchise($ID, async (res) => {
+      if (res.failed && res.status == 429) {
+        await sleep(1000);
+        return SetFranchise();
+      }
+      //Проверяем если есть у нас фрашиза
+      if (res.nodes) {
+        //Отоброжаем блок с франшизой
+        if (res.nodes.length > 0) {
+          $(".franchise-title, .franchisa-anime").css("display", "");
+        }
+
+        for (let i = 0; i < res.nodes.length; i++) {
+          const element = res.nodes[i]; // Обьект с франшизой
+
+          //Отбираем мусор в франшизе
+          if (element.kind == "Клип" || element.kind == "Спешл") {
+            continue;
+          }
+
+          //Создаем елемент
+          const html = `<a data-id="${element.id}" class="${$ID == element.id ? "selected" : ""
+            }"><div class="franchise"><div class="title">${element.name
+            }</div><div class="type">${element.kind
+            }</div></div><div class="year">${element.year}</div></a>`;
+
+          //Добавляем елемент
+          $(".franchisa-anime").append(html);
+        }
+
+        //Событие нажатие
+        $(".franchisa-anime > a").click((e) => {
+          //Перенаправляем пользователя без истории
+          window.location.replace(
+            "watch.html?id=" + $(e.currentTarget).data("id")
+          );
+        });
+      }
+
+      if (
+        parametrs.dub_anime &&
+        parametrs.dub_anime_franchise &&
+        res.nodes &&
+        res.nodes.length > 0
+      ) {
+        res.nodes.forEach((element) => {
+          let data = JSON.parse(
+            localStorage.getItem("save-translations-" + element.id)
+          );
+          if (data && element.id != $ID) {
+            data.forEach((element) => {
+              $(
+                `.translations--list--element--count-save--save[data-id="${element}"] > svg`
+              ).css("fill", "yellow");
+            });
+          }
+        });
+      }
+    });
+  }
+
+  async function SetSimiliar() {
+    shikimoriApi.Animes.similar($ID, async (r) => {
+      if (r.failed && r.status == 429) {
+        await sleep(1000);
+        return SetSimiliar();
+      }
+      $(".with-count > .similiar-count").text(r.length);
+      if (r.length > 0) {
+        $(".similiar-title , .similiar-anime").css("display", "");
+      }
+      for (let i = 0; i < r.length; i++) {
+        const element = r[i];
+        $(".similiar-anime").append(CreateElementAnime(element));
+      }
+    });
+
+    //Функция создание елемента anime-card
+    function CreateElementAnime(data) {
+      return `<a href="/watch.html?id=${data.id}">
+    <div class="card-anime" data-anime="${data.id}">
+        <div class="content-img">
+            <div class="saved"></div>
+            <div class="title">${data.russian}</div>
+            <img src="https://nyaa.shikimori.one${data.image.original}" alt="${data.russian
+        }">
+        </div>
+        <div class="content-inf">
+            <div class="inf-year">${new Date(data.aired_on).getFullYear()}</div>
+            <div class="inf-rtng"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"></path></svg>${data.score
+        }</div>
+        </div>
+    </div>
+</a>`;
+    }
+  }
+
+  /**
+   * Устанавливает жанры аниме
+   * @param {Object} data - обьект аниме
+   */
+  function SetGenres(data) {
+    for (let index = 0; index < data.genres.length; index++) {
+      const element = data.genres[index];
+      $(".genres").append(`<a href="#">${element.russian}</a>`);
+    }
+  }
+
+  /**
+   * Устанавливает продолжительность аниме
+   * @param {Object} data - обьект аниме
+   */
+  function SetDuration(data) {
+    if (data.episodes_aired == 0 && data.status == "released") {
+      $(".text-witch-pg > .episodes_aired").text(`${data.episodes}EP`);
+      $(".duration > .content > b").text(
+        `${getTimeFromMins(data.episodes * data.duration)}`
+      );
+    } else {
+      $(".text-witch-pg > .episodes_aired").text(`${data.episodes_aired}EP`);
+      $(".duration > .content > b").text(
+        `${getTimeFromMins(data.episodes_aired * data.duration)}`
+      );
+    }
+
+    //https://ru.stackoverflow.com/questions/646511/Сконвертировать-минуты-в-часыминуты-при-помощи-momentjs
+    function getTimeFromMins(mins) {
+      let hours = Math.trunc(mins / 60);
+      let minutes = mins % 60;
+      return hours + "ч. " + minutes + "мин.";
+    }
+  }
+
+  /**
+   * Устанавливает статус аниме
+   * @param {Object} data - обьект аниме
+   */
+  function SetStatus(data) {
+    $(".status > .content > b").text(
+      data.status == "anons"
+        ? "Анонс"
+        : data.status == "ongoing"
+          ? "Онгоинг"
+          : "Вышел"
+    );
+    $(".pg-rating").text(data.rating);
+  }
+
+  /**
+   * Устанавливает галерею
+   */
+  function SetGallery() {
+    shikimoriApi.Animes.screenshots($ID, async (r) => {
+      if (r.failed && r.status == 429) {
+        await sleep(1000);
+        return SetGallery();
+      }
+      if (r.length == 0) {
+        $(".title-gallery").css("display", "none");
+      }
+
+      for (let index = 0; index < r.length; index++) {
+        const element = r[index];
+        $(".galery-slider").append(
+          `<div class="slide"><img src="https://shikimori.one${element.preview}"></div>`
+        );
+      }
+    });
+  }
+
+  /**
+   *  Устанавливает главных героев аниме
+   */
+  function SetHeroes() {
+    shikimoriApi.Animes.roles($ID, async (r) => {
+      if (r.failed && r.status == 429) {
+        await sleep(1000);
+        return SetHeroes();
+      }
+
+      for (let i = 0; i < r.length; i++) {
+        const element = r[i];
+        if (element.roles.includes('Main')) {
+          $('.hero-anime, .hero-anime-title').css('display', '');
+          $('.hero-anime > .val').append(`<a href="https://shikimori.one${element.character.url}"><img src="https://nyaa.shikimori.one${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div><div class="name-en">${element.character.name}</div></div></a>`);
+        }
+      }
+    })
+  }
+
+  /**
+   * Устанавливает описание аниме
+   * @param {Object} data - обьект аниме
+   */
+  function SetDescription(data) {
+    if (!data.description) {
+      $(".description").append(data.english[0]);
+      return;
+    }
+    $(".description").append(data.description_html);
+  }
+
+  function SetStudio(data) {
+    if (data.studios.length > 0) {
+      $(".studio > .title").text(data.studios[0].filtered_name);
+    }
+  }
 }
