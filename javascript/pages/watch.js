@@ -829,6 +829,7 @@ async function LoadAnime(e = () => { }, l = false) {
   SetFranchise();
   SetSimiliar();
   SetStudio(data);
+  SetTitle(data);
 
   e();
 
@@ -1004,6 +1005,15 @@ async function LoadAnime(e = () => { }, l = false) {
       const element = data.genres[index];
       $(".genres").append(`<a href="#">${element.russian}</a>`);
     }
+  }
+
+  /**
+   * Устанавливает название аниме на сайте
+   * @param {Object} data - обьект аниме
+   */
+  function SetTitle(data){
+    console.log(data);
+    $(document).attr("title", "TUN - " + data.russian);
   }
 
   /**
