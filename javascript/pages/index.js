@@ -9,7 +9,7 @@ Main((e) => {
         ShowUser();
     }
     //Функция отображение пользователя
-    async function ShowUser(){
+    async function ShowUser() {
         let data = usr.Storage.Get(usr.Storage.keys.whoami);
         console.log(data);
 
@@ -27,8 +27,8 @@ Main((e) => {
                 return;
             }
             let count = response.messages + response.news + response.notifications;
-            
-            if(count > 0){
+
+            if (count > 0) {
                 $('.notification > .dot').removeClass('hide');
             }
         });
@@ -103,7 +103,7 @@ function scrollElementWithMouse(dom) {
 
 //Фукция запроса новых аниме с shikimori
 function GetAnimeShikimori() {
-    shikimoriApi.Animes.animes({ kind: 'tv', order: 'ranked', status: 'ongoing', limit: 8, genre: genres, season: `${new Date().getFullYear()-1}_${new Date().getFullYear()}` }, async (response) => {
+    shikimoriApi.Animes.animes({ kind: 'tv', order: 'ranked', status: 'ongoing', limit: 8, genre: genres, season: `${new Date().getFullYear() - 1}_${new Date().getFullYear()}` }, async (response) => {
         if (response.failed && response.status == 429) {
             await sleep(1000);
             GetAnimeShikimori();
@@ -124,7 +124,7 @@ function GetAnimeShikimori() {
 //функция создания елемента истории просмотра
 function CreateElementHistory(data) {
     //Для старых версий
-    const prcnt = data.fullduration?calculatePercentage(data.duration, data.fullduration):calculatePercentage(data.duration, data.duration);
+    const prcnt = data.fullduration ? calculatePercentage(data.duration, data.fullduration) : calculatePercentage(data.duration, data.duration);
     const time = Math.floor(data.duration / 60) + ':' + (data.duration % 60).toString().padEnd(2, '0');
     const link = `watch.html?id=${data.id}&player=true&continue=${data.continue}`;
     return `<div class="swiper-slide"><div class="frame-info"><div class="frame-status">
@@ -200,15 +200,25 @@ async function GitHubRelease() {
             $('.github > .version > span').text(data[0].tag_name);
             $('.github > .date').text(`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`);
 
-            //Если у пользователя нет ключа оюновления то он первый раз
-            if(localStorage.getItem(dialog.key)==null){
-                localStorage.setItem(dialog.key, true);
-            }
-            //Елси было обновление то показываем диалоговое окно
-            if(localStorage.getItem(dialog.key) == "true"){
-                dialog.show(()=>{
-                    localStorage.setItem(dialog.key, false);
-                }, data);
+
+            //Если версия гита отличается от версии сохраненной, то показывем диалоговое окно
+            console.log(localStorage.getItem('github-version'));
+
+            let saved_git_verrsion = JSON.parse(localStorage.getItem('github-version'));
+            if (saved_git_verrsion == null || saved_git_verrsion.tag != data[0].tag_name) {
+                //Если у пользователя нет ключа оюновления то он первый раз
+                if (localStorage.getItem(dialog.key) == null) {
+                    localStorage.setItem(dialog.key, true);
+                }
+                //Елси было обновление то показываем диалоговое окно
+                if (localStorage.getItem(dialog.key) == "true") {
+                    dialog.show(() => {
+                        localStorage.setItem(dialog.key, false);
+                    }, data);
+                }
+
+                //Сохраняем новые данные с github
+                localStorage.setItem('github-version', JSON.stringify({tag: data[0].tag_name, published_at:data[0].published_at}));
             }
         }
     });
@@ -238,8 +248,8 @@ function calculatePercentage(part, whole) {
 }
 
 //Получаем положение пользователя по ipа
-function GetUserPosition(){
-    fetch('https://api.sypexgeo.net/json/').then(async(response)=>{
+function GetUserPosition() {
+    fetch('https://api.sypexgeo.net/json/').then(async (response) => {
         const data = await response.json();
         console.log(data);
 
@@ -264,9 +274,9 @@ new Swiper('.swiper-continue', {
 });
 
 //Событие нажатие на жанр
-$('.genres').click((e)=>{
+$('.genres').click((e) => {
     const target = $(e.currentTarget);
-    if(target.hasClass('selected')){
+    if (target.hasClass('selected')) {
         return;
     }
 
@@ -283,5 +293,5 @@ $('.search > .btn').click((e) => {
     //Получение значения посика
     let value = $(e.currentTarget.parentNode)[0].firstElementChild.value;
 
-    window.location.href = '/search.html?val='+value;
+    window.location.href = '/search.html?val=' + value;
 });
