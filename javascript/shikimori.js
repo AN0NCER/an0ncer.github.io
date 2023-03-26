@@ -414,26 +414,21 @@ const shikimoriApi = {
       event(response);
       return response;
     },
-
+    //Tyt
     messages: async function (
       id,
       query = { type: "notifications" },
       event = () => {}
     ) {
-      if (shikimoriUser.authorized) {
         let q = "";
         if (Object.keys(query).length > 0) {
           q += "?" + new URLSearchParams(query).toString();
         }
         let url = this.url + "/" + id + "/messages" + q;
-        let request = shikimoriFetch("GET", url, {
-          "User-Agent": "Tunime",
-          Authorization: `${shikimoriUser.Oauth.access.token_type} ${shikimoriUser.Oauth.access.access_token}`,
-        });
+        let request = shikimoriFetch("GET", url, TemplateShikimori.Headers.bearer());
         let response = await request.fetch();
         event(response);
         return response;
-      }
     },
 
     unread_messages: async function (id, event = () => {}) {

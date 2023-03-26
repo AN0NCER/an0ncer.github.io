@@ -26,7 +26,9 @@ Main((e) => {
                 CountNotification(id);
                 return;
             }
-            let count = response.messages + response.news + response.notifications;
+
+            //Смотрим только на количество notifications
+            let count = /*response.messages + response.news +*/ response.notifications;
 
             if (count > 0) {
                 $('.notification > .dot').removeClass('hide');
