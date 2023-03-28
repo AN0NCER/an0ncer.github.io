@@ -1,0 +1,144 @@
+@import url("https://fonts.googleapis.com/css2?family=Nova+Square&display=swap");
+body {
+  background: #101318;
+  max-width: 1100px;
+  margin: 0 auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.wrapper {
+  margin-left: 20px;
+  margin-right: 20px;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+header {
+  margin-top: 20px;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+header .btn {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+header .btn svg {
+  fill: #fff;
+  opacity: 0.25;
+}
+header .back svg {
+  width: 17px;
+}
+header .mute svg {
+  width: 20px;
+}
+
+main {
+  margin-bottom: 20px;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+main .icon-logo {
+  display: grid;
+  place-items: center;
+}
+main .icon-logo img {
+  width: 100%;
+}
+main p {
+  font-family: "Manrope";
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  color: #FFFFFF;
+  margin-top: 20px;
+}
+main a {
+  font-family: "Manrope";
+  display: grid;
+  place-items: center;
+  color: #fff;
+  width: 100%;
+  height: 50px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+main a.primary {
+  background: #5D72FB;
+  margin-top: 50px;
+}
+main a:not(.primary) {
+  margin-top: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.47);
+}
+main label {
+  font-family: "Manrope";
+  color: #fff;
+  width: 100%;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-top: 10px;
+}
+main label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+main label .checkmark {
+  margin-right: 10px;
+  display: grid;
+  height: 16px;
+  width: 16px;
+  border-radius: 4px;
+  border: 1px solid #5D72FB;
+}
+main label input:checked ~ .checkmark {
+  background-color: #5D72FB;
+}
+main .help {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 11px;
+  margin-top: 10px;
+  font-family: "Manrope";
+  width: 100%;
+}
+
+h1 {
+  font-family: "Nova Square", cursive;
+  color: #fff;
+  font-size: 40px;
+  margin-top: 50px;
+}
+
+h1.animation {
+  font-weight: 400;
+  line-height: 48px;
+  margin-top: 0px;
+}
+
+span.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  background: #101318;
+  z-index: 99;
+}
