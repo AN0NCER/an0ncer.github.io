@@ -1,121 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Nova+Square&display=swap");
 body {
   background: #101318;
-  max-width: 1100px;
+  max-width: 900px;
   margin: 0 auto;
   min-height: 100vh;
   overflow-x: hidden;
-}
-
-.wrapper {
-  margin-left: 20px;
-  margin-right: 20px;
-  max-width: 900px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-}
-
-header {
-  margin-top: 20px;
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-}
-header .btn {
-  width: 35px;
-  height: 35px;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-}
-header .btn svg {
-  fill: #fff;
-  opacity: 0.25;
-}
-header .back svg {
-  width: 17px;
-}
-header .mute svg {
-  width: 20px;
-}
-
-main {
-  margin-bottom: 20px;
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-}
-main .icon-logo {
-  display: grid;
-  place-items: center;
-}
-main .icon-logo img {
-  width: 100%;
-}
-main p {
-  font-family: "Manrope";
-  font-weight: 700;
-  font-size: 14px;
-  text-align: center;
-  color: #FFFFFF;
-  margin-top: 20px;
-}
-main a {
-  font-family: "Manrope";
-  display: grid;
-  place-items: center;
-  color: #fff;
-  width: 100%;
-  height: 50px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: bold;
-}
-main a.primary {
-  background: #5D72FB;
-  margin-top: 50px;
-}
-main a:not(.primary) {
-  margin-top: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.47);
-}
-main label {
-  font-family: "Manrope";
-  color: #fff;
-  width: 100%;
-  font-size: 11px;
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin-top: 10px;
-}
-main label input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-main label .checkmark {
-  margin-right: 10px;
-  display: grid;
-  height: 16px;
-  width: 16px;
-  border-radius: 4px;
-  border: 1px solid #5D72FB;
-}
-main label input:checked ~ .checkmark {
-  background-color: #5D72FB;
-}
-main .help {
-  color: rgba(255, 255, 255, 0.2);
-  font-size: 11px;
-  margin-top: 10px;
-  font-family: "Manrope";
-  width: 100%;
 }
 
 h1 {
@@ -141,4 +31,113 @@ span.loading {
   place-items: center;
   background: #101318;
   z-index: 99;
+}
+
+.wrapper {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+  width: 100%;
+  height: calc(100vh - 40px);
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 35px 1fr auto auto auto auto auto auto;
+}
+.wrapper header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.wrapper header .btn {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.wrapper header .btn svg {
+  fill: #fff;
+  opacity: 0.25;
+}
+.wrapper header .back svg {
+  width: 17px;
+}
+.wrapper header .mute svg {
+  width: 20px;
+}
+.wrapper .icon-logo {
+  display: grid;
+  place-items: center;
+}
+.wrapper .icon-logo img {
+  height: calc(100% - 40px);
+}
+.wrapper h1 {
+  text-align: center;
+  display: grid;
+  place-items: center;
+  margin-top: 0;
+}
+.wrapper p {
+  margin-top: 20px;
+  margin-bottom: 25px;
+  font-family: "Manrope";
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+}
+.wrapper a {
+  font-family: "Manrope";
+  display: grid;
+  place-items: center;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  height: 50px;
+}
+.wrapper a.primary {
+  background: #5D72FB;
+  margin-bottom: 10px;
+}
+.wrapper a:not(.primary) {
+  border: 1px solid rgba(255, 255, 255, 0.47);
+}
+.wrapper label {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-family: "Manrope";
+  color: #fff;
+  width: 100%;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.wrapper label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.wrapper label .checkmark {
+  margin-right: 10px;
+  display: grid;
+  height: 16px;
+  width: 16px;
+  border-radius: 4px;
+  border: 1px solid #5D72FB;
+}
+.wrapper label input:checked ~ .checkmark {
+  background-color: #5D72FB;
+}
+.wrapper .help {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 11px;
+  font-family: "Manrope";
+  width: 100%;
 }
