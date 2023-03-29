@@ -676,7 +676,7 @@ function Functional() {
 
   //Функция отцинтровки плеера в горизонтальном режиме
   //Из за того что обращается глобально должен быть вызван один раз
-  (()=>{
+  (() => {
     let timer; // Внешний независимый таймер
     // Получаем ссылку на элемент, до которого нужно долистать
     const element = document.querySelector(".landscape-player");
@@ -781,8 +781,8 @@ function Functional() {
 
   function ShareAnime() {
     navigator.share({
-      title: "Название",
-      text: "Описание",
+      title: $(document).attr("title"),
+      text: $('meta[property="og:description"]').attr('content'),
       url: window.location.origin + window.location.pathname + '?id=' + $ID + '&share'
     }).catch((error) => console.log('Sharing failed', error));
   }
@@ -871,6 +871,7 @@ async function LoadAnime(e = () => { }, l = false) {
   SetSimiliar();
   SetStudio(data);
   SetTitle(data);
+  MetaTags(data);
 
   e();
 
@@ -1053,7 +1054,6 @@ async function LoadAnime(e = () => { }, l = false) {
    * @param {Object} data - обьект аниме
    */
   function SetTitle(data) {
-    console.log(data);
     $(document).attr("title", "TUN - " + data.russian);
   }
 
@@ -1144,6 +1144,7 @@ async function LoadAnime(e = () => { }, l = false) {
    * @param {Object} data - обьект аниме
    */
   function SetDescription(data) {
+    console.log(data);
     if (!data.description) {
       $(".description").append(data.english[0]);
       return;
@@ -1155,5 +1156,45 @@ async function LoadAnime(e = () => { }, l = false) {
     if (data.studios.length > 0) {
       $(".studio > .title").text(data.studios[0].filtered_name);
     }
+  }
+
+  /**
+   * Генерирует теги Open Graph на страницу для индексаций страницы
+   * @param {Object} data - response Shikimori
+   */
+  function MetaTags(data) {
+    // Создаем мета-тег Open Graph для заголовка страницы
+    var ogTitle = $("<meta/>", {
+      "property": "og:title",
+      "content": `TUN - ${data.russian}`
+    });
+
+    var ogType = $("<meta/>", {
+      "property": "og:type",
+      "content": `${data.kind == "movie" ? "video.movie" : "video.tv_show"}`
+    });
+
+    var ogImage = $("<meta/>", {
+      "property": "og:image",
+      "content": `https://moe.shikimori.one${data.image.original}`
+    });
+
+    var ogDescription = $("<meta/>", {
+      "property": "og:description",
+      "content": `${data.description.substr(0, 100)}... Смотрите на Tunime`
+    });
+
+    var ogRelease = $("<meta/>", {
+      "property": "og:release_date",
+      "content": `${data.aired_on}`
+    });
+
+    var ogRating = $("<meta/>", {
+      "property": "og:rating",
+      "content": data.score + "/10"
+    });
+
+    // Добавляем мета-тег Open Graph в раздел head нашего HTML документа
+    $("head").append(ogTitle, ogType, ogImage, ogDescription, ogRelease, ogRating);
   }
 }
