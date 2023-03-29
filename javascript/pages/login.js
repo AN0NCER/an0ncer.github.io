@@ -27,7 +27,15 @@ const slogans = [
                 const urlParams = new URLSearchParams(window.location.search);
                 let code = urlParams.get("code");
                 if (code) {
+                    //Проверяем если это сработал автологин то делаем редирект на главную страницу т.к. может только от нее сработать AutoLogin
+                    let application_event = localStorage.getItem('application_event');
                     await usr.Authorizate(code);
+                    localStorage.removeItem('application_event');
+                    if (application_event == "autologin") {
+                        //После авторизации переходим на главную страницу
+                        window.location.href = "/index.html";
+                        return;
+                    }
                     //После авторизации переходим на страницу пользователся
                     window.location.href = "/user.html"
                     //Если авторизация была неудачна, то нас выкинет обратно на страницу авторизации
@@ -77,6 +85,7 @@ function VisualFunctional() {
     //Кнопка авторизации
     $('.btn-login').click(async () => {
         if (usr.isteste) {
+            localStorage.removeItem('application_event');
             //Если тестовый режим то запрашиваем код от пользователя
             let code = prompt("Тестовый режим авторизации:");
             if (code) {
@@ -87,7 +96,7 @@ function VisualFunctional() {
                 window.open(usr.Oauth.GetUrl(), '_blank').focus();
             }
         } else {
-            window.open(usr.Oauth.GetUrl(), '_blank').focus();
+            window.location.href = usr.Oauth.GetUrl();
         }
     });
 

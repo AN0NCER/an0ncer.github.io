@@ -7,6 +7,8 @@ Main((e) => {
     if (e) {
         CountNotification();
         ShowUser();
+    }else{
+        AutoLogin();
     }
     //Функция отображение пользователя
     async function ShowUser() {
@@ -297,3 +299,23 @@ $('.search > .btn').click((e) => {
 
     window.location.href = '/search.html?val=' + value;
 });
+
+/**
+ * Автоматическая авторизация
+ */
+function AutoLogin(){
+    //Проверяем если пользователь не авторизирован, и то что у пользователя включена автоматический вход
+
+    if(!usr.authorized && parametrs.auto_login && localStorage.getItem('application_event') != "autologin"){
+        //Нужно будет создать в localStorage ячейку c указанием текущим событием программы
+        localStorage.setItem('application_event', "autologin");
+
+        //Для тестового режима своя страничка авторизации
+        if(usr.isteste){
+            return window.location.href = "/login.html";
+        }
+
+        //Пробуем авторизоваться
+        return window.location.href = usr.Oauth.GetUrl();
+    }
+}
