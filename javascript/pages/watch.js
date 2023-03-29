@@ -1011,7 +1011,7 @@ async function LoadAnime(e = () => { }, l = false) {
    * Устанавливает название аниме на сайте
    * @param {Object} data - обьект аниме
    */
-  function SetTitle(data){
+  function SetTitle(data) {
     console.log(data);
     $(document).attr("title", "TUN - " + data.russian);
   }
