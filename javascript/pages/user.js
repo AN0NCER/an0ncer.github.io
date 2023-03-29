@@ -79,7 +79,9 @@ $(document).ready(() => {
 
 function LogOut() {
   usr.Storage.Clear();
-  $('input[data-param="auto_login"]').click();
+  if(parametrs.auto_login){
+    $('input[data-param="auto_login"]').click();
+  }
   window.location.replace("/login.html");
 }
 
