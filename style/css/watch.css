@@ -931,6 +931,13 @@ footer .studio span {
   .landscape-player.landscape .player iframe {
     margin: 0;
   }
+  .landscape-player.landscape.reverse-dub {
+    flex-direction: row-reverse;
+  }
+  .landscape-player.landscape.reverse-dub .episodes {
+    margin-right: 0;
+    margin-left: 20px;
+  }
   .block-title.title-player.landscape {
     padding-bottom: 10px;
   }

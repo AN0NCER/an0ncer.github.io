@@ -266,6 +266,11 @@ header .menu--btn--select {
   display: flex;
   flex-direction: column;
 }
+.main--settings > .main--settings--checkbox > .main--settings--clear-cache--tips {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+}
 .main--settings > .main--settings--checkbox > label {
   display: flex;
   justify-content: space-between;

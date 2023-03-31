@@ -238,6 +238,7 @@ header {
   }
 }
 
+
 .main--settings {
   max-width: 1100px;
   margin: 0 auto;
@@ -305,6 +306,12 @@ header {
     gap: 10px;
     display: flex;
     flex-direction: column;
+
+    & > .main--settings--clear-cache--tips {
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 0;
+    }
 
     &>label {
       display: flex;

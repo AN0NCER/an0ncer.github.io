@@ -708,6 +708,10 @@ function Functional() {
     });
   })();
 
+  if(parametrs.dub_reverse){
+    $('.landscape-player').addClass('reverse-dub');
+  }
+
   /**
    * Отображает статус аниме
    */
