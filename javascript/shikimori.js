@@ -634,7 +634,7 @@ let usr = {
     auth_url: {
       client_id: "EKv75uNamao_d3uzFREIfo71l6cpyG2IEUIpBxFgcAM",
       client_secret: "WKDClcJlc3grYpBWDbxqQyAFEW0SquPgrvTdXeAfhds",
-      redirect_uri: "https://an0ncer.github.io/user.html",
+      redirect_uri: "https://an0ncer.github.io/login.html",
       response_type: "code",
       scope: "user_rates+messages+comments+topics+clubs+friends+ignores",
     },
