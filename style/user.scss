@@ -159,14 +159,14 @@ header {
     display: flex;
     flex-direction: column;
 
-    & > span:nth-child(1) {
+    &>span:nth-child(1) {
       width: 100%;
       height: 10px;
       text-overflow: ellipsis;
       overflow: hidden;
     }
 
-    & > span:nth-child(2) {
+    &>span:nth-child(2) {
       font-size: 14px;
       margin-top: 5px;
     }
@@ -238,6 +238,7 @@ header {
   }
 }
 
+
 .main--settings {
   max-width: 1100px;
   margin: 0 auto;
@@ -253,7 +254,8 @@ header {
     font-weight: bold;
   }
 
-  &--logout, &--synch {
+  &--logout,
+  &--synch {
     width: 100%;
 
     &--btn {
@@ -298,11 +300,20 @@ header {
     }
   }
 
-  & > &--checkbox {
+  &>&--checkbox {
     margin-left: 20px;
     margin-right: 20px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
 
-    & > label {
+    & > .main--settings--clear-cache--tips {
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 0;
+    }
+
+    &>label {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -351,31 +362,32 @@ header {
           }
         }
 
-        input:checked + .main--settings--checkbox--switch--slider {
+        input:checked+.main--settings--checkbox--switch--slider {
           background-color: #28b2f5;
         }
 
-        input:focus + .main--settings--checkbox--switch--slider {
+        input:focus+.main--settings--checkbox--switch--slider {
           box-shadow: 0 0 1px #28b2f5;
         }
 
-        input:checked + .main--settings--checkbox--switch--slider:before {
+        input:checked+.main--settings--checkbox--switch--slider:before {
           transform: translateX(26px);
         }
       }
     }
 
-    & > &.main--settings--checkbox {
+    &>&.main--settings--checkbox {
       display: flex;
       flex-direction: column;
     }
   }
 }
 
-.main--settings--checkbox > div.main--settings--checkbox {
+.main--settings--checkbox>div.main--settings--checkbox {
   margin-left: 20px;
   margin-top: 10px;
-  & > label {
+
+  &>label {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -424,19 +436,20 @@ header {
         }
       }
 
-      input:checked + .main--settings--checkbox--switch--slider {
+      input:checked+.main--settings--checkbox--switch--slider {
         background-color: #28b2f5;
       }
 
-      input:focus + .main--settings--checkbox--switch--slider {
+      input:focus+.main--settings--checkbox--switch--slider {
         box-shadow: 0 0 1px #28b2f5;
       }
 
-      input:checked + .main--settings--checkbox--switch--slider:before {
+      input:checked+.main--settings--checkbox--switch--slider:before {
         transform: translateX(26px);
       }
     }
   }
+
   &.disable {
     max-height: 0px;
     overflow: hidden;

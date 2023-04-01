@@ -262,6 +262,14 @@ header .menu--btn--select {
 .main--settings > .main--settings--checkbox {
   margin-left: 20px;
   margin-right: 20px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.main--settings > .main--settings--checkbox > .main--settings--clear-cache--tips {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
 }
 .main--settings > .main--settings--checkbox > label {
   display: flex;

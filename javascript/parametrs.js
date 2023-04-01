@@ -2,7 +2,9 @@ const keysParametrs = 'parametrs';
 let parametrs = {
     censored: true, //Делать цензуру на 18+ hentay
     dub_anime: false, //Сохранять переводы для каждого аниме отдельно
-    dub_anime_franchise: false
+    dub_anime_franchise: false, //Запаминать переводы по франшизам
+    auto_login: false, //Автоматический вход в приложение
+    dub_reverse: false, //При горизонтальном режиме эпизоды с права
 }
 
 //Метод загрузки параметров
@@ -30,7 +32,9 @@ let param = {
         default: 'NAN',
         censored: 'censored',
         dub_anime: 'dub_anime',
-        dub_anime_franchise: 'dub_anime_franchise'
+        dub_anime_franchise: 'dub_anime_franchise',
+        auto_login: 'auto_login',
+        dub_reverse: 'dub_reverse',
     },
     register: function (i,k){
         return{

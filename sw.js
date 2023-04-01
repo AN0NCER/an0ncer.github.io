@@ -1,4 +1,4 @@
-var version = '57';
+var version = '58';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     //Pages
@@ -7,8 +7,10 @@ var appShellFilesToCache = [
     '/404.html',
     '/search.html',
     '/list.html',
+    '/login.html',
     //Styles
     '/style/css/main.css',
+    '/style/css/login.css',
     '/style/css/index.css',
     '/style/css/search.css',
     '/style/css/user.css',
@@ -28,10 +30,12 @@ var appShellFilesToCache = [
     '/javascript/shikimori.js',
     //Engine
     '/javascript/engine/orientation.js',
+    '/javascript/engine/event_handler.js',
     //Pages
     '/javascript/pages/index.js',
     '/javascript/pages/search.js',
     '/javascript/pages/list.js',
+    '/javascript/pages/login.js',
     '/javascript/pages/user.js',
     '/javascript/pages/watch.js',
     //Custom

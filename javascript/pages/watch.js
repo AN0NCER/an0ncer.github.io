@@ -666,11 +666,50 @@ function Functional() {
     { dom: ".btn-wrapper.rb > .btn", func: ShareAnime },
   ];
 
-  let showdStatus = false;
+  let showdStatus = false; // Показаны ли статусы аниме
+  let enableCenter = false; // Включена ли отцентровка плеера в горизонтальном режиме
 
   for (let i = 0; i < VFClick.length; i++) {
     const element = VFClick[i];
     $(element.dom).click(element.func);
+  }
+
+  //Функция отцинтровки плеера в горизонтальном режиме
+  //Из за того что обращается глобально должен быть вызван один раз
+  (() => {
+    let timer; // Внешний независимый таймер
+    // Получаем ссылку на элемент, до которого нужно долистать
+    const element = document.querySelector(".landscape-player");
+
+    //Подписываемся на событие прокрутки
+    window.addEventListener('scroll', function () {
+      this.clearInterval(timer); // Очищаем интервал пока идет прокрутка
+      //Устанавливаем таймер
+      timer = setTimeout(function () {
+        //Проверяем что функция включена (Включается в функии SetPlayerDisplay) и ориентацию устройства
+        if (enableCenter && current_device_orientation == 'horizontal') {
+          var scrollPosition = window.scrollY; // Текущеее полажение страницы scroll
+          var elementPosition = element.getBoundingClientRect().top + window.scrollY; // Позиция елемента
+          var elementHeight = element.offsetHeight; // Высота елемента
+
+          if (Math.abs(scrollPosition - elementPosition) < elementHeight * 0.4) {
+            // Код, который нужно выполнить, если разница между scroll и элементом меньше 40%
+            element.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "nearest",
+            });
+          } else {
+            // Код, который нужно выполнить, если разница между scroll и элементом больше или равна 40%
+            enableCenter = false; // Отключаем центровку
+          }
+        }
+      }, 500);
+    });
+  })();
+
+  if(parametrs.dub_reverse){
+    $('.landscape-player').addClass('reverse-dub');
   }
 
   /**
@@ -686,6 +725,8 @@ function Functional() {
    * Отображает все возможные озвучки аниме
    */
   function ShowTranslations() {
+    //Отключаем отцинтровку плеера из за того что они расположены рядом и код может неправильно отработать и навеститьь на плеер во время выбора озвучки
+    enableCenter = false;
     //Получаем bool скрыт ли лист переводов
     const show_list = $(".translations--list").hasClass("hide") ? true : false;
     //Скрываем либо показываем
@@ -722,6 +763,10 @@ function Functional() {
   function SetPlayerDisplay() {
     // Получаем ссылку на элемент, до которого нужно долистать
     const element = document.querySelector(".landscape-player");
+
+    //Включаем функцию отцентровки экрана
+    enableCenter = true;
+
     // Наводим на плеер
     element.scrollIntoView({
       behavior: "smooth",
@@ -740,8 +785,8 @@ function Functional() {
 
   function ShareAnime() {
     navigator.share({
-      title: "Название",
-      text: "Описание",
+      title: $(document).attr("title"),
+      text: $('meta[property="og:description"]').attr('content'),
       url: window.location.origin + window.location.pathname + '?id=' + $ID + '&share'
     }).catch((error) => console.log('Sharing failed', error));
   }
@@ -829,6 +874,8 @@ async function LoadAnime(e = () => { }, l = false) {
   SetFranchise();
   SetSimiliar();
   SetStudio(data);
+  SetTitle(data);
+  MetaTags(data);
 
   e();
 
@@ -1007,6 +1054,14 @@ async function LoadAnime(e = () => { }, l = false) {
   }
 
   /**
+   * Устанавливает название аниме на сайте
+   * @param {Object} data - обьект аниме
+   */
+  function SetTitle(data) {
+    $(document).attr("title", "TUN - " + data.russian);
+  }
+
+  /**
    * Устанавливает продолжительность аниме
    * @param {Object} data - обьект аниме
    */
@@ -1093,6 +1148,7 @@ async function LoadAnime(e = () => { }, l = false) {
    * @param {Object} data - обьект аниме
    */
   function SetDescription(data) {
+    console.log(data);
     if (!data.description) {
       $(".description").append(data.english[0]);
       return;
@@ -1104,5 +1160,45 @@ async function LoadAnime(e = () => { }, l = false) {
     if (data.studios.length > 0) {
       $(".studio > .title").text(data.studios[0].filtered_name);
     }
+  }
+
+  /**
+   * Генерирует теги Open Graph на страницу для индексаций страницы
+   * @param {Object} data - response Shikimori
+   */
+  function MetaTags(data) {
+    // Создаем мета-тег Open Graph для заголовка страницы
+    var ogTitle = $("<meta/>", {
+      "property": "og:title",
+      "content": `TUN - ${data.russian}`
+    });
+
+    var ogType = $("<meta/>", {
+      "property": "og:type",
+      "content": `${data.kind == "movie" ? "video.movie" : "video.tv_show"}`
+    });
+
+    var ogImage = $("<meta/>", {
+      "property": "og:image",
+      "content": `https://moe.shikimori.one${data.image.original}`
+    });
+
+    var ogDescription = $("<meta/>", {
+      "property": "og:description",
+      "content": `${data.description.substr(0, 100)}... Смотрите на Tunime`
+    });
+
+    var ogRelease = $("<meta/>", {
+      "property": "og:release_date",
+      "content": `${data.aired_on}`
+    });
+
+    var ogRating = $("<meta/>", {
+      "property": "og:rating",
+      "content": data.score + "/10"
+    });
+
+    // Добавляем мета-тег Open Graph в раздел head нашего HTML документа
+    $("head").append(ogTitle, ogType, ogImage, ogDescription, ogRelease, ogRating);
   }
 }
