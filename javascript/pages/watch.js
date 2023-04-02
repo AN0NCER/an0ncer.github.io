@@ -1185,7 +1185,7 @@ async function LoadAnime(e = () => { }, l = false) {
 
     var ogDescription = $("<meta/>", {
       "property": "og:description",
-      "content": `${data.description.substr(0, 100)}... Смотрите на Tunime`
+      "content": `${data?.description?.substr(0, 100)}... Смотрите на Tunime`
     });
 
     var ogRelease = $("<meta/>", {
