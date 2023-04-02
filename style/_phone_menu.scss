@@ -100,11 +100,23 @@
     bottom: 0;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(5px);
-    z-index: 79;
+    z-index: 78;
+    transition: .3s ease-in-out;
+    opacity: 0;
+
+    .close-interactive{
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        z-index: 79;
+    }
+
     .user-interactive{
         position: absolute;
-        left: 20px;
-        right: 20px;
+        left: calc(env(safe-area-inset-left) + 20px);
+        right: calc(env(safe-area-inset-right) + 20px);
         background: #1E1F25;
         color: #fff;
         font-family: Manrope;
@@ -113,11 +125,13 @@
         flex-direction: column;
         padding: 0 20px;
         border-radius: 4px;
-        .btn{
+        z-index: 80;
+        .btn-inter{
             display: flex;
             gap: 20px;
             padding: 15px 0;
             font-size: 15px;
+            cursor: pointer;
 
             svg{
                 fill: #fff;

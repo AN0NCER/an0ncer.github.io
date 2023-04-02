@@ -18,6 +18,7 @@ header {
   &>.account {
     display: flex;
     white-space: nowrap;
+    align-items: center;
 
     .image-profile {
       overflow: hidden;

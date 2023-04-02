@@ -14,6 +14,7 @@ header {
 header > .account {
   display: flex;
   white-space: nowrap;
+  align-items: center;
 }
 header > .account .image-profile {
   overflow: hidden;
@@ -571,12 +572,22 @@ footer {
   background: rgba(255, 255, 255, 0.2);
   -webkit-backdrop-filter: blur(5px);
           backdrop-filter: blur(5px);
+  z-index: 78;
+  transition: 0.3s ease-in-out;
+  opacity: 0;
+}
+.interactive-menu .close-interactive {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
   z-index: 79;
 }
 .interactive-menu .user-interactive {
   position: absolute;
-  left: 20px;
-  right: 20px;
+  left: calc(env(safe-area-inset-left) + 20px);
+  right: calc(env(safe-area-inset-right) + 20px);
   background: #1E1F25;
   color: #fff;
   font-family: Manrope;
@@ -585,14 +596,16 @@ footer {
   flex-direction: column;
   padding: 0 20px;
   border-radius: 4px;
+  z-index: 80;
 }
-.interactive-menu .user-interactive .btn {
+.interactive-menu .user-interactive .btn-inter {
   display: flex;
   gap: 20px;
   padding: 15px 0;
   font-size: 15px;
+  cursor: pointer;
 }
-.interactive-menu .user-interactive .btn svg {
+.interactive-menu .user-interactive .btn-inter svg {
   fill: #fff;
   -webkit-text-stroke-color: #fff;
   width: 16px;
