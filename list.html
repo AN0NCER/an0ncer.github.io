@@ -11,15 +11,41 @@
     <link rel="stylesheet" href="/style/css/list.css">
     <link rel="manifest" href="manifest.json">
 </head>
-<body>
-
-    <header></header>
+<body class="unselectable">
+    
+    <header>
+        <input type="text" placeholder="Фильтр" class="search-filter">
+        <div class="wraper-filter scroll-none">
+            <div class="btn-filter btn-selected" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="watching,rewatching">
+                Смотрю
+            </div>
+            <div class="btn-filter" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="planned">
+                Посмотрю
+            </div>
+            <div class="btn-filter" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="completed">
+                Просмотрены
+            </div>
+            <div class="btn-filter" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="on_hold,dropped">
+                Заброшены
+            </div>
+            <div class="btn-filter" data-type="tv,ova,ona,special,music,tv_13,tv_24,tv_48,all", data-filtr="planned,completed,watching,rewatching,on_hold,dropped">
+                Сериалы
+            </div>
+            <div class="btn-filter" data-type="movie,all" data-filtr="planned,completed,watching,rewatching,on_hold,dropped">
+                Фильмы
+            </div>
+        </div>
+    </header>
     <main>
         <div class="content">
-            
         </div>
     </main>
     <footer></footer>
+
+    <span class="loading">
+        <h1 class="animation">Tunime</h1>
+        <span class="status">Идет авторизация в аккаунт</span>
+    </span>
 
     <script src="/javascript/library/jqery.min.js"></script>
     <script src="/javascript/library/anime.min.js"></script>
