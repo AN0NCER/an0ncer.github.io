@@ -708,7 +708,7 @@ function Functional() {
     });
   })();
 
-  if(parametrs.dub_reverse){
+  if (parametrs.dub_reverse) {
     $('.landscape-player').addClass('reverse-dub');
   }
 
@@ -920,15 +920,15 @@ async function LoadAnime(e = () => { }, l = false) {
    */
   async function AsyncLoadImage(src) {
     return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "Anonymous"; // to avoid CORS if used with Canvas
-      img.src = src;
-      img.onload = () => {
-        resolve(src);
-      };
-      img.onerror = (e) => {
-        reject(e);
-      };
+        const img = new Image();
+        //img.crossOrigin = "Anonymous"; // to avoid CORS if used with Canvas
+        img.src = src;
+        img.onload = () => {
+          resolve(src);
+        };
+        img.onerror = (e) => {
+          reject(e);
+        };
     });
   }
 
@@ -1185,7 +1185,7 @@ async function LoadAnime(e = () => { }, l = false) {
 
     var ogDescription = $("<meta/>", {
       "property": "og:description",
-      "content": `${data.description.substr(0, 100)}... Смотрите на Tunime`
+      "content": `${data?.description?.substr(0, 100)}... Смотрите на Tunime`
     });
 
     var ogRelease = $("<meta/>", {

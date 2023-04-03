@@ -14,6 +14,7 @@ header {
 header > .account {
   display: flex;
   white-space: nowrap;
+  align-items: center;
 }
 header > .account .image-profile {
   overflow: hidden;
@@ -484,46 +485,130 @@ footer {
   display: none;
 }
 
-.phone_menu {
+.application-menu {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
+  bottom: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+  left: 0;
+  right: 0;
+  background: #1E1F25;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 7px 7px 0px 0px;
+  z-index: 80;
   display: flex;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
-  z-index: 10;
+  gap: 10px;
 }
-.phone_menu .btn_menu {
+.application-menu .btn-menu {
+  width: 60px;
+  height: 60px;
   display: flex;
-  justify-content: space-around;
-  width: 100%;
-  background: rgba(10, 48, 78, 0.4);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
-  max-width: 450px;
-}
-.phone_menu .btn_menu .icon_btn {
-  padding: 15px;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  height: 30px;
-  width: 30px;
+  align-items: center;
   cursor: pointer;
 }
-.phone_menu .btn_menu .icon_btn svg {
-  height: 22px;
-  fill: #a0aabb;
+.application-menu .btn-menu .selected {
+  display: none;
+  fill: linear-gradient(130.55deg, #51B1FE -0.49%, #2774DB 100.49%);
 }
-.phone_menu .btn_menu .icon_btn:hover svg {
-  fill: #28B2F5;
+.application-menu .btn-menu svg {
+  fill: #fff;
+  height: 26px;
+  color: #fff;
 }
-.phone_menu .btn_menu .selected svg {
-  fill: #28B2F5;
+.application-menu .btn-menu:first-child {
+  margin-left: 10px;
+}
+.application-menu .btn-menu:last-child {
+  margin-right: 10px;
+}
+.application-menu .primary {
+  background: linear-gradient(130.55deg, #51B1FE -0.49%, #2774DB 100.49%);
+  border-radius: 4px;
+}
+.application-menu .selected {
+  position: relative;
+}
+.application-menu .selected .main-icon {
+  display: none;
+}
+.application-menu .selected .selected {
+  display: block;
+}
+
+.mode-1 {
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  padding-bottom: 0;
+  border: none;
+  border-radius: 7px;
+}
+
+.mode-2 .selected::after {
+  content: "";
+  position: absolute;
+  border-radius: 7px;
+  left: calc(50% - 17px);
+  top: -1px;
+  width: 34px;
+  height: 3px;
+  background: #51B1FE;
+}
+.mode-2 .selected .main-icon {
+  display: block;
+}
+.mode-2 .selected .selected {
+  display: none;
+}
+
+.interactive-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  z-index: 78;
+  transition: 0.3s ease-in-out;
+  opacity: 0;
+}
+.interactive-menu .close-interactive {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 79;
+}
+.interactive-menu .user-interactive {
+  position: absolute;
+  left: calc(env(safe-area-inset-left) + 20px);
+  right: calc(env(safe-area-inset-right) + 20px);
+  background: #1E1F25;
+  color: #fff;
+  font-family: Manrope;
+  bottom: calc(env(safe-area-inset-bottom) + 80px);
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+  border-radius: 4px;
+  z-index: 80;
+}
+.interactive-menu .user-interactive .btn-inter {
+  display: flex;
+  gap: 20px;
+  padding: 15px 0;
+  font-size: 15px;
+  cursor: pointer;
+}
+.interactive-menu .user-interactive .btn-inter svg {
+  fill: #fff;
+  -webkit-text-stroke-color: #fff;
+  width: 16px;
 }
 
 .card_anime {

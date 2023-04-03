@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="page" content="list">
     <title>Список - Tunime</title>
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
@@ -11,19 +11,54 @@
     <link rel="stylesheet" href="/style/css/list.css">
     <link rel="manifest" href="manifest.json">
 </head>
-<body>
-
-    <header></header>
+<body class="unselectable">
+    
+    <header>
+        <div class="wraper-input">
+            <input type="text" placeholder="Фильтр" class="search-filter">
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path
+                        d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
+                </svg>
+            </div>
+        </div>
+        <div class="wraper-filter scroll-none">
+            <div class="btn-filter btn-selected" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="watching,rewatching">
+                Смотрю
+            </div>
+            <div class="btn-filter" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="planned">
+                Посмотрю
+            </div>
+            <div class="btn-filter" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="completed">
+                Просмотрены
+            </div>
+            <div class="btn-filter" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="on_hold,dropped">
+                Заброшены
+            </div>
+            <div class="btn-filter" data-type="tv,ova,ona,special,music,tv_13,tv_24,tv_48,all", data-filtr="planned,completed,watching,rewatching,on_hold,dropped">
+                Сериалы
+            </div>
+            <div class="btn-filter" data-type="movie,all" data-filtr="planned,completed,watching,rewatching,on_hold,dropped">
+                Фильмы
+            </div>
+        </div>
+    </header>
     <main>
         <div class="content">
-            
         </div>
     </main>
     <footer></footer>
 
+    <span class="loading">
+        <h1 class="animation">Tunime</h1>
+        <span class="status">Идет авторизация в аккаунт</span>
+    </span>
+
     <script src="/javascript/library/jqery.min.js"></script>
     <script src="/javascript/library/anime.min.js"></script>
     <script src="/javascript/server.js"></script>
+    <script src="/javascript/engine/event_handler.js"></script>
     <script src="/javascript/jmenu.js"></script>
     <script src="/javascript/shikimori.js"></script>
     <script src="/javascript/pages/list.js"></script>
