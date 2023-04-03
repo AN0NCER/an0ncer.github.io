@@ -34,9 +34,63 @@ let task_loading = [];
         LoadingAnimeFromTask(task_loading);
     });
 
-    //Добавляем функионал к кнопкам сортировки
+    //Добавляем функционал к кнопкам сортировки
     AddFunctionalButton();
+    //Добавляем функционал к input сортировки по названию
+    AddFunctionalInput();
 })();
+
+/**
+ * Добавляет функционал к input сортировке по названию
+ */
+function AddFunctionalInput() {
+    //Прикрепляем функционал
+    let dom = '.search-filter';
+
+    $(dom).on('change keyup paste', (e) => {
+        //Value очищаем и обрезаем лишнии пробелы
+        let value = $(dom).val().trim();
+
+        if (value.length > 0) {
+            //Есть значение
+            let res = GetCardAnimeByName(value); //Поиск аниме карточек по имени
+
+            //Скрываем елементы которые показаны но нет в найденных поиске
+            for (let i = 0; i < res.notcontains.length; i++) {
+                const element = res.notcontains[i];
+                $(element).addClass('hide-search');
+            }
+        }
+
+        if (value.length <= 0) {
+            //Нет значения
+            ClearSearchFilter();
+        }
+    });
+}
+
+/**
+ * Очищает фильтр поиска
+ */
+function ClearSearchFilter() {
+    let elements = $('.hide-search');
+    for (let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+        $(element).removeClass('hide-search');
+    }
+}
+
+/**
+ * Делает поиск аниме по имени которые показаны на экране пользователя
+ * @param {String} name название аниме
+ * @returns Object c найдеными и не найдеными аниме
+ */
+function GetCardAnimeByName(name) {
+    return {
+        contains: $(`.title > span:contains('${name}')`).parent().parent().parent("a.show-anime"),
+        notcontains: $(`.title > span:not(:contains('${name}'))`).parent().parent().parent("a.show-anime")
+    };
+}
 
 /**
  * Добавляет функционал к кнопкам фильтра
@@ -48,6 +102,11 @@ function AddFunctionalButton() {
         if (target.hasClass('btn-selected')) {
             return;
         }
+
+        //Очищаем фильтр по поиску
+        $('.search-filter').val('');
+        ClearSearchFilter();
+
         //Удаляем класс старой кнопки
         $('.btn-filter.btn-selected').removeClass('btn-selected');
         //Добавляем класс к нажатой кнопке
@@ -108,7 +167,7 @@ async function LoadingAnimeFromTask(task = task_loading) {
                     resolve(await LoadAnime(id));
                     return;
                 }
-                
+
                 //Добавляем аниме
                 AddAnime(response);
                 resolve(true);

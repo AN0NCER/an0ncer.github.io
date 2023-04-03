@@ -14,6 +14,28 @@ header {
     padding-top: 20px;
     max-width: 900px;
 
+    .wraper-input {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        
+
+        .icon {
+            position: absolute;
+            left: 10px;
+            display: flex;
+
+            svg {
+                width: 16px;
+                fill: #fff;
+                opacity: 0.7;
+            }
+        }
+
+        
+    }
+
     .search-filter {
         font-family: Manrope;
         width: 100%;
@@ -24,6 +46,30 @@ header {
         background: #282D39;
         color: #fff;
         padding-left: 10px;
+        outline: none;
+
+        &::placeholder {
+            padding-left: 30px;
+            color: #fff;
+            opacity: 0.7;
+            transition: .3s ease-in-out;
+        }
+
+        
+
+        &:focus {
+            &::placeholder {
+                padding-left: 0px;
+            }
+        }
+
+        &:not(:placeholder-shown)~.icon {
+            opacity: 0;
+        }
+
+        &:focus~.icon {
+            opacity: 0;
+        }
     }
 
     .wraper-filter {
@@ -126,9 +172,21 @@ main {
                 color: #fff;
                 font-family: 'Nova Square';
                 font-size: 12px;
+
+                .score {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-end;
+                    align-items: center;
+                    gap: 5px;
+                }
             }
 
             &.hide-anime {
+                display: none;
+            }
+
+            &.hide-search{
                 display: none;
             }
 
@@ -189,6 +247,13 @@ span.loading {
         font-family: Manrope;
         margin-top: 20px;
     }
+}
+
+footer {
+    display: flex;
+    margin-top: max(150px, calc(env(safe-area-inset-top) + 61px));
+    margin-left: max(20px, env(safe-area-inset-left));
+    margin-right: max(20px, env(safe-area-inset-right));
 }
 
 .scroll-none {

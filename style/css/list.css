@@ -12,6 +12,21 @@ header {
   padding-top: 20px;
   max-width: 900px;
 }
+header .wraper-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+header .wraper-input .icon {
+  position: absolute;
+  left: 10px;
+  display: flex;
+}
+header .wraper-input .icon svg {
+  width: 16px;
+  fill: #fff;
+  opacity: 0.7;
+}
 header .search-filter {
   font-family: Manrope;
   width: 100%;
@@ -22,6 +37,35 @@ header .search-filter {
   background: #282D39;
   color: #fff;
   padding-left: 10px;
+  outline: none;
+}
+header .search-filter::-moz-placeholder {
+  padding-left: 30px;
+  color: #fff;
+  opacity: 0.7;
+  -moz-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+header .search-filter::placeholder {
+  padding-left: 30px;
+  color: #fff;
+  opacity: 0.7;
+  transition: 0.3s ease-in-out;
+}
+header .search-filter:focus::-moz-placeholder {
+  padding-left: 0px;
+}
+header .search-filter:focus::placeholder {
+  padding-left: 0px;
+}
+header .search-filter:not(:-moz-placeholder-shown) ~ .icon {
+  opacity: 0;
+}
+header .search-filter:not(:placeholder-shown) ~ .icon {
+  opacity: 0;
+}
+header .search-filter:focus ~ .icon {
+  opacity: 0;
 }
 header .wraper-filter {
   display: flex;
@@ -118,7 +162,17 @@ main .content a .card-information {
   font-family: "Nova Square";
   font-size: 12px;
 }
+main .content a .card-information .score {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+}
 main .content a.hide-anime {
+  display: none;
+}
+main .content a.hide-search {
   display: none;
 }
 main .content a:empty {
@@ -171,6 +225,13 @@ span.loading span.status {
   color: #fff;
   font-family: Manrope;
   margin-top: 20px;
+}
+
+footer {
+  display: flex;
+  margin-top: max(150px, env(safe-area-inset-top) + 61px);
+  margin-left: max(20px, env(safe-area-inset-left));
+  margin-right: max(20px, env(safe-area-inset-right));
 }
 
 .scroll-none::-webkit-scrollbar {
