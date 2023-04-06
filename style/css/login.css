@@ -65,8 +65,10 @@ span.loading {
   width: 20px;
 }
 .wrapper .icon-logo {
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  align-items: center;
 }
 .wrapper .icon-logo img {
   height: calc(100% - 40px);
