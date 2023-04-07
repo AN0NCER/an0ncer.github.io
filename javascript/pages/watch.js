@@ -1,6 +1,9 @@
 //ID ресурса из Shikimori
 const $ID = new URLSearchParams(window.location.search).get("id");
 
+//Продолжение просмотра
+let $CONTINUE = new URLSearchParams(window.location.search).get("continue");
+
 //Все возможные статусы пользователя к текущему аниме
 const anime_status = [
   { id: 0, name: "Посмотрю", sh: ["planned"] },
@@ -312,6 +315,36 @@ const player = {
     },
   },
 
+  functional: {
+    methods: [
+      "play", // Запуск плеера
+      "pause", // Пауза
+      "seek", // Перемотка на заданную точку. Время указывается в секундах
+      "volume", // Изменение громкости. Значение громкости может быть от 0 до 1
+      "mute", // Выключение звука
+      "unmute", // Включение звука
+      "change_episode", // Переключение серии
+      "enter_pip", // Вход в режим "Картинка в картинке"
+      "exit_pip", // Выход из режима "Картинка в картинке"
+      "get_time" // Получение текущего времени
+    ],
+
+    /**
+     * Функция для вызова управления плеером
+     * @param {String} method - метод функции
+     * @param {Object} data - данныне для отправки
+     */
+    control: function (method = this.methods[0], data = {}) {
+      if (!player.loaded) {
+        return;
+      }
+
+      let value = Object.assign({ method }, data);
+
+      document.querySelector("#kodik-player").contentWindow.postMessage({ key: "kodik_player_api", value: value }, '*');
+    }
+  },
+
   video_data: {
     duration: 0, //Продолжительность эпизода
     time: 0, //Текущее время просмотра
@@ -473,6 +506,13 @@ const History = {
     localStorage.setItem(this.key, JSON.stringify(history));
   },
 
+  /**
+   * Добавляет в историю последних просмотренных аниме для быстрого доступа
+   * @param {Boolean} cnt - требуется ля продолжение просмотра
+   * @param {Int} duration - текущий таймлайн эпизода
+   * @param {Int} i - прибавка эпихода если необходимо (Для переклбчение следующего эпизода)
+   * @param {Int} e - текущий эпизод
+   */
   add(cnt = false, duration = 0, i = 0, e = player.episodes.selected_episode) {
     if (!this.shikiData) {
       return;
@@ -840,12 +880,28 @@ Main((e) => {
 
   //Подписываемся на обработчик событий пауза плеера
   player.events.onpause((d) => {
-    History.add(false, d.time);
+    History.add(true, d.time)
   });
 
   //Подписываемся на обрботчик событий
   player.events.onplayed((e) => {
     user.events.setEpisode(player.episodes.selected_episode);
+
+    //Делаем проверку на продолжение воспроизведения anime
+    if ($CONTINUE != null && $CONTINUE != false) {
+      //Получаем историю спика продолжение просмотра
+      let history = History.get();
+      //Находим ID елемента из истории
+      let id = history.findIndex((x) => { return x.id == $ID });
+
+      //Если найдено и совпадают текущии эпизоды
+      if (id != -1 && player.episodes.selected_episode == history[id].episode) {
+        //Воспроизводим с остановившегося момента
+        player.functional.control("seek", { seconds: history[id].duration });
+        //Устанавливаем что продолжение было включено
+        $CONTINUE = false;
+      }
+    }
   })
 });
 
@@ -920,15 +976,15 @@ async function LoadAnime(e = () => { }, l = false) {
    */
   async function AsyncLoadImage(src) {
     return new Promise((resolve, reject) => {
-        const img = new Image();
-        //img.crossOrigin = "Anonymous"; // to avoid CORS if used with Canvas
-        img.src = src;
-        img.onload = () => {
-          resolve(src);
-        };
-        img.onerror = (e) => {
-          reject(e);
-        };
+      const img = new Image();
+      //img.crossOrigin = "Anonymous"; // to avoid CORS if used with Canvas
+      img.src = src;
+      img.onload = () => {
+        resolve(src);
+      };
+      img.onerror = (e) => {
+        reject(e);
+      };
     });
   }
 
