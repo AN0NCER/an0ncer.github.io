@@ -64,7 +64,7 @@ const player = {
      * @param {Object} data - данные с kodik
      */
     init: function (data) {
-      if (parametrs.dub_anime) this.key = "save-translations-" + $ID;
+      if ($PARAMETERS.watch.dubanime) this.key = "save-translations-" + $ID;
       this.saved = JSON.parse(localStorage.getItem(this.key));
       this.saved = this.saved ? this.saved : [];
 
@@ -1041,8 +1041,8 @@ async function LoadAnime(e = () => { }, l = false) {
       }
 
       if (
-        parametrs.dub_anime &&
-        parametrs.dub_anime_franchise &&
+        $PARAMETERS.watch.dubanime &&
+        $PARAMETERS.watch.dubanimefrc &&
         res.nodes &&
         res.nodes.length > 0
       ) {

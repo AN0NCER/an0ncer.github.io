@@ -177,7 +177,7 @@ function SearchEvent() {
 //функция запроса поиска
 function searchAPI(val, page = 1) {
     pasuse = true;
-    shikimoriApi.Animes.animes({ search: val, limit: 16, censored: parametrs.censored, page: page }, async (response) => {
+    shikimoriApi.Animes.animes({ search: val, limit: 16, censored: $PARAMETERS.censored, page: page }, async (response) => {
         if (response.failed) {
             await sleep(1000);
             return searchAPI(val, page);

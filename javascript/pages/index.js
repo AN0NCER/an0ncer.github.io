@@ -305,7 +305,7 @@ $('.search > .btn').click((e) => {
 function AutoLogin() {
     //Проверяем если пользователь не авторизирован, и то что у пользователя включена автоматический вход
 
-    if (!usr.authorized && parametrs.auto_login && localStorage.getItem('application_event') != "autologin") {
+    if (!usr.authorized && $PARAMETERS.autologin && localStorage.getItem('application_event') != "autologin") {
         //Нужно будет создать в localStorage ячейку c указанием текущим событием программы
         localStorage.setItem('application_event', "autologin");
 
