@@ -7,7 +7,7 @@ Main((e) => {
     if (e) {
         CountNotification();
         ShowUser();
-    }else{
+    } else {
         AutoLogin();
     }
     //Функция отображение пользователя
@@ -218,11 +218,10 @@ async function GitHubRelease() {
                 if (localStorage.getItem(dialog.key) == "true") {
                     dialog.show(() => {
                         localStorage.setItem(dialog.key, false);
+                        //Сохраняем новые данные с github
+                        localStorage.setItem('github-version', JSON.stringify({ tag: data[0].tag_name, published_at: data[0].published_at }));
                     }, data);
                 }
-
-                //Сохраняем новые данные с github
-                localStorage.setItem('github-version', JSON.stringify({tag: data[0].tag_name, published_at:data[0].published_at}));
             }
         }
     });
@@ -303,15 +302,15 @@ $('.search > .btn').click((e) => {
 /**
  * Автоматическая авторизация
  */
-function AutoLogin(){
+function AutoLogin() {
     //Проверяем если пользователь не авторизирован, и то что у пользователя включена автоматический вход
 
-    if(!usr.authorized && parametrs.auto_login && localStorage.getItem('application_event') != "autologin"){
+    if (!usr.authorized && parametrs.auto_login && localStorage.getItem('application_event') != "autologin") {
         //Нужно будет создать в localStorage ячейку c указанием текущим событием программы
         localStorage.setItem('application_event', "autologin");
 
         //Для тестового режима своя страничка авторизации
-        if(usr.isteste){
+        if (usr.isteste) {
             return window.location.href = "/login.html";
         }
 

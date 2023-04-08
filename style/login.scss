@@ -78,8 +78,11 @@ span.loading {
     }
 
     .icon-logo {
-        display: grid;
-        place-items: center;
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+        align-items: center;
+        
         img{
             height: calc(100% - 40px);
         }
