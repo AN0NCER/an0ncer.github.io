@@ -72,68 +72,39 @@ const $PARAMETERS = {
     }
 })();
 
-// let parametrs = {
-//     censored: true, //Делать цензуру на 18+ hentay
-//     dub_anime: false, //Сохранять переводы для каждого аниме отдельно
-//     dub_anime_franchise: false, //Запаминать переводы по франшизам
-//     auto_login: false, //Автоматический вход в приложение
-//     dub_reverse: false, //При горизонтальном режиме эпизоды с права
-// }
-
-// //Метод загрузки параметров
-// let synchparam = () => {
-//     let ls = JSON.parse(localStorage.getItem(keysParametrs));
-//     if (ls) {
-//         for (key in ls) {
-//             parametrs[key] = ls[key];
-//         }
-//     } else {
-//         localStorage.setItem(keysParametrs, JSON.stringify(parametrs));
-//     }
-// };
-
-// //Метод сохранения параметров
-// let saveparametrs = () => {
-//     localStorage.setItem(keysParametrs, JSON.stringify(parametrs));
-// }
-
-// //Загружаем параметры
-// synchparam();
-
-// let param = {
-//     keys: {
-//         default: 'NAN',
-//         censored: 'censored',
-//         dub_anime: 'dub_anime',
-//         dub_anime_franchise: 'dub_anime_franchise',
-//         auto_login: 'auto_login',
-//         dub_reverse: 'dub_reverse',
-//     },
-//     register: function (i, k) {
-//         return {
-//             boolean: function () {
-//                 i.change(function () {
-//                     parametrs[k] = this.checked;
-//                     saveparametrs();
-//                 });
-//             }
-//         }
-//     }
-// }
-
-// let loadparampage = () => {
-//     for (const key in param.keys) {
-//         if (param.keys[key] != param.keys.default) {
-//             let input = $(`input[data-param="${param.keys[key]}"]`);
-//             if (input.length > 0) {
-//                 let reg = param.register(input, key);
-//                 if (typeof (parametrs[key]) == 'boolean') {
-//                     reg.boolean();
-//                     input.prop("checked", parametrs[key]);
-//                 }
-//             }
-//         }
-//     }
-// };
-
-// loadparampage();
+/**
+ * Функция для установки нового значения ключа в объекте $PARAMETERS.
+ * Рекурсивно проходит по всем ключам объекта obj и проверяет, соответствует ли ключ key текущему ключу.
+ * Если соответствует, то функция проверяет, соответствует ли тип значения объекта типу нового значения value.
+ * Если соответствует, то функция присваивает новое значение value ключу key и возвращает управление.
+ * Если не соответствует, то функция выводит сообщение об ошибке и возвращает управление.
+ * Если функция не находит ключ key в объекте obj, то она выводит сообщение об ошибке.
+ * Если значение текущего ключа не является объектом, то функция также выводит сообщение об ошибке и возвращает управление.
+ * 
+ * @param {string} key - ключ, который нужно изменить.
+ * @param {*} value - новое значение ключа.
+ * @param {object} [obj=$PARAMETERS] - объект, в котором нужно искать ключ.
+ * @returns {undefined} - функция не возвращает ничего.
+ */
+function setParameter(key, value, obj = $PARAMETERS) {
+    if (typeof obj !== 'object') {
+      console.log(`Failed to set ${key} to ${value} - ${obj} is not an object`);
+      return;
+    }
+  
+    const keys = Object.keys(obj);
+  
+    for (const k of keys) {
+      if (k === key) {
+        if (typeof obj[k] === typeof value) {
+          obj[k] = value;
+          localStorage.setItem('parametrs', JSON.stringify($PARAMETERS));
+          return;
+        } else {
+          return;
+        }
+      } else if (typeof obj[k] === 'object') {
+        setParameter(key, value, obj[k]);
+      }
+    }
+  }
