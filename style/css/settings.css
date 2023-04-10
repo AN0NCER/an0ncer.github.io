@@ -117,6 +117,7 @@ header {
   font-weight: bold;
   margin-left: 10px;
   margin-top: 20px;
+  overflow: hidden;
 }
 
 .border-all {
@@ -137,6 +138,7 @@ header {
   color: #fff;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 .parameters-container label {
   background: #282D39;
@@ -216,6 +218,11 @@ header {
 }
 .parameters-container label .radio input:checked + svg {
   display: block;
+}
+
+.notfounded {
+  max-height: 0px;
+  margin-top: 0px;
 }
 
 .btn-logout {

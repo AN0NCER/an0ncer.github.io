@@ -110,6 +110,24 @@ const SelectWraper = {
         setParameter('autologin', false);
         window.location.replace("/login.html");
     });
+
+    //Фильтр по поиску
+    $('.search-filter').on('change keyup paste', function(){
+        if(this.value.length <= 0){
+            //Очищаем фильтр
+            $('[data-search]').removeClass('notfounded');
+            return;
+        }
+        let containers = $('[data-search]');
+        for (let i = 0; i < containers.length; i++) {
+            const element = $(containers[i]);
+            if(element.data('search')?.toUpperCase().indexOf(this.value.toUpperCase()) != -1){
+                element.removeClass('notfounded');
+            }else{
+                element.addClass('notfounded');
+            }
+        }
+    });
 })();
 
 Main((e) => {
