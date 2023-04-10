@@ -100,6 +100,11 @@ function VisualFunctional() {
         }
     });
 
+    //Кнопка настроек
+    $('.btn.mute').click(async () => {
+        window.location.href = "/settings.html";
+    });
+
     //Кнопка возврата на главную страницу
     $('.btn.back').click(async () => {
         window.location.href = "/index.html";
@@ -109,4 +114,7 @@ function VisualFunctional() {
     $('input[type="checkbox"]').change(function(){
         setParameter('autologin', this.checked);
     });
+
+    //Устанавливаем checkbox по параметру
+    $('input[type="checkbox"]').prop('checked', $PARAMETERS.autologin);
 }
