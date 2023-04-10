@@ -1203,7 +1203,6 @@ async function LoadAnime(e = () => { }, l = false) {
    * @param {Object} data - обьект аниме
    */
   function SetDescription(data) {
-    console.log(data);
     if (!data.description) {
       $(".description").append(data.english[0]);
       return;

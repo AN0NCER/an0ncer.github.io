@@ -13,7 +13,7 @@ Main((e) => {
     //Функция отображение пользователя
     async function ShowUser() {
         let data = usr.Storage.Get(usr.Storage.keys.whoami);
-        console.log(data);
+        // console.log(data);
 
         $('.image-profile > img').attr('src', data.avatar);
         $('.name > b').text(data.nickname);
@@ -206,7 +206,7 @@ async function GitHubRelease() {
 
 
             //Если версия гита отличается от версии сохраненной, то показывем диалоговое окно
-            console.log(localStorage.getItem('github-version'));
+            // console.log(localStorage.getItem('github-version'));
 
             let saved_git_verrsion = JSON.parse(localStorage.getItem('github-version'));
             if (saved_git_verrsion == null || saved_git_verrsion.tag != data[0].tag_name) {
@@ -254,7 +254,7 @@ function calculatePercentage(part, whole) {
 function GetUserPosition() {
     fetch('https://api.sypexgeo.net/json/').then(async (response) => {
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
 
         $('.position > span').text(data.country.name_en + ', ' + data.city.name_en);
     });
