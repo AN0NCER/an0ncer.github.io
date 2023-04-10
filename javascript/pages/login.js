@@ -104,4 +104,9 @@ function VisualFunctional() {
     $('.btn.back').click(async () => {
         window.location.href = "/index.html";
     });
+
+    //Checkbox автоматической авторизации
+    $('input[type="checkbox"]').change(function(){
+        setParameter('autologin', this.checked);
+    });
 }

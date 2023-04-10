@@ -748,9 +748,8 @@ function Functional() {
     });
   })();
 
-  if (parametrs.dub_reverse) {
-    $('.landscape-player').addClass('reverse-dub');
-  }
+  //Добавляет из параметров настройку положение плеера в горизонтальном режиме
+  $('.landscape-player').addClass('reverse-' + $PARAMETERS.watch.episrevers);
 
   /**
    * Отображает статус аниме
