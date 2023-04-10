@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="page" content="settings">
+    <title>Tunime - Настройка</title>
+    <link rel="icon" type="image/png" href="/images/icon-web.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="icon-192x192.png" />
+    <link rel="stylesheet" href="/style/css/main.css">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json?1">
+    <script src="/javascript/library/jqery.min.js"></script>
+    <script src="/javascript/engine/event_handler.js"></script>
+    <link rel="stylesheet" href="/style/css/settings.css">
+</head>
+
+<body class="unselectable">
+    <div class="wraper">
+        <header>
+            <a href="login.html" class="profile-link">
+                <div class="profile">
+                    <div class="profile-info">
+                        <img src="/images/ava.jpeg" alt="Profile">
+                        <div class="profile-content">
+                            <span class="profile-name">Авторизироваться</span>
+                            <span>Параметры</span>
+                        </div>
+                    </div>
+                    <div class="profile-icon">
+                        <svg width="8" height="15" viewBox="0 0 8 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M7.72461 8.1621C8.09082 7.79589 8.09082 7.20116 7.72461 6.83495L3.97461 3.08495C3.70508 2.81542 3.30371 2.73632 2.95215 2.8828C2.60059 3.02929 2.37207 3.36913 2.37207 3.74999V11.25C2.37207 11.6279 2.60059 11.9707 2.95215 12.1172C3.30371 12.2637 3.70508 12.1816 3.97461 11.915L7.72461 8.16503V8.1621Z"
+                                fill="white" />
+                        </svg>
+
+                    </div>
+                </div>
+            </a>
+            <div class="wraper-input">
+                <input type="text" placeholder="Поиск" class="search-filter">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path
+                            d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
+                    </svg>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="parameters-title" data-search="Основные, Главные">
+                Основные
+            </div>
+            <div class="parameters-container" data-search="Основные, Главные">
+                <label class="border-top">
+                    <div class="title">Цензура</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="censored">
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+                <label class="border-bottom">
+                    <div class="title">Автовход</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="autologin">
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+                <span class="tips">
+                    После истечения срока действия ключа авторизации пользователя, вход в систему будет происходить
+                    автоматически. Отключается при принудительном выходе из аккаунта.
+                </span>
+            </div>
+            <div class="parameters-title" data-search="Видеоплеер">
+                Видеоплеер
+            </div>
+            <div class="parameters-container" data-search="Видеоплеер">
+                <label class="border-all" data-param="episrevers" data-type="select" data-val="left" data-variation='[{"key":"top", "value":"Сверху"},{"key":"right", "value":"Справа"},{"key":"left", "value":"Слева"}]' data-tooltip="Правило отображения эпизодов при просмотре в горизонтальном режиме.">
+                    <div class="title">Эпизоды</div>
+                    <div class="select">Справа</div>
+                </label>
+                <span class="tips">
+                    Правило отображения эпизодов при просмотре в горизонтальном режиме.
+                </span>
+            </div>
+            <div class="parameters-title" data-search="Дубляжи">
+                Дубляжи
+            </div>
+            <div class="parameters-container" data-search="Дубляжи">
+                <label class="border-top">
+                    <div class="title">Индивидуально</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="dubanime">
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+                <label class="border-bottom disable">
+                    <div class="title">По франшизам</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="dubanimefrc" disabled>
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+                <span class="tips">
+                    Если аниме будут связаны, то перевод переключится на другое аниме, если он там будет доступен.
+                </span>
+            </div>
+        </main>
+        <footer>
+            <div class="btn-logout">
+                Выйти
+            </div>
+        </footer>
+    </div>
+
+    <span class="select-wraper hiden">
+        <div class="select-control">
+            <div class="btn-back"><svg width="14" height="18" viewBox="0 0 14 18" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12.0445 5.29454C12.4839 4.85509 12.4839 4.14142 12.0445 3.70197C11.605 3.26251 10.8914 3.26251 10.4519 3.70197L6.74995 7.40743L3.04448 3.70548C2.60503 3.26603 1.89136 3.26603 1.4519 3.70548C1.01245 4.14493 1.01245 4.85861 1.4519 5.29806L5.15737 9.00001L1.45542 12.7055C1.01597 13.1449 1.01597 13.8586 1.45542 14.2981C1.89487 14.7375 2.60854 14.7375 3.048 14.2981L6.74995 10.5926L10.4554 14.2945C10.8949 14.734 11.6085 14.734 12.048 14.2945C12.4875 13.8551 12.4875 13.1414 12.048 12.702L8.34253 9.00001L12.0445 5.29454Z"
+                        fill="white" />
+                </svg>
+            </div>
+            <div class="title"></div>
+        </div>
+        <div class="wraper">
+            <div class="parameters-container">
+            </div>
+        </div>
+    </span>
+
+    <script src="/javascript/server.js"></script>
+    <script src="/javascript/jmenu.js"></script>
+    <script src="/javascript/shikimori.js"></script>
+    <script src="/javascript/parametrs.js"></script>
+    <script src="/javascript/pages/settings.js"></script>
+</body>

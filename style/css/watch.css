@@ -901,28 +901,7 @@ footer .studio span {
     height: 100vh;
   }
   .landscape-player.landscape {
-    margin-top: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
     display: flex;
-  }
-  .landscape-player.landscape .episodes {
-    margin: 0;
-    margin-right: 20px;
-    min-width: 61px;
-  }
-  .landscape-player.landscape .episodes .value {
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100vh - 20px);
-    overflow-x: hidden;
-    overflow-y: visible;
-  }
-  .landscape-player.landscape .episodes .value .episode {
-    min-width: 55px;
-    max-width: 55px;
-    min-height: 70px;
-    max-height: 70px;
   }
   .landscape-player.landscape .player {
     width: 100%;
@@ -931,12 +910,61 @@ footer .studio span {
   .landscape-player.landscape .player iframe {
     margin: 0;
   }
-  .landscape-player.landscape.reverse-dub {
-    flex-direction: row-reverse;
+  .landscape-player.landscape.reverse-top {
+    flex-direction: column;
   }
-  .landscape-player.landscape.reverse-dub .episodes {
+  .landscape-player.landscape.reverse-top .player iframe {
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .landscape-player.landscape.reverse-right {
+    flex-direction: row-reverse;
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .landscape-player.landscape.reverse-right .episodes {
+    margin: 0;
     margin-right: 0;
     margin-left: 20px;
+    min-width: 61px;
+  }
+  .landscape-player.landscape.reverse-right .episodes .value {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 20px);
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+  .landscape-player.landscape.reverse-right .episodes .value .episode {
+    min-width: 55px;
+    max-width: 55px;
+    min-height: 70px;
+    max-height: 70px;
+  }
+  .landscape-player.landscape.reverse-left {
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .landscape-player.landscape.reverse-left .episodes {
+    margin: 0;
+    margin-right: 20px;
+    min-width: 61px;
+  }
+  .landscape-player.landscape.reverse-left .episodes .value {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 20px);
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+  .landscape-player.landscape.reverse-left .episodes .value .episode {
+    min-width: 55px;
+    max-width: 55px;
+    min-height: 70px;
+    max-height: 70px;
   }
   .block-title.title-player.landscape {
     padding-bottom: 10px;
