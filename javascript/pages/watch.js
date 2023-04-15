@@ -1256,3 +1256,5 @@ async function LoadAnime(e = () => { }, l = false) {
     $("head").append(ogTitle, ogType, ogImage, ogDescription, ogRelease, ogRating);
   }
 }
+
+//
