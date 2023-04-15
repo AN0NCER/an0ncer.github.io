@@ -253,7 +253,7 @@ BtnBack.click(() => {
 
 //Возвращает готовый елемент результат поиска
 function ElementResponse(response) {
-    const url = "https://nyaa.shikimori.one/";
+    const url = "https://nyaa.shikimori.me/";
     return `<div class="response-anime" data-id="${response.id}">
                 <div class="preview">
                     <img src="${url}${response.image.original}" alt="Сага о Винланде 2">
@@ -323,7 +323,7 @@ function ShowHistory() {
                 <div class="content-img">
                     <div class="saved"></div>
                     <div class="title">${data.russian}</div>
-                    <img src="https://nyaa.shikimori.one${data.image.original}" alt="${data.russian}">
+                    <img src="https://nyaa.shikimori.me${data.image.original}" alt="${data.russian}">
                 </div>
                 <div class="content-inf">
                     <div class="inf-year">${new Date(data.aired_on).getFullYear()}</div>
@@ -457,7 +457,7 @@ async function Recomendation(logged) {
                 <div class="content-img">
                     <div class="saved"></div>
                     <div class="title">${data.russian}</div>
-                    <img src="https://nyaa.shikimori.one${data.image.original}" alt="${data.russian}">
+                    <img src="https://nyaa.shikimori.me${data.image.original}" alt="${data.russian}">
                 </div>
                 <div class="content-inf">
                     <div class="inf-year">${new Date(data.aired_on).getFullYear()}</div>

@@ -520,7 +520,7 @@ const History = {
     const history = this.get();
     const { russian, screenshots } = this.shikiData;
     const episode = cnt ? e + i : e + i;
-    const image = `https://nyaa.shikimori.one/${screenshots[0].original}`;
+    const image = `https://nyaa.shikimori.me/${screenshots[0].original}`;
 
     const item = {
       id: $ID,
@@ -1084,7 +1084,7 @@ async function LoadAnime(e = () => { }, l = false) {
         <div class="content-img">
             <div class="saved"></div>
             <div class="title">${data.russian}</div>
-            <img src="https://nyaa.shikimori.one${data.image.original}" alt="${data.russian
+            <img src="https://nyaa.shikimori.me${data.image.original}" alt="${data.russian
         }">
         </div>
         <div class="content-inf">
@@ -1172,7 +1172,7 @@ async function LoadAnime(e = () => { }, l = false) {
       for (let index = 0; index < r.length; index++) {
         const element = r[index];
         $(".galery-slider").append(
-          `<div class="slide"><img src="https://shikimori.one${element.preview}"></div>`
+          `<div class="slide"><img src="https://shikimori.me${element.preview}"></div>`
         );
       }
     });
@@ -1192,7 +1192,7 @@ async function LoadAnime(e = () => { }, l = false) {
         const element = r[i];
         if (element.roles.includes('Main')) {
           $('.hero-anime, .hero-anime-title').css('display', '');
-          $('.hero-anime > .val').append(`<a href="https://shikimori.one${element.character.url}"><img src="https://nyaa.shikimori.one${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div><div class="name-en">${element.character.name}</div></div></a>`);
+          $('.hero-anime > .val').append(`<a href="https://shikimori.me${element.character.url}"><img src="https://nyaa.shikimori.me${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div><div class="name-en">${element.character.name}</div></div></a>`);
         }
       }
     })
@@ -1234,7 +1234,7 @@ async function LoadAnime(e = () => { }, l = false) {
 
     var ogImage = $("<meta/>", {
       "property": "og:image",
-      "content": `https://moe.shikimori.one${data.image.original}`
+      "content": `https://moe.shikimori.me${data.image.original}`
     });
 
     var ogDescription = $("<meta/>", {
