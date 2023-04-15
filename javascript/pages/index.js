@@ -151,7 +151,7 @@ function CreateElementAnime(data) {
         <div class="content-img">
             <div class="saved"></div>
             <div class="title">${data.russian}</div>
-            <img src="https://nyaa.shikimori.one${data.image.original}" alt="${data.russian}">
+            <img src="https://nyaa.shikimori.me${data.image.original}" alt="${data.russian}">
         </div>
         <div class="content-inf">
             <div class="inf-year">${new Date(data.aired_on).getFullYear()}</div>
