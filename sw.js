@@ -1,4 +1,4 @@
-var version = '60';
+var version = '62';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     //Pages
@@ -6,10 +6,14 @@ var appShellFilesToCache = [
     '/index.html',
     '/404.html',
     '/search.html',
+    '/settings.html',
     '/list.html',
+    '/user.html',
+    '/watch.html',
     '/login.html',
     //Styles
     '/style/css/main.css',
+    '/style/css/settings.css',
     '/style/css/login.css',
     '/style/css/index.css',
     '/style/css/search.css',
@@ -34,6 +38,7 @@ var appShellFilesToCache = [
     //Pages
     '/javascript/pages/index.js',
     '/javascript/pages/search.js',
+    '/javascript/pages/settings.js',
     '/javascript/pages/list.js',
     '/javascript/pages/login.js',
     '/javascript/pages/user.js',

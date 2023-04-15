@@ -193,7 +193,7 @@ header {
                   }
                }
 
-               & > .text {
+               &>.text {
                   max-width: 0px;
                   overflow: hidden;
                   transition: 0.3s ease-in-out;
@@ -201,7 +201,7 @@ header {
                   color: #fff;
                }
 
-               &.selected{
+               &.selected {
                   background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
                }
             }
@@ -225,13 +225,13 @@ header {
             max-height: 0px;
             overflow: hidden;
 
-            & > .hide {
+            &>.hide {
                display: none;
                max-height: 0px;
                overflow: hidden;
             }
 
-            & > .status {
+            &>.status {
                &:first-child {
                   border-radius: 3px 3px 0 0;
                }
@@ -260,7 +260,7 @@ header {
                   }
                }
 
-               & > .text {
+               &>.text {
                   overflow: hidden;
                   transition: 0.3s ease-in-out;
                   font-size: 12px;
@@ -284,7 +284,7 @@ header {
             }
 
             .icon {
-               & > .text {
+               &>.text {
                   max-width: 120px;
                   margin-right: 10px;
                }
@@ -547,7 +547,7 @@ Title block
    justify-content: space-between;
    align-items: center;
 
-   & > .btn {
+   &>.btn {
       cursor: pointer;
       width: 30px;
       height: 30px;
@@ -625,14 +625,14 @@ Episodes
    overflow-x: auto;
    border-radius: 3px;
 
-   & > .value {
+   &>.value {
       display: inline-flex;
       background: #15171e;
       border-radius: 3px;
       width: auto;
       position: relative;
 
-      & > .sel {
+      &>.sel {
          position: absolute;
          width: 55px;
          height: 70px;
@@ -642,7 +642,7 @@ Episodes
          z-index: 1;
       }
 
-      & > .episode {
+      &>.episode {
          margin: 3px;
          width: 55px;
          height: 70px;
@@ -657,7 +657,7 @@ Episodes
          flex-direction: column;
          cursor: pointer;
 
-         & > .ep-name {
+         &>.ep-name {
             font-size: 11px;
             margin-top: 5px;
          }
@@ -675,7 +675,8 @@ Heroes
    overflow-x: auto;
 
    .val {
-    display: inline-flex;
+      display: inline-flex;
+
       a {
          height: 90px;
          overflow: hidden;
@@ -685,10 +686,12 @@ Heroes
          font-family: Manrope;
          border-radius: 3px;
          margin-right: 10px;
+
          img {
             height: 100%;
             border-radius: 3px;
          }
+
          .hero {
             width: 100%;
             display: flex;
@@ -696,11 +699,13 @@ Heroes
             justify-content: center;
             margin-left: 20px;
             margin-right: 20px;
+
             .name {
                font-size: 18px;
                font-weight: bold;
                white-space: nowrap;
             }
+
             .name-en {
                font-size: 16px;
                opacity: 0.5;
@@ -712,6 +717,7 @@ Heroes
       a:first-child {
          margin-left: 20px;
       }
+
       a:last-child {
          margin-right: 20px;
       }
@@ -1028,12 +1034,14 @@ footer {
    z-index: 1;
    padding: 20px;
    font-family: "Manrope";
+
    .studio {
       color: #fff;
       text-align: center;
       font-weight: bold;
       font-size: 30px;
       text-transform: uppercase;
+
       span {
          font-size: 15px;
          opacity: 0.5;
@@ -1057,10 +1065,63 @@ footer {
    }
 
    .landscape-player.landscape {
+      display: flex;
+
+      .player {
+         width: 100%;
+         max-height: calc(100vh - 20px);
+
+         iframe {
+            margin: 0;
+         }
+      }
+   }
+
+   .landscape-player.landscape.reverse-top {
+      flex-direction: column;
+
+      .player {
+         iframe {
+            margin-top: 10px;
+            margin-left: 20px;
+            margin-right: 20px;
+         }
+      }
+   }
+
+   .landscape-player.landscape.reverse-right {
+      flex-direction: row-reverse;
       margin-top: 10px;
       margin-left: 20px;
       margin-right: 20px;
-      display: flex;
+
+      .episodes {
+         margin: 0;
+         margin-right: 0;
+         margin-left: 20px;
+         min-width: calc(55px + 6px);
+
+         .value {
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 20px);
+            overflow-x: hidden;
+            overflow-y: visible;
+
+            .episode {
+               min-width: 55px;
+               max-width: 55px;
+               min-height: 70px;
+               max-height: 70px;
+            }
+         }
+      }
+   }
+
+   .landscape-player.landscape.reverse-left {
+      margin-top: 10px;
+      margin-left: 20px;
+      margin-right: 20px;
 
       .episodes {
          margin: 0;
@@ -1082,23 +1143,6 @@ footer {
             }
          }
       }
-
-      .player {
-         width: 100%;
-         max-height: calc(100vh - 20px);
-
-         iframe {
-            margin: 0;
-         }
-      }
-   }
-
-   .landscape-player.landscape.reverse-dub{
-      flex-direction: row-reverse;
-      .episodes{
-         margin-right: 0;
-         margin-left: 20px;
-      }
    }
 
    .block-title.title-player.landscape {
@@ -1108,7 +1152,7 @@ footer {
          font-size: 20px;
       }
 
-      & > .btn {
+      &>.btn {
          display: grid;
       }
    }

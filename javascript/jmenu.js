@@ -28,6 +28,7 @@ const application_indexed_page = {
     index: 'index.html',
     list: 'list.html',
     search: 'search.html',
+    settings: 'settings.html',
     user: 'user.html'
 };
 //Функции интерактивного меню
@@ -42,7 +43,7 @@ const application_menu_interactive_func = {
     },
 
     settings: function(){
-        window.location = application_indexed_page.user;
+        window.location = application_indexed_page.settings;
     }
 };
 

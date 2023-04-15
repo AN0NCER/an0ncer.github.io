@@ -29,65 +29,43 @@ $(document).ready(() => {
     $(".main--settings").addClass("hide");
   });
   $("#menu--settings").click(() => {
-    $("#menu--statistick").removeClass("menu--btn--select");
-    $("#menu--settings").addClass("menu--btn--select");
-
-    $(".main--status").addClass("hide");
-    $(".main--settings").removeClass("hide");
+    window.location.href = "settings.html";
   });
 
-  $(".main--settings--logout--btn").click(() => {
-    LogOut();
-  });
-  $(".main--settings--clear-cache--btn").click(() => {
-    ClearCache();
-  });
-  $(".main--settings--synch--btn").click(() => {
-    if (
-      confirm(
-        "Синхронизировать с сервера? \r\n ДА - C сервера в приложение \r\n Отменить - С телефона на сервер"
-      )
-    ) {
-      let data = synch.get();
-      if (data) {
-        console.log(data);
-        for (let key in data) {
-          console.log(key);
-          localStorage.setItem(key, data[key]);
-        }
-        alert('Готово');
-      }
-    } else {
-      let data = {};
+  // $(".main--settings--synch--btn").click(() => {
+  //   if (
+  //     confirm(
+  //       "Синхронизировать с сервера? \r\n ДА - C сервера в приложение \r\n Отменить - С телефона на сервер"
+  //     )
+  //   ) {
+  //     let data = synch.get();
+  //     if (data) {
+  //       console.log(data);
+  //       for (let key in data) {
+  //         console.log(key);
+  //         localStorage.setItem(key, data[key]);
+  //       }
+  //       alert('Готово');
+  //     }
+  //   } else {
+  //     let data = {};
 
-      for (var i = 0, len = localStorage.length; i < len; ++i) {
-        //console.log(localStorage.key(i));
-        if (
-          localStorage.key(i) == "access_token" ||
-          localStorage.key(i) == "access_whoami" ||
-          localStorage.key(i) == "bearer"
-        ) {
-          continue;
-        }
-        data[localStorage.key(i)] = localStorage.getItem(localStorage.key(i));
-        //console.log(localStorage.getItem(localStorage.key(i)));
-      }
-      synch.set(data);
-    }
-  });
+  //     for (var i = 0, len = localStorage.length; i < len; ++i) {
+  //       //console.log(localStorage.key(i));
+  //       if (
+  //         localStorage.key(i) == "access_token" ||
+  //         localStorage.key(i) == "access_whoami" ||
+  //         localStorage.key(i) == "bearer"
+  //       ) {
+  //         continue;
+  //       }
+  //       data[localStorage.key(i)] = localStorage.getItem(localStorage.key(i));
+  //       //console.log(localStorage.getItem(localStorage.key(i)));
+  //     }
+  //     synch.set(data);
+  //   }
+  // });
 });
-
-function LogOut() {
-  usr.Storage.Clear();
-  if(parametrs.auto_login){
-    $('input[data-param="auto_login"]').click();
-  }
-  window.location.replace("/login.html");
-}
-
-function ClearCache() {
-  window.location.reload(true);
-}
 
 function Stats(id) {
   shikimoriApi.Users.id(id, {}, async (response) => {
@@ -184,19 +162,6 @@ function DaysText(d) {
     if (cc == "2" || cc == "3" || cc == "4") return `${d} дня назад`;
     return `${d} дней назад`;
   }
-}
-
-//Settings
-$('input[data-param="dub_anime"]').click(function () {
-  if ($(this).is(":checked")) {
-    $("#franchise-settings").removeClass("disable");
-  } else {
-    $("#franchise-settings").addClass("disable");
-  }
-});
-
-if (parametrs.dub_anime) {
-  $("#franchise-settings").removeClass("disable");
 }
 
 //https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep/39914235#39914235

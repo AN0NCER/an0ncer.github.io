@@ -64,7 +64,7 @@ const player = {
      * @param {Object} data - данные с kodik
      */
     init: function (data) {
-      if (parametrs.dub_anime) this.key = "save-translations-" + $ID;
+      if ($PARAMETERS.watch.dubanime) this.key = "save-translations-" + $ID;
       this.saved = JSON.parse(localStorage.getItem(this.key));
       this.saved = this.saved ? this.saved : [];
 
@@ -748,9 +748,8 @@ function Functional() {
     });
   })();
 
-  if (parametrs.dub_reverse) {
-    $('.landscape-player').addClass('reverse-dub');
-  }
+  //Добавляет из параметров настройку положение плеера в горизонтальном режиме
+  $('.landscape-player').addClass('reverse-' + $PARAMETERS.watch.episrevers);
 
   /**
    * Отображает статус аниме
@@ -1041,8 +1040,8 @@ async function LoadAnime(e = () => { }, l = false) {
       }
 
       if (
-        parametrs.dub_anime &&
-        parametrs.dub_anime_franchise &&
+        $PARAMETERS.watch.dubanime &&
+        $PARAMETERS.watch.dubanimefrc &&
         res.nodes &&
         res.nodes.length > 0
       ) {
@@ -1204,7 +1203,6 @@ async function LoadAnime(e = () => { }, l = false) {
    * @param {Object} data - обьект аниме
    */
   function SetDescription(data) {
-    console.log(data);
     if (!data.description) {
       $(".description").append(data.english[0]);
       return;
