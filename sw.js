@@ -1,3 +1,4 @@
+//http://192.168.31.233:5500
 var version = '62';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
