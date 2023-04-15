@@ -215,7 +215,7 @@ const shikimoriUser = {
   },
 
   Oauth: {
-    base_url: "https://shikimori.one/oauth/token",
+    base_url: "https://shikimori.me/oauth/token",
     client_id: "EKv75uNamao_d3uzFREIfo71l6cpyG2IEUIpBxFgcAM",
     client_secret: "WKDClcJlc3grYpBWDbxqQyAFEW0SquPgrvTdXeAfhds",
     redirect_url: "https://an0ncer.github.io/user.html",
@@ -225,7 +225,7 @@ const shikimoriUser = {
 
     getUrl: function () {
       return (
-        "https://shikimori.one/oauth/authorize?client_id=" +
+        "https://shikimori.me/oauth/authorize?client_id=" +
         this.client_id +
         "&redirect_uri=" +
         encodeURIComponent(this.redirect_url) +
@@ -276,7 +276,7 @@ const shikimoriUser = {
 };
 const shikimoriApi = {
   Animes: {
-    url: "https://shikimori.one/api/animes",
+    url: "https://shikimori.me/api/animes",
     animes: async function (query = {}, event = () => {}) {
       let q = "";
       if (Object.keys(query).length > 0) {
@@ -332,7 +332,7 @@ const shikimoriApi = {
     },
   },
   Users: {
-    url: "https://shikimori.one/api/users",
+    url: "https://shikimori.me/api/users",
     users: async function (query = {}, event = () => {}) {
       let q = "";
       if (Object.keys(query).length > 0) {
@@ -464,7 +464,7 @@ const shikimoriApi = {
     },
   },
   User_rates: {
-    url: "https://shikimori.one/api/v2/user_rates",
+    url: "https://shikimori.me/api/v2/user_rates",
     id: function (id, event = () => {}) {
       let url = this.url + "/" + id;
       let request = shikimoriFetch(
@@ -532,7 +532,7 @@ const shikimoriApi = {
     },
   },
   Genres: {
-    url: "https://shikimori.one/api/genres",
+    url: "https://shikimori.me/api/genres",
     genres: async function (event = () => {}) {
       let url = this.url;
       let request = shikimoriFetch(
@@ -546,7 +546,7 @@ const shikimoriApi = {
     },
   },
   Styles: {
-    url: "https://shikimori.one/api/styles",
+    url: "https://shikimori.me/api/styles",
     id: function (id, event = () => {}) {
       let url = this.url + "/" + id;
       let request = shikimoriFetch(
@@ -638,11 +638,11 @@ let usr = {
       response_type: "code",
       scope: "user_rates+messages+comments+topics+clubs+friends+ignores",
     },
-    base_url: "https://shikimori.one/oauth/token",
+    base_url: "https://shikimori.me/oauth/token",
 
     GetUrl: function () {
       return (
-        "https://shikimori.one/oauth/authorize?client_id=" +
+        "https://shikimori.me/oauth/authorize?client_id=" +
         this.auth_url.client_id +
         "&redirect_uri=" +
         encodeURIComponent(this.auth_url.redirect_uri) +
@@ -729,7 +729,7 @@ let usr = {
   },
 };
 
-if (location.hostname == "192.168.31.233") {
+if (location.hostname == "192.168.31.233" || location.hostname == "127.0.0.1") {
   usr.test_on();
 }
 
