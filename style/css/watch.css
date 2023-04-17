@@ -285,6 +285,7 @@ header .bg-paralax-img .btn-wrapper .btn {
   display: grid;
   place-items: center;
   z-index: 14;
+  cursor: pointer;
 }
 header .bg-paralax-img .btn-wrapper .btn:empty {
   background: red;
@@ -892,6 +893,165 @@ footer .studio span {
   opacity: 0.5;
 }
 
+.windowed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 300;
+  color: #FFF;
+  font-family: "Manrope";
+  display: block;
+  transition: 0.3s ease-in-out;
+}
+.windowed .hide-window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 1;
+  transition: 0.3s ease-in-out;
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+}
+.windowed .window-content {
+  background: #101318;
+  border-radius: 5px 5px 0px 0px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  right: 0;
+  flex-direction: column;
+  max-height: 100vh;
+  overflow-y: auto;
+  transition: 0.3s ease-in-out;
+  transform: translateY(100%);
+}
+.windowed .window-content .content-wraper {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.windowed .window-content .content-wraper .block-close {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.windowed .window-content .content-wraper .range-score {
+  display: flex;
+  width: 100%;
+}
+.windowed .window-content .content-wraper .range-score .range {
+  width: 100%;
+}
+.windowed .window-content .content-wraper .range-score .range label {
+  position: relative;
+}
+.windowed .window-content .content-wraper .range-score .range label input[type=range] {
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+       appearance: none;
+  background: #2487F1;
+  height: 5px;
+  border-radius: 5px;
+}
+.windowed .window-content .content-wraper .range-score .range label .datalist {
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  left: 8px;
+  right: 0px;
+}
+.windowed .window-content .content-wraper .range-score .range label .datalist div:first-child {
+  transform: translateX(-1px);
+}
+.windowed .window-content .content-wraper .range-score .range label .datalist div:last-child {
+  transform: translateX(-3px);
+}
+.windowed .window-content .content-wraper .range-score .rm-score {
+  height: 40px;
+  width: 20px;
+  display: grid;
+  place-items: center;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.windowed .window-content .content-wraper .range-score .rm-score svg {
+  fill: #fff;
+}
+.windowed .window-content .content-wraper .range-score .rm-score.disabled svg {
+  opacity: 0.2;
+  cursor: auto;
+}
+.windowed .window-content .content-wraper .content-title {
+  font-weight: bold;
+  font-size: 16px;
+}
+.windowed .window-content .content-wraper .comment-wrap {
+  display: flex;
+}
+.windowed .window-content .content-wraper .comment-wrap .avatar img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+.windowed .window-content .content-wraper .comment-wrap label {
+  width: 100%;
+  margin-left: 10px;
+  position: relative;
+}
+.windowed .window-content .content-wraper .comment-wrap label svg {
+  position: absolute;
+  left: -7px;
+  top: 19px;
+}
+.windowed .window-content .content-wraper .comment-wrap label textarea {
+  resize: none;
+  min-height: 75px;
+  width: 100%;
+  background: #282D39;
+  border-radius: 7px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 13px;
+  color: #fff;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: "Manrope";
+}
+.windowed .window-content .content-wraper .btn-commit {
+  height: 40px;
+  background: linear-gradient(90.75deg, #51B3FF 0%, #3283E4 100%);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.windowed .window-content.hide {
+  display: none;
+}
+.windowed.hide {
+  display: none;
+}
+.windowed.hide .hide-window {
+  opacity: 0;
+}
+
 .rm--mg--t {
   margin-top: 0;
 }
@@ -1005,5 +1165,10 @@ footer .studio span {
   header .bg-paralax-img img {
     width: auto;
     position: relative;
+  }
+  .windowed .window-content .content-wraper {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
   }
 }

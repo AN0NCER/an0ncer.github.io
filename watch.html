@@ -422,23 +422,23 @@
          </div>
       </main>
 
-      <span class="score-window" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 300; color: #FFF;font-family: Manrope;">
-         <span class="hide-windo" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.2); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); cursor: pointer;"></span>
-         <span class="window-content" style="background: #101318;border-radius: 5px 5px 0px 0px;position: fixed;bottom: 0;left: 0;display: flex;right: 0;flex-direction: column; max-height: 100vh; overflow-y: auto;">
-            <span class="content-wraper" style="padding: 20px; display: flex;flex-direction: column;gap: 10px;">
-               <span class="block-close" style="display: flex; justify-content: space-between; width: 100%;">
+      <span class="windowed hide">
+         <span class="hide-window"></span>
+         <span class="window-content content-score hide">
+            <span class="content-wraper">
+               <span class="block-close">
                   <span class="title" style="font-size: 16px;">Оценить</span>
                   <span class="btn close" style="width: 22px; height: 22px; display: grid; place-items: center;cursor: pointer;"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                      <path d="M9.70404 1.70779C10.0945 1.31735 10.0945 0.683273 9.70404 0.292831C9.3136 -0.0976105 8.67952 -0.0976105 8.28908 0.292831L5 3.58504L1.70779 0.295955C1.31735 -0.094487 0.683273 -0.094487 0.292831 0.295955C-0.0976105 0.686397 -0.0976105 1.32047 0.292831 1.71092L3.58504 5L0.295955 8.29221C-0.0944869 8.68265 -0.0944869 9.31673 0.295955 9.70717C0.686397 10.0976 1.32047 10.0976 1.71092 9.70717L5 6.41496L8.29221 9.70404C8.68265 10.0945 9.31673 10.0945 9.70717 9.70404C10.0976 9.3136 10.0976 8.67952 9.70717 8.28908L6.41496 5L9.70404 1.70779Z" fill="white"/>
                      </svg>
                      </span>
                </span>
-               <span class="range-score" style="display: flex; width: 100%;">
-                  <span class="range" style="width: 100%;">
-                     <label style="position: relative;">
-                        <input type="range" id="temp" name="temp" list="markers" min="1" max="10" style="width: 100%; -webkit-appearance: none; appearance: none; background: #2487F1; height: 5px; border-radius: 5px;" />
-                        <span class="datalist" style="font-size: 12px; display: flex; justify-content: space-between; position: absolute; left: 8px; right: 0px;">
-                           <div style="transform: translateX(-1px);">1</div>
+               <span class="range-score">
+                  <span class="range">
+                     <label>
+                        <input type="range" id="temp" name="temp" list="markers" min="1" max="10" />
+                        <span class="datalist">
+                           <div>1</div>
                            <div>2</div>
                            <div>3</div>
                            <div>4</div>
@@ -447,32 +447,32 @@
                            <div>7</div>
                            <div>8</div>
                            <div>9</div>
-                           <div style="transform: translateX(-3px);">10</div>
+                           <div>10</div>
                         </span>
                      </label>
                   </span>
-                  <span class="rm-score" style="height: 40px;width: 20px;display: grid;place-items: center;margin-left: 10px; cursor: pointer;"><svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                     <path d="M4.82857 0.989076L4.57143 1.49979H1.14286C0.510714 1.49979 0 2.01051 0 2.64265C0 3.27479 0.510714 3.78551 1.14286 3.78551H14.8571C15.4893 3.78551 16 3.27479 16 2.64265C16 2.01051 15.4893 1.49979 14.8571 1.49979H11.4286L11.1714 0.989076C10.9786 0.599791 10.5821 0.356934 10.15 0.356934H5.85C5.41786 0.356934 5.02143 0.599791 4.82857 0.989076ZM14.8571 4.92836H1.14286L1.9 17.0355C1.95714 17.9391 2.70714 18.6426 3.61071 18.6426H12.3893C13.2929 18.6426 14.0429 17.9391 14.1 17.0355L14.8571 4.92836Z" fill="white"/>
+                  <span class="rm-score disabled"><svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path d="M4.82857 0.989076L4.57143 1.49979H1.14286C0.510714 1.49979 0 2.01051 0 2.64265C0 3.27479 0.510714 3.78551 1.14286 3.78551H14.8571C15.4893 3.78551 16 3.27479 16 2.64265C16 2.01051 15.4893 1.49979 14.8571 1.49979H11.4286L11.1714 0.989076C10.9786 0.599791 10.5821 0.356934 10.15 0.356934H5.85C5.41786 0.356934 5.02143 0.599791 4.82857 0.989076ZM14.8571 4.92836H1.14286L1.9 17.0355C1.95714 17.9391 2.70714 18.6426 3.61071 18.6426H12.3893C13.2929 18.6426 14.0429 17.9391 14.1 17.0355L14.8571 4.92836Z" />
                      </svg>
                      </span>
                </span>
-               <span class="comment-title" style="font-weight: bold;font-size: 16px;">
+               <span class="content-title">
                   Оставить комментарий
                </span>
-               <span class="comment-wrap" style="display: flex;">
-                  <span class="avatar"><img src="/images/ava.jpeg" style="width: 45px;height: 45px;border-radius: 50%;" ></span>
-                  <label style="width: 100%; margin-left: 10px;position: relative;">
-                     <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="position: absolute; left: -7px; top: 19px;">
+               <span class="comment-wrap">
+                  <span class="avatar"><img src="/images/ava.jpeg"></span>
+                  <label>
+                     <svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1.5 8.09807C-0.500004 6.94337 -0.5 4.05662 1.5 2.90192L5.25 0.736858C7.25 -0.417842 9.75 1.02554 9.75 3.33494L9.75 7.66507C9.75 9.97447 7.25 11.4178 5.25 10.2631L1.5 8.09807Z" fill="#282D39"/>
                         </svg>
                         <script>function auto_grow(element) {
                            element.style.height = "5px";
                            element.style.height = (element.scrollHeight)+"px";
                          }</script>                        
-                     <textarea oninput="auto_grow(this)" placeholder="Оставьте свое впечатление об просмотренном или заброшенным аниме, поделитесь со своим мнением !" style="resize: none; min-height: 75px; width: 100%; background: #282D39; border-radius: 7px; outline: none; border: none; padding: 10px; box-sizing: border-box; font-size: 13px; color: #fff; color: rgba(255, 255, 255, 0.6);font-family: 'Manrope';"></textarea>
+                     <textarea oninput="auto_grow(this)" placeholder="Оставьте свое впечатление об просмотренном или заброшенным аниме, поделитесь со своим мнением !"></textarea>
                   </label>
                </span>
-               <span class="btn-commit-comment" style="height: 40px; background: linear-gradient(90.75deg, #51B3FF 0%, #3283E4 100%); border-radius: 4px; display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 0px; gap: 10px; font-weight: 700; font-size: 13px; cursor: pointer;">
+               <span class="btn-commit">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                      <path d="M15.5655 0.175119C15.8811 0.393869 16.0467 0.771994 15.9873 1.15012L13.9873 14.1501C13.9405 14.4532 13.7561 14.7189 13.4873 14.8689C13.2186 15.0189 12.8967 15.0376 12.6123 14.9189L8.87484 13.3657L6.73421 15.6814C6.45609 15.9845 6.01859 16.0845 5.63421 15.9345C5.24984 15.7845 4.99984 15.4126 4.99984 15.0001V12.3876C4.99984 12.2626 5.04671 12.1439 5.13109 12.0532L10.3686 6.33762C10.5498 6.14074 10.5436 5.83762 10.3561 5.65012C10.1686 5.46262 9.86546 5.45012 9.66859 5.62824L3.31234 11.2751L0.552962 9.89387C0.221712 9.72824 0.0092122 9.39699 -0.000162795 9.02824C-0.0095378 8.65949 0.184212 8.31574 0.502962 8.13137L14.503 0.131369C14.8373 -0.0592555 15.2498 -0.0405055 15.5655 0.175119Z" fill="white"/>
                      </svg>
