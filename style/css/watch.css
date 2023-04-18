@@ -1025,8 +1025,13 @@ footer .studio span {
   box-sizing: border-box;
   font-size: 13px;
   color: #fff;
-  color: rgba(255, 255, 255, 0.6);
   font-family: "Manrope";
+}
+.windowed .window-content .content-wraper .comment-wrap label textarea::-moz-placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+.windowed .window-content .content-wraper .comment-wrap label textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
 }
 .windowed .window-content .content-wraper .btn-commit {
   height: 40px;
