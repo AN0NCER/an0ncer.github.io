@@ -745,18 +745,35 @@ const WindowScore = {
   init: function () {
     let whoami = usr.Storage.Get(usr.Storage.keys.whoami);
 
+    //Кнопка закрытия окна
     $('.block-close>.btn.close').click(() => {
       this.hide();
       WindowManagment.hide();
     });
 
+    //Проверяем на наличие у пользователя user_rate
     if (user.rate) {
+      //Проверяем оценку пользователя
       if (user.rate.score != 0) {
+        //Если есть оценка, то устанавливаем значение в input и включаем кнопку очистки значения
         $('.range > label > input').val(user.rate.score);
         $('.range-score > .rm-score').removeClass('disabled');
+        //Изменяем title на оценено
+        $('.content-score > .content-wraper > .block-close > .title').text("Оценено");
+      }
+
+      //Проверяем комментарий пользователя
+      console.log(user.rate);
+      if(user.rate.text){
+        //Устанавливаем значения комментария в input
+        $('.comment-wrap > label > textarea').val(user.rate.text);
+        auto_grow(document.querySelector('.comment-wrap > label > textarea'));
+        //Изменяем кнопку на удалить
+
       }
     }
 
+    //Устанавливаем для комментариев аватарку пользоватея
     $('.comment-wrap > .avatar > img').attr('src', whoami.image['x160']);
 
     //Отслеживаем изменения оценки пользователем
@@ -766,7 +783,30 @@ const WindowScore = {
         return;
       }
       user.events.setScore(val);
+      $('.range-score > .rm-score').removeClass('disabled');
+      //Изменяем title на оценено
+      $('.content-score > .content-wraper > .block-close > .title').text("Оценено");
+    });
+
+    //Отслеживаем изменение нажатие на кнопку очистить оценку
+    $('.range-score > .rm-score').click(function(){
+      if($(this).hasClass('disabled')){
+        return;
+      }
+
+      user.events.setScore(0);
+      $('.range-score > .rm-score').addClass('disabled');
+      //Изменяем title на оценено
+      $('.content-score > .content-wraper > .block-close > .title').text("Оценить");
     })
+
+    $('.content-score > .content-wraper > .btn-commit').click(function(){
+      const val = $('.comment-wrap > label > textarea').val();
+      if(!val && val.length >= 0){
+        return;
+      }
+      user.events.setComment(val);
+    });
   },
 
   /**
