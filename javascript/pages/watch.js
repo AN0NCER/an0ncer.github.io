@@ -731,6 +731,12 @@ const user = {
 
     //Изменяем ид выбраного статуса
     $('.cur-status').data('id', id);
+    
+    //Если у статуса есть оценка то перекращиваем кнопку оценено
+    if(this.rate.score > 0){
+      console.log('here');
+      $('.lb > .btn').addClass('fill');
+    }
   },
 
   unselect: function () {

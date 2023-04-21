@@ -294,6 +294,16 @@ header .bg-paralax-img .btn-wrapper .btn svg {
   fill: #fff;
   width: 20px;
 }
+header .bg-paralax-img .btn-wrapper .btn .fill {
+  display: none;
+}
+header .bg-paralax-img .btn-wrapper .btn.fill svg {
+  display: none;
+}
+header .bg-paralax-img .btn-wrapper .btn.fill .fill {
+  display: block;
+  fill: #287bf1;
+}
 header .bg-paralax-img .rotate {
   transform: rotateY(180deg);
 }

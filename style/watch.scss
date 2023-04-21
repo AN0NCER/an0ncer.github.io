@@ -349,6 +349,20 @@ header {
                fill: #fff;
                width: 20px;
             }
+
+            .fill {
+               display: none;
+            }
+
+            &.fill{
+               svg{
+                  display: none;
+               }
+               .fill{
+                  display: block;
+                  fill: #287bf1;
+               }
+            }
          }
       }
 
