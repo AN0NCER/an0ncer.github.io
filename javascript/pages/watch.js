@@ -734,8 +734,8 @@ const user = {
     
     //Если у статуса есть оценка то перекращиваем кнопку оценено
     if(this.rate.score > 0){
-      console.log('here');
       $('.lb > .btn').addClass('fill');
+      $('.user-rate-score').text(`${this.rate.score}/10`);
     }
   },
 
