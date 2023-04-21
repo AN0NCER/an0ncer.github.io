@@ -520,7 +520,7 @@ const History = {
     const history = this.get();
     const { russian, screenshots } = this.shikiData;
     const episode = cnt ? e + i : e + i;
-    const image = `https://nyaa.shikimori.me/${screenshots[0].original}`;
+    const image = `${screenshots[0].original}`;
 
     const item = {
       id: $ID,
