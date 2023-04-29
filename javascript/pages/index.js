@@ -4,6 +4,7 @@ let genres = '';
 //Авторизация пользователя true / false
 //Метод Main вызывается файлом shikimori.js
 Main((e) => {
+    WindowManagment.init(e);
     if (e) {
         CountNotification();
         ShowUser();
@@ -131,7 +132,7 @@ function CreateElementHistory(data) {
     const prcnt = data.fullduration ? calculatePercentage(data.duration, data.fullduration) : calculatePercentage(data.duration, data.duration);
     const time = Math.floor(data.duration / 60) + ':' + (data.duration % 60).toString().padEnd(2, '0');
     const link = `watch.html?id=${data.id}&player=true&continue=${data.continue}`;
-    const image = data.image.includes("https://nyaa.shikimori.me/")?data.image.replace('https://nyaa.shikimori.me/', ''):data.image.replace('https://nyaa.shikimori.one/', '')?data.image.replace('https://nyaa.shikimori.one/', ''):data.image;
+    const image = data.image.includes("https://nyaa.shikimori.me/") ? data.image.replace('https://nyaa.shikimori.me/', '') : data.image.replace('https://nyaa.shikimori.one/', '') ? data.image.replace('https://nyaa.shikimori.one/', '') : data.image;
     return `<div class="swiper-slide"><div class="frame-info"><div class="frame-status">
             <div class="status">Эпизод: <b>${data.episode}</b> [${time}]</div>
             <div class="name">${data.name}</div>
@@ -205,23 +206,19 @@ async function GitHubRelease() {
             $('.github > .version > span').text(data[0].tag_name);
             $('.github > .date').text(`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`);
 
-
             //Если версия гита отличается от версии сохраненной, то показывем диалоговое окно
             // console.log(localStorage.getItem('github-version'));
 
             let saved_git_verrsion = JSON.parse(localStorage.getItem('github-version'));
             if (saved_git_verrsion == null || saved_git_verrsion.tag != data[0].tag_name) {
                 //Если у пользователя нет ключа оюновления то он первый раз
-                if (localStorage.getItem(dialog.key) == null) {
-                    localStorage.setItem(dialog.key, true);
+                if (localStorage.getItem(UpdateWindow.key) == null) {
+                    localStorage.setItem(UpdateWindow.key, true);
                 }
                 //Елси было обновление то показываем диалоговое окно
-                if (localStorage.getItem(dialog.key) == "true") {
-                    dialog.show(() => {
-                        localStorage.setItem(dialog.key, false);
-                        //Сохраняем новые данные с github
-                        localStorage.setItem('github-version', JSON.stringify({ tag: data[0].tag_name, published_at: data[0].published_at }));
-                    }, data);
+                if (localStorage.getItem(UpdateWindow.key) == "true") {
+                    UpdateWindow.data = data;
+                    WindowManagment.click(UpdateWindow);
                 }
             }
         }
