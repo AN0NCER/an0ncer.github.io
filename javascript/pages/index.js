@@ -221,6 +221,15 @@ async function GitHubRelease() {
                     WindowManagment.click(UpdateWindow);
                 }
             }
+        }else{
+            //Если ответа от Githuba не будет то изменяем на сохранненый тег
+            let saved_git_verrsion = JSON.parse(localStorage.getItem('github-version'));
+            if (saved_git_verrsion == null){
+                return;
+            }
+            let date = new Date(saved_git_verrsion.published_at);
+            $('.github > .version > span').text(saved_git_verrsion.tag);
+            $('.github > .date').text(`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`);
         }
     });
 }
