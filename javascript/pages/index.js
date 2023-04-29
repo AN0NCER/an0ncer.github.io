@@ -306,6 +306,17 @@ $('.search > .btn').click((e) => {
     window.location.href = '/search.html?val=' + value;
 });
 
+//Событие Enter unput search
+$('.search > input').on('keypress',function(e) {
+    if(e.which == 13) {
+        let value = this.value;
+        if(value.length <= 0){
+            return;
+        }
+        window.location.href = '/search.html?val=' + value;
+    }
+});
+
 /**
  * Автоматическая авторизация
  */
