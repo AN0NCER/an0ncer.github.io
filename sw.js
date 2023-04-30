@@ -1,4 +1,4 @@
-var version = '65';
+var version = '66';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     //Pages
@@ -35,6 +35,7 @@ var appShellFilesToCache = [
     //Engine
     '/javascript/engine/orientation.js',
     '/javascript/engine/event_handler.js',
+    '/javascript/engine/window_managment.js',
     //Pages
     '/javascript/pages/index.js',
     '/javascript/pages/search.js',
