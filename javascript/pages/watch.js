@@ -520,7 +520,7 @@ const History = {
     const history = this.get();
     const { russian, screenshots } = this.shikiData;
     const episode = cnt ? e + i : e + i;
-    const image = `https://nyaa.shikimori.me/${screenshots[0].original}`;
+    const image = `${screenshots[0].original}`;
 
     const item = {
       id: $ID,
@@ -593,7 +593,7 @@ const user = {
           shikimoriApi.User_rates.id(user.rate.id, async (res) => {
             if (res.failed && res.status == 429) {
               await sleep(1000);
-              return this.setEpisode(e);
+              return this.setEpisode(e, s);
             }
 
             user.rate = res;
@@ -602,6 +602,51 @@ const user = {
           }).PATCH({ "user_rate": { "episodes": e, "status": s } });
         }
       }
+    },
+
+    /**
+     * Устанавливает оценку аниме в user_rate
+     * @param {Integer} s - значение оценки
+     * @returns Ничего не возвращает
+     */
+    setScore: function (s) {
+      if (!user.logged && !user.rate) {
+        return;
+      }
+
+      shikimoriApi.User_rates.id(user.rate.id, async (res) => {
+        if (res.failed && res.status == 429) {
+          await sleep(1000);
+          return this.setScore(s);
+        }
+
+        user.rate = res;
+        user.status();
+        user.setStatus();
+      }).PATCH({ "user_rate": { "score": s } });
+    },
+
+    /**
+     * Устанавливает значение text (коментарий) anime в user_rate
+     * @param {String} s - коментарий к аниме
+     * @returns Ничего не возвращает
+     */
+    setComment: function (s) {
+      if (!user.logged && !user.rate) {
+        return;
+      }
+
+      shikimoriApi.User_rates.id(user.rate.id, async (res) => {
+        if (res.failed && res.status == 429) {
+          await sleep(1000);
+          return this.setComment(s);
+        }
+
+        user.rate = res;
+        user.status();
+        user.setStatus();
+      }).PATCH({ "user_rate": { "text": s } });
+
     },
 
     /**
@@ -686,10 +731,179 @@ const user = {
 
     //Изменяем ид выбраного статуса
     $('.cur-status').data('id', id);
+    
+    //Если у статуса есть оценка то перекращиваем кнопку оценено
+    if(this.rate.score > 0){
+      $('.lb > .btn').addClass('fill');
+      $('.user-rate-score').text(`${this.rate.score}/10`);
+    }
   },
 
   unselect: function () {
     $('.cur-status > .icon').removeClass('selected');
+  }
+}
+
+const WindowScore = {
+  /**
+  * Инициализация функции окна, запускается если прошел верификацию (this.verif)
+  */
+  init: function () {
+    let whoami = usr.Storage.Get(usr.Storage.keys.whoami);
+
+    //Кнопка закрытия окна
+    $('.block-close>.btn.close').click(() => {
+      this.hide();
+      WindowManagment.hide();
+    });
+
+    //Проверяем на наличие у пользователя user_rate
+    if (user.rate) {
+      //Проверяем оценку пользователя
+      if (user.rate.score != 0) {
+        //Если есть оценка, то устанавливаем значение в input и включаем кнопку очистки значения
+        $('.range > label > input').val(user.rate.score);
+        $('.range-score > .rm-score').removeClass('disabled');
+        //Изменяем title на оценено
+        $('.content-score > .content-wraper > .block-close > .title').text("Оценено");
+      }
+
+      //Проверяем комментарий пользователя
+      console.log(user.rate);
+      if(user.rate.text){
+        //Устанавливаем значения комментария в input
+        $('.comment-wrap > label > textarea').val(user.rate.text);
+        auto_grow(document.querySelector('.comment-wrap > label > textarea'));
+        //Изменяем кнопку на удалить
+
+      }
+    }
+
+    //Устанавливаем для комментариев аватарку пользоватея
+    $('.comment-wrap > .avatar > img').attr('src', whoami.image['x160']);
+
+    //Отслеживаем изменения оценки пользователем
+    $('.range > label > input').change(function () {
+      const val = this.value;
+      if (val <= 0) {
+        return;
+      }
+      user.events.setScore(val);
+      $('.range-score > .rm-score').removeClass('disabled');
+      //Изменяем title на оценено
+      $('.content-score > .content-wraper > .block-close > .title').text("Оценено");
+    });
+
+    //Отслеживаем изменение нажатие на кнопку очистить оценку
+    $('.range-score > .rm-score').click(function(){
+      if($(this).hasClass('disabled')){
+        return;
+      }
+
+      user.events.setScore(0);
+      $('.range-score > .rm-score').addClass('disabled');
+      //Изменяем title на оценено
+      $('.content-score > .content-wraper > .block-close > .title').text("Оценить");
+    })
+
+    $('.content-score > .content-wraper > .btn-commit').click(function(){
+      const val = $('.comment-wrap > label > textarea').val();
+      if(!val && val.length >= 0){
+        return;
+      }
+      user.events.setComment(val);
+    });
+  },
+
+  /**
+  * Отображение окна
+  */
+  show: async function () {
+    $('.content-score').removeClass('hide');
+    await sleep(10);
+    $('.content-score').css('transform', 'translateY(0%)')
+  },
+
+  /**
+  * Скрытие окна
+  */
+  hide: async function () {
+    $('.content-score').css('transform', '');
+    await sleep(300);
+    $('.content-score').addClass('hide');
+  },
+
+  /**
+  * Проверка для инициализация окна. Если проверка не нужна просто верни true
+  * @returns Возвращает boolean
+  */
+  verif: function () {
+    return WindowManagment.authorized;
+  }
+}
+
+//Управление окнами визуала
+const WindowManagment = {
+  authorized: false,
+  showed: false,
+
+  target: {
+    /**
+     * Инициализация функции окна, запускается если прошел верификацию (this.verif)
+     */
+    init: function () { },
+    /**
+     * Отображение окна
+     */
+    show: function () { },
+    /**
+     * Скрытие окна
+     */
+    hide: function () { },
+    /**
+     * Проверка для инициализация окна. Если проверка не нужна просто верни true
+     * @returns Возвращает boolean
+     */
+    verif: function () { return true; },
+  },
+
+  init: function (authorized) {
+    this.authorized = authorized;
+    $('.hide-window').click(() => {
+      this.hide();
+      this.target.hide();
+    })
+  },
+
+  click: function (target = this.target) {
+    if (!target.verif()) {
+      return;
+    }
+    this.target = target;
+    this.target.init();
+    this.show();
+    this.target.show();
+  },
+
+  hide: async function () {
+    this.showed = false;
+    let el = $('.windowed');
+    $('.hide-window').css('opacity', 0);
+    await sleep(300);
+    el.addClass('hide');
+    $('.hide-window').css('opacity', '');
+  },
+
+  show: async function () {
+    this.showed = true;
+    let el = $('.windowed.hide');
+    el.css('display', 'block');
+    await sleep(10);
+    $('.hide-window').css('opacity', 1);
+    el.removeClass('hide');
+    el.css('display', '');
+    await sleep(300);
+    $('.hide-window').css('opacity', '');
   }
 }
 
@@ -704,6 +918,7 @@ function Functional() {
     { dom: ".btn-back", func: BackToMainPage },
     { dom: ".btn-play > .btn", func: ShowPlayer },
     { dom: ".btn-wrapper.rb > .btn", func: ShareAnime },
+    { dom: ".btn-wrapper.lb > .btn", func: ShowWindowScore },
   ];
 
   let showdStatus = false; // Показаны ли статусы аниме
@@ -758,6 +973,13 @@ function Functional() {
     if (!showdStatus) $(".anime-status").addClass("show-more");
     else $(".anime-status").removeClass("show-more");
     showdStatus = !showdStatus;
+  }
+
+  /**
+   * Отображение окна с оцениваением
+   */
+  function ShowWindowScore() {
+    WindowManagment.click(WindowScore);
   }
 
   /**
@@ -840,6 +1062,9 @@ Main((e) => {
     //Завершаем анимацию загрузки страницы
     load_page.loaded();
   }, e);
+
+  //Инициализация функции оценивание пользователя
+  WindowManagment.init(e);
 
   //Загрузка данных аниме плеера kodik
   kodikApi.search({ shikimori_id: $ID }, (r) => {
@@ -1256,3 +1481,5 @@ async function LoadAnime(e = () => { }, l = false) {
     $("head").append(ogTitle, ogType, ogImage, ogDescription, ogRelease, ogRating);
   }
 }
+
+//

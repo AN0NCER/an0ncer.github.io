@@ -1,0 +1,108 @@
+.content-update {
+    font-family: 'Manrope';
+
+    //Title + tag
+    .title-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .tag {
+            display: flex;
+            background: rgba(76, 171, 250, 0.2);
+            border-radius: 3px;
+            padding: 5px 10px;
+            gap: 10px;
+            font-size: 11px;
+            font-weight: bold;
+
+            svg {
+                width: 9.4px;
+                fill: #fff;
+            }
+        }
+    }
+
+    //Update content
+    .update-content-wraper {
+        max-height: calc(100vh - 45px - 107px - max(20px, env(safe-area-inset-bottom)));
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .update-page-block{
+            border-bottom: 2px solid rgba(64, 153, 240, 0.4);
+            padding-bottom: 20px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            &:first-child{
+                margin-top: 10px;
+            }
+        }
+
+        .block-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+
+            span {
+                display: flex;
+                width: 6px;
+                height: 6px;
+                background: linear-gradient(90.75deg, #51B3FF 0%, #3283E4 100%);
+                border-radius: 50%;
+            }
+        }
+
+        .block-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            .block-icon {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 14px;
+                font-weight: bold;
+
+                svg {
+                    fill: #fff;
+                    width: 12px;
+                }
+            }
+
+            .block-text {
+                .content{
+                    font-size: 11px;
+                    margin-left: calc(12px + 10px);
+                }
+            }
+        }
+    }
+
+    //Button accept updation
+    .btn-submit {
+        $height: 40px;
+        min-height: $height;
+        max-height: $height;
+        background: linear-gradient(90.75deg, #51B3FF 0%, #3283E4 100%);
+        border-radius: 4px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 13px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+}

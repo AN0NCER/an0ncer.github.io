@@ -4,6 +4,7 @@ let genres = '';
 //Авторизация пользователя true / false
 //Метод Main вызывается файлом shikimori.js
 Main((e) => {
+    WindowManagment.init(e);
     if (e) {
         CountNotification();
         ShowUser();
@@ -131,6 +132,7 @@ function CreateElementHistory(data) {
     const prcnt = data.fullduration ? calculatePercentage(data.duration, data.fullduration) : calculatePercentage(data.duration, data.duration);
     const time = Math.floor(data.duration / 60) + ':' + (data.duration % 60).toString().padEnd(2, '0');
     const link = `watch.html?id=${data.id}&player=true&continue=${data.continue}`;
+    const image = data.image.includes("https://nyaa.shikimori.me/") ? data.image.replace('https://nyaa.shikimori.me/', '') : data.image.replace('https://nyaa.shikimori.one/', '') ? data.image.replace('https://nyaa.shikimori.one/', '') : data.image;
     return `<div class="swiper-slide"><div class="frame-info"><div class="frame-status">
             <div class="status">Эпизод: <b>${data.episode}</b> [${time}]</div>
             <div class="name">${data.name}</div>
@@ -138,7 +140,7 @@ function CreateElementHistory(data) {
         <a href="${link}">
             <div class="btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" /></svg>Продолжить</div></a></div><div class="frame-anime">
         <div class="progress-watch" style="width: ${prcnt}%;"></div>
-        <img src="${data.image}"
+        <img src="https://nyaa.shikimori.me/${image}"
             alt="${data.name}">
         <a href="${link}">
             <div class="btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" /></svg></div></a></div></div>`;
@@ -204,25 +206,30 @@ async function GitHubRelease() {
             $('.github > .version > span').text(data[0].tag_name);
             $('.github > .date').text(`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`);
 
-
             //Если версия гита отличается от версии сохраненной, то показывем диалоговое окно
             // console.log(localStorage.getItem('github-version'));
 
             let saved_git_verrsion = JSON.parse(localStorage.getItem('github-version'));
             if (saved_git_verrsion == null || saved_git_verrsion.tag != data[0].tag_name) {
                 //Если у пользователя нет ключа оюновления то он первый раз
-                if (localStorage.getItem(dialog.key) == null) {
-                    localStorage.setItem(dialog.key, true);
+                if (localStorage.getItem(UpdateWindow.key) == null) {
+                    localStorage.setItem(UpdateWindow.key, true);
                 }
                 //Елси было обновление то показываем диалоговое окно
-                if (localStorage.getItem(dialog.key) == "true") {
-                    dialog.show(() => {
-                        localStorage.setItem(dialog.key, false);
-                        //Сохраняем новые данные с github
-                        localStorage.setItem('github-version', JSON.stringify({ tag: data[0].tag_name, published_at: data[0].published_at }));
-                    }, data);
+                if (localStorage.getItem(UpdateWindow.key) == "true") {
+                    UpdateWindow.data = data;
+                    WindowManagment.click(UpdateWindow);
                 }
             }
+        }else{
+            //Если ответа от Githuba не будет то изменяем на сохранненый тег
+            let saved_git_verrsion = JSON.parse(localStorage.getItem('github-version'));
+            if (saved_git_verrsion == null){
+                return;
+            }
+            let date = new Date(saved_git_verrsion.published_at);
+            $('.github > .version > span').text(saved_git_verrsion.tag);
+            $('.github > .date').text(`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`);
         }
     });
 }
@@ -297,6 +304,17 @@ $('.search > .btn').click((e) => {
     let value = $(e.currentTarget.parentNode)[0].firstElementChild.value;
 
     window.location.href = '/search.html?val=' + value;
+});
+
+//Событие Enter unput search
+$('.search > input').on('keypress',function(e) {
+    if(e.which == 13) {
+        let value = this.value;
+        if(value.length <= 0){
+            return;
+        }
+        window.location.href = '/search.html?val=' + value;
+    }
 });
 
 /**

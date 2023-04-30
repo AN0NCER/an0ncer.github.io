@@ -668,177 +668,157 @@ footer {
   background: rgba(0, 0, 0, 0.7);
 }
 
-.frame-dialog {
+.windowed {
   position: fixed;
   top: 0;
   left: 0;
-  bottom: 0;
   right: 0;
-  background: rgba(95, 95, 95, 0.2);
-  -webkit-backdrop-filter: blur(4px);
-          backdrop-filter: blur(4px);
-  z-index: 500;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  bottom: 0;
+  z-index: 300;
+  color: #FFF;
+  font-family: "Manrope";
+  display: block;
+  transition: 0.3s ease-in-out;
 }
-.frame-dialog .dialog {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: relative;
-  padding: 10px;
-  margin-left: 20px;
-  margin-right: 20px;
-  gap: 10px;
+.windowed.hide {
+  display: none;
+}
+.windowed.hide .hide-window {
+  opacity: 0;
+}
+.windowed .hide-window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 1;
+  transition: 0.3s ease-in-out;
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+}
+.windowed .window-content {
   background: #101318;
-  border-radius: 3px;
-  width: 100%;
-  max-height: calc(100vh - 80px);
-  max-width: 700px;
-}
-.frame-dialog .dialog .wraper {
+  border-radius: 5px 5px 0px 0px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
   display: flex;
+  right: 0;
   flex-direction: column;
-  gap: 10px;
-  padding-bottom: 45px;
   overflow-y: auto;
-  max-height: calc(100vh - 80px);
-  width: 100%;
+  transition: 0.3s ease-in-out;
+  transform: translateY(100%);
 }
-.frame-dialog .dialog .wraper .info-block-content {
+.windowed .window-content .content-wraper {
+  padding-left: calc(env(safe-area-inset-left) + 20px);
+  padding-right: calc(env(safe-area-inset-right) + 20px);
+  padding-top: 20px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding-left: 20px;
   gap: 10px;
 }
-.frame-dialog .dialog .wraper .info-block-content.first .info-block {
-  border: 1px solid #4FDA65;
+.windowed .window-content.hide {
+  display: none;
 }
-.frame-dialog .dialog .wraper .info-block-content.first .info-block .icon svg {
-  fill: #4FDA65;
+
+@media screen and (min-width: 900px) {
+  .windowed .window-content .content-wraper {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
 }
-.frame-dialog .dialog .wraper .info-block-content.second .info-block {
-  border: 1px solid #4F97DA;
+.content-update {
+  font-family: "Manrope";
 }
-.frame-dialog .dialog .wraper .info-block-content.second .info-block .icon svg {
-  fill: #4F97DA;
-}
-.frame-dialog .dialog .wraper .info-block-content.third .info-block {
-  border: 1px solid #DA3584;
-}
-.frame-dialog .dialog .wraper .info-block-content.third .info-block .icon svg {
-  fill: #DA3584;
-}
-.frame-dialog .dialog .wraper > .title {
+.content-update .title-content {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 10px 0px;
-  gap: 10px;
-  width: 100%;
   justify-content: space-between;
-}
-.frame-dialog .dialog .wraper > .title .text {
-  font-family: "Manrope";
-  font-weight: 800;
-  font-size: 18px;
-  color: #FFFFFF;
-}
-.frame-dialog .dialog .wraper > .title .version {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
   align-items: center;
-  padding: 0px;
-  gap: 5px;
-  font-family: "Manrope";
-  font-weight: 800;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
 }
-.frame-dialog .dialog .wraper > .title .version svg {
-  width: 15px;
-  fill: rgba(255, 255, 255, 0.5);
+.content-update .title-content .title {
+  font-size: 16px;
+  font-weight: bold;
 }
-.frame-dialog .dialog .wraper .title-block {
+.content-update .title-content .tag {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 10px 0px 0px;
+  background: rgba(76, 171, 250, 0.2);
+  border-radius: 3px;
+  padding: 5px 10px;
   gap: 10px;
-  font-family: "Manrope";
-  font-size: 14px;
-  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: bold;
 }
-.frame-dialog .dialog .wraper .title-block span {
+.content-update .title-content .tag svg {
+  width: 9.4px;
+  fill: #fff;
+}
+.content-update .update-content-wraper {
+  max-height: calc(100vh - 45px - 107px - max(20px, env(safe-area-inset-bottom)));
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.content-update .update-content-wraper .update-page-block {
+  border-bottom: 2px solid rgba(64, 153, 240, 0.4);
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.content-update .update-content-wraper .update-page-block:first-child {
+  margin-top: 10px;
+}
+.content-update .update-content-wraper .block-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+.content-update .update-content-wraper .block-title span {
+  display: flex;
   width: 6px;
   height: 6px;
+  background: linear-gradient(90.75deg, #51B3FF 0%, #3283E4 100%);
+  border-radius: 50%;
 }
-.frame-dialog .dialog .wraper .title-block.first span {
-  background: #4FDA65;
-}
-.frame-dialog .dialog .wraper .title-block.second span {
-  background: #4F97DA;
-}
-.frame-dialog .dialog .wraper .title-block.third span {
-  background: #DA3584;
-}
-.frame-dialog .dialog .wraper .info-block {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 10px;
-  gap: 10px;
-  box-sizing: border-box;
-  border-radius: 3px;
-  width: 100%;
-}
-.frame-dialog .dialog .wraper .info-block .icon svg {
-  width: 19px;
-  opacity: 0.4;
-}
-.frame-dialog .dialog .wraper .info-block .content {
+.content-update .update-content-wraper .block-content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 0px;
   gap: 5px;
 }
-.frame-dialog .dialog .wraper .info-block .content .title {
-  font-family: "Manrope";
-  font-weight: 700;
+.content-update .update-content-wraper .block-content .block-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 14px;
-  color: #fff;
+  font-weight: bold;
 }
-.frame-dialog .dialog .wraper .info-block .content .info {
-  font-family: "Manrope";
+.content-update .update-content-wraper .block-content .block-icon svg {
+  fill: #fff;
+  width: 12px;
+}
+.content-update .update-content-wraper .block-content .block-text .content {
   font-size: 11px;
-  color: #FFFFFF;
+  margin-left: 22px;
 }
-.frame-dialog .dialog .btn-submit {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-  box-sizing: border-box;
-  border-radius: 3px;
-  background: #101318;
-}
-.frame-dialog .dialog .btn-submit .submit {
+.content-update .btn-submit {
+  min-height: 40px;
+  max-height: 40px;
+  background: linear-gradient(90.75deg, #51B3FF 0%, #3283E4 100%);
+  border-radius: 4px;
   display: grid;
   place-items: center;
-  padding: 14px 0px;
-  background: #5FBEF3;
-  color: #020202;
-  font-family: "Manrope";
-  font-weight: 800;
-  font-size: 11px;
-  border-radius: 3px;
-  text-transform: uppercase;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
   cursor: pointer;
-  width: 100%;
 }
 
 @media screen and (max-width: 700px) {
