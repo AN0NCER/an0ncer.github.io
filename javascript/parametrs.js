@@ -1,7 +1,7 @@
 const $PARAMETERS = {
     censored: true,
     autologin: false,
-    develop: true,
+    develop: false,
     watch: {
         dubanime: false,
         dubanimefrc: false,
