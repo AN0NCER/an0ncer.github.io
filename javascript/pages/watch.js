@@ -55,6 +55,7 @@ const player = {
   translation: {
     key: "save-translations",
     id: undefined,
+    name: NaN,
     selected: false,
 
     saved: [],
@@ -137,6 +138,7 @@ const player = {
 
       this.id = id; //Индентификатор озвучки
       this.selected = true;
+      this.name = data.translation.title;//Название озвучки
 
       $(element).addClass("hide");
       $(".translations--current--object--icon-title > span").text(data.translation.title); //Title translation
@@ -521,6 +523,8 @@ const History = {
     const { russian, screenshots } = this.shikiData;
     const episode = cnt ? e + i : e + i;
     const image = `${screenshots[0].original}`;
+    const dub = player.translation.name;
+    const type = this.shikiData.kind=="movie"?"Фильм":this.shikiData.kind=="ova"?"OVA":this.shikiData.kind=="ona"?"ONA":"Аниме";
 
     const item = {
       id: $ID,
@@ -530,6 +534,8 @@ const History = {
       episode,
       name: russian,
       image,
+      dub,
+      type
     };
 
     const index = history.findIndex((item) => item.id === $ID);
@@ -1233,15 +1239,13 @@ async function LoadAnime(e = () => { }, l = false) {
       //Проверяем если есть у нас фрашиза
       if (res.nodes) {
         //Отоброжаем блок с франшизой
-        if (res.nodes.length > 0) {
-          $(".franchise-title, .franchisa-anime").css("display", "");
-        }
-
         for (let i = 0; i < res.nodes.length; i++) {
           const element = res.nodes[i]; // Обьект с франшизой
 
-          //Отбираем мусор в франшизе
-          if (element.kind == "Клип" || element.kind == "Спешл") {
+          //Изначально франшизы скрыты, но после добавления отображаются
+
+          //Отбираем франшизы по правилам пользователя
+          if ($PARAMETERS.watch.typefrc.indexOf(element.kind) == -1) {
             continue;
           }
 
@@ -1253,6 +1257,8 @@ async function LoadAnime(e = () => { }, l = false) {
 
           //Добавляем елемент
           $(".franchisa-anime").append(html);
+          //Отображаем франщизы
+          $(".franchise-title, .franchisa-anime").css("display", "");
         }
 
         //Событие нажатие
