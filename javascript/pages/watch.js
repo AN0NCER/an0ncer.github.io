@@ -55,6 +55,7 @@ const player = {
   translation: {
     key: "save-translations",
     id: undefined,
+    name: NaN,
     selected: false,
 
     saved: [],
@@ -137,6 +138,7 @@ const player = {
 
       this.id = id; //Индентификатор озвучки
       this.selected = true;
+      this.name = data.translation.title;//Название озвучки
 
       $(element).addClass("hide");
       $(".translations--current--object--icon-title > span").text(data.translation.title); //Title translation
@@ -497,6 +499,7 @@ const History = {
   shikiData: undefined,
   key: "last-watch",
   maxItems: 5,
+  idImage: 0,
 
   get() {
     return JSON.parse(localStorage.getItem(this.key)) ?? [];
@@ -520,7 +523,9 @@ const History = {
     const history = this.get();
     const { russian, screenshots } = this.shikiData;
     const episode = cnt ? e + i : e + i;
-    const image = `${screenshots[0].original}`;
+    const image = `${screenshots[this.idImage].original}`;
+    const dub = player.translation.name;
+    const type = this.shikiData.kind == "movie" ? "Фильм" : this.shikiData.kind == "ova" ? "OVA" : this.shikiData.kind == "ona" ? "ONA" : "Аниме";
 
     const item = {
       id: $ID,
@@ -530,6 +535,9 @@ const History = {
       episode,
       name: russian,
       image,
+      dub,
+      type,
+      idImg: this.idImage
     };
 
     const index = history.findIndex((item) => item.id === $ID);
@@ -546,6 +554,42 @@ const History = {
 
     this.set(history);
   },
+
+  //Индивидуальные функции
+  custom: {
+    /**
+     * Инициализация после загрузки изображений slide
+     */
+    init: function () {
+      let history = History.get();
+      //Находим ID елемента из списка
+      let id = history.findIndex((x) => { return x.id == $ID });
+
+      //Проверяем что есть елемент из истории
+      if (history[id]) {
+        this.have = true;
+        //Получаем ID изображения или стандартное значение 0
+        let count = history[id].idImg ? history[id].idImg : 0;
+        //Устанавливаем значение в History.idImage
+        History.idImage = count;
+      }
+
+      //Показываем выбор в визуале
+      SetImage();
+
+      //Записуемся на функционал клик по изображение изменение idImage
+      $('.galery-slider > .slide').click((e)=>{
+        let idImage = $(e.currentTarget).data('id');
+        History.idImage = idImage?idImage:0;
+        SetImage();
+      });
+
+      function SetImage(){
+        $(`.galery-slider > .slide.select`).removeClass('select');
+        $(`.galery-slider > .slide[data-id="${History.idImage}"]`).addClass('select');
+      }
+    }
+  }
 };
 
 //Управление пользователем
@@ -731,9 +775,9 @@ const user = {
 
     //Изменяем ид выбраного статуса
     $('.cur-status').data('id', id);
-    
+
     //Если у статуса есть оценка то перекращиваем кнопку оценено
-    if(this.rate.score > 0){
+    if (this.rate.score > 0) {
       $('.lb > .btn').addClass('fill');
       $('.user-rate-score').text(`${this.rate.score}/10`);
     }
@@ -770,7 +814,7 @@ const WindowScore = {
 
       //Проверяем комментарий пользователя
       console.log(user.rate);
-      if(user.rate.text){
+      if (user.rate.text) {
         //Устанавливаем значения комментария в input
         $('.comment-wrap > label > textarea').val(user.rate.text);
         auto_grow(document.querySelector('.comment-wrap > label > textarea'));
@@ -795,8 +839,8 @@ const WindowScore = {
     });
 
     //Отслеживаем изменение нажатие на кнопку очистить оценку
-    $('.range-score > .rm-score').click(function(){
-      if($(this).hasClass('disabled')){
+    $('.range-score > .rm-score').click(function () {
+      if ($(this).hasClass('disabled')) {
         return;
       }
 
@@ -806,9 +850,9 @@ const WindowScore = {
       $('.content-score > .content-wraper > .block-close > .title').text("Оценить");
     })
 
-    $('.content-score > .content-wraper > .btn-commit').click(function(){
+    $('.content-score > .content-wraper > .btn-commit').click(function () {
       const val = $('.comment-wrap > label > textarea').val();
-      if(!val && val.length >= 0){
+      if (!val && val.length >= 0) {
         return;
       }
       user.events.setComment(val);
@@ -1233,15 +1277,13 @@ async function LoadAnime(e = () => { }, l = false) {
       //Проверяем если есть у нас фрашиза
       if (res.nodes) {
         //Отоброжаем блок с франшизой
-        if (res.nodes.length > 0) {
-          $(".franchise-title, .franchisa-anime").css("display", "");
-        }
-
         for (let i = 0; i < res.nodes.length; i++) {
           const element = res.nodes[i]; // Обьект с франшизой
 
-          //Отбираем мусор в франшизе
-          if (element.kind == "Клип" || element.kind == "Спешл") {
+          //Изначально франшизы скрыты, но после добавления отображаются
+
+          //Отбираем франшизы по правилам пользователя
+          if ($PARAMETERS.watch.typefrc.indexOf(element.kind) == -1) {
             continue;
           }
 
@@ -1253,6 +1295,8 @@ async function LoadAnime(e = () => { }, l = false) {
 
           //Добавляем елемент
           $(".franchisa-anime").append(html);
+          //Отображаем франщизы
+          $(".franchise-title, .franchisa-anime").css("display", "");
         }
 
         //Событие нажатие
@@ -1397,9 +1441,12 @@ async function LoadAnime(e = () => { }, l = false) {
       for (let index = 0; index < r.length; index++) {
         const element = r[index];
         $(".galery-slider").append(
-          `<div class="slide"><img src="https://shikimori.me${element.preview}"></div>`
+          `<div class="slide" data-id="${index}"><img src="https://shikimori.me${element.preview}"></div>`
         );
       }
+
+      //Инициализация cursotm функции истории
+      History.custom.init();
     });
   }
 

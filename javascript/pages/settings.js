@@ -53,6 +53,50 @@ const SelectWraper = {
     }
 };
 
+const SelectCheckWrapr = {
+    dom: '.select-checkbox-wraper',
+
+    show: function (title = "", data = [], tooltip = "", key = "", event = () => { }) {
+        if (data.length <= 0) {
+            return;
+        }
+
+        $(`${this.dom} > .select-control > .title`).text(title);
+        $(`${this.dom} > .wraper > .parameters-container`).empty();
+
+        const local_param = getParametrByKey($PARAMETERS, key);
+
+        for (let i = 0; i < data.length; i++) {
+            const e = data[i];
+            $(`${this.dom} > .wraper > .parameters-container`).append(this.gen(e, e.key, i, data.length, (local_param.indexOf(e.key) != -1)));
+        }
+
+        $(`${this.dom} > .wraper > .parameters-container`).append(`<span class="tips">${tooltip}</span>`);
+
+        $(this.dom).removeClass('hiden');
+
+        $('input[type=checkbox][name=multi-answer]').bind('change', function () {
+            event(this.checked, $(this).data('key'));
+        });
+
+        $('.btn-back').click(() => {
+            $(this.dom).addClass('hiden');
+        });
+    },
+
+    gen: function (data, key, i, lenght = 0, checked = false) {
+        const border = i == 0 ? "border-top" : i == (lenght - 1) ? "border-bottom" : "";
+        const chk = checked ? "checked" : "";
+        return `<label class="${border}">
+        <div class="title">${data.value}</div>
+        <div class="checkbox">
+            <input type="checkbox" name="multi-answer" data-key="${key}" ${chk}>
+            <div class="switch-check"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 576 512"><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z" fill="#008AFB"/></svg></div>
+        </div>
+    </label>`;
+    }
+};
+
 //Начало программы
 (() => {
     //Присваеваем значения к параметрам
@@ -73,6 +117,22 @@ const SelectWraper = {
             $(this).attr('data-val', k.key);
             $(this).find('.select').text(k.value);
             setParameter(key, k.key)
+        });
+    });
+
+    $('label[data-type="select-more"]').click(function (e) {
+        SelectCheckWrapr.show("Франшизы", $(this).data('variation'), $(this).data('tooltip'), $(this).data('param'), (checked, key) => {
+            const lkey = $(this).data('param');
+            const lval = getParametrByKey($PARAMETERS, lkey);
+            if (checked) {
+                lval.push(key);
+            }
+            else {
+                lval.splice(lval.indexOf(key),1);
+            }
+
+            setParameter(lkey, lval);
+            $(this).find('.select').text($PARAMETERS.watch.typefrc.length);
         });
     });
 
@@ -112,8 +172,8 @@ const SelectWraper = {
     });
 
     //Фильтр по поиску
-    $('.search-filter').on('change keyup paste', function(){
-        if(this.value.length <= 0){
+    $('.search-filter').on('change keyup paste', function () {
+        if (this.value.length <= 0) {
             //Очищаем фильтр
             $('[data-search]').removeClass('notfounded');
             return;
@@ -121,9 +181,9 @@ const SelectWraper = {
         let containers = $('[data-search]');
         for (let i = 0; i < containers.length; i++) {
             const element = $(containers[i]);
-            if(element.data('search')?.toUpperCase().indexOf(this.value.toUpperCase()) != -1){
+            if (element.data('search')?.toUpperCase().indexOf(this.value.toUpperCase()) != -1) {
                 element.removeClass('notfounded');
-            }else{
+            } else {
                 element.addClass('notfounded');
             }
         }
@@ -151,7 +211,7 @@ Main((e) => {
 
             usr.Storage.Set(response, usr.Storage.keys.whoami);
 
-            if($('.profile-info > img').attr('src') != response.image['x160']){
+            if ($('.profile-info > img').attr('src') != response.image['x160']) {
                 $('.profile-info > img').attr('src', response.image['x160']);
             }
 
@@ -195,9 +255,40 @@ function printObject(obj) {
                     };
                 }
             } else {
+                if (Array.isArray(obj[key])) {
+                    let input = $(`label[data-param="${key}"]`);
+                    if (!input) {
+                        continue;
+                    }
+                    input.find('.select').text(obj[key].length);
+                    continue;
+                }
                 // рекурсивно вызываем функцию для свойства, если оно является объектом
                 printObject(obj[key]);
             }
+        }
+    }
+}
+
+/**
+ * Рекурсивно ищет значение по ключу в объекте, включая вложенные объекты и массивы.
+ * @param {*} obj  - Объект, в котором осуществляется поиск.
+ * @param {*} lkey - Ключ, значение которого нужно найти.
+ * @returns  - Найденное значение или undefined, если значение не найдено.
+ */
+function getParametrByKey(obj, lkey) {
+    for (let key in obj) {
+        if (typeof obj[key] !== 'object' || obj[key] === null) {
+            if (key == lkey) {
+                return obj[key];
+            }
+        } else {
+            if (Array.isArray(obj[key])) {
+                if (key == lkey) {
+                    return obj[key];
+                }
+            }
+            return getParametrByKey(obj[key], lkey);
         }
     }
 }

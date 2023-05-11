@@ -497,6 +497,7 @@ Gallery
 }
 .gallery .galery-slider .slide {
   margin-right: 10px;
+  position: relative;
 }
 .gallery .galery-slider .slide img {
   height: 150px;
@@ -507,6 +508,16 @@ Gallery
 }
 .gallery .galery-slider .slide:last-child {
   padding-right: 20px;
+}
+.gallery .galery-slider .slide.select::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #5fbef3;
+  left: 5px;
+  top: 5px;
 }
 
 /*

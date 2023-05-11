@@ -6,39 +6,44 @@ ______
 
 ___
 
-## Notes
 
-___
+![Platform](https://img.shields.io/badge/platform-ios%20%7C%20android-brightgreen)
+![Release](https://img.shields.io/github/v/release/AN0NCER/an0ncer.github.io)
+![Code](https://img.shields.io/github/languages/top/AN0NCER/an0ncer.github.io)
 
-Formula to calculate percentage:
+# Tunime
 
-**JavaScript:**
-```js
-function calculatePercentage(part, whole) {
-  return (part / whole) * 100;
-}
+<img src="icon-512x512.png" align="left" width="50" />
 
-// Example using:
-let percentage = calculatePercentage(2, 12);
-console.log(percentage); // result 16.666666666666668
-```
+This site is a mobile application for watching anime. Uses data from **Shikimori** and **Kodik** player, as well as **PWA** functionality.
 
-**TypeScript:**
-```ts
-function calculatePercentage(part: number, whole: number): number {
-  return (part / whole) * 100;
-}
+## Functional
 
-// Example using:
-let percentage = calculatePercentage(2, 12);
-console.log(percentage); // result 16.666666666666668
-```
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_1.PNG" align="right" width="310">
 
-In this example, the **`calculatePercentage`** function takes two arguments: **`part`** and **`whole`**. It returns the value of the part expressed as a percentage of the whole.
+- [X] Search anime by name.
+- [X] View information about anime, including description, genre, number of episodes and rating.
+- [X] Play video on mobile device with Kodik player.
+- [X] Add anime to favorites.
+- [X] User account management.
+- [X] Work offline as a PWA app.
+- [X] Mobile optimization and friendly user interface.
 
->Note: To convert a percentage to a decimal number, you need to divide the percentage value by 100. For example, 50% is 0.5 in decimal format.
 
-___
+## Pages
+
+- [X] Main page.
+- [X] Search page.
+- [X] Page witch anime (Can Watch).
+- [X] List page (User anime).
+- [ ] User page (update).
+- [X] Settings page.
+
+## Description
+
+**`https://an0ncer.github.io/`** - is an online platform for watching anime with the ability to manage your account and save your favorites. The site has a convenient and simple interface, has many filters and categories to search for anime. In addition, the site supports PWA functionality, which allows you to add it to the home screen of a mobile device and use it as a full-fledged application.
+
+---
 
 I keep making news slider (trailers). The functionality will include:
 
@@ -50,3 +55,8 @@ This list of trailers will be changed every Sunday. To do this, I am writing a n
 
 All changes are in another branch (**main-page**)
 ___
+
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_2.PNG" align="left" width="310">
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_3.PNG" align="lefy" width="310">
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_4.PNG" align="left" width="310">
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_5.PNG" align="left" width="310">

@@ -176,6 +176,19 @@ header {
   border-radius: 50%;
   left: 3px;
 }
+.parameters-container label .checkbox .switch-check {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+}
+.parameters-container label .checkbox .switch-check svg {
+  display: none;
+}
+.parameters-container label .checkbox input:checked + .switch-check svg {
+  display: block;
+}
 .parameters-container label .checkbox input:checked + .switch-slider {
   background: #008AFB;
 }
@@ -244,7 +257,8 @@ footer {
   padding-bottom: calc(env(safe-area-inset-bottom) + 61px);
 }
 
-.select-wraper {
+.select-wraper,
+.select-checkbox-wraper {
   position: fixed;
   width: 100%;
   top: 0;
@@ -257,10 +271,12 @@ footer {
   transition: 0.3s ease-in-out;
   color: #fff;
 }
-.select-wraper.hiden {
+.select-wraper.hiden,
+.select-checkbox-wraper.hiden {
   left: 100%;
 }
-.select-wraper .select-control {
+.select-wraper .select-control,
+.select-checkbox-wraper .select-control {
   position: relative;
   display: flex;
   font-size: 16px;
@@ -268,7 +284,8 @@ footer {
   align-items: center;
   margin-top: 20px;
 }
-.select-wraper .select-control .btn-back {
+.select-wraper .select-control .btn-back,
+.select-checkbox-wraper .select-control .btn-back {
   left: 20px;
   height: 20px;
   width: 20px;

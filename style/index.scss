@@ -257,7 +257,7 @@ header {
   }
 
   .swiper-pagination {
-    bottom: 0;
+    bottom: 5px;
 
     .swiper-pagination-bullet {
       background: #282B2F;
@@ -281,47 +281,122 @@ header {
   .swiper-wrapper {
     .swiper-slide {
       overflow: hidden;
-      border-radius: 7px;
 
-      .frame-info {
-        background: #282D39;
+      .wrapp-content {
         display: flex;
-        justify-content: space-between;
-        padding: 20px 0;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #282D39;
+        height: 100%;
+        border-radius: 5px;
+        overflow: hidden;
 
-        .frame-status {
-          margin-left: 10px;
-          color: #fff;
-          font-size: 14px;
+        .continue-frame {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          border-radius: 5px;
+          overflow: hidden;
+          position: relative;
+          flex-shrink: 0;
           width: 100%;
+          margin-top: 10px;
+          background-size: cover;
+          background-repeat: no-repeat;
+          aspect-ratio: 16/9;
 
-          &>.name {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: calc(100% - 10px);
+
+          img {
+            height: 207px;
+          }
+
+          .continue-time {
+            position: absolute;
+            bottom: 20px;
+            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 4px;
+
+            span {
+              font-family: 'Manrope';
+              font-style: normal;
+              font-size: 13px;
+              color: #FFFFFF;
+            }
           }
         }
 
-        &>a {
+        .continue-content {
           display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          padding-top: 12px;
 
-          &>.btn {
-            margin-right: 10px;
+          .wrap-content {
+            font-family: 'Manrope';
+            margin-left: 12px;
+            display: flex;flex-direction: column;
+            width: calc(100% - 90px);
+
+
+            .title {
+              font-size: 13px;
+              color: #FFFFFF;
+              // margin-right: 40px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            .continue-episode {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              gap: 5px;
+              font-size: 13px;
+              color: #FFFFFF;
+            }
+          }
+
+          .continue-info {
             display: flex;
+            flex-direction: row;
             align-items: center;
-            background: linear-gradient(135deg, #51B2FF 0%, #2672DA 95.83%);
-            color: #fff;
-            padding: 0 10px;
-            border-radius: 7px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
+            gap: 5px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
 
-            svg {
-              fill: #fff;
-              width: 10px;
-              margin-right: 8px;
+            span.ellipse {
+              width: 3px;
+              height: 3px;
+              background: #2393F1;
+              border-radius: 50%;
+            }
+          }
+
+          .wrap-continue {
+            margin-right: 12px;
+            font-size: 10px;
+            color: #FFFFFF;
+            font-family: 'Manrope';
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0px;
+            gap: 5px;
+            white-space: nowrap;
+            min-width: 45px;
+
+            .button-continue {
+              background: #2393F1;
+              border-radius: 3px;
+              width: 43px;
+              height: 43px;
             }
           }
         }
@@ -374,7 +449,7 @@ header {
   }
 
   .swiper-pagination {
-    bottom: 0;
+    bottom: 5px;
 
     .swiper-pagination-bullet {
       background: #282B2F;
@@ -384,8 +459,6 @@ header {
 
     .swiper-pagination-bullet-active {
       background: #398BE0;
-      width: 50px;
-      border-radius: 6px;
     }
   }
 }

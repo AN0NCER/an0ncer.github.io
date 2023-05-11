@@ -182,6 +182,23 @@ header {
                 }
             }
 
+            .switch-check {
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 5px;
+                svg{
+                    display: none;
+                }
+            }
+
+            input:checked+.switch-check{
+                svg{
+                    display: block;
+                }
+            }
+
             input:checked+.switch-slider {
                 background: #008AFB;
 
@@ -218,28 +235,32 @@ header {
         }
     }
 }
-.parameters-container{
-    label{
-        .radio{
+
+.parameters-container {
+    label {
+        .radio {
             height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 5px;
-            input{
+
+            input {
                 display: none;
             }
-            svg{
+
+            svg {
                 display: none;
             }
-            input:checked + svg{
+
+            input:checked+svg {
                 display: block;
             }
         }
     }
 }
 
-.notfounded{
+.notfounded {
     max-height: 0px;
     margin-top: 0px;
 }
@@ -263,7 +284,8 @@ footer {
     padding-bottom: calc(env(safe-area-inset-bottom) + 61px);
 }
 
-.select-wraper{
+.select-wraper,
+.select-checkbox-wraper {
     position: fixed;
     width: 100%;
     top: 0;
@@ -276,11 +298,11 @@ footer {
     transition: .3s ease-in-out;
     color: #fff;
 
-    &.hiden{
+    &.hiden {
         left: 100%;
     }
 
-    .select-control{
+    .select-control {
         position: relative;
         display: flex;
         font-size: 16px;
@@ -288,7 +310,7 @@ footer {
         align-items: center;
         margin-top: 20px;
 
-        .btn-back{
+        .btn-back {
             left: 20px;
             height: 20px;
             width: 20px;

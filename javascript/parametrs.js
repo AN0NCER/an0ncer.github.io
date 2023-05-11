@@ -1,15 +1,18 @@
 const $PARAMETERS = {
     censored: true,
     autologin: false,
+    develop: false,
     watch: {
         dubanime: false,
         dubanimefrc: false,
-        episrevers: 'left'
+        episrevers: 'left',
+        typefrc: ["TV Сериал", "Фильм", "ONA", "OVA"],
     }
 };
 
 (() => {
     const key = 'parametrs';
+    console.log('[prmtrs] - Load parametrs {localStorage}')
     let saved = JSON.parse(localStorage.getItem(key));
 
     //Если у пользователя есть параметры то сверяем их
@@ -23,6 +26,8 @@ const $PARAMETERS = {
         mergeObjects(saved, $PARAMETERS);
     }
 
+    console.log('[prmtrs] - Loaded completed to {$PARAMETERS}');
+
     /**
      * Удаляет свойства объекта, которые не определены в другом объекте.
      * @param {*} objectToClean - Объект, из которого нужно удалить свойства.
@@ -34,6 +39,9 @@ const $PARAMETERS = {
             if (typeof objectToClean[key] === "object") {
                 if (referenceObject[key] === undefined) {
                     delete objectToClean[key];
+                    continue;
+                }
+                if (Array.isArray(objectToClean[key])) {
                     continue;
                 }
                 cleanObject(objectToClean[key], referenceObject[key]);
@@ -57,6 +65,10 @@ const $PARAMETERS = {
         for (const key in referenceObject) {
             if (typeof referenceObject[key] === "object") {
                 if (objectToClean[key]) {
+                    if (Array.isArray(referenceObject[key])) {
+                        referenceObject[key] = objectToClean[key];
+                        continue;
+                    }
                     mergeObjects(objectToClean[key], referenceObject[key]);
                 }
                 if (Object.keys(referenceObject[key]).length === 0) {
@@ -88,23 +100,40 @@ const $PARAMETERS = {
  */
 function setParameter(key, value, obj = $PARAMETERS) {
     if (typeof obj !== 'object') {
-      console.log(`Failed to set ${key} to ${value} - ${obj} is not an object`);
-      return;
+        DevLog(`[prmtrs] - Failed to set ${key} to ${value} - ${obj} is not an object`);
+        return;
     }
-  
+
     const keys = Object.keys(obj);
-  
+
     for (const k of keys) {
-      if (k === key) {
-        if (typeof obj[k] === typeof value) {
-          obj[k] = value;
-          localStorage.setItem('parametrs', JSON.stringify($PARAMETERS));
-          return;
-        } else {
-          return;
+        if (k === key) {
+            if (typeof obj[k] === typeof value) {
+                obj[k] = value;
+                localStorage.setItem('parametrs', JSON.stringify($PARAMETERS));
+                DevLog(`[prmtrs] - Set ${k} = ${value}`);
+                return;
+            } else {
+                return;
+            }
+        } else if (typeof obj[k] === 'object') {
+            if (Array.isArray(obj[k])) {
+                if (k === key && Array.isArray(value)) {
+                    obj[k] = value;
+                    localStorage.setItem('parametrs', JSON.stringify($PARAMETERS));
+                    DevLog(`[prmtrs] - Set ${k} = ${value}`);
+                    return;
+                }
+                continue;
+            }
+            setParameter(key, value, obj[k]);
         }
-      } else if (typeof obj[k] === 'object') {
-        setParameter(key, value, obj[k]);
-      }
     }
-  }
+}
+
+function DevLog(content) {
+    if (!$PARAMETERS.develop) {
+        return;
+    }
+    console.log(content);
+}
