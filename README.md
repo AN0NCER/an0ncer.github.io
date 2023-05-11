@@ -24,6 +24,16 @@ This site is a mobile application for watching anime. Uses data from **Shikimori
 - [X] Work offline as a PWA app.
 - [X] Mobile optimization and friendly user interface.
 
+
+## Pages
+
+- [X] Main page.
+- [X] Search page.
+- [X] Page witch anime (Can Watch).
+- [X] List page (User anime).
+- [ ] User page (update).
+- [X] Settings page.
+
 ## Notes
 
 ___
