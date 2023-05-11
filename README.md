@@ -6,6 +6,24 @@ ______
 
 ___
 
+# Tunime
+
+<img src="icon-512x512.png" align="left" width="50" />
+
+This site is a mobile application for watching anime. Uses data from **Shikimori** and **Kodik** player, as well as **PWA** functionality.
+
+## Functional
+
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_1.PNG" align="right" width="310">
+
+- [X] Search anime by name.
+- [X] View information about anime, including description, genre, number of episodes and rating.
+- [X] Play video on mobile device with Kodik player.
+- [X] Add anime to favorites.
+- [X] User account management.
+- [X] Work offline as a PWA app.
+- [X] Mobile optimization and friendly user interface.
+
 ## Notes
 
 ___
