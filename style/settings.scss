@@ -323,3 +323,18 @@ footer {
 }
 
 @import './phone_menu';
+
+@media screen and (min-width: 900px) {
+    .select-wraper, .select-checkbox-wraper{
+        .select-control{
+            max-width: 900px;
+            margin: 20px auto 0 auto;
+        }
+    }
+    .select-checkbox-wraper, .select-wraper{
+        .wraper{
+            max-width: 900px;
+            margin: 20px auto 0 auto;
+        }
+    }
+}

@@ -420,3 +420,14 @@ footer {
   -webkit-text-stroke-color: #fff;
   width: 16px;
 }
+
+@media screen and (min-width: 900px) {
+  .select-wraper .select-control, .select-checkbox-wraper .select-control {
+    max-width: 900px;
+    margin: 20px auto 0 auto;
+  }
+  .select-checkbox-wraper .wraper, .select-wraper .wraper {
+    max-width: 900px;
+    margin: 20px auto 0 auto;
+  }
+}
