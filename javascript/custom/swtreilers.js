@@ -107,7 +107,7 @@ async function TStatus(status, id = t_id) {
 //Функция присвоение событий объектам
 function TFunction(player = TVideoAudio()) {
     player.video.addEventListener('error', (e) => {
-        if(player.video.src == window.location.href || player.audio.src == window.location.href){
+        if (player.video.src == window.location.href || player.audio.src == window.location.href) {
             return;
         }
         console.log(player.video.src);
@@ -195,7 +195,7 @@ function TPlayerStop(player = TVideoAudio()) {
 }
 
 //Функция прерывания загрузки
-function TPlayerAbort(player = TVideoAudio()){
+function TPlayerAbort(player = TVideoAudio()) {
     player.audio.src = '';
     player.video.src = '';
 }
@@ -207,8 +207,8 @@ function YTPlayerReady(e) {
 }
 
 //Изменения событий 
-function YTPlayerStateChange(e){
-    if(e.data == YT.PlayerState.ENDED){
+function YTPlayerStateChange(e) {
+    if (e.data == YT.PlayerState.ENDED) {
         $('#ytplayer').remove();
         TStatus(t_status[0]);
     }
@@ -232,7 +232,7 @@ t_swiper.on('slideChange', function () {
     }
 
     //Если стату является 'loading'
-    if(c_status == t_status[1]){
+    if (c_status == t_status[1]) {
         //Нужно остановить загрузку плеера
         TPlayerAbort();
     }

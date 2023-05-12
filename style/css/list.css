@@ -101,106 +101,6 @@ main .content {
   align-items: center;
   justify-content: center;
 }
-main .content a {
-  display: grid;
-  overflow: hidden;
-}
-main .content a .card-content {
-  display: flex;
-  overflow: hidden;
-  position: relative;
-  border-radius: 4px;
-  max-height: 280px;
-  justify-content: center;
-}
-main .content a .card-content img {
-  height: 100%;
-}
-main .content a .card-content .title {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(16, 19, 24, 0.7);
-  -webkit-backdrop-filter: blur(2.5px);
-          backdrop-filter: blur(2.5px);
-  text-align: center;
-  padding: 10px 0px;
-}
-main .content a .card-content .title span {
-  margin-left: 10px;
-  margin-right: 10px;
-  display: flex;
-  color: #fff;
-  font-family: "Manrope";
-  font-size: 13px;
-  justify-content: center;
-}
-main .content a .card-content .my-score {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  background: linear-gradient(98.26deg, #51B2FF 0%, #2672DA 100%);
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
-  border-radius: 3px;
-  padding: 4px 8px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 3px;
-  color: #FFFFFF;
-  font-family: "Nova Square";
-  font-size: 12px;
-}
-main .content a .card-information {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  color: #fff;
-  font-family: "Nova Square";
-  font-size: 12px;
-}
-main .content a .card-information .score {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 5px;
-}
-main .content a.hide-anime {
-  display: none;
-}
-main .content a.hide-search {
-  display: none;
-}
-main .content a:empty {
-  min-height: 308px;
-  border-radius: 3px;
-  position: relative;
-}
-main .content a:empty::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 14.5px;
-  background: #282D39;
-  bottom: 0;
-  border-radius: 3px;
-  animation: loading 1.5s infinite;
-  transition: 0.1s ease-in-out;
-}
-main .content a:empty::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  top: 0;
-  bottom: 24.5px;
-  background: #282D39;
-  border-radius: 3px;
-  animation: loading 1.5s infinite;
-}
 
 span.loading {
   position: absolute;
@@ -391,4 +291,109 @@ footer {
   fill: #fff;
   -webkit-text-stroke-color: #fff;
   width: 16px;
+}
+
+.card-anime {
+  display: grid;
+  overflow: hidden;
+}
+.card-anime .card-content {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  border-radius: 4px;
+  max-height: 280px;
+  justify-content: center;
+}
+.card-anime .card-content img {
+  height: 100%;
+}
+.card-anime .card-content .title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(16, 19, 24, 0.7);
+  -webkit-backdrop-filter: blur(2.5px);
+          backdrop-filter: blur(2.5px);
+  text-align: center;
+  padding: 10px 0px;
+}
+.card-anime .card-content .title span {
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
+  color: #fff;
+  font-family: "Manrope";
+  font-size: 13px;
+  justify-content: center;
+}
+.card-anime .card-content .my-score {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: linear-gradient(98.26deg, #51B2FF 0%, #2672DA 100%);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+  border-radius: 3px;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  color: #FFFFFF;
+  font-family: "Nova Square";
+  font-size: 12px;
+}
+.card-anime .card-information {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  font-family: "Nova Square";
+  font-size: 12px;
+}
+.card-anime .card-information .score {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+}
+.card-anime.hide-anime {
+  display: none;
+}
+.card-anime.hide-search {
+  display: none;
+}
+.card-anime:empty {
+  min-height: 308px;
+  border-radius: 3px;
+  position: relative;
+}
+.card-anime:empty::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 14.5px;
+  background: #282D39;
+  bottom: 0;
+  border-radius: 3px;
+  animation: loading 1.5s infinite;
+  transition: 0.1s ease-in-out;
+}
+.card-anime:empty::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 24.5px;
+  background: #282D39;
+  border-radius: 3px;
+  animation: loading 1.5s infinite;
+}
+
+.swiper-slide-active a .card_anime .card_content {
+  background: rgba(0, 0, 0, 0.7);
 }

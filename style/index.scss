@@ -148,7 +148,7 @@ header {
     min-width: 40px;
     height: 40px;
     background: linear-gradient(135deg, #51B2FF 0%, #2672DA 95.83%);
-    box-shadow: -4px 0px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: -4px 0px 20px rgba(0, 0, 0, 0.25);
     display: grid;
     place-items: center;
     cursor: pointer;
@@ -257,7 +257,7 @@ header {
   }
 
   .swiper-pagination {
-    bottom: 5px;
+    bottom: -4px;
 
     .swiper-pagination-bullet {
       background: #282B2F;
@@ -510,59 +510,6 @@ header {
   a:nth-child(1) {
     margin-left: 20px;
   }
-
-  .card-anime {
-    font-family: Manrope;
-    margin-right: 10px;
-
-    .content-img {
-      position: relative;
-      border-radius: 7px;
-      overflow: hidden;
-
-      .title {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        border-radius: 0px 0px 7px 7px;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(3.5px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 50px;
-        text-align: center;
-        color: #fff;
-        font-size: 13px;
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-
-      img {
-        height: 270px;
-        border-radius: 7px;
-      }
-    }
-
-    .content-inf {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      color: #fff;
-
-      .inf-rtng {
-        display: flex;
-        align-items: center;
-
-        svg {
-          width: 10px;
-          margin-right: 5px;
-          fill: #FFE600;
-        }
-      }
-    }
-  }
 }
 
 .github {
@@ -624,6 +571,11 @@ footer {
 @import './cards';
 @import './windowed';
 @import './window/update';
+
+.card-anime{
+  min-width: 195px;
+  margin-right: 10px;
+}
 
 @media screen and (max-width:700px) {
   .desktop {

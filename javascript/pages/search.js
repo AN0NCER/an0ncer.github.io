@@ -289,10 +289,10 @@ function ShowGenres() {
 
         for (let index = 0; index < response.length; index++) {
             const element = response[index];
-            if (element.kind == 'anime') {
+            // if (element.kind == 'anime') {
                 $('.genres > .content > .block--' + i).append('<div>' + element.russian + '</div>');
                 i == 1 ? i = 2 : i == 2 ? i = 3 : i = 1;
-            }
+            // }
         }
     });
 }
