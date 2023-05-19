@@ -257,7 +257,7 @@ function AddToLoadTask(response = response_user_rates) {
     for (let index = 0; index < response.length; index++) {
         const element = response[index];
         //Со
-        $('.content').append(`<a href="/watch.html?id=${element.target_id}"  class="${!current_status.includes(element.status) ? "hide-anime" : "show-anime"}" data-score="${element.score}" data-id="${element.target_id}" data-status="${element.status}" data-type="all" data-loaded="false"></a>`);
+        $('.content').append(`<a href="/watch.html?id=${element.target_id}"  class="${!current_status.includes(element.status) ? "hide-anime" : "show-anime"} card-anime" data-score="${element.score}" data-id="${element.target_id}" data-status="${element.status}" data-type="all" data-loaded="false"></a>`);
 
         if (current_status.includes(element.status) && current_type.includes("all")) {
             task_loading.push(element.target_id);
