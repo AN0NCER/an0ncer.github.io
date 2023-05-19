@@ -678,6 +678,7 @@ footer {
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   color: #fff;
   font-family: "Nova Square";
   font-size: 12px;
