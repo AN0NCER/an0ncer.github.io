@@ -1,7 +1,7 @@
 //Эту библиотеку загружать последним
 const $EXPEMENTAL = {
     links: {
-        'watch.html': 'https://cdn.jsdelivr.net/gh/AN0NCER/an0ncer.github.io@ex-watch/javascript/pages/ex-watch.js',
+        'watch.html': 'https://raw.githubusercontent.com/AN0NCER/an0ncer.github.io/ex-watch/javascript/pages/ex-watch.js',
     },
 };
 
@@ -21,18 +21,18 @@ const $EXPEMENTAL = {
 })();
 
 function loadLibrary(libraryUrl) {
-    var script = document.createElement('script');
-    script.src = libraryUrl;
+    fetch(libraryUrl)
+        .then(response => response.text())
+        .then(script => {
+            const scriptElement = document.createElement('script');
+            scriptElement.textContent = script;
+            document.head.appendChild(scriptElement);
+            DevLog(`[expr] - Load (${libraryUrl}) completed`);
 
-    script.onload = function () {
-        // Код будет выполнен, когда библиотека успешно загрузится
-        DevLog(`[expr] - Load (${libraryUrl}) completed`);
-    };
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки скрипта:', error);
+            DevLog(`[expr] - Error (${libraryUrl}) load`);
 
-    script.onerror = function () {
-        // Код будет выполнен в случае ошибки загрузки библиотеки
-        DevLog(`[expr] - Error (${libraryUrl}) load`);
-    };
-
-    document.head.appendChild(script);
+        });
 }
