@@ -45,6 +45,7 @@ var appShellFilesToCache = [
     '/javascript/pages/user.js',
     '/javascript/pages/watch.js',
     //Custom
+    '/javascript/custom/experemental.js',
     '/javascript/custom/swtreilers.js',
     '/javascript/custom/updatedialog.js',
 ];
