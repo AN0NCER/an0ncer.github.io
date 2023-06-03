@@ -181,10 +181,17 @@ const player = {
 
     events: {
       clicked: [],
+      load: [],
 
       onclicked: function (e) {
         if (typeof e == "function" && e.length > 0) {
           this.clicked.push(e);
+        }
+      },
+
+      onload: function (e) {
+        if (typeof e == "function" && e.length > 0) {
+          this.load.push(e);
         }
       },
     },
@@ -209,6 +216,10 @@ const player = {
         player.episodes.AnimateSelect(player.episodes.selected_episode);
         //Даем плееру задачу обновить свои данные
         player.update();
+        //Вызываем событие обновление/изменение эпизодв
+        player.episodes.events.load.forEach((event) =>
+          event(player.episodes.episodes_count)
+        );
       }
 
       /**

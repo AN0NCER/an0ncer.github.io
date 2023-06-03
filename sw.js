@@ -1,4 +1,4 @@
-var version = '69';
+var version = '70';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     //Pages
@@ -45,6 +45,7 @@ var appShellFilesToCache = [
     '/javascript/pages/user.js',
     '/javascript/pages/watch.js',
     //Custom
+    '/javascript/custom/experemental.js',
     '/javascript/custom/swtreilers.js',
     '/javascript/custom/updatedialog.js',
 ];

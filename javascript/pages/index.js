@@ -246,11 +246,11 @@ async function GitHubRelease() {
 
             let saved_git_verrsion = JSON.parse(localStorage.getItem('github-version'));
             if (saved_git_verrsion == null || saved_git_verrsion.tag != data[0].tag_name) {
-                //Если у пользователя нет ключа оюновления то он первый раз
+                //Если у пользователя нет ключа обновления то он первый раз
                 if (localStorage.getItem(UpdateWindow.key) == null) {
                     localStorage.setItem(UpdateWindow.key, true);
                 }
-                //Елси было обновление то показываем диалоговое окно
+                //Если было обновление то показываем диалоговое окно
                 if (localStorage.getItem(UpdateWindow.key) == "true") {
                     UpdateWindow.data = data;
                     WindowManagment.click(UpdateWindow);
