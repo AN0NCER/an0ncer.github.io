@@ -33,6 +33,5 @@ function loadLibrary(libraryUrl) {
         .catch(error => {
             console.error('Ошибка загрузки скрипта:', error);
             DevLog(`[expr] - Error (${libraryUrl}) load`);
-
         });
 }
