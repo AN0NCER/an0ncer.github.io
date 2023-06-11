@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nova+Square&display=swap');
 
-*{
+* {
     margin: 0;
     padding: 0;
 }
@@ -11,15 +11,20 @@
     user-select: none;
 }
 
+.scroll-none {
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 img {
     pointer-events: none;
     user-select: none;
     -webkit-user-drag: none;
 }
 
-a{
+a {
     text-decoration: none;
     user-select: none;
     -webkit-user-drag: none;
 }
-

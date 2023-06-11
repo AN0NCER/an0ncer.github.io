@@ -12,6 +12,10 @@
           user-select: none;
 }
 
+.scroll-none::-webkit-scrollbar {
+  display: none;
+}
+
 img {
   pointer-events: none;
   -webkit-user-select: none;

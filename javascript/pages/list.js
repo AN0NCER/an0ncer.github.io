@@ -201,6 +201,7 @@ async function LoadingAnimeFromTask(task = task_loading) {
     /**
      * Генерирует html код с подготовленными данными об аниме
      * @param {Object} response shikimori ответ anime
+     * @param {Int} score оценка пользователя
      * @returns Возваращет готовый html картки аниме
      */
     function GenerateCardHtml(response, score) {
