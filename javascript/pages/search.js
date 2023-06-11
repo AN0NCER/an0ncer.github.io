@@ -50,7 +50,7 @@ let search = {
     elements: ['body', '.search', 'main'],
 
     //Функция изменения статуса
-    ChangeState: function (num = 0, event = (s, f) => { DevLog(s, f) }) {
+    ChangeState: function (num = 0, event = (s, f) => { $DEV.log(s, f) }) {
         //Получаем все елементы со старого состояния
         let el = $('.' + this.state.class);
 

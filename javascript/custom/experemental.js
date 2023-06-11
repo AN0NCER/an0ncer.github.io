@@ -11,11 +11,11 @@ const $EXPEMENTAL = {
         return;
     }
 
-    DevLog(`[expr] - Load experements function`);
+    $DEV.log(`[expr] - Load experements function`);
     let page = window.location.pathname.split('/').pop();
 
     if (page) {
-        DevLog(`[expr] - Finded experemental ${page}`);
+        $DEV.log(`[expr] - Finded experemental ${page}`);
         loadLibrary($EXPEMENTAL.links[page]);
     }
 })();
@@ -27,11 +27,11 @@ function loadLibrary(libraryUrl) {
             const scriptElement = document.createElement('script');
             scriptElement.textContent = script;
             document.head.appendChild(scriptElement);
-            DevLog(`[expr] - Load (${libraryUrl}) completed`);
+            $DEV.log(`[expr] - Load (${libraryUrl}) completed`);
 
         })
         .catch(error => {
             console.error('Ошибка загрузки скрипта:', error);
-            DevLog(`[expr] - Error (${libraryUrl}) load`);
+            $DEV.log(`[expr] - Error (${libraryUrl}) load`);
         });
 }

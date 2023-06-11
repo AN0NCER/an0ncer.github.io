@@ -101,7 +101,7 @@ const $PARAMETERS = {
  */
 function setParameter(key, value, obj = $PARAMETERS) {
     if (typeof obj !== 'object') {
-        DevLog(`[prmtrs] - Failed to set ${key} to ${value} - ${obj} is not an object`);
+        $DEV.log(`[prmtrs] - Failed to set ${key} to ${value} - ${obj} is not an object`);
         return;
     }
 
@@ -112,7 +112,7 @@ function setParameter(key, value, obj = $PARAMETERS) {
             if (typeof obj[k] === typeof value) {
                 obj[k] = value;
                 localStorage.setItem('parametrs', JSON.stringify($PARAMETERS));
-                DevLog(`[prmtrs] - Set ${k} = ${value}`);
+                $DEV.log(`[prmtrs] - Set ${k} = ${value}`);
                 return;
             } else {
                 return;
@@ -122,7 +122,7 @@ function setParameter(key, value, obj = $PARAMETERS) {
                 if (k === key && Array.isArray(value)) {
                     obj[k] = value;
                     localStorage.setItem('parametrs', JSON.stringify($PARAMETERS));
-                    DevLog(`[prmtrs] - Set ${k} = ${value}`);
+                    $DEV.log(`[prmtrs] - Set ${k} = ${value}`);
                     return;
                 }
                 continue;
@@ -132,9 +132,44 @@ function setParameter(key, value, obj = $PARAMETERS) {
     }
 }
 
-function DevLog(content) {
-    if (!$PARAMETERS.develop) {
-        return;
+const $DEV = {
+    log: function () {
+        if (!$PARAMETERS.develop) {
+            return;
+        }
+        const args = Array.from(arguments);
+        console.log(...args);
+    },
+
+    error: function () {
+        if (!$PARAMETERS.develop) {
+            return;
+        }
+        const args = Array.from(arguments);
+        console.error(...args);
+    },
+
+    warn: function () {
+        if (!$PARAMETERS.develop) {
+            return;
+        }
+        const args = Array.from(arguments);
+        console.warn(...args);
+    },
+
+    time: function () {
+        if (!$PARAMETERS.develop) {
+            return;
+        }
+        const args = Array.from(arguments);
+        console.time(...args);
+    },
+
+    timeEnd: function () {
+        if (!$PARAMETERS.develop) {
+            return;
+        }
+        const args = Array.from(arguments);
+        console.timeEnd(...args);
     }
-    console.log(content);
-}
+};
