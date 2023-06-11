@@ -36,7 +36,7 @@ This site is a mobile application for watching anime. Uses data from **Shikimori
 - [X] Search page.
 - [X] Page witch anime (Can Watch).
 - [X] List page (User anime).
-- [ ] User page (update).
+- [X] User page.
 - [X] Settings page.
 
 ## Description
