@@ -1426,14 +1426,14 @@ async function LoadAnime(e = () => { }, l = false) {
           ? "Онгоинг"
           : "Вышел"
     );
-    let rating = data.rating == 'none' || data.rating == 'g' 
-      ? '0' 
-      : data.rating == 'pg' 
-        ? '7' 
-        : data.rating == 'pg_13' 
-          ? '13' 
-          : data.rating == 'r' 
-            ? '17' 
+    let rating = data.rating == 'none' || data.rating == 'g'
+      ? '0'
+      : data.rating == 'pg'
+        ? '7'
+        : data.rating == 'pg_13'
+          ? '13'
+          : data.rating == 'r'
+            ? '17'
             : '18';
     $(".pg-rating").text(`${rating}+`);
   }
