@@ -4,208 +4,370 @@ body {
 }
 
 body {
-  background: #282d39;
+  background: #101318;
 }
 
-header {
-  background: #101318;
-  display: flex;
-  flex-direction: column;
-  max-width: 1100px;
+header,
+main,
+footer {
+  width: 100%;
+  max-width: 900px;
   margin: 0 auto;
 }
-header .content {
-  margin-left: 20px;
+
+header .account-controller {
   margin-top: 20px;
-  margin-right: 20px;
-  padding-bottom: 10px;
-  color: #fff;
-}
-header .content .account {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-header .content .account--block {
-  display: flex;
-  align-items: center;
-}
-header .content .account--image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-header .content .account--image img {
-  width: 50px;
-  border-radius: 5px;
-}
-header .content .account--info {
+  margin-bottom: 10px;
   margin-left: 20px;
-  font-family: Inter;
-  font-size: 12px;
+  margin-right: 20px;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
 }
-header .content .account--title {
-  font-weight: bold;
-  font-size: 16px;
+header .account-controller .left-panel,
+header .account-controller .right-panel {
+  display: flex;
 }
-header .content .account--share--btn {
-  background: #28b2f5;
+header .account-controller .btn-head {
   width: 35px;
   height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
 }
-header .content .account--share--btn svg {
-  width: 18px;
+header .account-controller .btn-head > svg {
   fill: #fff;
-  transform: translateX(1px);
+  opacity: 0.25;
+  height: 18px;
 }
-header .menu {
-  font-family: Manrope;
+header .user-profile {
+  margin-left: 20px;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+}
+header .user-profile .top-content {
+  display: flex;
+  gap: 10px;
+}
+header .user-profile .top-content .avatar img {
+  width: 73px;
+  border-radius: 13px;
+}
+header .user-profile .top-content .user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-family: "Manrope";
   color: #fff;
 }
-header .menu--box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 5px;
-}
-header .menu--btn {
-  padding: 8px 15px;
-  border-radius: 6px;
-  margin-left: 5px;
-  margin-right: 5px;
-  opacity: 0.5;
-  font-size: 14px;
-}
-header .menu--btn--select {
-  opacity: 1;
+header .user-profile .top-content .user-info .nikname {
+  font-size: 20px;
   font-weight: bold;
 }
-
-.list--history {
-  display: flex;
-  margin-left: 20px;
-  margin-right: 20px;
-  font-family: Manrope;
-  align-items: center;
-  margin-bottom: 10px;
-  position: relative;
-}
-.list--history:nth-child(1)::before {
-  display: none;
-}
-.list--history:nth-last-child(1)::after {
-  display: none;
-}
-.list--history::after {
-  content: "";
-  width: 1px;
-  height: 50%;
-  background: #fff;
-  position: absolute;
-  left: 5px;
-  bottom: -6px;
-}
-.list--history::before {
-  content: "";
-  width: 1px;
-  height: 50%;
-  background: #fff;
-  position: absolute;
-  left: 5px;
-  top: -4px;
-}
-.list--history--icon {
-  margin-right: 20px;
-  position: relative;
-}
-.list--history--icon svg {
-  width: 11px;
-  fill: #fff;
-}
-.list--history--text {
-  margin-top: 5px;
-  font-size: 14px;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-}
-.list--history--text > span:nth-child(1) {
-  width: 100%;
-  height: 10px;
-  text-overflow: ellipsis;
+header .user-profile .top-content .user-info .description {
+  font-size: 10px;
+  max-height: 45px;
   overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
-.list--history--text > span:nth-child(2) {
-  font-size: 14px;
+header .user-profile .bottom-content {
   margin-top: 5px;
 }
-.list--history--text a {
-  color: #28b2f5;
-}
-.list--history--date {
-  font-size: 12px;
-  color: #fff;
+header .user-profile .bottom-content .user-online {
   display: flex;
   justify-content: space-between;
+  font-family: "Manrope";
+  font-size: 11px;
+  color: #fff;
 }
-.list--history--block {
-  background: rgba(16, 19, 24, 0.5176470588);
-  padding: 12px 12px;
-  border-radius: 3px;
+header .user-anime-stat {
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-right: 20px;
   display: flex;
-  flex-direction: column;
+  gap: 5px;
+}
+header .user-anime-stat .planned,
+header .user-anime-stat .dropped,
+header .user-anime-stat .completed {
+  display: flex;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  font-family: "Manrope";
+  font-weight: bold;
+  color: #fff;
+  font-size: 11px;
   width: 100%;
+  min-width: 25px;
+  transition: 0.3s ease-in-out;
+}
+header .user-anime-stat .planned {
+  background: #327EE2;
+  border-radius: 10px 0px 0px 10px;
+}
+header .user-anime-stat .completed {
+  background: #82ADE7;
+}
+header .user-anime-stat .dropped {
+  background: #A9A496;
+  border-radius: 0px 10px 10px 0px;
+}
+header .user-anime-info {
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Manrope";
+  color: #fff;
+  font-size: 11px;
+}
+header .user-anime-info .point {
+  display: flex;
+  width: 10px;
+  height: 10px;
+}
+header .user-anime-info .point.p-plan {
+  background: #327EE2;
+}
+header .user-anime-info .point.p-drop {
+  background: #A9A496;
+}
+header .user-anime-info .point.p-comp {
+  background: #82ADE7;
 }
 
-.main--status {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-.main--status--title {
+main .title-block {
+  margin-top: 10px;
   margin-left: 20px;
-  margin-right: 20px;
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+}
+main .top-anime-user {
+  display: flex;
+  margin-left: 20px;
+}
+main .top-anime-user .content {
+  position: relative;
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  min-height: 200px;
+  width: 100%;
+  overflow-x: scroll;
+}
+main .score-diagrams {
   margin-top: 20px;
   margin-bottom: 20px;
-  text-align: center;
-  font-weight: bold;
-  color: #fff;
-  font-size: 16px;
-  font-family: Manrope;
-}
-.main--status--statistics {
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  display: flex;
-  padding-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
   padding-bottom: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
-  font-family: Manrope;
-  justify-content: space-between;
-  color: #fff;
 }
-.main--status--statistics--block {
+main .score-diagrams .diagram .panel {
+  display: flex;
+  background: #82ADE7;
+  height: 0.5px;
+  width: 100%;
+}
+main .score-diagrams .diagram .content {
+  display: flex;
+  justify-content: space-between;
+  max-width: 500px;
+  min-height: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  align-items: end;
+}
+main .score-diagrams .diagram .content .line {
+  border-radius: 2px 2px 0px 0px;
+  display: flex;
+  max-height: 60px;
+  max-width: 10px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-width: 10px;
+  background: #327EE2;
+  font-family: "Manrope";
+  transition: 0.3s ease-in-out;
+  height: 0px;
+}
+main .score-diagrams .diagram .content .line span.score {
+  color: #FFFFFF;
+  position: absolute;
+  bottom: -20px;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: default;
+}
+main .user-history {
+  font-family: "Manrope";
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-right: 20px;
+  display: flex;
+}
+main .user-history .block-history {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+main .user-history .block-history .mounth {
+  font-family: "Inter";
+  font-size: 14px;
+  color: #fff;
+  margin-left: 10px;
+  cursor: default;
+  font-weight: bold;
+}
+main .user-history .block-history .mounth span {
+  margin-left: 10px;
+}
+main .user-history .block-history .mounth:first-child {
+  display: none;
+}
+main .user-history .block-history .block-date-data {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 10px;
+}
+main .user-history .block-history .block-date-data .history-date {
+  position: sticky;
+  top: 0;
+  cursor: default;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 10px;
+  gap: 5px;
+  align-self: flex-start;
 }
-.main--status--statistics--block--value {
+main .user-history .block-history .block-date-data .history-date span.day {
+  color: #fff;
+  font-size: 14px;
   font-weight: bold;
 }
-.main--status--statistics--block--title {
-  font-size: 12px;
-  opacity: 0.5;
+main .user-history .block-history .block-date-data .history-date span.mon {
+  color: #fff;
+  opacity: 0.25;
+  font-size: 10px;
+}
+main .user-history .block-history .block-date-data .history-data {
+  display: grid;
+  width: 100%;
+  gap: 10px;
+}
+main .user-history .block-history .block-date-data .history-data a .block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-weight: bolder;
+  color: #fff;
+  border-radius: 4px;
+  padding: 10px 0px 10px 10px;
+  gap: 5px;
+  background: rgba(40, 45, 57, 0.5);
+}
+main .user-history .block-history .block-date-data .history-data a .block .anime-title {
+  font-size: 16px;
+}
+main .user-history .block-history .block-date-data .history-data a .block .anime-event {
+  font-size: 11px;
+}
+main .user-history .block-history .block-date-data:nth-child(2) .history-data a:first-child .block {
+  background: radial-gradient(100% 100% at 0% 100%, rgba(10, 61, 131, 0.2) 0%, rgba(0, 0, 0, 0) 100%), linear-gradient(76.31deg, #57A6E9 19.59%, #3683E2 40.81%, #2672DF 80.41%);
 }
 
-.hide {
-  display: none;
+footer {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 61px);
+}
+
+.content-load {
+  height: 200px;
+  position: relative;
+}
+.content-load .loader {
+  position: absolute;
+  top: calc(50% - 32px);
+  left: calc(50% - 32px);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  perspective: 800px;
+}
+.content-load .loader .inner {
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.content-load .loader .inner.one {
+  left: 0%;
+  top: 0%;
+  animation: rotate-one 1s linear infinite;
+  border-bottom: 3px solid #efeffa;
+}
+.content-load .loader .inner.two {
+  right: 0%;
+  top: 0%;
+  animation: rotate-two 1s linear infinite;
+  border-right: 3px solid #efeffa;
+}
+.content-load .loader .inner.three {
+  right: 0%;
+  bottom: 0%;
+  animation: rotate-three 1s linear infinite;
+  border-top: 3px solid #efeffa;
+}
+
+@keyframes rotate-one {
+  0% {
+    transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+  }
+}
+@keyframes rotate-two {
+  0% {
+    transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+  }
+}
+@keyframes rotate-three {
+  0% {
+    transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+  }
+}
+/*Animation*/
+@keyframes loading {
+  0% {
+    opacity: 0.04;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0.04;
+  }
+}
+.card-anime {
+  min-width: 195px;
+  margin-right: 10px;
 }
 
 .application-menu {
@@ -332,4 +494,117 @@ header .menu--btn--select {
   fill: #fff;
   -webkit-text-stroke-color: #fff;
   width: 16px;
+}
+
+.card-anime {
+  display: grid;
+  overflow: hidden;
+}
+.card-anime .card-content {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  border-radius: 4px;
+  max-height: 280px;
+  justify-content: center;
+}
+.card-anime .card-content img {
+  height: 100%;
+}
+.card-anime .card-content .title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(16, 19, 24, 0.7);
+  -webkit-backdrop-filter: blur(2.5px);
+          backdrop-filter: blur(2.5px);
+  text-align: center;
+  padding: 10px 0px;
+}
+.card-anime .card-content .title span {
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
+  color: #fff;
+  font-family: "Manrope";
+  font-size: 13px;
+  justify-content: center;
+}
+.card-anime .card-content .my-score {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: linear-gradient(98.26deg, #51B2FF 0%, #2672DA 100%);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+  border-radius: 3px;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  color: #FFFFFF;
+  font-family: "Nova Square";
+  font-size: 12px;
+}
+.card-anime .card-information {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  color: #fff;
+  font-family: "Nova Square";
+  font-size: 12px;
+}
+.card-anime .card-information .score {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+}
+.card-anime.hide-anime {
+  display: none;
+}
+.card-anime.hide-search {
+  display: none;
+}
+.card-anime:empty {
+  min-height: 308px;
+  border-radius: 3px;
+  position: relative;
+}
+.card-anime:empty::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 14.5px;
+  background: #282D39;
+  bottom: 0;
+  border-radius: 3px;
+  animation: loading 1.5s infinite;
+  transition: 0.1s ease-in-out;
+}
+.card-anime:empty::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 24.5px;
+  background: #282D39;
+  border-radius: 3px;
+  animation: loading 1.5s infinite;
+}
+
+.swiper-slide-active a .card_anime .card_content {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+@media screen and (max-width: 500px) {
+  main .score-diagrams .diagram .content {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 }

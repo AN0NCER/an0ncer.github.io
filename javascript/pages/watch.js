@@ -1104,7 +1104,7 @@ function Functional() {
       title: $(document).attr("title"),
       text: $('meta[property="og:description"]').attr('content'),
       url: window.location.origin + window.location.pathname + '?id=' + $ID + '&share'
-    }).catch((error) => console.log('Sharing failed', error));
+    }).catch((error) => $DEV.error('Sharing failed', error));
   }
 }
 
@@ -1426,7 +1426,16 @@ async function LoadAnime(e = () => { }, l = false) {
           ? "Онгоинг"
           : "Вышел"
     );
-    $(".pg-rating").text(data.rating);
+    let rating = data.rating == 'none' || data.rating == 'g'
+      ? '0'
+      : data.rating == 'pg'
+        ? '7'
+        : data.rating == 'pg_13'
+          ? '13'
+          : data.rating == 'r'
+            ? '17'
+            : '18';
+    $(".pg-rating").text(`${rating}+`);
   }
 
   /**
