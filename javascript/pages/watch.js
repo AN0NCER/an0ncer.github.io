@@ -1104,7 +1104,7 @@ function Functional() {
       title: $(document).attr("title"),
       text: $('meta[property="og:description"]').attr('content'),
       url: window.location.origin + window.location.pathname + '?id=' + $ID + '&share'
-    }).catch((error) => console.log('Sharing failed', error));
+    }).catch((error) => $DEV.error('Sharing failed', error));
   }
 }
 
