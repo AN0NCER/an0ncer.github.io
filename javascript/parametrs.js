@@ -7,6 +7,7 @@ const $PARAMETERS = {
         dubanimefrc: false,
         episrevers: 'left',
         typefrc: ["TV Сериал", "Фильм", "ONA", "OVA"],
+        saveinfo: false,
     },
     experement: false,
 };
