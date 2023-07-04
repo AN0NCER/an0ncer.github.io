@@ -508,6 +508,7 @@ const player = {
 //Управление историей
 const History = {
   shikiData: undefined,
+  screenData: undefined,
   key: "last-watch",
   maxItems: 5,
   idImage: 0,
@@ -534,7 +535,10 @@ const History = {
     const history = this.get();
     const { russian, screenshots } = this.shikiData;
     const episode = cnt ? e + i : e + i;
-    const image = `${screenshots[this.idImage].original}`;
+    let image = `${screenshots[0].original}`;
+    if (this.screenData?.length > 0) {
+      image = `${this.screenData[this.idImage].original}`;
+    }
     const dub = player.translation.name;
     const type = this.shikiData.kind == "movie" ? "Фильм" : this.shikiData.kind == "ova" ? "OVA" : this.shikiData.kind == "ona" ? "ONA" : "Аниме";
 
@@ -805,7 +809,7 @@ const WindowScore = {
   */
   init: function () {
 
-    if($PARAMETERS.watch.saveinfo){
+    if ($PARAMETERS.watch.saveinfo) {
       $('#info-anime').prop('checked', true);
     }
 
@@ -902,7 +906,7 @@ const WindowScore = {
       user.events.setComment(val);
     });
 
-    $('#info-anime').click(function(){
+    $('#info-anime').click(function () {
       setParameter('saveinfo', this.checked);
     });
   },
@@ -1427,6 +1431,8 @@ async function LoadAnime(e = () => { }, l = false) {
       if (r.length == 0) {
         $(".title-gallery").css("display", "none");
       }
+
+      History.screenData = r;
 
       for (let index = 0; index < r.length; index++) {
         const element = r[index];
