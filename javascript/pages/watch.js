@@ -4,6 +4,8 @@ const $ID = new URLSearchParams(window.location.search).get("id");
 //Продолжение просмотра
 let $CONTINUE = new URLSearchParams(window.location.search).get("continue");
 
+const $SHOWPLAYER = new URLSearchParams(window.location.search).get("player");
+
 //Все возможные статусы пользователя к текущему аниме
 const anime_status = [
   { id: 0, name: "Посмотрю", sh: ["planned"] },
@@ -508,6 +510,7 @@ const player = {
 //Управление историей
 const History = {
   shikiData: undefined,
+  screenData: undefined,
   key: "last-watch",
   maxItems: 5,
   idImage: 0,
@@ -534,7 +537,10 @@ const History = {
     const history = this.get();
     const { russian, screenshots } = this.shikiData;
     const episode = cnt ? e + i : e + i;
-    const image = `${screenshots[this.idImage].original}`;
+    let image = `${screenshots[0].original}`;
+    if (this.screenData?.length > 0) {
+      image = `${this.screenData[this.idImage].original}`;
+    }
     const dub = player.translation.name;
     const type = this.shikiData.kind == "movie" ? "Фильм" : this.shikiData.kind == "ova" ? "OVA" : this.shikiData.kind == "ona" ? "ONA" : "Аниме";
 
@@ -804,12 +810,19 @@ const WindowScore = {
   * Инициализация функции окна, запускается если прошел верификацию (this.verif)
   */
   init: function () {
-    let whoami = usr.Storage.Get(usr.Storage.keys.whoami);
+
+    if ($PARAMETERS.watch.saveinfo) {
+      $('#info-anime').prop('checked', true);
+    }
 
     //Кнопка закрытия окна
-    $('.block-close>.btn.close').click(() => {
+    $('.block-close > .btn-close-window').click(() => {
       this.hide();
       WindowManagment.hide();
+    });
+
+    $('.content-score > .content-wraper > textarea').bind('input', function () {
+      WindowScore.auto_grow(document.querySelector('.content-score > .content-wraper > textarea'));
     });
 
     //Проверяем на наличие у пользователя user_rate
@@ -817,56 +830,86 @@ const WindowScore = {
       //Проверяем оценку пользователя
       if (user.rate.score != 0) {
         //Если есть оценка, то устанавливаем значение в input и включаем кнопку очистки значения
-        $('.range > label > input').val(user.rate.score);
-        $('.range-score > .rm-score').removeClass('disabled');
+        $(`.sc-${user.rate.score}`).addClass('selected');
+        $('.block-clear-score').removeClass('disabled');
         //Изменяем title на оценено
-        $('.content-score > .content-wraper > .block-close > .title').text("Оценено");
+        $('.content-score > .content-wraper > .block-close > .title-block').text("Оценено");
       }
 
       //Проверяем комментарий пользователя
-      console.log(user.rate);
+      $DEV.log(user.rate);
       if (user.rate.text) {
         //Устанавливаем значения комментария в input
-        $('.comment-wrap > label > textarea').val(user.rate.text);
-        auto_grow(document.querySelector('.comment-wrap > label > textarea'));
-        //Изменяем кнопку на удалить
-
+        $('.content-score > .content-wraper > textarea').val(user.rate.text);
+        this.auto_grow(document.querySelector('.content-score > .content-wraper > textarea'));
       }
     }
 
-    //Устанавливаем для комментариев аватарку пользоватея
-    $('.comment-wrap > .avatar > img').attr('src', whoami.image['x160']);
-
     //Отслеживаем изменения оценки пользователем
-    $('.range > label > input').change(function () {
-      const val = this.value;
-      if (val <= 0) {
+    $('.score-list > .sc').click(function () {
+      let score = $(this).attr('data-score');
+
+      if (user?.rate && user.rate.score == score) {
         return;
       }
-      user.events.setScore(val);
-      $('.range-score > .rm-score').removeClass('disabled');
-      //Изменяем title на оценено
-      $('.content-score > .content-wraper > .block-close > .title').text("Оценено");
+      $(`.sc.selected`).removeClass('selected');
+      $(this).addClass('selected');
+
+      //Устанавливает оценку
+      user.events.setScore(score);
+
+      $('.block-clear-score').removeClass('disabled');
+      $('.content-score > .content-wraper > .block-close > .title-block').text("Оценено");
     });
 
     //Отслеживаем изменение нажатие на кнопку очистить оценку
-    $('.range-score > .rm-score').click(function () {
+    $('.block-clear-score').click(function () {
       if ($(this).hasClass('disabled')) {
         return;
       }
 
+      //  Устанавливает оценку 0
       user.events.setScore(0);
-      $('.range-score > .rm-score').addClass('disabled');
-      //Изменяем title на оценено
-      $('.content-score > .content-wraper > .block-close > .title').text("Оценить");
-    })
+
+      $('.block-clear-score').addClass('disabled');
+      $(`.sc.selected`).removeClass('selected');
+      $('.content-score > .content-wraper > .block-close > .title-block').text("Оценить");
+    });
 
     $('.content-score > .content-wraper > .btn-commit').click(function () {
-      const val = $('.comment-wrap > label > textarea').val();
+      let info = document.querySelector('#info-anime').checked;
+      let val = $('.content-score > .content-wraper > textarea').val();
       if (!val && val.length >= 0) {
         return;
       }
+
+      if (info) {
+        var searchString = 'Озвучка:';
+        var lines = val.split('\n'); // Разбиваем содержимое на строки
+
+        //Найдена данная строка
+        if (val.indexOf(searchString) !== -1) {
+          //Отбираем без этой строки
+          var updatedLines = lines.filter(function (line) {
+            return -1 === line.indexOf(searchString); // Фильтруем строки, удаляя найденную строку
+          });
+          //Изменяем текст
+          val = updatedLines.join('\n');
+        }
+
+        //Добавляем информацию о тексте
+        val += '\n' + searchString + ` ${player.translation.name} - ${player.translation.id}`;
+      }
+
+      $('.content-score > .content-wraper > textarea').val(val);
+      WindowScore.auto_grow(document.querySelector('.content-score > .content-wraper > textarea'))
+      $DEV.log(val);
+      //Устанавливает заметкку
       user.events.setComment(val);
+    });
+
+    $('#info-anime').click(function () {
+      setParameter('saveinfo', this.checked);
     });
   },
 
@@ -894,73 +937,13 @@ const WindowScore = {
   */
   verif: function () {
     return WindowManagment.authorized;
+  },
+
+  auto_grow: function (dom) {
+    dom.style.height = "5px";
+    dom.style.height = (dom.scrollHeight) + "px";
   }
-}
-
-//Управление окнами визуала
-const WindowManagment = {
-  authorized: false,
-  showed: false,
-
-  target: {
-    /**
-     * Инициализация функции окна, запускается если прошел верификацию (this.verif)
-     */
-    init: function () { },
-    /**
-     * Отображение окна
-     */
-    show: function () { },
-    /**
-     * Скрытие окна
-     */
-    hide: function () { },
-    /**
-     * Проверка для инициализация окна. Если проверка не нужна просто верни true
-     * @returns Возвращает boolean
-     */
-    verif: function () { return true; },
-  },
-
-  init: function (authorized) {
-    this.authorized = authorized;
-    $('.hide-window').click(() => {
-      this.hide();
-      this.target.hide();
-    })
-  },
-
-  click: function (target = this.target) {
-    if (!target.verif()) {
-      return;
-    }
-    this.target = target;
-    this.target.init();
-    this.show();
-    this.target.show();
-  },
-
-  hide: async function () {
-    this.showed = false;
-    let el = $('.windowed');
-    $('.hide-window').css('opacity', 0);
-    await sleep(300);
-    el.addClass('hide');
-    $('.hide-window').css('opacity', '');
-  },
-
-  show: async function () {
-    this.showed = true;
-    let el = $('.windowed.hide');
-    el.css('display', 'block');
-    await sleep(10);
-    $('.hide-window').css('opacity', 1);
-    el.removeClass('hide');
-    el.css('display', '');
-    await sleep(300);
-    $('.hide-window').css('opacity', '');
-  }
-}
+};
 
 /*
  * Создание событий к визулу
@@ -1181,7 +1164,7 @@ Main((e) => {
         $CONTINUE = false;
       }
     }
-  })
+  });
 });
 
 /**
@@ -1218,6 +1201,7 @@ async function LoadAnime(e = () => { }, l = false) {
   scrollElementWithMouse('.hero-anime');
   scrollElementWithMouse('.galery-slider');
   scrollElementWithMouse('#episodes');
+  scrollElementWithMouse('.genres.scroll-none');
 
   //Получение аниме из Shikimori
   /**
@@ -1451,6 +1435,8 @@ async function LoadAnime(e = () => { }, l = false) {
         $(".title-gallery").css("display", "none");
       }
 
+      History.screenData = r;
+
       for (let index = 0; index < r.length; index++) {
         const element = r[index];
         $(".galery-slider").append(
@@ -1460,6 +1446,16 @@ async function LoadAnime(e = () => { }, l = false) {
 
       //Инициализация cursotm функции истории
       History.custom.init();
+
+      //Наводимся на плеер
+      if ($SHOWPLAYER && $PARAMETERS.watch.showplayer) {
+        const element = document.querySelector(".landscape-player");
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "nearest",
+        });
+      }
     });
   }
 

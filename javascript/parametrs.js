@@ -5,8 +5,10 @@ const $PARAMETERS = {
     watch: {
         dubanime: false,
         dubanimefrc: false,
+        showplayer: true,
         episrevers: 'left',
         typefrc: ["TV Сериал", "Фильм", "ONA", "OVA"],
+        saveinfo: false,
     },
     experement: false,
 };

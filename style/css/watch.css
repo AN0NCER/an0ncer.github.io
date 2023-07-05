@@ -866,170 +866,6 @@ footer .studio span {
   opacity: 0.5;
 }
 
-.windowed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 300;
-  color: #FFF;
-  font-family: "Manrope";
-  display: block;
-  transition: 0.3s ease-in-out;
-}
-.windowed .hide-window {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 1;
-  transition: 0.3s ease-in-out;
-  background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  cursor: pointer;
-}
-.windowed .window-content {
-  background: #101318;
-  border-radius: 5px 5px 0px 0px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  right: 0;
-  flex-direction: column;
-  max-height: 100vh;
-  overflow-y: auto;
-  transition: 0.3s ease-in-out;
-  transform: translateY(100%);
-}
-.windowed .window-content .content-wraper {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.windowed .window-content .content-wraper .block-close {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-.windowed .window-content .content-wraper .range-score {
-  display: flex;
-  width: 100%;
-}
-.windowed .window-content .content-wraper .range-score .range {
-  width: 100%;
-}
-.windowed .window-content .content-wraper .range-score .range label {
-  position: relative;
-}
-.windowed .window-content .content-wraper .range-score .range label input[type=range] {
-  width: 100%;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-       appearance: none;
-  background: #2487F1;
-  height: 5px;
-  border-radius: 5px;
-}
-.windowed .window-content .content-wraper .range-score .range label .datalist {
-  font-size: 12px;
-  display: flex;
-  justify-content: space-between;
-  position: absolute;
-  left: 8px;
-  right: 0px;
-}
-.windowed .window-content .content-wraper .range-score .range label .datalist div:first-child {
-  transform: translateX(-1px);
-}
-.windowed .window-content .content-wraper .range-score .range label .datalist div:last-child {
-  transform: translateX(-3px);
-}
-.windowed .window-content .content-wraper .range-score .rm-score {
-  height: 40px;
-  width: 20px;
-  display: grid;
-  place-items: center;
-  margin-left: 10px;
-  cursor: pointer;
-}
-.windowed .window-content .content-wraper .range-score .rm-score svg {
-  fill: #fff;
-}
-.windowed .window-content .content-wraper .range-score .rm-score.disabled svg {
-  opacity: 0.2;
-  cursor: auto;
-}
-.windowed .window-content .content-wraper .content-title {
-  font-weight: bold;
-  font-size: 16px;
-}
-.windowed .window-content .content-wraper .comment-wrap {
-  display: flex;
-}
-.windowed .window-content .content-wraper .comment-wrap .avatar img {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-}
-.windowed .window-content .content-wraper .comment-wrap label {
-  width: 100%;
-  margin-left: 10px;
-  position: relative;
-}
-.windowed .window-content .content-wraper .comment-wrap label svg {
-  position: absolute;
-  left: -7px;
-  top: 19px;
-}
-.windowed .window-content .content-wraper .comment-wrap label textarea {
-  resize: none;
-  min-height: 75px;
-  width: 100%;
-  background: #282D39;
-  border-radius: 7px;
-  outline: none;
-  border: none;
-  padding: 10px;
-  box-sizing: border-box;
-  font-size: 13px;
-  color: #fff;
-  font-family: "Manrope";
-}
-.windowed .window-content .content-wraper .comment-wrap label textarea::-moz-placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-.windowed .window-content .content-wraper .comment-wrap label textarea::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-.windowed .window-content .content-wraper .btn-commit {
-  height: 40px;
-  background: linear-gradient(90.75deg, #51B3FF 0%, #3283E4 100%);
-  border-radius: 4px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 0px;
-  gap: 10px;
-  font-weight: 700;
-  font-size: 13px;
-  cursor: pointer;
-}
-.windowed .window-content.hide {
-  display: none;
-}
-.windowed.hide {
-  display: none;
-}
-.windowed.hide .hide-window {
-  opacity: 0;
-}
-
 .rm--mg--t {
   margin-top: 0;
 }
@@ -1138,6 +974,188 @@ footer .studio span {
 
 .swiper-slide-active a .card_anime .card_content {
   background: rgba(0, 0, 0, 0.7);
+}
+
+.windowed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 300;
+  color: #FFF;
+  font-family: "Manrope";
+  display: block;
+  transition: 0.3s ease-in-out;
+}
+.windowed.hide {
+  display: none;
+}
+.windowed.hide .hide-window {
+  opacity: 0;
+}
+.windowed .hide-window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 1;
+  transition: 0.3s ease-in-out;
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+}
+.windowed .window-content {
+  background: #101318;
+  border-radius: 5px 5px 0px 0px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  right: 0;
+  flex-direction: column;
+  overflow-y: auto;
+  transition: 0.3s ease-in-out;
+  transform: translateY(100%);
+}
+.windowed .window-content .content-wraper {
+  padding-left: calc(env(safe-area-inset-left) + 20px);
+  padding-right: calc(env(safe-area-inset-right) + 20px);
+  padding-top: 20px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.windowed .window-content.hide {
+  display: none;
+}
+
+@media screen and (min-width: 900px) {
+  .windowed .window-content .content-wraper {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+.content-score .content-wraper .block-close {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.content-score .content-wraper .block-close .btn-close-window {
+  display: grid;
+  place-items: center;
+  min-width: 35px;
+  min-height: 35px;
+  cursor: pointer;
+}
+.content-score .content-wraper .block-score {
+  display: flex;
+}
+.content-score .content-wraper .block-score .block-clear-score {
+  display: grid;
+  place-items: center;
+  min-width: 45px;
+  min-height: 45px;
+  box-shadow: -5px 0px 4px 0px rgba(16, 19, 24, 0.5);
+  z-index: 1;
+}
+.content-score .content-wraper .block-score .block-clear-score.disabled svg {
+  opacity: 0.25;
+}
+.content-score .content-wraper .block-score .block-clear-score svg {
+  width: 14px;
+  fill: #fff;
+  cursor: pointer;
+}
+.content-score .content-wraper .block-score .score-list {
+  display: flex;
+  width: 100%;
+  height: 45px;
+  overflow-x: auto;
+  gap: 5px;
+}
+.content-score .content-wraper .block-score .score-list .sc {
+  min-width: 45px;
+  min-height: 45px;
+  display: grid;
+  place-items: center;
+  border-radius: 3px;
+  background: #282D39;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.content-score .content-wraper .block-score .score-list .sc.selected {
+  background: #3689E8;
+}
+.content-score .content-wraper .block-score .score-list .shadow {
+  min-width: 5px;
+  min-height: 45px;
+}
+.content-score .content-wraper textarea {
+  resize: none;
+  min-height: 75px;
+  width: 100%;
+  background: #282D39;
+  border-radius: 7px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 13px;
+  color: #fff;
+  font-family: "Manrope";
+}
+.content-score .content-wraper .btn-commit {
+  height: 40px;
+  background: linear-gradient(90.75deg, #51B3FF 0%, #3283E4 100%);
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.content-score .content-wraper .title-block {
+  font-size: 16px;
+  font-weight: 700;
+}
+.content-score .content-wraper .block-check {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  gap: 10px;
+}
+.content-score .content-wraper .block-check input[type=checkbox] {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  display: none;
+  cursor: pointer;
+}
+.content-score .content-wraper .block-check input[type=checkbox]:checked ~ label > .check-box {
+  background: #3689E8;
+}
+.content-score .content-wraper .block-check .check-box {
+  display: flex;
+  min-width: 14px;
+  min-height: 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  border: 1px solid #3689E8;
+}
+.content-score .content-wraper .block-check label {
+  display: flex;
+  gap: 10px;
+  color: #FFF;
+  font-size: 13px;
+  font-family: Manrope;
+  font-weight: 400;
+  cursor: pointer;
 }
 
 .card-anime {
