@@ -1201,6 +1201,7 @@ async function LoadAnime(e = () => { }, l = false) {
   scrollElementWithMouse('.hero-anime');
   scrollElementWithMouse('.galery-slider');
   scrollElementWithMouse('#episodes');
+  scrollElementWithMouse('.genres.scroll-none');
 
   //Получение аниме из Shikimori
   /**
