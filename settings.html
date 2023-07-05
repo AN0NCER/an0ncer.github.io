@@ -90,17 +90,24 @@
                     Правило для отобора отображение франшизов аниме.
                 </span>
             </div>
-            <div class="parameters-title" data-search="Видеоплеер">
+            <div class="parameters-title" data-search="Видеоплеер, Автопрокрутка, Эпизоды">
                 Видеоплеер
             </div>
-            <div class="parameters-container" data-search="Видеоплеер">
-                <label class="border-all" data-param="episrevers" data-type="select" data-val="left"
+            <div class="parameters-container" data-search="Видеоплеер, Автопрокрутка, Эпизоды">
+                <label class="border-top">
+                    <div class="title">Автопрокрутка</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="showplayer">
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+                <label class="border-bottom" data-param="episrevers" data-type="select" data-val="left" data-search="Видеоплеер, Автопрокрутка, Эпизоды"
                     data-variation='[{"key":"top", "value":"Сверху"},{"key":"right", "value":"Справа"},{"key":"left", "value":"Слева"}]'
                     data-tooltip="Правило отображения эпизодов при просмотре в горизонтальном режиме.">
                     <div class="title">Эпизоды</div>
                     <div class="select">Справа</div>
                 </label>
-                <span class="tips">
+                <span class="tips" data-search="Видеоплеер, Автопрокрутка, Эпизоды">
                     Правило отображения эпизодов при просмотре в горизонтальном режиме.
                 </span>
             </div>

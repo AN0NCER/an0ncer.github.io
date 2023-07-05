@@ -4,6 +4,8 @@ const $ID = new URLSearchParams(window.location.search).get("id");
 //Продолжение просмотра
 let $CONTINUE = new URLSearchParams(window.location.search).get("continue");
 
+const $SHOWPLAYER = new URLSearchParams(window.location.search).get("player");
+
 //Все возможные статусы пользователя к текущему аниме
 const anime_status = [
   { id: 0, name: "Посмотрю", sh: ["planned"] },
@@ -1162,7 +1164,7 @@ Main((e) => {
         $CONTINUE = false;
       }
     }
-  })
+  });
 });
 
 /**
@@ -1443,6 +1445,16 @@ async function LoadAnime(e = () => { }, l = false) {
 
       //Инициализация cursotm функции истории
       History.custom.init();
+
+      //Наводимся на плеер
+      if ($SHOWPLAYER && $PARAMETERS.watch.showplayer) {
+        const element = document.querySelector(".landscape-player");
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "nearest",
+        });
+      }
     });
   }
 
