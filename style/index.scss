@@ -4,6 +4,7 @@ body {
   background: $main_bg;
   max-width: 1100px;
   margin: 0 auto;
+  -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
 }
 
 header {

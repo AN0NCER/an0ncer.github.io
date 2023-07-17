@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .application-menu {
   position: fixed;
   bottom: 0;
@@ -128,6 +129,7 @@ body {
   background: #101318;
   max-width: 1100px;
   margin: 0 auto;
+  -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
 }
 
 body.state_result .phone_menu,

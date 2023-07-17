@@ -6,6 +6,7 @@ body {
     background: $bg;
     max-width: 1100px;
     margin: 0 auto;
+    -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
 }
 
 body.state_result,

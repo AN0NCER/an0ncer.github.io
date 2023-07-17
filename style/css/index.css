@@ -1,7 +1,9 @@
+@charset "UTF-8";
 body {
   background: #101318;
   max-width: 1100px;
   margin: 0 auto;
+  -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
 }
 
 header {
