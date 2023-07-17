@@ -3,7 +3,8 @@ body {
   background: #101318;
   max-width: 1100px;
   margin: 0 auto;
-  -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
+  -webkit-text-size-adjust: none;
+  /* Запрещает автоматическое изменение размера текста */
 }
 
 header {
@@ -904,4 +905,26 @@ footer {
   100% {
     transform: rotate(360deg);
   }
+}
+body[data-orientation="90"] .swiper-treilers,
+body[data-orientation="90"] .section-genres,
+body[data-orientation="90"] .section-anime,
+body[data-orientation="90"] .swiper-continue,
+body[data-orientation="90"] .section-update {
+  margin-right: env(safe-area-inset-right);
+}
+
+body[data-orientation="270"] .swiper-treilers,
+body[data-orientation="270"] .section-genres,
+body[data-orientation="270"] .section-anime,
+body[data-orientation="270"] .swiper-continue,
+body[data-orientation="270"] .section-title,
+body[data-orientation="270"] .section-update {
+  margin-left: env(safe-area-inset-left);
+}
+body[data-orientation="270"] .section-genres > .genres:nth-child(1) {
+  margin-left: 0;
+}
+body[data-orientation="270"] .section-anime a:nth-child(1), body[data-orientation="270"] .section-update a:nth-child(1) {
+  margin-left: 0px;
 }

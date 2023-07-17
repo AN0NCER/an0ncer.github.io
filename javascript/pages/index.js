@@ -56,6 +56,8 @@ scrollElementWithMouse('.section-update');
 
 //Загружаем историю последних просмотров пользователя
 GetHistoryWatch();
+//Ориентация экрана
+OrienatationScreen();
 
 //https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep/39914235#39914235
 function sleep(ms) {
@@ -379,4 +381,11 @@ function AutoLogin() {
         //Пробуем авторизоваться
         return window.location.href = usr.Oauth.GetUrl();
     }
+}
+
+function OrienatationScreen(){
+    $('body').attr('data-orientation', screen.orientation.angle);
+    window.addEventListener("orientationchange", function () {
+        $('body').attr('data-orientation', screen.orientation.angle);
+    });
 }
