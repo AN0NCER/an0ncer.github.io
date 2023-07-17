@@ -6,7 +6,8 @@ body {
     background: $bg;
     max-width: 1100px;
     margin: 0 auto;
-    -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
+    -webkit-text-size-adjust: none;
+    /* Запрещает автоматическое изменение размера текста */
 }
 
 body.state_result,
@@ -152,10 +153,12 @@ main {
             input::placeholder {
                 opacity: 0;
             }
-            .filter-dub{
+
+            .filter-dub {
                 display: flex;
             }
-            .icon{
+
+            .icon {
                 display: none;
             }
         }
@@ -402,7 +405,7 @@ main.state_result {
                 margin-right: 10px;
                 font-size: 16px;
 
-                &.selected{
+                &.selected {
                     background: #18222F;
                 }
 
@@ -672,5 +675,31 @@ footer {
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+body {
+    &[data-orientation="90"] {
+
+        main,
+        .recomend>.title,
+        .genres .content,
+        .voice .content,
+        .result .content,
+        .recomend .content {
+            margin-right: max(20px, env(safe-area-inset-right));
+        }
+    }
+
+    &[data-orientation="270"] {
+
+        main,
+        .recomend>.title,
+        .genres .content,
+        .voice .content,
+        .result .content,
+        .recomend .content {
+            margin-left: max(20px, env(safe-area-inset-left));
+        }
     }
 }

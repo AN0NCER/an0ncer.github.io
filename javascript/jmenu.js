@@ -80,6 +80,9 @@ const application_menu_icon = {
     InteractiveFunctionMenu();
 })();
 
+//Ориентация экрана
+OrienatationScreen();
+
 /**
  * Добавляет основные елементы меню на сайт
  */
@@ -196,4 +199,17 @@ function InteractiveFunctionMenu(){
         let key = $(e.currentTarget).data('intm');
         application_menu_interactive_func[key]();
     })
+}
+
+/**
+ * Функция определяет ориентацию экрана
+ */
+function OrienatationScreen(){
+    if($PARAMETERS.menuver){
+        $('body').addClass('menuver');
+    }
+    $('body').attr('data-orientation', screen.orientation.angle);
+    window.addEventListener("orientationchange", function () {
+        $('body').attr('data-orientation', screen.orientation.angle);
+    });
 }

@@ -624,6 +624,42 @@ footer {
   width: 16px;
 }
 
+body.menuver[data-orientation="90"] .application-menu, body.menuver[data-orientation="270"] .application-menu {
+  bottom: 0;
+  top: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+  border-top: none;
+  flex-direction: column;
+  align-items: center;
+}
+body.menuver[data-orientation="90"] .application-menu .btn-menu:first-child, body.menuver[data-orientation="270"] .application-menu .btn-menu:first-child {
+  margin: 0;
+}
+body.menuver[data-orientation="90"] .application-menu .btn-menu:last-child, body.menuver[data-orientation="270"] .application-menu .btn-menu:last-child {
+  margin: 0;
+}
+body.menuver[data-orientation="90"] {
+  margin-left: 75px;
+}
+body.menuver[data-orientation="90"] .application-menu {
+  left: 0;
+  right: auto;
+  padding-left: 10px;
+  border-radius: 0px 7px 7px 0px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+body.menuver[data-orientation="270"] {
+  margin-right: 75px;
+}
+body.menuver[data-orientation="270"] .application-menu {
+  left: auto;
+  right: 0;
+  padding-right: 10px;
+  border-radius: 7px 0px 0px 7px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .card-anime {
   display: grid;
   overflow: hidden;
@@ -911,20 +947,20 @@ body[data-orientation="90"] .section-genres,
 body[data-orientation="90"] .section-anime,
 body[data-orientation="90"] .swiper-continue,
 body[data-orientation="90"] .section-update {
-  margin-right: env(safe-area-inset-right);
+  margin-right: max(20px, env(safe-area-inset-right));
 }
-
 body[data-orientation="270"] .swiper-treilers,
 body[data-orientation="270"] .section-genres,
 body[data-orientation="270"] .section-anime,
 body[data-orientation="270"] .swiper-continue,
 body[data-orientation="270"] .section-title,
 body[data-orientation="270"] .section-update {
-  margin-left: env(safe-area-inset-left);
+  margin-left: max(20px, env(safe-area-inset-left));
 }
 body[data-orientation="270"] .section-genres > .genres:nth-child(1) {
   margin-left: 0;
 }
-body[data-orientation="270"] .section-anime a:nth-child(1), body[data-orientation="270"] .section-update a:nth-child(1) {
+body[data-orientation="270"] .section-anime a:nth-child(1),
+body[data-orientation="270"] .section-update a:nth-child(1) {
   margin-left: 0px;
 }
