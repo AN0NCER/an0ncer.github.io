@@ -442,7 +442,7 @@ body.menuver[data-orientation="270"] main {
   margin-right: 20px;
 }
 body.menuver[data-orientation="270"] main .content {
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 body.menuver[data-orientation="90"] header {
   margin-left: 20px;

@@ -469,3 +469,11 @@ body.menuver[data-orientation="270"] .application-menu {
     margin: 20px auto 0 auto;
   }
 }
+body[data-orientation="90"] main > div, body[data-orientation="90"] .wraper-input {
+  margin-right: max(10px, env(safe-area-inset-right));
+  margin-left: 10px;
+}
+body[data-orientation="270"] main > div, body[data-orientation="270"] .wraper-input {
+  margin-left: max(20px, env(safe-area-inset-left));
+  margin-right: 10px;
+}

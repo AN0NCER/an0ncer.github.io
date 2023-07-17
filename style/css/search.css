@@ -389,7 +389,6 @@ main.state_result .search--loading {
 
 .recomend {
   display: flex;
-  width: 100%;
   color: #fff;
   transition: 0.3s ease-in-out;
   max-height: 400px;
@@ -884,19 +883,11 @@ footer {
     transform: rotate(360deg);
   }
 }
-body[data-orientation="90"] main,
-body[data-orientation="90"] .recomend > .title,
-body[data-orientation="90"] .genres .content,
-body[data-orientation="90"] .voice .content,
-body[data-orientation="90"] .result .content,
-body[data-orientation="90"] .recomend .content {
-  margin-right: max(20px, env(safe-area-inset-right));
+body[data-orientation="90"] main > div {
+  margin-right: max(10px, env(safe-area-inset-right));
+  margin-left: 20px;
 }
-body[data-orientation="270"] main,
-body[data-orientation="270"] .recomend > .title,
-body[data-orientation="270"] .genres .content,
-body[data-orientation="270"] .voice .content,
-body[data-orientation="270"] .result .content,
-body[data-orientation="270"] .recomend .content {
+body[data-orientation="270"] main > div {
   margin-left: max(20px, env(safe-area-inset-left));
+  margin-right: 20px;
 }

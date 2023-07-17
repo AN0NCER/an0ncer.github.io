@@ -261,7 +261,6 @@ main.state_result {
 
 .recomend {
     display: flex;
-    width: 100%;
     color: #fff;
     transition: .3s ease-in-out;
     max-height: 400px;
@@ -681,25 +680,17 @@ footer {
 body {
     &[data-orientation="90"] {
 
-        main,
-        .recomend>.title,
-        .genres .content,
-        .voice .content,
-        .result .content,
-        .recomend .content {
-            margin-right: max(20px, env(safe-area-inset-right));
+        main > div{
+            margin-right: max(10px, env(safe-area-inset-right));
+            margin-left: 20px;
         }
     }
 
     &[data-orientation="270"] {
 
-        main,
-        .recomend>.title,
-        .genres .content,
-        .voice .content,
-        .result .content,
-        .recomend .content {
+        main > div{
             margin-left: max(20px, env(safe-area-inset-left));
+            margin-right: 20px;
         }
     }
 }

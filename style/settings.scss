@@ -339,3 +339,21 @@ footer {
         }
     }
 }
+
+body {
+    &[data-orientation="90"] {
+
+        main > div, .wraper-input{
+            margin-right: max(10px, env(safe-area-inset-right));
+            margin-left: 10px;
+        }
+    }
+
+    &[data-orientation="270"] {
+
+        main > div, .wraper-input{
+            margin-left: max(20px, env(safe-area-inset-left));
+            margin-right: 10px;
+        }
+    }
+}
