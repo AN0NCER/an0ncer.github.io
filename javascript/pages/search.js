@@ -605,7 +605,7 @@ function Search(search) {
             if (list_animes.length <= 0) return;
             Animes.list({ ids: list_animes[0].toString(), limit: list_animes[0].length }, async (response) => {
                 if (response.failed) {
-                    await sleep(1000);
+                    await Sleep(1000);
                     return LoadShikimori();
                 }
 
@@ -663,7 +663,7 @@ function ShowHistory() {
     function loadHistory(list) {
         Animes.list({ ids: list.toString(), limit: list.length }, async (response) => {
             if (response.failed) {
-                await sleep(1000);
+                await Sleep(1000);
                 return loadHistory(list);
             }
 
