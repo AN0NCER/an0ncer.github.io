@@ -4,7 +4,7 @@ import { Animes, Genres } from "../modules/ShikiAPI.js";
 import { WindowManagement } from "../engine/window_magagment_class.js";
 import { GetState, SetState } from "./search/_searchState.js";
 import { SearchHistory } from "./search/_history.js";
-import "./search/_recomendation.js";
+import { Recomendation } from "./search/_recomendation.js";
 
 //Текущая страница результатов
 let scrollPage = 1;
@@ -364,6 +364,7 @@ Main((e) => {
     ShowVoice();
     ShowHistory();
     Events();
+    Recomendation();
 });
 
 function Events() {

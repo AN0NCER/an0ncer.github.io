@@ -283,6 +283,40 @@ main.result > .content {
   justify-content: center;
 }
 
+main.main > .content {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  overflow-y: auto;
+  flex-wrap: nowrap;
+}
+main.main > .content > div {
+  width: 200px;
+}
+main.main .content-progress-load {
+  display: flex;
+  height: 23px;
+  border-radius: 4px;
+  background: #282D39;
+  overflow: hidden;
+  margin-top: 10px;
+  transition: 0.3s ease-in-out;
+}
+main.main .content-progress-load .progress {
+  background: #3283E4;
+  font-family: "Manrope";
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease-in-out;
+}
+main.main .content-progress-load.hidden {
+  height: 0;
+  margin-top: 0;
+}
+
 main.history.state_search, main.history.state_result {
   display: none;
 }
@@ -1080,6 +1114,12 @@ body.menuver[data-orientation="270"] .application-menu {
 body[data-orientation="90"] header {
   margin-left: 10px;
 }
+body[data-orientation="90"] main {
+  margin-left: 10px;
+}
 body[data-orientation="270"] header {
+  margin-right: 10px;
+}
+body[data-orientation="270"] main {
   margin-right: 10px;
 }
