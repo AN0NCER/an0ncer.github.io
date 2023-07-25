@@ -1,5 +1,5 @@
 import { Main } from "../modules/ShikiUSR.js";
-import { Sleep, TrackElement } from "../modules/funcitons.js";
+import { Sleep, TrackElement, ScrollElementWithMouse } from "../modules/funcitons.js";
 import { Animes, Genres } from "../modules/ShikiAPI.js";
 import { WindowManagement } from "../engine/window_magagment_class.js";
 import { GetState, SetState } from "./search/_searchState.js";
@@ -376,6 +376,11 @@ function Events() {
         SearchClear();
         SetState(0);
     });
+
+    ScrollElementWithMouse('.content-recomendation.scroll-none');
+    ScrollElementWithMouse('.block-line.genres.scroll-none');
+    ScrollElementWithMouse('.block-line.voices.scroll-none');
+    ScrollElementWithMouse('.history > .content.scroll-none');
 }
 
 function _searchEvenet() {
