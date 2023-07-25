@@ -608,7 +608,10 @@ function Search(search) {
 
         function LoadShikimori() {
             if (list_animes.length <= 0) return;
-            Animes.list({ ids: list_animes[0].toString(), limit: list_animes[0].length }, async (response) => {
+            let custom_Filter = searchFilter;
+            custom_Filter["ids"] = list_animes[0].toString();
+            custom_Filter["limit"] = list_animes[0].length;
+            Animes.list(custom_Filter, async (response) => {
                 if (response.failed) {
                     await Sleep(1000);
                     return LoadShikimori();
