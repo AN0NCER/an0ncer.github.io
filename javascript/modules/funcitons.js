@@ -161,7 +161,7 @@ export function TrackElement() {
  * @param {string} str - Строка для вычисления хеша SHA-256.
  * @returns {string} Хеш в шестнадцатеричном формате.
  */
-function sha256(str) {
+export function sha256(str) {
     const utf8Encoder = new TextEncoder();
     const data = utf8Encoder.encode(str);
 
