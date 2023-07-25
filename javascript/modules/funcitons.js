@@ -26,6 +26,10 @@ export function Fetch(method, url, headers, body = "") {
         url: url,
         headers: headers,
         body: body,
+        badresponse: {
+            failed: true,
+            status: "404",
+        },
 
         /**
          * Метод для установки HTTP-метода запроса.
