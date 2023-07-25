@@ -294,3 +294,50 @@ export function sha256(str) {
         toHex(h0) + toHex(h1) + toHex(h2) + toHex(h3) + toHex(h4) + toHex(h5) + toHex(h6) + toHex(h7);
     return result;
 }
+
+/**
+ * Добавляет слушатели событий для прокрутки горизонтального скролла элемента с помощью мыши.
+ * @param {string} dom - Селектор элемента, к которому будет добавлены слушатели событий.
+ */
+export function ScrollElementWithMouse(dom) {
+    const element = $(dom)[0];
+
+    let isDragging = false;
+    let currentX;
+    let initialMouseX;
+    let scrollLeft;
+
+    element.addEventListener('mousedown', (e) => {
+        initialMouseX = e.clientX;
+        scrollLeft = element.scrollLeft;
+        isDragging = true;
+    });
+
+    element.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            currentX = e.clientX - initialMouseX;
+            element.scrollLeft = scrollLeft - currentX;
+        }
+    });
+
+    element.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+
+    element.addEventListener('mouseleave', () => {
+        isDragging = false;
+    });
+
+    element.addEventListener('wheel', (e) => {
+        // Проверить, достигнут ли конец элемента
+        if (Math.abs(element.scrollLeft - (element.scrollWidth - element.clientWidth)) <= 2 && e.deltaY > 0) {
+            return;
+        }
+        //Проверить если число явсляется отрицательным и мы на начале элемента то прокручивать на врех дальше
+        if (e.deltaY < 0 && element.scrollLeft == 0) {
+            return;
+        }
+        e.preventDefault();
+        element.scrollLeft += e.deltaY;
+    });
+}

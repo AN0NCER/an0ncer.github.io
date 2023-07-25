@@ -1,4 +1,4 @@
-import { ObjectToQuery, Fetch, Sleep } from "./funcitons.js";
+import { Fetch, Sleep } from "./funcitons.js";
 import { Headers, Bodys } from "./header.js";
 
 export const Oauth = {
@@ -120,6 +120,10 @@ if (ips.findIndex(x => location.hostname) != -1) {
     User.test_on();
 }
 
+/**
+ * Основная функция для выполнения операций связанных с авторизацией пользователя.
+ * @param {function} e - Функция обратного вызова, которая будет вызвана с результатом проверки авторизации пользователя.
+ */
 export async function Main(e = () => { }) {
     if (!User.authorized) {
         if (User.Storage.Get()) {
