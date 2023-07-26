@@ -146,7 +146,6 @@ export async function Recomendation() {
     function LoadSaveAnime() {
         if (dataSave.list.length <= 0) return;
         LoadAnimes(dataSave.list);
-        console.log(dataSave.list);
 
         function LoadAnimes(ids) {
             Animes.list({ ids: ids.toString(), limit: ids.length }, async (response) => {
