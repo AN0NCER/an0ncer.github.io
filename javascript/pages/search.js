@@ -1,29 +1,14 @@
 import { Main } from "../modules/ShikiUSR.js";
-import { Sleep, TrackElement, ScrollElementWithMouse } from "../modules/funcitons.js";
+import { Sleep, ScrollElementWithMouse, isObjectEqual } from "../modules/funcitons.js";
 import { Animes, Genres } from "../modules/ShikiAPI.js";
 import { WindowManagement } from "../engine/window_magagment_class.js";
 import { GetState, SetState } from "./search/_searchState.js";
 import { SearchHistory } from "./search/_history.js";
 import { Recomendation } from "./search/_recomendation.js";
-
-//Текущая страница результатов
-let scrollPage = 1;
+import { Search, SearchFilter, SetEmptyFilter, SearchVoice, GetEmptyFilter, SetEmptyVoice } from "./search/_search.js";
 
 //Поиск
 const InputSearch = $(`.search-input > input`);
-
-//Поисковой фильтр
-let searchFilter = {
-    limit: 16, //Лимит елементов ответа
-    censored: $PARAMETERS.censored, //Цензура
-    page: scrollPage, //Страница результата
-}
-
-//Поиск по озвучек
-let searchVoice = [];
-
-//Пауза для рекомендации, загрузки и обновления онформации
-let pasuse = false;
 
 //Результаты ответа Жанров и Озвучек
 let responseGenres = undefined;
@@ -79,32 +64,32 @@ const WindowFilter = {
         $(`.filter--kind > div`).click((e) => {
             let selected = $(`.filter--kind > div.selected`);
             let element = $(e.currentTarget);
-            if (element.attr("data-id") == searchFilter.kind) {
+            if (element.attr("data-id") == SearchFilter.kind) {
                 element.removeClass("selected");
-                delete searchFilter.kind;
+                delete SearchFilter.kind;
                 ChangeFilter();
                 return;
             }
 
             selected.removeClass('selected');
             element.addClass('selected');
-            searchFilter["kind"] = element.attr("data-id");
+            SearchFilter["kind"] = element.attr("data-id");
             ChangeFilter();
         });
         //Status
         $(`.filter--status > div`).click((e) => {
             let element = $(e.currentTarget);
             let selected = $(`.filter--status > div.selected`);
-            if (element.attr("data-id") == searchFilter.status) {
+            if (element.attr("data-id") == SearchFilter.status) {
                 element.removeClass("selected");
-                delete searchFilter.status;
+                delete SearchFilter.status;
                 ChangeFilter();
                 return;
             }
 
             selected.removeClass('selected');
             element.addClass('selected');
-            searchFilter["status"] = element.attr("data-id");
+            SearchFilter["status"] = element.attr("data-id");
             ChangeFilter();
         });
         //Rating
@@ -112,38 +97,38 @@ const WindowFilter = {
             let element = $(e.currentTarget);
             if (element.hasClass('disabled')) return;
             let selected = $(`.filter--rating > div.selected`);
-            if (element.attr("data-id") == searchFilter.rating) {
+            if (element.attr("data-id") == SearchFilter.rating) {
                 element.removeClass("selected");
-                delete searchFilter.rating;
+                delete SearchFilter.rating;
                 ChangeFilter();
                 return;
             }
 
             selected.removeClass('selected');
             element.addClass('selected');
-            searchFilter["rating"] = element.attr("data-id");
+            SearchFilter["rating"] = element.attr("data-id");
             ChangeFilter();
         });
         //Score
         $(`.score-list > .sc`).click((e) => {
             let element = $(e.currentTarget);
             let selected = $(`.score-list > .sc.selected`);
-            if (parseInt(element.attr("data-score")) == searchFilter.score) {
+            if (parseInt(element.attr("data-score")) == SearchFilter.score) {
                 element.removeClass("selected");
-                delete searchFilter.score;
+                delete SearchFilter.score;
                 ChangeFilter();
                 return;
             }
             selected.removeClass('selected');
             element.addClass('selected');
-            searchFilter["score"] = parseInt(element.attr("data-score"));
+            SearchFilter["score"] = parseInt(element.attr("data-score"));
             ChangeFilter();
         });
 
         //Clear
         $(`.filte-bar > .btn-clear`).click((e) => {
-            searchFilter = EmptyFilter();
-            searchVoice = [];
+            SetEmptyFilter();
+            SetEmptyVoice();
 
             const elements = [$(`.filter--kind > div.selected`), $(`.filter--status > div.selected`), $(`.filter--rating > div.selected`), $(`.score-list > .sc.selected`), $(`.content-genres > div.genre.selected`), $(`.content-voices > .voice.selected`)];
 
@@ -204,7 +189,7 @@ const WindowGenres = {
 
         //Очистка
         $(`.genre-bar > .btn-clear`).click((e) => {
-            delete searchFilter.genre;
+            delete SearchFilter.genre;
             const elements = [$(`.content-genres > div.genre.selected`)];
             for (let i = 0; i < elements.length; i++) {
                 const e = elements[i];
@@ -233,21 +218,21 @@ const WindowGenres = {
             let element = $(e.currentTarget);
             if (element.hasClass('disabled')) return;
             let id = parseInt(element.attr("data-id"));
-            if (!searchFilter?.genre) {
-                searchFilter["genre"] = [];
+            if (!SearchFilter?.genre) {
+                SearchFilter["genre"] = [];
             }
-            let findIndex = searchFilter.genre.findIndex(x => x == id);
+            let findIndex = SearchFilter.genre.findIndex(x => x == id);
             if (findIndex != -1) {
-                searchFilter.genre.splice(findIndex, 1);
+                SearchFilter.genre.splice(findIndex, 1);
                 element.removeClass("selected");
-                if (searchFilter.genre.length == 0) delete searchFilter.genre;
+                if (SearchFilter.genre.length == 0) delete SearchFilter.genre;
                 this.selected--;
                 UpdateValue(this.selected);
                 return;
             }
             this.selected++;
             element.addClass('selected');
-            searchFilter.genre.push(id);
+            SearchFilter.genre.push(id);
             UpdateValue(this.selected);
         });
 
@@ -294,7 +279,7 @@ const WindowVoices = {
 
         //Очистка
         $(`.voice-bar > .btn-clear`).click((e) => {
-            searchVoice = [];
+            SetEmptyVoice();
             const elements = [$(`.content-voices > .voice.selected`)];
             for (let i = 0; i < elements.length; i++) {
                 const e = elements[i];
@@ -321,22 +306,22 @@ const WindowVoices = {
         $(`.content-voices > .voice`).click((e) => {
             const element = $(e.currentTarget);
             const id = parseInt(element.attr("data-id"));
-            const findeIndex = searchVoice.findIndex(x => x == id);
+            const findeIndex = SearchVoice.findIndex(x => x == id);
             if (findeIndex != -1) {
-                searchVoice.splice(findeIndex, 1);
+                SearchVoice.splice(findeIndex, 1);
                 element.removeClass("selected");
                 UpdateValue();
                 return;
             }
 
             element.addClass("selected");
-            searchVoice.push(id);
+            SearchVoice.push(id);
             UpdateValue();
             ChangeFilter();
         });
 
         function UpdateValue() {
-            $(`.full-btn.filter--voices > .info`).text(searchVoice.length);
+            $(`.full-btn.filter--voices > .info`).text(SearchVoice.length);
         }
     },
     /**
@@ -351,8 +336,6 @@ const WindowVoices = {
      */
     verif: function () { return windowFilter.showed && responseVoices; },
 }
-
-const Tracker = TrackElement();
 
 //Window Managment
 const windowFilter = new WindowManagement(WindowFilter, '.window-filter');
@@ -449,9 +432,9 @@ function _functionWindows() {
 
 function ChangeFilter() {
     const excludedKeys = ["limit", "censored", "page"];
-    let standartFilter = EmptyFilter();
-    const isChanged = !isObjectEqual(searchFilter, standartFilter, excludedKeys);
-    if (isChanged || searchVoice.length > 0) {
+    let standartFilter = GetEmptyFilter();
+    const isChanged = !isObjectEqual(SearchFilter, standartFilter, excludedKeys);
+    if (isChanged || SearchVoice.length > 0) {
         $('.btn--filter').addClass('on-filter')
     } else {
         $('.btn--filter').removeClass('on-filter')
@@ -459,14 +442,6 @@ function ChangeFilter() {
 
     if (InputSearch.val().length > 0) {
         Search(InputSearch.val());
-    }
-}
-
-function EmptyFilter() {
-    return {
-        limit: 16, //Лимит елементов ответа
-        censored: $PARAMETERS.censored, //Цензура
-        page: scrollPage, //Страница результата
     }
 }
 
@@ -501,10 +476,7 @@ function ShowVoice() {
 
         let id_dub = [];
 
-        // Замер времени выполнения скрипта
-        console.time("getNumericKeysFromLocalStorage");
         const numericKeys = getNumericKeysFromLocalStorage();
-        console.timeEnd("getNumericKeysFromLocalStorage");
 
         for (let index = 0; index < numericKeys.length; index++) {
             const e = numericKeys[index];
@@ -529,129 +501,13 @@ function ShowVoice() {
 
         //Функция нажатия на озвучки
         $('.voice-card').click(async (e) => {
-            search.ChangeState(3);
+            SetState(3);
+            ChangeState(3);
             searchKodikAudio($(e.currentTarget).attr('data-id'));
             $('.input-search').addClass('dub-filter');
             $('.filter-dub > .dub').text(($(e.currentTarget).attr('data-title')));
         });
     })
-}
-
-//Функция поиска
-function Search(search) {
-    SearchClear();
-    InputSearch.blur();
-    searchFilter.page = 1;
-    Tracker.removeEvent();
-
-    if (searchVoice.length == 0) {
-        ShikimoriSearch(search);
-    } else {
-        VoiceSearch(search);
-    }
-
-    function ShikimoriSearch(search) {
-        searchFilter["search"] = search;
-        Animes.list(searchFilter, async (response) => {
-            if (response.failed) {
-                await Sleep(1000);
-                return ShikimoriSearch(search);
-            }
-
-            GenerateList(response);
-
-            if (response.length <= 0) return;
-
-
-            Tracker.eventScroll(".scroll-end-func", () => {
-                if (GetState().id != "result") return;
-                searchFilter.page++;
-                console.log('here');
-                ShikimoriSearch(search)
-            });
-        }).GET();
-
-        function GenerateList(response) {
-            SetState(3);
-
-            for (let i = 0; i < response.length; i++) {
-                $('main.result > .content').append(GenElement(response[i]));
-            }
-
-            $("main.result > .content > .card-anime").unbind('click').on('click', (e) => {
-                const target = $(e.currentTarget);
-                const id = target.data('id');
-                SearchHistory.addHistory(id);
-                window.location.href = "/watch.html?id=" + id;
-            });
-        }
-    }
-
-    async function VoiceSearch(search) {
-        let list_animes = []
-
-        await kodikApi.search({ types: 'anime-serial,anime', translation_id: searchVoice, title: search }, (response) => {
-            const data = response;
-
-            let ids = [];
-            for (let i = 0; i < data.total; i++) {
-                const e = data.results[i];
-                if (ids.findIndex(x => x == e.shikimori_id) == -1) ids.push(e.shikimori_id);
-                if (ids.length == 16) {
-                    list_animes.push(ids);
-                    ids = [];
-                }
-            }
-            if (ids.length > 0) list_animes.push(ids);
-            LoadShikimori();
-        });
-
-        function LoadShikimori() {
-            if (list_animes.length <= 0) return;
-            let custom_Filter = searchFilter;
-            custom_Filter["ids"] = list_animes[0].toString();
-            custom_Filter["limit"] = list_animes[0].length;
-            Animes.list(custom_Filter, async (response) => {
-                if (response.failed) {
-                    await Sleep(1000);
-                    return LoadShikimori();
-                }
-
-                SetState(3);
-                list_animes.splice(0, 1);
-
-                for (let i = 0; i < response.length; i++) {
-                    $('main.result > .content').append(GenElement(response[i]));
-                }
-
-                $("main.result > .content > .card-anime").unbind('click').on('click', (e) => {
-                    const target = $(e.currentTarget);
-                    const id = target.data('id');
-                    SearchHistory.addHistory(id);
-                    window.location.href = "/watch.html?id=" + id;
-                });
-
-                if (list_animes.length <= 0) return;
-
-                Tracker.eventScroll(".scroll-end-func", () => {
-                    if (GetState().id != "result") return;
-                    LoadShikimori();
-                });
-
-            }).GET();
-        }
-    }
-
-    function GenElement(response) {
-        const url = "https://nyaa.shikimori.me/";
-        return `<div class="card-anime" data-id="${response.id}">
-<div class="card-content"><img src="https://moe.shikimori.me/${response.image.original}"><div class="title"><span>${response.russian}</span></div></div><div class="card-information"><div class="year">${new Date(response.aired_on).getFullYear()}</div><div class="score"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.73196 0.745728C4.65834 0.595337 4.50279 0.499634 4.33196 0.499634C4.16112 0.499634 4.00696 0.595337 3.93196 0.745728L3.0389 2.55452L1.04446 2.84436C0.877789 2.86897 0.7389 2.98381 0.687511 3.14104C0.636122 3.29827 0.677789 3.4719 0.797233 3.58811L2.24446 4.99768L1.90279 6.98967C1.87501 7.15374 1.94446 7.32053 2.08196 7.4176C2.21946 7.51467 2.4014 7.52698 2.5514 7.44905L4.33334 6.51252L6.11529 7.44905C6.26529 7.52698 6.44723 7.51604 6.58473 7.4176C6.72223 7.31917 6.79168 7.15374 6.7639 6.98967L6.42084 4.99768L7.86807 3.58811C7.98751 3.4719 8.03057 3.29827 7.97779 3.14104C7.92501 2.98381 7.78751 2.86897 7.62084 2.84436L5.62501 2.55452L4.73196 0.745728Z" fill="#FFE600"/></svg>${response.score}</div></div>
-    </div>`;
-    }
-}
-
-function SearchClear() {
-    $('main.result > .content').empty();
 }
 
 function ShowHistory() {
@@ -699,21 +555,4 @@ function getNumericKeysFromLocalStorage() {
     }
 
     return numericKeys;
-}
-
-function isObjectEqual(obj1, obj2, excludedKeys) {
-    const keys1 = Object.keys(obj1).filter((key) => !excludedKeys.includes(key));
-    const keys2 = Object.keys(obj2).filter((key) => !excludedKeys.includes(key));
-
-    if (keys1.length !== keys2.length) {
-        return false;
-    }
-
-    for (const key of keys1) {
-        if (obj1[key] !== obj2[key]) {
-            return false;
-        }
-    }
-
-    return true;
 }
