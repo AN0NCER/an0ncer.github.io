@@ -2,6 +2,10 @@ export const SearchHistory = {
     key: 'search-history',
     data: [],
 
+    /**
+     * Загружает историю поиска из локального хранилища и передает ее в функцию обратного вызова (event).
+     * @param {function} event - Функция обратного вызова, которой передается загруженная история.
+     */
     loadHistory: function (event) {
         let data = localStorage.getItem(this.key);
         if (data)
@@ -9,6 +13,10 @@ export const SearchHistory = {
         event(this.data);
     },
 
+    /**
+     * Добавляет элемент в историю поиска.
+     * @param {string} id - Идентификатор элемента, который нужно добавить в историю.
+     */
     addHistory: function (id) {
         if (this.data == []) {
             this.data = localStorage.getItem(this.key) ? JSON.parse(localStorage.getItem(this.key)) : [];
@@ -30,6 +38,9 @@ export const SearchHistory = {
         localStorage.setItem(this.key, JSON.stringify(this.data));
     },
 
+    /**
+     * Очищает историю поиска, удаляя все элементы из нее.
+     */
     clearHistory: function () {
         this.data = [];
         localStorage.setItem(this.key, JSON.stringify(this.data));

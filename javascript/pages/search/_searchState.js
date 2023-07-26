@@ -10,6 +10,11 @@ const _states = [
 
 let _cur_state = _states[0];
 
+/**
+ * Устанавливает новое состояние по указанному номеру (индексу) и выполняет обратный вызов (event) при изменении состояния.
+ * @param {number} num - Новый номер (индекс) состояния, которое нужно установить.
+ * @param {function} event - Функция обратного вызова, которая будет вызвана после изменения состояния.
+ */
 export function SetState(num = 0, event = (s, f) => { /*$DEV.log(s, f)*/ }) {
     //Получаем все елементы со старого состояния
     let el = $('.' + _cur_state.class);
@@ -30,7 +35,11 @@ export function SetState(num = 0, event = (s, f) => { /*$DEV.log(s, f)*/ }) {
     event(second, _cur_state);
 }
 
-export function GetState(){
+/**
+ * Возвращает текущее состояние.
+ * @returns {object} Текущее состояние.
+ */
+export function GetState() {
     return _cur_state;
 }
 
