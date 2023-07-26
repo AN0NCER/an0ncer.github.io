@@ -341,3 +341,27 @@ export function ScrollElementWithMouse(dom) {
         element.scrollLeft += e.deltaY;
     });
 }
+
+/**
+ * Сравнивает два объекта и возвращает true, если значения всех свойств объектов (за исключением указанных в excludedKeys) равны между собой.
+ * @param {Object} obj1 - Первый объект для сравнения.
+ * @param {Object} obj2 - Второй объект для сравнения.
+ * @param {string[]} excludedKeys - Массив ключей, которые нужно исключить из сравнения.
+ * @returns {boolean} Результат сравнения объектов.
+ */
+export function isObjectEqual(obj1, obj2, excludedKeys) {
+    const keys1 = Object.keys(obj1).filter((key) => !excludedKeys.includes(key));
+    const keys2 = Object.keys(obj2).filter((key) => !excludedKeys.includes(key));
+
+    if (keys1.length !== keys2.length) {
+        return false;
+    }
+
+    for (const key of keys1) {
+        if (obj1[key] !== obj2[key]) {
+            return false;
+        }
+    }
+
+    return true;
+}
