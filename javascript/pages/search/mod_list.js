@@ -1,7 +1,7 @@
 import { Animes } from "../../modules/ShikiAPI.js";
 import { Sleep, TrackElement } from "../../modules/funcitons.js";
-import { SearchHistory } from "./_history.js";
-import { GetState, SetState } from "./_searchState.js";
+import { SearchHistory } from "./mod_history.js";
+import { GetState, SetState } from "./mod_searchState.js";
 
 const Tracker = TrackElement();
 

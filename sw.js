@@ -58,11 +58,11 @@ var appShellFilesToCache = [
     '/javascript/pages/user.js',
     '/javascript/pages/watch.js',
     //Javascript//Pages//Search
-    '/javascript/pages/search/_history.js',
-    '/javascript/pages/search/_list.js',
-    '/javascript/pages/search/_recomendation.js',
-    '/javascript/pages/search/_search.js',
-    '/javascript/pages/search/_searchState.js',
+    '/javascript/pages/search/mod_history.js',
+    '/javascript/pages/search/mod_list.js',
+    '/javascript/pages/search/mod_recomendation.js',
+    '/javascript/pages/search/mod_search.js',
+    '/javascript/pages/search/mod_searchState.js',
 ];
 
 var dataCacheName = 'pwa-tunime-data-v' + version;
