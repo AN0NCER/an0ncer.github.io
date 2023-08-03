@@ -1,8 +1,8 @@
 import { Card } from "../../modules/AnimeCard.js";
 import { Animes } from "../../modules/ShikiAPI.js";
 import { TrackElement } from "../../modules/funcitons.js";
-import { SearchHistory } from "./_history.js";
-import { SetState, GetState } from "./_searchState.js";
+import { SearchHistory } from "./mod_history.js";
+import { SetState, GetState } from "./mod_searchState.js";
 
 //Поиск
 const InputSearch = $(`.search-input > input`);
