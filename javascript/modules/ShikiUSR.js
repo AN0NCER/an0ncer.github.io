@@ -115,7 +115,7 @@ export let User = {
 
 const ips = ["192.168.31.233", "127.0.0.1"]
 
-if (ips.findIndex(x => location.hostname) != -1) {
+if (ips.findIndex(x => x == location.hostname) != -1) {
     console.log("Enabled Tested Version");
     User.test_on();
 }
