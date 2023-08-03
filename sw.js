@@ -1,4 +1,4 @@
-var version = '72';
+var version = '73';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     //Pages
@@ -12,42 +12,57 @@ var appShellFilesToCache = [
     '/watch.html',
     '/login.html',
     //Styles
-    '/style/css/main.css',
-    '/style/css/settings.css',
-    '/style/css/login.css',
     '/style/css/index.css',
+    '/style/css/list.css',
+    '/style/css/login.css',
+    '/style/css/main.css',
     '/style/css/search.css',
+    '/style/css/settings.css',
     '/style/css/user.css',
     '/style/css/watch.css',
-    '/style/css/list.css',
+    //Styles//Min
     '/style/css/min/swiper-bundle.min.css',
-    //Library
-    '/javascript/library/jqery.min.js',
-    '/javascript/library/anime.min.js',
-    '/javascript/library/swiper-bundle.min.js',
-    '/javascript/library/swiper-bundle.min.js.map',
     //Javascript
-    '/javascript/kodik.js',
     '/javascript/jmenu.js',
-    '/javascript/server.js',
+    '/javascript/kodik.js',
     '/javascript/parametrs.js',
+    '/javascript/server.js',
     '/javascript/shikimori.js',
-    //Engine
-    '/javascript/engine/orientation.js',
-    '/javascript/engine/event_handler.js',
-    '/javascript/engine/window_managment.js',
-    //Pages
-    '/javascript/pages/index.js',
-    '/javascript/pages/search.js',
-    '/javascript/pages/settings.js',
-    '/javascript/pages/list.js',
-    '/javascript/pages/login.js',
-    '/javascript/pages/user.js',
-    '/javascript/pages/watch.js',
-    //Custom
+    //Javascript//Custom
+    '/javascript/custom/device.js',
     '/javascript/custom/experemental.js',
     '/javascript/custom/swtreilers.js',
     '/javascript/custom/updatedialog.js',
+    //Javascript//Engine
+    '/javascript/engine/event_handler.js',
+    '/javascript/engine/orientation.js',
+    '/javascript/engine/window_magagment_class.js',
+    '/javascript/engine/window_managment.js',
+    //Javascript//Library
+    '/javascript/library/anime.min.js',
+    '/javascript/library/jqery.min.js',
+    '/javascript/library/swiper-bundle.min.js',
+    '/javascript/library/swiper-bundle.min.js.map',
+    //Javascript//Modiles
+    '/javascript/modules/AnimeCard.js',
+    '/javascript/modules/funcitons.js',
+    '/javascript/modules/header.js',
+    '/javascript/modules/ShikiAPI.js',
+    '/javascript/modules/ShikiUSR.js',
+    //Javascript//Pages
+    '/javascript/pages/index.js',
+    '/javascript/pages/list.js',
+    '/javascript/pages/login.js',
+    '/javascript/pages/search.js',
+    '/javascript/pages/settings.js',
+    '/javascript/pages/user.js',
+    '/javascript/pages/watch.js',
+    //Javascript//Pages//Search
+    '/javascript/pages/search/_history.js',
+    '/javascript/pages/search/_list.js',
+    '/javascript/pages/search/_recomendation.js',
+    '/javascript/pages/search/_search.js',
+    '/javascript/pages/search/_searchState.js',
 ];
 
 var dataCacheName = 'pwa-tunime-data-v' + version;
