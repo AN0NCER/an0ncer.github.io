@@ -1107,9 +1107,6 @@ body.menuver[data-orientation="270"] .application-menu {
   min-width: 195px;
   margin-right: 10px;
 }
-.card-anime .card-content .title {
-  white-space: pre-wrap;
-}
 
 body[data-orientation="90"] header {
   margin-left: 10px;

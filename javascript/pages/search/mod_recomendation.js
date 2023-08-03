@@ -113,12 +113,16 @@ export async function Recomendation() {
         //Функция возвращает похожие аниме с аниме
         function getSimmiliar(id) {
             return new Promise((resolve) => {
-                if (dataBase[id]) return resolve(dataBase[id].data);
+                if(dataBase[id]){
+                    if (!Array.isArray(dataBase[id].data)) dataBase[id].data = [];
+                    return resolve(dataBase[id].data);
+                }
                 Animes.similar(id, async (response) => {
                     if (response.failed) {
                         await Sleep(1000);
-                        resolve(getSimmiliar(id));
+                        return resolve(getSimmiliar(id));
                     }
+
                     dataBase[id] = {
                         data: response,
                         expirationDate: new Date().toJSON().slice(0, 10)
