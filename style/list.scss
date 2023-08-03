@@ -2,8 +2,9 @@ $bg: #101318;
 
 body {
     background: $bg;
-    width: 100%;
+    // width: 100%;
     overflow-x: hidden;
+    -webkit-text-size-adjust: none;
 }
 
 header {
@@ -194,3 +195,31 @@ footer {
 
 @import './phone_menu';
 @import './cards';
+
+body.menuver{
+    &[data-orientation="270"] {
+        header{
+            margin-right: 20px;
+        }
+
+        main{
+            margin-right: 20px;
+            .content{
+                justify-content: flex-start;
+            }
+        }
+    }
+
+    &[data-orientation="90"]{
+        header{
+            margin-left: 20px;
+        }
+
+        main{
+            margin-left: 20px;
+            .content{
+                justify-content: flex-start;
+            }
+        }
+    }
+}

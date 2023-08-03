@@ -1,7 +1,7 @@
 body {
   background: #101318;
-  width: 100%;
   overflow-x: hidden;
+  -webkit-text-size-adjust: none;
 }
 
 header {
@@ -293,6 +293,42 @@ footer {
   width: 16px;
 }
 
+body.menuver[data-orientation="90"] .application-menu, body.menuver[data-orientation="270"] .application-menu {
+  bottom: 0;
+  top: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+  border-top: none;
+  flex-direction: column;
+  align-items: center;
+}
+body.menuver[data-orientation="90"] .application-menu .btn-menu:first-child, body.menuver[data-orientation="270"] .application-menu .btn-menu:first-child {
+  margin: 0;
+}
+body.menuver[data-orientation="90"] .application-menu .btn-menu:last-child, body.menuver[data-orientation="270"] .application-menu .btn-menu:last-child {
+  margin: 0;
+}
+body.menuver[data-orientation="90"] {
+  margin-left: 75px;
+}
+body.menuver[data-orientation="90"] .application-menu {
+  left: 0;
+  right: auto;
+  padding-left: 10px;
+  border-radius: 0px 7px 7px 0px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+body.menuver[data-orientation="270"] {
+  margin-right: 75px;
+}
+body.menuver[data-orientation="270"] .application-menu {
+  left: auto;
+  right: 0;
+  padding-right: 10px;
+  border-radius: 7px 0px 0px 7px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .card-anime {
   display: grid;
   overflow: hidden;
@@ -397,4 +433,23 @@ footer {
 
 .swiper-slide-active a .card_anime .card_content {
   background: rgba(0, 0, 0, 0.7);
+}
+
+body.menuver[data-orientation="270"] header {
+  margin-right: 20px;
+}
+body.menuver[data-orientation="270"] main {
+  margin-right: 20px;
+}
+body.menuver[data-orientation="270"] main .content {
+  justify-content: flex-start;
+}
+body.menuver[data-orientation="90"] header {
+  margin-left: 20px;
+}
+body.menuver[data-orientation="90"] main {
+  margin-left: 20px;
+}
+body.menuver[data-orientation="90"] main .content {
+  justify-content: flex-start;
 }

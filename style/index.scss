@@ -4,6 +4,8 @@ body {
   background: $main_bg;
   max-width: 1100px;
   margin: 0 auto;
+  -webkit-text-size-adjust: none;
+  /* Запрещает автоматическое изменение размера текста */
 }
 
 header {
@@ -339,7 +341,8 @@ header {
           .wrap-content {
             font-family: 'Manrope';
             margin-left: 12px;
-            display: flex;flex-direction: column;
+            display: flex;
+            flex-direction: column;
             width: calc(100% - 90px);
 
 
@@ -572,7 +575,7 @@ footer {
 @import './windowed';
 @import './window/update';
 
-.card-anime{
+.card-anime {
   min-width: 195px;
   margin-right: 10px;
 }
@@ -598,5 +601,40 @@ footer {
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+body {
+  &[data-orientation="90"] {
+
+    .swiper-treilers,
+    .section-genres,
+    .section-anime,
+    .swiper-continue,
+    .section-update {
+
+      margin-right: max(20px, env(safe-area-inset-right));
+    }
+  }
+
+  &[data-orientation="270"] {
+
+    .swiper-treilers,
+    .section-genres,
+    .section-anime,
+    .swiper-continue,
+    .section-title,
+    .section-update {
+      margin-left: max(20px, env(safe-area-inset-left));
+    }
+  
+    .section-genres>.genres:nth-child(1) {
+      margin-left: 0;
+    }
+  
+    .section-anime a:nth-child(1),
+    .section-update a:nth-child(1) {
+      margin-left: 0px;
+    }
   }
 }

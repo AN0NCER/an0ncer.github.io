@@ -1473,7 +1473,7 @@ async function LoadAnime(e = () => { }, l = false) {
         const element = r[i];
         if (element.roles.includes('Main')) {
           $('.hero-anime, .hero-anime-title').css('display', '');
-          $('.hero-anime > .val').append(`<a href="https://shikimori.me${element.character.url}"><img src="https://nyaa.shikimori.me${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div><div class="name-en">${element.character.name}</div></div></a>`);
+          $('.hero-anime > .val').append(`<a href="https://shikimori.me${element.character.url}"><img src="https://nyaa.shikimori.me${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div></div></a>`);
         }
       }
     })

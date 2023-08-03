@@ -2,6 +2,7 @@ const $PARAMETERS = {
     censored: true,
     autologin: false,
     develop: false,
+    menuver: true,
     watch: {
         dubanime: false,
         dubanimefrc: false,

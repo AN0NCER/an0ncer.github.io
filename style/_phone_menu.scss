@@ -104,7 +104,7 @@
     transition: .3s ease-in-out;
     opacity: 0;
 
-    .close-interactive{
+    .close-interactive {
         position: fixed;
         left: 0;
         right: 0;
@@ -113,7 +113,7 @@
         z-index: 79;
     }
 
-    .user-interactive{
+    .user-interactive {
         position: absolute;
         left: calc(env(safe-area-inset-left) + 20px);
         right: calc(env(safe-area-inset-right) + 20px);
@@ -126,18 +126,66 @@
         padding: 0 20px;
         border-radius: 4px;
         z-index: 80;
-        .btn-inter{
+
+        .btn-inter {
             display: flex;
             gap: 20px;
             padding: 15px 0;
             font-size: 15px;
             cursor: pointer;
 
-            svg{
+            svg {
                 fill: #fff;
                 -webkit-text-stroke-color: #fff;
                 width: 16px;
             }
         }
+    }
+}
+
+body.menuver{
+
+    &[data-orientation="90"],
+    &[data-orientation="270"] {
+        .application-menu {
+            bottom: 0;
+            top: 0;
+            padding-bottom: 0;
+            padding-top: 0;
+            border-top: none;
+            flex-direction: column;
+            align-items: center;
+
+            .btn-menu:first-child {
+                margin: 0;
+            }
+
+            .btn-menu:last-child {
+                margin: 0;
+            }
+        }
+    }
+
+    &[data-orientation="90"]{
+        .application-menu {
+            left: 0;
+            right: auto;
+            padding-left: 10px;
+            border-radius: 0px 7px 7px 0px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    
+        margin-left: 75px;
+    }
+    &[data-orientation="270"]{
+        .application-menu {
+            left: auto;
+            right: 0;
+            padding-right: 10px;
+            border-radius: 7px 0px 0px 7px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    
+        margin-right: 75px;
     }
 }

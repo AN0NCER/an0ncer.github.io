@@ -4,6 +4,7 @@ body {
     background: $main_bg;
     max-width: 900px;
     margin: 0 auto;
+    -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
 }
 
 .wraper {
@@ -335,6 +336,24 @@ footer {
         .wraper{
             max-width: 900px;
             margin: 20px auto 0 auto;
+        }
+    }
+}
+
+body {
+    &[data-orientation="90"] {
+
+        main > div, .wraper-input{
+            margin-right: max(10px, env(safe-area-inset-right));
+            margin-left: 10px;
+        }
+    }
+
+    &[data-orientation="270"] {
+
+        main > div, .wraper-input{
+            margin-left: max(20px, env(safe-area-inset-left));
+            margin-right: 10px;
         }
     }
 }

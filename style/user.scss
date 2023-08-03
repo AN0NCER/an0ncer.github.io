@@ -1,6 +1,7 @@
 html,
 body {
   height: 100%;
+  -webkit-text-size-adjust: none;
 }
 
 body {
@@ -266,7 +267,7 @@ main {
         cursor: default;
         font-weight: bold;
 
-        span{
+        span {
           margin-left: 10px;
         }
 
@@ -458,6 +459,25 @@ footer {
           margin-right: 10px;
         }
       }
+    }
+  }
+}
+
+body {
+  &[data-orientation="90"] {
+
+    header>div,
+    main>div {
+
+      margin-right: max(20px, env(safe-area-inset-right));
+    }
+  }
+
+  &[data-orientation="270"] {
+
+    header>div,
+    main>div {
+      margin-left: max(20px, env(safe-area-inset-left));
     }
   }
 }

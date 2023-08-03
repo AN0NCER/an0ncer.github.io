@@ -1,7 +1,9 @@
+@charset "UTF-8";
 body {
   background: #101318;
   max-width: 900px;
   margin: 0 auto;
+  -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
 }
 
 .wraper {
@@ -421,6 +423,42 @@ footer {
   width: 16px;
 }
 
+body.menuver[data-orientation="90"] .application-menu, body.menuver[data-orientation="270"] .application-menu {
+  bottom: 0;
+  top: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+  border-top: none;
+  flex-direction: column;
+  align-items: center;
+}
+body.menuver[data-orientation="90"] .application-menu .btn-menu:first-child, body.menuver[data-orientation="270"] .application-menu .btn-menu:first-child {
+  margin: 0;
+}
+body.menuver[data-orientation="90"] .application-menu .btn-menu:last-child, body.menuver[data-orientation="270"] .application-menu .btn-menu:last-child {
+  margin: 0;
+}
+body.menuver[data-orientation="90"] {
+  margin-left: 75px;
+}
+body.menuver[data-orientation="90"] .application-menu {
+  left: 0;
+  right: auto;
+  padding-left: 10px;
+  border-radius: 0px 7px 7px 0px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+body.menuver[data-orientation="270"] {
+  margin-right: 75px;
+}
+body.menuver[data-orientation="270"] .application-menu {
+  left: auto;
+  right: 0;
+  padding-right: 10px;
+  border-radius: 7px 0px 0px 7px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 @media screen and (min-width: 900px) {
   .select-wraper .select-control, .select-checkbox-wraper .select-control {
     max-width: 900px;
@@ -430,4 +468,12 @@ footer {
     max-width: 900px;
     margin: 20px auto 0 auto;
   }
+}
+body[data-orientation="90"] main > div, body[data-orientation="90"] .wraper-input {
+  margin-right: max(10px, env(safe-area-inset-right));
+  margin-left: 10px;
+}
+body[data-orientation="270"] main > div, body[data-orientation="270"] .wraper-input {
+  margin-left: max(20px, env(safe-area-inset-left));
+  margin-right: 10px;
 }
