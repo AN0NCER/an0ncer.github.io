@@ -355,7 +355,7 @@ function Events() {
     _searchEvenet();
     _functionWindows();
 
-    $(`header > .btn--clear`).click(()=>{
+    $(`header > .btn--clear`).click(() => {
         InputSearch.val("");
         SearchClear();
         SetState(0);
@@ -365,6 +365,13 @@ function Events() {
     ScrollElementWithMouse('.block-line.genres.scroll-none');
     ScrollElementWithMouse('.block-line.voices.scroll-none');
     ScrollElementWithMouse('.history > .content.scroll-none');
+
+    //Проверяем есть ли запрос из вне
+    const searchParams = new URLSearchParams(window.location.search).get('val');
+    if(searchParams){
+        InputSearch.val(searchParams);
+        Search(searchParams);
+    }
 }
 
 function _searchEvenet() {
