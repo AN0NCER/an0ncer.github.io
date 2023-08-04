@@ -106,7 +106,7 @@ export const Users = {
 
     show: function (id, query = {}, event = () => { }) {
         query = ObjectToQuery(query);
-        let url = this.url + "/" + id + query;
+        let url = this.base_url() + "/" + id + query;
         return StandartIDGET(url, event);
     },
 
