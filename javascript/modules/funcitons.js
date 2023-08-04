@@ -98,7 +98,7 @@ export function Fetch(method, url, headers, body = "") {
                     if (!response.ok) {
                         let r = this.badresponse;
                         r.status = response.status;
-                        resolve(r);
+                        return resolve(r);
                     }
                     resolve(response.json());
                 });
