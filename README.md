@@ -39,6 +39,10 @@ This site is a mobile application for watching anime. Uses data from **Shikimori
 - [X] User page.
 - [X] Settings page.
 
+## Stats
+
+![Alt](https://repobeats.axiom.co/api/embed/ade0779625b8da67b375884494164252f8348c2d.svg "Repobeats analytics image")
+
 ## Description
 
 **`https://an0ncer.github.io/`** - is an online platform for watching anime with the ability to manage your account and save your favorites. The site has a convenient and simple interface, has many filters and categories to search for anime. In addition, the site supports PWA functionality, which allows you to add it to the home screen of a mobile device and use it as a full-fledged application.
