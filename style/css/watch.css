@@ -4,7 +4,8 @@ body {
   overflow-x: hidden;
   max-width: 900px;
   margin: 0 auto;
-  -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
+  -webkit-text-size-adjust: none;
+  /* Запрещает автоматическое изменение размера текста */
 }
 body.loading {
   overflow-y: hidden;
@@ -472,17 +473,35 @@ Title block
   justify-content: space-between;
   align-items: center;
 }
-.block-title.title-player > .btn {
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  display: none;
-  place-items: center;
+.block-title.title-player > .btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  gap: 5px;
+  overflow: hidden;
 }
-.block-title.title-player > .btn svg {
+.block-title.title-player > .btn-wrapper > .btn {
+  display: grid;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  place-items: center;
+  background: rgba(133, 133, 133, 0.2);
+}
+.block-title.title-player > .btn-wrapper > .btn.btn-lock-view {
+  display: none;
+}
+.block-title.title-player > .btn-wrapper > .btn svg {
   width: 18px;
   fill: #fff;
   opacity: 0.6;
+}
+.block-title.title-player > .btn-wrapper > .btn .locked-view {
+  display: none;
+}
+.block-title.title-player > .btn-wrapper > .btn .unlocked-view {
+  width: 21px;
 }
 
 /*
@@ -1263,7 +1282,7 @@ footer .studio span {
   .block-title.title-player.landscape .title {
     font-size: 20px;
   }
-  .block-title.title-player.landscape > .btn {
+  .block-title.title-player.landscape > .btn-wrapper > .btn {
     display: grid;
   }
 }

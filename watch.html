@@ -258,13 +258,16 @@
 
          <div class="block-title title-player" data-engine="orientationchange">
             <div class="title">Плеер</div>
-            <div class="btn">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                  <!--! Font Awesome Pro 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                  <path
-                     d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z" />
-               </svg>
+            <div class="btn-wrapper">
+               <div class="btn btn-change-player">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/></svg>
+               </div>
+               <div class="btn btn-lock-view">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="unlocked-view" viewBox="0 0 32 32" id="icon"><defs><style>.cls-1{fill:none;}</style></defs><title>center--square</title><polygon points="6 12 4 12 4 4 12 4 12 6 6 6 6 12"/><polygon points="28 12 26 12 26 6 20 6 20 4 28 4 28 12"/><polygon points="12 28 4 28 4 20 6 20 6 26 12 26 12 28"/><polygon points="28 28 20 28 20 26 26 26 26 20 28 20 28 28"/><rect x="15" y="10" width="2" height="4"/><rect x="10" y="15" width="4" height="2"/><rect x="18" y="15" width="4" height="2"/><rect x="15" y="18" width="2" height="4"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="locked-view" height="1em" viewBox="0 0 448 512"><path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/></svg>
+               </div>
             </div>
+
          </div>
          <div class="landscape-player" data-engine="orientationchange">
             <!--Episodes-->
@@ -381,7 +384,8 @@
                <input type="checkbox" id="info-anime" name="info">
                <label for="info-anime">
                   <div class="check-box"></div>
-                  Записать информацию о просмотре</label>
+                  Записать информацию о просмотре
+               </label>
             </div>
             <span class="btn-commit">Сохранить</span>
          </span>

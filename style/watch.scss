@@ -5,7 +5,8 @@ body {
    overflow-x: hidden;
    max-width: 900px;
    margin: 0 auto;
-   -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
+   -webkit-text-size-adjust: none;
+   /* Запрещает автоматическое изменение размера текста */
 
    &.loading {
       overflow-y: hidden;
@@ -564,17 +565,42 @@ Title block
    justify-content: space-between;
    align-items: center;
 
-   &>.btn {
-      cursor: pointer;
-      width: 30px;
-      height: 30px;
-      display: none;
-      place-items: center;
+   &>.btn-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+      gap: 5px;
+      overflow: hidden;
 
-      svg {
-         width: 18px;
-         fill: #fff;
-         opacity: 0.6;
+      &>.btn {
+         display: grid;
+         cursor: pointer;
+         width: 35px;
+         height: 35px;
+         place-items: center;
+         background: rgba(133, 133, 133, 0.2);
+
+
+         &.btn-lock-view {
+            display: none;
+
+         }
+
+         svg {
+            width: 18px;
+            fill: #fff;
+            opacity: 0.6;
+         }
+
+         .locked-view {
+            display: none;
+
+         }
+
+         .unlocked-view {
+            width: 21px;
+         }
       }
    }
 }
@@ -636,7 +662,7 @@ Description
    line-height: 150%;
    font-size: 14px;
 
-   div{
+   div {
       font-size: 14px;
    }
 
@@ -705,17 +731,19 @@ Episodes
 Heroes
 */
 
-.block-shadow-left{
+.block-shadow-left {
    width: 100%;
    position: relative;
-   &::after{
+
+   &::after {
       content: '';
       position: absolute;
       width: 75px;
       height: 100%;
       right: 0;
       top: 0;
-      background: linear-gradient(270deg, #101318 0%, rgba(16, 19, 24, 0.00) 100%);;
+      background: linear-gradient(270deg, #101318 0%, rgba(16, 19, 24, 0.00) 100%);
+      ;
       z-index: 1;
    }
 }
@@ -1305,7 +1333,7 @@ footer {
          font-size: 20px;
       }
 
-      &>.btn {
+      &>.btn-wrapper>.btn {
          display: grid;
       }
    }

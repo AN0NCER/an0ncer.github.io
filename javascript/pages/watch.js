@@ -952,11 +952,12 @@ function Functional() {
   const VFClick = [
     { dom: ".anime-status > .cur-status > .more-status", func: ShowStatus },
     { dom: ".translations--current--object", func: ShowTranslations },
-    { dom: ".title-player > .btn", func: SetPlayerDisplay },
+    { dom: ".title-player > .btn-wrapper > .btn-lock-view", func: SetPlayerDisplay },
     { dom: ".btn-back", func: BackToMainPage },
     { dom: ".btn-play > .btn", func: ShowPlayer },
     { dom: ".btn-wrapper.rb > .btn", func: ShareAnime },
     { dom: ".btn-wrapper.lb > .btn", func: ShowWindowScore },
+    //Сбда функцию новой кнопки изменить плеер
   ];
 
   let showdStatus = false; // Показаны ли статусы аниме
