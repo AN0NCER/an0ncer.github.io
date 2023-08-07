@@ -18,7 +18,14 @@ export function ScrollHroizontal() {
     const newScrollLeftValue = selectedElementPosition.left - episodesContainerWidth / 2 + episodeWidth;
 
     // Прокрутите контейнер до нового значения прокрутки
-    $('.episodes').scrollLeft(newScrollLeftValue);
+    // $('.episodes').scrollLeft(newScrollLeftValue);
+
+    anime({
+        targets: '.episodes',
+        scrollLeft: newScrollLeftValue,
+        duration: 300,
+        easing: 'easeInOutQuad'
+    });
 }
 
 export function ScrollVertical() {
@@ -38,5 +45,25 @@ export function ScrollVertical() {
     }
 
     // Прокрутка блока .episodes так, чтобы выбранный элемент оказался посередине
-    $('.episodes > .value').scrollTop(selectedElementPosition.top - episodesContainerHeight / 2 + episodeHeight);
+    // $('.episodes > .value').scrollTop(selectedElementPosition.top - episodesContainerHeight / 2 + episodeHeight);
+
+    anime({
+        targets: '.episodes > .value',
+        scrollTop: selectedElementPosition.top - episodesContainerHeight / 2 + episodeHeight,
+        duration: 300,
+        easing: 'easeInOutQuad'
+    });
+}
+
+export function AutoScrollEpisodes() {
+    //Проверить ориентацию экрана и выполняем эту одну из этих функцией ScrollHroizontal, ScrollVertical
+    if (!window.matchMedia("(orientation: landscape)").matches) {
+        ScrollHroizontal(); // Вызываем функцию для горизонтальной прокрутки
+    } else {
+        if ($PARAMETERS.episrevers == "top") {
+            ScrollHroizontal();
+        } else {
+            ScrollVertical(); // Вызываем функцию для вертикальной прокрутки
+        }
+    }
 }

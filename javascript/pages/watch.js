@@ -1,3 +1,5 @@
+import { AutoScrollEpisodes } from "./watch/mod_scrolling.js";
+
 //ID ресурса из Shikimori
 const $ID = new URLSearchParams(window.location.search).get("id");
 
@@ -215,7 +217,7 @@ const player = {
           player.episodes.selected_episode = 1;
         }
         //Анимируем выбор первого эпизода автоматически
-        player.episodes.AnimateSelect(player.episodes.selected_episode);
+        player.episodes.AnimateSelect(player.episodes.selected_episode, () => { AutoScrollEpisodes(); });
         //Даем плееру задачу обновить свои данные
         player.update();
         //Вызываем событие обновление/изменение эпизодв
@@ -272,8 +274,7 @@ const player = {
       }
       this.selected = element;
       const left = $(element).position().left;
-      const top =
-        $(element).position().top + $(".episodes > .value").scrollTop();
+      const top = $(element).position().top + $(".episodes > .value").scrollTop();
       anime({
         targets: ".sel",
         top: top,
@@ -502,7 +503,7 @@ const player = {
 
     //Отслеживаем изменение ориентации экрана для правильного отображения выбраного эпизода
     window.addEventListener("orientationchange", function () {
-      player.episodes.AnimateSelect(player.episodes.selected_episode);
+      player.episodes.AnimateSelect(player.episodes.selected_episode, () => { AutoScrollEpisodes() });
     });
   },
 };
