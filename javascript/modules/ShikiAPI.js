@@ -88,6 +88,7 @@ export const Appear = {
         return {
             POST: async (body) => {
                 request.setBody(body);
+                request.setHeaders(Headers.bearer());
                 const response = await request.fetch();
                 event(response);
                 return response;
@@ -180,6 +181,7 @@ export const UserRates = {
         const request = Fetch("DELETE", url, Headers.bearer());
         return {
             DELETE: async () => {
+                request.setHeaders(Headers.bearer());
                 const response = await request.fetch();
                 event(response);
                 return response;
@@ -187,6 +189,7 @@ export const UserRates = {
 
             PATCH: async (body) => {
                 request.setMethod("PATCH");
+                request.setHeaders(Headers.bearer());
                 request.setBody(body);
                 const response = await request.fetch();
                 event(response);
@@ -207,6 +210,7 @@ export const UserRates = {
             },
             POST: async (body = undefined) => {
                 request.setMethod("POST");
+                request.setHeaders(Headers.bearer());
                 request.setBody(body);
                 const response = await request.fetch();
                 event(response);
