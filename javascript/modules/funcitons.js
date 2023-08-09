@@ -91,6 +91,8 @@ export function Fetch(method, url, headers, body = "") {
 
             if (this.body) {
                 request.body = this.body;
+                if (!(request.body instanceof FormData))
+                    request.headers["Content-Type"] = "application/json";
             }
 
             return new Promise((resolve) => {
@@ -100,7 +102,10 @@ export function Fetch(method, url, headers, body = "") {
                         r.status = response.status;
                         return resolve(r);
                     }
-                    resolve(response.json());
+                    if (response.status == 204) {
+                        return resolve({ ok: response.ok, status: response.status });
+                    }
+                    return resolve(response.json());
                 });
             });
         },
