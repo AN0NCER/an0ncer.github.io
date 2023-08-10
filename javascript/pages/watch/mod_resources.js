@@ -1,6 +1,6 @@
 import { Animes } from "../../modules/ShikiAPI.js";
 import { ScrollElementWithMouse, Sleep } from "../../modules/funcitons.js";
-import { $ID } from "./mod_main.js";
+import { $ID } from "../watch.js";
 
 const ShikimoriUrl = "https://shikimori.me";
 
@@ -13,7 +13,7 @@ const handlers = {
     load: [],
 }
 
-export const Events = {
+export const ELA = {
     onload: (e) => {
         if (typeof e != "function")
             return;
@@ -22,6 +22,9 @@ export const Events = {
         handlers.load.push(e);
     }
 }
+
+export const GetShikiData = () => { return _shikimoriData; };
+export const GetShikiScreenshots = () => { return _shikimoriScreenshots; };
 
 /**
  * Делает загрузку аниме данных с shikimori а также загружает картинку аниме в высоком разрешении
@@ -204,7 +207,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
             Animes.franchise(id, async (response) => {
                 if (response.failed && response.status == 429) {
                     await Sleep(1000);
-                    return resolve(SetFranchise(id));
+                    return resolve(_loadFranchise(id));
                 }
 
                 if (response.failed) {
@@ -315,7 +318,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
             Animes.roles(id, async (response) => {
                 if (response.failed && response.status == 429) {
                     await Sleep(1000);
-                    return resolve(SetHeroes(id));
+                    return resolve(_loadHeroes(id));
                 }
 
                 if (response.failed) {
@@ -344,7 +347,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
             Animes.similar(id, async (response) => {
                 if (response.failed && response.status == 429) {
                     await Sleep(1000);
-                    return resolve(SetSimiliar(id));
+                    return resolve(_loadSimiliar(id));
                 }
 
                 if (response.failed) {
