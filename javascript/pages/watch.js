@@ -202,7 +202,7 @@ function Functional() {
       let bottomOffset = 10;
       let offsetPosition =
         elementPosition +
-        window.pageYOffset -
+        window.scrollY -
         windowHeight +
         elementHeight +
         bottomOffset;

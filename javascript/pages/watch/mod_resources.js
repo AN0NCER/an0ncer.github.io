@@ -431,6 +431,7 @@ function ScrollingElements() {
     ScrollElementWithMouse('.galery-slider');
     ScrollElementWithMouse('#episodes');
     ScrollElementWithMouse('.genres.scroll-none');
+    ScrollElementWithMouse('.franchisa-anime');
 }
 
 function CallEvent(name) {
