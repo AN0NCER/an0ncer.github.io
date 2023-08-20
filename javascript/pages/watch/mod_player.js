@@ -7,6 +7,7 @@ const player = {
     loaded: false, //Загрузился ли плеер (нужно для его управления)
     loaded_int: 0,
     data_uri: undefined, //Ссылка на плеер kodik
+    data_id: undefined,
 
     uri: function (url) {
         this.data_uri = url;
@@ -334,6 +335,7 @@ const player = {
 
         //Устанавливаем url адрес плеера
         this.uri(element.link);
+        this.data_id = element.id;
 
         //Устанавливаем количество еаизодов
         this.episodes.episodes_count = element.episodes_count;

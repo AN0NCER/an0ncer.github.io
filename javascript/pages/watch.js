@@ -67,7 +67,7 @@ Main((e) => {
   //Подписываемся на обрботчик событий
   Player().events.onplayed((e) => {
     AnimeUserRate().events.setEpisode(Player().episodes.selected_episode);
-
+    
     //Делаем проверку на продолжение воспроизведения anime
     if ($CONTINUE != null && $CONTINUE != false) {
       //Получаем историю спика продолжение просмотра
@@ -116,6 +116,7 @@ function Functional() {
     { dom: ".btn-play > .btn", func: ShowPlayer },
     { dom: ".btn-wrapper.rb > .btn", func: ShareAnime },
     { dom: ".btn-wrapper.lb > .btn", func: ShowWindowScore },
+    { dom: ".btn-change-player", func: ChangePlayer }
     //Сюда функцию новой кнопки изменить плеер
   ];
 
@@ -248,5 +249,11 @@ function Functional() {
       text: $('meta[property="og:description"]').attr('content'),
       url: window.location.origin + window.location.pathname + '?id=' + $ID + '&share'
     }).catch((error) => $DEV.error('Sharing failed', error));
+  }
+
+  //Функция изменение на плеер Tunime
+  function ChangePlayer() {
+    console.log(Player());
+    document.querySelector("#kodik-player").contentWindow.location.replace(`./tunimeplayer.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
   }
 }

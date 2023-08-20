@@ -10,6 +10,12 @@ const $PARAMETERS = {
         episrevers: 'left',
         typefrc: ["TV Сериал", "Фильм", "ONA", "OVA"],
         saveinfo: false,
+    },
+    player: {
+        quality: '720',
+        info: false,
+        standart: false,
+        full: true
     }
 };
 
