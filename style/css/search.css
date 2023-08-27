@@ -46,6 +46,23 @@ header .search-input input::placeholder {
   padding-left: 25px;
   transition: 0.3s ease-in-out;
 }
+@supports (-moz-appearance: none) {
+  header .search-input input:-moz-placeholder-shown {
+    padding-left: 40px;
+    -moz-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+  }
+  header .search-input input:placeholder-shown {
+    padding-left: 40px;
+    transition: 0.3s ease-in-out;
+  }
+  header .search-input input:focus:-moz-placeholder-shown {
+    padding-left: 10px;
+  }
+  header .search-input input:focus:placeholder-shown {
+    padding-left: 10px;
+  }
+}
 header .search-input .icon {
   position: absolute;
   left: 10px;
@@ -1007,6 +1024,23 @@ body.menuver[data-orientation="270"] .application-menu {
 .content-wraper > .search-filter input::placeholder {
   padding-left: 25px;
   transition: 0.3s ease-in-out;
+}
+@supports (-moz-appearance: none) {
+  .content-wraper > .search-filter input:-moz-placeholder-shown {
+    padding-left: 40px;
+    -moz-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+  }
+  .content-wraper > .search-filter input:placeholder-shown {
+    padding-left: 40px;
+    transition: 0.3s ease-in-out;
+  }
+  .content-wraper > .search-filter input:focus:-moz-placeholder-shown {
+    padding-left: 10px;
+  }
+  .content-wraper > .search-filter input:focus:placeholder-shown {
+    padding-left: 10px;
+  }
 }
 .content-wraper > .search-filter .icon {
   position: absolute;

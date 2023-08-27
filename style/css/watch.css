@@ -11,6 +11,9 @@ body.loading {
   overflow-y: hidden;
 }
 
+.scroll-none {
+  scrollbar-width: none;
+}
 .scroll-none::-webkit-scrollbar {
   display: none;
 }

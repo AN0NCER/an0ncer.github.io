@@ -44,7 +44,19 @@ header {
             &::placeholder {
                 padding-left: 25px;
                 transition: .3s ease-in-out;
+            }
 
+            @supports (-moz-appearance:none) {
+                &:placeholder-shown {
+                    padding-left: 40px;
+                    transition: .3s ease-in-out;
+                }
+
+                &:focus {
+                    &:placeholder-shown {
+                        padding-left: 10px;
+                    }
+                }
             }
         }
 
@@ -334,7 +346,7 @@ main.main {
         }
     }
 
-    .content-progress-load{
+    .content-progress-load {
         display: flex;
         height: 23px;
         border-radius: 4px;
@@ -342,7 +354,8 @@ main.main {
         overflow: hidden;
         margin-top: 10px;
         transition: .3s ease-in-out;
-        .progress{
+
+        .progress {
             background: #3283E4;
             font-family: 'Manrope';
             color: #fff;
@@ -353,7 +366,7 @@ main.main {
             transition: .3s ease-in-out;
         }
 
-        &.hidden{
+        &.hidden {
             height: 0;
             margin-top: 0;
         }
@@ -799,7 +812,19 @@ footer {
             &::placeholder {
                 padding-left: 25px;
                 transition: .3s ease-in-out;
+            }
 
+            @supports (-moz-appearance:none) {
+                &:placeholder-shown {
+                    padding-left: 40px;
+                    transition: .3s ease-in-out;
+                }
+
+                &:focus {
+                    &:placeholder-shown {
+                        padding-left: 10px;
+                    }
+                }
             }
         }
 
@@ -928,7 +953,7 @@ body {
             margin-left: 10px;
         }
 
-        main{
+        main {
             margin-left: 10px;
         }
 
@@ -944,7 +969,7 @@ body {
             margin-right: 10px;
         }
 
-        main{
+        main {
             margin-right: 10px;
         }
 
