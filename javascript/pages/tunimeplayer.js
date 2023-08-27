@@ -163,7 +163,7 @@ kodikApi.search({ id: shiki_id }, async (res) => {
     fetch("https://anime-m3u8.onrender.com/link-anime", { body: new URLSearchParams({ 'link': 'https:' + res.results[0].link + `?episode=${episode}` }), method: 'post' })
         .then(function (response) { return response.json(); })
         .then(async function (data) {
-            const url = "https:" + data[quality][0].src;
+            const url = data[quality][0].src.indexOf("http") != -1 ? data[quality][0].src : "https:" + data[quality][0].src;
             mainVideo.setAttribute('src', url);
 
             loadFirstSuccessfulImage(data.thumbinals)
@@ -196,8 +196,9 @@ function LoadImage(url) {
 }
 
 async function loadFirstSuccessfulImage(urls) {
-    for (const url of urls) {
-        const result = await LoadImage("https:" + url);
+    for (let url of urls) {
+        url = url.indexOf("http") != -1 ? url : "https:" + url;
+        const result = await LoadImage(url);
         if (result !== null) {
             return result; // Return the first successful image
         }
@@ -224,6 +225,7 @@ var tm = anime
                     targets: ".sk-folding-cube",
                     rotateZ: ["45deg", "0deg"],
                     complete: () => {
+                        parentWindow.postMessage({ key: 'tunime_player_loaded', value: { loaded: true } }, '*');
                         anime({
                             easing: "spring(1, 80, 10, 0)",
                             targets: ".btn-play",
