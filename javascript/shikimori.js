@@ -729,7 +729,7 @@ let usr = {
   },
 };
 
-if (location.hostname == "192.168.31.233" || location.hostname == "127.0.0.1") {
+if (location.hostname == "192.168.31.233" || location.hostname == "127.0.0.1" || location.hostname == "192.168.31.45") {
   usr.test_on();
 }
 
