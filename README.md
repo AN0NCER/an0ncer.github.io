@@ -1,8 +1,6 @@
-<p align="center"><img src="https://github.com/AN0NCER/resources/raw/main/github-logo.png" width="200px" /></p>
-
 ______
 
-<p align="center">Progressive web application to watch anime on your device and enter a list</p>
+<img src="https://github.com/AN0NCER/resources/raw/main/GithubPreview(1).png">
 
 ___
 
