@@ -44,16 +44,18 @@ Main((e) => {
     }
   });
 
+  //Выполняем сохранение аниме если выбирается озвучка только первого эпизода
+  Player().translation.events.onselected((id_translation, user) => {
+    let e = Player().episodes.selected_episode;
+    if (user && e == 1 && id_translation) {
+      SaveLocalDataAnime(e, id_translation);
+    }
+  });
+
   //Подписываемся на обработчик событий выбора эпизода
   //Этот обработчик будет сохранять последние выбраное аниме аниме
   Player().episodes.events.onclicked((e, d) => {
-    const data = {
-      kodik_episode: e,
-      kodik_dub: d,
-    };
-
-    //Сохраняем последние выбранное аниме
-    localStorage.setItem($ID, JSON.stringify(data));
+    SaveLocalDataAnime(e, d);
 
     //Добавляем истоию просмотра
     History().add(false, 0, 0, e);
@@ -67,7 +69,7 @@ Main((e) => {
   //Подписываемся на обрботчик событий
   Player().events.onplayed((e) => {
     AnimeUserRate().events.setEpisode(Player().episodes.selected_episode);
-    
+
     //Делаем проверку на продолжение воспроизведения anime
     if ($CONTINUE != null && $CONTINUE != false) {
       //Получаем историю спика продолжение просмотра
@@ -86,6 +88,7 @@ Main((e) => {
   });
 });
 
+//Выполнена загрузка аниме 
 ELA.onload(() => {
   //Загружаем пользователя
   AnimeUserRate().init(GetShikiData(), User.authorized);
@@ -256,4 +259,19 @@ function Functional() {
     console.log(Player());
     document.querySelector("#kodik-player").contentWindow.location.replace(`./tunimeplayer.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
   }
+}
+
+/**
+ * Функция сохранение аниме (ид аниме, ид озвучки, и текущий эпизод)
+ * @param {Int} e - номер эпизода 
+ * @param {Int} d - ид озвчки аниме
+ */
+function SaveLocalDataAnime(e, d) {
+  const data = {
+    kodik_episode: e,
+    kodik_dub: d,
+  };
+
+  //Сохраняем последние выбранное аниме
+  localStorage.setItem($ID, JSON.stringify(data));
 }

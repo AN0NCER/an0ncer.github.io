@@ -21,6 +21,16 @@ const player = {
 
         saved: [],
 
+        events: {
+            selected: [],
+
+            onselected: function (e) {
+                if (typeof e == "function" && e.length > 0) {
+                    this.selected.push(e);
+                }
+            }
+        },
+
         /**
          * Инициализация управление переводами аниме
          * @param {Object} data - данные с kodik
@@ -75,7 +85,7 @@ const player = {
 
             //Нажатие на перевод
             $(".translations--list--element--icon-title").click((e) => {
-                this.select($(e.currentTarget).data("id"));
+                this.select($(e.currentTarget).data("id"), true);
             });
 
             //Добавить в избранное
@@ -88,7 +98,7 @@ const player = {
          * Выберает озвучку аниме
          * @param {Int} id - перевода
          */
-        select: function (id) {
+        select: function (id, user_handler = false) {
             // Проверяем на существование такго обьекта в DOM
             const element = $('.translations--list--element[data-id="' + id + '"]')[0];
             const data = player.data.find((x) => x.translation.id == id);
@@ -108,6 +118,11 @@ const player = {
             $("body").removeClass("loading");
 
             player.selectedTranslation(this.id);
+
+            //Событие выбора озвучки
+            this.events.selected.forEach((event) =>
+                event(this.id, user_handler)
+            );
         },
 
         /**
