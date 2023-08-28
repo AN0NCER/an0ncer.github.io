@@ -5,9 +5,14 @@ const mainVideo = document.getElementById('main-player'),
 
 const quality = $PARAMETERS.player.quality;
 
-let loaded = false;
+let video_loaded = false;
+let image_loaded = false;
 
 let first = true;
+
+mainVideo.addEventListener("loadedmetadata", () => {
+    video_loaded = true;
+});
 
 mainVideo.addEventListener("pause", () => {
     parentWindow.postMessage({ key: 'kodik_player_pause' }, '*');
@@ -17,41 +22,27 @@ mainVideo.addEventListener("play", () => {
     parentWindow.postMessage({ key: 'kodik_player_play' }, '*');
     if (first) {
         if ($PARAMETERS.player.full) {
-            // Check if the user agent includes "iPhone" or "iPad"
-            const isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            anime({
+                targets: '.fullscreen-wrapper .fk-cube',
+                easing: "spring(1, 80, 10, 0)",
+                duration: 1000,
+                opacity: [0, 0.5, 0, 0.5, 0],
+                complete: () => {
+                    $(`.fullscreen-wrapper`).css({ display: 'none' });
 
-            if (isiOS) {
-                anime({
-                    targets: '.fullscreen-wrapper .fk-cube',
-                    easing: "spring(1, 80, 10, 0)",
-                    duration: 1000,
-                    opacity: [0, 0.5, 0, 0.5, 0],
-                    complete: () => {
-                        $(`.fullscreen-wrapper`).css({ display: 'none' });
-
-                        if (mainVideo.webkitEnterFullscreen) {
-                            mainVideo.webkitEnterFullscreen();
-                        } else if (mainVideo.requestFullscreen) {
-                            mainVideo.requestFullscreen();
-                        }
-                        anime({
-                            targets: '.controls',
-                            easing: 'easeInBack',
-                            translateY: [40, 0],
-                            duration: 500
-                        });
+                    if (mainVideo.webkitEnterFullscreen) {
+                        mainVideo.webkitEnterFullscreen();
+                    } else if (mainVideo.requestFullscreen) {
+                        mainVideo.requestFullscreen();
                     }
-                });
-            } else {
-                $(`.fullscreen-wrapper`).css({ display: 'none' });
-                anime({
-                    targets: '.controls',
-                    easing: 'easeInBack',
-                    translateY: [40, 0],
-                    duration: 500
-                });
-            }
-
+                    anime({
+                        targets: '.controls',
+                        easing: 'easeInBack',
+                        translateY: [40, 0],
+                        duration: 500
+                    });
+                }
+            });
         } else {
             $(`.fullscreen-wrapper`).css({ display: 'none' });
             anime({
@@ -159,17 +150,23 @@ kodikApi.search({ id: shiki_id }, async (res) => {
     $('.name').text(res.results[0].title);
     $('.type').text(res.results[0].translation.title)
 
-
     fetch("https://anime-m3u8.onrender.com/link-anime", { body: new URLSearchParams({ 'link': 'https:' + res.results[0].link + `?episode=${episode}` }), method: 'post' })
         .then(function (response) { return response.json(); })
         .then(async function (data) {
             const url = data[quality][0].src.indexOf("http") != -1 ? data[quality][0].src : "https:" + data[quality][0].src;
-            mainVideo.setAttribute('src', url);
+
+            if (Hls.isSupported()) {
+                var hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(mainVideo);
+            } else {
+                mainVideo.src = url;
+            }
 
             loadFirstSuccessfulImage(data.thumbinals)
                 .then((successfulImage) => {
                     if (successfulImage !== null) {
-                        loaded = true;
+                        image_loaded = true;
                         mainVideo.setAttribute('poster', successfulImage);
                     } else {
                         console.log("No successful image found.");
@@ -213,7 +210,7 @@ var tm = anime
         easing: "linear",
         duration: 300,
         loopComplete: () => {
-            if (!loaded) return;
+            if (!image_loaded || !video_loaded) return;
             tm.pause();
             anime
                 .timeline({

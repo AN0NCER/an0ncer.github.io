@@ -87,6 +87,7 @@ video {
   display: flex;
   justify-content: space-between;
   transform: translateY(40px);
+  z-index: 99;
 }
 .controls .btn {
   min-height: 40px;

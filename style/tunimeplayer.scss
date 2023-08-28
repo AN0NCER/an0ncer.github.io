@@ -105,6 +105,7 @@ video {
     display: flex;
     justify-content: space-between;
     transform: translateY($height);
+    z-index: 99;
 
     .btn {
         min-height: $height;
