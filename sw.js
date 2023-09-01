@@ -1,4 +1,4 @@
-var version = '79';
+var version = '80';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     //Pages
@@ -19,7 +19,7 @@ var appShellFilesToCache = [
     '/style/css/main.css',
     '/style/css/search.css',
     '/style/css/settings.css',
-    '/style/css/tunimeplayers.css',
+    '/style/css/tunimeplayer.css',
     '/style/css/user.css',
     '/style/css/watch.css',
     //Styles//Min
