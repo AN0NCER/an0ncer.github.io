@@ -42,6 +42,23 @@ body {
   padding-left: 10px;
   outline: none;
 }
+@supports (-moz-appearance: none) {
+  .search-filter:-moz-placeholder-shown {
+    padding-left: 40px;
+    -moz-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+  }
+  .search-filter:placeholder-shown {
+    padding-left: 40px;
+    transition: 0.3s ease-in-out;
+  }
+  .search-filter:focus:-moz-placeholder-shown {
+    padding-left: 10px;
+  }
+  .search-filter:focus:placeholder-shown {
+    padding-left: 10px;
+  }
+}
 .search-filter::-moz-placeholder {
   padding-left: 30px;
   color: #fff;

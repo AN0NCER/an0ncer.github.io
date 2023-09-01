@@ -20,7 +20,7 @@ header {
         display: flex;
         align-items: center;
 
-        
+
 
         .icon {
             position: absolute;
@@ -34,7 +34,7 @@ header {
             }
         }
 
-        
+
     }
 
     .search-filter {
@@ -56,8 +56,6 @@ header {
             transition: .3s ease-in-out;
         }
 
-        
-
         &:focus {
             &::placeholder {
                 padding-left: 0px;
@@ -70,6 +68,19 @@ header {
 
         &:focus~.icon {
             opacity: 0;
+        }
+
+        @supports (-moz-appearance:none) {
+            &:placeholder-shown {
+                padding-left: 40px;
+                transition: .3s ease-in-out;
+            }
+
+            &:focus {
+                &:placeholder-shown {
+                    padding-left: 10px;
+                }
+            }
         }
     }
 
@@ -147,6 +158,8 @@ footer {
 }
 
 .scroll-none {
+    scrollbar-width: none;
+
     &::-webkit-scrollbar {
         display: none;
     }
@@ -196,28 +209,30 @@ footer {
 @import './phone_menu';
 @import './cards';
 
-body.menuver{
+body.menuver {
     &[data-orientation="270"] {
-        header{
+        header {
             margin-right: 20px;
         }
 
-        main{
+        main {
             margin-right: 20px;
-            .content{
+
+            .content {
                 justify-content: flex-start;
             }
         }
     }
 
-    &[data-orientation="90"]{
-        header{
+    &[data-orientation="90"] {
+        header {
             margin-left: 20px;
         }
 
-        main{
+        main {
             margin-left: 20px;
-            .content{
+
+            .content {
                 justify-content: flex-start;
             }
         }

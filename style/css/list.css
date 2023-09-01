@@ -67,6 +67,23 @@ header .search-filter:not(:placeholder-shown) ~ .icon {
 header .search-filter:focus ~ .icon {
   opacity: 0;
 }
+@supports (-moz-appearance: none) {
+  header .search-filter:-moz-placeholder-shown {
+    padding-left: 40px;
+    -moz-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+  }
+  header .search-filter:placeholder-shown {
+    padding-left: 40px;
+    transition: 0.3s ease-in-out;
+  }
+  header .search-filter:focus:-moz-placeholder-shown {
+    padding-left: 10px;
+  }
+  header .search-filter:focus:placeholder-shown {
+    padding-left: 10px;
+  }
+}
 header .wraper-filter {
   display: flex;
   font-family: Manrope;
@@ -134,6 +151,9 @@ footer {
   margin-right: max(20px, env(safe-area-inset-right));
 }
 
+.scroll-none {
+  scrollbar-width: none;
+}
 .scroll-none::-webkit-scrollbar {
   display: none;
 }

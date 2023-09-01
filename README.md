@@ -11,7 +11,7 @@ ___
 
 # Tunime
 
-<img src="icon-512x512.png" align="left" width="50" />
+<img src="./images/icons/logo-x512-o.png" align="left" width="50" />
 
 This site is a mobile application for watching anime. Uses data from **Shikimori** and **Kodik** player, as well as **PWA** functionality.
 

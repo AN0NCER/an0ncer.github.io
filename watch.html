@@ -258,13 +258,42 @@
 
          <div class="block-title title-player" data-engine="orientationchange">
             <div class="title">Плеер</div>
-            <div class="btn">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                  <!--! Font Awesome Pro 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                  <path
-                     d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z" />
-               </svg>
+            <div class="btn-wrapper">
+               <div class="btn btn-change-player">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="1em"
+                     viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                     <path
+                        d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+                  </svg>
+               </div>
+               <div class="btn btn-lock-view">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="unlocked-view" viewBox="0 0 32 32" id="icon">
+                     <defs>
+                        <style>
+                           .cls-1 {
+                              fill: none;
+                           }
+                        </style>
+                     </defs>
+                     <title>center--square</title>
+                     <polygon points="6 12 4 12 4 4 12 4 12 6 6 6 6 12" />
+                     <polygon points="28 12 26 12 26 6 20 6 20 4 28 4 28 12" />
+                     <polygon points="12 28 4 28 4 20 6 20 6 26 12 26 12 28" />
+                     <polygon points="28 28 20 28 20 26 26 26 26 20 28 20 28 28" />
+                     <rect x="15" y="10" width="2" height="4" />
+                     <rect x="10" y="15" width="4" height="2" />
+                     <rect x="18" y="15" width="4" height="2" />
+                     <rect x="15" y="18" width="2" height="4" />
+                     <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1"
+                        width="32" height="32" />
+                  </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="locked-view" height="1em" viewBox="0 0 448 512">
+                     <path
+                        d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z" />
+                  </svg>
+               </div>
             </div>
+
          </div>
          <div class="landscape-player" data-engine="orientationchange">
             <!--Episodes-->
@@ -322,7 +351,7 @@
             <div class="title">Франшиза</div>
          </div>
          <!--Franchisa Block-->
-         <div class="franchisa-anime" style="display: none"></div>
+         <div class="franchisa-anime scroll-none" style="display: none"></div>
          <!--Title Block-->
          <div class="block-title similiar-title with-count" style="display: none">
             <div class="title">Похожие</div>
@@ -339,19 +368,20 @@
       </div>
    </main>
 
-   <span class="windowed hide">
+   <span class="windowed window-score hide">
       <span class="hide-window"></span>
       <span class="window-content content-score hide">
          <span class="content-wraper">
-            <span class="block-close">
-               <span class="title-block">Оценить</span>
-               <span class="btn-close-window"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"
-                     xmlns="http://www.w3.org/2000/svg">
+            <div class="window-bar bar-score">
+               <div class="window-title">Оценить</div>
+               <div class="window-close">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="1em"
+                     viewBox="0 0 384 512">
                      <path
-                        d="M9.70404 1.70779C10.0945 1.31735 10.0945 0.683273 9.70404 0.292831C9.3136 -0.0976105 8.67952 -0.0976105 8.28908 0.292831L5 3.58504L1.70779 0.295955C1.31735 -0.094487 0.683273 -0.094487 0.292831 0.295955C-0.0976105 0.686397 -0.0976105 1.32047 0.292831 1.71092L3.58504 5L0.295955 8.29221C-0.0944869 8.68265 -0.0944869 9.31673 0.295955 9.70717C0.686397 10.0976 1.32047 10.0976 1.71092 9.70717L5 6.41496L8.29221 9.70404C8.68265 10.0945 9.31673 10.0945 9.70717 9.70404C10.0976 9.3136 10.0976 8.67952 9.70717 8.28908L6.41496 5L9.70404 1.70779Z"
-                        fill="white"></path>
-                  </svg></span>
-            </span>
+                        d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                  </svg>
+               </div>
+            </div>
             <span class="block-score">
                <div class="score-list scroll-none">
                   <div class="sc sc-1" data-score="1">1</div>
@@ -381,7 +411,8 @@
                <input type="checkbox" id="info-anime" name="info">
                <label for="info-anime">
                   <div class="check-box"></div>
-                  Записать информацию о просмотре</label>
+                  Записать информацию о просмотре
+               </label>
             </div>
             <span class="btn-commit">Сохранить</span>
          </span>
@@ -389,19 +420,14 @@
    </span>
 
    <!--Scripts Library-->
-   <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
-   <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
    <script src="/javascript/library/jqery.min.js"></script>
    <script src="/javascript/library/anime.min.js"></script>
-   <script src="/javascript/shikimori.js"></script>
    <script src="/javascript/kodik.js"></script>
    <script src="/javascript/parametrs.js"></script>
    <!--Engine-->
    <script src="/javascript/engine/orientation.js"></script>
-   <script src="/javascript/engine/window_managment.js"></script>
    <!---------->
-   <script src="/javascript/pages/watch.js"></script>
-   <script src="/javascript/custom/experemental.js"></script>
+   <script src="/javascript/pages/watch.js" type="module"></script>
 </body>
 
 </html>

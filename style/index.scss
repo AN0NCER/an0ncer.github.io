@@ -144,6 +144,19 @@ header {
       opacity: 0.7;
       transition: .3s ease-in-out;
     }
+
+    @supports (-moz-appearance:none) {
+      &:placeholder-shown {
+        padding-left: 40px;
+        transition: .3s ease-in-out;
+      }
+
+      &:focus{
+        &:placeholder-shown{
+          padding-left: 10px;
+        }
+      }
+    }
   }
 
   &>.btn {
@@ -565,6 +578,8 @@ footer {
 }
 
 .scroll-none {
+  scrollbar-width: none;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -627,11 +642,11 @@ body {
     .section-update {
       margin-left: max(20px, env(safe-area-inset-left));
     }
-  
+
     .section-genres>.genres:nth-child(1) {
       margin-left: 0;
     }
-  
+
     .section-anime a:nth-child(1),
     .section-update a:nth-child(1) {
       margin-left: 0px;

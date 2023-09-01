@@ -1,3 +1,4 @@
+import { Card } from "../../modules/AnimeCard.js";
 import { Animes } from "../../modules/ShikiAPI.js";
 import { Sleep, TrackElement } from "../../modules/funcitons.js";
 import { SearchHistory } from "./mod_history.js";

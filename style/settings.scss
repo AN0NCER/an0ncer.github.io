@@ -45,6 +45,19 @@ body {
     padding-left: 10px;
     outline: none;
 
+    @supports (-moz-appearance:none) {
+        &:placeholder-shown {
+            padding-left: 40px;
+            transition: .3s ease-in-out;
+        }
+
+        &:focus {
+            &:placeholder-shown {
+                padding-left: 10px;
+            }
+        }
+    }
+
     &::placeholder {
         padding-left: 30px;
         color: #fff;

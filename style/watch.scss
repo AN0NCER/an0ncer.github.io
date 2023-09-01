@@ -5,7 +5,8 @@ body {
    overflow-x: hidden;
    max-width: 900px;
    margin: 0 auto;
-   -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
+   -webkit-text-size-adjust: none;
+   /* Запрещает автоматическое изменение размера текста */
 
    &.loading {
       overflow-y: hidden;
@@ -13,6 +14,7 @@ body {
 }
 
 .scroll-none {
+   scrollbar-width: none;
    &::-webkit-scrollbar {
       display: none;
    }
@@ -564,17 +566,42 @@ Title block
    justify-content: space-between;
    align-items: center;
 
-   &>.btn {
-      cursor: pointer;
-      width: 30px;
-      height: 30px;
-      display: none;
-      place-items: center;
+   &>.btn-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+      gap: 5px;
+      overflow: hidden;
 
-      svg {
-         width: 18px;
-         fill: #fff;
-         opacity: 0.6;
+      &>.btn {
+         display: grid;
+         cursor: pointer;
+         width: 35px;
+         height: 35px;
+         place-items: center;
+         background: rgba(133, 133, 133, 0.2);
+
+
+         &.btn-lock-view {
+            display: none;
+
+         }
+
+         svg {
+            width: 18px;
+            fill: #fff;
+            opacity: 0.6;
+         }
+
+         .locked-view {
+            display: none;
+
+         }
+
+         .unlocked-view {
+            width: 21px;
+         }
       }
    }
 }
@@ -636,7 +663,7 @@ Description
    line-height: 150%;
    font-size: 14px;
 
-   div{
+   div {
       font-size: 14px;
    }
 
@@ -705,17 +732,19 @@ Episodes
 Heroes
 */
 
-.block-shadow-left{
+.block-shadow-left {
    width: 100%;
    position: relative;
-   &::after{
+
+   &::after {
       content: '';
       position: absolute;
       width: 75px;
       height: 100%;
       right: 0;
       top: 0;
-      background: linear-gradient(270deg, #101318 0%, rgba(16, 19, 24, 0.00) 100%);;
+      background: linear-gradient(270deg, #101318 0%, rgba(16, 19, 24, 0.00) 100%);
+      ;
       z-index: 1;
    }
 }
@@ -1062,17 +1091,51 @@ footer {
 
 .content-score {
    .content-wraper {
-      .block-close {
+      &>.window-bar {
          display: flex;
-         justify-content: space-between;
          align-items: center;
+         justify-content: space-between;
+         gap: 10px;
 
-         .btn-close-window {
+         .window-title {
+            font-size: 14px;
+         }
+
+         .window-close {
+            width: 40px;
+            height: 40px;
             display: grid;
             place-items: center;
-            min-width: 35px;
-            min-height: 35px;
             cursor: pointer;
+
+            svg {
+               fill: #fff;
+               width: 10px;
+            }
+         }
+
+         .btn-accept {
+            display: flex;
+            height: 40px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1 0 0;
+            border-radius: 4px;
+            background: linear-gradient(135deg, #51B3FF 0%, #3283E4 100%);
+            font-size: 13px;
+            font-weight: 700;
+         }
+
+         .btn-clear {
+            display: grid;
+            width: 40px;
+            height: 40px;
+            place-items: center;
+
+            svg {
+               fill: #fff;
+            }
          }
       }
 
@@ -1305,7 +1368,7 @@ footer {
          font-size: 20px;
       }
 
-      &>.btn {
+      &>.btn-wrapper>.btn {
          display: grid;
       }
    }

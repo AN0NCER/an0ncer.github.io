@@ -131,6 +131,23 @@ header > .notification > .dot {
   opacity: 0.7;
   transition: 0.3s ease-in-out;
 }
+@supports (-moz-appearance: none) {
+  .search > input:-moz-placeholder-shown {
+    padding-left: 40px;
+    -moz-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+  }
+  .search > input:placeholder-shown {
+    padding-left: 40px;
+    transition: 0.3s ease-in-out;
+  }
+  .search > input:focus:-moz-placeholder-shown {
+    padding-left: 10px;
+  }
+  .search > input:focus:placeholder-shown {
+    padding-left: 10px;
+  }
+}
 .search > .btn {
   min-width: 40px;
   height: 40px;
@@ -494,6 +511,9 @@ footer {
   display: none;
 }
 
+.scroll-none {
+  scrollbar-width: none;
+}
 .scroll-none::-webkit-scrollbar {
   display: none;
 }

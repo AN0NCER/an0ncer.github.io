@@ -11,7 +11,12 @@ const $PARAMETERS = {
         typefrc: ["TV Сериал", "Фильм", "ONA", "OVA"],
         saveinfo: false,
     },
-    experement: false,
+    player: {
+        quality: '720',
+        info: false,
+        standart: false,
+        full: true
+    }
 };
 
 (() => {

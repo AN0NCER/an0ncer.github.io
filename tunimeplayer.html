@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Tunime - Плеер</title>
+    <link rel="icon" type="image/png" href="/images/icon-web.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="icon-192x192.png" />
+    <link rel="stylesheet" href="/style/css/main.css">
+    <link rel="stylesheet" href="/style/css/tunimeplayer.css">
+    <link rel="manifest" href="/images/icons/manifest-o.json">
+    <script src="/javascript/library/jqery.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="spinner-wrapper">
+            <div class="spinner">
+                <div class="sk-folding-cube">
+                    <div class="sk-cube1 sk-cube"></div>
+                    <div class="sk-cube2 sk-cube"></div>
+                    <div class="sk-cube4 sk-cube"></div>
+                    <div class="sk-cube3 sk-cube"></div>
+                </div>
+            </div>
+        </div>
+        <div class="fullscreen-wrapper">
+            <div class="fk-cube fk-cube1">
+                <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_924_2)">
+                        <rect width="30" height="10" fill="white" />
+                        <rect y="10" width="10" height="20" fill="white" />
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_924_2">
+                            <rect width="30" height="30" fill="white" />
+                        </clipPath>
+                    </defs>
+                </svg>
+            </div>
+            <div class="fk-cube fk-cube2">
+                <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_924_2)">
+                        <rect width="30" height="10" fill="white" />
+                        <rect y="10" width="10" height="20" fill="white" />
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_924_2">
+                            <rect width="30" height="30" fill="white" />
+                        </clipPath>
+                    </defs>
+                </svg>
+            </div>
+            <div class="fk-cube fk-cube3">
+                <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_924_2)">
+                        <rect width="30" height="10" fill="white" />
+                        <rect y="10" width="10" height="20" fill="white" />
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_924_2">
+                            <rect width="30" height="30" fill="white" />
+                        </clipPath>
+                    </defs>
+                </svg>
+            </div>
+            <div class="fk-cube fk-cube4">
+                <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_924_2)">
+                        <rect width="30" height="10" fill="white" />
+                        <rect y="10" width="10" height="20" fill="white" />
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_924_2">
+                            <rect width="30" height="30" fill="white" />
+                        </clipPath>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="hide info-panel">
+                <span class="name">...</span>
+                <span class="type">...</span>
+            </div>
+            <div class="btn-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M2.97135 0.252015C2.47031 -0.0729274 1.84063 -0.0836399 1.32943 0.219878C0.818229 0.523396 0.5 1.09472 0.5 1.71604V14.2852C0.5 14.9066 0.818229 15.4779 1.32943 15.7814C1.84063 16.0849 2.47031 16.0706 2.97135 15.7493L12.7214 9.46467C13.2055 9.15401 13.5 8.60054 13.5 8.00065C13.5 7.40075 13.2055 6.85085 12.7214 6.53662L2.97135 0.252015Z"
+                        fill="white" />
+                </svg>
+            </div>
+        </div>
+        <div class="controls">
+            <div class="left-controls">
+                <div class="btn btn-control-play">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em"
+                        viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                        <path
+                            d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" />
+                    </svg>
+                </div>
+
+                <span class="time-span">
+                    <span class="current-time">0:00</span>
+                    <span>/</span>
+                    <span class="video-duration">0:00</span>
+                </span>
+            </div>
+            <div class="right-controls">
+                <div class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em"
+                        viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                        <path
+                            d="M0 96C0 60.7 28.7 32 64 32H512c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 208c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48s21.5-48 48-48zm144 48c0-26.5 21.5-48 48-48c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48z" />
+                    </svg>
+                </div>
+                <div class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em"
+                        viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                        <path
+                            d="M64 64V352H576V64H64zM0 64C0 28.7 28.7 0 64 0H576c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zM128 448H512c17.7 0 32 14.3 32 32s-14.3 32-32 32H128c-17.7 0-32-14.3-32-32s14.3-32 32-32z" />
+                    </svg>
+                </div>
+                <div class="btn btn-fullscreen">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em"
+                        viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                        <path
+                            d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <video id="main-player" poster="" src="" crossorigin="anonymous" playsinline></video>
+    </div>
+    <script src="/javascript/parametrs.js"></script>
+    <script src="/javascript/kodik.js"></script>
+    <script src="/javascript/library/anime.min.js"></script>
+    <script src="/javascript/library/hls.js"></script>
+    <script src="/javascript/pages/tunimeplayer.js"></script>
+</body>
+
+</html>

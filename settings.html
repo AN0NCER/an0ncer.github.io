@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/style/css/main.css">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="manifest.json?1">
+    <link rel="manifest" href="/images/icons/manifest-o.json">
     <script src="/javascript/library/jqery.min.js"></script>
     <script src="/javascript/engine/event_handler.js"></script>
     <link rel="stylesheet" href="/style/css/settings.css">
@@ -53,14 +53,21 @@
         </header>
 
         <main>
-            <div class="parameters-title" data-search="Основные, Главные">
+            <div class="parameters-title" data-search="Основные, Главные, Меню">
                 Основные
             </div>
-            <div class="parameters-container" data-search="Основные, Главные">
+            <div class="parameters-container" data-search="Основные, Главные, Меню">
                 <label class="border-top">
                     <div class="title">Цензура</div>
                     <div class="checkbox">
                         <input type="checkbox" data-param="censored">
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+                <label class="border" data-search="Меню">
+                    <div class="title">Авто меню</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="menuver">
                         <div class="switch-slider"></div>
                     </div>
                 </label>
@@ -101,7 +108,8 @@
                         <div class="switch-slider"></div>
                     </div>
                 </label>
-                <label class="border-bottom" data-param="episrevers" data-type="select" data-val="left" data-search="Видеоплеер, Автопрокрутка, Эпизоды"
+                <label class="border-bottom" data-param="episrevers" data-type="select" data-val="left"
+                    data-search="Видеоплеер, Автопрокрутка, Эпизоды"
                     data-variation='[{"key":"top", "value":"Сверху"},{"key":"right", "value":"Справа"},{"key":"left", "value":"Слева"}]'
                     data-tooltip="Правило отображения эпизодов при просмотре в горизонтальном режиме.">
                     <div class="title">Эпизоды</div>
@@ -109,6 +117,35 @@
                 </label>
                 <span class="tips" data-search="Видеоплеер, Автопрокрутка, Эпизоды">
                     Правило отображения эпизодов при просмотре в горизонтальном режиме.
+                </span>
+            </div>
+            <div class="parameters-title" data-search="Видеоплеер, Плеер, Экран, Весь, На, Качество, Основной">
+                Видеоплеер Tunime
+            </div>
+            <div class="parameters-container" data-search="Экран, Весь, На">
+                <label class="border-top">
+                    <div class="title">На весь экран</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="full">
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+                <label data-param="quality" data-type="select" data-val="left"
+                    data-search="Видеоплеер, Качество"
+                    data-variation='[{"key":"720", "value":"720p (HD)"},{"key":"480", "value":"480p"},{"key":"360", "value":"360p"}]'
+                    data-tooltip="Выбирет качество видео, если оно доступно.">
+                    <div class="title">Качество</div>
+                    <div class="select">720p (HD)</div>
+                </label>
+                <label class="border-bottom" data-search="Основной">
+                    <div class="title">Основной</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="standart">
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+                <span class="tips" data-search="Видеоплеер, Автопрокрутка, Эпизоды">
+                    Использовать Tunime плеер основным, вместо Kodik плеера.
                 </span>
             </div>
             <div class="parameters-title" data-search="Дубляжи">
@@ -137,30 +174,13 @@
                 Разработчик
             </div>
             <div class="parameters-container" data-search="Разработчик, Разработка">
-                <label class="border-top">
+                <label class="border-top border-bottom">
                     <div class="title">DevLogs</div>
                     <div class="checkbox">
                         <input type="checkbox" data-param="develop">
                         <div class="switch-slider"></div>
                     </div>
                 </label>
-                <label class="border">
-                    <div class="title">Вертекальное меню</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="menuver">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <label class="border-bottom">
-                    <div class="title">Beta Functions</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="experement">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <span class="tips">
-                    Включает эксперементальные функции если они доступны для странницы.
-                </span>
             </div>
         </main>
         <footer>

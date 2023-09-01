@@ -1,4 +1,5 @@
 import { Sleep } from "../modules/funcitons.js";
+
 export class WindowManagement {
     constructor(target = {
         init: function () { },

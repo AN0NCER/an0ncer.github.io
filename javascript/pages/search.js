@@ -1,12 +1,12 @@
 import { Main } from "../modules/ShikiUSR.js";
 import { Sleep, ScrollElementWithMouse, isObjectEqual } from "../modules/funcitons.js";
 import { Animes, Genres } from "../modules/ShikiAPI.js";
-import { WindowManagement } from "../engine/window_magagment_class.js";
 import { GetState, SetState } from "./search/mod_searchState.js";
 import { SearchHistory } from "./search/mod_history.js";
 import { Recomendation } from "./search/mod_recomendation.js";
 import { Search, SearchFilter, SetEmptyFilter, SearchVoice, GetEmptyFilter, SetEmptyVoice } from "./search/mod_search.js";
 import { AnimeFromVoices } from "./search/mod_list.js";
+import { WindowManagement } from "../modules/Windows.js";
 
 //Поиск
 const InputSearch = $(`.search-input > input`);
