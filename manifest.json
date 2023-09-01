@@ -1,0 +1,33 @@
+{
+    "name": "Tunime Web App",
+    "short_name": "Tunime",
+    "description": "Anime watch online",
+    "theme_color": "#101318",
+    "lang": "ru",
+    "background_color": "#101318",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/?mode=standalone",
+    "icons": [
+        {
+            "src": "./images/icons/logo-x192-o.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "./images/icons/logo-x256-o.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "./images/icons/logo-x384-o.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "./images/icons/logo-x512-o.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+  }
