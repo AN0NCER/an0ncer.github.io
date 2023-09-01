@@ -19,7 +19,7 @@ var appShellFilesToCache = [
     '/style/css/main.css',
     '/style/css/search.css',
     '/style/css/settings.css',
-    '/style/css/tunimeplayers.css',
+    '/style/css/tunimeplayer.css',
     '/style/css/user.css',
     '/style/css/watch.css',
     //Styles//Min
