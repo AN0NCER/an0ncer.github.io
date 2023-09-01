@@ -1,4 +1,4 @@
-var version = '79';
+var version = '80';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     //Pages
