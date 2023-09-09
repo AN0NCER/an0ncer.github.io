@@ -26,6 +26,7 @@ This site is a mobile application for watching anime. Uses data from **Shikimori
 - [X] User account management.
 - [X] Work offline as a PWA app.
 - [X] Mobile optimization and friendly user interface.
+- [ ] Ability to download TV series and movies to your device.
 
 
 ## Pages
