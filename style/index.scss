@@ -189,104 +189,7 @@ header {
   }
 }
 
-.swiper-treilers {
-  border-radius: 7px;
-  padding-bottom: 20px;
-  position: relative;
-  overflow: hidden;
-
-  .swiper-wrapper {
-    .swiper-slide {
-      &>.player {
-        iframe {
-          width: 100%;
-          aspect-ratio: 16/9;
-          position: absolute;
-          z-index: 1;
-          border-radius: 7px;
-        }
-
-        video {
-          aspect-ratio: 16/9;
-          width: 100%;
-          position: absolute;
-          z-index: 1;
-          border-radius: 7px;
-        }
-
-      }
-
-      &>.image-player>.btn {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, #51B2FF 0%, #2672DA 95.83%);
-        cursor: pointer;
-        border-radius: 50%;
-        position: absolute;
-        display: grid;
-        place-items: center;
-        z-index: 2;
-
-        svg {
-          fill: #fff;
-          width: 17.3px;
-          transform: translateX(2px);
-        }
-      }
-
-      &>.image-player {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        &>.hide {
-          display: none;
-        }
-      }
-
-      img {
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        border-radius: 7px;
-      }
-
-      &>.data-content {
-        display: flex;
-        justify-content: space-between;
-        color: #fff;
-        font-family: Manrope;
-        margin-top: 10px;
-
-        &>.raiting {
-          display: flex;
-
-          svg {
-            width: 12px;
-            margin-right: 10px;
-            fill: #ffe600;
-          }
-        }
-      }
-    }
-  }
-
-  .swiper-pagination {
-    bottom: -4px;
-
-    .swiper-pagination-bullet {
-      background: #282B2F;
-      transition: .3s ease-in-out;
-      opacity: 1;
-    }
-
-    .swiper-pagination-bullet-active {
-      background: #398BE0;
-      width: 50px;
-      border-radius: 6px;
-    }
-  }
-}
+@import './index/trailers';
 
 .swiper-continue {
   font-family: Manrope;
@@ -585,6 +488,7 @@ footer {
   }
 }
 
+@import './popup';
 @import './phone_menu';
 @import './cards';
 @import './windowed';
