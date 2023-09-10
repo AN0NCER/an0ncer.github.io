@@ -19,7 +19,7 @@ This site is a mobile application for watching anime. Uses data from **Shikimori
 
 ## Functional
 
-<img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_1.PNG" align="right" width="310">
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_6.PNG" align="right" width="310">
 
 - [X] Search anime by name.
 - [X] View information about anime, including description, genre, number of episodes and rating.
