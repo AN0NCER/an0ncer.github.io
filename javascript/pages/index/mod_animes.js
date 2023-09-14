@@ -33,6 +33,9 @@ export function LoadAnimeShikimori({ status = 'ongoing', limit = _limitAnime, ge
             element.empty();
         }
 
+        //Пролистываем в начало
+        element.scrollLeft(0)
+
         for (let i = 0; i < response.length; i++) {
             element.append(Card().Link(response[i]));
         }
