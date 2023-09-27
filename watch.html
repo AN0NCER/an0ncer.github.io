@@ -292,6 +292,12 @@
                         d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z" />
                   </svg>
                </div>
+               <div class="btn btn-download-episode">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                     <path
+                        d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                  </svg>
+               </div>
             </div>
 
          </div>
@@ -368,6 +374,41 @@
       </div>
    </main>
 
+   <span class="windowed window-download hide">
+      <span class="hide-window"></span>
+      <span class="window-content content-download hide">
+         <span class="content-wraper">
+            <div class="window-bar bar-download">
+               <div class="window-title">Загрузить</div>
+               <div class="window-close">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                     <path
+                        d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                  </svg>
+               </div>
+            </div>
+            <div class="window-body-fs">
+               <div class="download-episode scroll-none">
+                  <div class="down-value">
+                     <div class="sel-down" style="top: 0px; left: 0px;"></div>
+                  </div>
+               </div>
+               <div class="download-info">
+                  <span class="voice">Anilibria</span>
+                  <span class="quality">720p</span>
+               </div>
+               <div class="progress-download">
+                  <div class="value">
+                  </div>
+               </div>
+            </div>
+            <div class="window-futter">
+               <div id="btn-download" class="btn-accept" data-status="ready">Загрузить</div>
+            </div>
+         </span>
+      </span>
+   </span>
+
    <span class="windowed window-score hide">
       <span class="hide-window"></span>
       <span class="window-content content-score hide">
@@ -375,8 +416,7 @@
             <div class="window-bar bar-score">
                <div class="window-title">Оценить</div>
                <div class="window-close">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="1em"
-                     viewBox="0 0 384 512">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
                      <path
                         d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
                   </svg>

@@ -81,6 +81,7 @@ const WindowScore = {
             $DEV.log(val);
             //Устанавливает заметкку
             AnimeUserRate().events.setComment(val);
+            _windowScore.hide();
         });
 
         $('#info-anime').click(function () {
