@@ -5,6 +5,10 @@ export class WindowManagement {
         init: function () { },
         show: function () { },
         hide: function () { },
+        anim: {
+            showed: function () { },
+            hided: function () { },
+        },
         verif: function () { return true; },
     }, el = '.windowed') {
         this.authorized = false;
@@ -40,6 +44,9 @@ export class WindowManagement {
         await Sleep(300);
         el.addClass('hide');
         $(`${this.element} > .hide-window`).css('opacity', '');
+        if (this.target.anim?.hided) {
+            this.target.anim.hided();
+        }
     }
 
     async show() {
@@ -55,5 +62,8 @@ export class WindowManagement {
         $(`${this.element} > .window-content`).removeClass('hide');
         await Sleep(10);
         $(`${this.element} > .window-content`).css('transform', 'translateY(0%)')
+        if (this.target.anim?.showed) {
+            this.target.anim.showed();
+        }
     }
 }  
