@@ -122,7 +122,7 @@
             <div class="parameters-title" data-search="Видеоплеер, Плеер, Экран, Весь, На, Качество, Основной">
                 Видеоплеер Tunime
             </div>
-            <div class="parameters-container" data-search="Экран, Весь, На">
+            <div class="parameters-container" data-search="Видеоплеер, Плеер, Экран, Весь, На, Качество, Основной">
                 <label class="border-top">
                     <div class="title">На весь экран</div>
                     <div class="checkbox">
@@ -170,11 +170,62 @@
                     Если аниме будут связаны, то перевод переключится на другое аниме, если он там будет доступен.
                 </span>
             </div>
-            <div class="parameters-title" data-search="Разработчик, Разработка">
+            <div class="parameters-title" data-search="Качество, Загрузки, Асинхронная, Загрузка, Названии, Расширение, Автосохранение, Время">
+                Загрузка Аниме
+            </div>
+            <div class="parameters-container" data-search="Качество, Загрузки, Асинхронная, Загрузка, Названии, Расширение, Автосохранение, Время">
+                <label data-param="dquality" data-type="select" data-val="left"
+                    class="border-top"
+                    data-search="Качество, Загрузки"
+                    data-variation='[{"key":"720", "value":"720p (HD)"},{"key":"480", "value":"480p"},{"key":"360", "value":"360p"}]'
+                    data-tooltip="Выбирет качество видео для загрузки, если оно доступно.">
+                    <div class="title">Качество</div>
+                    <div class="select">720p (HD)</div>
+                </label>
+                <label class="border-bottom">
+                    <div class="title">Асинхронная загрузка</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="dasync">
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+                <span class="tips margin-bottom">
+                   Асинхронная загрузка ускоряет загрузку аниме в 3,2 раза. Но если вы получаете ошибку отключите этот параметр.
+                </span>
+                <label class="border-top">
+                    <div class="title">Озвучка в названии</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="dtranslation">
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+                <label>
+                    <div class="title">Английское названии</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="denglish">
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+                <label data-param="dexten" data-type="select" data-val="left"
+                    data-search="Видеоплеер, Качество"
+                    data-variation='[{"key":"tun", "value":".tun"},{"key":"ts", "value":".ts"},{"key":"mp4", "value":".mp4"}]'
+                    data-tooltip="Расширение в котором будет сохраняться файлы.">
+                    <div class="title">Расширение</div>
+                    <div class="select">.tun</div>
+                </label>
+                <label class="border-bottom">
+                    <div class="title">Автосохранение</div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-param="dautosave">
+                        <div class="switch-slider"></div>
+                    </div>
+                </label>
+            </div>
+            <div class="parameters-title" data-search="Разработчик, Разработка, Загрузка">
                 Разработчик
             </div>
-            <div class="parameters-container" data-search="Разработчик, Разработка">
-                <label class="border-top border-bottom">
+            <div class="parameters-container" data-search="Разработчик, Разработка, Загрузка">
+                <label class="border-all">
                     <div class="title">DevLogs</div>
                     <div class="checkbox">
                         <input type="checkbox" data-param="develop">
