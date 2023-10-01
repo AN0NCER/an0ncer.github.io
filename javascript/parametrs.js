@@ -25,7 +25,8 @@ const $PARAMETERS = {
         quality: '720',
         info: false,
         standart: false,
-        full: true
+        full: true,
+        standart_controls: true
     }
 };
 
