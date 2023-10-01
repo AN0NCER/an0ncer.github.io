@@ -9,7 +9,9 @@ ___
 ![Release](https://img.shields.io/github/v/release/AN0NCER/an0ncer.github.io)
 ![Code](https://img.shields.io/github/languages/top/AN0NCER/an0ncer.github.io)
 
-# Tunime
+
+
+# <img src="https://wotaku.its.moe/static/asset/inaidle.webp" width="20" /> Tunime
 
 <img src="./images/icons/logo-x512-o.png" align="left" width="50" />
 
