@@ -20,43 +20,6 @@ const _data = {
 let totalFiles = 0;
 let downloadedFiles = 0;
 
-const _saveInfo = {
-    key: 'db-download',
-    Add: function (id, episod, name, translation) {
-        const data = this.Get();
-        const data_save = { episod: episod, translation: translation };
-        if (data[id]) {
-            const i = data[id].list.findIndex(x => x.episod == episod);
-            if (i != -1) {
-                data[id].list.splice(i, 1);
-            }
-            data[id].list.push(data_save);
-        } else {
-            data[id] = {
-                name: name,
-                list: [data_save]
-            }
-        }
-    },
-
-    Get: function () {
-        const string = localStorage.getItem(this.key);
-        if (!string) {
-            return {};
-        } else {
-            return JSON.parse(string);
-        }
-    },
-    Set: function (data) {
-        if (typeof data == "string") {
-            return "Not allowed data save";
-        }
-
-        const string = JSON.stringify(data);
-        localStorage.setItem(this.key, string);
-    }
-}
-
 /**
  * Создает эпизоды в окне загрузке
  * @returns ? ничего не возвращяет
