@@ -276,6 +276,10 @@ footer {
   padding-bottom: calc(env(safe-area-inset-bottom) + 61px);
 }
 
+.margin-bottom {
+  margin-bottom: 10px;
+}
+
 .select-wraper,
 .select-checkbox-wraper {
   position: fixed;

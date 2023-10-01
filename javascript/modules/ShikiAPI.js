@@ -158,7 +158,14 @@ export const Users = {
 
     unread_messages: function (id, event = () => { }) {
         const url = this.base_url() + "/" + id + "/unread_messages";
-        return StandartIDGET(url, event);
+        const request = Fetch("GET", url, Headers.bearer());
+        return {
+            GET: async () => {
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
     },
 
     history: function (id, query = {}, event = () => { }) {

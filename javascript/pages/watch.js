@@ -5,6 +5,7 @@ import { AnimeUserRate } from "./watch/mod_userrate.js";
 import { LoadAnime, ELA, GetShikiData, GetShikiScreenshots } from "./watch/mod_resources.js";
 import { Main, User } from "../modules/ShikiUSR.js";
 import { ShowScoreWindow } from "./watch/mod_window.js";
+import { ShowDwonloadWindow } from "./watch/mod_download.js";
 
 //ID ресурса из Shikimori
 export const $ID = new URLSearchParams(window.location.search).get("id");
@@ -119,7 +120,8 @@ function Functional() {
     { dom: ".btn-play > .btn", func: ShowPlayer },
     { dom: ".btn-wrapper.rb > .btn", func: ShareAnime },
     { dom: ".btn-wrapper.lb > .btn", func: ShowWindowScore },
-    { dom: ".btn-change-player", func: ChangePlayer }
+    { dom: ".btn-change-player", func: ChangePlayer },
+    { dom: '.btn-download-episode', func: DownloadEpisode }
     //Сюда функцию новой кнопки изменить плеер
   ];
 
@@ -168,6 +170,11 @@ function Functional() {
   //Добавляет из параметров настройку положение плеера в горизонтальном режиме
   $('.landscape-player').addClass('reverse-' + $PARAMETERS.watch.episrevers);
 
+
+  function DownloadEpisode() {
+    ShowDwonloadWindow();
+    // location.replace(`./download.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
+  }
   /**
    * Отображает статус аниме
    */

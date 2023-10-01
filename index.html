@@ -7,16 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="page" content="index">
     <title>Tunime - PWA приложения</title>
-    <meta name="description" content="Смотреть аниме онлайн на сайте Tunime. Открой для себя новые миры с Tunime - лучшим сайтом для просмотра аниме!">
+    <meta name="description"
+        content="Смотреть аниме онлайн на сайте Tunime. Открой для себя новые миры с Tunime - лучшим сайтом для просмотра аниме!">
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="./images/icons/logo-x192-o.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="./images/icons/logo-x192-o.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="./images/icons/logo-x192-b.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="./images/icons/logo-x192-b.png" />
     <link rel="stylesheet" href="/style/css/main.css">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="/style/css/min/swiper-bundle.min.css">
     <link rel="stylesheet" href="/style/css/index.css">
-    <link rel="manifest" href="/images/icons/manifest-o.json">
+    <link rel="manifest" href="/images/icons/manifest-b.json">
     <script src="/javascript/library/jqery.min.js"></script>
     <script src="/javascript/engine/event_handler.js"></script>
 </head>
@@ -25,7 +26,7 @@
 
     <header class="unselectable">
         <div class="account">
-            <a href="/user.html">
+            <a href="/login.html">
                 <div class="image-profile">
                     <img src="/images/ava.jpeg" alt="Image Account">
                 </div>
@@ -36,8 +37,7 @@
                     <b>Авторизируйтесь</b>
                 </div>
                 <div class="position">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 384 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
                         <path
                             d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 256c-35.3 0-64-28.7-64-64s28.7-64 64-64s64 28.7 64 64s-28.7 64-64 64z" />
                     </svg>
@@ -47,13 +47,11 @@
         </div>
         <div class="desktop search w800">
             <input type="text" name="" id="search-input" placeholder="Поиск">
-            <div class="btn unselectable"><svg xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+            <div class="btn unselectable"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path
                         d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7H272.5L349.4 44.6z" />
                 </svg></div>
-            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path
                         d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
                 </svg></div>
@@ -70,13 +68,11 @@
 
     <div class="mobile search mbs">
         <input type="text" name="" id="search-input" placeholder="Поиск">
-        <div class="btn unselectable"><svg xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+        <div class="btn unselectable"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path
                     d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7H272.5L349.4 44.6z" />
             </svg></div>
-        <span class="icon"><svg xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+        <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path
                     d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
             </svg></span>
@@ -87,6 +83,10 @@
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper">
             <!-- Slides -->
+            <div class="swiper-slide slide-load">
+                <div class="preview-load"></div>
+                <div class="controls-load"></div>
+            </div>
         </div>
         <!-- If we need pagination -->
         <div class="swiper-pagination"></div>
@@ -160,10 +160,10 @@
         <div class="date">2022.12.28</div>
     </div>
 
-    <span class="windowed hide">
+    <span class="windowed window-update hide">
         <span class="hide-window"></span>
         <!--Окно с обновлением-->
-        <span class="window-content content-update">
+        <span class="window-content content-update hide">
             <span class="content-wraper">
                 <div class="title-content">
                     <span class="title">Обновление</span>
@@ -186,16 +186,17 @@
     <!--Scripts-->
     <!--Library-->
     <script src="/javascript/library/swiper-bundle.min.js"></script>
+    <script src="/javascript/library/anime.min.js"></script>
     <!--Custom library-->
     <script src="/javascript/server.js"></script>
-    <script src="/javascript/engine/window_managment.js"></script>
-    <script src="/javascript/custom/updatedialog.js"></script>
+    <!-- <script src="/javascript/engine/window_managment.js"></script> -->
+    <!-- <script src="/javascript/custom/updatedialog.js"></script> -->
     <script src="/javascript/parametrs.js"></script>
     <script src="/javascript/jmenu.js"></script>
     <script src="/javascript/shikimori.js"></script>
     <script src="/javascript/kodik.js"></script>
-    <script src="/javascript/pages/index.js"></script>
-    <script src="/javascript/custom/swtreilers.js"></script>
+    <script src="/javascript/pages/index.js" type="module"></script>
+    <!-- <script src="/javascript/custom/swtreilers.js"></script> -->
     <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 

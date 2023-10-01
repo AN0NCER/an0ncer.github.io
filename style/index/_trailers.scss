@@ -1,0 +1,295 @@
+.swiper-treilers {
+    position: relative;
+    overflow: hidden;
+
+    .swiper-wrapper {
+        .swiper-slide {
+            border-radius: 5px;
+            overflow: hidden;
+
+            .preview-block {
+                aspect-ratio: 16/9;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+
+                a {
+                    position: relative;
+                    z-index: 2;
+                    height: 100%;
+                }
+
+                img {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                }
+
+                .player {
+                    z-index: 1;
+                    position: absolute;
+                    background: #000;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    top: 0;
+
+                    video {
+                        width: 100%;
+                    }
+
+                    iframe {
+                        height: 100%;
+                        left: 0;
+                        top: 0;
+                        position: absolute;
+                        z-index: 2;
+                    }
+                }
+            }
+
+            &>.controls {
+                $btn_size: 43px;
+
+                background: #282D39;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+
+                .wrapper-block-info {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    max-width: calc(100% - 90px);
+
+                    .btn-play {
+                        background: #2393F1;
+                        border-radius: 3px;
+                        width: $btn_size;
+                        height: $btn_size;
+                        min-height: $btn_size;
+                        min-width: $btn_size;
+                        display: grid;
+                        place-items: center;
+                        cursor: pointer;
+                        position: relative;
+
+                        svg {
+                            fill: #fff;
+                            height: 16px;
+                            position: absolute;
+                        }
+
+                        .load {
+                            opacity: 0;
+                        }
+
+                        .pause {
+                            opacity: 0;
+                        }
+                    }
+
+                    .block-info {
+                        font-family: Manrope;
+                        display: flex;
+                        flex-direction: column;
+                        width: 100%;
+
+                        .block-name {
+                            font-size: 13px;
+                            color: #FFFFFF;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+
+                        .wrapper-details {
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+
+                            .kind,
+                            .studio {
+                                font-size: 11px;
+                                color: rgba(255, 255, 255, 0.5);
+                            }
+
+                            .ellipse {
+                                width: 3px;
+                                height: 3px;
+                                background: #2393F1;
+                                border-radius: 50%;
+                            }
+                        }
+                    }
+                }
+
+                .control-list {
+                    .btn-list {
+                        width: $btn_size;
+                        height: $btn_size;
+                        min-height: $btn_size;
+                        min-width: $btn_size;
+                        display: grid;
+                        place-items: center;
+                        cursor: pointer;
+
+                        svg {
+                            fill: #fff;
+                            height: 16px;
+                        }
+
+                        svg.selected {
+                            display: none;
+                            fill: #2393F1;
+                        }
+
+                        &.selected {
+                            svg {
+                                display: none;
+
+                                &.selected {
+                                    display: block;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.slide-load {
+
+                background: #282D39;
+                animation: loading 3s infinite;
+
+                .preview-load {
+                    aspect-ratio: 16/9;
+                }
+
+                .controls-load {
+                    height: 63px;
+                }
+            }
+
+            &.error-slide {
+                .wrapper-error {
+                    aspect-ratio: 16/9;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                    .wrapper-content {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: rgba(0, 0, 0, 0.35);
+                        z-index: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+
+                        .content-info {
+                            margin-left: 5%;
+                            display: flex;
+                            flex-direction: column;
+                            font-family: Manrope;
+                            color: #FFF;
+
+                            .title-error {
+                                font-weight: 700;
+                                font-size: 5vw;
+                            }
+
+                            .info-error {
+                                font-size: 3vw;
+                            }
+                        }
+
+                        .content-reload {
+
+                            margin-right: 10%;
+
+                            .btn-reolad {
+                                width: 7vw;
+                                height: 7vw;
+                                max-width: 60px;
+                                max-height: 60px;
+                                cursor: pointer;
+                                display: grid;
+                                place-items: center;
+
+                                svg {
+                                    width: 10vw;
+                                    max-width: 80px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .swiper-pagination {
+        bottom: 80px;
+
+        .swiper-pagination-bullet {
+            background: #282B2F;
+            transition: .3s ease-in-out;
+            opacity: 1;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: #398BE0;
+        }
+    }
+}
+
+/*Animation*/
+@keyframes loading {
+    0% {
+        opacity: .04;
+    }
+
+    50% {
+        opacity: .4;
+    }
+
+    100% {
+        opacity: .04;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .controls {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 3;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .swiper-treilers .swiper-wrapper .swiper-slide.error-slide .wrapper-error .wrapper-content .content-info {
+        .title-error {
+            font-size: 3vw;
+        }
+
+        .info-error {
+            font-size: 1vw;
+        }
+    }
+}

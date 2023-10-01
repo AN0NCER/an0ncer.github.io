@@ -213,3 +213,7 @@ function OrienatationScreen(){
         $('body').attr('data-orientation', screen.orientation.angle);
     });
 }
+
+function HasMenu(){
+    return true;
+}

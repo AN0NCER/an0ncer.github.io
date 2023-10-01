@@ -11,6 +11,16 @@ const $PARAMETERS = {
         typefrc: ["TV Сериал", "Фильм", "ONA", "OVA"],
         saveinfo: false,
     },
+    download:{
+        dquality: '720',
+        dasync: true,
+        dtitle: {
+            dtranslation: true,
+            denglish: true
+        },
+        dexten: 'tun',
+        dautosave: true
+    },
     player: {
         quality: '720',
         info: false,

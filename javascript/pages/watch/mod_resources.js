@@ -1,4 +1,5 @@
 import { Animes } from "../../modules/ShikiAPI.js";
+import { ApiTunime } from "../../modules/TunimeApi.js";
 import { ScrollElementWithMouse, Sleep } from "../../modules/funcitons.js";
 import { $ID } from "../watch.js";
 
@@ -57,6 +58,8 @@ export async function LoadAnime(event = () => { }, logged = false) {
     event();
     ScrollingElements();
     CallEvent("load");
+    
+    ApiTunime.anime($ID);
 
     function _loadShikimoriData(id) {
         return new Promise((resolve) => {
