@@ -26,7 +26,7 @@ const $PARAMETERS = {
         info: false,
         standart: false,
         full: true,
-        standart_controls: true
+        standart_controls: false
     }
 };
 
