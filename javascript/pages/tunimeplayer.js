@@ -51,7 +51,10 @@ OnPlayerPlay(() => {
             })
         }
     }
-
+    if ($PARAMETERS.player.standart_controls) {
+        $('.controls').css({ 'display': 'none' });
+        VideoPlayer.setAttribute("controls","controls");
+    }
 });
 
 function PlayVideo() {
