@@ -71,7 +71,7 @@ const WindowUpdate = {
 
     hide: function () {
         localStorage.setItem(_updateKey, false);
-        localStorage.setItem('github-version', JSON.stringify({ tag: this.data[0].tag_name, published_at: this.data[0].published_at }));
+        localStorage.setItem('github-version', JSON.stringify({ tag: this.data.tag_name, published_at: this.data.published_at }));
     },
 
     verif: function () {
@@ -87,10 +87,10 @@ const WindowUpdate = {
      */
     load: function (data) {
         //Проверяем если это массив
-        if (Array.isArray(data) && data.length > 0) {
+        if (data) {
             const pages = [];
             //Разбиваем текст на строки
-            const arr = data[0].body.split('\r\n');
+            const arr = data.body.split('\r\n');
             //Страница для pages
             let page = {};
 
@@ -133,7 +133,7 @@ const WindowUpdate = {
             //Добавляем последнию страницу
             pages.push(page);
 
-            return { title: data[0].name, tag: data[0].tag_name, content: pages };
+            return { title: data.name, tag: data.tag_name, content: pages };
         } else {
             //Возвращаем пусто
             return {};
