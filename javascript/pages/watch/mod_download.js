@@ -136,9 +136,9 @@ function _downloadAnime(e) {
 }
 
 async function GetM3U8Links() {
-    let link = `https:${_data.link}?episode=${selected}`;
-    if (!_data.link.includes('https://')) {
-        link = `${_data.link}?episode=${selected}`
+    let link = `${_data.link}?episode=${selected}`;
+    if (!link.includes("http")) {
+        link = `https:${link}?episode=${selected}`;
     }
     const data = await ApiTunime.stream(link);
     if (data) {

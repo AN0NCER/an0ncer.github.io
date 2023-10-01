@@ -28,9 +28,14 @@ export const ApiTunime = {
 
     },
 
+    /**
+     * Получение stream аниме
+     * @param {string} url - ссыка на Kodik c https://
+     * @returns 
+     */
     stream: function (url) {
         return new Promise((resolve) => {
-            fetch(`https://anime-m3u8.onrender.com/link-anime`, { body: new URLSearchParams({ 'link': 'https:' + url }), method: 'post' })
+            fetch(`https://anime-m3u8.onrender.com/link-anime`, { body: new URLSearchParams({ 'link': url }), method: 'post' })
                 .then(function (response) { return response.json(); })
                 .then(function (data) { return resolve(data); })
                 .catch((res) => { console.log(res) });
