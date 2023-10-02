@@ -92,6 +92,24 @@
                     }
                 }
 
+                .user-help{
+                    display: flex;
+                    gap: 20px;
+                    font-family: 'Manrope';
+                    align-items: center;
+                    opacity: .6;
+                    
+                    .user-help-link{
+                        font-weight: bolder;
+                        font-size: 24px;
+                        color: #51B3FF;
+                    }
+
+                    .user-help-info{
+                        font-size: 13px;
+                    }
+                }
+
                 .download-info {
                     display: flex;
                     justify-content: space-between;
