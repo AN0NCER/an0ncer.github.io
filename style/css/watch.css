@@ -1312,6 +1312,21 @@ footer .studio span {
   border-radius: 3px;
   z-index: 1;
 }
+.windowed .content-download .content-wraper .window-body-fs .user-help {
+  display: flex;
+  gap: 20px;
+  font-family: "Manrope";
+  align-items: center;
+  opacity: 0.6;
+}
+.windowed .content-download .content-wraper .window-body-fs .user-help .user-help-link {
+  font-weight: bolder;
+  font-size: 24px;
+  color: #51B3FF;
+}
+.windowed .content-download .content-wraper .window-body-fs .user-help .user-help-info {
+  font-size: 13px;
+}
 .windowed .content-download .content-wraper .window-body-fs .download-info {
   display: flex;
   justify-content: space-between;
