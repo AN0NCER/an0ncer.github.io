@@ -6,6 +6,7 @@ import { LoadAnime, ELA, GetShikiData, GetShikiScreenshots } from "./watch/mod_r
 import { Main, User } from "../modules/ShikiUSR.js";
 import { ShowScoreWindow } from "./watch/mod_window.js";
 import { ShowDwonloadWindow } from "./watch/mod_download.js";
+import { OnLocalData, SaveDataAnime } from "./watch/mod_synch.js";
 
 //ID ресурса из Shikimori
 export const $ID = new URLSearchParams(window.location.search).get("id");
@@ -30,18 +31,27 @@ Main((e) => {
     Player().init(r.results);
   });
 
-  //Подписываемся на обработчик событий для загрузки плеера
-  //Этот обработчик будет загружать из сохранения последние аниме
-  Player().events.onloaded(async (i) => {
-    //Если загружен только 1-й раз то загружаем наше сохранение
-    if (i == 1) {
-      let save = JSON.parse(localStorage.getItem($ID));
+  //Подписываемся на обработчик получение данных Синхронизации
+  OnLocalData((save) => {
+    console.log("Loaded save", save);
 
-      if (!save) {
-        return;
+    if (!save) {
+      return;
+    }
+
+    if (!Player().loaded) {
+      // Подписываемся на обработчик событий для загрузки плеера
+      // Этот обработчик будет загружать из сохранения последние аниме
+      Player().events.onloaded(async (i) => {
+        //Если загружен только 1-й раз то загружаем наше сохранение
+        if (i == 1) {
+          Player().loadAnime(save.kodik_episode, save.kodik_dub);
+        }
+      });
+    } else {
+      if (Player().loaded_int == 1) {
+        Player().loadAnime(save.kodik_episode, save.kodik_dub);
       }
-
-      Player().loadAnime(save.kodik_episode, save.kodik_dub);
     }
   });
 
@@ -49,14 +59,14 @@ Main((e) => {
   Player().translation.events.onselected((id_translation, user) => {
     let e = Player().episodes.selected_episode;
     if (user && e == 1 && id_translation) {
-      SaveLocalDataAnime(e, id_translation);
+      SaveDataAnime(e, id_translation);
     }
   });
 
   //Подписываемся на обработчик событий выбора эпизода
   //Этот обработчик будет сохранять последние выбраное аниме аниме
   Player().episodes.events.onclicked((e, d) => {
-    SaveLocalDataAnime(e, d);
+    SaveDataAnime(e, d);
 
     //Добавляем истоию просмотра
     History().add(false, 0, 0, e);
@@ -277,6 +287,7 @@ function SaveLocalDataAnime(e, d) {
   const data = {
     kodik_episode: e,
     kodik_dub: d,
+    date_update: new Date()
   };
 
   //Сохраняем последние выбранное аниме

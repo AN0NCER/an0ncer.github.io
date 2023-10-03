@@ -4,6 +4,10 @@ import { Player } from "./mod_player.js";
 import { AnimeUserRate } from "./mod_userrate.js";
 
 const WindowScore = {
+    comments: {
+        footer: ""
+    },
+    
     init: function () {
         if ($PARAMETERS.watch.saveinfo) {
             $('#info-anime').prop('checked', true);
@@ -77,6 +81,7 @@ const WindowScore = {
             }
 
             $('.content-score > .content-wraper > textarea').val(val);
+            val += WindowScore.comments.footer;
             WindowScore.auto_grow(document.querySelector('.content-score > .content-wraper > textarea'))
             $DEV.log(val);
             //Устанавливает заметкку
@@ -104,8 +109,16 @@ const WindowScore = {
             //Проверяем комментарий пользователя
             $DEV.log(AnimeUserRate().rate);
             if (AnimeUserRate().rate.text) {
+                let text = AnimeUserRate().rate.text;
+                const regex = /\[tunime-sync:(\d+):(\d+):"(.+?)"]/;
+                const match = text.match(regex);
+                if(match){
+                    this.comments.footer = `\r\n${match[0]}`;
+                    text = text.replace(match[0], '');
+                    text.trim();
+                }
                 //Устанавливаем значения комментария в input
-                $('.content-score > .content-wraper > textarea').val(AnimeUserRate().rate.text);
+                $('.content-score > .content-wraper > textarea').val(text);
                 this.auto_grow(document.querySelector('.content-score > .content-wraper > textarea'));
             }
         }

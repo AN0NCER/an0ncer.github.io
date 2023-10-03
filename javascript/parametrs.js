@@ -3,6 +3,9 @@ const $PARAMETERS = {
     autologin: false,
     develop: false,
     menuver: true,
+    anime: {
+        syncdata: true,
+    },
     watch: {
         dubanime: false,
         dubanimefrc: false,
@@ -23,7 +26,6 @@ const $PARAMETERS = {
     },
     player: {
         quality: '720',
-        info: false,
         standart: false,
         full: true,
         standart_controls: false

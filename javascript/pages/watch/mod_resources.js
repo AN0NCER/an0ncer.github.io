@@ -2,6 +2,7 @@ import { Animes } from "../../modules/ShikiAPI.js";
 import { ApiTunime } from "../../modules/TunimeApi.js";
 import { ScrollElementWithMouse, Sleep } from "../../modules/funcitons.js";
 import { $ID } from "../watch.js";
+import { SynchLocalData } from "./mod_synch.js";
 
 const ShikimoriUrl = "https://shikimori.me";
 
@@ -34,6 +35,8 @@ export const GetShikiScreenshots = () => { return _shikimoriScreenshots; };
  */
 export async function LoadAnime(event = () => { }, logged = false) {
     _shikimoriData = await _loadShikimoriData($ID);
+
+    SynchLocalData(_shikimoriData.user_rate);
 
     let localurlimage = await _loadImageJikan($ID);
     localurlimage = await _showImageFromUrl(localurlimage);
