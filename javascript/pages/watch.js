@@ -277,19 +277,3 @@ function Functional() {
     document.querySelector("#kodik-player").contentWindow.location.replace(`./tunimeplayer.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
   }
 }
-
-/**
- * Функция сохранение аниме (ид аниме, ид озвучки, и текущий эпизод)
- * @param {Int} e - номер эпизода 
- * @param {Int} d - ид озвчки аниме
- */
-function SaveLocalDataAnime(e, d) {
-  const data = {
-    kodik_episode: e,
-    kodik_dub: d,
-    date_update: new Date()
-  };
-
-  //Сохраняем последние выбранное аниме
-  localStorage.setItem($ID, JSON.stringify(data));
-}
