@@ -1,3 +1,5 @@
+import { InitMenu } from "../menu.js";
+
 //Обьект управлением select-wraper input type="radio"
 const SelectWraper = {
     dom: '.select-wraper',
@@ -189,6 +191,8 @@ const SelectCheckWrapr = {
         }
     });
 })();
+
+InitMenu();
 
 Main((e) => {
     if (e) {

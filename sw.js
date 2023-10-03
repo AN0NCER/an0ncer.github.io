@@ -81,7 +81,6 @@ var appShellFilesToCache = [
     "/javascript/pages/user.js",
     "/javascript/pages/watch.js",
     // Директория: /javascript
-    "/javascript/jmenu.js",
     "/javascript/kodik.js",
     "/javascript/parametrs.js",
     "/javascript/server.js",

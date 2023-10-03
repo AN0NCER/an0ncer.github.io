@@ -2,6 +2,7 @@ import { Main, User } from "../modules/ShikiUSR.js";
 import { Users, UserRates, Animes } from "../modules/ShikiAPI.js";
 import { Sleep, ScrollElementWithMouse } from "../modules/funcitons.js";
 import { LoadHistory } from "./user/mod_history.js";
+import { InitMenu } from "../menu.js";
 
 //Индентификатор пользователя
 let $ID = new URLSearchParams(window.location.search).get("id");
@@ -31,6 +32,8 @@ Main((e) => {
     }).catch((error) => console.error('Sharing failed', error));
   });
 });
+
+InitMenu();
 
 /**
  * Получает данные о пользователе авторизации

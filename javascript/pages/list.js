@@ -1,3 +1,5 @@
+import { InitMenu } from "../menu.js";
+
 let response_user_rates = null;
 
 //Правила филтрации елементов
@@ -39,6 +41,8 @@ let task_loading = [];
     //Добавляем функционал к input сортировки по названию
     AddFunctionalInput();
 })();
+
+InitMenu();
 
 /**
  * Добавляет функционал к input сортировке по названию

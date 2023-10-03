@@ -1,3 +1,4 @@
+import { InitMenu } from "../menu.js";
 import { ShowUser } from "./index/mod_account.js";
 import { UserRates } from "../modules/ShikiAPI.js";
 import { GitHubRel } from "./index/mod_github.js";
@@ -6,6 +7,8 @@ import { SetUserRate } from "./index/mod_trailers.js";
 import { GetHistoryWatch } from "./index/mod_history_watch.js";
 import { ScrollElementWithMouse, Sleep } from "../modules/funcitons.js";
 import { AnimeLoaded, LoadAnimeShikimori, LoadUpdatetAnime } from "./index/mod_animes.js";
+
+InitMenu();
 
 Main((e) => {
     ShowUser(e);

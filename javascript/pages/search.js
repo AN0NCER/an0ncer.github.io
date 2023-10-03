@@ -7,6 +7,7 @@ import { Recomendation } from "./search/mod_recomendation.js";
 import { Search, SearchFilter, SetEmptyFilter, SearchVoice, GetEmptyFilter, SetEmptyVoice } from "./search/mod_search.js";
 import { AnimeFromVoices } from "./search/mod_list.js";
 import { WindowManagement } from "../modules/Windows.js";
+import { InitMenu } from "../menu.js";
 
 //Поиск
 const InputSearch = $(`.search-input > input`);
@@ -351,6 +352,8 @@ Main((e) => {
     Recomendation();
 });
 
+InitMenu();
+
 function Events() {
     _searchEvenet();
     _functionWindows();
@@ -368,7 +371,7 @@ function Events() {
 
     //Проверяем есть ли запрос из вне
     const searchParams = new URLSearchParams(window.location.search).get('val');
-    if(searchParams){
+    if (searchParams) {
         InputSearch.val(searchParams);
         Search(searchParams);
     }
