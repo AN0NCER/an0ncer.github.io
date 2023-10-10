@@ -53,7 +53,7 @@ OnPlayerPlay(() => {
     }
     if ($PARAMETERS.player.standart_controls) {
         $('.controls').css({ 'display': 'none' });
-        VideoPlayer.setAttribute("controls","controls");
+        VideoPlayer.setAttribute("controls", "controls");
     }
 });
 
@@ -134,6 +134,7 @@ function LoadData() {
                 _hls = new Hls();
                 _hls.loadSource(url);
                 _hls.attachMedia(VideoPlayer);
+                OnErrors(_hls);
             } else {
                 console.warn('HLS unsupported');
                 VideoPlayer.src = url
@@ -149,9 +150,17 @@ function LoadData() {
                 })
 
         } catch (err) {
-            console.log(err);
+            ParentWindow.postMessage({ key: 'tunime_error', value: err }, "*");
         }
     });
+}
+
+function OnErrors(hls) {
+    hls.on(Hls.Events.ERROR, (e, data) => {
+        if (data.fatal) {
+            ParentWindow.postMessage({ key: 'tunime_error', value: data.details }, "*");
+        }
+    })
 }
 
 

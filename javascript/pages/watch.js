@@ -14,6 +14,15 @@ export let $CONTINUE = new URLSearchParams(window.location.search).get("continue
 
 export const $SHOWPLAYER = new URLSearchParams(window.location.search).get("player");
 
+//Событие ошибка Tunime плеера
+Player().events.onerror((data) => {
+  console.log(`Eror Tunime Player: ${data}`);
+  //Убираем автомотический выбор плеера из за ошибки
+  $PARAMETERS.player.standart = false;
+  //Если ошибка Tunime плеера то переключаем на обычный плеер Kodik
+  Player().update();
+});
+
 Main((e) => {
   //Функционал страницы (контролеров)
   Functional();

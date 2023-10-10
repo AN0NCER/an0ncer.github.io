@@ -2,7 +2,7 @@ import { ParentWindow, VideoPlayer } from "../tunimeplayer.js";
 
 export function RegEvents() {
     VideoPlayer.addEventListener("error", (e) => {
-        ParentWindow.postMessage({ key: 'tunime_error' }, "*");
+        ParentWindow.postMessage({ key: 'tunime_error', value: "Error Player" }, "*");
     });
     VideoPlayer.addEventListener("loadedmetadata", () => {
     });
