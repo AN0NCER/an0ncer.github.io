@@ -150,7 +150,7 @@ function LoadData() {
                 })
 
         } catch (err) {
-            console.log(err);
+            ParentWindow.postMessage({ key: 'tunime_error', value: err }, "*");
         }
     });
 }
