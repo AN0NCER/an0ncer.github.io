@@ -3,6 +3,7 @@ const $PARAMETERS = {
     autologin: false,
     develop: false,
     menuver: true,
+    type_notify: ["episode"],
     anime: {
         syncdata: true,
     },

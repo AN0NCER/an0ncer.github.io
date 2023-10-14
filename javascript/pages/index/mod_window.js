@@ -141,8 +141,17 @@ const WindowUpdate = {
     }
 }
 
+const WindowNotify = {
+    init: () => { },
+    show: () => { },
+    hide: () => { },
+    verif: () => { return true; }
+}
+
 const _windowUpdate = new WindowManagement(WindowUpdate, '.window-update');
+const _windowNotify = new WindowManagement(WindowNotify, '.window-notify');
 
 export const ShowUpdateWindow = () => { _windowUpdate.click(); }
+export const ShowNotifyWindow = () => { _windowNotify.click(); }
 export const UpdateKey = () => { return _updateKey };
 export const SetUpdateData = (data) => { WindowUpdate.data = data; } 

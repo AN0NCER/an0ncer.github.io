@@ -1,0 +1,41 @@
+.content-notify {
+
+    .content-wraper {
+        max-height: 100%;
+        overflow-y: auto;
+
+        .title-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .title-witch-icon {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 700;
+
+                svg {
+                    width: 10px;
+                    height: 12px;
+                    fill: #fff;
+                }
+            }
+
+            .btn-window-close {
+                display: grid;
+                width: 35px;
+                height: 35px;
+                place-items: center;
+                cursor: pointer;
+
+                svg {
+                    fill: #FFF;
+                    width: 10px;
+                    height: 10px;
+                    flex-shrink: 0;
+                }
+            }
+        }
+    }
+}

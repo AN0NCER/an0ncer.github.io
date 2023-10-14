@@ -24,6 +24,7 @@ export function ShowUser(looged = false) {
     userNotification(data.id);
 }
 
+//Отображение количество уведомлений на аккаунте пользователя
 function userNotification(id) {
     AnimeLoaded(() => {
         Users.unread_messages(id, async (response) => {

@@ -1146,6 +1146,40 @@ body.menuver[data-orientation="270"] .application-menu {
   cursor: pointer;
 }
 
+.content-notify .content-wraper {
+  max-height: 100%;
+  overflow-y: auto;
+}
+.content-notify .content-wraper .title-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.content-notify .content-wraper .title-content .title-witch-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+.content-notify .content-wraper .title-content .title-witch-icon svg {
+  width: 10px;
+  height: 12px;
+  fill: #fff;
+}
+.content-notify .content-wraper .title-content .btn-window-close {
+  display: grid;
+  width: 35px;
+  height: 35px;
+  place-items: center;
+  cursor: pointer;
+}
+.content-notify .content-wraper .title-content .btn-window-close svg {
+  fill: #FFF;
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+}
+
 .card-anime {
   min-width: 195px;
   margin-right: 10px;
