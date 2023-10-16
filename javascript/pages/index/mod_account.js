@@ -1,5 +1,5 @@
 import { Users } from "../../modules/ShikiAPI.js";
-import { User } from "../../modules/ShikiUSR.js";
+import { Oauth, User } from "../../modules/ShikiUSR.js";
 import { Sleep } from "../../modules/funcitons.js";
 import { AnimeLoaded } from "./mod_animes.js";
 
@@ -59,7 +59,7 @@ function autoLogin() {
         }
 
         //Пробуем авторизоваться
-        return window.location.href = User.Oauth.GetUrl();
+        return window.location.href = Oauth.GetUrl();
     }
 }
 
