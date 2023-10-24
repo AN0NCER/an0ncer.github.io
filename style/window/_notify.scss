@@ -157,9 +157,15 @@
                             height: 100%;
                             background: #5c5c5c;
                             border-radius: 3px;
+                            position: relative;
                             svg{
                                 fill: #fff;
                                 width: 10px;
+                                position: absolute;
+                            }
+
+                            .loaded, .error{
+                                opacity: 0;
                             }
                         }
                     }

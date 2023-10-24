@@ -1334,10 +1334,15 @@ body.menuver[data-orientation="270"] .application-menu {
   height: 100%;
   background: #5c5c5c;
   border-radius: 3px;
+  position: relative;
 }
 .content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-onshow svg {
   fill: #fff;
   width: 10px;
+  position: absolute;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-onshow .loaded, .content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-onshow .error {
+  opacity: 0;
 }
 
 .card-anime {
