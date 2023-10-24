@@ -370,3 +370,31 @@ export function isObjectEqual(obj1, obj2, excludedKeys) {
 
     return true;
 }
+
+/**
+ * Проверяет видимость элемента и его положение на экране.
+ * @param {jQuery} element - jQuery-элемент для проверки.
+ * @returns {boolean} - `true`, если элемент видим и находится на экране, в противном случае `false`.
+ */
+export function isElementVisible(element) {
+    // Получаем размеры окна просмотра
+    var windowWidth = $(window).width();
+    var windowHeight = $(window).height();
+
+    // Получаем размеры и позицию элемента
+    var elementWidth = element.outerWidth();
+    var elementHeight = element.outerHeight();
+    var elementPosition = element.offset();
+
+    // Проверяем видимость элемента
+    var isVisible =
+        elementPosition.left >= 0 &&
+        elementPosition.top >= 0 &&
+        elementPosition.left + elementWidth <= windowWidth &&
+        elementPosition.top + elementHeight <= windowHeight;
+
+    // Проверяем, что элемент не скрыт через opacity или display
+    var isNotHidden = element.is(":visible");
+
+    return isVisible && isNotHidden;
+}
