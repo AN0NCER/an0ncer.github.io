@@ -1,6 +1,6 @@
 import { InitMenu } from "../menu.js";
 import { ShowUser } from "./index/mod_account.js";
-import { UserRates, Users } from "../modules/ShikiAPI.js";
+import { UserRates } from "../modules/ShikiAPI.js";
 import { GitHubRel } from "./index/mod_github.js";
 import { Main, User } from "../modules/ShikiUSR.js";
 import { SetUserRate } from "./index/mod_trailers.js";

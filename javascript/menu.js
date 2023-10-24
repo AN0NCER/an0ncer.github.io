@@ -1,3 +1,5 @@
+import { User } from "./modules/ShikiUSR.js";
+
 //Отображено ли меню на сайте
 let _has_menu = false;
 //ID текущей страницы
@@ -46,7 +48,30 @@ function addMenu({ icons = { main: "", selected: "" }, id, link = "/", selected 
         //Нажатие на кнопку в меню
         $(`.btn-menu[data-id="${id}"]`).on('click', function () {
             _app_menu[id].function(_app_menu[id].link);
-        })
+        });
+
+        //Присутствует интерактивное меню для вкладки
+        if (IntercatMenu[id]) {
+            let target = `.btn-menu[data-id="${id}"]`;
+            let timer;
+
+            $(target).contextmenu((e) => {
+                e.preventDefault();
+                showInteractMenu(id, e);
+            });
+
+            $(target).bind('touchstart', function (e) {
+                clearInterval(timer);
+                timer = setInterval(() => {
+                    showInteractMenu(id, e);
+                }, 700);
+                e.preventDefault();
+            });
+
+            $(target).bind('touchend', function (e) {
+                clearInterval(timer);
+            });
+        }
     }
 }
 
@@ -58,6 +83,26 @@ function addContinue({ icon } = {}) {
         if (data && data[0]) {
             location.replace('watch.html?id=' + data[0].id + '&player=true&continue=' + data[0].continue);
         }
+    });
+
+    let target = `#btnContinue`;
+    let timer;
+
+    $(target).contextmenu((e) => {
+        e.preventDefault();
+        showInteractMenu("play", e);
+    });
+
+    $(target).bind('touchstart', function (e) {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            showInteractMenu("play", e);
+        }, 700);
+        e.preventDefault();
+    });
+
+    $(target).bind('touchend', function (e) {
+        clearInterval(timer);
     });
 }
 
@@ -83,6 +128,7 @@ function checkOrientation() {
 
 export const InitMenu = async () => {
     $('body').append(`<div class="application-menu unselectable"></div>`);
+    initIntercattMenu();
     _has_menu = true;
     addMenu({ icons: _app_menu_icons.home, id: "index", link: "index.html" });
     addMenu({ icons: _app_menu_icons.search, id: "search", link: "search.html" });
@@ -92,6 +138,62 @@ export const InitMenu = async () => {
     selectCurPage(_id_current_page);
     checkOrientation();
 };
+
+function showInteractMenu(id, e) {
+    console.log(e);
+    $('.user-interactive').empty();
+    for (const key in IntercatMenu[id]) {
+        const element = IntercatMenu[id][key];
+        if (element.type == "page") {
+            //Ссылка на страницу
+            const iMenu = $(`<div class="btn-inter disable-${element.disabled()}">${element.icon}${element.text}</div>`);
+            $('.user-interactive').append(iMenu);
+            if (!element.disabled()) {
+                iMenu.on('click', function () {
+                    element.event();
+                });
+            }
+        } else if (element.type == "parametr") {
+            // Параметр
+            const iMenu = $(`<label class="btn-inter inter-param disable-${element.disabled()}"><div class="title">${element.icon}${element.text}</div>
+            <div class="checkbox">
+                <input type="checkbox" ${element.disabled() ? `disabled` : ``} ${element.value() ? 'checked' : ''}>
+                <div class="switch-check"></div>
+            </div></label>`);
+            $('.user-interactive').append(iMenu);
+
+            if (!element.disabled()) {
+                iMenu.on("click.parametr", function (e) {
+                    if (e.target.checked != undefined) {
+                        element.event(e.target.checked);
+                    }
+                });
+            }
+        } else if (element.type == "method") {
+            //Функция
+            const iMenu = $(`<div class="btn-inter disable-${element.disabled()}">${element.icon}${element.text}</div>`);
+            $('.user-interactive').append(iMenu);
+            if (!element.disabled()) {
+                iMenu.on("click.method", function () {
+                    element.event();
+                })
+            }
+        } else {
+            //Линия
+            const iMenu = $(`<div class="line-inter"></div>`);
+            $('.user-interactive').append(iMenu);
+        }
+    }
+}
+
+function initIntercattMenu() {
+    let iMenu = $('body').append(`<div class="interactive-menu unselectable" style="">
+    <div class="close-interactive"></div>
+    <div class="user-interactive"></div>
+    </div>`);
+    iMenu = iMenu.append('');
+}
+
 
 export function Menu(id) {
     if (id) {
@@ -143,11 +245,120 @@ export function Menu(id) {
 }
 
 const IntercatMenu = {
-    logout: {
-        string: "Выйти",
-        icon: "",
-        function: function () {
+    user: {
+        settings: {
+            text: "Настройки",
+            type: "page",
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></svg>`,
+            disabled: () => { return false },
+            event: function () {
+                _app_menu.index.function("settings.html");
+            }
+        },
+        updates: {
+            text: "Обновления",
+            type: "page",
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M142.9 142.9c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5c0 0 0 0 0 0H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1C73.2 122 55.6 150.7 44.8 181.4c-5.9 16.7 2.9 34.9 19.5 40.8s34.9-2.9 40.8-19.5c7.7-21.8 20.2-42.3 37.8-59.8zM16 312v7.6 .7V440c0 9.7 5.8 18.5 14.8 22.2s19.3 1.7 26.2-5.2l41.6-41.6c87.6 86.5 228.7 86.2 315.8-1c24.4-24.4 42.1-53.1 52.9-83.7c5.9-16.7-2.9-34.9-19.5-40.8s-34.9 2.9-40.8 19.5c-7.7 21.8-20.2 42.3-37.8 59.8c-62.2 62.2-162.7 62.5-225.3 1L185 329c6.9-6.9 8.9-17.2 5.2-26.2s-12.5-14.8-22.2-14.8H48.4h-.7H40c-13.3 0-24 10.7-24 24z"/></svg>`,
+            disabled: () => { return true }
+        },
+        line: {
+            type: "line",
+        },
+        autologin: {
+            type: "parametr",
+            disabled: () => {
+                return !User.authorized;
+            },
+            value: () => {
+                return $PARAMETERS.autologin;
+            },
+            event: (bool) => {
+                setParameter('autologin', bool);
+            },
+            text: "Автовход",
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M14.1 463.3c-18.7-18.7-18.7-49.1 0-67.9L395.4 14.1c18.7-18.7 49.1-18.7 67.9 0l34.6 34.6c18.7 18.7 18.7 49.1 0 67.9L116.5 497.9c-18.7 18.7-49.1 18.7-67.9 0L14.1 463.3zM347.6 187.6l105-105L429.4 59.3l-105 105 23.3 23.3z"/></svg>`
+        },
+        logout: {
+            type: "method",
+            disabled: () => {
+                return !User.authorized;
+            },
+            event: () => {
+                User.Storage.Clear();
+                location.reload();
+            },
+            text: "Выйти",
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg>`
+        }
+    },
+    play: {
+        two: {
+            text: "Продолжить 2-ое",
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M0 96C0 60.7 28.7 32 64 32H384c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM352 352a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM128 192a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg>`,
+            type: "page",
+            disabled: () => {
+                let data = localStorage.getItem('last-watch');
+                if (!data) return true;
+                data = JSON.parse(data);
+                if (!data[1]) return true;
+                return false;
+            },
+            event: () => {
+
+            }
+        },
+        one: {
+            text: "Продолжить 1-ое",
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM224 224a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>`,
+            type: "page",
+            disabled: () => {
+                let data = localStorage.getItem('last-watch');
+                if (!data) return true;
+                data = JSON.parse(data);
+                if (!data[0]) return true;
+                return false;
+            },
+            event: () => {
+
+            }
+        },
+        line: {
 
         },
+        standartcontrol: {
+            type: "parametr",
+            disabled: () => {
+                return !$PARAMETERS.player.standart;
+            },
+            value: () => {
+                return $PARAMETERS.player.standart_controls;
+            },
+            text: "Стандартное управление",
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>`
+        },
+        fullscreen: {
+            type: "parametr",
+            disabled: () => {
+                return false;
+            },
+            value: () => {
+                return $PARAMETERS.player.full;
+            },
+            text: "На весь экран",
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z"/></svg>`
+        },
+        tunime: {
+            type: "parametr",
+            disabled: () => {
+                return false;
+            },
+            value: () => {
+                return $PARAMETERS.player.standart;
+            },
+            text: "Плеер",
+            icon: `<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.550458 5.92729H3.44954C3.87634 5.92729 4.0784 5.84857 4.17437 5.44142C4.27034 5.03428 4.29358 4.58401 4.29358 4.58401H5.50459V15.5304C5.50459 15.5304 5.12416 15.6461 4.69725 15.759C4.27034 15.872 4.11009 16.0419 4.11009 16.3306V19.1029C4.11009 19.3602 4.33027 19.6746 4.69725 19.6746H11.3028C11.633 19.6746 11.8899 19.3602 11.8899 19.1315V16.302C11.8899 16.0734 11.6697 15.8448 11.4128 15.7876C11.156 15.7304 10.4954 15.5304 10.4954 15.5304V4.58401H11.7064L11.9266 5.44142C11.9633 5.64149 12.2202 5.92729 12.5138 5.92729H15.4495C15.7431 5.92729 16 5.61291 16 5.41284V0.868531C16 0.668467 15.7064 0.3255 15.4128 0.3255H0.587156C0.293578 0.3255 0 0.697048 0 0.897112V5.38426C0 5.58433 0.293577 5.92729 0.550458 5.92729Z" fill="white"/>
+          </svg>`
+        }
     }
 }
