@@ -753,13 +753,30 @@ body.menuver[data-orientation="270"] .application-menu {
   display: block;
   transition: 0.3s ease-in-out;
 }
-.windowed.hide {
+
+.windowed-right {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-family: "Manrope";
+  display: block;
+  transition: 0.3s ease-in-out;
+  z-index: 300;
+  color: #FFF;
+}
+
+.windowed.hide,
+.windowed-right.hide {
   display: none;
 }
-.windowed.hide .hide-window {
+.windowed.hide .hide-window,
+.windowed-right.hide .hide-window {
   opacity: 0;
 }
-.windowed .hide-window {
+.windowed .hide-window,
+.windowed-right .hide-window {
   position: fixed;
   top: 0;
   left: 0;
@@ -772,6 +789,31 @@ body.menuver[data-orientation="270"] .application-menu {
   backdrop-filter: blur(5px);
   cursor: pointer;
 }
+
+.windowed-right .window-content {
+  background: #101318;
+  border-radius: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  flex-direction: column;
+  overflow-y: auto;
+  transition: 0.3s ease-in-out;
+  transform: translateX(100%);
+}
+.windowed-right .window-content .content-wraper {
+  padding-top: 20px;
+  padding-left: calc(env(safe-area-inset-left) + 20px);
+  padding-right: calc(env(safe-area-inset-right) + 20px);
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  display: grid;
+}
+.windowed-right .window-content.hide {
+  display: none;
+}
+
 .windowed .window-content {
   background: #101318;
   border-radius: 5px 5px 0px 0px;
@@ -802,6 +844,11 @@ body.menuver[data-orientation="270"] .application-menu {
   .windowed .window-content .content-wraper {
     max-width: 900px;
     margin: 0 auto;
+    width: 100%;
+  }
+  .windowed-right .window-content {
+    left: auto;
+    max-width: 400px;
     width: 100%;
   }
 }

@@ -998,13 +998,30 @@ body.menuver[data-orientation="270"] .application-menu {
   display: block;
   transition: 0.3s ease-in-out;
 }
-.windowed.hide {
+
+.windowed-right {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-family: "Manrope";
+  display: block;
+  transition: 0.3s ease-in-out;
+  z-index: 300;
+  color: #FFF;
+}
+
+.windowed.hide,
+.windowed-right.hide {
   display: none;
 }
-.windowed.hide .hide-window {
+.windowed.hide .hide-window,
+.windowed-right.hide .hide-window {
   opacity: 0;
 }
-.windowed .hide-window {
+.windowed .hide-window,
+.windowed-right .hide-window {
   position: fixed;
   top: 0;
   left: 0;
@@ -1017,6 +1034,31 @@ body.menuver[data-orientation="270"] .application-menu {
   backdrop-filter: blur(5px);
   cursor: pointer;
 }
+
+.windowed-right .window-content {
+  background: #101318;
+  border-radius: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  flex-direction: column;
+  overflow-y: auto;
+  transition: 0.3s ease-in-out;
+  transform: translateX(100%);
+}
+.windowed-right .window-content .content-wraper {
+  padding-top: 20px;
+  padding-left: calc(env(safe-area-inset-left) + 20px);
+  padding-right: calc(env(safe-area-inset-right) + 20px);
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  display: grid;
+}
+.windowed-right .window-content.hide {
+  display: none;
+}
+
 .windowed .window-content {
   background: #101318;
   border-radius: 5px 5px 0px 0px;
@@ -1047,6 +1089,11 @@ body.menuver[data-orientation="270"] .application-menu {
   .windowed .window-content .content-wraper {
     max-width: 900px;
     margin: 0 auto;
+    width: 100%;
+  }
+  .windowed-right .window-content {
+    left: auto;
+    max-width: 400px;
     width: 100%;
   }
 }
@@ -1147,8 +1194,8 @@ body.menuver[data-orientation="270"] .application-menu {
 }
 
 .content-notify .content-wraper {
-  max-height: 100%;
-  overflow-y: auto;
+  grid-template-rows: auto 1fr;
+  gap: 10px;
 }
 .content-notify .content-wraper .title-content {
   display: flex;
@@ -1178,6 +1225,119 @@ body.menuver[data-orientation="270"] .application-menu {
   width: 10px;
   height: 10px;
   flex-shrink: 0;
+}
+.content-notify .content-wraper .content-notifycation {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+.content-notify .content-wraper .content-notifycation .notifycation {
+  cursor: pointer;
+  padding: 10px 0;
+  margin-top: 10px;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notify-status {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  opacity: 0.3;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .controlls-read {
+  background: #2393F1;
+  display: grid;
+  place-items: center;
+  width: 0px;
+  margin-right: 0px;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .controlls-read svg {
+  fill: #fff;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .controlls-del {
+  background: #f12323;
+  display: grid;
+  place-items: center;
+  width: 0px;
+  margin-left: 0px;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .controlls-del svg {
+  fill: #fff;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt-type-date {
+  display: flex;
+  justify-content: space-between;
+  color: #FFF;
+  font-family: Manrope;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt-type-date > .notify-type {
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt-type-date > .notify-type .read-false {
+  width: 5px;
+  height: 5px;
+  background: #2393F1;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt-type-date > .notify-date {
+  font-size: 13px;
+  font-weight: 400;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt-text > div {
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags {
+  display: flex;
+  justify-content: space-between;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-list {
+  display: flex;
+  gap: 10px;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-list div {
+  background: #2393F1;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 6px;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-onshow {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1/1;
+  height: 100%;
+  background: #5c5c5c;
+  border-radius: 3px;
+}
+.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-onshow svg {
+  fill: #fff;
+  width: 10px;
 }
 
 .card-anime {
