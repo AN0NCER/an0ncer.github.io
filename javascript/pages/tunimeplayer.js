@@ -48,6 +48,7 @@ OnPlayerPlay(() => {
                 } else if (VideoPlayer.requestFullscreen) {
                     VideoPlayer.requestFullscreen();
                 }
+                first_play = true;
             })
         }
     }

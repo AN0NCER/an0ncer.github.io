@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body,
 html {
   background: #15171e;
@@ -123,6 +124,7 @@ video {
   left: 0;
   right: 0;
   bottom: 0;
+  pointer-events: none; /* Этот элемент не будет реагировать на события мыши */
 }
 .fullscreen-wrapper .fk-cube {
   position: absolute;
