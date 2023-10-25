@@ -1,3 +1,4 @@
+import { User } from "../../modules/ShikiUSR.js";
 import { WindowManagement } from "../../modules/Windows.js"
 import { isElementVisible } from "../../modules/funcitons.js";
 import { LoadNotifycation } from "./mod_notify.js";
@@ -167,7 +168,9 @@ const WindowNotify = {
         }
     },
     hide: () => { },
-    verif: () => { return true; },
+    verif: () => {
+        return User.authorized;
+    },
     loadVoice: () => {
         let elements = $(`.notifycation[data-voice="true"][data-loaded="false"]`);
         for (let i = 0; i < elements.length; i++) {
@@ -195,13 +198,13 @@ const WindowNotify = {
                 element.attr('data-loaded', true);
                 if (response.results[0].last_episode >= episode) {
                     stopLoadingAnimation(element);
-                }else{
+                } else {
                     stopLoadingFalsAnimation(element);
                 }
             });
         }
 
-        function stopLoadingFalsAnimation(element){
+        function stopLoadingFalsAnimation(element) {
             const target = `.notifycation-cnt[data-id="${element.attr('data-id')}"] > .notifycation-cnt-tags > .notifycation-cnt-tags-onshow`;
             anime({
                 targets: `${target} > svg.load`,
