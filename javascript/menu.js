@@ -1,5 +1,7 @@
 import { User } from "./modules/ShikiUSR.js";
 
+const get_orientation = screen?.orientation?.angle ? () => { return screen.orientation.angle } : () => { return window.orientation == -90?270:window.orientation };
+
 //Отображено ли меню на сайте
 let _has_menu = false;
 //ID текущей страницы
@@ -120,9 +122,9 @@ function checkOrientation() {
     if ($PARAMETERS.menuver) {
         $('body').addClass('menuver');
     }
-    $('body').attr('data-orientation', screen.orientation.angle);
+    $('body').attr('data-orientation', get_orientation());
     window.addEventListener("orientationchange", function () {
-        $('body').attr('data-orientation', screen.orientation.angle);
+        $('body').attr('data-orientation', get_orientation());
     });
 }
 
@@ -204,7 +206,7 @@ function showInteractMenu(id, e) {
         SetPositionMenu();
     });
 
-    function SetTriangle(angle = screen.orientation.angle) {
+    function SetTriangle(angle = get_orientation()) {
         const triangle = $(`.user-interactive > .triangle`);
         const target = $(e.currentTarget);
         const menuver = $PARAMETERS.menuver;
@@ -232,7 +234,7 @@ function showInteractMenu(id, e) {
         }
     }
 
-    function SetPositionMenu(angle = screen.orientation.angle) {
+    function SetPositionMenu(angle = get_orientation()) {
         const menuver = $PARAMETERS.menuver;
         const menu = $(`.user-interactive`);
         const target = $(e.currentTarget);
