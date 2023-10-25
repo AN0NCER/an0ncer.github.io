@@ -1,6 +1,6 @@
 import { User } from "./modules/ShikiUSR.js";
 
-const get_orientation = screen?.orientation?.angle ? () => { return screen.orientation.angle } : () => { return window.orientation == -90?270:window.orientation };
+const get_orientation = screen?.orientation ? () => { return screen.orientation.angle } : () => { return window.orientation == -90?270:window.orientation };
 
 //Отображено ли меню на сайте
 let _has_menu = false;
