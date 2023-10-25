@@ -65,7 +65,7 @@ function addMenu({ icons = { main: "", selected: "" }, id, link = "/", selected 
                 timer = setInterval(() => {
                     showInteractMenu(id, e);
                 }, 700);
-                e.preventDefault();
+                // e.preventDefault();
             });
 
             $(target).bind('touchend', function (e) {
@@ -98,7 +98,7 @@ function addContinue({ icon } = {}) {
         timer = setInterval(() => {
             showInteractMenu("play", e);
         }, 700);
-        e.preventDefault();
+        // e.preventDefault();
     });
 
     $(target).bind('touchend', function (e) {
@@ -137,17 +137,24 @@ export const InitMenu = async () => {
     addMenu({ icons: _app_menu_icons.user, id: "user", link: "user.html" });
     selectCurPage(_id_current_page);
     checkOrientation();
+    $('.close-interactive').click(() => {
+        $('.interactive-menu').css('opacity', '0');
+
+        setTimeout(() => {
+            $('.interactive-menu').css({ display: 'none' });
+        }, 300);
+    });
 };
 
 function showInteractMenu(id, e) {
-    console.log(e);
-    $('.user-interactive').empty();
+    const dom = '.user-interactive > .interact-content';
+    $(dom).empty();
     for (const key in IntercatMenu[id]) {
         const element = IntercatMenu[id][key];
         if (element.type == "page") {
             //Ссылка на страницу
             const iMenu = $(`<div class="btn-inter disable-${element.disabled()}">${element.icon}${element.text}</div>`);
-            $('.user-interactive').append(iMenu);
+            $(dom).append(iMenu);
             if (!element.disabled()) {
                 iMenu.on('click', function () {
                     element.event();
@@ -160,7 +167,7 @@ function showInteractMenu(id, e) {
                 <input type="checkbox" ${element.disabled() ? `disabled` : ``} ${element.value() ? 'checked' : ''}>
                 <div class="switch-check"></div>
             </div></label>`);
-            $('.user-interactive').append(iMenu);
+            $(dom).append(iMenu);
 
             if (!element.disabled()) {
                 iMenu.on("click.parametr", function (e) {
@@ -172,7 +179,7 @@ function showInteractMenu(id, e) {
         } else if (element.type == "method") {
             //Функция
             const iMenu = $(`<div class="btn-inter disable-${element.disabled()}">${element.icon}${element.text}</div>`);
-            $('.user-interactive').append(iMenu);
+            $(dom).append(iMenu);
             if (!element.disabled()) {
                 iMenu.on("click.method", function () {
                     element.event();
@@ -181,19 +188,169 @@ function showInteractMenu(id, e) {
         } else {
             //Линия
             const iMenu = $(`<div class="line-inter"></div>`);
-            $('.user-interactive').append(iMenu);
+            $(dom).append(iMenu);
+        }
+    }
+
+    $('.interactive-menu').css('display', 'block');
+    setTimeout(() => {
+        $('.interactive-menu').css('opacity', '1');
+    }, 100);
+
+    //Управление Меню
+    SetPositionMenu();
+    $(window).on('orientationchange.triangle', function () {
+        //Управление Меню
+        SetPositionMenu();
+    });
+
+    function SetTriangle(angle = screen.orientation.angle) {
+        const triangle = $(`.user-interactive > .triangle`);
+        const target = $(e.currentTarget);
+        const menuver = $PARAMETERS.menuver;
+        const menu = $(`.user-interactive`);
+        if (menuver) {
+            //Меню может поворачиваться
+            if (angle == 90 || angle == 270) {
+                _setSide();
+            } else {
+                _setBottom();
+            }
+        } else {
+            //Меню всегда снизу
+            _setBottom();
+        }
+
+        function _setBottom() {
+            let pos = (target.position().left + (target.width() / 2) - (18.15 / 2)) - menu.position().left;
+            triangle.css({ left: pos, top: '' });
+        }
+
+        function _setSide() {
+            let pos = (target.position().top + (target.height() / 2) - (18.15 / 2) - menu.position().top);
+            triangle.css({ left: '', top: pos });
+        }
+    }
+
+    function SetPositionMenu(angle = screen.orientation.angle) {
+        const menuver = $PARAMETERS.menuver;
+        const menu = $(`.user-interactive`);
+        const target = $(e.currentTarget);
+        const dispay = {
+            height: $(window).height(),
+            width: $(window).width()
+        };
+        const size = {
+            height: menu.height(),
+            width: menu.width()
+        }
+
+        if (menuver) {
+            //Меню может поворачиваться
+            if (angle == 90 || angle == 270) {
+                _setSide();
+            } else {
+                _setBottom();
+            }
+        } else {
+            //Меню всегда снизу
+            _setBottom();
+        }
+
+        SetTriangle();
+
+        function _setBottom() {
+            let fit = _checkSize();
+
+            //Проверим что для него нет места в экране
+            if (!fit) {
+                menu.css({ left: 20, right: '', bottom: '', top: '' });
+                return;
+            }
+
+            //Проверка что меню помещаеться в центре кнопки по horizontal
+            if (dispay.width > ((target.position().left + (target.width() / 2)) + (size.width / 2) - 20)) {
+                //Вмещаеться по центру кнопки
+                console.log('Вмещаеться по центру кнопки');
+                let left = (target.position().left + (target.width() / 2)) - (size.width / 2);
+                menu.css({ left });
+            } else {
+                //Не вмещаеться по центру кнопки
+                console.log('Не вмещаеться по центру кнопки');
+
+                //Определить прикрепить с правой стороны 20px или с левой
+                if (target.position().left + (size.width / 2) - 20 < 0) {
+                    console.log('Прикрепить с левой стороны с отступом 20px');
+                    menu.css({ left: 20, right: 'auto' });
+
+                } else {
+                    console.log('Прикрепить с правой стороны с отступом 20px');
+                    menu.css({ left: 'auto', right: 20 });
+                }
+            }
+        }
+
+        function _setSide() {
+            let fit = _checkSize();
+
+            if (dispay.height > ((target.position().top + (target.height() / 2)) + (size.height / 2) - 20)) {
+                //Вмещаеться по центру кнопки
+                console.log('Вмещаеться по центру кнопки');
+                let top = (target.position().top + (target.height() / 2)) - (size.height / 2);
+                menu.css({ top, bottom: 'auto', left: '', right: '' });
+            } else {
+                //Не вмещаеться по центру кнопки
+                console.log('Не вмещаеться по центру кнопки');
+
+                // Теперь добавим проверку по вертикали
+                if (target.position().top + (size.height / 2) - 20 < 0) {
+                    console.log('Прикрепить сверху с отступом 20px');
+                    menu.css({ top: 20, bottom: '', left: '', right: '' });
+                } else {
+                    console.log('Прикрепить снизу с отступом 20px');
+                    menu.css({ top: '', bottom: 20, left: '', right: '' });
+                }
+            }
+        }
+
+        function _checkSize() {
+            if ((size.width + 40) >= dispay.width) {
+                //Невмещаеться в экран полным размером
+                console.log('Невмещаеться в экран полным размером');
+                menu.css({ 'max-width': dispay.width - 40 });
+                return false;
+            } else {
+                //Вмещаеться в экран полным размером
+                console.log('Вмещаеться в экран полным размером');
+                menu.css({ 'max-width': '' });
+                return true;
+            }
         }
     }
 }
 
 function initIntercattMenu() {
-    let iMenu = $('body').append(`<div class="interactive-menu unselectable" style="">
+    let iMenu = $('body').append(`<div class="interactive-menu unselectable" style="display: none;">
     <div class="close-interactive"></div>
-    <div class="user-interactive"></div>
+    <div class="user-interactive">
+    <div class="interact-content"></div>
+    <svg width="16" height="14" class="triangle" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g filter="url(#filter0_b_1077_1149)">
+    <path d="M10.5981 12C9.44338 14 6.55662 14 5.40192 12L1.35091 4.98343C-0.101468 2.46785 2.51193 -0.437339 5.16665 0.741663L6.78234 1.45922C7.5576 1.80353 8.4424 1.80353 9.21766 1.45922L10.8334 0.741662C13.4881 -0.437339 16.1015 2.46784 14.6491 4.98343L10.5981 12Z" fill="#1E1F25" fill-opacity="0.95"/>
+  </g>
+  <defs>
+    <filter id="filter0_b_1077_1149" x="-19.0649" y="-19.529" width="54.1297" height="53.029" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feGaussianBlur in="BackgroundImageFix" stdDeviation="10"/>
+      <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_1077_1149"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_1077_1149" result="shape"/>
+    </filter>
+  </defs>
+</svg>
+    </div>
     </div>`);
     iMenu = iMenu.append('');
 }
-
 
 export function Menu(id) {
     if (id) {
@@ -304,7 +461,9 @@ const IntercatMenu = {
                 return false;
             },
             event: () => {
-
+                let data = localStorage.getItem('last-watch');
+                data = JSON.parse(data);
+                location.replace('watch.html?id=' + data[1].id + '&player=true&continue=' + data[1].continue);
             }
         },
         one: {
@@ -319,7 +478,9 @@ const IntercatMenu = {
                 return false;
             },
             event: () => {
-
+                let data = localStorage.getItem('last-watch');
+                data = JSON.parse(data);
+                location.replace('watch.html?id=' + data[0].id + '&player=true&continue=' + data[0].continue);
             }
         },
         line: {
@@ -334,7 +495,10 @@ const IntercatMenu = {
                 return $PARAMETERS.player.standart_controls;
             },
             text: "Стандартное управление",
-            icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>`
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>`,
+            event: (bool) => {
+                setParameter('standart_controls', bool);
+            }
         },
         fullscreen: {
             type: "parametr",
@@ -343,6 +507,9 @@ const IntercatMenu = {
             },
             value: () => {
                 return $PARAMETERS.player.full;
+            },
+            event: (bool) => {
+                setParameter('full', bool);
             },
             text: "На весь экран",
             icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z"/></svg>`
@@ -354,6 +521,9 @@ const IntercatMenu = {
             },
             value: () => {
                 return $PARAMETERS.player.standart;
+            },
+            event: (bool) => {
+                setParameter('standart', bool);
             },
             text: "Плеер",
             icon: `<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
