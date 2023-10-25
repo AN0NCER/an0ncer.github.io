@@ -109,7 +109,7 @@ export function Fetch(method, url, headers, body = "") {
                     response.json().then(json => {
                         return resolve(json);
                     }).catch(()=>{
-                        return resolve(true);
+                        return resolve({ ok: response.ok, status: response.status });
                     })
                 });
             });

@@ -75,9 +75,11 @@ function _Events() {
         if (touchX < element.offset().left + edgeThreshold) {
             // Касание по левому краю элемента
             isSwiping = true;
+            event.preventDefault();
         } else if (touchX > element.offset().left + elementWidth - edgeThreshold) {
             // Касание по правому краю элемента
             isSwiping = true;
+            event.preventDefault();
         } else {
             // Касание произошло внутри элемента
             isSwiping = false;
@@ -85,8 +87,6 @@ function _Events() {
 
 
         startX = event.clientX || event.originalEvent.touches[0].clientX;
-
-        event.preventDefault();
 
         read = $(element).children(`.controlls-read`);
         del = $(element).children(`.controlls-del`);
@@ -137,6 +137,7 @@ function _Events() {
 
     $(document).on("mouseup touchend", function () {
         if (!element) return;
+        if (!isSwiping) return;
         isSwiping = false;
         del.width('0px');
         read.width('0px');
@@ -144,6 +145,8 @@ function _Events() {
         del.css({ transition: `` });
         cnt.css({ transition: `` });
         EventsNotify(readed, deletet, element);
+        readed = false;
+        deletet = false;
         element = undefined;
     });
 }
@@ -162,7 +165,16 @@ function EventsNotify(readed, deletet, element) {
             $(`.notifycation-cnt[data-id="${id}"] > .notifycation-cnt-type-date > .notify-type > .read-false`).attr('class', 'read-true');
         }).POST({ ids: id, is_read: "1" });
     } else if (deletet) {
-
+        Messages.delete(id, async (res) => {
+            if (res.failed) {
+                if (response.status == 429) {
+                    await Sleep(1000);
+                    return EventsNotify(readed, deletet, element);
+                }
+                return;
+            }
+            $(`.notifycation[data-id="${id}"]`).remove();
+        }).DELETE();
     }
 }
 

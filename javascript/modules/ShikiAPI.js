@@ -257,6 +257,18 @@ export const Messages = {
                 return response;
             }
         }
+    },
+
+    delete: function (id, event = () => { }) {
+        const url = this.base_url() + '/' + id;
+        const request = Fetch("DELETE", url, Headers.bearer());
+        return {
+            DELETE: async () => {
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
     }
 }
 
