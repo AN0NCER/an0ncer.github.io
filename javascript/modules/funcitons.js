@@ -105,7 +105,12 @@ export function Fetch(method, url, headers, body = "") {
                     if (response.status == 204) {
                         return resolve({ ok: response.ok, status: response.status });
                     }
-                    return resolve(response.json());
+                    
+                    response.json().then(json => {
+                        return resolve(json);
+                    }).catch(()=>{
+                        return resolve(true);
+                    })
                 });
             });
         },

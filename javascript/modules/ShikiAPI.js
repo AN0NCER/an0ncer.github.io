@@ -157,7 +157,7 @@ export const Users = {
         return {
             GET: async () => {
                 const response = await request.fetch();
-                event (response);
+                event(response);
                 return response;
             }
         }
@@ -240,6 +240,23 @@ export const Genres = {
     list: function (event = () => { }) {
         const url = this.base_url();
         return StandartIDGET(url, event);
+    }
+}
+
+export const Messages = {
+    base_url: () => { return "https://shikimori.me/api/messages" },
+
+    mark_read: function (event = () => { }) {
+        const url = this.base_url() + '/mark_read';
+        const request = Fetch("POST", url, Headers.bearer());
+        return {
+            POST: async (body = undefined) => {
+                request.setBody(body);
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
     }
 }
 
