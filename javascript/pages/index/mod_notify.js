@@ -1,4 +1,4 @@
-import { Users } from "../../modules/ShikiAPI.js";
+import { Messages, Users } from "../../modules/ShikiAPI.js";
 import { User } from "../../modules/ShikiUSR.js";
 import { Sleep } from "../../modules/funcitons.js";
 
@@ -62,15 +62,41 @@ function _Events() {
     let readed = false;
     let deletet = false;
 
+    let disable_read = false;
+
     $('.notifycation').on('mousedown touchstart', function (event) {
-        isSwiping = true;
-        startX = event.clientX || event.originalEvent.touches[0].clientX;
+
         element = $(event.currentTarget);
+        // Добавьте код для проверки касания по краям элемента
+        var elementWidth = element.width();
+        var touchX = event.clientX || event.originalEvent.touches[0].clientX;
+        var edgeThreshold = 50; // Порог для определения, что касание произошло по краю
+
+        if (touchX < element.offset().left + edgeThreshold) {
+            // Касание по левому краю элемента
+            isSwiping = true;
+        } else if (touchX > element.offset().left + elementWidth - edgeThreshold) {
+            // Касание по правому краю элемента
+            isSwiping = true;
+        } else {
+            // Касание произошло внутри элемента
+            isSwiping = false;
+        }
+
+
+        startX = event.clientX || event.originalEvent.touches[0].clientX;
+
         event.preventDefault();
 
         read = $(element).children(`.controlls-read`);
         del = $(element).children(`.controlls-del`);
         cnt = $(element).children(`.notifycation-cnt`);
+
+        disable_read = false;
+
+        if (cnt.find('.read-true').length != 0) {
+            disable_read = true;
+        }
     });
 
     $(document).on("mousemove touchmove", function (event) {
@@ -78,7 +104,7 @@ function _Events() {
         var currentX = event.clientX || event.originalEvent.touches[0].clientX;
         var swipeDistance = currentX - startX;
 
-        if (swipeDistance > 0) {
+        if (swipeDistance > 0 && !disable_read) {
             del.width('0px');
             deletet = false;
             if (swipeDistance < 100) {
@@ -96,7 +122,9 @@ function _Events() {
             readed = false;
             if (swipeDistance > -100) {
                 del.width(`${-swipeDistance}px`);
-                cnt.css({ transform: `translateX(${swipeDistance}px)` });
+                if (swipeDistance < 0) {
+                    cnt.css({ transform: `translateX(${swipeDistance}px)` });
+                }
                 del.css({ transition: `` });
                 deletet = false;
             } else {
@@ -115,10 +143,27 @@ function _Events() {
         cnt.css({ transform: `translateX(0px)` });
         del.css({ transition: `` });
         cnt.css({ transition: `` });
+        EventsNotify(readed, deletet, element);
         element = undefined;
-
-        console.log(readed, deletet);
     });
+}
+
+function EventsNotify(readed, deletet, element) {
+    const id = element.attr('data-id');
+    if (readed) {
+        Messages.mark_read(async (res) => {
+            if (res.failed) {
+                if (response.status == 429) {
+                    await Sleep(1000);
+                    return EventsNotify(readed, deletet, element);
+                }
+                return;
+            }
+            $(`.notifycation-cnt[data-id="${id}"] > .notifycation-cnt-type-date > .notify-type > .read-false`).attr('class', 'read-true');
+        }).POST({ ids: id, is_read: "1" });
+    } else if (deletet) {
+
+    }
 }
 
 function _RemoveEvents() {
