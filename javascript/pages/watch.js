@@ -267,7 +267,7 @@ function Functional() {
     navigator.share({
       title: $(document).attr("title"),
       text: $('meta[property="og:description"]').attr('content'),
-      url: `https://tunime.onrender.com/l/${id}`
+      url: `https://tunime.onrender.com/l/${$ID}`
     }).catch((error) => $DEV.error('Sharing failed', error));
   }
 

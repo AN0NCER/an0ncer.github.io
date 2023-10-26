@@ -927,6 +927,7 @@ footer .studio span {
   border-radius: 4px;
   max-height: 280px;
   justify-content: center;
+  aspect-ratio: 1/1.44;
 }
 .card-anime .card-content img {
   height: 100%;
