@@ -64,8 +64,13 @@ function _Events() {
 
     let disable_read = false;
 
+    var timer;
+    var isClick = true;
+
     $('.notifycation').on('mousedown touchstart', function (event) {
 
+        timer = new Date();
+        isClick = true;
         element = $(event.currentTarget);
         // Добавьте код для проверки касания по краям элемента
         var elementWidth = element.width();
@@ -99,6 +104,15 @@ function _Events() {
         }
     });
 
+    $('.notifycation').on('mouseup touchend', function (event) {
+        if ((new Date() - timer) <= 500 && isClick) {
+            let target = $(event.currentTarget);
+            EventsNotify(true, false, target, () => {
+                location.href = `watch.html?id=${target.attr('data-anime')}&player=true`;
+            });
+        }
+    });
+
     $(document).on("mousemove touchmove", function (event) {
         if (!isSwiping || !element) return;
         var currentX = event.clientX || event.originalEvent.touches[0].clientX;
@@ -107,6 +121,7 @@ function _Events() {
         if (swipeDistance > 0 && !disable_read) {
             del.width('0px');
             deletet = false;
+            isClick = false;
             if (swipeDistance < 100) {
                 readed = false;
                 read.width(`${swipeDistance}px`);
@@ -120,6 +135,7 @@ function _Events() {
         } else {
             read.width('0px');
             readed = false;
+            isClick = false;
             if (swipeDistance > -100) {
                 del.width(`${-swipeDistance}px`);
                 if (swipeDistance < 0) {
@@ -151,7 +167,7 @@ function _Events() {
     });
 }
 
-function EventsNotify(readed, deletet, element) {
+function EventsNotify(readed, deletet, element, e = () => { }) {
     const id = element.attr('data-id');
     if (readed) {
         Messages.mark_read(async (res) => {
@@ -163,6 +179,7 @@ function EventsNotify(readed, deletet, element) {
                 return;
             }
             $(`.notifycation-cnt[data-id="${id}"] > .notifycation-cnt-type-date > .notify-type > .read-false`).attr('class', 'read-true');
+            e();
         }).POST({ ids: id, is_read: "1" });
     } else if (deletet) {
         Messages.delete(id, async (res) => {
@@ -174,6 +191,7 @@ function EventsNotify(readed, deletet, element) {
                 return;
             }
             $(`.notifycation[data-id="${id}"]`).remove();
+            e();
         }).DELETE();
     }
 }
