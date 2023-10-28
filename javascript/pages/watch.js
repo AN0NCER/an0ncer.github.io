@@ -4,7 +4,7 @@ import { Player } from "./watch/mod_player.js";
 import { AnimeUserRate } from "./watch/mod_userrate.js";
 import { LoadAnime, ELA, GetShikiData, GetShikiScreenshots } from "./watch/mod_resources.js";
 import { Main, User } from "../modules/ShikiUSR.js";
-import { ShowScoreWindow } from "./watch/mod_window.js";
+import { ShowScoreWindow, ShowTranslationWindow } from "./watch/mod_window.js";
 import { ShowDwonloadWindow } from "./watch/mod_download.js";
 import { OnLocalData, SaveDataAnime } from "./watch/mod_synch.js";
 
@@ -123,15 +123,16 @@ ELA.onload(() => {
  */
 function Functional() {
   const VFClick = [
-    { dom: ".anime-status > .cur-status > .more-status", func: ShowStatus },
-    { dom: ".translations--current--object", func: ShowTranslations },
+    { dom: ".anime-status > .cur-status > .more-status", func: ShowStatus }, // Боковая кнопка статуса (Показать все статусы)
     { dom: ".title-player > .btn-wrapper > .btn-lock-view", func: SetPlayerDisplay },
     { dom: ".btn-back", func: BackToMainPage },
     { dom: ".btn-play > .btn", func: ShowPlayer },
     { dom: ".btn-wrapper.rb > .btn", func: ShareAnime },
     { dom: ".btn-wrapper.lb > .btn", func: ShowWindowScore },
     { dom: ".btn-change-player", func: ChangePlayer },
-    { dom: '.btn-download-episode', func: DownloadEpisode }
+    { dom: '.btn-download-episode', func: DownloadEpisode },
+    { dom: '.translations-wrapper > .button-translation', func: ShowTranslationWindow}, //Кнопка выбора озвучки
+    { dom: '.translations-wrapper > .button-stars', func: SaveVoice}, //Кнопка добавление озвучки в избранное
     //Сюда функцию новой кнопки изменить плеер
   ];
 
@@ -183,7 +184,6 @@ function Functional() {
 
   function DownloadEpisode() {
     ShowDwonloadWindow();
-    // location.replace(`./download.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
   }
   /**
    * Отображает статус аниме
@@ -199,42 +199,6 @@ function Functional() {
    */
   function ShowWindowScore() {
     ShowScoreWindow()
-  }
-
-  /**
-   * Отображает все возможные озвучки аниме
-   */
-  function ShowTranslations() {
-    //Отключаем отцинтровку плеера из за того что они расположены рядом и код может неправильно отработать и навеститьь на плеер во время выбора озвучки
-    enableCenter = false;
-    //Получаем bool скрыт ли лист переводов
-    const show_list = $(".translations--list").hasClass("hide") ? true : false;
-    //Скрываем либо показываем
-    show_list
-      ? $(".translations--list").removeClass("hide")
-      : $(".translations--list").addClass("hide");
-    //Пролистать до открытого списка
-    if (show_list && Player().data.length > 1) {
-      $("body").addClass("loading");
-      let element = document.getElementsByClassName("translations--current")[0];
-      let elementPosition = element.getBoundingClientRect().top;
-      let windowHeight = window.innerHeight;
-      let elementHeight = element.offsetHeight;
-      let bottomOffset = 10;
-      let offsetPosition =
-        elementPosition +
-        window.scrollY -
-        windowHeight +
-        elementHeight +
-        bottomOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "auto",
-      });
-    } else {
-      $("body").removeClass("loading");
-    }
   }
 
   /**
@@ -275,5 +239,10 @@ function Functional() {
   function ChangePlayer() {
     console.log(Player());
     document.querySelector("#kodik-player").contentWindow.location.replace(`./tunimeplayer.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
+  }
+
+  //Функция выбора текущей озвучки в избранное или удаление его
+  function SaveVoice(){
+    Player().translation.favorites(Player().translation.id);
   }
 }
