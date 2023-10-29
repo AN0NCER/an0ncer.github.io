@@ -136,7 +136,7 @@ export async function Main(e = () => { }) {
         }
     }
     e(User.authorized);
-    if(!User.authorized){
+    if(!User.authorized && Menu().hasMenu()){
         Menu('user').setUrl('login.html');
         Menu('list').setUrl('login.html');
     }
