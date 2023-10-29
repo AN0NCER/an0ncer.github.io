@@ -13,174 +13,182 @@ html {
     }
 }
 
-*::-webkit-media-controls-panel {
-    display: none !important;
-    -webkit-appearance: none;
-}
-
-/* Old shadow dom for play button */
-
-*::-webkit-media-controls-play-button {
-    display: none !important;
-    -webkit-appearance: none;
-}
-
-/* New shadow dom for play button */
-
-/* This one works! */
-
-*::-webkit-media-controls-start-playback-button {
-    display: none !important;
-    -webkit-appearance: none;
-}
-
-.container {
-    position: relative;
-    height: 100%;
-
-    .wrapper {
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        position: absolute;
-        // background: #000;
-        z-index: 9999;
-
-        .info-panel {
-            $height: 35px;
-
-            height: $height;
-            left: 0;
-            right: 0;
-            top: 0;
-            background: #51B2FF;
-            font-family: Manrope;
-            color: #FFF;
-            font-family: Manrope;
-            font-size: 13px;
-            font-weight: 700;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-left: 10px;
-            padding-right: 10px;
-            -webkit-text-size-adjust: none;
-
-            @include hide;
-        }
-
-        .btn-play {
-            $box: 40px;
-
-            position: absolute;
-            top: calc(50% - ($box / 2));
-            left: calc(50% - ($box / 2));
-            width: $box;
-            height: $box;
-            background: #51B2FF;
-            display: grid;
-            place-items: center;
-            cursor: pointer;
-            border-radius: 3px;
-            opacity: 0;
-        }
-    }
-}
-
-video {
-    height: 100%;
-    width: 100%;
-}
-
-.controls {
-    $height: 40px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #fff;
-    height: $height;
-    display: flex;
-    justify-content: space-between;
-    transform: translateY($height);
-    z-index: 99;
-
-    .btn {
-        min-height: $height;
-        max-height: $height;
-        min-width: $height;
-        max-width: $height;
-        cursor: pointer;
-        display: grid;
-        place-items: center;
-
-        svg {
-            fill: #5a5a5a;
-            width: 14px;
-        }
-    }
-
-    .left-controls,
-    .right-controls {
-        display: flex;
-    }
-
-    .time-span {
-        min-height: $height;
-        max-height: $height;
-        display: flex;
-        align-items: center;
-        font-family: Manrope;
-        color: #5a5a5a;
-        font-weight: bold;
-        font-size: 12px;
-    }
-}
-
-.fullscreen-wrapper {
+.wrapper-full {
     position: fixed;
+    display: grid;
     top: 0;
     left: 0;
-    right: 0;
     bottom: 0;
-    // display: none;
+    right: 0;
+    background: rgba(16, 19, 24, 0.50);
+    z-index: 900;
+    place-items: center;
 
-    .fk-cube {
-        position: absolute;
+    .btn-play {
+        width: 45px;
+        height: 45px;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        background: #51B2FF;
+        border-radius: 3px;
         opacity: 0;
+    }
+}
 
-        svg {
-            width: 15px;
-            fill: red;
+.control-button {
+    $size: 45px;
+    display: grid;
+    width: $size;
+    height: $size;
+    place-items: center;
+    cursor: pointer;
+
+    svg {
+        fill: #fff;
+        height: 16px;
+    }
+}
+
+.wrapper-player {
+    width: 100%;
+    height: 100%;
+
+    video {
+        height: 100%;
+        width: 100%;
+    }
+
+    .sliders {
+        position: fixed;
+        z-index: 40;
+        left: 0;
+        bottom: 50px;
+        right: 0;
+
+        .cur-slider {
+            background: #5FBEF3;
+            width: 0%;
+            max-width: 100%;
+            left: 0;
+
+            .content {
+                .pointer {
+                    right: -29px;
+                    top: -40px;
+                    z-index: 21;
+
+                    svg {
+                        fill: #2672DA;
+                    }
+                }
+            }
         }
 
-        &1 {
-            top: 10px;
-            left: 10px;
+        .cur-slider,
+        .end-slider {
+            position: absolute;
+            height: 10px;
+            display: flex;
+            border-radius: 3px;
+
+            .content {
+                position: relative;
+                width: 100%;
+
+                .pointer {
+                    display: none;
+                    position: absolute;
+                    padding: 20px;
+                    cursor: pointer;
+
+                    &.mouseenter{
+                        display: block;
+                    }
+                }
+            }
         }
 
-        &2 {
-            right: 10px;
-            top: 10px;
-            transform: rotate(90deg);
+        .end-slider {
+            background: #F35F5F;
+            right: 0;
+            max-width: 50%;
+            width: 0%;
+
+            .content {
+                .pointer {
+                    left: -29px;
+                    top: -40px;
+                    z-index: 20;
+
+                    svg {
+                        fill: #DA2626;
+                    }
+                }
+            }
         }
 
-        &3{
-            bottom: 10px;
-            left: 10px;
-            transform: rotate(270deg);
-        }
-
-        &4{
-            bottom: 10px;
-            right: 10px;
-            transform: rotate(180deg);
+        &.mouseenter{
+            .cur-slider, .end-slider{
+                .content {
+                    .pointer{
+                        display: block;
+                    }
+                }
+            }
         }
     }
 }
 
+.player-controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 51;
+
+    .controls {
+        border-radius: 3px;
+        background: #282A2E;
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        z-index: 50;
+
+        .left-controls,
+        .right-controls {
+            display: flex;
+            align-items: center;
+
+            .btn-play-pause {
+                position: relative;
+                svg {
+                    position: absolute;
+                    &.pause {
+                        opacity: 0;
+                    }
+                }
+            }
+
+            .video-timer {
+                display: flex;
+                font-family: Manrope;
+                font-size: 13px;
+                gap: 2px;
+                cursor: default;
+
+                .current-timve {
+                    color: #FFF;
+                }
+
+                .del,
+                .full-time {
+                    color: rgba(255, 255, 255, 0.40);
+                }
+            }
+        }
+    }
+}
 
 .spinner {
     display: flex;

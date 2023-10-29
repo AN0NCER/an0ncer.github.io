@@ -7,149 +7,159 @@ html {
   -webkit-text-size-adjust: none;
 }
 
-*::-webkit-media-controls-panel {
-  display: none !important;
-  -webkit-appearance: none;
-}
-
-/* Old shadow dom for play button */
-*::-webkit-media-controls-play-button {
-  display: none !important;
-  -webkit-appearance: none;
-}
-
-/* New shadow dom for play button */
-/* This one works! */
-*::-webkit-media-controls-start-playback-button {
-  display: none !important;
-  -webkit-appearance: none;
-}
-
-.container {
-  position: relative;
-  height: 100%;
-}
-.container .wrapper {
+.wrapper-full {
+  position: fixed;
+  display: grid;
   top: 0;
   left: 0;
-  right: 0;
   bottom: 0;
-  position: absolute;
-  z-index: 9999;
-}
-.container .wrapper .info-panel {
-  height: 35px;
-  left: 0;
   right: 0;
-  top: 0;
-  background: #51B2FF;
-  font-family: Manrope;
-  color: #FFF;
-  font-family: Manrope;
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-left: 10px;
-  padding-right: 10px;
-  -webkit-text-size-adjust: none;
+  background: rgba(16, 19, 24, 0.5);
+  z-index: 900;
+  place-items: center;
 }
-.container .wrapper .info-panel.hide {
-  display: none;
-}
-.container .wrapper .btn-play {
-  position: absolute;
-  top: calc(50% - 20px);
-  left: calc(50% - 20px);
-  width: 40px;
-  height: 40px;
-  background: #51B2FF;
+.wrapper-full .btn-play {
+  width: 45px;
+  height: 45px;
   display: grid;
   place-items: center;
   cursor: pointer;
+  background: #51B2FF;
   border-radius: 3px;
   opacity: 0;
 }
 
-video {
+.control-button {
+  display: grid;
+  width: 45px;
+  height: 45px;
+  place-items: center;
+  cursor: pointer;
+}
+.control-button svg {
+  fill: #fff;
+  height: 16px;
+}
+
+.wrapper-player {
+  width: 100%;
+  height: 100%;
+}
+.wrapper-player video {
   height: 100%;
   width: 100%;
 }
-
-.controls {
+.wrapper-player .sliders {
+  position: fixed;
+  z-index: 40;
+  left: 0;
+  bottom: 50px;
+  right: 0;
+}
+.wrapper-player .sliders .cur-slider {
+  background: #5FBEF3;
+  width: 0%;
+  max-width: 100%;
+  left: 0;
+}
+.wrapper-player .sliders .cur-slider .content .pointer {
+  right: -29px;
+  top: -40px;
+  z-index: 21;
+}
+.wrapper-player .sliders .cur-slider .content .pointer svg {
+  fill: #2672DA;
+}
+.wrapper-player .sliders .cur-slider,
+.wrapper-player .sliders .end-slider {
   position: absolute;
+  height: 10px;
+  display: flex;
+  border-radius: 3px;
+}
+.wrapper-player .sliders .cur-slider .content,
+.wrapper-player .sliders .end-slider .content {
+  position: relative;
+  width: 100%;
+}
+.wrapper-player .sliders .cur-slider .content .pointer,
+.wrapper-player .sliders .end-slider .content .pointer {
+  display: none;
+  position: absolute;
+  padding: 20px;
+  cursor: pointer;
+}
+.wrapper-player .sliders .cur-slider .content .pointer.mouseenter,
+.wrapper-player .sliders .end-slider .content .pointer.mouseenter {
+  display: block;
+}
+.wrapper-player .sliders .end-slider {
+  background: #F35F5F;
+  right: 0;
+  max-width: 50%;
+  width: 0%;
+}
+.wrapper-player .sliders .end-slider .content .pointer {
+  left: -29px;
+  top: -40px;
+  z-index: 20;
+}
+.wrapper-player .sliders .end-slider .content .pointer svg {
+  fill: #DA2626;
+}
+.wrapper-player .sliders.mouseenter .cur-slider .content .pointer, .wrapper-player .sliders.mouseenter .end-slider .content .pointer {
+  display: block;
+}
+
+.player-controls {
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background: #fff;
-  height: 40px;
+  z-index: 51;
+}
+.player-controls .controls {
+  border-radius: 3px;
+  background: #282A2E;
   display: flex;
   justify-content: space-between;
-  transform: translateY(40px);
-  z-index: 99;
+  position: relative;
+  z-index: 50;
 }
-.controls .btn {
-  min-height: 40px;
-  max-height: 40px;
-  min-width: 40px;
-  max-width: 40px;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-}
-.controls .btn svg {
-  fill: #5a5a5a;
-  width: 14px;
-}
-.controls .left-controls,
-.controls .right-controls {
-  display: flex;
-}
-.controls .time-span {
-  min-height: 40px;
-  max-height: 40px;
+.player-controls .controls .left-controls,
+.player-controls .controls .right-controls {
   display: flex;
   align-items: center;
-  font-family: Manrope;
-  color: #5a5a5a;
-  font-weight: bold;
-  font-size: 12px;
 }
-
-.fullscreen-wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+.player-controls .controls .left-controls .btn-play-pause,
+.player-controls .controls .right-controls .btn-play-pause {
+  position: relative;
 }
-.fullscreen-wrapper .fk-cube {
+.player-controls .controls .left-controls .btn-play-pause svg,
+.player-controls .controls .right-controls .btn-play-pause svg {
   position: absolute;
+}
+.player-controls .controls .left-controls .btn-play-pause svg.pause,
+.player-controls .controls .right-controls .btn-play-pause svg.pause {
   opacity: 0;
 }
-.fullscreen-wrapper .fk-cube svg {
-  width: 15px;
-  fill: red;
+.player-controls .controls .left-controls .video-timer,
+.player-controls .controls .right-controls .video-timer {
+  display: flex;
+  font-family: Manrope;
+  font-size: 13px;
+  gap: 2px;
+  cursor: default;
 }
-.fullscreen-wrapper .fk-cube1 {
-  top: 10px;
-  left: 10px;
+.player-controls .controls .left-controls .video-timer .current-timve,
+.player-controls .controls .right-controls .video-timer .current-timve {
+  color: #FFF;
 }
-.fullscreen-wrapper .fk-cube2 {
-  right: 10px;
-  top: 10px;
-  transform: rotate(90deg);
-}
-.fullscreen-wrapper .fk-cube3 {
-  bottom: 10px;
-  left: 10px;
-  transform: rotate(270deg);
-}
-.fullscreen-wrapper .fk-cube4 {
-  bottom: 10px;
-  right: 10px;
-  transform: rotate(180deg);
+.player-controls .controls .left-controls .video-timer .del,
+.player-controls .controls .left-controls .video-timer .full-time,
+.player-controls .controls .right-controls .video-timer .del,
+.player-controls .controls .right-controls .video-timer .full-time {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .spinner {
