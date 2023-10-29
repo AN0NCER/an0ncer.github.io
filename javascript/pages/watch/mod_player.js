@@ -296,6 +296,7 @@ const player = {
         loaded: [],
         paused: [],
         played: [],
+        error: [],
 
         /**
          * Подписывается на обработчик загрузки плеера
@@ -318,6 +319,12 @@ const player = {
                 this.played.push(e);
             }
         },
+
+        onerror: function (e) {
+            if (typeof e == "function" && e.length > 0) {
+                this.error.push(e);
+            }
+        }
     },
 
     functional: {
@@ -490,6 +497,12 @@ const player = {
         if (message.data.key == "kodik_player_play") {
             //Вызываем событие
             player.events.played.forEach((event) => event(player.video_data));
+        }
+
+        //Статус плеера tunime ошибка
+        if (message.data.key == "tunime_error") {
+            //Вызываем событие
+            player.events.error.forEach((event) => event(message.data.value));
         }
     },
 

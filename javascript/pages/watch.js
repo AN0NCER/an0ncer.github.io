@@ -15,6 +15,15 @@ export let $CONTINUE = new URLSearchParams(window.location.search).get("continue
 
 export const $SHOWPLAYER = new URLSearchParams(window.location.search).get("player");
 
+//Событие ошибка Tunime плеера
+Player().events.onerror((data) => {
+  console.log(`Eror Tunime Player: ${data}`);
+  //Убираем автомотический выбор плеера из за ошибки
+  $PARAMETERS.player.standart = false;
+  //Если ошибка Tunime плеера то переключаем на обычный плеер Kodik
+  Player().update();
+});
+
 Main((e) => {
   //Функционал страницы (контролеров)
   Functional();
@@ -131,8 +140,8 @@ function Functional() {
     { dom: ".btn-wrapper.lb > .btn", func: ShowWindowScore },
     { dom: ".btn-change-player", func: ChangePlayer },
     { dom: '.btn-download-episode', func: DownloadEpisode },
-    { dom: '.translations-wrapper > .button-translation', func: ShowTranslationWindow}, //Кнопка выбора озвучки
-    { dom: '.translations-wrapper > .button-stars', func: SaveVoice}, //Кнопка добавление озвучки в избранное
+    { dom: '.translations-wrapper > .button-translation', func: ShowTranslationWindow }, //Кнопка выбора озвучки
+    { dom: '.translations-wrapper > .button-stars', func: SaveVoice }, //Кнопка добавление озвучки в избранное
     //Сюда функцию новой кнопки изменить плеер
   ];
 
@@ -242,7 +251,7 @@ function Functional() {
   }
 
   //Функция выбора текущей озвучки в избранное или удаление его
-  function SaveVoice(){
+  function SaveVoice() {
     Player().translation.favorites(Player().translation.id);
   }
 }
