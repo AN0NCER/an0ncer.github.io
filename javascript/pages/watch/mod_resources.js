@@ -307,7 +307,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
                 for (let index = 0; index < response.length; index++) {
                     const element = response[index];
                     $(".galery-slider").append(
-                        `<div class="slide" data-id="${index}"><img src="https://shikimori.me${element.preview}"></div>`
+                        `<div class="slide" data-id="${index}"><img src="https://shikimori.me${element.preview}" loading="lazy"></div>`
                     );
                 }
 

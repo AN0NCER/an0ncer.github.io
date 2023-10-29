@@ -42,8 +42,6 @@ Main((e) => {
 
   //Подписываемся на обработчик получение данных Синхронизации
   OnLocalData((save) => {
-    console.log("Loaded save", save);
-
     if (!save) {
       return;
     }
@@ -105,6 +103,18 @@ Main((e) => {
         $CONTINUE = false;
       }
     }
+  });
+
+  //Обработчик события следующего эпизода
+  Player().events.onnext((e) => {
+    //Проверяем на количество эпизодов
+    if (e.episodes.episodes_count == e.episodes.selected_episode) return;
+    const next_episode = e.episodes.selected_episode + 1;
+    e.functional.control(e.functional.methods[10], { episode: next_episode });
+    e.episodes.selected_episode = next_episode;
+    e.episodes.AnimateSelect(next_episode);
+    SaveDataAnime(next_episode, e.translation.id);
+    History().add(false, 0, 0, next_episode);
   });
 });
 

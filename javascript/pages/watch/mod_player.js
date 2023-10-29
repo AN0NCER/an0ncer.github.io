@@ -297,6 +297,7 @@ const player = {
         paused: [],
         played: [],
         error: [],
+        next: [],
 
         /**
          * Подписывается на обработчик загрузки плеера
@@ -324,6 +325,12 @@ const player = {
             if (typeof e == "function" && e.length > 0) {
                 this.error.push(e);
             }
+        },
+
+        onnext: function (e) {
+            if (typeof e == "function" && e.length > 0) {
+                this.next.push(e);
+            }
         }
     },
 
@@ -338,7 +345,8 @@ const player = {
             "change_episode", // Переключение серии
             "enter_pip", // Вход в режим "Картинка в картинке"
             "exit_pip", // Выход из режима "Картинка в картинке"
-            "get_time" // Получение текущего времени
+            "get_time", // Получение текущего времени
+            "set_episode" //Включение эпизода (только Tunime Player)
         ],
 
         /**
@@ -472,6 +480,7 @@ const player = {
         this.episodes.selected_episode = e;
         this.translation.select(d);
         this.episodes.AnimateSelect(e);
+        this.update();
     },
 
     saveAnime: function () { },
@@ -503,6 +512,11 @@ const player = {
         if (message.data.key == "tunime_error") {
             //Вызываем событие
             player.events.error.forEach((event) => event(message.data.value));
+        }
+
+        //Статус плеера переключение эпизода
+        if (message.data.key == "tunime_next") {
+            player.events.next.forEach((event) => event(player));
         }
     },
 

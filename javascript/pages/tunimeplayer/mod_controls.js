@@ -1,7 +1,10 @@
-import { VideoPlayer, toggleFullScreen } from "../tunimeplayer.js";
+import { Datas, ParentWindow, VideoPlayer, toggleFullScreen } from "../tunimeplayer.js";
 import { ButtonPlay } from "./mod_animation.js";
 
+let points = {};
+
 export function InitUserControls() {
+
     if (!$PARAMETERS.player.autonekst) {
         $('.end-slider').hide();
     }
@@ -108,7 +111,10 @@ function EndPointer() {
                 target.off('mouseup.endpoint touchend.endpoint');
                 event = false;
                 let prcnt = ($('.end-slider').width() / window.innerWidth) * 100;
-                PlayerControls.endtime = PlayerControls.duration - (prcnt / 100) * PlayerControls.duration;
+                let time_end = (prcnt / 100) * PlayerControls.duration;
+                points[Datas.id] = { date: new Date(), time: time_end };
+                localStorage.setItem('tun-end-point', JSON.stringify(points));
+                PlayerControls.endtime = PlayerControls.duration - time_end
             }
         }
     });
@@ -172,21 +178,32 @@ function CurrentPointer() {
 export const PlayerControls = {
     duration: undefined, //Продолжительность видео
     launched: false, //Запущен плеер
-    endtime: undefined,
+    endtime: undefined, //Конец времени воспроизведение
+    next_sended: false,
 
     scrolls: {
+
         current: {
             setVal: (time) => {
                 $('.cur-slider').css({ width: `${calculatePercentageWatched(PlayerControls.duration, time)}%` });
+            }
+        },
+
+        end: {
+            setVal: (time) => {
+                $('.end-slider').css({ width: `${calculatePercentageWatched(PlayerControls.duration, time)}%` });
             }
         }
     },
 
     playerPlay: function () {
         if (!this.launched) {
+
             this.launched = true;
             $('.player-controls').click();
+
             ButtonPlay.play();
+
             if ($PARAMETERS.player.full) {
                 toggleFullScreen();
             }
@@ -198,15 +215,34 @@ export const PlayerControls = {
         this.scrolls.current.setVal(currentTime);
         if ($PARAMETERS.player.autonekst && this.endtime) {
             if (currentTime >= this.endtime) {
-                PlayerFunctions.Pause();
+                //Может не успеть среагировать для этого делаем прверку что отправлен
+                if (!PlayerControls.next_sended) {
+                    PlayerControls.next_sended = true;
+                    ParentWindow.postMessage({ key: 'tunime_next', value: {} }, '*');
+                }
             }
         }
     },
+
+    setEndTime: function (time) {
+        this.endtime = this.duration - time;
+        this.scrolls.end.setVal(time);
+    },
+
     setDurationTime: function (durationTime, time = { hours: 0, minutes: 0, seconds: 0 }) {
         $(`.full-time`).text(this.genTextTime(time));
         this.duration = durationTime;
         this.launched = false;
+
+        if ($PARAMETERS.player.autonekst) {
+            points = localStorage.getItem('tun-end-point');
+            if (!points) points = {}; else points = JSON.parse(points);
+            if (points && points[Datas.id]) {
+                this.setEndTime(points[Datas.id].time);
+            }
+        }
     },
+
     genTextTime: (time = { hours: 0, minutes: 0, seconds: 0 }) => {
         let text = `${time.minutes}:${time.seconds}`;
         if (time.hours != 0) {
@@ -214,6 +250,15 @@ export const PlayerControls = {
         }
         return text;
     }
+}
+
+export function Restart() {
+    PlayerControls.scrolls.current.setVal(0);
+    PlayerControls.duration = undefined;
+    PlayerControls.launched = false;
+    PlayerControls.endtime = undefined;
+    PlayerControls.next_sended = false;
+    PlayerFunctions.Play();
 }
 
 const PlayerFunctions = {

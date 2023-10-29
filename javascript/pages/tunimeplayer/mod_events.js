@@ -1,4 +1,4 @@
-import { ParentWindow, VideoPlayer } from "../tunimeplayer.js";
+import { LoadAnimeByEpisode, ParentWindow, VideoPlayer } from "../tunimeplayer.js";
 import { PlayAnimation } from "./mod_animation.js";
 import { PlayerControls } from "./mod_controls.js";
 
@@ -22,8 +22,9 @@ export function RegWindowEvents() {
         ParentWindow.postMessage({ key: 'kodik_player_time_update', value: Math.floor(VideoPlayer.currentTime) }, '*');
     });
 
-    VideoPlayer.addEventListener("durationchange", () => {
+    VideoPlayer.addEventListener("durationchange", function () {
         ParentWindow.postMessage({ key: 'kodik_player_duration_update', value: VideoPlayer.duration }, '*');
+        PlayerControls.setDurationTime(VideoPlayer.duration, secondsToTime(VideoPlayer.duration));
     });
 
     VideoPlayer.addEventListener("ended", () => {
@@ -42,7 +43,7 @@ export function InitVideoEvets() {
     });
 
     jqVideoPlayer.on("durationchange.tunime", function (event) {
-        PlayerControls.setDurationTime(this.duration, secondsToTime(this.duration));
+
     });
 
     jqVideoPlayer.on("play.tunime", function (event) {
@@ -91,6 +92,10 @@ window.addEventListener('message', function (event) {
             if (event.data.value.method == "get_time") {
                 ParentWindow.postMessage({ key: 'kodik_player_time_update', value: Math.floor(VideoPlayer.currentTime) }, '*');
                 return;
+            }
+
+            if (event.data.value.method == "set_episode") {
+                LoadAnimeByEpisode(event.data.value.episode);
             }
         }
     }
