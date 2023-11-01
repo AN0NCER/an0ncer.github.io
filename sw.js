@@ -31,6 +31,7 @@ var appShellFilesToCache = [
     // Директория: /javascript/library
     "/javascript/library/anime.min.js",
     "/javascript/library/hls.js",
+    "/javascript/library/hls.min.js.map",
     "/javascript/library/jqery.min.js",
     "/javascript/library/swiper-bundle.min.js",
     "/javascript/library/swiper-bundle.min.js.map",
@@ -101,6 +102,10 @@ var appShellFilesToCache = [
     "/style/css/tunimeplayer.css",
     "/style/css/user.css",
     "/style/css/watch.css",
+    // Директория: /style/fonts
+    "/style/fonts/Inter.ttf",
+    "/style/fonts/Manrope.ttf",
+    "/style/fonts/NovaSquare.ttf",
     // Директория: /
     "/404.html",
     "/index.html",

@@ -130,6 +130,9 @@ function _downloadAnime(e) {
     }
     if ($(e).attr('data-status') == "ready") {
         SetButtonStatus("loading");
+        downloadedFiles = 0;
+        totalFiles = 0;
+        $('.progress-download > .value').css({ width: `${0}%` }); // Обновляем индикатор загрузки
         GetM3U8Links();
         return;
     }
@@ -138,7 +141,7 @@ function _downloadAnime(e) {
 async function GetM3U8Links() {
     let link = `${_data.link}?episode=${selected}`;
     if (!link.includes("http")) {
-        link = `https:${link}?episode=${selected}`;
+        link = `https:${link}`;
     }
     const data = await ApiTunime.stream(link);
     if (data) {
