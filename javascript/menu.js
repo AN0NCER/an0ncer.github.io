@@ -444,6 +444,7 @@ const IntercatMenu = {
             },
             event: () => {
                 User.Storage.Clear();
+                setParameter('autologin', false);
                 location.reload();
             },
             text: "Выйти",
