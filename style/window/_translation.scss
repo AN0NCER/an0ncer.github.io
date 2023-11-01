@@ -1,0 +1,164 @@
+.window-translation {
+    .window-content {
+        max-height: calc(100vh - env(safe-area-inset-top));
+        overflow-y: hidden;
+
+        .content-wraper {
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: auto auto auto;
+            overflow-y: hidden;
+
+            .window-bar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+
+                .window-title {
+                    font-size: 14px;
+                }
+
+                .window-close {
+                    width: 40px;
+                    height: 40px;
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+
+                    svg {
+                        fill: #fff;
+                        width: 10px;
+                    }
+                }
+            }
+
+            .content-voices{
+                background: #203544;
+                border-radius: 5px;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+
+                .voice{
+                    color: #fff;
+                    display: flex;
+                    width: 100%;
+                    align-items: center;
+                    justify-content: space-between;
+                    box-sizing: border-box;
+
+                    .voice-content{
+                        font-family: Manrope;
+                        font-size: 15px;
+                        display: flex;
+                        justify-content: space-between;
+                        width: 100%;
+                        cursor: pointer;
+                        height: 45px;
+                        align-items: center;
+                        padding-left: 10px;
+
+                        .voice-title{
+                            font-weight: 700; 
+                        }
+                    }
+
+                    .voice-save{
+                        min-width: 45px;
+                        min-height: 45px;
+                        max-width: 45px;
+                        max-height: 45px;
+                        display: grid;
+                        place-items: center;
+                        cursor: pointer;
+                        svg{
+                            fill: #fff;
+                            width: 14px;
+                        }
+
+                        .select{
+                            display: none;
+                        }
+
+                        &.select{
+                            svg.select{
+                                display: block;
+                                fill: #3587E6;
+                            }
+                            svg.unselect{
+                                display: none;
+                            }
+                        }
+                    }
+
+                    &.empty{
+                        height: 45px;
+                        display: grid;
+                        place-items: center;
+                        font-family: Manrope; 
+                        font-size: 15px; 
+                        justify-content: center;
+                    }
+
+                    &.select{
+                        background: #3587E6;
+                        .voice-save{
+                            svg.select{
+                                fill: #fff;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .window-footer {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 8px 10px;
+
+
+
+                .title {
+                    display: flex;
+                    gap: 20px;
+                    align-items: center;
+                    color: #FFF;
+                    font-family: Manrope;
+                    font-size: 14px;
+
+                    svg {
+                        width: 16px;
+                        fill: #fff;
+                    }
+                }
+
+                .checkbox {
+                    overflow: hidden;
+                    display: grid;
+                    place-items: center;
+                    width: 16px;
+                    height: 16px;
+                    background: #C0C0C0;
+                    border-radius: 3px;
+
+                    input {
+                        display: none;
+                    }
+
+                    .switch-check {
+                        display: none;
+                        width: 100%;
+                        height: 100%;
+                        background: #3C92ED;
+                    }
+
+                    input:checked+.switch-check {
+                        display: grid;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -153,7 +153,14 @@ export const Users = {
     messages: function (id, query = { type: "notifications" }, event = () => { }) {
         query = ObjectToQuery(query);
         const url = this.base_url() + "/" + id + "/messages" + query;
-        return StandartIDGET(url, event);
+        const request = Fetch("GET", url, Headers.bearer());
+        return {
+            GET: async () => {
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
     },
 
     unread_messages: function (id, event = () => { }) {
@@ -233,6 +240,35 @@ export const Genres = {
     list: function (event = () => { }) {
         const url = this.base_url();
         return StandartIDGET(url, event);
+    }
+}
+
+export const Messages = {
+    base_url: () => { return "https://shikimori.me/api/messages" },
+
+    mark_read: function (event = () => { }) {
+        const url = this.base_url() + '/mark_read';
+        const request = Fetch("POST", url, Headers.bearer());
+        return {
+            POST: async (body = undefined) => {
+                request.setBody(body);
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
+    },
+
+    delete: function (id, event = () => { }) {
+        const url = this.base_url() + '/' + id;
+        const request = Fetch("DELETE", url, Headers.bearer());
+        return {
+            DELETE: async () => {
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
     }
 }
 

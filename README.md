@@ -49,15 +49,9 @@ This site is a mobile application for watching anime. Uses data from **Shikimori
 
 ---
 
-I keep making news slider (trailers). The functionality will include:
+Interactive menu with easy settings options
 
-- Trailer data (video, audio, id, anime, image)
-- Direct inclusion of video + audio from google server
-- Additional **`YT.Player`** library if there are problems with the main server
-
-This list of trailers will be changed every Sunday. To do this, I am writing a node js and python script that will select the actual trailers of this week.
-
-All changes are in another branch (**main-page**)
+![Menu](https://github.com/AN0NCER/resources/blob/main/new-interact-menu.png?raw=true)
 ___
 
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_2.PNG" align="left" width="310">

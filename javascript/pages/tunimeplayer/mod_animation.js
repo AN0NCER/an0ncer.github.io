@@ -1,22 +1,36 @@
-let loadedData = false;
+export const ButtonPlay = {
+    play: function () {
+        $('.wrapper-full').css({ 'pointer-events': 'none' });
+        anime({
+            targets: '.btn-play',
+            scale: 0,
+            duration: 300,
+            easing: 'easeInBack',
+            complete: () => {
+                $('.wrapper-full').css({ display: 'none' });
+            }
+        });
+    }
+}
 
-export const SiteAnimation = {
-    complete: {
-        loadedData: false,
-        completeLoad: false,
-    },
-    loadData: function () {
+export const LoadAnimation = {
+    html: `<div class="spinner-wrapper"><div class="spinner"><div class="sk-folding-cube"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div></div></div>`,
+    loaded: false,
+    start: function () {
+        this.loaded = false;
+        if ($('.spinner-wrapper').length == 0)
+            $('body').append(this.html);
         const tl = anime
             .timeline({
                 loop: true,
                 delay: 0,
                 easing: "linear",
+                opacity: 1,
                 duration: 300,
                 loopComplete: () => {
-                    if (!loadedData) return;
+                    if (!this.loaded) return;
                     tl.pause();
-                    this.complete.loadedData = true;
-                    this.completeLoad();
+                    this.end();
                 }
             })
             .add({
@@ -69,8 +83,9 @@ export const SiteAnimation = {
                 opacity: 1
             });
     },
-
-    completeLoad: function () {
+    end: function () {
+        $('.wrapper-full').css({ display: '', opacity: '', 'pointer-events': '' });
+        $('.btn-play').css({ display: '', opacity: '', transform: '' });
         anime.timeline({
             easing: "linear",
             duration: 200,
@@ -79,7 +94,7 @@ export const SiteAnimation = {
             targets: ".sk-folding-cube",
             rotateZ: ["45deg", "0deg"],
             complete: () => {
-                this.complete.completeLoad = true;
+                $('.spinner-wrapper').css({ 'pointer-events': 'none' })
                 anime({
                     easing: "spring(1, 80, 10, 0)",
                     targets: ".btn-play",
@@ -96,51 +111,46 @@ export const SiteAnimation = {
         });
         anime({
             targets: ".spinner-wrapper",
-            background: "rgba(16, 19, 24, 0.20)"
-        });
-    },
-
-    playAnimation: function (e) {
-        anime({
-            targets: '.btn-play',
-            scale: 0,
-            duration: 300,
-            easing: 'easeInBack',
-            complete: () => {
-                e();
-                $('.wrapper').css({ display: 'none' });
-            }
-        });
-        anime({
-            targets: ".spinner-wrapper",
             background: "rgba(16, 19, 24, 0)",
-            duration: 300,
             complete: () => {
-                $('.spinner-wrapper').css({ display: 'none' });
-            }
-        });
-    },
-
-    fullScreen: function (e) {
-        anime({
-            targets: '.fullscreen-wrapper .fk-cube',
-            easing: "spring(1, 80, 10, 0)",
-            duration: 1000,
-            opacity: [0, 0.5, 0, 0.5, 0],
-            complete: () => {
-                $(`.fullscreen-wrapper`).css({ display: 'none' });
-                e();
-                anime({
-                    targets: '.controls',
-                    easing: 'easeInBack',
-                    translateY: [40, 0],
-                    duration: 500
-                });
+                $('.spinner-wrapper').hide();
+                $('.spinner-wrapper').remove();
             }
         });
     }
 }
 
-export function SetLoaded() {
-    loadedData = true;
+export const PlayAnimation = {
+    play: function () {
+        anime({
+            easing: "linear",
+            targets: ".btn-play-pause > .play",
+            opacity: 0,
+            duration: 200,
+            scale: [1, 0.5]
+        });
+        anime({
+            easing: "linear",
+            targets: ".btn-play-pause > .pause",
+            opacity: 1,
+            duration: 200,
+            scale: [0.5, 1]
+        });
+    },
+    pause: function () {
+        anime({
+            easing: "linear",
+            targets: ".btn-play-pause > .pause",
+            opacity: 0,
+            duration: 200,
+            scale: [1, 0.5]
+        });
+        anime({
+            easing: "linear",
+            targets: ".btn-play-pause > .play",
+            opacity: 1,
+            duration: 200,
+            scale: [0.5, 1]
+        });
+    }
 }

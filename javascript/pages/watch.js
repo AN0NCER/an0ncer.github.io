@@ -4,8 +4,9 @@ import { Player } from "./watch/mod_player.js";
 import { AnimeUserRate } from "./watch/mod_userrate.js";
 import { LoadAnime, ELA, GetShikiData, GetShikiScreenshots } from "./watch/mod_resources.js";
 import { Main, User } from "../modules/ShikiUSR.js";
-import { ShowScoreWindow } from "./watch/mod_window.js";
+import { ShowScoreWindow, ShowTranslationWindow } from "./watch/mod_window.js";
 import { ShowDwonloadWindow } from "./watch/mod_download.js";
+import { OnLocalData, SaveDataAnime } from "./watch/mod_synch.js";
 
 //ID ресурса из Shikimori
 export const $ID = new URLSearchParams(window.location.search).get("id");
@@ -39,18 +40,25 @@ Main((e) => {
     Player().init(r.results);
   });
 
-  //Подписываемся на обработчик событий для загрузки плеера
-  //Этот обработчик будет загружать из сохранения последние аниме
-  Player().events.onloaded(async (i) => {
-    //Если загружен только 1-й раз то загружаем наше сохранение
-    if (i == 1) {
-      let save = JSON.parse(localStorage.getItem($ID));
+  //Подписываемся на обработчик получение данных Синхронизации
+  OnLocalData((save) => {
+    if (!save) {
+      return;
+    }
 
-      if (!save) {
-        return;
+    if (!Player().loaded) {
+      // Подписываемся на обработчик событий для загрузки плеера
+      // Этот обработчик будет загружать из сохранения последние аниме
+      Player().events.onloaded(async (i) => {
+        //Если загружен только 1-й раз то загружаем наше сохранение
+        if (i == 1) {
+          Player().loadAnime(save.kodik_episode, save.kodik_dub);
+        }
+      });
+    } else {
+      if (Player().loaded_int == 1) {
+        Player().loadAnime(save.kodik_episode, save.kodik_dub);
       }
-
-      Player().loadAnime(save.kodik_episode, save.kodik_dub);
     }
   });
 
@@ -58,14 +66,14 @@ Main((e) => {
   Player().translation.events.onselected((id_translation, user) => {
     let e = Player().episodes.selected_episode;
     if (user && e == 1 && id_translation) {
-      SaveLocalDataAnime(e, id_translation);
+      SaveDataAnime(e, id_translation);
     }
   });
 
   //Подписываемся на обработчик событий выбора эпизода
   //Этот обработчик будет сохранять последние выбраное аниме аниме
   Player().episodes.events.onclicked((e, d) => {
-    SaveLocalDataAnime(e, d);
+    SaveDataAnime(e, d);
 
     //Добавляем истоию просмотра
     History().add(false, 0, 0, e);
@@ -96,6 +104,18 @@ Main((e) => {
       }
     }
   });
+
+  //Обработчик события следующего эпизода
+  Player().events.onnext((e) => {
+    //Проверяем на количество эпизодов
+    if (e.episodes.episodes_count == e.episodes.selected_episode) return;
+    const next_episode = e.episodes.selected_episode + 1;
+    e.functional.control(e.functional.methods[10], { episode: next_episode });
+    e.episodes.selected_episode = next_episode;
+    e.episodes.AnimateSelect(next_episode);
+    SaveDataAnime(next_episode, e.translation.id);
+    History().add(false, 0, 0, next_episode);
+  });
 });
 
 //Выполнена загрузка аниме 
@@ -122,15 +142,16 @@ ELA.onload(() => {
  */
 function Functional() {
   const VFClick = [
-    { dom: ".anime-status > .cur-status > .more-status", func: ShowStatus },
-    { dom: ".translations--current--object", func: ShowTranslations },
+    { dom: ".anime-status > .cur-status > .more-status", func: ShowStatus }, // Боковая кнопка статуса (Показать все статусы)
     { dom: ".title-player > .btn-wrapper > .btn-lock-view", func: SetPlayerDisplay },
     { dom: ".btn-back", func: BackToMainPage },
     { dom: ".btn-play > .btn", func: ShowPlayer },
     { dom: ".btn-wrapper.rb > .btn", func: ShareAnime },
     { dom: ".btn-wrapper.lb > .btn", func: ShowWindowScore },
     { dom: ".btn-change-player", func: ChangePlayer },
-    { dom: '.btn-download-episode', func: DownloadEpisode }
+    { dom: '.btn-download-episode', func: DownloadEpisode },
+    { dom: '.translations-wrapper > .button-translation', func: ShowTranslationWindow }, //Кнопка выбора озвучки
+    { dom: '.translations-wrapper > .button-stars', func: SaveVoice }, //Кнопка добавление озвучки в избранное
     //Сюда функцию новой кнопки изменить плеер
   ];
 
@@ -182,7 +203,6 @@ function Functional() {
 
   function DownloadEpisode() {
     ShowDwonloadWindow();
-    // location.replace(`./download.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
   }
   /**
    * Отображает статус аниме
@@ -198,42 +218,6 @@ function Functional() {
    */
   function ShowWindowScore() {
     ShowScoreWindow()
-  }
-
-  /**
-   * Отображает все возможные озвучки аниме
-   */
-  function ShowTranslations() {
-    //Отключаем отцинтровку плеера из за того что они расположены рядом и код может неправильно отработать и навеститьь на плеер во время выбора озвучки
-    enableCenter = false;
-    //Получаем bool скрыт ли лист переводов
-    const show_list = $(".translations--list").hasClass("hide") ? true : false;
-    //Скрываем либо показываем
-    show_list
-      ? $(".translations--list").removeClass("hide")
-      : $(".translations--list").addClass("hide");
-    //Пролистать до открытого списка
-    if (show_list && Player().data.length > 1) {
-      $("body").addClass("loading");
-      let element = document.getElementsByClassName("translations--current")[0];
-      let elementPosition = element.getBoundingClientRect().top;
-      let windowHeight = window.innerHeight;
-      let elementHeight = element.offsetHeight;
-      let bottomOffset = 10;
-      let offsetPosition =
-        elementPosition +
-        window.scrollY -
-        windowHeight +
-        elementHeight +
-        bottomOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "auto",
-      });
-    } else {
-      $("body").removeClass("loading");
-    }
   }
 
   /**
@@ -266,7 +250,7 @@ function Functional() {
     navigator.share({
       title: $(document).attr("title"),
       text: $('meta[property="og:description"]').attr('content'),
-      url: window.location.origin + window.location.pathname + '?id=' + $ID + '&share'
+      url: `https://tunime.onrender.com/l/${$ID}`
     }).catch((error) => $DEV.error('Sharing failed', error));
   }
 
@@ -275,19 +259,9 @@ function Functional() {
     console.log(Player());
     document.querySelector("#kodik-player").contentWindow.location.replace(`./tunimeplayer.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
   }
-}
 
-/**
- * Функция сохранение аниме (ид аниме, ид озвучки, и текущий эпизод)
- * @param {Int} e - номер эпизода 
- * @param {Int} d - ид озвчки аниме
- */
-function SaveLocalDataAnime(e, d) {
-  const data = {
-    kodik_episode: e,
-    kodik_dub: d,
-  };
-
-  //Сохраняем последние выбранное аниме
-  localStorage.setItem($ID, JSON.stringify(data));
+  //Функция выбора текущей озвучки в избранное или удаление его
+  function SaveVoice() {
+    Player().translation.favorites(Player().translation.id);
+  }
 }

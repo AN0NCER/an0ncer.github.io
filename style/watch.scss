@@ -15,6 +15,7 @@ body {
 
 .scroll-none {
    scrollbar-width: none;
+
    &::-webkit-scrollbar {
       display: none;
    }
@@ -828,141 +829,85 @@ Player
  Translations
 */
 
-.translations {
-   margin-left: 20px;
-   margin-right: 20px;
-   margin-top: 20px;
-   font-family: Manrope;
+//Кнопка открытия окна выбор озвучки
+.translations-wrapper {
+   margin: 20px 20px 0 20px;
+   background: rgba(133, 133, 133, 0.2);
+   color: #020202;
+   overflow: hidden;
+   border-radius: 3px;
+   display: flex;
 
-   &--current {
+   .button-translation {
       display: flex;
+      flex: 1 0 0;
+      cursor: pointer;
+      background: #5FBEF3;
+      box-shadow: 2px 0px 0px 0px #032335;
+      border-radius: 0px 3px 3px 0px;
 
-      &--object {
-         width: 100%;
-         height: 45px;
-         background: #5fbef3;
-         color: #020202;
+      .current-translation {
          display: flex;
+         height: 45px;
+         padding-left: 10px;
          align-items: center;
-         justify-content: space-between;
-         border-radius: 3px;
+         gap: 10px;
+         flex: 1 0 0;
 
-         &--icon-title {
-            margin-left: 15px;
-
-            svg {
-               height: 13px;
-               fill: #020202;
-            }
-
-            span {
-               font-weight: bold;
-               margin-left: 10px;
-               font-size: 15px;
-            }
+         svg {
+            height: 13px;
+            fill: #020202;
          }
 
-         &--count {
+         span {
+            color: #020202;
+            font-family: Manrope;
             font-size: 15px;
-            margin-right: 15px;
+            font-weight: 700;
          }
       }
 
-      &--helper {
-         min-width: 45px;
-         min-height: 45px;
-         background: #5fbef3;
-         margin-left: 10px;
+      .count-current-translation {
          display: grid;
          place-items: center;
-         border-radius: 3px;
-
-         svg {
-            height: 15px;
-            fill: #020202;
-         }
+         min-width: 45px;
+         min-height: 45px;
+         max-width: 45px;
+         max-height: 45px;
+         color: #020202;
+         font-family: Manrope;
+         font-size: 15px;
+         font-weight: 400;
       }
    }
 
-   &--list {
-      margin-top: 10px;
-      margin-left: auto;
-      margin-right: auto;
-      border-radius: 3px;
-      background: #203544;
-      overflow: hidden;
-      position: fixed;
-      max-width: 860px;
-      bottom: 60px;
-      left: 20px;
-      right: 20px;
-      z-index: 9;
-      max-height: calc(100vh - 75px);
-      overflow-y: auto;
+   .button-stars {
+      display: grid;
+      place-items: center;
+      min-width: 45px;
+      min-height: 45px;
+      max-width: 45px;
+      max-height: 45px;
+      cursor: pointer;
 
-      &--element {
-         cursor: pointer;
-         height: 45px;
-         color: #fff;
-         display: flex;
-         justify-content: space-between;
-
-         &--icon-title {
-            margin-left: 15px;
-            display: flex;
-            align-items: center;
-            width: 100%;
-
-            svg {
-               height: 13px;
-               fill: #fff;
-            }
-
-            span {
-               font-weight: bold;
-               margin-left: 10px;
-               font-size: 15px;
-            }
-         }
-
-         &--count-save {
-            display: flex;
-
-            &--count {
-               min-height: 45px;
-               min-width: 45px;
-               font-size: 15px;
-               display: grid;
-               place-items: center;
-            }
-
-            &--save {
-               cursor: pointer;
-               min-height: 45px;
-               min-width: 45px;
-               display: grid;
-               place-items: center;
-
-               svg {
-                  height: 13px;
-                  fill: #fff;
-               }
-
-               &.saved-translation {
-                  svg {
-                     fill: yellow;
-                  }
-               }
-            }
-         }
-
-         &.hide {
-            display: none;
-         }
+      svg {
+         fill: #fff;
+         width: 14px;
       }
 
-      &.hide {
-         max-height: 0px;
+      .selected {
+         display: none;
+         fill: #5FBEF3;
+      }
+   }
+
+   .button-stars.selected {
+      .selected {
+         display: block;
+      }
+
+      .unselected {
+         display: none;
       }
    }
 }
@@ -1088,6 +1033,7 @@ footer {
 
 @import './cards';
 @import './windowed';
+@import './window/translation';
 
 .content-score {
    .content-wraper {

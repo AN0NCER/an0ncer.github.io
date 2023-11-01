@@ -1,3 +1,5 @@
+import { Menu } from "../menu.js";
+
 let _ids = [];
 
 export async function ShowInfo(message, id) {
@@ -6,11 +8,12 @@ export async function ShowInfo(message, id) {
     }
 
     _ids.push(id);
+    
 
-    let ismenu = HasMenu() ? "visible" : "none";
+    let ismenu = Menu().hasMenu() ? "visible" : "none";
     $('body').append(genHtml({ text: message, id: id, menu: ismenu }));
     let h = $(`.popup-id-${id} > .popup-content`).height();
-    let h_menu = !HasMenu() ? 0 : $('.application-menu').outerHeight();
+    let h_menu = !Menu().hasMenu() ? 0 : $('.application-menu').outerHeight();
     if ($('body').hasClass('menuver') && ($('body').attr("data-orientation") == "90" || $('body').attr("data-orientation") == "270")) {
         h_menu = 0;
     }
