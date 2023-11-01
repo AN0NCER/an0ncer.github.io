@@ -35,6 +35,25 @@ export function InitUserControls() {
     PanelEvents();
     CurrentPointer();
     EndPointer();
+    WindowEvents();
+}
+
+function WindowEvents() {
+    let timerHideControls;
+    $(window).on('mouseenter click mousemove mouseleave', function () {
+        _hideClontrols();
+    });
+
+    function _hideClontrols() {
+        $('.player-controls').show();
+        $('.sliders').show();
+        clearTimeout(timerHideControls);
+        timerHideControls = setTimeout(() => {
+            if (VideoPlayer.paused) return;
+            $('.player-controls').hide();
+            $('.sliders').hide();
+        }, 5000);
+    }
 }
 
 //Скроллеры события
@@ -45,6 +64,7 @@ function PanelEvents() {
     let timeOut;
 
     target.on('click mouseenter', function (e) {
+        console.log(PlayerControls.launched);
         if (!PlayerControls.launched) return;
         $('.sliders').addClass('mouseenter');
         clearTimeout(timeOut);
@@ -55,6 +75,7 @@ function PanelEvents() {
 
     target.on('mouseleave touchleave', function () {
         if (!PlayerControls.launched) return;
+        clearTimeout(timeOut);
         timeOut = setTimeout(() => {
             $('.sliders').removeClass('mouseenter');
         }, 3000);
@@ -232,7 +253,6 @@ export const PlayerControls = {
     setDurationTime: function (durationTime, time = { hours: 0, minutes: 0, seconds: 0 }) {
         $(`.full-time`).text(this.genTextTime(time));
         this.duration = durationTime;
-        this.launched = false;
 
         if ($PARAMETERS.player.autonekst) {
             points = localStorage.getItem('tun-end-point');
@@ -255,10 +275,10 @@ export const PlayerControls = {
 export function Restart() {
     PlayerControls.scrolls.current.setVal(0);
     PlayerControls.duration = undefined;
-    PlayerControls.launched = false;
     PlayerControls.endtime = undefined;
     PlayerControls.next_sended = false;
     PlayerFunctions.Play();
+    PlayerControls.launched = true;
 }
 
 const PlayerFunctions = {
