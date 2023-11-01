@@ -40,7 +40,7 @@ export function InitUserControls() {
 
 function WindowEvents() {
     let timerHideControls;
-    $(window).on('mouseenter click mousemove mouseleave', function () {
+    $(window).on('mouseenter click mousemove mouseleave touchstart', function () {
         _hideClontrols();
     });
 

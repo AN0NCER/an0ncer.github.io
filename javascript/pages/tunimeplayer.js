@@ -61,6 +61,8 @@ function LoadAnimeByID(id, e) {
             link = `https:${link}`;
         }
 
+        $(document).prop('title', data_anime.title);
+
         try {
             //Получаем данные от Tunime сервера
             const stream = await ApiTunime.stream(link);
@@ -94,7 +96,6 @@ function LoadAnimeByID(id, e) {
 }
 
 export async function LoadAnimeByEpisode(e) {
-    console.log(Datas.id, e, data_anime);
     if (!Datas.id || !e || !data_anime) return;
     let link = data_anime.link + `?episode=${e}`;
     if (!link.includes("http")) {
