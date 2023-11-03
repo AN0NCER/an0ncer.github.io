@@ -1,4 +1,4 @@
-var version = '99';
+var version = '100';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     // Директория: /images/icons
@@ -49,6 +49,7 @@ var appShellFilesToCache = [
     "/javascript/pages/index/mod_animes.js",
     "/javascript/pages/index/mod_github.js",
     "/javascript/pages/index/mod_history_watch.js",
+    "/javascript/pages/index/mod_notify.js",
     "/javascript/pages/index/mod_trailers.js",
     "/javascript/pages/index/mod_trailers_animation.js",
     "/javascript/pages/index/mod_window.js",
@@ -60,6 +61,7 @@ var appShellFilesToCache = [
     "/javascript/pages/search/mod_searchState.js",
     // Директория: /javascript/pages/tunimeplayer
     "/javascript/pages/tunimeplayer/mod_animation.js",
+    "/javascript/pages/tunimeplayer/mod_controls.js",
     "/javascript/pages/tunimeplayer/mod_events.js",
     // Директория: /javascript/pages/user
     "/javascript/pages/user/mod_history.js",
@@ -70,6 +72,7 @@ var appShellFilesToCache = [
     "/javascript/pages/watch/mod_player.js",
     "/javascript/pages/watch/mod_resources.js",
     "/javascript/pages/watch/mod_scrolling.js",
+    "/javascript/pages/watch/mod_synch.js",
     "/javascript/pages/watch/mod_userrate.js",
     "/javascript/pages/watch/mod_window.js",
     // Директория: /javascript/pages
@@ -82,8 +85,8 @@ var appShellFilesToCache = [
     "/javascript/pages/user.js",
     "/javascript/pages/watch.js",
     // Директория: /javascript
-    "/javascript/jmenu.js",
     "/javascript/kodik.js",
+    "/javascript/menu.js",
     "/javascript/parametrs.js",
     "/javascript/server.js",
     "/javascript/shikimori.js",

@@ -1,8 +1,6 @@
-<p align="center"><img src="https://github.com/AN0NCER/resources/raw/main/github-logo.png" width="200px" /></p>
-
 ______
 
-<p align="center">Progressive web application to watch anime on your device and enter a list</p>
+<img src="https://github.com/AN0NCER/resources/raw/main/GithubPreview(1).png">
 
 ___
 
@@ -11,7 +9,8 @@ ___
 ![Release](https://img.shields.io/github/v/release/AN0NCER/an0ncer.github.io)
 ![Code](https://img.shields.io/github/languages/top/AN0NCER/an0ncer.github.io)
 
-# Tunime
+
+# <img src="https://wotaku.moe/asset/inaidle.webp" width="20" /> Tunime
 
 <img src="./images/icons/logo-x512-o.png" align="left" width="50" />
 
@@ -28,6 +27,7 @@ This site is a mobile application for watching anime. Uses data from **Shikimori
 - [X] User account management.
 - [X] Work offline as a PWA app.
 - [X] Mobile optimization and friendly user interface.
+- [X] Ability to download TV series and movies to your device.
 
 
 ## Pages
@@ -43,17 +43,15 @@ This site is a mobile application for watching anime. Uses data from **Shikimori
 
 **`https://an0ncer.github.io/`** - is an online platform for watching anime with the ability to manage your account and save your favorites. The site has a convenient and simple interface, has many filters and categories to search for anime. In addition, the site supports PWA functionality, which allows you to add it to the home screen of a mobile device and use it as a full-fledged application.
 
+## Stats
+
+![Alt](https://repobeats.axiom.co/api/embed/ade0779625b8da67b375884494164252f8348c2d.svg "Repobeats analytics image")
+
 ---
 
-I keep making news slider (trailers). The functionality will include:
+Interactive menu with easy settings options
 
-- Trailer data (video, audio, id, anime, image)
-- Direct inclusion of video + audio from google server
-- Additional **`YT.Player`** library if there are problems with the main server
-
-This list of trailers will be changed every Sunday. To do this, I am writing a node js and python script that will select the actual trailers of this week.
-
-All changes are in another branch (**main-page**)
+![Menu](https://github.com/AN0NCER/resources/blob/main/new-interact-menu.png?raw=true)
 ___
 
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_2.PNG" align="left" width="310">

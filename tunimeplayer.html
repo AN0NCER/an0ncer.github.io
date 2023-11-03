@@ -1,140 +1,111 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Tunime - Плеер</title>
+    <title>Tunime Player</title>
+    <link rel="stylesheet" href="/style/css/main.css">
+    <link rel="stylesheet" href="/style/css/tunimeplayer.css">
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
     <link rel="apple-touch-icon" sizes="120x120" href="/images/icons/logo-x192-o.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="/images/icons/logo-x192-o.png" />
-    <link rel="stylesheet" href="/style/css/main.css">
-    <link rel="stylesheet" href="/style/css/tunimeplayer.css">
-    <link rel="manifest" href="/images/icons/manifest-o.json">
-    <script src="/javascript/library/jqery.min.js"></script>
 </head>
 
-<body>
-    <div class="container">
-        <div class="spinner-wrapper">
-            <div class="spinner">
-                <div class="sk-folding-cube">
-                    <div class="sk-cube1 sk-cube"></div>
-                    <div class="sk-cube2 sk-cube"></div>
-                    <div class="sk-cube4 sk-cube"></div>
-                    <div class="sk-cube3 sk-cube"></div>
-                </div>
+<body class="unselectable">
+    <div class="spinner-wrapper">
+        <div class="spinner">
+            <div class="sk-folding-cube">
+                <div class="sk-cube1 sk-cube"></div>
+                <div class="sk-cube2 sk-cube"></div>
+                <div class="sk-cube4 sk-cube"></div>
+                <div class="sk-cube3 sk-cube"></div>
             </div>
         </div>
-        <div class="fullscreen-wrapper">
-            <div class="fk-cube fk-cube1">
-                <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#clip0_924_2)">
-                        <rect width="30" height="10" fill="white" />
-                        <rect y="10" width="10" height="20" fill="white" />
-                    </g>
-                    <defs>
-                        <clipPath id="clip0_924_2">
-                            <rect width="30" height="30" fill="white" />
-                        </clipPath>
-                    </defs>
-                </svg>
-            </div>
-            <div class="fk-cube fk-cube2">
-                <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#clip0_924_2)">
-                        <rect width="30" height="10" fill="white" />
-                        <rect y="10" width="10" height="20" fill="white" />
-                    </g>
-                    <defs>
-                        <clipPath id="clip0_924_2">
-                            <rect width="30" height="30" fill="white" />
-                        </clipPath>
-                    </defs>
-                </svg>
-            </div>
-            <div class="fk-cube fk-cube3">
-                <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#clip0_924_2)">
-                        <rect width="30" height="10" fill="white" />
-                        <rect y="10" width="10" height="20" fill="white" />
-                    </g>
-                    <defs>
-                        <clipPath id="clip0_924_2">
-                            <rect width="30" height="30" fill="white" />
-                        </clipPath>
-                    </defs>
-                </svg>
-            </div>
-            <div class="fk-cube fk-cube4">
-                <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#clip0_924_2)">
-                        <rect width="30" height="10" fill="white" />
-                        <rect y="10" width="10" height="20" fill="white" />
-                    </g>
-                    <defs>
-                        <clipPath id="clip0_924_2">
-                            <rect width="30" height="30" fill="white" />
-                        </clipPath>
-                    </defs>
-                </svg>
-            </div>
-        </div>
-        <div class="wrapper">
-            <div class="hide info-panel">
-                <span class="name">...</span>
-                <span class="type">...</span>
-            </div>
-            <div class="btn-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M2.97135 0.252015C2.47031 -0.0729274 1.84063 -0.0836399 1.32943 0.219878C0.818229 0.523396 0.5 1.09472 0.5 1.71604V14.2852C0.5 14.9066 0.818229 15.4779 1.32943 15.7814C1.84063 16.0849 2.47031 16.0706 2.97135 15.7493L12.7214 9.46467C13.2055 9.15401 13.5 8.60054 13.5 8.00065C13.5 7.40075 13.2055 6.85085 12.7214 6.53662L2.97135 0.252015Z"
-                        fill="white" />
-                </svg>
-            </div>
-        </div>
-        <div class="controls">
-            <div class="left-controls">
-                <div class="btn btn-control-play">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="1em"
-                        viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                        <path
-                            d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" />
-                    </svg>
-                </div>
-
-                <span class="time-span">
-                    <span class="current-time">0:00</span>
-                    <span>/</span>
-                    <span class="video-duration">0:00</span>
-                </span>
-            </div>
-            <div class="right-controls">
-                <div class="btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="1em"
-                        viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                        <path
-                            d="M0 96C0 60.7 28.7 32 64 32H512c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 208c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48s21.5-48 48-48zm144 48c0-26.5 21.5-48 48-48c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48z" />
-                    </svg>
-                </div>
-                <div class="btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="1em"
-                        viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                        <path
-                            d="M64 64V352H576V64H64zM0 64C0 28.7 28.7 0 64 0H576c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zM128 448H512c17.7 0 32 14.3 32 32s-14.3 32-32 32H128c-17.7 0-32-14.3-32-32s14.3-32 32-32z" />
-                    </svg>
-                </div>
-                <div class="btn btn-fullscreen">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="1em"
-                        viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                        <path
-                            d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <video id="main-player" poster="/images/preview-image.png" src="" crossorigin="anonymous" playsinline></video>
     </div>
+    <div class="wrapper-full">
+        <div class="btn-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M2.97135 0.252015C2.47031 -0.0729274 1.84063 -0.0836399 1.32943 0.219878C0.818229 0.523396 0.5 1.09472 0.5 1.71604V14.2852C0.5 14.9066 0.818229 15.4779 1.32943 15.7814C1.84063 16.0849 2.47031 16.0706 2.97135 15.7493L12.7214 9.46467C13.2055 9.15401 13.5 8.60054 13.5 8.00065C13.5 7.40075 13.2055 6.85085 12.7214 6.53662L2.97135 0.252015Z"
+                    fill="white" />
+            </svg>
+        </div>
+    </div>
+
+    <div class="wrapper-player" id="player-wrapper">
+        <div class="sliders">
+            <div class="cur-slider">
+                <div class="content">
+                    <div class="pointer">
+                        <svg width="18" height="17" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path
+                                    d="M9.85641 12C8.70171 14 5.81496 14 4.66026 12L0.609239 4.98343C-0.843136 2.46785 1.77026 -0.437339 4.42498 0.741663L6.04067 1.45922C6.81594 1.80353 7.70073 1.80353 8.47599 1.45922L10.0917 0.741662C12.7464 -0.437339 15.3598 2.46784 13.9074 4.98343L9.85641 12Z"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="end-slider">
+                <div class="content">
+                    <div class="pointer">
+                        <svg width="18" height="17" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path
+                                    d="M9.85641 12C8.70171 14 5.81496 14 4.66026 12L0.609239 4.98343C-0.843136 2.46785 1.77026 -0.437339 4.42498 0.741663L6.04067 1.45922C6.81594 1.80353 7.70073 1.80353 8.47599 1.45922L10.0917 0.741662C12.7464 -0.437339 15.3598 2.46784 13.9074 4.98343L9.85641 12Z"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="player-controls">
+            <div class="controls">
+                <div class="left-controls">
+                    <div class="btn-play-pause control-button">
+                        <svg class="play" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                            <path
+                                d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" />
+                        </svg>
+                        <svg class="pause" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512">
+                            <path
+                                d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z" />
+                        </svg>
+                    </div>
+                    <div class="video-timer">
+                        <span class="current-timve">0:0</span>
+                        <span class="del">/</span>
+                        <span class="full-time">0:0</span>
+                    </div>
+                </div>
+                <div class="right-controls">
+                    <div class="btn-settings control-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                            <path
+                                d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z" />
+                        </svg>
+                    </div>
+                    <div class="btn-pip control-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                            <path
+                                d="M432 64H208c-8.8 0-16 7.2-16 16V96H128V80c0-44.2 35.8-80 80-80H432c44.2 0 80 35.8 80 80V304c0 44.2-35.8 80-80 80H416V320h16c8.8 0 16-7.2 16-16V80c0-8.8-7.2-16-16-16zM0 192c0-35.3 28.7-64 64-64H320c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V192zm64 32c0 17.7 14.3 32 32 32H288c17.7 0 32-14.3 32-32s-14.3-32-32-32H96c-17.7 0-32 14.3-32 32z" />
+                        </svg>
+                    </div>
+                    <div class="btn-fullscreen control-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                            <path
+                                d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <video id="main-player"
+            src=""
+            poster="/images/preview-image.png" playsinline></video>
+    </div>
+    <script src="/javascript/library/jqery.min.js"></script>
     <script src="/javascript/parametrs.js"></script>
     <script src="/javascript/kodik.js"></script>
     <script src="/javascript/library/anime.min.js"></script>

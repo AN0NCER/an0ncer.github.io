@@ -1,3 +1,4 @@
+import { Menu } from "../menu.js";
 import { Fetch, Sleep } from "./funcitons.js";
 import { Headers, Bodys } from "./header.js";
 import { } from "./TunimeApi.js";
@@ -135,4 +136,8 @@ export async function Main(e = () => { }) {
         }
     }
     e(User.authorized);
+    if(!User.authorized && Menu().hasMenu()){
+        Menu('user').setUrl('login.html');
+        Menu('list').setUrl('login.html');
+    }
 }
