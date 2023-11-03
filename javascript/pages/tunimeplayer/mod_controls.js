@@ -9,11 +9,11 @@ export function InitUserControls() {
         $('.end-slider').hide();
     }
 
-    // if ($PARAMETERS.player.standart_controls) {
-    //     // $('.player-controls').hide();
-    //     // $('.sliders').hide();
-    //     // VideoPlayer.setAttribute("controls", "controls");
-    // }
+    if ($PARAMETERS.player.standart_controls) {
+        VideoPlayer.setAttribute("controls", "controls");
+        $('.player-controls').addClass('st-controls');
+        $('.sliders').addClass('st-controls');
+    }
 
     //Пауза воспроизведение кнопка
     $('.control-button.btn-play-pause').on('click', function (e) {
@@ -45,13 +45,13 @@ function WindowEvents() {
     });
 
     function _hideClontrols() {
-        $('.player-controls').show();
-        $('.sliders').show();
+        $('.player-controls').addClass('ct-moved');
+        $('.sliders').addClass('ct-moved');
         clearTimeout(timerHideControls);
         timerHideControls = setTimeout(() => {
             if (VideoPlayer.paused) return;
-            $('.player-controls').hide();
-            $('.sliders').hide();
+            $('.player-controls').removeClass('ct-moved');
+            $('.sliders').removeClass('ct-moved');
         }, 5000);
     }
 }

@@ -65,6 +65,7 @@ html {
         left: 0;
         bottom: 50px;
         right: 0;
+        display: none;
 
         .cur-slider {
             background: #5FBEF3;
@@ -102,7 +103,7 @@ html {
                     padding: 20px;
                     cursor: pointer;
 
-                    &.mouseenter{
+                    &.mouseenter {
                         display: block;
                     }
                 }
@@ -128,14 +129,24 @@ html {
             }
         }
 
-        &.mouseenter{
-            .cur-slider, .end-slider{
+        &.mouseenter {
+
+            .cur-slider,
+            .end-slider {
                 .content {
-                    .pointer{
+                    .pointer {
                         display: block;
                     }
                 }
             }
+        }
+
+        &.ct-moved {
+            display: block;
+        }
+
+        &.st-controls {
+            display: none;
         }
     }
 }
@@ -146,6 +157,7 @@ html {
     left: 0;
     right: 0;
     z-index: 51;
+    display: none;
 
     .controls {
         border-radius: 3px;
@@ -162,8 +174,10 @@ html {
 
             .btn-play-pause {
                 position: relative;
+
                 svg {
                     position: absolute;
+
                     &.pause {
                         opacity: 0;
                     }
@@ -187,6 +201,14 @@ html {
                 }
             }
         }
+    }
+
+    &.ct-moved {
+        display: block;
+    }
+
+    &.st-controls {
+        display: none;
     }
 }
 
