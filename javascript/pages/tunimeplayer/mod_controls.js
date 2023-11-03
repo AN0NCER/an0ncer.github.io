@@ -9,11 +9,11 @@ export function InitUserControls() {
         $('.end-slider').hide();
     }
 
-    if ($PARAMETERS.player.standart_controls) {
-        $('.player-controls').hide();
-        $('.sliders').hide();
-        VideoPlayer.setAttribute("controls", "controls");
-    }
+    // if ($PARAMETERS.player.standart_controls) {
+    //     // $('.player-controls').hide();
+    //     // $('.sliders').hide();
+    //     // VideoPlayer.setAttribute("controls", "controls");
+    // }
 
     //Пауза воспроизведение кнопка
     $('.control-button.btn-play-pause').on('click', function (e) {
