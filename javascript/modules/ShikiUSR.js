@@ -65,11 +65,20 @@ export let User = {
         this.authorized = true;
     },
 
+    Leave: async function (access) {
+        if (access) {
+            Oauth.access = access;
+            this.Storage.Set(access);
+            this.authorized = true;
+        }
+    },
+
     expires_in: function (access = Oauth.access) {
         if (access) {
-            if (
-                new Date((access.created_at + access.expires_in) * 1000) > new Date()
-            ) {
+            const currentTime = new Date().getTime();
+            const tokenExpirationTime = (access.created_at + access.expires_in) * 1000;
+            const twoHoursInMilliseconds = 6 * 60 * 60 * 1000; // 6 часов в миллисекундах
+            if (tokenExpirationTime - currentTime > twoHoursInMilliseconds) {
                 return true;
             } else {
                 return false;
@@ -131,12 +140,14 @@ export async function Main(e = () => { }) {
         if (User.Storage.Get()) {
             Oauth.access = User.Storage.Get();
             if (User.expires_in()) {
+                await User.Leave(Oauth.access);
+            } else {
                 await User.Refresh();
             }
         }
     }
     e(User.authorized);
-    if(!User.authorized && Menu().hasMenu()){
+    if (!User.authorized && Menu().hasMenu()) {
         Menu('user').setUrl('login.html');
         Menu('list').setUrl('login.html');
     }
