@@ -87,6 +87,10 @@ export function OnLocalData(func = (data) => { }) {
     }
 }
 
+export function SetSynchUserRate(user_rate) {
+    _urate = user_rate;
+}
+
 /**
  * Вызов события получения данных аниме
  * @param {Object} data - Данные аниме
@@ -122,13 +126,21 @@ function saveAnimeData(e, d) {
     }
 
     const regex = /\[tunime-sync:(\d+):(\d+):"(.+?)"]/;
-    const match = user_rate.text.match(regex);
+    let match = "";
+    if (user_rate.text) {
+        match = user_rate.text.match(regex);
+    }
 
     if (match) {
         user_rate.text = user_rate.text.replace(match[0], '');
     }
 
-    user_rate.text = user_rate.text.trim();
+    user_rate.text = "";
+
+    if (user_rate.text) {
+        user_rate.text = user_rate.text.trim();
+    }
+
     user_rate.text += `\r\n[tunime-sync:${data.kodik_episode}:${data.kodik_dub}:${JSON.stringify(data.date_update)}]`;
 
     updateComment(user_rate);
