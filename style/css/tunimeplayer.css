@@ -1,4 +1,3 @@
-@charset "UTF-8";
 body,
 html {
   background: #15171e;
@@ -56,6 +55,7 @@ html {
   left: 0;
   bottom: 50px;
   right: 0;
+  display: none;
 }
 .wrapper-player .sliders .cur-slider {
   background: #5FBEF3;
@@ -108,8 +108,15 @@ html {
 .wrapper-player .sliders .end-slider .content .pointer svg {
   fill: #DA2626;
 }
-.wrapper-player .sliders.mouseenter .cur-slider .content .pointer, .wrapper-player .sliders.mouseenter .end-slider .content .pointer {
+.wrapper-player .sliders.mouseenter .cur-slider .content .pointer,
+.wrapper-player .sliders.mouseenter .end-slider .content .pointer {
   display: block;
+}
+.wrapper-player .sliders.ct-moved {
+  display: block;
+}
+.wrapper-player .sliders.st-controls {
+  display: none;
 }
 
 .player-controls {
@@ -118,6 +125,7 @@ html {
   left: 0;
   right: 0;
   z-index: 51;
+  display: none;
 }
 .player-controls .controls {
   border-radius: 3px;
@@ -161,6 +169,12 @@ html {
 .player-controls .controls .right-controls .video-timer .del,
 .player-controls .controls .right-controls .video-timer .full-time {
   color: rgba(255, 255, 255, 0.4);
+}
+.player-controls.ct-moved {
+  display: block;
+}
+.player-controls.st-controls {
+  display: none;
 }
 
 .spinner {

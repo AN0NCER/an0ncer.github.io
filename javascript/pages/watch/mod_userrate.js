@@ -2,6 +2,7 @@ import { UserRates } from "../../modules/ShikiAPI.js";
 import { Sleep } from "../../modules/funcitons.js";
 import { $ID } from "../watch.js";
 import { User } from "../../modules/ShikiUSR.js";
+import { SetSynchUserRate } from "./mod_synch.js";
 
 //Все возможные статусы пользователя к текущему аниме
 const anime_status = [
@@ -124,6 +125,7 @@ const user = {
                     return this.createData(id);
                 }
                 user.rate = res;
+                SetSynchUserRate(res);
                 user.status();
                 user.setStatus();
             }).POST({ "user_rate": { "status": anime_status[id].sh[0], "target_id": $ID, "target_type": "Anime", "user_id": User.Storage.Get('access_whoami').id } });
@@ -141,6 +143,7 @@ const user = {
             }).DELETE();
             user.rate = undefined;
             user.id = undefined;
+            SetSynchUserRate(undefined);
             user.unselect();
         }
     },

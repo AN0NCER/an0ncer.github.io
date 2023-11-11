@@ -31,9 +31,11 @@ const _history = {
         const history = this.get();
         const { russian, screenshots } = this.shikiData;
         const episode = cnt ? e + i : e + i;
-        let image = `${screenshots[0].original}`;
+        let image = "";
         if (this.screenData?.length > 0) {
             image = `${this.screenData[this.idImage].original}`;
+        }else{
+            image = `${screenshots[0].original}`;
         }
         const dub = Player().translation.name;
         const type = this.shikiData.kind == "movie" ? "Фильм" : this.shikiData.kind == "ova" ? "OVA" : this.shikiData.kind == "ona" ? "ONA" : "Аниме";
