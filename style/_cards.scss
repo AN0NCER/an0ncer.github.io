@@ -1,6 +1,5 @@
 .card-anime {
     display: grid;
-    overflow: hidden;
 
     .card-content {
         display: flex;
@@ -13,6 +12,19 @@
 
         img {
             height: 100%;
+            z-index: 3;
+        }
+
+        .blur{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            filter: blur(5px);
         }
 
         .title {
@@ -24,6 +36,7 @@
             backdrop-filter: blur(2.5px);
             text-align: center;
             padding: 10px 0px;
+            z-index: 4;
 
             span {
                 margin-left: 10px;

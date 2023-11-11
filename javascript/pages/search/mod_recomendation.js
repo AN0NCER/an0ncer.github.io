@@ -1,4 +1,4 @@
-import { Card } from "../../modules/AnimeCard.js";
+import { ACard } from "../../modules/AnimeCard.js";
 import { UserRates, Animes } from "../../modules/ShikiAPI.js";
 import { User } from "../../modules/ShikiUSR.js";
 import { Sleep, sha256 } from "../../modules/funcitons.js";
@@ -161,7 +161,7 @@ export async function Recomendation() {
 
                 for (let i = 0; i < response.length; i++) {
                     const element = response[i];
-                    $('.content-recomendation').append(Card().Link(element));
+                    $('.content-recomendation').append(ACard.Gen({response: element}));
                 }
             }).GET();
         }

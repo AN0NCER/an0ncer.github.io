@@ -620,7 +620,6 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 
 .card-anime {
   display: grid;
-  overflow: hidden;
 }
 .card-anime .card-content {
   display: flex;
@@ -633,6 +632,18 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 }
 .card-anime .card-content img {
   height: 100%;
+  z-index: 3;
+}
+.card-anime .card-content .blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  filter: blur(5px);
 }
 .card-anime .card-content .title {
   position: absolute;
@@ -644,6 +655,7 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
           backdrop-filter: blur(2.5px);
   text-align: center;
   padding: 10px 0px;
+  z-index: 4;
 }
 .card-anime .card-content .title span {
   margin-left: 10px;

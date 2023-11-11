@@ -1,3 +1,5 @@
+import { ACard } from "../../modules/AnimeCard.js";
+
 export const SearchHistory = {
     key: 'search-history',
     data: [],
@@ -36,6 +38,29 @@ export const SearchHistory = {
             }
         }
         localStorage.setItem(this.key, JSON.stringify(this.data));
+        //Если это уже есть в списке перенести на первое место
+        if ($(`.history > .content > a[data-id="${id}"]`).length > 0) {
+            $(`.history > .content > a[data-id="${id}"]`).detach().prependTo($('.history > .content'));
+        } else {
+            if ($(`.history > .content > a`).length >= 10) {
+                $(`.history > .content > a:last`).remove();
+            }
+
+            let element = $(`.result > .content > .card-anime[data-id="${id}"]`);
+
+            let response = {
+                id,
+                image: element.find(`.card-content > img`).attr('src').trim(ACard.GetUrl()),
+                russian: element.find(`.card-content > .title > span`).text(),
+                score: element.find(`.card-information > .score`).text(),
+                aired_on: element.find(`.card-information > .year`).text()
+            };
+
+            response.image = { original: response.image.substring(ACard.GetUrl().length) };
+            response.score = response.score.trim();
+
+            $(`.history > .content`).prepend(ACard.Gen({ response: response }));
+        }
     },
 
     /**
