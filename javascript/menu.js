@@ -1,6 +1,27 @@
 import { User } from "./modules/ShikiUSR.js";
 
-const get_orientation = screen?.orientation ? () => { return screen.orientation.angle } : () => { return window.orientation == -90 ? 270 : window.orientation };
+const get_orientation = screen?.orientation ? () => {
+    if ($PARAMETERS.menu.menureverse) {
+        if (screen.orientation.angle == 90) {
+            return 270;
+        } else if (screen.orientation.angle == 270) {
+            return 90;
+        }
+    }
+    return screen.orientation.angle;
+} : () => {
+    if ($PARAMETERS.menu.menureverse) {
+        if (window.orientation == -90) {
+            return 90;
+        } else if (window.orientation == 90) {
+            return 270;
+        }
+    }
+    if (window.orientation == -90) {
+        return 270;
+    }
+    return window.orientation;
+};
 
 //Отображено ли меню на сайте
 let _has_menu = false;
@@ -119,7 +140,7 @@ function selectCurPage(id) {
 }
 
 function checkOrientation() {
-    if ($PARAMETERS.menuver) {
+    if ($PARAMETERS.menu.menuver) {
         $('body').addClass('menuver');
     }
     $('body').attr('data-orientation', get_orientation());
@@ -130,6 +151,7 @@ function checkOrientation() {
 
 export const InitMenu = async () => {
     $('body').append(`<div class="application-menu unselectable"></div>`);
+    $(`.application-menu`).addClass($PARAMETERS.menu.menustyle);
     initIntercattMenu();
     _has_menu = true;
     addMenu({ icons: _app_menu_icons.home, id: "index", link: "index.html" });
@@ -209,7 +231,7 @@ function showInteractMenu(id, e) {
     function SetTriangle(angle = get_orientation()) {
         const triangle = $(`.user-interactive > .triangle`);
         const target = $(e.currentTarget);
-        const menuver = $PARAMETERS.menuver;
+        const menuver = $PARAMETERS.menu.menuver;
         const menu = $(`.user-interactive`);
         if (menuver) {
             //Меню может поворачиваться
@@ -235,7 +257,7 @@ function showInteractMenu(id, e) {
     }
 
     function SetPositionMenu(angle = get_orientation()) {
-        const menuver = $PARAMETERS.menuver;
+        const menuver = $PARAMETERS.menu.menuver;
         const menu = $(`.user-interactive`);
         const target = $(e.currentTarget);
         const dispay = {
