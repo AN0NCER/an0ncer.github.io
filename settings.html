@@ -37,7 +37,6 @@
                                 d="M7.72461 8.1621C8.09082 7.79589 8.09082 7.20116 7.72461 6.83495L3.97461 3.08495C3.70508 2.81542 3.30371 2.73632 2.95215 2.8828C2.60059 3.02929 2.37207 3.36913 2.37207 3.74999V11.25C2.37207 11.6279 2.60059 11.9707 2.95215 12.1172C3.30371 12.2637 3.70508 12.1816 3.97461 11.915L7.72461 8.16503V8.1621Z"
                                 fill="white" />
                         </svg>
-
                     </div>
                 </div>
             </a>
@@ -51,198 +50,7 @@
                 </div>
             </div>
         </header>
-
         <main>
-            <div class="parameters-title" data-search="Основные, Главные, Меню">
-                Основные
-            </div>
-            <div class="parameters-container" data-search="Основные, Главные, Меню">
-                <label class="border-top">
-                    <div class="title">Цензура</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="censored">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <label class="border" data-search="Меню">
-                    <div class="title">Авто меню</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="menuver">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <label class="border-bottom">
-                    <div class="title">Автовход</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="autologin">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <span class="tips">
-                    После истечения срока действия ключа авторизации пользователя, вход в систему будет происходить
-                    автоматически. Отключается при принудительном выходе из аккаунта.
-                </span>
-            </div>
-            <div class="parameters-title" data-search="Аниме">
-                Аниме
-            </div>
-            <div class="parameters-container" data-search="Аниме">
-                <label class="border-all" data-param="typefrc" data-type="select-more" data-val="left"
-                    data-variation='[{"key":"TV Сериал", "value":"TV Сериал"},{"key":"Фильм", "value":"Фильм"},{"key":"ONA", "value":"ONA"},{"key":"OVA", "value":"OVA"},{"key":"Клип", "value":"Клип"},{"key":"Спешл", "value":"Спешл"}]'
-                    data-tooltip="Правило для отобора отображение франшизов аниме.">
-                    <div class="title">Франшизы</div>
-                    <div class="select">0</div>
-                </label>
-                <span class="tips">
-                    Правило для отобора отображение франшизов аниме.
-                </span>
-            </div>
-            <div class="parameters-title" data-search="Видеоплеер, Автопрокрутка, Эпизоды">
-                Видеоплеер
-            </div>
-            <div class="parameters-container" data-search="Видеоплеер, Автопрокрутка, Эпизоды">
-                <label class="border-top">
-                    <div class="title">Автопрокрутка</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="showplayer">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <label class="border-bottom" data-param="episrevers" data-type="select" data-val="left"
-                    data-search="Видеоплеер, Автопрокрутка, Эпизоды"
-                    data-variation='[{"key":"top", "value":"Сверху"},{"key":"right", "value":"Справа"},{"key":"left", "value":"Слева"}]'
-                    data-tooltip="Правило отображения эпизодов при просмотре в горизонтальном режиме.">
-                    <div class="title">Эпизоды</div>
-                    <div class="select">Справа</div>
-                </label>
-                <span class="tips" data-search="Видеоплеер, Автопрокрутка, Эпизоды">
-                    Правило отображения эпизодов при просмотре в горизонтальном режиме.
-                </span>
-            </div>
-            <div class="parameters-title" data-search="Видеоплеер, Плеер, Экран, Весь, На, Качество, Основной">
-                Видеоплеер Tunime
-            </div>
-            <div class="parameters-container" data-search="Видеоплеер, Плеер, Экран, Весь, На, Качество, Основной">
-                <label class="border-top">
-                    <div class="title">На весь экран</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="full">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <label data-param="quality" data-type="select" data-val="left"
-                    data-search="Видеоплеер, Качество"
-                    data-variation='[{"key":"720", "value":"720p (HD)"},{"key":"480", "value":"480p"},{"key":"360", "value":"360p"}]'
-                    data-tooltip="Выбирет качество видео, если оно доступно.">
-                    <div class="title">Качество</div>
-                    <div class="select">720p (HD)</div>
-                </label>
-                <label class="border-bottom" data-search="Стандартный контролле">
-                    <div class="title">Стандартный контроллер</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="standart_controls">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <span class="tips margin-bottom" data-search="Видеоплеер, Автопрокрутка, Эпизоды">
-                    Стандартное управление плеером браузера.
-                </span>
-                <label class="border-all" data-search="Основной">
-                    <div class="title">Основной</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="standart">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <span class="tips" data-search="Видеоплеер, Автопрокрутка, Эпизоды">
-                    Использовать Tunime плеер основным, вместо Kodik плеера.
-                </span>
-            </div>
-            <div class="parameters-title" data-search="Дубляжи">
-                Дубляжи
-            </div>
-            <div class="parameters-container" data-search="Дубляжи">
-                <label class="border-top">
-                    <div class="title">Индивидуально</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="dubanime">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <label class="border-bottom disable">
-                    <div class="title">По франшизам</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="dubanimefrc" disabled>
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <span class="tips">
-                    Если аниме будут связаны, то перевод переключится на другое аниме, если он там будет доступен.
-                </span>
-            </div>
-            <div class="parameters-title" data-search="Качество, Загрузки, Асинхронная, Загрузка, Названии, Расширение, Автосохранение, Время">
-                Загрузка Аниме
-            </div>
-            <div class="parameters-container" data-search="Качество, Загрузки, Асинхронная, Загрузка, Названии, Расширение, Автосохранение, Время">
-                <label data-param="dquality" data-type="select" data-val="left"
-                    class="border-top"
-                    data-search="Качество, Загрузки"
-                    data-variation='[{"key":"720", "value":"720p (HD)"},{"key":"480", "value":"480p"},{"key":"360", "value":"360p"}]'
-                    data-tooltip="Выбирет качество видео для загрузки, если оно доступно.">
-                    <div class="title">Качество</div>
-                    <div class="select">720p (HD)</div>
-                </label>
-                <label class="border-bottom">
-                    <div class="title">Асинхронная загрузка</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="dasync">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <span class="tips margin-bottom">
-                   Асинхронная загрузка ускоряет загрузку аниме в 3,2 раза. Но если вы получаете ошибку отключите этот параметр.
-                </span>
-                <label class="border-top">
-                    <div class="title">Озвучка в названии</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="dtranslation">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <label>
-                    <div class="title">Английское названии</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="denglish">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-                <label data-param="dexten" data-type="select" data-val="left"
-                    data-search="Видеоплеер, Качество"
-                    data-variation='[{"key":"tun", "value":".tun"},{"key":"ts", "value":".ts"},{"key":"mp4", "value":".mp4"}]'
-                    data-tooltip="Расширение в котором будет сохраняться файлы.">
-                    <div class="title">Расширение</div>
-                    <div class="select">.tun</div>
-                </label>
-                <label class="border-bottom">
-                    <div class="title">Автосохранение</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="dautosave">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-            </div>
-            <div class="parameters-title" data-search="Разработчик, Разработка, Загрузка">
-                Разработчик
-            </div>
-            <div class="parameters-container" data-search="Разработчик, Разработка, Загрузка">
-                <label class="border-all">
-                    <div class="title">DevLogs</div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-param="develop">
-                        <div class="switch-slider"></div>
-                    </div>
-                </label>
-            </div>
         </main>
         <footer>
             <div class="btn-logout">
@@ -250,43 +58,57 @@
             </div>
         </footer>
     </div>
+    <!--Окно Выбора-->
+    <span class="windowed window-select hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-select hide">
+            <span class="content-wraper">
+                <div class="window-bar select-bar">
+                    <div class="window-title">Параметры</div>
+                    <div class="window-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                            <path
+                                d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
 
-    <span class="select-wraper hiden">
-        <div class="select-control">
-            <div class="btn-back"><svg width="14" height="18" viewBox="0 0 14 18" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M12.0445 5.29454C12.4839 4.85509 12.4839 4.14142 12.0445 3.70197C11.605 3.26251 10.8914 3.26251 10.4519 3.70197L6.74995 7.40743L3.04448 3.70548C2.60503 3.26603 1.89136 3.26603 1.4519 3.70548C1.01245 4.14493 1.01245 4.85861 1.4519 5.29806L5.15737 9.00001L1.45542 12.7055C1.01597 13.1449 1.01597 13.8586 1.45542 14.2981C1.89487 14.7375 2.60854 14.7375 3.048 14.2981L6.74995 10.5926L10.4554 14.2945C10.8949 14.734 11.6085 14.734 12.048 14.2945C12.4875 13.8551 12.4875 13.1414 12.048 12.702L8.34253 9.00001L12.0445 5.29454Z"
-                        fill="white" />
-                </svg>
-            </div>
-            <div class="title"></div>
-        </div>
-        <div class="wraper">
-            <div class="parameters-container">
-            </div>
-        </div>
+                <div class="content-selectes scroll-none">
+                </div>
+
+                <label class="window-footer button-clear-param">
+                    <span>Сбросить</span>
+                </label>
+            </span>
+        </span>
     </span>
+    <!--Окно Выбора Mehr-->
+    <span class="windowed window-select-mehr hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-select-mehr hide">
+            <span class="content-wraper">
+                <div class="window-bar select-mehr-bar">
+                    <div class="window-title">Параметры</div>
+                    <div class="window-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                            <path
+                                d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
 
-    <span class="select-checkbox-wraper hiden">
-        <div class="select-control">
-            <div class="btn-back"><svg width="14" height="18" viewBox="0 0 14 18" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M12.0445 5.29454C12.4839 4.85509 12.4839 4.14142 12.0445 3.70197C11.605 3.26251 10.8914 3.26251 10.4519 3.70197L6.74995 7.40743L3.04448 3.70548C2.60503 3.26603 1.89136 3.26603 1.4519 3.70548C1.01245 4.14493 1.01245 4.85861 1.4519 5.29806L5.15737 9.00001L1.45542 12.7055C1.01597 13.1449 1.01597 13.8586 1.45542 14.2981C1.89487 14.7375 2.60854 14.7375 3.048 14.2981L6.74995 10.5926L10.4554 14.2945C10.8949 14.734 11.6085 14.734 12.048 14.2945C12.4875 13.8551 12.4875 13.1414 12.048 12.702L8.34253 9.00001L12.0445 5.29454Z"
-                        fill="white" />
-                </svg>
-            </div>
-            <div class="title"></div>
-        </div>
-        <div class="wraper">
-            <div class="parameters-container">
-            </div>
-        </div>
+                <div class="content-selectes-more scroll-none">
+                </div>
+
+                <label class="window-footer info-text">
+                    <span></span>
+                </label>
+            </span>
+        </span>
     </span>
-
     <script src="/javascript/server.js"></script>
-    <script src="/javascript/shikimori.js"></script>
     <script src="/javascript/parametrs.js"></script>
     <script src="/javascript/pages/settings.js" type="module"></script>
 </body>

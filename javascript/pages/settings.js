@@ -1,203 +1,211 @@
-import { InitMenu } from "../menu.js";
+import { InitMenu, Menu } from "../menu.js";
+import { Users } from "../modules/ShikiAPI.js";
+import { Main, User } from "../modules/ShikiUSR.js";
+import { ShowMoreSelect, ShowSelect } from "./settings/mod_select.js";
 
-//Обьект управлением select-wraper input type="radio"
-const SelectWraper = {
-    dom: '.select-wraper',
-
-    /**
-     * Показывает окно выбора елемент radio
-     * @param {String} title - название раздела
-     * @param {Array} data - данные массива сосотоящие из обьектов {key:"", value:""}
-     * @param {String} tooltip - подсказка
-     * @param {String} selected - выбранный елемент
-     * @param {Event} event - событие при выборе radio
-     */
-    show: function (title = "", data = [], tooltip = "", selected = "", event = (object) => { }) {
-        if (data.length <= 0) {
-            return;
-        }
-
-        $(`${this.dom} > .select-control > .title`).text(title);
-        $(`${this.dom} > .wraper > .parameters-container`).empty();
-
-        for (let i = 0; i < data.length; i++) {
-            const e = data[i];
-            let s = false;
-            if (e.key == selected) {
-                s = true;
+const Parameters = [
+    {
+        name: 'Основные',
+        parameters: [
+            {
+                type: 'boolean',
+                param: 'censored',
+                name: 'Цензура',
+                description: 'Пользователи могут включать или выключать фильтрацию нежелательного контента.'
+            },
+            {
+                type: 'boolean',
+                param: 'autologin',
+                name: 'Автоматический вход',
+                description: 'Моментальная авторизация пользователей.'
             }
-            $(`${this.dom} > .wraper > .parameters-container`).append(this.gen(e, s, i, data.length));
-        }
-
-        $(`${this.dom} > .wraper > .parameters-container`).append(`<span class="tips">${tooltip}</span>`);
-
-        $(this.dom).removeClass('hiden');
-
-        $('input[type=radio][name=answer]').bind('change', function () {
-            event($(this).data('value'));
-        });
-
-        $('.btn-back').click(() => {
-            $('input[type=radio][name=answer]').unbind('change');
-            $('.select-wraper').addClass('hiden');
-        });
+        ]
     },
-
-    /**
-     * Генерирует radiobox по обьекту
-     * @param {Object} data - обьект {key:"", value:""}
-     * @param {Boolean} selected - выбран ли обьект
-     */
-    gen: function (data, selected = false, i = 0, lenght = 0) {
-        return `<label class="${i == 0 ? "border-top" : i == (lenght - 1) ? "border-bottom" : ""}"><div class="title">${data.value}</div><div class="radio">
-            <input type="radio" data-value='${JSON.stringify(data)}' name="answer" value="${data.key}" ${selected ? 'checked' : ''}>
-            <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_548_1002)"><path d="M15.6695 3.70547C16.109 4.14493 16.109 4.8586 15.6695 5.29805L6.66954 14.2981C6.23009 14.7375 5.51642 14.7375 5.07697 14.2981L0.576965 9.79805C0.137512 9.3586 0.137512 8.64493 0.576965 8.20547C1.01642 7.76602 1.73009 7.76602 2.16954 8.20547L5.87501 11.9074L14.0805 3.70547C14.5199 3.26602 15.2336 3.26602 15.6731 3.70547H15.6695Z" fill="#008AFB" /></g></svg></div></label>`;
-    }
-};
-
-const SelectCheckWrapr = {
-    dom: '.select-checkbox-wraper',
-
-    show: function (title = "", data = [], tooltip = "", key = "", event = () => { }) {
-        if (data.length <= 0) {
-            return;
-        }
-
-        $(`${this.dom} > .select-control > .title`).text(title);
-        $(`${this.dom} > .wraper > .parameters-container`).empty();
-
-        const local_param = getParametrByKey($PARAMETERS, key);
-
-        for (let i = 0; i < data.length; i++) {
-            const e = data[i];
-            $(`${this.dom} > .wraper > .parameters-container`).append(this.gen(e, e.key, i, data.length, (local_param.indexOf(e.key) != -1)));
-        }
-
-        $(`${this.dom} > .wraper > .parameters-container`).append(`<span class="tips">${tooltip}</span>`);
-
-        $(this.dom).removeClass('hiden');
-
-        $('input[type=checkbox][name=multi-answer]').bind('change', function () {
-            event(this.checked, $(this).data('key'));
-        });
-
-        $('.btn-back').click(() => {
-            $(this.dom).addClass('hiden');
-        });
+    {
+        name: 'Меню',
+        parameters: [
+            {
+                type: 'sel-one',
+                param: 'menustyle',
+                default: 'mode-0',
+                variation: [
+                    { key: 'mode-0', val: 'Стандартное' },
+                    { key: 'mode-1', val: 'Стиль 1' },
+                    { key: 'mode-2', val: 'Стиль 2' },
+                ],
+                name: 'Стиль меню',
+                description: 'Визуальное оформление для персонализированного внешнего вида Меню.',
+                event: () => {
+                    switch ($PARAMETERS.menu.menustyle) {
+                        case 'mode-1':
+                            Menu().setMode.mode_1();
+                            break;
+                        case 'mode-2':
+                            Menu().setMode.mode_2();
+                            break;
+                        default:
+                            Menu().setMode.mode_0();
+                            break;
+                    }
+                }
+            },
+            {
+                type: 'boolean',
+                param: 'menuver',
+                name: 'Автоповорот',
+                description: 'Автоматически вращать меню в горизонтальном режиме.'
+            },
+            {
+                type: 'boolean',
+                param: 'menureverse',
+                name: 'Горизонт. отражение',
+                description: 'Возможность инвертировать меню горизонтально для изменения его расположения.'
+            }
+        ]
     },
-
-    gen: function (data, key, i, lenght = 0, checked = false) {
-        const border = i == 0 ? "border-top" : i == (lenght - 1) ? "border-bottom" : "";
-        const chk = checked ? "checked" : "";
-        return `<label class="${border}">
-        <div class="title">${data.value}</div>
-        <div class="checkbox">
-            <input type="checkbox" name="multi-answer" data-key="${key}" ${chk}>
-            <div class="switch-check"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 576 512"><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z" fill="#008AFB"/></svg></div>
-        </div>
-    </label>`;
+    {
+        name: 'Аниме',
+        parameters: [
+            {
+                type: 'sel-mehre',
+                param: 'typefrc',
+                variation: [
+                    { key: "TV Сериал", val: "TV Сериал" },
+                    { key: "Фильм", val: "Фильм" },
+                    { key: "ONA", val: "ONA" },
+                    { key: "OVA", val: "OVA" }
+                ],
+                name: 'Франшизы',
+                description: 'Правило для отобора отображение франшизов аниме.'
+            },
+            {
+                type: 'boolean',
+                param: '',
+                name: 'Скрыть героев',
+                description: 'Позволяет пользователю убирать изображения персонажей для более нейтрального просмотра сайта.'
+            },
+            {
+                type: 'boolean',
+                param: '',
+                name: 'Защита 18+',
+                description: 'Ограниченный доступ к контенту для пользователей старше 18 лет, обеспечивая соответствие возрастным ограничениям.'
+            },
+            {
+                type: 'boolean',
+                param: 'syncdata',
+                name: 'Синхронизация',
+                description: 'Синхронизация по озвучке и текущему эпизоде по разным приложениям в Tunime'
+            }
+        ]
+    },
+    {
+        name: 'Страница просмотра',
+        parameters: [
+            {
+                type: 'sel-one',
+                param: 'episrevers',
+                default: 'left',
+                variation: [
+                    { key: 'left', val: 'Сбоку' },
+                    { key: 'top', val: 'Сверху' }
+                ],
+                name: 'Эпизоды',
+                description: 'Визуальное отображение для эпизодов.'
+            },
+            {
+                type: 'boolean',
+                param: 'dubanime',
+                name: 'Озвучки по франшизе',
+                description: 'Отдельный список избранных озвучек по франшизе аниме.'
+            }
+        ]
+    },
+    {
+        name: 'Плеер',
+        parameters: [
+            {
+                type: 'boolean',
+                param: 'standart',
+                name: 'Tunime Player',
+                description: 'Основным плеером будет Tunime.'
+            },
+            {
+                type: 'boolean',
+                param: 'full',
+                name: 'Auto Fullscreen',
+                description: 'Автоматически включает видео на весь экран в плеере Tunime.'
+            },
+            {
+                type: 'sel-one',
+                param: 'quality',
+                default: '720',
+                variation: [
+                    { key: '720', val: '720p' },
+                    { key: '480', val: '480p' },
+                    { key: '360', val: '360p' },
+                ],
+                name: 'Качество',
+                description: 'Качествр воспроизведение видео в плеере Tunime.'
+            },
+            {
+                type: 'boolean',
+                param: 'autonekst',
+                name: 'Автопереключение',
+                description: 'При просмотре аниме в плеере Tunime будет происходить автопереключение эпизодов при их окончание просмотра.'
+            },
+            {
+                type: 'boolean',
+                param: 'saveinfo',
+                name: 'Записывать озвучку',
+                description: 'Записывать озвучку аниме которую оценил в заметки.'
+            },
+            {
+                type: 'boolean',
+                param: 'standart_controls',
+                name: 'Стандартный контроллер',
+                description: 'Стандартное управление Tunime плеера от браузера.'
+            }
+        ]
+    },
+    {
+        name: 'Загрузка',
+        parameters: [
+            {
+                type: 'sel-one',
+                param: 'dquality',
+                default: '720',
+                variation: [
+                    { key: '720', val: '720p' },
+                    { key: '480', val: '480p' },
+                    { key: '360', val: '360p' },
+                ],
+                name: 'Качество',
+                description: 'Качествр воспроизведение видео в плеере Tunime.'
+            },
+            {
+                type: 'boolean',
+                param: 'dasync',
+                name: 'Асинхроная загрузка',
+                description: 'Позволяет приложению подгружать контент независимо от основного процесса, улучшая скорость загрузки.'
+            },
+            {
+                type: 'boolean',
+                param: 'dautosave',
+                name: 'Автосохранение',
+                description: 'После загрузки автоматически  сохраняет файл.'
+            }
+        ]
     }
-};
+];
 
-//Начало программы
-(() => {
-    //Присваеваем значения к параметрам
-    printObject($PARAMETERS);
-    //Проверяем зависимотсии
-    checkAddiction();
-
-    //Подписываемся на изменение всех checkbox
-    $(`input[type="checkbox"]`).change(function () {
-        setParameter($(this).data('param'), this.checked);
-        checkAddiction(this);
-    });
-
-    //Присваеваем изменение выбора из списка
-    $('label[data-type="select"]').click(function (e) {
-        SelectWraper.show("Эпизоды", $(this).data('variation'), $(this).data('tooltip'), $(this).attr('data-val'), (k) => {
-            const key = $(this).data('param');
-            $(this).attr('data-val', k.key);
-            $(this).find('.select').text(k.value);
-            setParameter(key, k.key)
-        });
-    });
-
-    $('label[data-type="select-more"]').click(function (e) {
-        SelectCheckWrapr.show("Франшизы", $(this).data('variation'), $(this).data('tooltip'), $(this).data('param'), (checked, key) => {
-            const lkey = $(this).data('param');
-            const lval = getParametrByKey($PARAMETERS, lkey);
-            if (checked) {
-                lval.push(key);
-            }
-            else {
-                lval.splice(lval.indexOf(key),1);
-            }
-
-            setParameter(lkey, lval);
-            $(this).find('.select').text($PARAMETERS.watch.typefrc.length);
-        });
-    });
-
-    //Делаем привязку завиcящих друг от друга елементов
-    function checkAddiction(el) {
-        const addiction = {
-            "dubanime": "dubanimefrc",
-        }
-
-        if (!el) {
-            for (const key in addiction) {
-                checkAddiction(document.querySelector(`input[data-param="${key}"]`));
-            }
-            return;
-        }
-
-        const element = $(el);
-
-        if (!addiction[element.data('param')]) {
-            return;
-        }
-
-        const target = $(`input[data-param="${addiction[element.data('param')]}"]`);
-        target.prop("disabled", !el.checked);
-        if (el.checked) {
-            target.parent().parent().removeClass('disable');
-        } else {
-            target.parent().parent().addClass('disable');
-        }
-    }
-
-    //Присваевам функцию к кнопке выхода
-    $('.btn-logout').click(function () {
-        usr.Storage.Clear();
-        setParameter('autologin', false);
-        window.location.replace("/login.html");
-    });
-
-    //Фильтр по поиску
-    $('.search-filter').on('change keyup paste', function () {
-        if (this.value.length <= 0) {
-            //Очищаем фильтр
-            $('[data-search]').removeClass('notfounded');
-            return;
-        }
-        let containers = $('[data-search]');
-        for (let i = 0; i < containers.length; i++) {
-            const element = $(containers[i]);
-            if (element.data('search')?.toUpperCase().indexOf(this.value.toUpperCase()) != -1) {
-                element.removeClass('notfounded');
-            } else {
-                element.addClass('notfounded');
-            }
-        }
-    });
-})();
-
-InitMenu();
+//Отображаем параметры
+_ShowParametrs();
 
 Main((e) => {
+    InitMenu();
     if (e) {
         GetWhoami();
-        let whoami = usr.Storage.Get(usr.Storage.keys.whoami);
+        let whoami = User.Storage.Get(User.Storage.keys.whoami);
         if (whoami) {
             $('.profile-info > img').attr('src', whoami.image['x160']);
             $('.profile-name').text(whoami.nickname);
@@ -207,24 +215,146 @@ Main((e) => {
     }
 
     function GetWhoami() {
-        shikimoriApi.Users.whoami(async (response) => {
+        Users.whoami(async (response) => {
             if (response.failed && response.status == 429) {
                 await sleep(1000);
                 return GetWhoami(id);
             }
-
-            usr.Storage.Set(response, usr.Storage.keys.whoami);
-
+            User.Storage.Set(response, User.Storage.keys.whoami);
             if ($('.profile-info > img').attr('src') != response.image['x160']) {
                 $('.profile-info > img').attr('src', response.image['x160']);
             }
-
             $('.profile-name').text(response.nickname);
             $('.profile-link').attr('href', response.url + '/edit/account');
             $('.profile-link').attr('target', '_blank');
-        });
+        }).GET();
     }
+
+    //Присваевам функцию к кнопке выхода
+    $('.btn-logout').click(function () {
+        User.Storage.Clear();
+        setParameter('autologin', false);
+        window.location.replace("/login.html");
+    });
+
+    $('.search-filter').on('change keyup paste', function () {
+        if (this.value.length <= 0) {
+            $('label').removeClass('founded');
+            return;
+        }
+
+        const labels = $('label');
+        let erste = undefined;
+
+        for (let i = 0; i < labels.length; i++) {
+            const el = $(labels[i]).find('.title');
+            const title = el.text().trim().toUpperCase();
+            if (title.indexOf(this.value.toUpperCase()) != -1) {
+                $(labels[i]).addClass('founded');
+                if (!erste)
+                    erste = labels[i];
+            } else {
+                $(labels[i]).removeClass('founded');
+            }
+        }
+
+        if (erste) {
+            erste.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "nearest",
+            });
+        }
+    });
 });
+
+function _ShowParametrs() {
+    for (let i = 0; i < Parameters.length; i++) {
+        const element = Parameters[i];
+        $('main').append(`<div class="parametr-wrapper"><div class="parameters-title">${element.name}</div><div class="parameters-container">${__loadParametrs(element.parameters)}</div></div>`);
+    }
+
+    printObject($PARAMETERS);
+    eventBoolean();
+    eventSelectOne();
+    eventSelectMore();
+
+    function __loadParametrs(parametrs) {
+        let html = "";
+        for (let i = 0; i < parametrs.length; i++) {
+            const element = parametrs[i];
+
+            switch (element.type) {
+                case "boolean":
+                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}">
+                                <div class="title">${element.name}</div>
+                                <div class="checkbox">
+                                    <input type="checkbox" data-param="${element.param}">
+                                    <div class="switch-slider"></div>
+                                </div>
+                            </label>`;
+                    break;
+                case "sel-one":
+                    const def = element.variation[0];
+                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-param="${element.param}" data-type="select-one" data-val="${def.key}" data-variation='${JSON.stringify(element.variation)}' ${element.event ? `data-event="${element.event}"` : ''} data-default="${element.default}" data-tooltip="${element.description}">
+                                <div class="title">${element.name}</div>
+                                <div class="select">${def.val}</div>
+                            </label>`;
+                    break;
+                case "sel-mehre":
+                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-param="${element.param}" data-type="select-more" data-val="left" data-variation='${JSON.stringify(element.variation)}' data-tooltip="${element.description}">
+                                <div class="title">${element.name}</div>
+                                <div class="select">${element.variation.length}</div>
+                            </label>`
+                    break;
+                default:
+                    break;
+            }
+        }
+        return html;
+    }
+}
+
+function eventBoolean() {
+    $('input[type="checkbox"]').change(function () {
+        let param = $(this).data('param');
+        if (param) {
+            setParameter(param, this.checked);
+        }
+    });
+}
+
+function eventSelectOne() {
+    $('label[data-type="select-one"]').click(function () {
+        const el = $(this);
+        const title = el.find('.title').text().trim();
+        const param = el.attr('data-param').trim();
+        if (param) {
+            const lval = getParametrByKey($PARAMETERS, param);
+            const def = el.attr('data-default').trim();
+            const parametrs = JSON.parse(el.attr('data-variation'));
+            let event = el.data('event');
+            if (event) {
+                event = eval(event);
+            }
+            ShowSelect(title, param, def, parametrs, lval, event);
+        }
+    });
+}
+
+function eventSelectMore() {
+    $('label[data-type="select-more"]').click(function () {
+        const el = $(this);
+        const title = el.find('.title').text().trim();
+        const param = el.attr('data-param').trim();
+        const description = el.attr('data-tooltip');
+        if (param) {
+            const lval = getParametrByKey($PARAMETERS, param);
+            const parameters = JSON.parse(el.attr('data-variation'));
+            ShowMoreSelect(title, param, parameters, lval, description);
+        }
+    });
+}
 
 /**
  * Рекурсивно выводит в консоль все ключи и значения объекта, кроме вложенных объектов.
@@ -247,12 +377,12 @@ function printObject(obj) {
                     $(`input[data-param="${key}"]`).prop("checked", obj[key]);
                 } else if (typeof (obj[key]) == 'string') {
                     let input = $(`[data-param="${key}"]`);
-                    if (input.data('type') == 'select') {
+                    if (input.data('type') == 'select-one') {
                         let data = input.data('variation');
                         for (let index = 0; index < data.length; index++) {
                             const element = data[index];
                             if (element.key === obj[key]) {
-                                input.find('.select').text(element.value);
+                                input.find('.select').text(element.val);
                                 input.attr('data-val', obj[key]);
                             }
                         }
@@ -281,6 +411,7 @@ function printObject(obj) {
  * @returns  - Найденное значение или undefined, если значение не найдено.
  */
 function getParametrByKey(obj, lkey) {
+    let response = undefined;
     for (let key in obj) {
         if (typeof obj[key] !== 'object' || obj[key] === null) {
             if (key == lkey) {
@@ -292,7 +423,11 @@ function getParametrByKey(obj, lkey) {
                     return obj[key];
                 }
             }
-            return getParametrByKey(obj[key], lkey);
+            response = getParametrByKey(obj[key], lkey);
+            if (response) {
+                return response;
+            }
         }
     }
+    return response;
 }
