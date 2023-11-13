@@ -127,8 +127,16 @@ export let User = {
 const ips = ["192.168.31.233", "127.0.0.1", "192.168.31.45"]
 
 if (ips.findIndex(x => x == location.hostname) != -1) {
-    console.log("Enabled Tested Version");
+    console.log("[ver] - Test");
     User.test_on();
+    var manifestLink = document.querySelector('head > link[rel="manifest"]');
+    manifestLink.href = '/images/icons/manifest-b.json';
+    var appleIcon = document.querySelector('head > link[sizes="120x120"]');
+    if (appleIcon)
+        appleIcon.href = './images/icons/logo-x192-b.png';
+    appleIcon = document.querySelector('head > link[sizes="152x152"]');
+    if (appleIcon)
+        appleIcon.href = './images/icons/logo-x192-b.png';
 }
 
 /**
