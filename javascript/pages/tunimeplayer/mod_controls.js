@@ -64,7 +64,6 @@ function PanelEvents() {
     let timeOut;
 
     target.on('click mouseenter', function (e) {
-        console.log(PlayerControls.launched);
         if (!PlayerControls.launched) return;
         $('.sliders').addClass('mouseenter');
         clearTimeout(timeOut);
@@ -85,6 +84,7 @@ function PanelEvents() {
 //Конец времени поинт
 function EndPointer() {
     let target = $('.end-slider > .content > .pointer');
+    const currentPoint = $('.cur-slider > .content > .pointer');
 
     //Таймер скрытия поинта при нажатия
     let timeOutEnter;
@@ -92,12 +92,14 @@ function EndPointer() {
     target.on('mousedown touchstart', function (e) {
         $('.player-controls').mouseleave();
         $(e.currentTarget).addClass('mouseenter');
+        currentPoint.addClass('hide');
         clearTimeout(timeOutEnter);
     });
 
     target.on('mouseup touchend', function (e) {
         timeOutEnter = setTimeout(() => {
             $(e.currentTarget).removeClass('mouseenter');
+            currentPoint.removeClass('hide');
         }, 1500);
     });
 
@@ -144,6 +146,7 @@ function EndPointer() {
 //Текущего времени поинт
 function CurrentPointer() {
     let target = $('.cur-slider > .content > .pointer');
+    let endpoint = $('.end-slider > .content > .pointer');
 
     //Таймер скрытия поинта при нажатия
     let timeOutEnter;
@@ -151,12 +154,14 @@ function CurrentPointer() {
     target.on('mousedown touchstart', function (e) {
         $('.player-controls').mouseleave();
         $(e.currentTarget).addClass('mouseenter');
+        endpoint.addClass('hide');
         clearTimeout(timeOutEnter);
     });
 
     target.on('mouseup touchend', function (e) {
         timeOutEnter = setTimeout(() => {
             $(e.currentTarget).removeClass('mouseenter');
+            endpoint.removeClass('hide');
         }, 1500);
     });
 
