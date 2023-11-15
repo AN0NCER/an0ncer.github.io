@@ -1303,13 +1303,8 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 .content-notify .content-wraper .title-content .title-witch-icon {
   display: flex;
   align-items: center;
-  gap: 10px;
   font-weight: 700;
-}
-.content-notify .content-wraper .title-content .title-witch-icon svg {
-  width: 10px;
-  height: 12px;
-  fill: #fff;
+  font-size: 16px;
 }
 .content-notify .content-wraper .title-content .btn-window-close {
   display: grid;
@@ -1324,125 +1319,349 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   height: 10px;
   flex-shrink: 0;
 }
-.content-notify .content-wraper .content-notifycation {
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+.content-notify .content-wraper label.notify-search {
   display: flex;
+  height: 45px;
+  overflow: hidden;
+  border-radius: 3px;
+  position: relative;
+}
+.content-notify .content-wraper label.notify-search .icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  display: grid;
+  place-items: center;
+  transition: 0.3s ease-in-out;
+}
+.content-notify .content-wraper label.notify-search .icon svg {
+  width: 16px;
+  fill: #fff;
+  opacity: 0.7;
+}
+.content-notify .content-wraper label.notify-search input {
+  width: 100%;
+  border-radius: 0;
+  border: none;
+  background: #282D39;
+  color: #fff;
+  padding-left: 10px;
+  font-family: Manrope;
+}
+.content-notify .content-wraper label.notify-search input::-moz-placeholder {
+  padding-left: 30px;
+  color: #fff;
+  opacity: 0.7;
+  -moz-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+.content-notify .content-wraper label.notify-search input::placeholder {
+  padding-left: 30px;
+  color: #fff;
+  opacity: 0.7;
+  transition: 0.3s ease-in-out;
+}
+@supports (-moz-appearance: none) {
+  .content-notify .content-wraper label.notify-search input:-moz-placeholder-shown {
+    padding-left: 40px;
+    -moz-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+  }
+  .content-notify .content-wraper label.notify-search input:placeholder-shown {
+    padding-left: 40px;
+    transition: 0.3s ease-in-out;
+  }
+  .content-notify .content-wraper label.notify-search input:focus:-moz-placeholder-shown {
+    padding-left: 10px;
+  }
+  .content-notify .content-wraper label.notify-search input:focus:placeholder-shown {
+    padding-left: 10px;
+  }
+}
+.content-notify .content-wraper label.notify-search > input:focus::-moz-placeholder {
+  padding-left: 0px;
+}
+.content-notify .content-wraper label.notify-search > input:focus::placeholder {
+  padding-left: 0px;
+}
+.content-notify .content-wraper label.notify-search input:focus ~ .icon {
+  opacity: 0;
+}
+.content-notify .content-wraper label.notify-search input:not(:-moz-placeholder-shown) ~ .icon {
+  opacity: 0;
+}
+.content-notify .content-wraper label.notify-search input:not(:placeholder-shown) ~ .icon {
+  opacity: 0;
+}
+.content-notify .content-wraper .notify-filter {
+  border-radius: 3px;
+  background: #282D39;
+  display: flex;
+  height: 40px;
+  padding: 2px;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+}
+.content-notify .content-wraper .notify-filter .block-filter {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  flex: 1 0 0;
+  align-self: stretch;
+  cursor: pointer;
+}
+.content-notify .content-wraper .notify-filter .block-filter.selected {
+  border-radius: 3px;
+  background: #51B2FF;
+}
+.content-notify .content-wraper .content-notifycation {
+  display: flex;
+  gap: 10px;
   flex-direction: column;
 }
 .content-notify .content-wraper .content-notifycation .notifycation {
   cursor: pointer;
-  padding: 10px 0;
-  margin-top: 10px;
+  padding: 7px 10px 7px 0px;
   display: flex;
   position: relative;
   overflow: hidden;
+  gap: 10px;
+  border-radius: 3px;
+  background: #203544;
 }
-.content-notify .content-wraper .content-notifycation .notifycation .notify-status {
-  width: 100%;
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  opacity: 0.3;
+.content-notify .content-wraper .content-notifycation .notifycation .status-unread {
+  width: 2px;
+  align-self: stretch;
+  background: #51B2FF;
 }
-.content-notify .content-wraper .content-notifycation .notifycation .controlls-read {
-  background: #2393F1;
-  display: grid;
-  place-items: center;
-  width: 0px;
-  margin-right: 0px;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
-}
-.content-notify .content-wraper .content-notifycation .notifycation .controlls-read svg {
-  fill: #fff;
-}
-.content-notify .content-wraper .content-notifycation .notifycation .controlls-del {
-  background: #f12323;
-  display: grid;
-  place-items: center;
-  width: 0px;
-  margin-left: 0px;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10;
-}
-.content-notify .content-wraper .content-notifycation .notifycation .controlls-del svg {
-  fill: #fff;
-}
-.content-notify .content-wraper .content-notifycation .notifycation-cnt {
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 5px;
-  width: 100%;
+  flex: 1 0 0;
 }
-.content-notify .content-wraper .content-notifycation .notifycation-cnt-type-date {
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-title-date {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
   color: #FFF;
   font-family: Manrope;
-}
-.content-notify .content-wraper .content-notifycation .notifycation-cnt-type-date > .notify-type {
-  font-size: 14px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-}
-.content-notify .content-wraper .content-notifycation .notifycation-cnt-type-date > .notify-type .read-false {
-  width: 5px;
-  height: 5px;
-  background: #2393F1;
-  border-radius: 50%;
-  margin-right: 5px;
-}
-.content-notify .content-wraper .content-notifycation .notifycation-cnt-type-date > .notify-date {
-  font-size: 13px;
-  font-weight: 400;
-}
-.content-notify .content-wraper .content-notifycation .notifycation-cnt-text > div {
   font-size: 13px;
   font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-text {
+  color: #FFF;
+  font-family: Manrope;
+  font-size: 14px;
+  font-style: normal;
   font-weight: 400;
+  line-height: normal;
 }
-.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags {
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info {
   display: flex;
-  justify-content: space-between;
-}
-.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-list {
-  display: flex;
+  align-items: flex-start;
   gap: 10px;
+  align-self: stretch;
 }
-.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-list div {
-  background: #2393F1;
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .anime-episodes {
+  display: flex;
+  padding: 5px 10px;
+  align-items: center;
+  gap: 10px;
   border-radius: 3px;
+  background: rgba(81, 178, 255, 0.1);
+  color: #51B2FF;
+  font-weight: 700;
+  font-family: Manrope;
   font-size: 10px;
-  font-weight: 600;
-  padding: 3px 6px;
 }
-.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-onshow {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 1/1;
-  height: 100%;
-  background: #5c5c5c;
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .anime-episodes svg {
+  fill: #51B2FF;
+  width: 12px;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status {
+  display: flex;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status > div {
+  display: flex;
+  padding: 5px 10px;
+  align-items: center;
+  gap: 10px;
   border-radius: 3px;
-  position: relative;
+  font-family: Manrope;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
-.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-onshow svg {
-  fill: #fff;
-  width: 10px;
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status > div svg {
+  height: 12px;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status > div.available {
+  background: rgba(52, 222, 49, 0.1);
+  color: #34DE31;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status > div.available svg {
+  fill: #34DE31;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status > div.unavailable {
+  background: rgba(222, 49, 49, 0.1);
+  color: #DE3131;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status > div.unavailable svg {
+  fill: #DE3131;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status > div.load {
+  background: rgba(199, 199, 199, 0.1);
+  color: #C7C7C7;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status > div.load svg {
+  fill: #C7C7C7;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status.available .unavailable,
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status.available .load {
+  display: none;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status.load .unavailable,
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status.load .available {
+  display: none;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status.unvailable .available,
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status.unvailable .load {
+  display: none;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .empty-notify {
+  display: flex;
+  height: 120px;
+  padding: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+  border-radius: 8px;
+  border: 1px solid #51B2FF;
+  background: #282D39;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  font-family: Manrope;
+  font-size: 12px;
+  font-weight: 700;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .empty-notify svg {
+  height: 34px;
+  fill: #FFF;
+  opacity: 0.7;
+}
+.content-notify .content-wraper .content-notifycation .notifycation.empty-notify {
+  border-radius: 0;
+  background: none;
+  padding: 0;
+}
+.content-notify .content-wraper .content-notifycation .notifycation.true {
+  padding: 7px 10px;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .read-event,
+.content-notify .content-wraper .content-notifycation .notifycation .remove-event {
+  display: grid;
   position: absolute;
+  border-radius: 3px;
+  max-width: 85px;
+  width: 0%;
+  top: 0;
+  bottom: 0;
+  place-items: center;
 }
-.content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-onshow .loaded, .content-notify .content-wraper .content-notifycation .notifycation-cnt-tags-onshow .error {
-  opacity: 0;
+.content-notify .content-wraper .content-notifycation .notifycation .read-event svg,
+.content-notify .content-wraper .content-notifycation .notifycation .remove-event svg {
+  fill: #fff;
+  width: 22%;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .remove-event {
+  right: 0;
+  background: #DE3131;
+}
+.content-notify .content-wraper .content-notifycation .notifycation .read-event {
+  left: 0;
+  background: #51B2FF;
+}
+.content-notify .content-wraper .content-notifycation.unread .notifycation.true {
+  display: none;
 }
 
+.scale-down-center {
+  animation: scale-down-center 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite alternate-reverse both;
+}
+
+/* ----------------------------------------------
+ * Generated by Animista on 2023-11-15 0:29:59
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+/**
+ * ----------------------------------------
+ * animation scale-down-center
+ * ----------------------------------------
+ */
+@keyframes scale-down-center {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.5);
+  }
+}
+.jello-horizontal {
+  animation: jello-horizontal 0.9s both;
+}
+
+/* ----------------------------------------------
+ * Generated by Animista on 2023-11-15 0:31:53
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+/**
+ * ----------------------------------------
+ * animation jello-horizontal
+ * ----------------------------------------
+ */
+@keyframes jello-horizontal {
+  0% {
+    transform: scale3d(1, 1, 1);
+  }
+  30% {
+    transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    transform: scale3d(1.05, 0.95, 1);
+  }
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+}
 .card-anime {
   min-width: 195px;
   margin-right: 10px;

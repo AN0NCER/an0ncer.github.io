@@ -1,6 +1,5 @@
 import { User } from "../../modules/ShikiUSR.js";
 import { WindowManagement } from "../../modules/Windows.js"
-import { isElementVisible } from "../../modules/funcitons.js";
 import { LoadNotifycation } from "./mod_notify.js";
 
 const _updateKey = 'dialog-update';
@@ -152,93 +151,30 @@ const WindowNotify = {
             _windowNotify.hide();
             this.hide();
         });
+
+        //Нажатие на фильтр непрочитанные
+        $('.notify-filter > #unread').click(function () {
+            $('.content-notifycation').addClass('unread');
+            $('.notify-filter > .selected').removeClass('selected');
+            $(this).addClass('selected');
+        });
+        //Нажатие на фильтр все
+        $('.notify-filter > #all').click(function () {
+            $('.content-notifycation').removeClass('unread');
+            $('.notify-filter > .selected').removeClass('selected');
+            $(this).addClass('selected');
+        });
     },
     show: function () {
-        if (!this.loaded) {
+        if (!this.loaded)
             LoadNotifycation({
                 e: () => {
                     this.loaded = true;
-                    this.loadVoice();
                 }
             });
-            $('.notify-status').text("Загрука...");
-        }
-        if (this.loaded) {
-            this.loadVoice();
-        }
     },
     hide: () => { },
-    verif: () => {
-        return User.authorized;
-    },
-    loadVoice: () => {
-        let elements = $(`.notifycation[data-voice="true"][data-loaded="false"]`);
-        for (let i = 0; i < elements.length; i++) {
-            const element = $(elements[i]);
-            const episode = element.attr('data-episode');
-            loadAnimeInfo(element, episode);
-        }
-
-        $(`.content-notify`).scroll(function () {
-            elements = $(`.notifycation[data-voice="true"][data-loaded="false"]`);
-            for (let i = 0; i < elements.length; i++) {
-                const element = $(elements[i]);
-                if (isElementVisible(element)) {
-                    const episode = element.attr('data-episode');
-                    loadAnimeInfo(element, episode);
-                }
-            }
-        });
-
-        // Функция для загрузки информации о аниме с Kodik
-        function loadAnimeInfo(element, episode) {
-            const anime_id = element.attr('data-anime');
-            const data_anime = JSON.parse(localStorage.getItem(anime_id));
-            kodikApi.search({ shikimori_id: anime_id, translation_id: data_anime.kodik_dub, limit: 1 }, (response) => {
-                element.attr('data-loaded', true);
-                if (response.results[0].last_episode >= episode) {
-                    stopLoadingAnimation(element);
-                } else {
-                    stopLoadingFalsAnimation(element);
-                }
-            });
-        }
-
-        function stopLoadingFalsAnimation(element) {
-            const target = `.notifycation-cnt[data-id="${element.attr('data-id')}"] > .notifycation-cnt-tags > .notifycation-cnt-tags-onshow`;
-            anime({
-                targets: `${target} > svg.load`,
-                scale: '0',
-            });
-            anime({
-                targets: target,
-                background: '#882626',
-            });
-            anime({
-                targets: `${target} > svg.error`,
-                scale: ['0', '1'],
-                opacity: 1
-            });
-        }
-
-        // Функция для остановки анимации загрузки
-        function stopLoadingAnimation(element) {
-            const target = `.notifycation-cnt[data-id="${element.attr('data-id')}"] > .notifycation-cnt-tags > .notifycation-cnt-tags-onshow`;
-            anime({
-                targets: `${target} > svg.load`,
-                scale: '0',
-            });
-            anime({
-                targets: target,
-                background: '#2393F1',
-            });
-            anime({
-                targets: `${target} > svg.loaded`,
-                scale: ['0', '1'],
-                opacity: 1
-            });
-        }
-    },
+    verif: () => { return User.authorized; }
 }
 
 const _windowUpdate = new WindowManagement(WindowUpdate, '.window-update');
