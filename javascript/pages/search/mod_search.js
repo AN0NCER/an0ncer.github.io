@@ -1,4 +1,4 @@
-import { Card } from "../../modules/AnimeCard.js";
+import { ACard } from "../../modules/AnimeCard.js";
 import { Animes } from "../../modules/ShikiAPI.js";
 import { TrackElement } from "../../modules/funcitons.js";
 import { SearchHistory } from "./mod_history.js";
@@ -56,7 +56,7 @@ export function Search(search) {
             SetState(3);
 
             for (let i = 0; i < response.length; i++) {
-                $('main.result > .content').append(Card().Div(response[i]));
+                $('main.result > .content').append(ACard.Gen({response: response[i], link: false}));
             }
 
             $("main.result > .content > .card-anime").unbind('click').on('click', (e) => {
@@ -103,7 +103,7 @@ export function Search(search) {
 
                 for (let i = 0; i < response.length; i++) {
                     
-                    $('main.result > .content').append(Card().Div(response[i]));
+                    $('main.result > .content').append(ACard.Gen({response: response[i], link: false}));
                 }
 
                 $("main.result > .content > .card-anime").unbind('click').on('click', (e) => {

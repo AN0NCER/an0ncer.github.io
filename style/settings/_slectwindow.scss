@@ -1,0 +1,139 @@
+.window-select, .window-select-mehr {
+    .window-content {
+        max-height: calc(100vh - env(safe-area-inset-top));
+        overflow-y: hidden;
+
+        .content-wraper {
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: auto auto auto;
+            overflow-y: hidden;
+
+            .window-bar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+
+                .window-title {
+                    font-size: 14px;
+                }
+
+                .window-close {
+                    width: 40px;
+                    height: 40px;
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+
+                    svg {
+                        fill: #fff;
+                        width: 10px;
+                    }
+                }
+            }
+            .content-selectes, .content-selectes-more{
+                background: #203544;
+                border-radius: 5px;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+
+                .selectes{
+                    color: #fff;
+                    display: flex;
+                    width: 100%;
+                    align-items: center;
+                    justify-content: space-between;
+                    box-sizing: border-box;
+
+                    .variant{
+                        font-family: Manrope;
+                        font-size: 15px;
+                        display: flex;
+                        justify-content: space-between;
+                        width: 100%;
+                        cursor: pointer;
+                        height: 45px;
+                        align-items: center;
+                        padding-left: 10px;
+
+                        .variant-key{
+                            font-weight: 700; 
+                        }
+
+                        .variant-selected{
+                            width: 45px;
+                            height: 45px;
+                            display: grid;
+                            place-items: center;
+                            .circle{
+                                display: grid;
+                                width: 14px;
+                                height: 14px;
+                                background: #3587E6;
+                                border-radius: 50%;
+                            }
+                        }
+                    }
+
+                    .voice-save{
+                        min-width: 45px;
+                        min-height: 45px;
+                        max-width: 45px;
+                        max-height: 45px;
+                        display: grid;
+                        place-items: center;
+                        cursor: pointer;
+                        svg{
+                            fill: #fff;
+                            width: 14px;
+                        }
+
+                        .select{
+                            display: none;
+                        }
+
+                        &.select{
+                            svg.select{
+                                display: block;
+                                fill: #3587E6;
+                            }
+                            svg.unselect{
+                                display: none;
+                            }
+                        }
+                    }
+
+                    &.empty{
+                        height: 45px;
+                        display: grid;
+                        place-items: center;
+                        font-family: Manrope; 
+                        font-size: 15px; 
+                        justify-content: center;
+                    }
+
+                    &.select{
+                        background: #3587E6;
+                        .variant{
+                            .variant-selected{
+                                .circle{
+                                    background: #fff;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .window-footer {
+                color: rgba(255, 255, 255, 0.60);
+                display: grid;
+                place-items: center;
+                padding: 8px 10px;
+                cursor: pointer;
+            }
+        }
+    }
+}

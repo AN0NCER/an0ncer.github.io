@@ -127,7 +127,7 @@ ELA.onload(() => {
   History().custom.init();
   //Нводимся на плеер
   //Наводимся на плеер
-  if ($SHOWPLAYER && $PARAMETERS.watch.showplayer) {
+  if ($SHOWPLAYER) {
     const element = document.querySelector(".landscape-player");
     element.scrollIntoView({
       behavior: "smooth",

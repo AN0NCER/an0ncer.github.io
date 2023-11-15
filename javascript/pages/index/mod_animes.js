@@ -1,4 +1,4 @@
-import { Card } from "../../modules/AnimeCard.js";
+import { ACard } from "../../modules/AnimeCard.js";
 import { Animes } from "../../modules/ShikiAPI.js";
 import { Sleep } from "../../modules/funcitons.js";
 
@@ -37,7 +37,7 @@ export function LoadAnimeShikimori({ status = 'ongoing', limit = _limitAnime, ge
         element.scrollLeft(0)
 
         for (let i = 0; i < response.length; i++) {
-            element.append(Card().Link(response[i]));
+            element.append(ACard.Gen({response: response[i]}));
         }
 
         if ($('.section-anime').find('.card-anime').length < _limitAnime) {
@@ -83,7 +83,7 @@ export async function LoadUpdatetAnime() {
             const element = $('.section-update');
 
             for (let i = 0; i < response.length; i++) {
-                element.append(Card().Link(response[i]));
+                element.append(ACard.Gen({response: response[i]}));
             }
 
             _loadedUpdates = true;

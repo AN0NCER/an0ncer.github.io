@@ -11,14 +11,8 @@
             .title-witch-icon {
                 display: flex;
                 align-items: center;
-                gap: 10px;
                 font-weight: 700;
-
-                svg {
-                    width: 10px;
-                    height: 12px;
-                    fill: #fff;
-                }
+                font-size: 16px;
             }
 
             .btn-window-close {
@@ -37,140 +31,464 @@
             }
         }
 
-        .content-notifycation {
-            border-top: 1px solid rgba(255, 255, 255, 0.20);
+        //Поиск в уведомлениях
+        label.notify-search {
             display: flex;
-            flex-direction: column;
+            height: 45px;
+            overflow: hidden;
+            border-radius: 3px;
+            position: relative;
 
-            .notifycation {
-                cursor: pointer;
-                padding: 10px 0;
-                margin-top: 10px;
-                display: flex;
-                position: relative;
-                overflow: hidden;
+            .icon {
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 40px;
+                display: grid;
+                place-items: center;
+                transition: .3s ease-in-out;
 
-                .notify-status{
-                    width: 100%;
-                    display: grid;
-                    place-items: center;
-                    font-weight: 700;
-                    opacity: .3;
+                svg {
+                    width: 16px;
+                    fill: #fff;
+                    opacity: 0.7;
+                }
+            }
+
+            input {
+                width: 100%;
+                border-radius: 0;
+                border: none;
+                background: #282D39;
+                color: #fff;
+                padding-left: 10px;
+                font-family: Manrope;
+
+                &::placeholder {
+                    padding-left: 30px;
+                    color: #fff;
+                    opacity: 0.7;
+                    transition: .3s ease-in-out;
                 }
 
-                .controlls-read {
-                    background: #2393F1;
-                    display: grid;
-                    place-items: center;
-                    width: 0px; // 100px
-                    margin-right: 0px; // 10px
-                    overflow: hidden;
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    left: 0;
-                    z-index: 10;
-
-                    // transition: .3s ease-in-out;
-                    svg {
-                        fill: #fff;
-                    }
-                }
-
-                .controlls-del {
-                    background: #f12323;
-                    display: grid;
-                    place-items: center;
-                    width: 0px; // 100px
-                    margin-left: 0px; // 10px
-                    overflow: hidden;
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    bottom: 0;
-                    z-index: 10;
-
-                    // transition: .3s ease-in-out;
-                    svg {
-                        fill: #fff;
-                    }
-                }
-
-                &-cnt {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 5px;
-                    width: 100%;
-
-                    &-type-date {
-                        display: flex;
-                        justify-content: space-between;
-                        color: #FFF;
-                        font-family: Manrope;
-
-                        &>.notify-type {
-                            font-size: 14px;
-                            font-weight: 700;
-                            display: flex;
-                            align-items: center;
-
-                            .read-false {
-                                width: 5px;
-                                height: 5px;
-                                background: #2393F1;
-                                border-radius: 50%;
-                                margin-right: 5px;
-                            }
-                        }
-
-                        &>.notify-date {
-                            font-size: 13px;
-                            font-weight: 400;
-                        }
+                @supports (-moz-appearance:none) {
+                    &:placeholder-shown {
+                        padding-left: 40px;
+                        transition: .3s ease-in-out;
                     }
 
-                    &-text>div {
-                        font-size: 13px;
-                        font-style: normal;
-                        font-weight: 400;
-                    }
-
-                    &-tags {
-                        display: flex;
-                        justify-content: space-between;
-                        &-list {
-                            display: flex;
-                            gap: 10px;
-
-                            div {
-                                background: #2393F1;
-                                border-radius: 3px;
-                                font-size: 10px;
-                                font-weight: 600;
-                                padding: 3px 6px;
-                            }
-                        }
-                        &-onshow{
-                            display: grid;
-                            place-items: center;
-                            aspect-ratio: 1 / 1;
-                            height: 100%;
-                            background: #5c5c5c;
-                            border-radius: 3px;
-                            position: relative;
-                            svg{
-                                fill: #fff;
-                                width: 10px;
-                                position: absolute;
-                            }
-
-                            .loaded, .error{
-                                opacity: 0;
-                            }
+                    &:focus {
+                        &:placeholder-shown {
+                            padding-left: 10px;
                         }
                     }
                 }
             }
+
+            &>input:focus {
+                &::placeholder {
+                    padding-left: 0px;
+                }
+            }
+
+            input:focus~.icon {
+                opacity: 0;
+            }
+
+            input:not(:placeholder-shown)~.icon {
+                opacity: 0;
+            }
         }
+
+        //Филтр в уведомлениях
+        .notify-filter {
+            border-radius: 3px;
+            background: #282D39;
+
+            display: flex;
+            height: 40px;
+            padding: 2px;
+            align-items: flex-start;
+            gap: 10px;
+            align-self: stretch;
+
+            .block-filter {
+                display: flex;
+                padding: 10px;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                font-size: 13px;
+                flex: 1 0 0;
+                align-self: stretch;
+                cursor: pointer;
+
+                &.selected {
+                    border-radius: 3px;
+                    background: #51B2FF;
+                }
+            }
+        }
+
+        //Уведомление
+        .content-notifycation {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+
+            .notifycation {
+                cursor: pointer;
+                padding: 7px 10px 7px 0px;
+                display: flex;
+                position: relative;
+                overflow: hidden;
+                gap: 10px;
+                border-radius: 3px;
+                background: #203544;
+
+                .status-unread {
+                    width: 2px;
+                    align-self: stretch;
+                    background: #51B2FF;
+                }
+
+                .notification-data {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 5px;
+                    flex: 1 0 0;
+
+                    .notify-title-date {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: flex-start;
+                        align-self: stretch;
+
+                        color: #FFF;
+                        font-family: Manrope;
+                        font-size: 13px;
+                        font-style: normal;
+                        font-weight: 700;
+                        line-height: normal;
+                    }
+
+                    .notify-text {
+                        color: #FFF;
+                        font-family: Manrope;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                    }
+
+                    .notify-user-info {
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 10px;
+                        align-self: stretch;
+
+                        .anime-episodes {
+                            display: flex;
+                            padding: 5px 10px;
+                            align-items: center;
+                            gap: 10px;
+
+                            border-radius: 3px;
+                            background: rgba(81, 178, 255, 0.10);
+
+                            color: #51B2FF;
+                            font-weight: 700;
+                            font-family: Manrope;
+                            font-size: 10px;
+
+                            svg {
+                                fill: #51B2FF;
+                                width: 12px;
+                            }
+                        }
+
+                        .voice-status {
+                            display: flex;
+
+                            &>div {
+                                display: flex;
+                                padding: 5px 10px;
+                                align-items: center;
+                                gap: 10px;
+                                border-radius: 3px;
+
+                                font-family: Manrope;
+                                font-size: 10px;
+                                font-style: normal;
+                                font-weight: 700;
+                                line-height: normal;
+
+                                svg {
+                                    height: 12px;
+                                }
+
+                                &.available {
+                                    background: rgba(52, 222, 49, 0.10);
+                                    color: #34DE31;
+
+                                    svg {
+                                        fill: #34DE31;
+                                    }
+                                }
+
+                                &.unavailable {
+                                    background: rgba(222, 49, 49, 0.10);
+                                    color: #DE3131;
+
+                                    svg {
+                                        fill: #DE3131;
+                                    }
+                                }
+
+                                &.load {
+                                    background: rgba(199, 199, 199, 0.10);
+                                    color: #C7C7C7;
+
+                                    svg {
+                                        fill: #C7C7C7;
+                                    }
+                                }
+                            }
+
+                            &.available {
+
+                                .unavailable,
+                                .load {
+                                    display: none;
+                                }
+                            }
+
+                            &.load {
+
+                                .unavailable,
+                                .available {
+                                    display: none;
+                                }
+                            }
+
+                            &.unvailable {
+
+                                .available,
+                                .load {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .empty-notify {
+                    display: flex;
+                    height: 120px;
+                    padding: 10px;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    flex: 1 0 0;
+
+                    border-radius: 8px;
+                    border: 1px solid #51B2FF;
+                    background: #282D39;
+                    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+
+                    color: rgba(255, 255, 255, 0.70);
+                    text-align: center;
+                    font-family: Manrope;
+                    font-size: 12px;
+                    font-weight: 700;
+
+                    svg {
+                        height: 34px;
+                        fill: #FFF;
+                        opacity: 0.70;
+                    }
+                }
+
+                &.empty-notify {
+                    border-radius: 0;
+                    background: none;
+                    padding: 0;
+                }
+
+                &.true {
+                    padding: 7px 10px;
+                }
+
+                .read-event,
+                .remove-event {
+                    display: grid;
+                    position: absolute;
+                    border-radius: 3px;
+                    max-width: 85px;
+                    width: 0%;
+                    top: 0;
+                    bottom: 0;
+                    place-items: center;
+
+                    svg {
+                        fill: #fff;
+                        width: 22%;
+                    }
+                }
+
+                .remove-event {
+                    right: 0;
+
+                    background: #DE3131;
+                }
+
+                .read-event {
+                    left: 0;
+                    background: #51B2FF;
+                }
+            }
+
+            &.unread{
+                .notifycation.true{
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.scale-down-center {
+    -webkit-animation: scale-down-center 0.3s cubic-bezier(0.550, 0.085, 0.680, 0.530) infinite alternate-reverse both;
+    animation: scale-down-center 0.3s cubic-bezier(0.550, 0.085, 0.680, 0.530) infinite alternate-reverse both;
+}
+
+/* ----------------------------------------------
+ * Generated by Animista on 2023-11-15 0:29:59
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+
+/**
+ * ----------------------------------------
+ * animation scale-down-center
+ * ----------------------------------------
+ */
+@-webkit-keyframes scale-down-center {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    100% {
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+    }
+}
+
+@keyframes scale-down-center {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    100% {
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+    }
+}
+
+.jello-horizontal {
+    -webkit-animation: jello-horizontal 0.9s both;
+    animation: jello-horizontal 0.9s both;
+}
+
+/* ----------------------------------------------
+ * Generated by Animista on 2023-11-15 0:31:53
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+
+/**
+ * ----------------------------------------
+ * animation jello-horizontal
+ * ----------------------------------------
+ */
+@-webkit-keyframes jello-horizontal {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+
+    30% {
+        -webkit-transform: scale3d(1.25, 0.75, 1);
+        transform: scale3d(1.25, 0.75, 1);
+    }
+
+    40% {
+        -webkit-transform: scale3d(0.75, 1.25, 1);
+        transform: scale3d(0.75, 1.25, 1);
+    }
+
+    50% {
+        -webkit-transform: scale3d(1.15, 0.85, 1);
+        transform: scale3d(1.15, 0.85, 1);
+    }
+
+    65% {
+        -webkit-transform: scale3d(0.95, 1.05, 1);
+        transform: scale3d(0.95, 1.05, 1);
+    }
+
+    75% {
+        -webkit-transform: scale3d(1.05, 0.95, 1);
+        transform: scale3d(1.05, 0.95, 1);
+    }
+
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+@keyframes jello-horizontal {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+
+    30% {
+        -webkit-transform: scale3d(1.25, 0.75, 1);
+        transform: scale3d(1.25, 0.75, 1);
+    }
+
+    40% {
+        -webkit-transform: scale3d(0.75, 1.25, 1);
+        transform: scale3d(0.75, 1.25, 1);
+    }
+
+    50% {
+        -webkit-transform: scale3d(1.15, 0.85, 1);
+        transform: scale3d(1.15, 0.85, 1);
+    }
+
+    65% {
+        -webkit-transform: scale3d(0.95, 1.05, 1);
+        transform: scale3d(0.95, 1.05, 1);
+    }
+
+    75% {
+        -webkit-transform: scale3d(1.05, 0.95, 1);
+        transform: scale3d(1.05, 0.95, 1);
+    }
+
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
     }
 }

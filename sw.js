@@ -1,4 +1,4 @@
-var version = '115';
+var version = '116';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     // Директория: /images/icons
@@ -20,14 +20,9 @@ var appShellFilesToCache = [
     "/images/popup.png",
     "/images/preview-image.png",
     "/images/splashscreen.png",
-    // Директория: /javascript/custom
-    "/javascript/custom/device.js",
-    "/javascript/custom/swtreilers.js",
-    "/javascript/custom/updatedialog.js",
     // Директория: /javascript/engine
     "/javascript/engine/event_handler.js",
     "/javascript/engine/orientation.js",
-    "/javascript/engine/window_managment.js",
     // Директория: /javascript/library
     "/javascript/library/anime.min.js",
     "/javascript/library/hls.js",
@@ -59,6 +54,8 @@ var appShellFilesToCache = [
     "/javascript/pages/search/mod_recomendation.js",
     "/javascript/pages/search/mod_search.js",
     "/javascript/pages/search/mod_searchState.js",
+    // Директория: /javascript/pages/settings
+    "/javascript/pages/settings/mod_select.js",
     // Директория: /javascript/pages/tunimeplayer
     "/javascript/pages/tunimeplayer/mod_animation.js",
     "/javascript/pages/tunimeplayer/mod_controls.js",

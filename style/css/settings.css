@@ -3,7 +3,8 @@ body {
   background: #101318;
   max-width: 900px;
   margin: 0 auto;
-  -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
+  -webkit-text-size-adjust: none;
+  /* Запрещает автоматическое изменение размера текста */
 }
 
 .wraper {
@@ -91,8 +92,18 @@ body {
 header {
   display: flex;
   flex-direction: column;
-  width: 100%;
   gap: 20px;
+  position: fixed;
+  z-index: 10;
+  background: #111318;
+  left: 0;
+  right: 0;
+  top: 0;
+  padding: 20px;
+}
+
+main {
+  margin-top: 111px;
 }
 
 .profile {
@@ -158,6 +169,7 @@ header {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  border: 0px solid #008afb;
 }
 .parameters-container label {
   background: #282D39;
@@ -217,6 +229,9 @@ header {
 }
 .parameters-container label.disable {
   opacity: 0.4;
+}
+.parameters-container label.founded {
+  border: 1px solid #008afb;
 }
 .parameters-container span.tips {
   color: rgba(255, 255, 255, 0.3);
@@ -565,21 +580,261 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   left: -18px;
 }
 
+.windowed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 300;
+  color: #FFF;
+  font-family: "Manrope";
+  display: block;
+  transition: 0.3s ease-in-out;
+}
+
+.windowed-right {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-family: "Manrope";
+  display: block;
+  transition: 0.3s ease-in-out;
+  z-index: 300;
+  color: #FFF;
+}
+
+.windowed.hide,
+.windowed-right.hide {
+  display: none;
+}
+.windowed.hide .hide-window,
+.windowed-right.hide .hide-window {
+  opacity: 0;
+}
+.windowed .hide-window,
+.windowed-right .hide-window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 1;
+  transition: 0.3s ease-in-out;
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+}
+
+.windowed-right .window-content {
+  background: #101318;
+  border-radius: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  flex-direction: column;
+  overflow-y: auto;
+  transition: 0.3s ease-in-out;
+  transform: translateX(100%);
+}
+.windowed-right .window-content .content-wraper {
+  padding-top: 20px;
+  padding-left: calc(env(safe-area-inset-left) + 20px);
+  padding-right: calc(env(safe-area-inset-right) + 20px);
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  display: grid;
+}
+.windowed-right .window-content.hide {
+  display: none;
+}
+
+.windowed .window-content {
+  background: #101318;
+  border-radius: 5px 5px 0px 0px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  right: 0;
+  flex-direction: column;
+  overflow-y: auto;
+  transition: 0.3s ease-in-out;
+  transform: translateY(100%);
+}
+.windowed .window-content .content-wraper {
+  padding-left: calc(env(safe-area-inset-left) + 20px);
+  padding-right: calc(env(safe-area-inset-right) + 20px);
+  padding-top: 20px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.windowed .window-content.hide {
+  display: none;
+}
+
 @media screen and (min-width: 900px) {
-  .select-wraper .select-control, .select-checkbox-wraper .select-control {
+  .windowed .window-content .content-wraper {
     max-width: 900px;
-    margin: 20px auto 0 auto;
+    margin: 0 auto;
+    width: 100%;
   }
-  .select-checkbox-wraper .wraper, .select-wraper .wraper {
-    max-width: 900px;
-    margin: 20px auto 0 auto;
+  .windowed-right .window-content {
+    left: auto;
+    max-width: 400px;
+    width: 100%;
   }
 }
-body[data-orientation="90"] main > div, body[data-orientation="90"] .wraper-input {
+.window-select .window-content, .window-select-mehr .window-content {
+  max-height: calc(100vh - env(safe-area-inset-top));
+  overflow-y: hidden;
+}
+.window-select .window-content .content-wraper, .window-select-mehr .window-content .content-wraper {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto auto auto;
+  overflow-y: hidden;
+}
+.window-select .window-content .content-wraper .window-bar, .window-select-mehr .window-content .content-wraper .window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.window-select .window-content .content-wraper .window-bar .window-title, .window-select-mehr .window-content .content-wraper .window-bar .window-title {
+  font-size: 14px;
+}
+.window-select .window-content .content-wraper .window-bar .window-close, .window-select-mehr .window-content .content-wraper .window-bar .window-close {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.window-select .window-content .content-wraper .window-bar .window-close svg, .window-select-mehr .window-content .content-wraper .window-bar .window-close svg {
+  fill: #fff;
+  width: 10px;
+}
+.window-select .window-content .content-wraper .content-selectes, .window-select .window-content .content-wraper .content-selectes-more, .window-select-mehr .window-content .content-wraper .content-selectes, .window-select-mehr .window-content .content-wraper .content-selectes-more {
+  background: #203544;
+  border-radius: 5px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes, .window-select .window-content .content-wraper .content-selectes-more .selectes, .window-select-mehr .window-content .content-wraper .content-selectes .selectes, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes {
+  color: #fff;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes .variant, .window-select .window-content .content-wraper .content-selectes-more .selectes .variant, .window-select-mehr .window-content .content-wraper .content-selectes .selectes .variant, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes .variant {
+  font-family: Manrope;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+  height: 45px;
+  align-items: center;
+  padding-left: 10px;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes .variant .variant-key, .window-select .window-content .content-wraper .content-selectes-more .selectes .variant .variant-key, .window-select-mehr .window-content .content-wraper .content-selectes .selectes .variant .variant-key, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes .variant .variant-key {
+  font-weight: 700;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes .variant .variant-selected, .window-select .window-content .content-wraper .content-selectes-more .selectes .variant .variant-selected, .window-select-mehr .window-content .content-wraper .content-selectes .selectes .variant .variant-selected, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes .variant .variant-selected {
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes .variant .variant-selected .circle, .window-select .window-content .content-wraper .content-selectes-more .selectes .variant .variant-selected .circle, .window-select-mehr .window-content .content-wraper .content-selectes .selectes .variant .variant-selected .circle, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes .variant .variant-selected .circle {
+  display: grid;
+  width: 14px;
+  height: 14px;
+  background: #3587E6;
+  border-radius: 50%;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes .voice-save, .window-select .window-content .content-wraper .content-selectes-more .selectes .voice-save, .window-select-mehr .window-content .content-wraper .content-selectes .selectes .voice-save, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes .voice-save {
+  min-width: 45px;
+  min-height: 45px;
+  max-width: 45px;
+  max-height: 45px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes .voice-save svg, .window-select .window-content .content-wraper .content-selectes-more .selectes .voice-save svg, .window-select-mehr .window-content .content-wraper .content-selectes .selectes .voice-save svg, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes .voice-save svg {
+  fill: #fff;
+  width: 14px;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes .voice-save .select, .window-select .window-content .content-wraper .content-selectes-more .selectes .voice-save .select, .window-select-mehr .window-content .content-wraper .content-selectes .selectes .voice-save .select, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes .voice-save .select {
+  display: none;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes .voice-save.select svg.select, .window-select .window-content .content-wraper .content-selectes-more .selectes .voice-save.select svg.select, .window-select-mehr .window-content .content-wraper .content-selectes .selectes .voice-save.select svg.select, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes .voice-save.select svg.select {
+  display: block;
+  fill: #3587E6;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes .voice-save.select svg.unselect, .window-select .window-content .content-wraper .content-selectes-more .selectes .voice-save.select svg.unselect, .window-select-mehr .window-content .content-wraper .content-selectes .selectes .voice-save.select svg.unselect, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes .voice-save.select svg.unselect {
+  display: none;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes.empty, .window-select .window-content .content-wraper .content-selectes-more .selectes.empty, .window-select-mehr .window-content .content-wraper .content-selectes .selectes.empty, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes.empty {
+  height: 45px;
+  display: grid;
+  place-items: center;
+  font-family: Manrope;
+  font-size: 15px;
+  justify-content: center;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes.select, .window-select .window-content .content-wraper .content-selectes-more .selectes.select, .window-select-mehr .window-content .content-wraper .content-selectes .selectes.select, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes.select {
+  background: #3587E6;
+}
+.window-select .window-content .content-wraper .content-selectes .selectes.select .variant .variant-selected .circle, .window-select .window-content .content-wraper .content-selectes-more .selectes.select .variant .variant-selected .circle, .window-select-mehr .window-content .content-wraper .content-selectes .selectes.select .variant .variant-selected .circle, .window-select-mehr .window-content .content-wraper .content-selectes-more .selectes.select .variant .variant-selected .circle {
+  background: #fff;
+}
+.window-select .window-content .content-wraper .window-footer, .window-select-mehr .window-content .content-wraper .window-footer {
+  color: rgba(255, 255, 255, 0.6);
+  display: grid;
+  place-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 900px) {
+  .select-wraper .select-control,
+  .select-checkbox-wraper .select-control {
+    max-width: 900px;
+    margin: 20px auto 0 auto;
+  }
+  .select-checkbox-wraper .wraper,
+  .select-wraper .wraper {
+    max-width: 900px;
+    margin: 20px auto 0 auto;
+  }
+  header {
+    max-width: 860px;
+    left: auto;
+    right: auto;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+body[data-orientation="90"] main > div,
+body[data-orientation="90"] .wraper-input {
   margin-right: max(10px, env(safe-area-inset-right));
   margin-left: 10px;
 }
-body[data-orientation="270"] main > div, body[data-orientation="270"] .wraper-input {
+body[data-orientation="270"] main > div,
+body[data-orientation="270"] .wraper-input {
   margin-left: max(20px, env(safe-area-inset-left));
   margin-right: 10px;
 }

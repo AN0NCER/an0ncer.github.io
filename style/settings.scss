@@ -4,7 +4,8 @@ body {
     background: $main_bg;
     max-width: 900px;
     margin: 0 auto;
-    -webkit-text-size-adjust: none; /* Запрещает автоматическое изменение размера текста */
+    -webkit-text-size-adjust: none;
+    /* Запрещает автоматическое изменение размера текста */
 }
 
 .wraper {
@@ -83,8 +84,18 @@ body {
 header {
     display: flex;
     flex-direction: column;
-    width: 100%;
     gap: 20px;
+    position: fixed;
+    z-index: 10;
+    background: #111318;
+    left: 0;
+    right: 0;
+    top: 0;
+    padding: 20px;
+}
+
+main{
+    margin-top: 111px;
 }
 
 .profile {
@@ -156,6 +167,7 @@ header {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    border: 0px solid #008afb;
 
     label {
         background: #282D39;
@@ -202,13 +214,14 @@ header {
                 align-items: center;
                 justify-content: center;
                 margin-right: 5px;
-                svg{
+
+                svg {
                     display: none;
                 }
             }
 
-            input:checked+.switch-check{
-                svg{
+            input:checked+.switch-check {
+                svg {
                     display: block;
                 }
             }
@@ -226,6 +239,10 @@ header {
 
     label.disable {
         opacity: .4;
+    }
+
+    label.founded {
+        border: 1px solid #008afb;
     }
 
     span.tips {
@@ -298,7 +315,7 @@ footer {
     padding-bottom: calc(env(safe-area-inset-bottom) + 61px);
 }
 
-.margin-bottom{
+.margin-bottom {
     margin-bottom: 10px;
 }
 
@@ -341,26 +358,42 @@ footer {
 }
 
 @import './phone_menu';
+@import './windowed';
+@import './settings/slectwindow';
 
 @media screen and (min-width: 900px) {
-    .select-wraper, .select-checkbox-wraper{
-        .select-control{
+
+    .select-wraper,
+    .select-checkbox-wraper {
+        .select-control {
             max-width: 900px;
             margin: 20px auto 0 auto;
         }
     }
-    .select-checkbox-wraper, .select-wraper{
-        .wraper{
+
+    .select-checkbox-wraper,
+    .select-wraper {
+        .wraper {
             max-width: 900px;
             margin: 20px auto 0 auto;
         }
+    }
+
+    header{
+        max-width: 860px;
+        left: auto;
+        right: auto;
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 
 body {
     &[data-orientation="90"] {
 
-        main > div, .wraper-input{
+        main>div,
+        .wraper-input {
             margin-right: max(10px, env(safe-area-inset-right));
             margin-left: 10px;
         }
@@ -368,7 +401,8 @@ body {
 
     &[data-orientation="270"] {
 
-        main > div, .wraper-input{
+        main>div,
+        .wraper-input {
             margin-left: max(20px, env(safe-area-inset-left));
             margin-right: 10px;
         }

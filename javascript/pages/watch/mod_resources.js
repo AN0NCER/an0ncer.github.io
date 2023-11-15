@@ -258,7 +258,6 @@ export async function LoadAnime(event = () => { }, logged = false) {
 
                 if (
                     $PARAMETERS.watch.dubanime &&
-                    $PARAMETERS.watch.dubanimefrc &&
                     response.nodes &&
                     response.nodes.length > 0
                 ) {

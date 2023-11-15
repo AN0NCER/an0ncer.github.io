@@ -167,11 +167,6 @@
             <span class="content-wraper">
                 <div class="title-content">
                     <div class="title-witch-icon">
-                        <svg width="10" height="13" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M5.71457 1.25V1.66906C7.33296 1.93883 8.57186 3.41094 8.57186 5.1875V5.97031C8.57186 7.03437 8.91786 8.06797 9.54958 8.9L9.88219 9.33594C10.0117 9.50469 10.0362 9.73672 9.94692 9.93125C9.85763 10.1258 9.67012 10.25 9.46476 10.25H0.535745C0.329708 10.25 0.142087 10.1258 0.0528862 9.93125C-0.036337 9.73672 -0.0112465 9.50469 0.117421 9.33594L0.45025 8.9C1.08354 8.06797 1.42865 7.03437 1.42865 5.97031V5.1875C1.42865 3.41094 2.66755 1.93883 4.28593 1.66906V1.25C4.28593 0.835859 4.60514 0.5 5.00025 0.5C5.39536 0.5 5.71457 0.835859 5.71457 1.25ZM4.82167 2.75C3.54036 2.75 2.50013 3.84219 2.50013 5.1875V5.97031C2.50013 7.09297 2.19029 8.1875 1.61415 9.125H8.38658C7.81066 8.1875 7.50037 7.09297 7.50037 5.97031V5.1875C7.50037 3.84219 6.46014 2.75 5.17883 2.75H4.82167ZM6.42889 11C6.42889 11.3773 6.27933 11.7805 6.01146 12.0617C5.74359 12.343 5.35964 12.5 5.00025 12.5C4.62077 12.5 4.25691 12.343 3.98904 12.0617C3.72117 11.7805 3.57161 11.3773 3.57161 11H6.42889Z"
-                                fill="white" />
-                        </svg>
                         Уведомления
                     </div>
                     <div class="btn-window-close">
@@ -182,11 +177,29 @@
                         </svg>
                     </div>
                 </div>
+                <!-- <label class="notify-search">
+                    <input type="text" name="" id="notify-search-input" autocomplete="new-password" placeholder="Поиск">
+                    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path
+                                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z">
+                            </path>
+                        </svg>
+                    </div>
+                </label> -->
+
+                <div class="notify-filter">
+                    <div class="block-filter selected" id="all">Все</div>
+                    <div class="block-filter" id="unread">Непрочитанные</div>
+                </div>
 
                 <div class="content-notifycation">
-                    <div class="notifycation">
-                        <div class="notify-status">
-                            Загрузка
+                    <div class="notifycation empty-notify">
+                        <div class="empty-notify">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512">
+                                <path
+                                    d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7l-87.5-68.6c.5-1.7 .7-3.5 .7-5.4c0-27.6-11-54.1-30.5-73.7L512 320c-20.5-20.5-32-48.3-32-77.3V208c0-77.4-55-142-128-156.8V32c0-17.7-14.3-32-32-32s-32 14.3-32 32V51.2c-42.6 8.6-79 34.2-102 69.3L38.8 5.1zM160 242.7c0 29-11.5 56.8-32 77.3l-1.5 1.5C107 341 96 367.5 96 395.2c0 11.5 9.3 20.8 20.8 20.8H406.2L160 222.1v20.7zM384 448H320 256c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z" />
+                            </svg>
+                            <span>Нет уведомлений</span>
                         </div>
                     </div>
                 </div>
@@ -223,13 +236,9 @@
     <script src="/javascript/library/anime.min.js"></script>
     <!--Custom library-->
     <script src="/javascript/server.js"></script>
-    <!-- <script src="/javascript/engine/window_managment.js"></script> -->
-    <!-- <script src="/javascript/custom/updatedialog.js"></script> -->
     <script src="/javascript/parametrs.js"></script>
-    <script src="/javascript/shikimori.js"></script>
     <script src="/javascript/kodik.js"></script>
     <script src="/javascript/pages/index.js" type="module"></script>
-    <!-- <script src="/javascript/custom/swtreilers.js"></script> -->
     <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 

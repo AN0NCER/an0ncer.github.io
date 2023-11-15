@@ -71,6 +71,10 @@ html {
 .wrapper-player .sliders .cur-slider .content .pointer svg {
   fill: #2672DA;
 }
+.wrapper-player .sliders.mouseenter .cur-slider .content .pointer,
+.wrapper-player .sliders.mouseenter .end-slider .content .pointer {
+  display: block;
+}
 .wrapper-player .sliders .cur-slider,
 .wrapper-player .sliders .end-slider {
   position: absolute;
@@ -90,6 +94,10 @@ html {
   padding: 20px;
   cursor: pointer;
 }
+.wrapper-player .sliders .cur-slider .content .pointer.hide,
+.wrapper-player .sliders .end-slider .content .pointer.hide {
+  display: none;
+}
 .wrapper-player .sliders .cur-slider .content .pointer.mouseenter,
 .wrapper-player .sliders .end-slider .content .pointer.mouseenter {
   display: block;
@@ -107,10 +115,6 @@ html {
 }
 .wrapper-player .sliders .end-slider .content .pointer svg {
   fill: #DA2626;
-}
-.wrapper-player .sliders.mouseenter .cur-slider .content .pointer,
-.wrapper-player .sliders.mouseenter .end-slider .content .pointer {
-  display: block;
 }
 .wrapper-player .sliders.ct-moved {
   display: block;

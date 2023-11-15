@@ -1,28 +1,23 @@
 const $PARAMETERS = {
     censored: true,
     autologin: false,
-    develop: false,
-    menuver: true,
-    type_notify: ["episode"],
+    menu: {
+        menuver: true,
+        menustyle: 'mode-0',
+        menureverse: false,
+    },
     anime: {
         syncdata: true,
     },
     watch: {
         dubanime: false,
-        dubanimefrc: false,
-        showplayer: true,
         episrevers: 'left',
         typefrc: ["TV Сериал", "Фильм", "ONA", "OVA"],
         saveinfo: false,
     },
-    download:{
+    download: {
         dquality: '720',
         dasync: true,
-        dtitle: {
-            dtranslation: true,
-            denglish: true
-        },
-        dexten: 'tun',
         dautosave: true
     },
     player: {
@@ -31,7 +26,8 @@ const $PARAMETERS = {
         full: true,
         standart_controls: false,
         autonekst: true,
-    }
+    },
+    develop: false
 };
 
 (() => {

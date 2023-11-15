@@ -285,11 +285,11 @@ function DownloadCompleated() {
 }
 
 function DownloadLocalVideo() {
-    const translation = $PARAMETERS.download.dtitle.dtranslation ? `-${_data.translation}` : '';
+    const translation = `-${_data.translation}`;
     // Создаем ссылку для скачивания
     const dL = document.createElement('a');
     dL.href = downloadLink;
-    dL.download = `${_data.name}-${selected}${translation}.${$PARAMETERS.download.dexten}`;
+    dL.download = `${_data.name}-${selected}${translation}.ts`;
     // Автоматически нажимаем на ссылку для скачивания
     dL.click();
     // Очищаем ссылку и удаляем ее из DOM
@@ -336,7 +336,7 @@ const WindowDownload = {
             _downloadAnime(e.currentTarget);
         });
 
-        $('.bar-download > .window-close').on('click', function() {
+        $('.bar-download > .window-close').on('click', function () {
             _windowDownload.hide();
         });
     },
@@ -347,11 +347,7 @@ const WindowDownload = {
         const data = Player().data[id];
         $('.download-info > .voice').text(data.translation.title);
         $('.download-info > .quality').text($PARAMETERS.download.dquality);
-        if ($PARAMETERS.download.dtitle.denglish) {
-            _data.name = data.title_orig;
-        } else {
-            _data.name = data.title;
-        }
+        _data.name = data.title_orig;
         _data.link = data.link;
         _data.translation = data.translation.title;
     },
