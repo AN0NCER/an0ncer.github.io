@@ -1537,8 +1537,8 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 .content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status.load .available {
   display: none;
 }
-.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status.unvailable .available,
-.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status.unvailable .load {
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status.unavailable .available,
+.content-notify .content-wraper .content-notifycation .notifycation .notification-data .notify-user-info .voice-status.unavailable .load {
   display: none;
 }
 .content-notify .content-wraper .content-notifycation .notifycation .empty-notify {
