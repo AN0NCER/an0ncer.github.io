@@ -1,4 +1,4 @@
-var version = '116';
+var version = '117';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     // Директория: /images/icons
