@@ -337,7 +337,7 @@ const WindowDownload = {
         });
 
         $('.bar-download > .window-close').on('click', function () {
-            _windowDownload.hide();
+            WindowDownload.hide();
         });
     },
 
@@ -350,10 +350,12 @@ const WindowDownload = {
         _data.name = data.title_orig;
         _data.link = data.link;
         _data.translation = data.translation.title;
+        $("body").addClass("loading");
     },
 
     hide: function () {
-
+        _windowDownload.hide();
+        $("body").removeClass("loading");
     },
 
     verif: function () {

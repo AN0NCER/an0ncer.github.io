@@ -1,5 +1,9 @@
 $bg: #101318;
 
+html, body{
+    scrollbar-gutter: stable;
+ }
+
 body {
     background: $bg;
     -webkit-text-size-adjust: none;
