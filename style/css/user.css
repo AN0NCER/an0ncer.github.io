@@ -680,9 +680,14 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   justify-content: center;
   align-items: center;
   gap: 3px;
-  color: #FFFFFF;
+  color: #fff;
   font-family: "Nova Square";
   font-size: 12px;
+  z-index: 5;
+}
+.card-anime .card-content .my-score svg {
+  fill: #fff;
+  display: none;
 }
 .card-anime .card-information {
   margin-top: 10px;

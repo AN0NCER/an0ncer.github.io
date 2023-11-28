@@ -1,6 +1,7 @@
 .content-notify {
     .content-wraper {
         grid-template-rows: auto 1fr;
+        overscroll-behavior: contain;
         gap: 10px;
 
         .title-content {

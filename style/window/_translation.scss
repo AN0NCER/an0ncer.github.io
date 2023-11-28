@@ -2,6 +2,7 @@
     .window-content {
         max-height: calc(100vh - env(safe-area-inset-top));
         overflow-y: hidden;
+        overscroll-behavior: contain;
 
         .content-wraper {
             display: grid;
