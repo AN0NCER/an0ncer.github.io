@@ -26,6 +26,7 @@ const $PARAMETERS = {
         full: true,
         standart_controls: false,
         autonekst: true,
+        autoquality: true
     },
     develop: false
 };
