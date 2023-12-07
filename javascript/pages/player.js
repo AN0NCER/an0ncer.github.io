@@ -1,8 +1,8 @@
 import { InitUI, InitUICallbacks, ResetUI } from "./player/mod_ui.js";
-import { InitEvent, onDuration$ } from "./player/mod_event.js";
-import { InitFunctions } from "./player/mod_functions.js";
+import { InitEvent, onPlay$ } from "./player/mod_event.js";
+import { InitFunctions, ResetFunctions } from "./player/mod_functions.js";
 import { InitAPI, ParentWindow, SendAPI } from "./player/mod_api.js";
-import { InitSettings, QUALITY } from "./player/mod_settings.js";
+import { FULL_PLAYER, InitSettings, QUALITY } from "./player/mod_settings.js";
 import { AnimLoadPlayer } from "./player/mod_animation.js";
 import { LoadM3U8, LoadM3U8Episode } from "./player/mod_stream.js";
 
@@ -20,7 +20,14 @@ export async function LoadEpisode(e) {
     if (!e) return;
     AnimLoadPlayer.start();
     ResetUI();
+    ResetFunctions();
     const stream_file = await LoadM3U8Episode(AnimeQuery.id, e);
+    let b = onBuffered$.subscribe({
+        next: () => {
+            Player.play();
+            b.unsubscribe();
+        }
+    });
     LoadPlayer(stream_file);
 }
 
@@ -114,10 +121,18 @@ function InitPlayer() {
  * @param {string} stream_file - URL link к файлу m3u8
  */
 function LoadPlayer(stream_file) {
-    let s = onDuration$.subscribe({
+    let s = onBuffered$.subscribe({
         next: () => {
             AnimLoadPlayer.stop();
             s.unsubscribe();
+        }
+    });
+    let f = onPlay$.subscribe({
+        next: () => {
+            if(FULL_PLAYER){
+                toggleFullScreen();
+            }
+            f.unsubscribe();
         }
     });
     if (Hls.isSupported()) {

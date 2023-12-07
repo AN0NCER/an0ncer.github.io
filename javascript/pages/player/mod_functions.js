@@ -22,6 +22,8 @@ const onEndTime$ = new rxjs.Subject();
 //Вызов при воспроизведении x2
 export const onPlaybackRate2$ = new rxjs.Subject();
 
+let api_nexte_called = false;
+
 /**
  * Инициализация функций плеера
  */
@@ -147,9 +149,10 @@ export function InitFunctions() {
     onTimeUpdate$.subscribe({
         next: () => {
             if (AUTO_NEKST && END_TIME != 0) {
-                if (Player.currentTime >= END_TIME) {
+                if (Player.currentTime >= END_TIME && !api_nexte_called) {
                     Player.pause();
                     SendAPI.next();
+                    api_nexte_called = !api_nexte_called;
                 }
             }
         }
@@ -169,6 +172,10 @@ export function InitFunctions() {
     CurrentPointScroll();
     TrimPointScroll();
     InitShortcuts();
+}
+
+export function ResetFunctions(){
+    api_nexte_called = false;
 }
 
 onEndTime$.subscribe({
