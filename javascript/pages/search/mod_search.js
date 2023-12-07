@@ -1,6 +1,6 @@
 import { ACard } from "../../modules/AnimeCard.js";
 import { Animes } from "../../modules/ShikiAPI.js";
-import { TrackElement } from "../../modules/funcitons.js";
+import { Sleep, TrackElement } from "../../modules/funcitons.js";
 import { SearchHistory } from "./mod_history.js";
 import { SetState, GetState } from "./mod_searchState.js";
 
