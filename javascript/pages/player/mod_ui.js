@@ -96,6 +96,7 @@ export function InitUICallbacks() {
             if (onSettings) {
                 ClickSettings();
             }
+            subControls$.next('p.play');
         }
     });
     onBuffered$.subscribe({
@@ -146,9 +147,9 @@ export function InitUICallbacks() {
     });
     onPlaybackRate2$.subscribe({
         next: (israte) => {
-            if(israte){
+            if (israte) {
                 AnimRate.show();
-            }else{
+            } else {
                 AnimRate.hide();
             }
         }
@@ -239,7 +240,13 @@ function SubscribePlayerControlsEvent() {
 //Здесь фильтруються сигналы для скрытия контроллера
 subControls$.subscribe({
     next: (targets) => {
-        if (onSettings || Player.paused || inCursor || inControls) {
+        if (Player.paused) {
+            $('.player-wrapper').removeClass('hide');
+            $('.controls-wrapper').removeClass('hide');
+            clearTimeout(timerHideControls);
+            return;
+        }
+        if (onSettings || inCursor || inControls) {
             clearTimeout(timerHideControls);
             return;
         }

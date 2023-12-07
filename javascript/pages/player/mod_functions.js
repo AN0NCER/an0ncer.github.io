@@ -150,7 +150,6 @@ export function InitFunctions() {
         next: () => {
             if (AUTO_NEKST && END_TIME != 0) {
                 if (Player.currentTime >= END_TIME && !api_nexte_called) {
-                    Player.pause();
                     SendAPI.next();
                     api_nexte_called = !api_nexte_called;
                 }
