@@ -40,5 +40,21 @@ export const ApiTunime = {
                 .then(function (data) { return resolve(data); })
                 .catch((res) => { console.log(res) });
         });
+    },
+
+    /**
+     * Создание обьединеного файла m3u8
+     * @param {string} q720 - ссылка на 720p
+     * @param {string} q480 - ссылка на 480p
+     * @param {string} q360 - ссылка на 360p
+     * @returns Ссылку на объединенный файл m3u8
+     */
+    link_file: function ({ q720 = undefined, q480 = undefined, q360 = undefined } = {}) {
+        const params = { q720, q480, q360 };
+        const queryParams = Object.entries(params)
+            .filter(([key, value]) => value !== undefined)
+            .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+            .join('&');
+        return `https://anime-m3u8.onrender.com/m3u8?${queryParams}`;
     }
 }

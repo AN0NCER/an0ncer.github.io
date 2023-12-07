@@ -257,7 +257,7 @@ function Functional() {
   //Функция изменение на плеер Tunime
   function ChangePlayer() {
     console.log(Player());
-    document.querySelector("#kodik-player").contentWindow.location.replace(`./tunimeplayer.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
+    document.querySelector("#kodik-player").contentWindow.location.replace(`./player.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
   }
 
   //Функция выбора текущей озвучки в избранное или удаление его

@@ -17,6 +17,7 @@ var appShellFilesToCache = [
     "/images/login-icon.png",
     "/images/logo-login.png",
     "/images/magnifying-glass.png",
+    "/images/player-icon.png",
     "/images/popup.png",
     "/images/preview-image.png",
     "/images/splashscreen.png",
@@ -26,8 +27,10 @@ var appShellFilesToCache = [
     // Директория: /javascript/library
     "/javascript/library/anime.min.js",
     "/javascript/library/hls.js",
-    "/javascript/library/hls.min.js.map",
+    "/javascript/library/hls.js.map",
     "/javascript/library/jqery.min.js",
+    "/javascript/library/rxjs.umd.min.js",
+    "/javascript/library/rxjs.umd.min.js.map",
     "/javascript/library/swiper-bundle.min.js",
     "/javascript/library/swiper-bundle.min.js.map",
     // Директория: /javascript/modules
@@ -48,6 +51,15 @@ var appShellFilesToCache = [
     "/javascript/pages/index/mod_trailers.js",
     "/javascript/pages/index/mod_trailers_animation.js",
     "/javascript/pages/index/mod_window.js",
+    // Директория: /javascript/pages/player
+    "/javascript/pages/player/mod_animation.js",
+    "/javascript/pages/player/mod_api.js",
+    "/javascript/pages/player/mod_event.js",
+    "/javascript/pages/player/mod_functions.js",
+    "/javascript/pages/player/mod_settings.js",
+    "/javascript/pages/player/mod_shortcuts.js",
+    "/javascript/pages/player/mod_stream.js",
+    "/javascript/pages/player/mod_ui.js",
     // Директория: /javascript/pages/search
     "/javascript/pages/search/mod_history.js",
     "/javascript/pages/search/mod_list.js",
@@ -56,10 +68,6 @@ var appShellFilesToCache = [
     "/javascript/pages/search/mod_searchState.js",
     // Директория: /javascript/pages/settings
     "/javascript/pages/settings/mod_select.js",
-    // Директория: /javascript/pages/tunimeplayer
-    "/javascript/pages/tunimeplayer/mod_animation.js",
-    "/javascript/pages/tunimeplayer/mod_controls.js",
-    "/javascript/pages/tunimeplayer/mod_events.js",
     // Директория: /javascript/pages/user
     "/javascript/pages/user/mod_history.js",
     // Директория: /javascript/pages/watch
@@ -76,9 +84,9 @@ var appShellFilesToCache = [
     "/javascript/pages/index.js",
     "/javascript/pages/list.js",
     "/javascript/pages/login.js",
+    "/javascript/pages/player.js",
     "/javascript/pages/search.js",
     "/javascript/pages/settings.js",
-    "/javascript/pages/tunimeplayer.js",
     "/javascript/pages/user.js",
     "/javascript/pages/watch.js",
     // Директория: /javascript
@@ -94,9 +102,9 @@ var appShellFilesToCache = [
     "/style/css/list.css",
     "/style/css/login.css",
     "/style/css/main.css",
+    "/style/css/player.css",
     "/style/css/search.css",
     "/style/css/settings.css",
-    "/style/css/tunimeplayer.css",
     "/style/css/user.css",
     "/style/css/watch.css",
     // Директория: /style/fonts
@@ -108,9 +116,9 @@ var appShellFilesToCache = [
     "/index.html",
     "/list.html",
     "/login.html",
+    "/player.html",
     "/search.html",
     "/settings.html",
-    "/tunimeplayer.html",
     "/user.html",
     "/watch.html",
 ];

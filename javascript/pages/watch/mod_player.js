@@ -419,7 +419,7 @@ const player = {
 
         let url = this.data_uri + "?hide_selectors=true" + "&episode=" + episode
         if ($PARAMETERS.player.standart) {
-            url = `tunimeplayer.html?id=${this.data_id}&e=${episode}`;
+            url = `player.html?id=${this.data_id}&e=${episode}`;
         }
         document
             .querySelector("#kodik-player")
@@ -443,7 +443,7 @@ const player = {
             interval = setInterval(() => {
                 try {
                     if (element.contentWindow.document) {
-                        if (element.contentWindow.window.location.href.indexOf("tunimeplayer") != -1) {
+                        if (element.contentWindow.window.location.href.indexOf("player") != -1) {
                             //Очищаем интервао
                             clearInterval(interval);
 
