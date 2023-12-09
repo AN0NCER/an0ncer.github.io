@@ -36,6 +36,7 @@ html {
 
                 .switch-button {
                     position: relative;
+                    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
                     svg {
                         position: absolute;
@@ -144,7 +145,8 @@ html {
                 right: 0;
                 top: 0;
                 z-index: 3;
-                &.hide{
+
+                &.hide {
                     display: none;
                 }
             }
@@ -334,21 +336,18 @@ html {
         left: 0;
         right: 0;
         bottom: 0;
-        // background: #ff00002f;
         display: flex;
         z-index: 49;
-        .left-event{
+
+        .left-event,
+        .right-event,
+        .center-event {
             width: 100%;
-        }
-        .center-event{
-            width: 100%;
-        }
-        .right-event{
-            width: 100%;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         }
     }
 
-    .video-speed{
+    .video-speed {
         position: absolute;
         display: grid;
         padding: 10px 20px;
@@ -356,7 +355,8 @@ html {
         left: -100px;
         background: #282A2E;
         border-radius: 3px;
-        svg{
+
+        svg {
             fill: #fff;
         }
     }

@@ -32,6 +32,7 @@ html {
 }
 .player-wrapper .controls-wrapper .player-controls .l-controls .switch-button {
   position: relative;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .player-wrapper .controls-wrapper .player-controls .l-controls .switch-button svg {
   position: absolute;
@@ -277,14 +278,11 @@ html {
   display: flex;
   z-index: 49;
 }
-.player-wrapper .points-event .left-event {
-  width: 100%;
-}
+.player-wrapper .points-event .left-event,
+.player-wrapper .points-event .right-event,
 .player-wrapper .points-event .center-event {
   width: 100%;
-}
-.player-wrapper .points-event .right-event {
-  width: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .player-wrapper .video-speed {
   position: absolute;
