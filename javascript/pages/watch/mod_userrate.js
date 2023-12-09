@@ -54,6 +54,12 @@ const user = {
         setEpisode: function (e, s = anime_status[1].sh[0]) {
             if (user.logged) {
                 if (user.rate) {
+                    if (user.rate.status == "completed")
+                        return;
+
+                    //Переключение на ниже эпизод 
+                    if (user.rate.episodes > e)
+                        return;
 
                     UserRates.show(user.rate.id, async (res) => {
                         if (res.failed && res.status == 429) {

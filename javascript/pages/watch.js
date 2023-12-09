@@ -125,7 +125,6 @@ ELA.onload(() => {
   History().shikiData = GetShikiData();
   History().screenData = GetShikiScreenshots();
   History().custom.init();
-  //Нводимся на плеер
   //Наводимся на плеер
   if ($SHOWPLAYER) {
     const element = document.querySelector(".landscape-player");
