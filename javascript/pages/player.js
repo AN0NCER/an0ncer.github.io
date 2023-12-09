@@ -1,5 +1,5 @@
 import { InitUI, InitUICallbacks, ResetUI } from "./player/mod_ui.js";
-import { InitEvent, onPlay$ } from "./player/mod_event.js";
+import { InitEvent, onDuration$, onPlay$ } from "./player/mod_event.js";
 import { InitFunctions, ResetFunctions } from "./player/mod_functions.js";
 import { InitAPI, ParentWindow, SendAPI } from "./player/mod_api.js";
 import { FULL_PLAYER, InitSettings, QUALITY } from "./player/mod_settings.js";
@@ -121,7 +121,7 @@ function InitPlayer() {
  * @param {string} stream_file - URL link к файлу m3u8
  */
 function LoadPlayer(stream_file) {
-    let s = onBuffered$.subscribe({
+    let s = onDuration$.subscribe({
         next: () => {
             AnimLoadPlayer.stop();
             s.unsubscribe();
