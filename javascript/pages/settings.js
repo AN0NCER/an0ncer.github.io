@@ -170,6 +170,12 @@ const Parameters = [
                 param: 'autoquality',
                 name: 'Авто качество',
                 description: 'Подгоняет качество под интернет, всегда будет пытаться воспроизводить на выбранном качестве. Рекомендуеться включить.'
+            },
+            {
+                type: 'boolean',
+                param: 'alternative_full',
+                name: 'Альтернативный fulsscreen',
+                description: 'Делает плеер на весь экран не переходя в fullscreen mode и оставляя контроллер Tunime. Больше подходит для IOS девайсов'
             }
         ]
     },

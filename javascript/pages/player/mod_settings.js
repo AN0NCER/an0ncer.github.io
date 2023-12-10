@@ -18,7 +18,7 @@ export const FULL_PLAYER = $PARAMETERS.player.full;
 export const AUTOQUALITY = $PARAMETERS.player.autoquality;
 export const STANDART = $PARAMETERS.player.standart;
 export const STANDART_CONTROLS = $PARAMETERS.player.standart_controls;
-export const ALTERNATIVE_FULLSCREEN = false;
+export const ALTERNATIVE_FULLSCREEN = $PARAMETERS.player.alternative_full;
 
 /**
  * Изменение качество видеоролика

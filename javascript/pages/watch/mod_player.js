@@ -298,6 +298,7 @@ const player = {
         played: [],
         error: [],
         next: [],
+        fullscreen: [],
 
         /**
          * Подписывается на обработчик загрузки плеера
@@ -330,6 +331,12 @@ const player = {
         onnext: function (e) {
             if (typeof e == "function" && e.length > 0) {
                 this.next.push(e);
+            }
+        },
+
+        onfullscreen: function (e) {
+            if (typeof e == "function" && e.length > 0) {
+                this.fullscreen.push(e);
             }
         }
     },
@@ -517,6 +524,10 @@ const player = {
         //Статус плеера переключение эпизода
         if (message.data.key == "tunime_next") {
             player.events.next.forEach((event) => event(player));
+        }
+
+        if(message.data.key == "tunime_fullscreen"){
+            player.events.fullscreen.forEach((event) => event(message.data.value));
         }
     },
 

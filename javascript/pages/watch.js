@@ -116,6 +116,15 @@ Main((e) => {
     SaveDataAnime(next_episode, e.translation.id);
     History().add(false, 0, 0, next_episode);
   });
+
+  //Альтернативный полный экран видеоплеера
+  Player().events.onfullscreen((e) => {
+    if (e.full) {
+      $('.player').addClass('fullscreen');
+    } else {
+      $('.player').removeClass('fullscreen');
+    }
+  });
 });
 
 //Выполнена загрузка аниме 
