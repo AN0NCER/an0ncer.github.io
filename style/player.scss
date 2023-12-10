@@ -95,6 +95,13 @@ html {
                             max-width: 0px;
                         }
                     }
+
+                }
+
+                @supports (-webkit-touch-callout: none) {
+                    .volume-slider, .volume {
+                        display: none;
+                    }
                 }
             }
 
@@ -322,6 +329,16 @@ html {
 
             label {
                 height: 45px;
+            }
+
+            @supports (-webkit-touch-callout: none) {
+                label.volume {
+                    display: none;
+                }
+
+                span.line:nth-child(4) {
+                    display: none;
+                }
             }
         }
 

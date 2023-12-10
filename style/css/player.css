@@ -75,6 +75,11 @@ html {
 .player-wrapper .controls-wrapper .player-controls .l-controls .volume-slider.hide .slide {
   max-width: 0px;
 }
+@supports (-webkit-touch-callout: none) {
+  .player-wrapper .controls-wrapper .player-controls .l-controls .volume-slider, .player-wrapper .controls-wrapper .player-controls .l-controls .volume {
+    display: none;
+  }
+}
 .player-wrapper .controls-wrapper .player-controls .l-controls,
 .player-wrapper .controls-wrapper .player-controls .r-controls {
   display: flex;
@@ -265,6 +270,14 @@ html {
 }
 .player-wrapper .controls-wrapper .player-settings label {
   height: 45px;
+}
+@supports (-webkit-touch-callout: none) {
+  .player-wrapper .controls-wrapper .player-settings label.volume {
+    display: none;
+  }
+  .player-wrapper .controls-wrapper .player-settings span.line:nth-child(4) {
+    display: none;
+  }
 }
 .player-wrapper .controls-wrapper.hide {
   display: none;
