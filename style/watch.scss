@@ -1,6 +1,7 @@
 $bg: #101318;
 
-html, body{
+html,
+body {
    scrollbar-gutter: stable;
 }
 
@@ -828,13 +829,16 @@ Player
       margin-right: 20px;
    }
 
-   &.fullscreen{
+   &.fullscreen {
       aspect-ratio: 16 / 10;
       width: 100%;
 
-      iframe{
+      iframe {
          position: fixed;
-         left: 0; top: 0; right: 0;bottom: 0;
+         left: 0;
+         top: 0;
+         right: 0;
+         bottom: 0;
          z-index: 999;
          margin: 0;
          aspect-ratio: auto;
@@ -1391,13 +1395,22 @@ footer {
 }
 
 @media (orientation: landscape) {
-   main{
+   main {
       padding-left: env(safe-area-inset-left);
       padding-right: env(safe-area-inset-right);
    }
-   header .bg-paralax-img img{
+
+   header .bg-paralax-img img {
       left: env(safe-area-inset-left);
       right: env(safe-area-inset-right);
       width: calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right));
    }
 }
+
+// @media screen and (width <=530px) and (orientation: portrait) {
+//    .player {
+//       iframe {
+//          aspect-ratio: 16/11;
+//       }
+//    }
+// }

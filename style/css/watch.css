@@ -1,5 +1,6 @@
 @charset "UTF-8";
-html, body {
+html,
+body {
   scrollbar-gutter: stable;
 }
 
