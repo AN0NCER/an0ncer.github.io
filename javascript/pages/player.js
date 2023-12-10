@@ -22,7 +22,7 @@ export async function LoadEpisode(e) {
     ResetUI();
     ResetFunctions();
     const stream_file = await LoadM3U8Episode(AnimeQuery.id, e);
-    let b = onBuffered$.subscribe({
+    let b = onDuration$.subscribe({
         next: () => {
             Player.play();
             b.unsubscribe();

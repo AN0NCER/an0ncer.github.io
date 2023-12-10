@@ -159,6 +159,7 @@ export function InitUICallbacks() {
 export function ResetUI() {
     $('.player-slides > .current-slid').css({ width: '' });
     $('.player-cursors > .current-cursor').css({ left: '' });
+    AnimButtonStatus.pause();
 }
 
 /**
