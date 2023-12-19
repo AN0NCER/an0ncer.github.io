@@ -116,6 +116,15 @@ Main((e) => {
     SaveDataAnime(next_episode, e.translation.id);
     History().add(false, 0, 0, next_episode);
   });
+
+  //Альтернативный полный экран видеоплеера
+  Player().events.onfullscreen((e) => {
+    if (e.full) {
+      $('.player').addClass('fullscreen');
+    } else {
+      $('.player').removeClass('fullscreen');
+    }
+  });
 });
 
 //Выполнена загрузка аниме 
@@ -125,7 +134,6 @@ ELA.onload(() => {
   History().shikiData = GetShikiData();
   History().screenData = GetShikiScreenshots();
   History().custom.init();
-  //Нводимся на плеер
   //Наводимся на плеер
   if ($SHOWPLAYER) {
     const element = document.querySelector(".landscape-player");
@@ -257,7 +265,7 @@ function Functional() {
   //Функция изменение на плеер Tunime
   function ChangePlayer() {
     console.log(Player());
-    document.querySelector("#kodik-player").contentWindow.location.replace(`./tunimeplayer.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
+    document.querySelector("#kodik-player").contentWindow.location.replace(`./player.html?id=${Player().data_id}&e=${Player().episodes.selected_episode}`);
   }
 
   //Функция выбора текущей озвучки в избранное или удаление его

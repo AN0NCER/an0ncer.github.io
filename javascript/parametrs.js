@@ -24,8 +24,10 @@ const $PARAMETERS = {
         quality: '720',
         standart: false,
         full: true,
+        alternative_full: false,
         standart_controls: false,
         autonekst: true,
+        autoquality: true
     },
     develop: false
 };

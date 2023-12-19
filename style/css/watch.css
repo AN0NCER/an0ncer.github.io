@@ -1,5 +1,6 @@
 @charset "UTF-8";
-html, body {
+html,
+body {
   scrollbar-gutter: stable;
 }
 
@@ -699,6 +700,21 @@ Player
   margin-top: 10px;
   margin-left: 20px;
   margin-right: 20px;
+}
+.player.fullscreen {
+  aspect-ratio: 16/10;
+  width: 100%;
+}
+.player.fullscreen iframe {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  margin: 0;
+  aspect-ratio: auto;
+  height: 100%;
 }
 
 /*
@@ -1645,5 +1661,16 @@ footer .studio span {
     max-width: 900px;
     margin: 0 auto;
     width: 100%;
+  }
+}
+@media (orientation: landscape) {
+  main {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  header .bg-paralax-img img {
+    left: env(safe-area-inset-left);
+    right: env(safe-area-inset-right);
+    width: calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right));
   }
 }

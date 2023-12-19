@@ -25,7 +25,7 @@ function UpdatetGithub(data) {
     if (saved_git_version == null || saved_git_version.tag != data.tag_name) {
         //Пользователь находиться без ключа об обновлениях
         if (localStorage.getItem(UpdateKey()) == null) {
-            localStorage.setItem(UpdateKey(), true);
+            localStorage.setItem(UpdateKey(), false);
         }
         //Если было обновление показываем диалоговое окно
         if (localStorage.getItem(UpdateKey()) == "true") {
