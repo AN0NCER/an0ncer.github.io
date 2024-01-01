@@ -52,7 +52,9 @@ export async function LoadAnime(event = () => { }, logged = false) {
     _setPageMetaTags(_shikimoriData);
 
     await _loadGallery($ID);
-    await _loadHeroes($ID);
+    //Отключить загрузку если в параметрах отключено
+    if (!$PARAMETERS.anime.hidehero)
+        await _loadHeroes($ID);
     await _loadFranchise($ID);
     await _loadSimiliar($ID);
 
@@ -61,7 +63,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
     event();
     ScrollingElements();
     CallEvent("load");
-    
+
     ApiTunime.anime($ID);
 
     function _loadShikimoriData(id) {
