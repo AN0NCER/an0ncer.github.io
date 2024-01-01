@@ -462,6 +462,7 @@ Title block
   color: #fff;
   font-weight: bold;
   font-size: 18px;
+  position: relative;
 }
 .block-title.with-count {
   display: flex;
@@ -469,11 +470,8 @@ Title block
   align-items: center;
 }
 .block-title.with-count .count {
-  background: #98d4fd;
-  padding: 5px 10px;
-  border-radius: 3px;
   font-size: 12px;
-  color: #020202;
+  color: #596271;
 }
 
 .block-title.title-player {
@@ -1126,7 +1124,7 @@ footer .studio span {
   }
 }
 .window-translation .window-content {
-  max-height: calc(100vh - env(safe-area-inset-top));
+  max-height: calc(100dvh - env(safe-area-inset-top));
   overflow-y: hidden;
   overscroll-behavior: contain;
 }
