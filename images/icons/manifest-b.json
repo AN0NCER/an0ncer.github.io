@@ -8,6 +8,7 @@
     "display": "standalone",
     "scope": "/",
     "start_url": "/?mode=standalone",
+    "id": "beta-tunime",
     "icons": [
         {
             "src": "/images/icons/logo-x192-b.png",
