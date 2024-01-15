@@ -18,6 +18,32 @@ html {
         width: 100%;
     }
 
+    .player-skip {
+        position: absolute;
+        bottom: calc(45px + 15px);
+        right: -500px;
+        padding: 10px 20px;
+        background: #282A2E;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        border-radius: 4px;
+        font-family: Manrope;
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.5);
+
+        cursor: pointer;
+        z-index: 50;
+        transition: .3s ease-in-out;
+        svg {
+            fill: rgba(255, 255, 255, 0.5);
+            width: 14px;
+        }
+    }
+
     .controls-wrapper {
         position: fixed;
         bottom: 0;
@@ -99,7 +125,9 @@ html {
                 }
 
                 @supports (-webkit-touch-callout: none) {
-                    .volume-slider, .volume {
+
+                    .volume-slider,
+                    .volume {
                         display: none;
                     }
                 }

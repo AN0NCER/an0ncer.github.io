@@ -5,8 +5,10 @@
  *              кнопок воспроизведения / пауза
  * Библиотеки:  anime.js, jqery.js
  * Возвращает:  AnimLoadPlayer, AnimationPlay, AnimButtonStatus, AnimSettings, 
- *              AnimRate
+ *              AnimRate, AnimSkip
  */
+
+import { Skips } from "./mod_stream.js";
 
 //Отвечает за анимацию загрузки плеера
 export const AnimLoadPlayer = {
@@ -36,6 +38,12 @@ export const AnimSettings = {
 export const AnimRate = {
     show: () => _amRShow(),
     hide: () => _amRhide()
+}
+
+//Отвечает за анимацию кнопки пропуска
+export const AnimSkip = {
+    show: (index) => _amSkShow(index),
+    hide: () => _amSkHide()
 }
 
 //Html анимцации загрузки 
@@ -232,11 +240,46 @@ function _amRShow() {
 /**
  * Анимация скрытия скорости воспроизведения
  */
-function _amRhide(){
+function _amRhide() {
     anime({
         targets: ".video-speed",
         easing: "easeInQuad",
         duration: 100,
         translateX: 0
     })
+}
+
+/**
+ * Анимация отображение кнопки пропуска сегмента
+ */
+function _amSkShow(index) {
+    if (!Skips.showed) {
+        anime({
+            targets: ".player-skip",
+            easing: "easeInQuad",
+            duration: 100,
+            right: 10
+        });
+        Skips.index = index;
+        Skips.showed = !Skips.showed;
+    }
+}
+
+/**
+ * Анимация скрытия кнопки пропуска сегмента
+ */
+function _amSkHide(){
+    if(Skips.showed){
+        anime({
+            targets: ".player-skip",
+            easing: "easeInQuad",
+            duration: 100,
+            opacity: 0,
+            complete:() => {
+                $('.player-skip').css({right: '', opacity: ''});
+            }
+        });
+        Skips.index = -1;
+        Skips.showed = !Skips.showed;
+    }
 }

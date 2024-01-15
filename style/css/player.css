@@ -16,6 +16,29 @@ html {
   height: 100%;
   width: 100%;
 }
+.player-wrapper .player-skip {
+  position: absolute;
+  bottom: 60px;
+  right: -500px;
+  padding: 10px 20px;
+  background: #282A2E;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 4px;
+  font-family: Manrope;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  z-index: 50;
+  transition: 0.3s ease-in-out;
+}
+.player-wrapper .player-skip svg {
+  fill: rgba(255, 255, 255, 0.5);
+  width: 14px;
+}
 .player-wrapper .controls-wrapper {
   position: fixed;
   bottom: 0;
@@ -76,7 +99,8 @@ html {
   max-width: 0px;
 }
 @supports (-webkit-touch-callout: none) {
-  .player-wrapper .controls-wrapper .player-controls .l-controls .volume-slider, .player-wrapper .controls-wrapper .player-controls .l-controls .volume {
+  .player-wrapper .controls-wrapper .player-controls .l-controls .volume-slider,
+  .player-wrapper .controls-wrapper .player-controls .l-controls .volume {
     display: none;
   }
 }
