@@ -58,3 +58,4 @@ ___
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_3.PNG" align="lefy" width="310">
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_4.PNG" align="left" width="310">
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_5.PNG" align="left" width="310">
+<img src ="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_7.jpg" align="left" width="310">
