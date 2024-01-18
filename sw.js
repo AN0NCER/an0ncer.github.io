@@ -1,4 +1,4 @@
-var version = '121';
+var version = '125';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     // Директория: /images/icons
@@ -56,6 +56,7 @@ var appShellFilesToCache = [
     "/javascript/pages/player/mod_api.js",
     "/javascript/pages/player/mod_event.js",
     "/javascript/pages/player/mod_functions.js",
+    "/javascript/pages/player/mod_mediasession.js",
     "/javascript/pages/player/mod_settings.js",
     "/javascript/pages/player/mod_shortcuts.js",
     "/javascript/pages/player/mod_stream.js",
