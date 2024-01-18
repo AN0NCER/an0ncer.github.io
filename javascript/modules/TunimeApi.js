@@ -46,8 +46,9 @@ class Tunime {
         }).then((val) => {
             this.access = { id: val.id, key: val.key, date: Date.now() }
             this.Update();
-        }).catch((reas) => {
+        }).catch(async (reas) => {
             this.access = Tunime.standart;
+            await Sleep(1000);
             this.Update();
         });
     }
