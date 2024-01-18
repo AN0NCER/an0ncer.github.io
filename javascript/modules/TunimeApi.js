@@ -1,55 +1,103 @@
-let _updateData = undefined;
-let _enabled = false;
+import { Sleep } from "./funcitons.js";
 
-GetOnlineData();
-setInterval(() => {
-    GetOnlineData();
-}, 299000);
+class Tunime {
+    static get standart() {
+        return { id: 'shadow', key: 'tunime-register', date: Date.now() - 10000 }
+    }
 
-function GetOnlineData() {
-    fetch('https://tunime.onrender.com/online').then((response) => {
-        return response.json();
-    }).then((val) => {
-        _updateData = val;
-        _enabled = true;
-    });
-}
+    constructor() {
+        this.lk = 'shadow-api';
+        this.life = 350000;
+        this.time = 299000;
+        this.interval = undefined;
+        this.url = 'tunime.onrender.com';
+        if (window.location.pathname != '/player.html') {
+            this.Update();
+        }
+    }
 
-export const ApiTunime = {
-    anime: async function (id) {
-        fetch(`https://tunime.onrender.com/online/${id}/o`).then((response) => {
+    set access(val) {
+        if (val && val?.id && val?.key && val?.date) {
+            localStorage.setItem(this.lk, JSON.stringify(val));
+        }
+    }
+
+    /**
+     * @returns {{id: string, key: string, date: number}}
+     */
+    get access() {
+        let inl = localStorage.getItem(this.lk);
+        inl = inl || JSON.stringify(Tunime.standart);
+        let val = JSON.parse(inl);
+        if ((new Date() - val.date) > this.life) {
+            val = Tunime.standart;
+        }
+        this.access = val;
+        return val;
+    }
+
+    online() {
+        const data = this.access;
+        fetch(`http://${this.url}/online/`, {
+            method: 'POST',
+            body: new URLSearchParams({ id: data.id, key: data.key })
+        }).then((response) => {
+            return response.json()
+        }).then((val) => {
+            this.access = { id: val.id, key: val.key, date: Date.now() }
+            this.Update();
+        }).catch(async (reas) => {
+            this.access = Tunime.standart;
+            await Sleep(1000);
+            this.Update();
+        });
+    }
+
+    Update() {
+        if (this.access.id == 'shadow') {
+            this.online();
+        }
+        clearInterval(this.interval);
+        this.interval = setInterval(() => {
+            this.online();
+        }, this.time - (Date.now() - this.access.date));
+    }
+
+    anime(id) {
+        const data = this.access;
+        fetch(`http://${this.url}/online/${id}/o`, {
+            method: 'POST',
+            body: new URLSearchParams({ id: data.id, key: data.key })
+        }).then((response) => {
             return response.json();
         }).then((val) => {
-            console.log(val);
+            this.access = { id: val.id, key: val.key, date: Date.now() }
+        }).catch(async (err) => {
+            await Sleep(1000);
+            this.anime(id);
         });
-    },
+    }
 
-    online: function () {
-
-    },
-
-    /**
-     * Получение stream аниме
-     * @param {string} url - ссыка на Kodik c https://
-     * @returns 
-     */
-    stream: function (url) {
-        return new Promise((resolve) => {
-            fetch(`https://anime-m3u8.onrender.com/link-anime`, { body: new URLSearchParams({ 'link': url }), method: 'post' })
-                .then(function (response) { return response.json(); })
-                .then(function (data) { return resolve(data); })
-                .catch((res) => { console.log(res) });
+    stream(url) {
+        return new Promise(async (resolve) => {
+            const access = this.access;
+            fetch(`http://anime-m3u8.onrender.com/link-anime`, {
+                body: new URLSearchParams({
+                    'link': url,
+                    'id': access.id,
+                    'key': access.key
+                }), method: 'post'
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                this.access = { id: access.id, key: data.key, date: Date.now() };
+                return resolve(data);
+            }).catch((res) => {
+            });
         });
-    },
+    }
 
-    /**
-     * Создание обьединеного файла m3u8
-     * @param {string} q720 - ссылка на 720p
-     * @param {string} q480 - ссылка на 480p
-     * @param {string} q360 - ссылка на 360p
-     * @returns Ссылку на объединенный файл m3u8
-     */
-    link_file: function ({ q720 = undefined, q480 = undefined, q360 = undefined } = {}) {
+    link({ q720 = undefined, q480 = undefined, q360 = undefined } = {}) {
         const params = { q720, q480, q360 };
         const queryParams = Object.entries(params)
             .filter(([key, value]) => value !== undefined)
@@ -58,3 +106,5 @@ export const ApiTunime = {
         return `https://anime-m3u8.onrender.com/m3u8?${queryParams}`;
     }
 }
+
+export const ApiTunime = new Tunime();

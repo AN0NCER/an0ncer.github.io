@@ -12,6 +12,7 @@ import { AnimButtonStatus, AnimRate, AnimSettings } from "./mod_animation.js";
 import { onDuration$, onPause$, onPlay$, onTimeUpdate$, onVolumeChange$ } from "./mod_event.js";
 import { CURSOR_WIDTH, onPlaybackRate2$ } from "./mod_functions.js";
 import { AUTO_NEKST, STANDART_CONTROLS, onAutoNekstChange$ } from "./mod_settings.js";
+import { Skips } from "./mod_stream.js";
 
 /**
  * Инициализация управления визуалом плеера
@@ -65,6 +66,10 @@ export function InitUI() {
                 Player.volume = prcnt / 100;
             }
         }
+    });
+
+    $('.player-skip').on('click', function (){
+        Skips.Skip();
     });
 
     SetVolume();

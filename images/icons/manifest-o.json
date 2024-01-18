@@ -8,6 +8,7 @@
     "display": "standalone",
     "scope": "/",
     "start_url": "/?mode=standalone",
+    "id": "tunime",
     "icons": [
         {
             "src": "/images/icons/logo-x192-o.png",

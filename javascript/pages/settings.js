@@ -117,6 +117,12 @@ const Parameters = [
                 param: 'dubanime',
                 name: 'Озвучки по франшизе',
                 description: 'Отдельный список избранных озвучек по франшизе аниме.'
+            },
+            {
+                type: 'boolean',
+                param: 'previewbs',
+                name: 'Информация воспроизведения',
+                description: 'Отображает текущее аниме на экране блокировке.'
             }
         ]
     },

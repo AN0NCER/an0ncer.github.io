@@ -7,10 +7,12 @@
  * Возвращает:  InitFunctions, CURSOR_WIDTH, onPlaybackRate2$
  */
 import { AnimeQuery, Player, hls, onBuffered$, toggleFullScreen } from "../player.js";
+import { AnimSkip } from "./mod_animation.js";
 import { SendAPI } from "./mod_api.js";
 import { onDuration$, onTimeUpdate$ } from "./mod_event.js";
 import { ALTERNATIVE_FULLSCREEN, AUTO_NEKST } from "./mod_settings.js";
 import { InitShortcuts } from "./mod_shortcuts.js";
+import { Skips } from "./mod_stream.js";
 
 let END_TIME = 0; //Продолжительность видео после обрезки
 //Настоящий размер курсора
@@ -158,6 +160,24 @@ export function InitFunctions() {
         }
     });
 
+    onTimeUpdate$.subscribe({
+        next: () => {
+            if (Skips.list.length <= 0) {
+                return;
+            }
+
+            const index = Skips.list.findIndex(x => { 
+                return (x.start <= Player.currentTime && Player.currentTime <= x.end) 
+            });
+
+            if (index > -1 && Skips.index != index) {
+                AnimSkip.show(index);
+            } else if (index == -1 && Skips.index > -1) {
+                AnimSkip.hide();
+            }
+        }
+    })
+
     onBuffered$.subscribe({
         next: (time) => {
             if (AUTO_NEKST && END_TIME != 0) {
@@ -174,7 +194,7 @@ export function InitFunctions() {
     InitShortcuts();
 }
 
-export function ResetFunctions(){
+export function ResetFunctions() {
     api_nexte_called = false;
 }
 

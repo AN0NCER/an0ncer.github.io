@@ -6,6 +6,7 @@ import { FULL_PLAYER, InitSettings, QUALITY } from "./player/mod_settings.js";
 import { AnimLoadPlayer } from "./player/mod_animation.js";
 import { LoadM3U8, LoadM3U8Episode } from "./player/mod_stream.js";
 
+/**@type {HTMLVideoElement}*/
 export const Player = document.getElementById('player');
 export const hls = new Hls();
 export const onBuffered$ = new rxjs.Subject();
@@ -129,7 +130,7 @@ function LoadPlayer(stream_file) {
     });
     let f = onPlay$.subscribe({
         next: () => {
-            if(FULL_PLAYER){
+            if (FULL_PLAYER) {
                 toggleFullScreen();
             }
             f.unsubscribe();

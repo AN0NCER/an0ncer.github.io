@@ -15,6 +15,7 @@ const $PARAMETERS = {
         episrevers: 'left',
         typefrc: ["TV Сериал", "Фильм", "ONA", "OVA"],
         saveinfo: false,
+        previewbs: true,
     },
     download: {
         dquality: '720',
@@ -28,7 +29,8 @@ const $PARAMETERS = {
         alternative_full: false,
         standart_controls: false,
         autonekst: true,
-        autoquality: true
+        autoquality: true,
+        skipmoments: true
     },
     develop: false
 };
