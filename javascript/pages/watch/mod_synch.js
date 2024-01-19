@@ -8,6 +8,7 @@ const ANIME_SYNC_ENABLED = $PARAMETERS.anime.syncdata;
 
 let _urate = undefined; // Переменная для хранения данных пользователя
 let _localDate = undefined; // Переменная для хранения локальных данных
+let _diffenceData = undefined; // Переменая для хранения предыдуших данных
 let _onLocalData = []; // Массив функций, ожидающих вызова
 let onCalledLocalData = false; // Флаг для отслеживания вызова события
 
@@ -21,6 +22,7 @@ export async function SynchLocalData(user_rate) {
 
     if (str_local_data) {
         localData = JSON.parse(str_local_data);
+        _diffenceData = localData;
     }
 
     if (!ANIME_SYNC_ENABLED || !user_rate) {
@@ -118,6 +120,9 @@ function saveAnimeData(e, d) {
         date_update: new Date()
     };
 
+    _diffenceData = _localDate;
+    _localDate = data;
+    
     localStorage.setItem($ID, JSON.stringify(data));
     let user_rate = _urate;
 
@@ -168,4 +173,12 @@ async function updateComment(user_rate) {
  */
 export async function SaveDataAnime(e, d) {
     saveAnimeData(e, d);
+}
+
+/**
+ * Получить массива данных из информации об озвучке и эпизоде
+ * @returns Возвращает массив из двух данных, первый [0] являеться новыми данными, второй [1] являеться прошлыми данными
+ */
+export function DifferenceInData() {
+    return [_localDate, _diffenceData];
 }

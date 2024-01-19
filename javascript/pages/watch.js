@@ -6,7 +6,8 @@ import { LoadAnime, ELA, GetShikiData, GetShikiScreenshots } from "./watch/mod_r
 import { Main, User } from "../modules/ShikiUSR.js";
 import { ShowScoreWindow, ShowTranslationWindow } from "./watch/mod_window.js";
 import { ShowDwonloadWindow } from "./watch/mod_download.js";
-import { OnLocalData, SaveDataAnime } from "./watch/mod_synch.js";
+import { DifferenceInData, OnLocalData, SaveDataAnime } from "./watch/mod_synch.js";
+import { ApiTunime } from "../modules/TunimeApi.js";
 
 //ID ресурса из Shikimori
 export const $ID = new URLSearchParams(window.location.search).get("id");
@@ -67,6 +68,20 @@ Main((e) => {
     let e = Player().episodes.selected_episode;
     if (user && e == 1 && id_translation) {
       SaveDataAnime(e, id_translation);
+    }
+  });
+
+  //Событие отправки выбора озвучки первого просмотра 
+  Player().events.onplayed((e) => {
+    const data = DifferenceInData();
+    if (!data[0] && !data[1])
+      return;
+    if (data[0] && !data[1]) {
+      ApiTunime.tsset($ID, data[0].kodik_dub);
+    } else if (data[0] && data[1]) {
+      if (data[0].kodik_dub != data[1].kodik_dub) {
+        ApiTunime.tsset($ID, data[0].kodik_dub);
+      }
     }
   });
 

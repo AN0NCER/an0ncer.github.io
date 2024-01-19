@@ -37,19 +37,23 @@ class Tunime {
     }
 
     online() {
-        const data = this.access;
-        fetch(`https://${this.url}/online/`, {
-            method: 'POST',
-            body: new URLSearchParams({ id: data.id, key: data.key })
-        }).then((response) => {
-            return response.json()
-        }).then((val) => {
-            this.access = { id: val.id, key: val.key, date: Date.now() }
-            this.Update();
-        }).catch(async (reas) => {
-            this.access = Tunime.standart;
-            await Sleep(1000);
-            this.Update();
+        return new Promise((resolve) => {
+            const data = this.access;
+            fetch(`https://${this.url}/online/`, {
+                method: 'POST',
+                body: new URLSearchParams({ id: data.id, key: data.key })
+            }).then((response) => {
+                return response.json()
+            }).then((val) => {
+                this.access = { id: val.id, key: val.key, date: Date.now() }
+                this.Update();
+                resolve(true);
+            }).catch(async (reas) => {
+                this.access = Tunime.standart;
+                await Sleep(1000);
+                this.Update();
+                resolve(false);
+            });
         });
     }
 
@@ -74,6 +78,7 @@ class Tunime {
             this.access = { id: val.id, key: val.key, date: Date.now() }
         }).catch(async (err) => {
             await Sleep(1000);
+            await this.online();
             this.anime(id);
         });
     }
@@ -104,6 +109,50 @@ class Tunime {
             .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
             .join('&');
         return `https://anime-m3u8.onrender.com/m3u8?${queryParams}`;
+    }
+
+    tsget(id) {
+        return new Promise((resolve) => {
+            const access = this.access;
+            if (access.id == Tunime.standart.id) {
+                return resolve({ translations: [] });
+            }
+            fetch(`https://${this.url}/ts/${id}`, {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'id': access.id,
+                    'key': access.key
+                })
+            }).then((res) => {
+                return res.json();
+            }).then((val) => {
+                return resolve(val);
+            }).catch(() => {
+                return resolve({ translations: [] });
+            });
+        });
+    }
+
+    tsset(aid, tid) {
+        return new Promise((resolve) => {
+            const access = this.access;
+            if (access.id === Tunime.standart.id) {
+                return resolve({ completed: false });
+            }
+            fetch(`https://${this.url}/ts/${aid}/${tid}`, {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'id': access.id,
+                    'key': access.key
+                })
+            }).then((res) => {
+                return res.json();
+            }).then((val) => {
+                return resolve(val);
+            }).catch(() => {
+                return resolve({ completed: false });
+            });
+        });
     }
 }
 
