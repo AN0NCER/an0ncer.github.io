@@ -88,11 +88,11 @@ function GenLink(streams) {
             return blobUrl;
         } else {
             if (QUALITY == '720') {
-                return ApiTunime.link_file({ q720: STREAMS[720][0].src, q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
+                return ApiTunime.link({ q720: STREAMS[720][0].src, q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
             } else if (QUALITY == '480') {
-                return ApiTunime.link_file({ q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
+                return ApiTunime.link({ q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
             } else {
-                return ApiTunime.link_file({ q360: STREAMS[360][0].src });
+                return ApiTunime.link({ q360: STREAMS[360][0].src });
             }
         }
     } else {

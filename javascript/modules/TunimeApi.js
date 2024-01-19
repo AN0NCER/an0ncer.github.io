@@ -38,7 +38,7 @@ class Tunime {
 
     online() {
         const data = this.access;
-        fetch(`http://${this.url}/online/`, {
+        fetch(`https://${this.url}/online/`, {
             method: 'POST',
             body: new URLSearchParams({ id: data.id, key: data.key })
         }).then((response) => {
@@ -65,7 +65,7 @@ class Tunime {
 
     anime(id) {
         const data = this.access;
-        fetch(`http://${this.url}/online/${id}/o`, {
+        fetch(`https://${this.url}/online/${id}/o`, {
             method: 'POST',
             body: new URLSearchParams({ id: data.id, key: data.key })
         }).then((response) => {
@@ -81,7 +81,7 @@ class Tunime {
     stream(url) {
         return new Promise(async (resolve) => {
             const access = this.access;
-            fetch(`http://anime-m3u8.onrender.com/link-anime`, {
+            fetch(`https://anime-m3u8.onrender.com/link-anime`, {
                 body: new URLSearchParams({
                     'link': url,
                     'id': access.id,
