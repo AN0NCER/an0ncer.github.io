@@ -182,3 +182,10 @@ export async function SaveDataAnime(e, d) {
 export function DifferenceInData() {
     return [_localDate, _diffenceData];
 }
+/**
+ * Установка предыдущего значения
+ * @param {Object} val 
+ */
+export function SetDifferenceData(val){
+    _diffenceData = val;
+}
