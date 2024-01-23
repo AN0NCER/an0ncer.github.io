@@ -78,6 +78,7 @@ class Tunime {
             this.access = { id: val.id, key: val.key, date: Date.now() }
         }).catch(async (err) => {
             await Sleep(1000);
+            this.access = Tunime.standart;
             await this.online();
             this.anime(id);
         });
@@ -97,7 +98,9 @@ class Tunime {
             }).then((data) => {
                 this.access = { id: access.id, key: data.key, date: Date.now() };
                 return resolve(data);
-            }).catch((res) => {
+            }).catch(async (res) => {
+                await Sleep(3000);
+                return resolve(this.stream(url));
             });
         });
     }
