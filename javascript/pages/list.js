@@ -147,7 +147,31 @@ async function LoadingAnimeFromTask(task = task_loading) {
             local_task.slice(i, 1);
     }
 
-    await LoadAnimes(local_task);
+    if (local_task.length <= 0) {
+        return;
+    }
+
+    if (local_task.length <= 50) {
+        return await LoadAnimes(local_task);
+    }
+
+    //Разбить задачу на много маленьких задач
+    let small_task = [];
+    let b = 0;
+    for (let i = 0; i < local_task.length; i++) {
+        b++;
+        small_task.push(local_task[i]);
+        if (b == 50) {
+            b = 0;
+            await LoadAnimes(small_task);
+            small_task = [];
+            continue;
+        }
+    }
+
+    if (small_task.length != 0) {
+        await LoadAnimes(small_task);
+    }
 
     /**
      * Ставит аниме на очерель загрузки
