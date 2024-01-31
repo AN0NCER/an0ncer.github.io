@@ -2,7 +2,7 @@ import { History } from "./watch/mod_history.js";
 import { LoadPage } from "./watch/mod_loadingpage.js";
 import { Player } from "./watch/mod_player.js";
 import { AnimeUserRate } from "./watch/mod_userrate.js";
-import { LoadAnime, ELA, GetShikiData, GetShikiScreenshots } from "./watch/mod_resources.js";
+import { LoadAnime, ELA, GetShikiData, GetShikiScreenshots, LoadImageById } from "./watch/mod_resources.js";
 import { Main, User } from "../modules/ShikiUSR.js";
 import { ShowScoreWindow, ShowTranslationWindow } from "./watch/mod_window.js";
 import { ShowDwonloadWindow } from "./watch/mod_download.js";
@@ -188,39 +188,51 @@ function Functional() {
     $(element.dom).click(element.func);
   }
 
-  //Функция отцинтровки плеера в горизонтальном режиме
-  //Из за того что обращается глобально должен быть вызван один раз
-  (() => {
-    let timer; // Внешний независимый таймер
-    // Получаем ссылку на элемент, до которого нужно долистать
-    const element = document.querySelector(".landscape-player");
+  //Функция прогрузки галереи при пролистывании
+  const gallerySlider = document.querySelector('.galery-slider');
+  $(".galery-slider").on('scroll', (e) => {
+    const slides = gallerySlider.querySelectorAll('.slide img');
+    const targetSlide = slides[slides.length - 1];
+    const targetSlidePosition = targetSlide.getBoundingClientRect().right;
 
-    //Подписываемся на событие прокрутки
-    window.addEventListener('scroll', function () {
-      this.clearInterval(timer); // Очищаем интервал пока идет прокрутка
-      //Устанавливаем таймер
-      timer = setTimeout(function () {
-        //Проверяем что функция включена (Включается в функии SetPlayerDisplay) и ориентацию устройства
-        if (enableCenter && current_device_orientation == 'horizontal') {
-          var scrollPosition = window.scrollY; // Текущеее полажение страницы scroll
-          var elementPosition = element.getBoundingClientRect().top + window.scrollY; // Позиция елемента
-          var elementHeight = element.offsetHeight; // Высота елемента
+    if (targetSlidePosition <= window.innerWidth) {
+      LoadImageById(slides.length);
+    }
+  });
 
-          if (Math.abs(scrollPosition - elementPosition) < elementHeight * 0.4) {
-            // Код, который нужно выполнить, если разница между scroll и элементом меньше 40%
-            element.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "nearest",
-            });
-          } else {
-            // Код, который нужно выполнить, если разница между scroll и элементом больше или равна 40%
-            enableCenter = false; // Отключаем центровку
+    //Функция отцинтровки плеера в горизонтальном режиме
+    //Из за того что обращается глобально должен быть вызван один раз
+    (() => {
+      let timer; // Внешний независимый таймер
+      // Получаем ссылку на элемент, до которого нужно долистать
+      const element = document.querySelector(".landscape-player");
+
+      //Подписываемся на событие прокрутки
+      window.addEventListener('scroll', function () {
+        this.clearInterval(timer); // Очищаем интервал пока идет прокрутка
+        //Устанавливаем таймер
+        timer = setTimeout(function () {
+          //Проверяем что функция включена (Включается в функии SetPlayerDisplay) и ориентацию устройства
+          if (enableCenter && current_device_orientation == 'horizontal') {
+            var scrollPosition = window.scrollY; // Текущеее полажение страницы scroll
+            var elementPosition = element.getBoundingClientRect().top + window.scrollY; // Позиция елемента
+            var elementHeight = element.offsetHeight; // Высота елемента
+
+            if (Math.abs(scrollPosition - elementPosition) < elementHeight * 0.4) {
+              // Код, который нужно выполнить, если разница между scroll и элементом меньше 40%
+              element.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "nearest",
+              });
+            } else {
+              // Код, который нужно выполнить, если разница между scroll и элементом больше или равна 40%
+              enableCenter = false; // Отключаем центровку
+            }
           }
-        }
-      }, 500);
-    });
-  })();
+        }, 500);
+      });
+    })();
 
   //Добавляет из параметров настройку положение плеера в горизонтальном режиме
   $('.landscape-player').addClass('reverse-' + $PARAMETERS.watch.episrevers);
