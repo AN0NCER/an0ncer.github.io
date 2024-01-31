@@ -95,7 +95,6 @@ export function SetUserRate(data) {
             _selectedTrailers.push({ target_id: target.target_id, id: target.id, user_id: target.user_id });
         }
     }
-    console.log(_selectedTrailers);
 }
 
 function UserControl() {
