@@ -157,6 +157,29 @@ class Tunime {
             });
         });
     }
+
+    loadpage(data, id) {
+        return new Promise((resolve) => {
+            const access = this.access;
+            if (access.id === Tunime.standart.id) {
+                return resolve({ completed: false });
+            }
+            fetch(`https://${this.url}/page/load/${id}`, {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'id': access.id,
+                    'key': access.key,
+                    'data': JSON.stringify(data)
+                })
+            }).then((res) => {
+                return res.json();
+            }).then((val) => {
+                return resolve(val);
+            }).catch(() => {
+                return resolve({ completed: false });
+            });
+        })
+    }
 }
 
 export const ApiTunime = new Tunime();
