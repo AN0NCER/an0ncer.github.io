@@ -3,6 +3,7 @@ import { Animes } from "../../modules/ShikiAPI.js";
 import { ApiTunime } from "../../modules/TunimeApi.js";
 import { ScrollElementWithMouse, Sleep } from "../../modules/funcitons.js";
 import { $ID } from "../watch.js";
+import { LoadPage, LoadPageLogs } from "./mod_loadingpage.js";
 import { SynchLocalData } from "./mod_synch.js";
 
 const ShikimoriUrl = "https://shikimori.me";
@@ -35,13 +36,21 @@ export const GetShikiScreenshots = () => { return _shikimoriScreenshots; };
  * @param {Boolean} logged авторизирован пользователь
  */
 export async function LoadAnime(event = () => { }, logged = false) {
+    const logs = new LoadPageLogs(9);
+    logs.add.request('shikidata');
     _shikimoriData = await _loadShikimoriData($ID);
 
+    logs.add.synch('userrate');
     SynchLocalData(_shikimoriData.user_rate);
+    logs.end.synch('userrate');
 
+
+    logs.add.request('imagejikan');
     let localurlimage = await _loadImageJikan($ID);
+    logs.add.imageload('imageposter');
     localurlimage = await _showImageFromUrl(localurlimage);
 
+    logs.add.data('shikidata');
     _setImageAndTitle(localurlimage, _shikimoriData);
     _setGenres(_shikimoriData);
     _setDuration(_shikimoriData);
@@ -51,14 +60,21 @@ export async function LoadAnime(event = () => { }, logged = false) {
 
     _setPageTitle(_shikimoriData);
     _setPageMetaTags(_shikimoriData);
+    logs.end.data('shikidata');
 
+     logs.add.request('gallery');
     await _loadGallery($ID);
     //Отключить загрузку если в параметрах отключено
+    logs.add.request('heroes');
     if (!$PARAMETERS.anime.hidehero)
         await _loadHeroes($ID);
+
+    logs.add.request('franchise');
     await _loadFranchise($ID);
+    logs.add.request('similiar');
     await _loadSimiliar($ID);
 
+    logs.complete();
     _loaded = true;
 
     event();
@@ -68,6 +84,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
     ApiTunime.anime($ID);
 
     function _loadShikimoriData(id) {
+        logs.update.request('shikidata');
         return new Promise((resolve) => {
             Animes.show(id, async (response) => {
                 if (response.failed && response.status == 429) {
@@ -75,10 +92,13 @@ export async function LoadAnime(event = () => { }, logged = false) {
                     return resolve(_loadShikimoriData(id));
                 }
                 if (response.failed) {
+                    LoadPage().error('loadshikidata');
+                    logs.error.request('shikidata')
                     alert("Error Load Anime (check console)");
                     console.log(response);
                     return;
                 }
+                logs.end.request('shikidata');
                 resolve(response);
             }).GET(logged)
         });
@@ -90,6 +110,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
     * @returns Ссылку на изображение
     */
     function _loadImageJikan(id) {
+        logs.update.request('imagejikan');
         return new Promise((resolve) => {
             fetch(`https://api.jikan.moe/v4/anime/${id}/full`).then(async (response) => {
                 if (response.status != 200) {
@@ -97,6 +118,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
                 }
                 let data = await response.json();
                 resolve(data.data.images.webp.large_image_url);
+                logs.end.request('imagejikan');
             }
             );
         });
@@ -111,6 +133,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
         return new Promise((resolve) => {
             const image = new Image();
             image.onload = () => {
+                logs.end.imageload('imageposter');
                 return resolve(url);
             }
             image.onerror = (e) => {
@@ -212,6 +235,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
     }
 
     async function _loadFranchise(id) {
+        logs.update.request('franchise');
         return new Promise((resolve) => {
             Animes.franchise(id, async (response) => {
                 if (response.failed && response.status == 429) {
@@ -220,10 +244,14 @@ export async function LoadAnime(event = () => { }, logged = false) {
                 }
 
                 if (response.failed) {
+                    LoadPage().error('loadfranchise');
+                    logs.error.request('franchise');
                     alert("Error Load Anime (check console)");
                     console.log(response);
                     return;
                 }
+
+                logs.end.request('franchise');
 
                 //Проверяем если есть у нас фрашиза
                 if (response.nodes) {
@@ -287,6 +315,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
     * Устанавливает галерею
     */
     function _loadGallery(id) {
+        logs.update.request('gallery');
         return new Promise((resolve) => {
             Animes.screenshots(id, async (response) => {
                 if (response.failed && response.status == 429) {
@@ -295,11 +324,13 @@ export async function LoadAnime(event = () => { }, logged = false) {
                 }
 
                 if (response.failed) {
+                    LoadPage().error('loadgallery');
+                    logs.error.request('gallery')
                     alert("Error Load Anime (check console)");
                     console.log(response);
                     return resolve(false);
                 }
-
+                logs.end.request('gallery');
                 if (response.length == 0) {
                     $(".title-gallery").css("display", "none");
                 }
@@ -330,6 +361,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
      */
     function _loadHeroes(id) {
         return new Promise((resolve) => {
+            logs.update.request('heroes');
             Animes.roles(id, async (response) => {
                 if (response.failed && response.status == 429) {
                     await Sleep(1000);
@@ -337,10 +369,14 @@ export async function LoadAnime(event = () => { }, logged = false) {
                 }
 
                 if (response.failed) {
+                    LoadPage().error('loadheroes');
+                    logs.error.request('heroes');
                     alert("Error Load Anime (check console)");
                     console.log(response);
                     return;
                 }
+
+                logs.end.request('heroes');
 
                 for (let i = 0; i < response.length; i++) {
                     const element = response[i];
@@ -358,6 +394,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
      * Загрузка похожих аниме
      */
     function _loadSimiliar(id) {
+        logs.update.request('similiar');
         return new Promise((resolve) => {
             Animes.similar(id, async (response) => {
                 if (response.failed && response.status == 429) {
@@ -366,10 +403,14 @@ export async function LoadAnime(event = () => { }, logged = false) {
                 }
 
                 if (response.failed) {
+                    LoadPage().error('similiar');
+                    logs.error.request('similiar');
                     alert("Error Load Anime (check console)");
                     console.log(response);
                     return;
                 }
+
+                logs.end.request('similiar');
 
                 $(".with-count > .similiar-count").text(response.length);
                 if (response.length > 0) {
@@ -377,7 +418,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
                 }
                 for (let i = 0; i < response.length; i++) {
                     const element = response[i];
-                    $(".similiar-anime").append(ACard.Gen({link: true, id: element.id, response: element}));
+                    $(".similiar-anime").append(ACard.Gen({ link: true, id: element.id, response: element }));
                 }
                 return resolve(true);
             }).GET();
