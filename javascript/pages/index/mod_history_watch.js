@@ -1,3 +1,4 @@
+import { SHIKIURL } from "../../modules/Settings.js";
 import { User } from "../../modules/ShikiUSR.js";
 
 //Слайдер для блока продолжение просмотра
@@ -96,7 +97,7 @@ function CreateElementHistory(data) {
                     <span>ОСТ <span>${ost}</span></span>
                 </div>
             </div>
-            <div class="continue-frame" style="background-image: url(https://nyaa.shikimori.me/${image});">
+            <div class="continue-frame" style="background-image: url(${SHIKIURL.suburl('nyaa')}/${image});">
                 <div class="continue-time">
                     <span>${time}</span>
                 </div>

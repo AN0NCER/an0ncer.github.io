@@ -1,6 +1,7 @@
 import { Menu } from "../menu.js";
 import { Fetch, Sleep } from "./funcitons.js";
 import { Headers, Bodys } from "./header.js";
+import { SHIKIURL } from "./Settings.js";
 import { } from "./TunimeApi.js";
 
 export const Oauth = {
@@ -12,11 +13,11 @@ export const Oauth = {
         response_type: "code",
         scope: "user_rates+messages+comments+topics+clubs+friends+ignores",
     },
-    base_url: "https://shikimori.me/oauth/token",
+    base_url: `${SHIKIURL.url}/oauth/token`,
 
     GetUrl: function () {
         return (
-            "https://shikimori.me/oauth/authorize?client_id=" +
+            `${SHIKIURL.url}/oauth/authorize?client_id=` +
             this.auth_url.client_id +
             "&redirect_uri=" +
             encodeURIComponent(this.auth_url.redirect_uri) +
