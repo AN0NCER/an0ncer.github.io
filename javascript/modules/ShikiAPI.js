@@ -305,6 +305,37 @@ export const Styles = {
     }
 }
 
+export const GraphQl = {
+    base_url: () => { return `${SHIKIURL.url}/api/graphql` },
+
+    animes: function (arg = {}, event = () => { }) {
+        const url = this.base_url();
+        const request = Fetch("POST", url, Headers.base());
+        return {
+            POST: async (body = []) => {
+                body = BodyGraphQl("animes", arg, body);
+                request.setBody(body);
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
+    }
+}
+
+function BodyGraphQl(prof, arg = {}, body = []) {
+    let query = [];
+    for (const key in arg) {
+        const element = arg[key];
+        if (Array.isArray(element)) {
+            query.push(`${key}: "${element}"`);
+        } else {
+            query.push(`${key}: ${element}`);
+        }
+    }
+    return { query: `{${prof}(${query}){${body}}}` };
+}
+
 function StandartIDGET(url, event) {
     const request = Fetch("GET", url, Headers.base());
     return {
