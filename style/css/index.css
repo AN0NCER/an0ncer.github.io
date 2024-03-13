@@ -13,6 +13,7 @@ header {
   margin-right: 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 header > .account {
   display: flex;
@@ -59,26 +60,34 @@ header > .account > .information > .position > span {
   margin-left: 5px;
   font-size: 13px;
 }
-header > .notification {
-  min-height: 45px;
-  min-width: 45px;
+header > .notify-search {
+  display: flex;
+  gap: 10px;
+}
+header > .notify-search .notification {
+  min-height: 40px;
+  min-width: 40px;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #1f2329;
+  border-radius: 5px;
+  cursor: pointer;
 }
-header > .notification svg {
+header > .notify-search .notification svg {
   fill: #fff;
-  height: 20px;
+  height: 14px;
+  z-index: 1;
 }
-header > .notification > .dot {
-  width: 8px;
-  height: 8px;
-  background: red;
+header > .notify-search .notification > .dot {
+  width: 6px;
+  height: 6px;
+  background: #2393F1;
   border-radius: 50%;
   position: absolute;
-  top: 14px;
-  right: 13px;
+  top: 8px;
+  right: 12px;
 }
 
 .mbs {
@@ -87,58 +96,46 @@ header > .notification > .dot {
   margin-right: 20px;
 }
 
+.desktop.search {
+  width: 300px;
+}
+
 .search {
   display: flex;
   height: 40px;
   overflow: hidden;
-  border-radius: 7px;
+  border-radius: 5px;
   position: relative;
-}
-.search .icon {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 40px;
-  display: grid;
-  place-items: center;
-  transition: 0.3s ease-in-out;
-}
-.search .icon svg {
-  width: 16px;
-  fill: #fff;
-  opacity: 0.7;
 }
 .search > input {
   width: 100%;
   border-radius: 0;
   border: none;
-  background: #282D39;
+  background: #1f2329;
   color: #fff;
   padding-left: 10px;
+  padding-right: 40px;
   font-family: Manrope;
 }
 .search > input::-moz-placeholder {
-  padding-left: 30px;
   color: #fff;
   opacity: 0.7;
   -moz-transition: 0.3s ease-in-out;
   transition: 0.3s ease-in-out;
 }
 .search > input::placeholder {
-  padding-left: 30px;
   color: #fff;
   opacity: 0.7;
   transition: 0.3s ease-in-out;
 }
 @supports (-moz-appearance: none) {
   .search > input:-moz-placeholder-shown {
-    padding-left: 40px;
+    padding-left: 10px;
     -moz-transition: 0.3s ease-in-out;
     transition: 0.3s ease-in-out;
   }
   .search > input:placeholder-shown {
-    padding-left: 40px;
+    padding-left: 10px;
     transition: 0.3s ease-in-out;
   }
   .search > input:focus:-moz-placeholder-shown {
@@ -148,18 +145,23 @@ header > .notification > .dot {
     padding-left: 10px;
   }
 }
-.search > .btn {
-  min-width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #51B2FF 0%, #2672DA 95.83%);
-  box-shadow: -4px 0px 20px rgba(0, 0, 0, 0.25);
+.search > .shortcut {
+  position: absolute;
+  right: 6px;
+  top: 0;
+  bottom: 0;
   display: grid;
   place-items: center;
-  cursor: pointer;
 }
-.search > .btn svg {
-  fill: #fff;
-  height: 18px;
+.search > .shortcut > span {
+  color: #fff;
+  background: #101318;
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
 }
 .search > input:focus::-moz-placeholder {
   padding-left: 0px;
@@ -224,7 +226,7 @@ header > .notification > .dot {
   z-index: 2;
 }
 .swiper-treilers .swiper-wrapper .swiper-slide > .controls {
-  background: #282D39;
+  background: #191C21;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -433,7 +435,7 @@ header > .notification > .dot {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #282D39;
+  background: #1f2329;
   height: 100%;
   border-radius: 5px;
   overflow: hidden;
@@ -586,6 +588,15 @@ header > .notification > .dot {
 .section-title {
   color: #fff;
   font-family: Manrope;
+  display: flex;
+  gap: 10px;
+}
+.section-title > .line {
+  display: grid;
+  width: 5px;
+  border-radius: 1px;
+  height: 25px;
+  background: #2393F1;
 }
 
 .section-genres {
@@ -600,7 +611,7 @@ header > .notification > .dot {
 }
 .section-genres > .genres {
   margin-right: 10px;
-  background: #282B2F;
+  background: #1f2329;
   height: 35px;
   display: grid;
   place-items: center;
@@ -613,7 +624,7 @@ header > .notification > .dot {
 }
 .section-genres > .selected {
   color: #fff;
-  background: linear-gradient(135deg, #51B2FF 0%, #1F62BE 95.83%);
+  background: #2393F1;
 }
 
 .section-anime,
@@ -663,12 +674,6 @@ footer {
   width: 50px;
   fill: #fff;
   animation: rotate 3s ease-in-out infinite;
-}
-
-.w800 {
-  width: 800px;
-  margin-left: 20px;
-  margin-right: 20px;
 }
 
 .hide {
