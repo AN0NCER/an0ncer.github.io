@@ -504,6 +504,7 @@ footer {
 @import './windowed';
 @import './window/update';
 @import './window/notify';
+@import './window/countdown';
 
 .card-anime {
   min-width: 195px;
@@ -541,7 +542,8 @@ body {
     .section-genres,
     .section-anime,
     .swiper-continue,
-    .section-update {
+    .section-update,
+    .section-countdown {
 
       margin-right: max(20px, env(safe-area-inset-right));
     }
@@ -554,7 +556,8 @@ body {
     .section-anime,
     .swiper-continue,
     .section-title,
-    .section-update {
+    .section-update,
+    .section-countdown {
       margin-left: max(20px, env(safe-area-inset-left));
     }
 

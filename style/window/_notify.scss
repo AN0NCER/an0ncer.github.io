@@ -3,6 +3,7 @@
         grid-template-rows: auto 1fr;
         overscroll-behavior: contain;
         gap: 10px;
+        min-height: 90dvh;
 
         .title-content {
             display: flex;
@@ -17,11 +18,14 @@
             }
 
             .btn-window-close {
+                $size: 40px;
                 display: grid;
-                width: 35px;
-                height: 35px;
+                width: $size;
+                height: $size;
                 place-items: center;
                 cursor: pointer;
+                background: $object_bg;
+                border-radius: $radius;
 
                 svg {
                     fill: #FFF;
@@ -32,80 +36,20 @@
             }
         }
 
-        //Поиск в уведомлениях
-        label.notify-search {
+        .notify-content {
             display: flex;
-            height: 45px;
-            overflow: hidden;
-            border-radius: 3px;
-            position: relative;
+            flex-direction: column;
+            gap: 10px;
 
-            .icon {
-                position: absolute;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                width: 40px;
-                display: grid;
-                place-items: center;
-                transition: .3s ease-in-out;
-
-                svg {
-                    width: 16px;
-                    fill: #fff;
-                    opacity: 0.7;
-                }
-            }
-
-            input {
-                width: 100%;
-                border-radius: 0;
-                border: none;
-                background: #282D39;
-                color: #fff;
-                padding-left: 10px;
-                font-family: Manrope;
-
-                &::placeholder {
-                    padding-left: 30px;
-                    color: #fff;
-                    opacity: 0.7;
-                    transition: .3s ease-in-out;
-                }
-
-                @supports (-moz-appearance:none) {
-                    &:placeholder-shown {
-                        padding-left: 40px;
-                        transition: .3s ease-in-out;
-                    }
-
-                    &:focus {
-                        &:placeholder-shown {
-                            padding-left: 10px;
-                        }
-                    }
-                }
-            }
-
-            &>input:focus {
-                &::placeholder {
-                    padding-left: 0px;
-                }
-            }
-
-            input:focus~.icon {
-                opacity: 0;
-            }
-
-            input:not(:placeholder-shown)~.icon {
-                opacity: 0;
+            &.hide {
+                display: none;
             }
         }
 
         //Филтр в уведомлениях
         .notify-filter {
-            border-radius: 3px;
-            background: #282D39;
+            border-radius: $radius;
+            background: $object_bg;
 
             display: flex;
             height: 40px;
@@ -128,7 +72,8 @@
 
                 &.selected {
                     border-radius: 3px;
-                    background: #51B2FF;
+                    background: $primary;
+                    font-weight: bold;
                 }
             }
         }
@@ -147,7 +92,7 @@
                 overflow: hidden;
                 gap: 10px;
                 border-radius: 3px;
-                background: #203544;
+                background: $object_bg;
 
                 .status-unread {
                     width: 2px;
@@ -174,6 +119,9 @@
                         font-style: normal;
                         font-weight: 700;
                         line-height: normal;
+                        .notify-date{
+                            opacity: .5;
+                        }
                     }
 
                     .notify-text {
@@ -287,30 +235,25 @@
                 }
 
                 .empty-notify {
+                    opacity: 0.5;
                     display: flex;
-                    height: 120px;
+                    height: 200px;
                     padding: 10px;
                     flex-direction: column;
                     justify-content: center;
                     align-items: center;
-                    gap: 10px;
+                    gap: 20px;
                     flex: 1 0 0;
-
-                    border-radius: 8px;
-                    border: 1px solid #51B2FF;
-                    background: #282D39;
-                    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
-
-                    color: rgba(255, 255, 255, 0.70);
+                    color: #fff;
                     text-align: center;
                     font-family: Manrope;
-                    font-size: 12px;
+                    font-size: 14px;
                     font-weight: 700;
+                    cursor: default;
 
                     svg {
                         height: 34px;
                         fill: #FFF;
-                        opacity: 0.70;
                     }
                 }
 
@@ -353,12 +296,58 @@
                 }
             }
 
-            &.unread{
-                .notifycation.true{
+            &.unread {
+                .notifycation.true {
                     display: none;
                 }
             }
         }
+
+        //Загрузка
+        .notify-load {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            height: 100%;
+
+            &.hide{
+                display: none;
+            }
+        }
+    }
+}
+
+@-webkit-keyframes rotating {
+    from {
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
 }
 

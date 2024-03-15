@@ -8,6 +8,7 @@ import { GetHistoryWatch } from "./index/mod_history_watch.js";
 import { ScrollElementWithMouse, Sleep } from "../modules/funcitons.js";
 import { AnimeLoaded, LoadAnimeShikimori, LoadUpdatetAnime } from "./index/mod_animes.js";
 import { ShowNotifyWindow } from "./index/mod_window.js";
+// import { InitCountdown } from "./index/mod_countdown.js";
 
 InitMenu();
 
@@ -22,6 +23,7 @@ Main((e) => {
     GetHistoryWatch();
     LoadUserRate();
     On();
+    // InitCountdown();
 })();
 
 ScrollElementWithMouse('.section-genres');
