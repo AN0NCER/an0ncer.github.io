@@ -1,4 +1,4 @@
-var version = '141';
+var version = '150';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     // Директория: /images/icons
@@ -38,6 +38,7 @@ var appShellFilesToCache = [
     "/javascript/modules/funcitons.js",
     "/javascript/modules/header.js",
     "/javascript/modules/Popup.js",
+    "/javascript/modules/Settings.js",
     "/javascript/modules/ShikiAPI.js",
     "/javascript/modules/ShikiUSR.js",
     "/javascript/modules/TunimeApi.js",
@@ -45,9 +46,11 @@ var appShellFilesToCache = [
     // Директория: /javascript/pages/index
     "/javascript/pages/index/mod_account.js",
     "/javascript/pages/index/mod_animes.js",
+    "/javascript/pages/index/mod_countdown.js",
     "/javascript/pages/index/mod_github.js",
     "/javascript/pages/index/mod_history_watch.js",
     "/javascript/pages/index/mod_notify.js",
+    "/javascript/pages/index/mod_search.js",
     "/javascript/pages/index/mod_trailers.js",
     "/javascript/pages/index/mod_trailers_animation.js",
     "/javascript/pages/index/mod_window.js",

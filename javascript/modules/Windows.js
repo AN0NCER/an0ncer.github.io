@@ -1,4 +1,5 @@
 import { Sleep } from "../modules/funcitons.js";
+import { ShowInfo } from "./Popup.js";
 
 export class WindowManagement {
     constructor(target = {
@@ -28,6 +29,7 @@ export class WindowManagement {
 
     click() {
         if (!this.target.verif()) {
+            ShowInfo("Вы должны авторизоваться!", "auth");
             return;
         }
         this.show();

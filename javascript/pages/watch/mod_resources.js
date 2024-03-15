@@ -1,12 +1,11 @@
 import { ACard } from "../../modules/AnimeCard.js";
+import { SHIKIURL } from "../../modules/Settings.js";
 import { Animes } from "../../modules/ShikiAPI.js";
 import { ApiTunime } from "../../modules/TunimeApi.js";
 import { ScrollElementWithMouse, Sleep } from "../../modules/funcitons.js";
 import { $ID } from "../watch.js";
 import { LoadPage, LoadPageLogs } from "./mod_loadingpage.js";
 import { SynchLocalData } from "./mod_synch.js";
-
-const ShikimoriUrl = "https://shikimori.me";
 
 let _shikimoriData = undefined;
 let _shikimoriScreenshots = undefined;
@@ -114,7 +113,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
         return new Promise((resolve) => {
             fetch(`https://api.jikan.moe/v4/anime/${id}/full`).then(async (response) => {
                 if (response.status != 200) {
-                    return resolve(ShikimoriUrl + _shikimoriData.image.original);
+                    return resolve(SHIKIURL.url + _shikimoriData.image.original);
                 }
                 let data = await response.json();
                 resolve(data.data.images.webp.large_image_url);
@@ -138,7 +137,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
             }
             image.onerror = (e) => {
                 console.log(e);
-                return resolve(ShikimoriUrl + _shikimoriData.image.original);
+                return resolve(SHIKIURL.url + _shikimoriData.image.original);
             }
             image.src = url;
         });
@@ -342,7 +341,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
                     const img = response[i];
                     if (i < 3) {
                         $(".galery-slider").append(
-                            `<div class="slide" data-id="${i}"><img src="https://shikimori.me${img.preview}" loading="lazy"></div>`
+                            `<div class="slide" data-id="${i}"><img src="${SHIKIURL.url}${img.preview}" loading="lazy"></div>`
                         );
                     } else {
                         $(".galery-slider").append(
@@ -382,7 +381,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
                     const element = response[i];
                     if (element.roles.includes('Main')) {
                         $('.hero-anime, .hero-anime-title').css('display', '');
-                        $('.hero-anime > .val').append(`<a href="https://shikimori.me${element.character.url}"><img src="https://nyaa.shikimori.me${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div></div></a>`);
+                        $('.hero-anime > .val').append(`<a href="${SHIKIURL.url}${element.character.url}"><img src="${SHIKIURL.suburl('nyaa')}${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div></div></a>`);
                     }
                 }
                 return resolve(true);
@@ -451,7 +450,7 @@ export async function LoadAnime(event = () => { }, logged = false) {
 
         var ogImage = $("<meta/>", {
             "property": "og:image",
-            "content": `https://moe.shikimori.me${data.image.original}`
+            "content": `${SHIKIURL.protocol}://moe.${SHIKIURL.domain}${data.image.original}`
         });
 
         var ogDescription = $("<meta/>", {
@@ -479,7 +478,7 @@ export function LoadImageById(id) {
         return;
     }
     $(`.galery-slider > .slide[data-id="${id}"]`).append(
-        `<img src="https://shikimori.me${_shikimoriScreenshots[id].preview}">`
+        `<img src="${SHIKIURL.url}${_shikimoriScreenshots[id].preview}">`
     );
 }
 

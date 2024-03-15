@@ -1,0 +1,149 @@
+.swiper-countdown {
+    overflow: hidden;
+  
+    .swiper-wrapper {
+      .swiper-slide {
+        overflow: hidden;
+        height: 300px;
+        border-radius: $radius;
+        position: relative;
+        background: $object_bg;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+  
+        img {
+          height: 115%;
+        }
+  
+        .schape {
+          $size: 1000px;
+          width: $size;
+          height: $size;
+          background: $object_bg;
+          display: flex;
+          position: absolute;
+          transform: rotate(66deg);
+          top: -135%;
+          right: calc($size / 2 * -1);
+        }
+  
+        .content {
+          position: absolute;
+          right: 50px;
+          display: flex;
+          flex-direction: column;
+          align-items: end;
+          justify-content: center;
+          gap: 10px;
+          font-family: Manrope;
+          height: 100%;
+  
+          .title {
+            font-size: 20px;
+            color: #fff;
+            font-weight: bold;
+            max-width: 420px;
+            text-align: right;
+          }
+  
+          .tags {
+            display: flex;
+            gap: 10px;
+  
+            .tag {
+              font-size: 11px;
+              border: 1px solid #fff;
+              padding: 3px 5px;
+              border-radius: $radius;
+              color: #fff;
+              text-transform: uppercase;
+            }
+  
+            .pg {
+              background: #F7D149;
+              color: #161616;
+              border: none;
+            }
+          }
+  
+          .text {
+            text-transform: uppercase;
+            font-size: 14px;
+            color: #fff;
+            letter-spacing: 0.2em;
+          }
+  
+          .timer {
+            display: flex;
+            gap: 10px;
+  
+            .d,
+            .h,
+            .m,
+            .s {
+              padding: 10px;
+              background: $main_bg;
+              border-radius: $radius;
+              color: #fff;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  @media screen and (max-width:940px) {
+    .swiper-countdown {
+      .swiper-wrapper {
+        .swiper-slide {
+          height: auto;
+          flex-direction: column;
+  
+          img {
+            height: auto;
+            width: 100%;
+          }
+  
+          .schape {
+            display: none;
+          }
+  
+          .content {
+            position: static;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+  
+            .title {
+              text-align: center;
+              font-size: 16px;
+            }
+  
+            .tags {
+              .tag {
+                font-size: 9px;
+              }
+            }
+  
+            .text {
+              font-size: 12px;
+            }
+  
+            .timer {
+  
+              .d,
+              .h,
+              .m,
+              .s {
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }

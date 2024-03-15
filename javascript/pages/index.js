@@ -8,6 +8,7 @@ import { GetHistoryWatch } from "./index/mod_history_watch.js";
 import { ScrollElementWithMouse, Sleep } from "../modules/funcitons.js";
 import { AnimeLoaded, LoadAnimeShikimori, LoadUpdatetAnime } from "./index/mod_animes.js";
 import { ShowNotifyWindow } from "./index/mod_window.js";
+// import { InitCountdown } from "./index/mod_countdown.js";
 
 InitMenu();
 
@@ -22,6 +23,7 @@ Main((e) => {
     GetHistoryWatch();
     LoadUserRate();
     On();
+    // InitCountdown();
 })();
 
 ScrollElementWithMouse('.section-genres');
@@ -62,14 +64,6 @@ function On() {
         LoadAnimeShikimori({ genre: genres });
     });
 
-    //Событие на нажатие кнопки поиска
-    $('.search > .btn').click((e) => {
-        //Получение значения посика
-        let value = $(e.currentTarget.parentNode)[0].firstElementChild.value;
-
-        window.location.href = '/search.html?val=' + value;
-    });
-
     //Событие Enter unput search
     $('.search > input').on('keypress', function (e) {
         if (e.which == 13) {
@@ -78,6 +72,13 @@ function On() {
                 return;
             }
             window.location.href = '/search.html?val=' + value;
+        }
+    });
+
+    $(document).on('keydown', (e) => {
+        if (e.originalEvent.key === "/") {
+            e.preventDefault();
+            $('.desktop > #search-input').focus();
         }
     });
 

@@ -1675,6 +1675,7 @@ footer .studio span {
     display: flex;
     max-width: 521px;
     flex-direction: column;
+    width: 100%;
   }
   main .block--2 {
     padding-top: 20px;
