@@ -178,14 +178,14 @@ function PlayPLayer() {
         const player = GetPlayer(key);
         if (!player.video.paused) {
             //Анимация кнопки паузы
-            AnimePausePlayer(key);
+            AnimePlayPlayer(key);
             //Пауза видео
             player.video.pause();
         } else {
             //Скрываем превью трейлера
             AnimeHidePreview(key);
             //Анимация кнопки воспроизведения
-            AnimePlayPlayer(key);
+            AnimePausePlayer(key);
             //Воспроизводим видео
             player.video.play();
         }

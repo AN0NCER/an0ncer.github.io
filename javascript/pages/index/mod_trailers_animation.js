@@ -53,7 +53,7 @@ export function AnimeLoadedPlayer(key) {
         scale: [1, 0.8]
     })
     anime({
-        targets: `.btn-play[data-key="${key}"] > .play`,
+        targets: `.btn-play[data-key="${key}"] > .pause`,
         opacity: [0, 1],
         scale: [0.8, 1]
     })
