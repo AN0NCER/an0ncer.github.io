@@ -224,6 +224,7 @@ header > .notify-search .notification > .dot {
   top: 0;
   position: absolute;
   z-index: 2;
+  pointer-events: none;
 }
 .swiper-treilers .swiper-wrapper .swiper-slide > .controls {
   background: #191C21;

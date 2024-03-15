@@ -33,6 +33,8 @@ let TrailersData = undefined;
 let _loadedTrailers = [];
 let _selectedTrailers = [];
 
+let TypePlayer = 'local';
+
 export const GetLoadedTrailers = () => { return _loadedTrailers };
 
 //Начало скрипта
@@ -177,11 +179,15 @@ function PlayPLayer() {
 
         const player = GetPlayer(key);
         if (!player.video.paused) {
+            if (TypePlayer != 'local')
+                return;
             //Анимация кнопки паузы
             AnimePlayPlayer(key);
             //Пауза видео
             player.video.pause();
         } else {
+            if (TypePlayer != 'local')
+                return;
             //Скрываем превью трейлера
             AnimeHidePreview(key);
             //Анимация кнопки воспроизведения
@@ -226,17 +232,16 @@ function PlayerFunctions(player, key) {
         //Воспроизводим видео
         player.video.play();
         //Анимация кнопки на воспроизведение
+        TypePlayer = 'local';
     }
 }
 
 function GetPlayer(key) {
-    let audio = null;
     let video = null;
 
-    // audio = $(`.player[data-key="${key}"] > audio`)[0];
     video = $(`.player[data-key="${key}"] > video`)[0];
 
-    return { audio: audio, video: video };
+    return { video: video };
 }
 
 function LoadYTPlayer(key) {
@@ -263,12 +268,19 @@ function LoadYTPlayer(key) {
     //Подключение стилей к сайту
     window.player = YTPlayer;
 
+    //Статус youtube player
+    let ytstatus = 0;
     //Изменения событий 
     function YTPlayerStateChange(e) {
         if (e.data == YT.PlayerState.ENDED) {
             AnimeShowPreview(key);
             $('#ytplayer').remove();
+        } else if (e.data == YT.PlayerState.PLAYING) {
+            AnimePausePlayer(key);
+        } else if (e.data == YT.PlayerState.PAUSED) {
+            AnimePlayPlayer(key);
         }
+        ytstatus = e.data;
     }
 
     //Функция когда дополнительный плеер готов
@@ -277,6 +289,14 @@ function LoadYTPlayer(key) {
         AnimeHidePreview(key);
         e.target.playVideo();
         _loadedTrailers.push(key);
+        TypePlayer = 'youtube';
+        $('.wrapper-block-info > .btn-play').on('click', function (e) {
+            if (ytstatus == YT.PlayerState.PLAYING) {
+                YTPlayer.pauseVideo();
+            } else {
+                YTPlayer.playVideo();
+            }
+        });
     }
 }
 
@@ -289,7 +309,6 @@ function GenSlide(res, key) {
         </a>
         <div class="player" data-key="${key}">
             <video type="video/mp4" playsinline></video>
-            <audio type="audio/mp3" playsinline></audio>
         </div>
     </div>
     <div class="controls">
