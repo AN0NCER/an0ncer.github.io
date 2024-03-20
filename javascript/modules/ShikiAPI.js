@@ -218,7 +218,10 @@ export const UserRates = {
         const url = this.base_url() + query;
         const request = Fetch("GET", url, Headers.base());
         return {
-            GET: async () => {
+            GET: async (logged = false) => {
+                if (logged) {
+                    request.setHeaders(Headers.bearer());
+                }
                 const response = await request.fetch();
                 event(response);
                 return response;
