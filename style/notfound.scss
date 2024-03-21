@@ -1,0 +1,322 @@
+$main_bg: #101318;
+$object_bg: #1f2329;
+$primary: #2393F1;
+$radius: 5px;
+
+body {
+    background: $main_bg;
+    max-width: 1100px;
+    margin: 0 auto;
+    -webkit-text-size-adjust: none;
+    /* Запрещает автоматическое изменение размера текста */
+}
+
+header {
+    $profile_size: 45px;
+
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &>.account {
+        display: flex;
+        white-space: nowrap;
+        align-items: center;
+
+        .image-profile {
+            overflow: hidden;
+            border-radius: 50%;
+            width: $profile_size;
+            height: $profile_size;
+
+            img {
+                width: 45px;
+                height: 45px;
+                aspect-ratio: 1 / 1;
+            }
+        }
+
+        &>.information {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-left: 10px;
+            color: #fff;
+            font-family: Manrope;
+
+            &>.name {
+                font-size: 16px;
+
+                span {
+                    font-size: 14px;
+                }
+
+                b {
+                    font-weight: 800;
+                }
+            }
+
+            &>.position {
+                display: flex;
+                align-items: center;
+
+                svg {
+                    width: 12px;
+                    fill: #fff;
+                }
+
+                &>span {
+                    margin-left: 5px;
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+
+    &>.notify-search {
+        display: flex;
+        gap: 10px;
+
+        .notification {
+            $size: 40px;
+            min-height: $size;
+            min-width: $size;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: $object_bg;
+            border-radius: $radius;
+            cursor: pointer;
+
+            svg {
+                fill: #fff;
+                height: 14px;
+                z-index: 1;
+            }
+
+            &>.dot {
+                $size: 6px;
+                width: $size;
+                height: $size;
+                background: #2393F1;
+                border-radius: 50%;
+                position: absolute;
+                top: 8px;
+                right: 12px;
+            }
+        }
+    }
+}
+
+.mbs {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.desktop.search {
+    width: 300px;
+}
+
+.search {
+    display: flex;
+    height: 40px;
+    overflow: hidden;
+    border-radius: $radius;
+    position: relative;
+
+    &>input {
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        background: $object_bg;
+        color: #fff;
+        padding-left: 10px;
+        padding-right: 40px;
+        font-family: Manrope;
+
+        &::placeholder {
+            // padding-left: 10px;
+            color: #fff;
+            opacity: 0.7;
+            transition: .3s ease-in-out;
+        }
+
+        @supports (-moz-appearance:none) {
+            &:placeholder-shown {
+                padding-left: 10px;
+                transition: .3s ease-in-out;
+            }
+
+            &:focus {
+                &:placeholder-shown {
+                    padding-left: 10px;
+                }
+            }
+        }
+    }
+
+    &>.shortcut {
+        position: absolute;
+        right: 6px;
+        top: 0;
+        bottom: 0;
+        display: grid;
+        place-items: center;
+
+        &>span {
+            color: #fff;
+            background: $main_bg;
+            width: 28px;
+            height: 28px;
+            border-radius: $radius;
+            display: grid;
+            place-items: center;
+            font-size: 14px;
+        }
+    }
+
+    &>input:focus {
+        &::placeholder {
+            padding-left: 0px;
+        }
+    }
+
+    input:focus~.icon {
+        opacity: 0;
+    }
+
+    input:not(:placeholder-shown)~.icon {
+        opacity: 0;
+    }
+}
+
+main {
+    display: flex;
+    gap: 10px;
+    padding-top: 25px;
+
+    .preview-bg {
+        min-width: 430px;
+        display: flex;
+        background-image: url('../../../../images/anime-dragon.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        border-radius: $radius;
+    }
+
+    .content {
+        font-family: 'Manrope';
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+
+        span.title {
+            font-size: 96px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        span.text {
+            font-size: 16px;
+            padding: 0 100px;
+            text-align: center;
+        }
+
+        .buttons {
+            display: flex;
+            margin-top: 50px;
+            justify-content: center;
+            gap: 10px;
+
+            .btn {
+                background: #191C21;
+                padding: 10px;
+                font-size: 16px;
+                color: rgba($color: #ffffff, $alpha: 0.6);
+                border-radius: $radius;
+                cursor: pointer;
+            }
+        }
+
+        .section-anime {
+            margin-top: 20px;
+            margin-right: 20px;
+            width: 100%;
+            display: inline-flex;
+            margin-top: 30px;
+            overflow-x: scroll;
+            gap: 10px;
+
+            .card-anime {
+                min-width: 195px;
+            }
+
+
+        }
+
+        .section-anime:empty {
+            min-height: 305px;
+            width: 100%;
+        }
+    }
+}
+
+footer {
+    margin-top: 50px;
+}
+
+@import './windowed';
+@import './window/notify';
+@import './popup';
+@import './cards';
+
+@media screen and (max-width:890px) {
+    main {
+        padding-top: 0px;
+
+        .preview-bg {
+            display: none;
+        }
+
+        .content {
+            span.title {
+                text-align: left;
+            }
+
+            span.text {
+                text-align: left;
+                padding: 0;
+            }
+
+            .buttons {
+                justify-content: start;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:700px) {
+    .desktop {
+        display: none;
+    }
+}
+
+@media screen and (min-width:700px) {
+    .mobile {
+        display: none;
+    }
+}
+
+@media (orientation: landscape) and (max-width:1100px) {
+    body {
+        margin-right: max(20px, env(safe-area-inset-right));
+        margin-left: max(20px, env(safe-area-inset-left));
+    }
+}
