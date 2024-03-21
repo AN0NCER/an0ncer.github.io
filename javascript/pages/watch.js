@@ -107,7 +107,7 @@ Main(async (e) => {
                 if (userRate.episodes > e || userRate.status == "completed") {
                     return;
                 }
-                UserRate().Controls.Episode(e)
+                UserRate().Controls.Episode(Player().episodes.selected_episode)
             }
         });
 
