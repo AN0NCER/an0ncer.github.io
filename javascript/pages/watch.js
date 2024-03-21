@@ -24,7 +24,7 @@ Main(async (e) => {
 
     if (check.length == 0) {
         //Аниме с такий ID не существует, перекидываем на страницу 404
-        return document.location.replace('404.html');
+        return document.location.replace('404a.html');
     }
 
     Functional();
