@@ -70,12 +70,12 @@ async function LoadVoices() {
             VOICES[i] = data;
             for (let a = 0; a < data.notify_ids.length; a++) {
                 const element = data.notify_ids[a];
-                SetVoiceStatus(kodik.last_episode, data.anime.episode, element);
+                SetVoiceStatus(kodik.last_episode, $(`.notifycation[data-id="${element}"]`).data('episode'), element);
             }
         } else {
             for (let a = 0; a < data.notify_ids.length; a++) {
                 const element = data.notify_ids[a];
-                SetVoiceStatus(data.voice.lastepisode, data.anime.episode, element);
+                SetVoiceStatus(data.voice.lastepisode, $(`.notifycation[data-id="${element}"]`).data('episode'), element);
             }
         }
     }
