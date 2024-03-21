@@ -2,30 +2,19 @@
 html,
 body {
   scrollbar-gutter: stable;
+  /* Запрещает автоматическое изменение размера текста */
+  -webkit-text-size-adjust: none;
 }
 
 body {
   background: #101318;
-  overflow-x: hidden;
-  max-width: 900px;
-  margin: 0 auto;
-  -webkit-text-size-adjust: none;
-  /* Запрещает автоматическое изменение размера текста */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 body.loading {
   overflow-y: hidden;
 }
 
-.scroll-none {
-  scrollbar-width: none;
-}
-.scroll-none::-webkit-scrollbar {
-  display: none;
-}
-
-/*
-Page Loading Animation
-*/
 .page-loading {
   position: fixed;
   top: 0;
@@ -131,28 +120,76 @@ Page Loading Animation
   }
 }
 
-/*
-Header page image fix
-*/
 header {
-  font-family: Manrope;
+  width: 100%;
+  overflow-x: hidden;
+  margin-top: 20px;
+  overflow: hidden;
+  display: flex;
 }
-header .bg-paralax-img {
-  height: 528px;
+header .preview {
+  position: relative;
+  max-width: 370px;
+  width: 100%;
+  overflow: hidden;
+}
+header .preview .preview-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+}
+header .preview .preview-wrapper img.main {
+  width: 100%;
+  min-width: 370px;
+  z-index: 1;
   position: relative;
 }
-header .bg-paralax-img img {
-  width: 100%;
-  max-width: 900px;
-  position: fixed;
+header .preview .preview-wrapper .bg-wrapper {
+  position: absolute;
   top: 0;
-  z-index: 9;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-header .bg-paralax-img .btn-back {
+header .preview .preview-wrapper img.bg {
+  filter: blur(5px);
+  width: 150%;
+}
+header .preview .schape {
+  position: absolute;
+  bottom: 0px;
+  z-index: 14;
+  display: flex;
+}
+header .preview .schape-l {
+  left: 0;
+}
+header .preview .schape-l .btn {
+  left: 5px;
+}
+header .preview .schape-r {
+  right: 0;
+}
+header .preview .schape-r .btn {
+  right: 5px;
+}
+header .preview .schape .btn {
+  position: absolute;
+  width: 59px;
+  height: 59px;
+  display: grid;
+  place-items: center;
+  z-index: 14;
+  bottom: 5px;
+}
+header .preview .schape .btn svg {
+  fill: #fff;
+  width: 20px;
+}
+header .preview .btn-back {
   width: 35px;
   height: 35px;
   cursor: pointer;
@@ -167,7 +204,52 @@ header .bg-paralax-img .btn-back {
   display: grid;
   place-items: center;
 }
-header .bg-paralax-img .anime-status {
+header .preview .btn-back svg {
+  height: 12px;
+}
+header .preview .btn-play {
+  position: absolute;
+  z-index: 11;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+}
+header .preview .btn-play .btn {
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  background: linear-gradient(180deg, #2296f0 0%, #287bf1 100%);
+  max-width: 60px;
+  max-height: 60px;
+  width: 100%;
+  height: 100%;
+}
+header .preview .btn-play .btn .wrapper-play {
+  max-width: 25px;
+  max-height: 25px;
+  border-radius: 50%;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+header .preview .btn-play .btn .wrapper-play .wrapper-icon {
+  position: absolute;
+  display: flex;
+  top: 1.17px;
+  left: 3.51px;
+  bottom: 1.17px;
+  right: 0.78px;
+}
+header .preview .btn-play .btn .wrapper-play .wrapper-icon svg {
+  height: 100%;
+}
+header .preview .anime-status {
+  font-family: "Manrope";
   position: absolute;
   z-index: 15;
   top: 20px;
@@ -176,11 +258,11 @@ header .bg-paralax-img .anime-status {
   flex-direction: column;
   align-items: flex-end;
 }
-header .bg-paralax-img .anime-status .cur-status {
+header .preview .anime-status .cur-status {
   display: flex;
   cursor: pointer;
 }
-header .bg-paralax-img .anime-status .cur-status .more-status {
+header .preview .anime-status .cur-status .more-status {
   background: rgba(164, 164, 164, 0.5);
   -webkit-backdrop-filter: blur(2px);
           backdrop-filter: blur(2px);
@@ -191,10 +273,10 @@ header .bg-paralax-img .anime-status .cur-status .more-status {
   display: grid;
   place-items: center;
 }
-header .bg-paralax-img .anime-status .cur-status .more-status svg {
+header .preview .anime-status .cur-status .more-status svg {
   height: 10px;
 }
-header .bg-paralax-img .anime-status .cur-status .icon {
+header .preview .anime-status .cur-status .icon {
   height: 35px;
   display: flex;
   justify-content: center;
@@ -202,7 +284,7 @@ header .bg-paralax-img .anime-status .cur-status .icon {
   background: rgba(133, 133, 133, 0.8);
   border-radius: 0px 5px 5px 0px;
 }
-header .bg-paralax-img .anime-status .cur-status .icon .safe-area {
+header .preview .anime-status .cur-status .icon .safe-area {
   min-width: 35px;
   max-width: 35px;
   min-height: 35px;
@@ -212,27 +294,27 @@ header .bg-paralax-img .anime-status .cur-status .icon .safe-area {
   display: grid;
   place-items: center;
 }
-header .bg-paralax-img .anime-status .cur-status .icon .safe-area svg {
+header .preview .anime-status .cur-status .icon .safe-area svg {
   height: 15px;
   fill: #fff;
 }
-header .bg-paralax-img .anime-status .cur-status .icon > .text {
+header .preview .anime-status .cur-status .icon > .text {
   max-width: 0px;
   overflow: hidden;
   transition: 0.3s ease-in-out;
   font-size: 12px;
   color: #fff;
 }
-header .bg-paralax-img .anime-status .cur-status .icon.selected {
+header .preview .anime-status .cur-status .icon.selected {
   background: linear-gradient(180deg, #2296F0 0%, #287BF1 100%);
 }
-header .bg-paralax-img .anime-status .select .more-status {
+header .preview .anime-status .select .more-status {
   background: linear-gradient(180deg, #2296f0 0%, #287bf1 100%);
 }
-header .bg-paralax-img .anime-status .select .icon {
+header .preview .anime-status .select .icon {
   background: linear-gradient(180deg, #2296f0 0%, #287bf1 100%);
 }
-header .bg-paralax-img .anime-status .list-status {
+header .preview .anime-status .list-status {
   margin-top: 10px;
   display: flex;
   flex-direction: column;
@@ -240,12 +322,12 @@ header .bg-paralax-img .anime-status .list-status {
   max-height: 0px;
   overflow: hidden;
 }
-header .bg-paralax-img .anime-status .list-status > .hide {
+header .preview .anime-status .list-status > .hide {
   display: none;
   max-height: 0px;
   overflow: hidden;
 }
-header .bg-paralax-img .anime-status .list-status > .status {
+header .preview .anime-status .list-status > .status {
   background: rgba(133, 133, 133, 0.8);
   width: 100%;
   display: flex;
@@ -254,10 +336,10 @@ header .bg-paralax-img .anime-status .list-status > .status {
   justify-content: flex-start;
   cursor: pointer;
 }
-header .bg-paralax-img .anime-status .list-status > .status:first-child {
+header .preview .anime-status .list-status > .status:first-child {
   border-radius: 3px 3px 0 0;
 }
-header .bg-paralax-img .anime-status .list-status > .status .safe-area {
+header .preview .anime-status .list-status > .status .safe-area {
   min-width: 35px;
   max-width: 35px;
   min-height: 35px;
@@ -267,310 +349,155 @@ header .bg-paralax-img .anime-status .list-status > .status .safe-area {
   display: grid;
   place-items: center;
 }
-header .bg-paralax-img .anime-status .list-status > .status .safe-area svg {
+header .preview .anime-status .list-status > .status .safe-area svg {
   height: 15px;
   fill: #fff;
 }
-header .bg-paralax-img .anime-status .list-status > .status > .text {
+header .preview .anime-status .list-status > .status > .text {
   overflow: hidden;
   transition: 0.3s ease-in-out;
   font-size: 12px;
   color: #fff;
   margin-right: 10px;
 }
-header .bg-paralax-img .anime-status .list-status > .status:last-child {
+header .preview .anime-status .list-status > .status:last-child {
   border-radius: 0 0 3px 3px;
 }
-header .bg-paralax-img .show-more .cur-status .more-status svg {
+header .preview .show-more .cur-status .more-status svg {
   transform: scale(-1, 1);
 }
-header .bg-paralax-img .show-more .cur-status .icon > .text {
+header .preview .show-more .cur-status .icon > .text {
   max-width: 120px;
   margin-right: 10px;
 }
-header .bg-paralax-img .show-more .list-status {
+header .preview .show-more .list-status {
   max-height: 200px;
 }
-header .bg-paralax-img .btn-play {
-  position: absolute;
-  z-index: 11;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: grid;
-  place-items: center;
-}
-header .bg-paralax-img .btn-play .btn {
-  cursor: pointer;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  position: relative;
-  background: linear-gradient(180deg, #2296f0 0%, #287bf1 100%);
-  width: 60px;
-  height: 60px;
-}
-header .bg-paralax-img .btn-play .btn svg {
-  width: 20px;
-  transform: translateX(3px);
-}
-header .bg-paralax-img .btn-wrapper {
-  position: absolute;
-  z-index: 14;
-}
-header .bg-paralax-img .btn-wrapper .obj {
-  width: 101px;
-  height: 101px;
-}
-header .bg-paralax-img .btn-wrapper .btn {
-  position: absolute;
-  width: 59px;
-  height: 59px;
-  display: grid;
-  place-items: center;
-  z-index: 14;
-  cursor: pointer;
-}
-header .bg-paralax-img .btn-wrapper .btn:empty {
-  background: red;
-}
-header .bg-paralax-img .btn-wrapper .btn svg {
-  fill: #fff;
-  width: 20px;
-}
-header .bg-paralax-img .btn-wrapper .btn .fill {
-  display: none;
-}
-header .bg-paralax-img .btn-wrapper .btn.fill svg {
-  display: none;
-}
-header .bg-paralax-img .btn-wrapper .btn.fill .fill {
-  display: block;
-  fill: #287bf1;
-}
-header .bg-paralax-img .rotate {
-  transform: rotateY(180deg);
-}
-header .bg-paralax-img .lb,
-header .bg-paralax-img .rb {
-  bottom: 0;
-}
-header .bg-paralax-img .lb .btn,
-header .bg-paralax-img .rb .btn {
-  bottom: 5px;
-}
-header .bg-paralax-img .lb {
-  left: -1px;
-}
-header .bg-paralax-img .lb .btn {
-  left: 5px;
-}
-header .bg-paralax-img .rb {
-  right: -1px;
-}
-header .bg-paralax-img .rb .btn {
-  right: 5px;
-}
-
-/*
-Blocks
-*/
-main {
+header .content {
   font-family: "Manrope";
+  overflow: hidden;
+  width: 100%;
 }
-main .block--1 {
-  display: flex;
-  position: relative;
-  z-index: 8;
-  flex-direction: column;
-}
-main .block--1--content {
-  z-index: 10;
-  background: #101318;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-main .block--2 {
-  background: #101318;
-  position: relative;
-  z-index: 50;
-  min-height: 500px;
-}
-
-/*
- Заголовок рус/анг + оценка
-*/
-.title-with-raiting {
+header .content .title-with-raiting {
   margin-left: 20px;
   margin-right: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.title-with-raiting .title {
+header .content .title-with-raiting .title {
   margin-right: 10px;
 }
-.title-with-raiting .title .russian {
+header .content .title-with-raiting .title .russian {
   color: #fff;
   font-weight: bold;
   font-size: 18px;
 }
-.title-with-raiting .title .name {
+header .content .title-with-raiting .title .name {
   color: #fff;
   opacity: 0.5;
   font-size: 11px;
 }
-.title-with-raiting .raiting {
+header .content .title-with-raiting .raiting {
   display: flex;
   color: #fff;
   font-weight: bold;
   align-items: center;
 }
-.title-with-raiting .raiting svg {
+header .content .title-with-raiting .raiting svg {
   height: 14px;
   margin-right: 10px;
-  fill: #2487f1;
+  fill: #5fbef3;
 }
-
-/*
- Жанры
-*/
-.genres {
+header .content .genres {
   display: flex;
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 20px;
   overflow-x: auto;
+  gap: 10px;
 }
-.genres a {
+header .content .genres a {
   color: #5fbef3;
   border: 1px solid #5fbef3;
   height: 30px;
   padding: 0 10px;
   display: flex;
   align-items: center;
-  margin-right: 10px;
   border-radius: 5px;
   white-space: nowrap;
   font-size: 12px;
 }
-
-/*
-Data information
-*/
-.text-witch-pg {
+header .content .details {
+  display: flex;
+  flex-direction: column;
+  background: #191C21;
   margin-top: 20px;
-  color: #020202;
+}
+header .content .details .block {
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 12px;
-  background: #5fbef3;
-  height: 45px;
-}
-.text-witch-pg .pg {
   font-weight: bold;
-  margin-right: 20px;
-  display: flex;
-  align-items: center;
-}
-.text-witch-pg .icon-text {
-  display: flex;
-  align-items: center;
-  margin-left: 20px;
-}
-.text-witch-pg .icon-text svg {
-  fill: #020202;
-  width: 20px;
-}
-.text-witch-pg .icon-text .content {
-  margin-left: 10px;
-}
-
-/*
-Title block
-*/
-.block-title {
-  margin-top: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
   color: #fff;
-  font-weight: bold;
-  font-size: 18px;
-  position: relative;
 }
-.block-title.with-count {
+header .content .details .block .content-a {
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
   align-items: center;
 }
-.block-title.with-count .count {
-  font-size: 12px;
-  color: #596271;
-}
-
-.block-title.title-player {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.block-title.title-player > .btn-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 3px;
-  gap: 5px;
-  overflow: hidden;
-}
-.block-title.title-player > .btn-wrapper > .btn {
+header .content .details .block .content-a .icon {
+  background: #101318;
+  width: 30px;
+  height: 30px;
   display: grid;
-  cursor: pointer;
-  width: 35px;
-  height: 35px;
   place-items: center;
-  background: rgba(133, 133, 133, 0.2);
+  border-radius: 2px;
 }
-.block-title.title-player > .btn-wrapper > .btn.btn-lock-view {
-  display: none;
-}
-.block-title.title-player > .btn-wrapper > .btn svg {
-  width: 18px;
+header .content .details .block .content-a .icon svg {
   fill: #fff;
-  opacity: 0.6;
+  width: 15px;
 }
-.block-title.title-player > .btn-wrapper > .btn .locked-view {
-  display: none;
+header .content .details .block .content-b .ep {
+  opacity: 0.2;
 }
-.block-title.title-player > .btn-wrapper > .btn .unlocked-view {
-  width: 21px;
+header .content .details .block .content-b .pg {
+  padding: 3px 7px;
+  background: #F7D149;
+  border-radius: 3px;
+  color: #161616;
 }
-
-/*
-Gallery
-*/
-.gallery {
+header .content > .title {
+  font-size: 18px;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-weight: bold;
+  color: #fff;
+}
+header .content .gallery {
   margin-left: 0px;
   margin-top: 10px;
+  margin-left: 20px;
 }
-.gallery .galery-slider {
+header .content .gallery .galery-slider {
   display: flex;
   overflow-x: auto;
+  gap: 10px;
 }
-.gallery .galery-slider .slide {
-  margin-right: 10px;
+header .content .gallery .galery-slider .slide {
   position: relative;
 }
-.gallery .galery-slider .slide img {
+header .content .gallery .galery-slider .slide img {
   height: 150px;
   border-radius: 3px;
 }
-.gallery .galery-slider .slide:first-child {
-  margin-left: 20px;
-}
-.gallery .galery-slider .slide:last-child {
+header .content .gallery .galery-slider .slide:last-child {
   padding-right: 20px;
 }
-.gallery .galery-slider .slide.select::after {
+header .content .gallery .galery-slider .slide.select::after {
   content: "";
   position: absolute;
   width: 5px;
@@ -581,10 +508,34 @@ Gallery
   top: 5px;
 }
 
-/*
-Description
-*/
-.description {
+main {
+  font-family: "Manrope";
+  background: #101318;
+  position: relative;
+  z-index: 1;
+  padding-top: 20px;
+}
+main > .title {
+  font-size: 18px;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-weight: bold;
+  color: #fff;
+}
+main > .title:first-child {
+  margin-top: 0;
+}
+main > .title.count {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+main > .title.count .count {
+  font-size: 12px;
+  color: #596271;
+}
+main .description {
   color: #fff;
   opacity: 0.8;
   margin-left: 20px;
@@ -593,21 +544,79 @@ Description
   line-height: 150%;
   font-size: 14px;
 }
-.description div {
-  font-size: 14px;
-}
-.description a {
+main .description a {
   color: #98d4fd;
   font-size: 14px;
 }
-.description p {
-  font-size: 14px;
-  margin-bottom: 2px;
+main .hero-anime {
+  margin-top: 20px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+main .hero-anime .val {
+  display: inline-flex;
+  gap: 10px;
+}
+main .hero-anime .val a {
+  overflow: hidden;
+  width: 125px;
+  height: 195px;
+  position: relative;
+  display: flex;
+  border-radius: 4px;
+}
+main .hero-anime .val a img {
+  width: 100%;
+  top: 0;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
+main .hero-anime .val a .hero {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: 10px 0px;
+  background: rgba(16, 19, 24, 0.7);
+  -webkit-backdrop-filter: blur(2.5px);
+          backdrop-filter: blur(2.5px);
+  position: absolute;
+  bottom: 0;
+}
+main .hero-anime .val a .hero .name {
+  color: #FFF;
+  text-align: center;
+  font-family: Manrope;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+main .hero-anime .val a:first-child {
+  margin-left: 20px;
+}
+main .hero-anime .val a:last-child {
+  margin-right: 20px;
+}
+main .player-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+main .player-title .player-controls {
+  display: flex;
+  gap: 5px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+main .player-title .player-controls .btn {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  background: #191C21;
 }
 
-/*
-Episodes
-*/
 .episodes {
   margin: 20px 20px 10px 20px;
   overflow: hidden;
@@ -650,78 +659,6 @@ Episodes
   margin-top: 5px;
 }
 
-/*
-Heroes
-*/
-.block-shadow-left {
-  width: 100%;
-  position: relative;
-}
-.block-shadow-left::after {
-  content: "";
-  position: absolute;
-  width: 75px;
-  height: 100%;
-  right: 0;
-  top: 0;
-  background: linear-gradient(270deg, #101318 0%, rgba(16, 19, 24, 0) 100%);
-  z-index: 1;
-}
-
-.hero-anime {
-  margin-top: 20px;
-  overflow: hidden;
-  overflow-x: auto;
-}
-.hero-anime .val {
-  display: inline-flex;
-  gap: 10px;
-}
-.hero-anime .val a {
-  overflow: hidden;
-  width: 125px;
-  height: 195px;
-  position: relative;
-  display: flex;
-  border-radius: 4px;
-}
-.hero-anime .val a img {
-  width: 100%;
-  top: 0;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-}
-.hero-anime .val a .hero {
-  width: 100%;
-  display: grid;
-  place-items: center;
-  padding: 10px 0px;
-  background: rgba(16, 19, 24, 0.7);
-  -webkit-backdrop-filter: blur(2.5px);
-          backdrop-filter: blur(2.5px);
-  position: absolute;
-  bottom: 0;
-}
-.hero-anime .val a .hero .name {
-  color: #FFF;
-  text-align: center;
-  font-family: Manrope;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-}
-.hero-anime .val a:first-child {
-  margin-left: 20px;
-}
-.hero-anime .val a:last-child {
-  margin-right: 20px;
-}
-
-/*
-Player
-*/
 .player {
   display: flex;
 }
@@ -750,12 +687,9 @@ Player
   height: 100%;
 }
 
-/*
- Translations
-*/
 .translations-wrapper {
   margin: 20px 20px 0 20px;
-  background: rgba(133, 133, 133, 0.2);
+  background: #191C21;
   color: #020202;
   overflow: hidden;
   border-radius: 3px;
@@ -823,9 +757,6 @@ Player
   display: none;
 }
 
-/*
-Franchise
-*/
 .franchisa-anime {
   display: grid;
   margin-top: 20px;
@@ -899,6 +830,20 @@ Franchise
   margin-right: 20px;
 }
 
+.btn {
+  cursor: pointer;
+}
+
+.hide {
+  display: none;
+}
+
+.screen-wrapper {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 footer {
   background: #101318;
   position: sticky;
@@ -916,10 +861,6 @@ footer .studio {
 footer .studio span {
   font-size: 15px;
   opacity: 0.5;
-}
-
-.rm--mg--t {
-  margin-top: 0;
 }
 
 .card-anime {
@@ -1580,131 +1521,110 @@ footer .studio span {
   margin-right: 10px;
 }
 
-@media screen and (orientation: landscape) {
-  header .bg-paralax-img {
-    height: 100vh;
+@media screen and (max-width: 920px) {
+  header .mr-20 {
+    margin-right: 20px;
   }
-  .landscape-player.landscape {
+}
+@media screen and (max-width: 920px) and (orientation: landscape) {
+  header {
+    margin-top: 20px;
+  }
+}
+#center-player {
+  display: none;
+}
+
+@media (orientation: landscape) {
+  #center-player {
+    display: grid;
+  }
+  .landscape-player {
     display: flex;
   }
-  .landscape-player.landscape .player {
+  .landscape-player .player {
     width: 100%;
     max-height: calc(100vh - 20px);
   }
-  .landscape-player.landscape .player iframe {
+  .landscape-player .player iframe {
     margin: 0;
   }
-  .landscape-player.landscape.reverse-top {
+  .landscape-player.reverse-left {
+    margin: 10px 20px 0 20px;
+  }
+  .landscape-player.reverse-left .episodes {
+    margin: 0;
+    margin-right: 20px;
+    min-width: 61px;
+  }
+  .landscape-player.reverse-left .episodes .value {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 20px);
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+  .landscape-player.reverse-left .episodes .value .episode {
+    min-width: 55px;
+    max-width: 55px;
+    min-height: 70px;
+    max-height: 70px;
+  }
+  .landscape-player.reverse-top {
     flex-direction: column;
   }
-  .landscape-player.landscape.reverse-top .player iframe {
+  .landscape-player.reverse-top .player iframe {
     margin-top: 10px;
     margin-left: 20px;
     margin-right: 20px;
   }
-  .landscape-player.landscape.reverse-right {
+  .landscape-player.reverse-right {
     flex-direction: row-reverse;
     margin-top: 10px;
     margin-left: 20px;
     margin-right: 20px;
   }
-  .landscape-player.landscape.reverse-right .episodes {
+  .landscape-player.reverse-right .episodes {
     margin: 0;
     margin-right: 0;
     margin-left: 20px;
     min-width: 61px;
   }
-  .landscape-player.landscape.reverse-right .episodes .value {
+  .landscape-player.reverse-right .episodes .value {
     display: flex;
     flex-direction: column;
     max-height: calc(100vh - 20px);
     overflow-x: hidden;
     overflow-y: visible;
   }
-  .landscape-player.landscape.reverse-right .episodes .value .episode {
+  .landscape-player.reverse-right .episodes .value .episode {
     min-width: 55px;
     max-width: 55px;
     min-height: 70px;
     max-height: 70px;
-  }
-  .landscape-player.landscape.reverse-left {
-    margin-top: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-  .landscape-player.landscape.reverse-left .episodes {
-    margin: 0;
-    margin-right: 20px;
-    min-width: 61px;
-  }
-  .landscape-player.landscape.reverse-left .episodes .value {
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100vh - 20px);
-    overflow-x: hidden;
-    overflow-y: visible;
-  }
-  .landscape-player.landscape.reverse-left .episodes .value .episode {
-    min-width: 55px;
-    max-width: 55px;
-    min-height: 70px;
-    max-height: 70px;
-  }
-  .block-title.title-player.landscape {
-    padding-bottom: 10px;
-  }
-  .block-title.title-player.landscape .title {
-    font-size: 20px;
-  }
-  .block-title.title-player.landscape > .btn-wrapper > .btn {
-    display: grid;
   }
 }
-@media screen and (min-width: 900px) {
-  main {
-    margin-top: 20px;
-  }
-  main .block--1 {
-    flex-direction: revert;
-    max-width: 900px;
-    width: 100%;
-    overflow-x: hidden;
-  }
-  main .block--1--content {
-    padding-top: 0;
-    display: flex;
-    max-width: 521px;
-    flex-direction: column;
-    width: 100%;
-  }
-  main .block--2 {
-    padding-top: 20px;
-  }
+@media screen and (max-width: 650px) {
   header {
-    width: 370px;
+    flex-direction: column;
+    margin-top: 0;
   }
-  header .bg-paralax-img {
+  header .preview {
+    margin-left: 0;
+    max-width: none;
     height: 528px;
-    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  header .bg-paralax-img img {
-    width: auto;
-    position: relative;
+  header .preview .preview-wrapper img.main {
+    position: fixed;
+    top: 0;
+    left: 0;
   }
-  .windowed .window-content .content-wraper {
-    max-width: 900px;
-    margin: 0 auto;
-    width: 100%;
-  }
-}
-@media (orientation: landscape) {
-  main {
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
-  }
-  header .bg-paralax-img img {
-    left: env(safe-area-inset-left);
-    right: env(safe-area-inset-right);
-    width: calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right));
+  header .content {
+    padding-top: 20px;
+    z-index: 1;
+    background: #101318;
   }
 }
