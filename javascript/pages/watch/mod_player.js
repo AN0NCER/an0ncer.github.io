@@ -5,9 +5,11 @@ import { $ID } from "../watch.js";
 const player = {
     data: [],
     loaded: false, //Загрузился ли плеер (нужно для его управления)
-    loaded_int: 0,
+    loaded_int: 0, // Количество раз загрузки
     data_uri: undefined, //Ссылка на плеер kodik
     data_id: undefined,
+    alredy: false, // Готов плеер (ссылки для загрузки) для загрузки
+    name: 'kodik', //Название запущеного плеера
 
     uri: function (url) {
         this.data_uri = url;
@@ -299,6 +301,7 @@ const player = {
         error: [],
         next: [],
         fullscreen: [],
+        alredy: [],
 
         /**
          * Подписывается на обработчик загрузки плеера
@@ -337,6 +340,12 @@ const player = {
         onfullscreen: function (e) {
             if (typeof e == "function" && e.length > 0) {
                 this.fullscreen.push(e);
+            }
+        },
+
+        onalredy: function (e) {
+            if (typeof e == "function" && e.length > 0) {
+                this.alredy.push(e);
             }
         }
     },
@@ -403,7 +412,7 @@ const player = {
     /**
      * Событие изменение данных плеера
      */
-    update: function () {
+    update: function (standart = $PARAMETERS.player.standart) {
         //Выбранный эпизод
         const episode = this.episodes.selected_episode;
 
@@ -425,14 +434,18 @@ const player = {
         //Изменяем ссылку на плеер (не используем тег src для того чтобы не созранять его в истори браузера)
 
         let url = this.data_uri + "?hide_selectors=true" + "&episode=" + episode
-        if ($PARAMETERS.player.standart) {
+        this.name = "kodik";
+        if (standart) {
             url = `player.html?id=${this.data_id}&e=${episode}`;
+            this.name = "tunime";
         }
-        document
-            .querySelector("#kodik-player")
-            .contentWindow.location.replace(
-                url
-            );
+
+        if (!this.alredy) {
+            this.alredy = true;
+            this.events.alredy.forEach((event) => event(this.alredy));
+        } else {
+            document.querySelector("#kodik-player").contentWindow.location.replace(url);
+        }
 
         //Вызываем функцию которая будет отслеживать загрузился ли плеер и добавлять количество какой раз загрузился плеер
         this.loading();
@@ -526,7 +539,7 @@ const player = {
             player.events.next.forEach((event) => event(player));
         }
 
-        if(message.data.key == "tunime_fullscreen"){
+        if (message.data.key == "tunime_fullscreen") {
             player.events.fullscreen.forEach((event) => event(message.data.value));
         }
     },
