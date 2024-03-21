@@ -1,5 +1,6 @@
 import { $ID } from "../watch.js";
 import { Player } from "./mod_player.js";
+import { Screenshots } from "./mod_resource.js";
 
 //Управление историей
 const _history = {
@@ -32,6 +33,7 @@ const _history = {
         const { russian, screenshots } = this.shikiData;
         const episode = cnt ? e + i : e + i;
         let image = "";
+        this.screenData = Screenshots;
         if (this.screenData?.length > 0) {
             image = `${this.screenData[this.idImage].original}`;
         }else{
