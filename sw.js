@@ -1,4 +1,4 @@
-var version = '150';
+var version = '152';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     // Директория: /images/icons
@@ -11,6 +11,7 @@ var appShellFilesToCache = [
     "/images/icons/logo-x512-b.png",
     "/images/icons/logo-x512-o.png",
     // Директория: /images
+    "/images/anime-dragon.png",
     "/images/ava.jpeg",
     "/images/error-trailers.png",
     "/images/icon-web.png",
@@ -37,6 +38,7 @@ var appShellFilesToCache = [
     "/javascript/modules/AnimeCard.js",
     "/javascript/modules/funcitons.js",
     "/javascript/modules/header.js",
+    "/javascript/modules/Kodik.js",
     "/javascript/modules/Popup.js",
     "/javascript/modules/Settings.js",
     "/javascript/modules/ShikiAPI.js",
@@ -77,14 +79,17 @@ var appShellFilesToCache = [
     // Директория: /javascript/pages/watch
     "/javascript/pages/watch/mod_download.js",
     "/javascript/pages/watch/mod_history.js",
-    "/javascript/pages/watch/mod_loadingpage.js",
+    "/javascript/pages/watch/mod_load.js",
     "/javascript/pages/watch/mod_player.js",
-    "/javascript/pages/watch/mod_resources.js",
+    "/javascript/pages/watch/mod_resource.js",
     "/javascript/pages/watch/mod_scrolling.js",
-    "/javascript/pages/watch/mod_synch.js",
-    "/javascript/pages/watch/mod_userrate.js",
-    "/javascript/pages/watch/mod_window.js",
+    "/javascript/pages/watch/mod_sdata.js",
+    "/javascript/pages/watch/mod_translation.js",
+    "/javascript/pages/watch/mod_ui.js",
+    "/javascript/pages/watch/mod_urate.js",
+    "/javascript/pages/watch/mod_wscore.js",
     // Директория: /javascript/pages
+    "/javascript/pages/404a.js",
     "/javascript/pages/index.js",
     "/javascript/pages/list.js",
     "/javascript/pages/login.js",
@@ -106,6 +111,7 @@ var appShellFilesToCache = [
     "/style/css/list.css",
     "/style/css/login.css",
     "/style/css/main.css",
+    "/style/css/notfound.css",
     "/style/css/player.css",
     "/style/css/search.css",
     "/style/css/settings.css",
@@ -117,6 +123,7 @@ var appShellFilesToCache = [
     "/style/fonts/NovaSquare.ttf",
     // Директория: /
     "/404.html",
+    "/404a.html",
     "/index.html",
     "/list.html",
     "/login.html",
