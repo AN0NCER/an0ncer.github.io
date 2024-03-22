@@ -489,6 +489,7 @@ header .content .gallery .galery-slider {
 }
 header .content .gallery .galery-slider .slide {
   position: relative;
+  display: flex;
 }
 header .content .gallery .galery-slider .slide img {
   height: 150px;
@@ -497,15 +498,27 @@ header .content .gallery .galery-slider .slide img {
 header .content .gallery .galery-slider .slide:last-child {
   padding-right: 20px;
 }
-header .content .gallery .galery-slider .slide.select::after {
-  content: "";
+header .content .gallery .galery-slider .slide .selected {
   position: absolute;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #5fbef3;
-  left: 5px;
-  top: 5px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid #5FBEF3;
+  border-radius: 3px;
+}
+header .content .gallery .galery-slider .slide .selected .sel-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #5FBEF3;
+  border-radius: 0px 0px 3px 0px;
+  display: flex;
+  padding: 6px 5px 5px 6px;
+}
+header .content .gallery .galery-slider .slide .selected .sel-icon svg {
+  width: 12px;
+  fill: #191c21;
 }
 
 main {

@@ -97,7 +97,6 @@ const WindowScore = {
         });
 
         UserRate().Events.OnInit((res) => {
-            console.log(res);
             UserRate().Events.OnUpdate((res) => {
                 if (res == null) {
                     SetScore(0);

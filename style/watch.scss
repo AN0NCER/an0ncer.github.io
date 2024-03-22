@@ -575,6 +575,7 @@ header {
 
                 .slide {
                     position: relative;
+                    display: flex;
 
                     img {
                         height: 150px;
@@ -585,16 +586,31 @@ header {
                         padding-right: 20px;
                     }
 
-                    &.select {
-                        &::after {
-                            content: '';
+                    $select-color: #5FBEF3;
+
+                    .selected {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        border: 2px solid $select-color;
+                        border-radius: 3px;
+
+                        .sel-icon {
                             position: absolute;
-                            width: 5px;
-                            height: 5px;
-                            border-radius: 50%;
-                            background: #5fbef3;
-                            left: 5px;
-                            top: 5px;
+                            top: 0;
+                            left: 0;
+                            background: $select-color;
+                            border-radius: 0px 0px 3px 0px;
+                            display: flex;
+                            padding: 6px 5px 5px 6px;
+
+                            svg {
+                                width: 12px;
+                                // mix-blend-mode: color;
+                                fill: #191c21;
+                            }
                         }
                     }
                 }
