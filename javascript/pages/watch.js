@@ -43,6 +43,7 @@ Main(async (e) => {
                 } else {
                     Player().update();
                 }
+                AutoScrollEpisodes();
             });
         });
 
