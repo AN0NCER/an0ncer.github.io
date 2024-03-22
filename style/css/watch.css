@@ -1548,7 +1548,7 @@ footer .studio span {
   display: none;
 }
 
-@media (orientation: landscape) {
+@media (orientation: landscape) and (hover: none) and (pointer: coarse) {
   #center-player {
     display: grid;
   }
