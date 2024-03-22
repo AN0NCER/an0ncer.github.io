@@ -355,7 +355,7 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
     function Duration(data) {
         let contb = `<div class="content-b">${data.episodes_aired} | <span class="ep">${data.episodes}</span> EP</div>`;
         let conta = `Время: ${getTimeFromMins(data.episodes_aired * data.duration)}`;
-        if (data.episodes_aired == 0 && data.status == "released") {
+        if (data.status == "released") {
             contb = `<div class="content-b">${data.episodes} EP</div>`;
             conta = `Время: ${getTimeFromMins(data.episodes * data.duration)}`;
         }
