@@ -35,7 +35,7 @@ function Loop() {
         if (container.scrollTop() + container.innerHeight() >= container[0].scrollHeight - 20) {
             container.off("scroll.ajax");
             GetNotifycation((e) => {
-                if(e.length != 0){
+                if (e.length != 0) {
                     AddNotifycation().episode(e);
                     _Events();
                     Loop();
@@ -109,6 +109,8 @@ function AddNotifycation() {
                 const element = response[i];
                 if (element.kind == "episode" && $(`.notifycation[data-id="${element.id}"]`).length == 0) {
                     $('.content-notifycation').append(GENERATE().episode(element));
+                } else if (element.kind == "released" && $(`.notifycation[data-id="${element.id}"]`).length == 0) {
+                    $('.content-notifycation').append(GENERATE().release(element));
                 }
             }
         }
@@ -133,20 +135,40 @@ function GENERATE() {
                     }
                 }
             }
-            return `<div class="notifycation ${e.read}" data-id="${e.id}" data-episode="${episode}" data-anime="${e.linked.id}">
-                ${!e.read ? `<div class="status-unread"></div>` : ''}
+            return GENERATE().html(e.read, e.id, episode, e.linked.id, e.created_at, body, e.linked.episodes_aired, e.linked.episodes, issetVoice, "Новый эпизод");
+        },
+        release: (e) => {
+            console.log(e);
+            const body = `Завершён показ аниме <b>"${e.linked.russian}"</b>`;
+            const issetVoice = localStorage.getItem(e.linked.id) ? true : false;
+            if (issetVoice) {
+                const index = VOICES.findIndex(x => x.anime.id == e.linked.id);
+                if (index == -1) {
+                    VOICES.push({ notify_ids: [e.id], anime: { id: e.linked.id, episode: e.linked.episodes }, voice: undefined });
+                } else {
+                    if (VOICES[index].notify_ids.findIndex(x => x == e.id) == -1) {
+                        VOICES[index].notify_ids.push(e.id);
+                    }
+                }
+            }
+            return GENERATE().html(e.read, e.id, e.linked.episodes, e.linked.id, e.created_at, body, e.linked.episodes, e.linked.episodes, issetVoice, "Релиз");
+        },
+
+        html: (isRead, notifyId, episode, animeId, notifyDate, body, episodesAired, episodesAnime, issetVoice, title) => {
+            return `<div class="notifycation ${isRead}" data-id="${notifyId}" data-episode="${episode}" data-anime="${animeId}">
+                ${!isRead ? `<div class="status-unread"></div>` : ''}
                 <div class="notification-data">
                     <div class="notify-title-date">
-                        <span class="notify-title">Новый эпизод</span>
-                        <span class="notify-date">${formatDate(e.created_at)}</span>
+                        <span class="notify-title">${title}</span>
+                        <span class="notify-date">${formatDate(notifyDate)}</span>
                     </div>
                     <div class="notify-text">${body}</div>
                     <div class="notify-user-info">
                         <div class="anime-episodes">
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z" /> </svg>
-                            <span class="count-anime">${e.linked.episodes_aired} из ${e.linked.episodes}</span>
+                            <span class="count-anime">${episodesAired} из ${episodesAnime}</span>
                         </div>
-                        ${issetVoice ? `<div class="voice-status load" data-id="${e.id}" data-anime="${e.linked.id}">
+                        ${issetVoice ? `<div class="voice-status load" data-id="${notifyId}" data-anime="${animeId}">
                                             <div class="available">
                                                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
                                                     <path
