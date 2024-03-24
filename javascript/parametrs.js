@@ -28,7 +28,7 @@ const $PARAMETERS = {
         full: true,
         alternative_full: false,
         standart_controls: false,
-        autonekst: true,
+        autonekst: false,
         autoquality: true,
         skipmoments: true
     },
