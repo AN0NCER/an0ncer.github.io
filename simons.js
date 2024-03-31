@@ -5,7 +5,6 @@ async function simonmain() {
 async function simonglitch() {
     const s = sessionStorage.getItem('simons');
     if (window.location.pathname == '/' && !s || window.location.pathname == '/index.html' && !s) {
-        sessionStorage.setItem('simons', true);
         document.addEventListener("DOMContentLoaded", async function () {
             // Create a new div element
             const div = document.createElement("div");
@@ -152,6 +151,7 @@ async function simonglitch() {
                     }
                 }
 
+                sessionStorage.setItem('simons', true);
             }, 50);
         });
     }
