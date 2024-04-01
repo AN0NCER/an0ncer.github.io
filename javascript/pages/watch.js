@@ -27,8 +27,6 @@ Main(async (e) => {
         return document.location.replace('404a.html');
     }
 
-    ApiTunime.anime($ID);
-
     Functional();
 
     UserRate().Events.OnInit((res) => {
@@ -166,6 +164,7 @@ Main(async (e) => {
                     inline: "nearest",
                 });
             }
+            ApiTunime.anime($ID);
         });
         History().shikiData = e;
         History().custom.init();
