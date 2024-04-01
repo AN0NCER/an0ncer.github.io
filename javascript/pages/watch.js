@@ -114,7 +114,7 @@ Main(async (e) => {
             }
         });
 
-        Player().events.onplayed(() => {
+        Player().events.onplayed((e) => {
             if ($CONTINUE != null && $CONTINUE != false) {
                 //Получаем историю спика продолжение просмотра
                 let history = History().get();
