@@ -5,7 +5,7 @@
  * Возвращает:  LoadM3U8, LoadM3U8Episode, Skips
  */
 
-import { ApiTunime } from "../../modules/TunimeApi.js";
+import { Tunime } from "../../modules/TunimeApi.js";
 import { Player } from "../player.js";
 import { InitMediaSession } from "./mod_mediasession.js";
 import { AUTOQUALITY, QUALITY } from "./mod_settings.js";
@@ -88,11 +88,11 @@ function GenLink(streams) {
             return blobUrl;
         } else {
             if (QUALITY == '720') {
-                return ApiTunime.link({ q720: STREAMS[720][0].src, q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
+                return Tunime.Link({ q720: STREAMS[720][0].src, q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
             } else if (QUALITY == '480') {
-                return ApiTunime.link({ q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
+                return Tunime.Link({ q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
             } else {
-                return ApiTunime.link({ q360: STREAMS[360][0].src });
+                return Tunime.Link({ q360: STREAMS[360][0].src });
             }
         }
     } else {
@@ -104,9 +104,9 @@ function loadStreamTunime(id, e, kodik_link = undefined) {
     return new Promise(async (resolve) => {
         if (!kodik_link)
             kodik_link = await loadKodikLink(id, e);
-        let tunime_data = await ApiTunime.stream(kodik_link);
+        let tunime_data = await Tunime.Source(kodik_link);
         resolve(tunime_data);
-        if($PARAMETERS.player.skipmoments){
+        if ($PARAMETERS.player.skipmoments) {
             new Skips(tunime_data.skips);
         }
         loadFirstSuccessfulImage(tunime_data.thumbinals)

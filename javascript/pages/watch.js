@@ -7,7 +7,7 @@ import { AutoScrollEpisodes } from "./watch/mod_scrolling.js";
 import { Functional } from "./watch/mod_ui.js";
 import { DifferenceInData, SaveLData, SetDifferenceData, Synch, SynchLData } from "./watch/mod_sdata.js";
 import { UserRate } from "./watch/mod_urate.js";
-import { ApiTunime } from "../modules/TunimeApi.js";
+import { Tunime } from "../modules/TunimeApi.js";
 import { History } from "./watch/mod_history.js";
 
 //ID ресурса из Shikimori
@@ -73,15 +73,14 @@ Main(async (e) => {
         //Событие отправки выбора озвучки первого просмотра 
         Player().events.onplayed((e) => {
             const data = DifferenceInData();
-            console.log(data);
             if (!data[0] && !data[1])
                 return;
             if (data[0] && !data[1]) {
-                ApiTunime.tsset($ID, data[0].kodik_dub);
+                Tunime.Voices($ID).SET(data[0].kodik_dub);
                 SetDifferenceData(data[0]);
             } else if (data[0] && data[1]) {
                 if (data[0].kodik_dub != data[1].kodik_dub) {
-                    ApiTunime.tsset($ID, data[0].kodik_dub);
+                    Tunime.Voices($ID).SET(data[0].kodik_dub);
                     SetDifferenceData(data[0]);
                 }
             }
@@ -164,7 +163,7 @@ Main(async (e) => {
                     inline: "nearest",
                 });
             }
-            ApiTunime.anime($ID);
+            Tunime.Anime($ID);
         });
         History().shikiData = e;
         History().custom.init();

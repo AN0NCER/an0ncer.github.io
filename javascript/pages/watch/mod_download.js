@@ -1,4 +1,4 @@
-import { ApiTunime } from "../../modules/TunimeApi.js";
+import { Tunime } from "../../modules/TunimeApi.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { ScrollElementWithMouse } from "../../modules/funcitons.js";
 import { Player } from "./mod_player.js";
@@ -143,7 +143,7 @@ async function GetM3U8Links() {
     if (!link.includes("http")) {
         link = `https:${link}`;
     }
-    const data = await ApiTunime.stream(link);
+    const data = await Tunime.Source(link);
     if (data) {
         _localDownload(data);
     }
