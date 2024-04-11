@@ -4,7 +4,7 @@ import { User } from "../../modules/ShikiUSR.js";
 import { Sleep } from "../../modules/funcitons.js";
 import { AnimeHidePreview, AnimeLoadingPlayer, AnimePausePlayer, AnimePlayPlayer, AnimeShowPreview } from "./mod_trailers_animation.js";
 
-const TrailersUrl = 'https://raw.githubusercontent.com/AN0NCER/anime-data/main/data.json';
+const TrailersUrl = 'https://raw.githubusercontent.com/AN0NCER/anime-data/main/data-v2.json';
 
 const TrilersSwiper = new Swiper('.swiper-treilers', {
     // Parametrs
@@ -75,11 +75,9 @@ function Main() {
         }
         // return;
         TrailersData = await response.json();
-        //Проходимся по трейлерам и добавляем значения
-        for (const key in TrailersData) {
-            const element = TrailersData[key];
-            //Добавляем новые слайды
-            TrilersSwiper.appendSlide(GenSlide(element, key));
+        for (let i = 0; i < TrailersData.length; i++) {
+            const element = TrailersData[i];
+            TrilersSwiper.appendSlide(GenSlide(element, element.id));
         }
         //Удаляем загрузачный слайд
         TrilersSwiper.removeSlide(0);
@@ -163,7 +161,8 @@ function PlayPLayer() {
         //Анимация загрузки плеера
         AnimeLoadingPlayer(key);
         //Присваеваем значения audio и video
-        player.video.src = TrailersData[key].audio;
+        const i = TrailersData.findIndex(x => x.id === key);
+        player.video.src = TrailersData[i].youtube.video;
         //Подписываемся на события
         PlayerFunctions(player, key);
         //Прогружаем audio & video
@@ -246,12 +245,13 @@ function GetPlayer(key) {
 
 function LoadYTPlayer(key) {
     $(`.player[data-key="${key}"]`).append(`<div id="ytplayer" data-key="${key}"></div>`);
+    const i = TrailersData.findIndex(x => x.id === key);
 
     //Добавляем плеер
     const YTPlayer = new YT.Player('ytplayer', {
         width: '100%',
         height: 'auto',
-        videoId: key,
+        videoId: YouTubeGetID(TrailersData[i].youtube.link),
         playerVars: {
             controls: 0,
             modestbranding: 1,
@@ -300,12 +300,25 @@ function LoadYTPlayer(key) {
     }
 }
 
+function YouTubeGetID(url){
+    var ID = '';
+    url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    if(url[2] !== undefined) {
+      ID = url[2].split(/[^0-9a-z_\-]/i);
+      ID = ID[0];
+    }
+    else {
+      ID = url;
+    }
+      return ID;
+  }
+
 function GenSlide(res, key) {
     const type = res.anime.kind != "movie" ? "Сериал" : "Фильм";
     return `<div class="swiper-slide unselectable" data-key="${key}">
     <div class="preview-block">
-        <a href="watch.html?id=${res.anime.id}" data-key="${key}">
-            <img src="${res.img}" />
+        <a href="watch.html?id=${res.id}" data-key="${key}">
+            <img src="${res.youtube.preview}" />
         </a>
         <div class="player" data-key="${key}">
             <video type="video/mp4" playsinline></video>
@@ -322,7 +335,7 @@ function GenSlide(res, key) {
                 <svg class="pause" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><path d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/></svg>
             </div>
             <div class="block-info">
-                <div class="block-name">${res.anime.name ? res.anime.name : res.anime.eng}</div>
+                <div class="block-name">${res.anime.rus ? res.anime.rus : res.anime.eng}</div>
                 <div class="wrapper-details">
                     <span class="kind">${type}</span>
                     <span class="ellipse"></span>
@@ -331,7 +344,7 @@ function GenSlide(res, key) {
             </div>
         </div>
         <div class="control-list">
-            <div class="btn-list" data-id="${res.anime.id}">
+            <div class="btn-list" data-id="${res.id}">
                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
                     <path
                         d="M0 48C0 21.5 21.5 0 48 0l0 48V441.4l130.1-92.9c8.3-6 19.6-6 27.9 0L336 441.4V48H48V0H336c26.5 0 48 21.5 48 48V488c0 9-5 17.2-13 21.3s-17.6 3.4-24.9-1.8L192 397.5 37.9 507.5c-7.3 5.2-16.9 5.9-24.9 1.8S0 497 0 488V48z" />
