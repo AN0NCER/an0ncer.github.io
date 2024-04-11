@@ -1,6 +1,7 @@
 import { Sleep } from "./funcitons.js";
 
 const LIFETIME = 600000;
+const VERSION = '2.0.0';
 
 class Server {
     #base = 'https://tunime.onrender.com';
@@ -137,10 +138,10 @@ export const Tunime = {
             if (!this.storage.Live(access)) {
                 access = undefined;
             }
-            let body = { id: 'shadow', key: 'register' };
+            let body = { id: 'shadow', key: 'register', vid: VERSION };
             let headers = undefined;
             if (access !== undefined) {
-                body = { id: access.id, key: access.key };
+                body = { id: access.id, key: access.key, vid: VERSION };
                 headers = { 'Authorization': `Bearer ${access.token}` }
             }
             if (this.device.id !== undefined) {
