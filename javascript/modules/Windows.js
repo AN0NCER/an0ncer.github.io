@@ -27,9 +27,9 @@ export class WindowManagement {
         this.authorized = authorized;
     }
 
-    click() {
+    click(title = "Вы должны авторизоваться!") {
         if (!this.target.verif()) {
-            ShowInfo("Вы должны авторизоваться!", "auth");
+            ShowInfo(title, "auth");
             return;
         }
         this.show();

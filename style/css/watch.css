@@ -1529,6 +1529,45 @@ footer .studio span {
   opacity: 0.3;
 }
 
+:root {
+  --sab: env(safe-area-inset-bottom);
+}
+
+.popup {
+  position: fixed;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 11;
+}
+.popup .popup-content {
+  background: #2393F1;
+  color: #fff;
+  font-family: Manrope;
+  font-weight: bold;
+  padding: 10px 30px;
+  font-size: 11px;
+  border-radius: 10px;
+  max-width: 300px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.368627451);
+  position: relative;
+}
+.popup .popup-content img {
+  position: absolute;
+  top: -23px;
+  width: 30px;
+  right: 20px;
+}
+.popup.popup-menu-none {
+  bottom: -40px;
+}
+.popup.popup-menu-visible {
+  bottom: calc(env(safe-area-inset-bottom) - 40px);
+}
+
 .card-anime {
   min-width: 195px;
   margin-right: 10px;
