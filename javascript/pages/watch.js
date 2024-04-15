@@ -22,7 +22,7 @@ Main(async (e) => {
     //Проверка на существование такого ID
     const check = await CheckID($ID);
 
-    if (check.length == 0) {
+    if (!check) {
         //Аниме с такий ID не существует, перекидываем на страницу 404
         return document.location.replace('404a.html');
     }
