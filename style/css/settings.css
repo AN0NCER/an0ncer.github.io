@@ -693,7 +693,7 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   }
 }
 .window-select .window-content, .window-select-mehr .window-content {
-  max-height: calc(100vh - env(safe-area-inset-top));
+  max-height: calc(100dvh - env(safe-area-inset-top));
   overflow-y: hidden;
 }
 .window-select .window-content .content-wraper, .window-select-mehr .window-content .content-wraper {
@@ -802,6 +802,74 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   background: #fff;
 }
 .window-select .window-content .content-wraper .window-footer, .window-select-mehr .window-content .content-wraper .window-footer {
+  color: rgba(255, 255, 255, 0.6);
+  display: grid;
+  place-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.window-app-size .window-content {
+  max-height: calc(100dvh - env(safe-area-inset-top));
+  overflow-y: hidden;
+}
+.window-app-size .window-content .content-wraper {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto auto auto;
+  overflow-y: hidden;
+}
+.window-app-size .window-content .content-wraper .window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.window-app-size .window-content .content-wraper .window-bar .window-title {
+  font-size: 14px;
+}
+.window-app-size .window-content .content-wraper .window-bar .window-close {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.window-app-size .window-content .content-wraper .window-bar .window-close svg {
+  fill: #fff;
+  width: 10px;
+}
+.window-app-size .window-content .content-wraper .block-title {
+  font-size: 14px;
+  background: #1f2329;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.window-app-size .window-content .content-wraper .wrapper-storage {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+}
+.window-app-size .window-content .content-wraper .list-local-storage,
+.window-app-size .window-content .content-wraper .list-session-storage {
+  background: #203544;
+}
+.window-app-size .window-content .content-wraper .list-local-storage .storage-element,
+.window-app-size .window-content .content-wraper .list-session-storage .storage-element {
+  padding: 5px 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+.window-app-size .window-content .content-wraper .list-local-storage .storage-element div,
+.window-app-size .window-content .content-wraper .list-session-storage .storage-element div {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding-right: 20px;
+}
+.window-app-size .window-content .content-wraper .window-footer {
   color: rgba(255, 255, 255, 0.6);
   display: grid;
   place-items: center;

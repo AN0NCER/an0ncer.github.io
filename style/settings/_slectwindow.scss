@@ -1,6 +1,6 @@
 .window-select, .window-select-mehr {
     .window-content {
-        max-height: calc(100vh - env(safe-area-inset-top));
+        max-height: calc(100dvh - env(safe-area-inset-top));
         overflow-y: hidden;
 
         .content-wraper {

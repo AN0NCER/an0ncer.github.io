@@ -2,6 +2,7 @@ import { InitMenu, Menu } from "../menu.js";
 import { Users } from "../modules/ShikiAPI.js";
 import { Main, User } from "../modules/ShikiUSR.js";
 import { ShowMoreSelect, ShowSelect } from "./settings/mod_select.js";
+import { ShowStorage, Storage } from "./settings/mod_storage.js";
 
 const Parameters = [
     {
@@ -18,6 +19,10 @@ const Parameters = [
                 param: 'autologin',
                 name: 'Автоматический вход',
                 description: 'Моментальная авторизация пользователей.'
+            },
+            {
+                type: 'app-size',
+                name: 'Хранилище'
             }
         ]
     },
@@ -296,6 +301,7 @@ function _ShowParametrs() {
     eventBoolean();
     eventSelectOne();
     eventSelectMore();
+    eventAppStorage();
 
     function __loadParametrs(parametrs) {
         let html = "";
@@ -323,6 +329,17 @@ function _ShowParametrs() {
                     html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-param="${element.param}" data-type="select-more" data-val="left" data-variation='${JSON.stringify(element.variation)}' data-tooltip="${element.description}">
                                 <div class="title">${element.name}</div>
                                 <div class="select">${element.variation.length}</div>
+                            </label>`
+                    break;
+                case "app-size":
+                    let s = Storage.size(), d = 'KB';
+                    if (s > 1000) {
+                        d = 'MB';
+                        s = (s / 1000).toFixed(2);
+                    }
+                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-type="app-size" data-tooltip="${element.description}">
+                                <div class="title">${element.name}</div>
+                                <div class="select">${s > 1000 ? (s / 1000).toFixed(2) : s} ${d}</div>
                             </label>`
                     break;
                 default:
@@ -371,6 +388,12 @@ function eventSelectMore() {
             const parameters = JSON.parse(el.attr('data-variation'));
             ShowMoreSelect(title, param, parameters, lval, description);
         }
+    });
+}
+
+function eventAppStorage() {
+    $('label[data-type="app-size"]').click(function () {
+        ShowStorage();
     });
 }
 
