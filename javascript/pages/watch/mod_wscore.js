@@ -105,6 +105,7 @@ const WindowScore = {
                 }
 
                 SetScore(res.score);
+                SetNote(res.text);
             });
 
             if (res == null) {
