@@ -38,7 +38,7 @@ class Server {
         }
         this.#id = id;
         this.#url = url;
-        sessionStorage.setItem(this.#key, JSON.stringify({id: this.#id, url: this.#url}));
+        sessionStorage.setItem(this.#key, JSON.stringify({ id: this.#id, url: this.#url }));
     }
 }
 
@@ -261,22 +261,24 @@ export const Tunime = {
             },
 
             SET: (tid) => {
-                let responseCode = 503;
-                const body = { key: access.key, id: access.id, tid };
-                Fetch(`/voices/${aid}`, { method: 'POST', headers, body }).then((response) => {
-                    responseCode = response.status;
-                    response.json().then((value) => {
-                        return resolve(value);
+                return new Promise((resolve) => {
+                    let responseCode = 503;
+                    const body = { key: access.key, id: access.id, tid };
+                    Fetch(`/voices/${aid}`, { method: 'POST', headers, body }).then((response) => {
+                        responseCode = response.status;
+                        response.json().then((value) => {
+                            return resolve(value);
+                        });
+                    }).catch(async (reason) => {
+                        console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
+                        if (responseCode == 503) {
+                            return;
+                            // URL = `onrender.com`;
+                            // return resolve(this.Voices(aid, access).SET(tid));
+                        }
+                        await Sleep(1000);
+                        return resolve(this.Voices(aid, access).SET(tid));
                     });
-                }).catch(async (reason) => {
-                    console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
-                    if (responseCode == 503) {
-                        return;
-                        // URL = `onrender.com`;
-                        // return resolve(this.Voices(aid, access).SET(tid));
-                    }
-                    await Sleep(1000);
-                    return resolve(this.Voices(aid, access).SET(tid));
                 });
             }
         }

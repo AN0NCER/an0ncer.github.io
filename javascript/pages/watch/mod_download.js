@@ -372,4 +372,4 @@ const WindowDownload = {
 
 const _windowDownload = new WindowManagement(WindowDownload, '.window-download');
 
-export const ShowDwonloadWindow = () => { _windowDownload.click(); }
+export const ShowDwonloadWindow = () => { _windowDownload.click("Не доступно!"); }

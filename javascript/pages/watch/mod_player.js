@@ -119,7 +119,13 @@ const player = {
             this.name = data.translation.title;//Название озвучки
 
             $(".current-translation > span").text(data.translation.title); //Title translation
-            $(".count-current-translation").text(data.last_episode); //Last episode translation
+            if (data.last_episode) {
+                $(".count-current-translation").text(data.last_episode); //Last episode translation
+            } else if (data) {
+                $(".count-current-translation").text('1');
+                $("#episodes").addClass('hide');
+            }
+
             $(element).addClass("select");
 
             //Проверяем что выбранная озвучка в избранном

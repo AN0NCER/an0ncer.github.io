@@ -25,7 +25,7 @@ const $PARAMETERS = {
     player: {
         quality: '720',
         standart: false,
-        full: true,
+        full: false,
         alternative_full: false,
         standart_controls: false,
         autonekst: false,

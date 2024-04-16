@@ -1,0 +1,78 @@
+.window-app-size {
+    .window-content {
+        max-height: calc(100dvh - env(safe-area-inset-top));
+        overflow-y: hidden;
+
+        .content-wraper {
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: auto auto auto;
+            overflow-y: hidden;
+
+            .window-bar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+
+                .window-title {
+                    font-size: 14px;
+                }
+
+                .window-close {
+                    width: 40px;
+                    height: 40px;
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+
+                    svg {
+                        fill: #fff;
+                        width: 10px;
+                    }
+                }
+            }
+
+            .block-title {
+                font-size: 14px;
+                background: #1f2329;
+                padding: 5px 10px;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .wrapper-storage {
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                border-radius: 5px;
+            }
+
+            .list-local-storage,
+            .list-session-storage {
+                background: #203544;
+
+                .storage-element {
+                    padding: 5px 10px;
+                    display: grid;
+                    grid-template-columns: 1fr auto;
+
+                    div {
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        padding-right: 20px;
+                    }
+                }
+            }
+
+            .window-footer {
+                color: rgba(255, 255, 255, 0.60);
+                display: grid;
+                place-items: center;
+                padding: 8px 10px;
+                cursor: pointer;
+            }
+        }
+    }
+}

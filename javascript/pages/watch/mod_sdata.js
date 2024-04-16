@@ -137,10 +137,10 @@ export function SaveLData(e, d) {
         user_rate.text = user_rate.text.replace(match[0], '');
     }
 
-    // user_rate.text = "";
-
     if (user_rate.text) {
         user_rate.text = user_rate.text.trim();
+    } else {
+        user_rate.text = "";
     }
 
     user_rate.text += `\r\n[tunime-sync:${data.kodik_episode}:${data.kodik_dub}:${JSON.stringify(data.date_update)}]`;
