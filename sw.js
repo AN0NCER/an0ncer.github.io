@@ -1,4 +1,4 @@
-var version = '166';
+var version = '167';
 var cacheName = 'pwa-tunime-v' + version;
 var appShellFilesToCache = [
     // Директория: /images/icons
@@ -35,6 +35,7 @@ var appShellFilesToCache = [
     "/javascript/library/swiper-bundle.min.js",
     "/javascript/library/swiper-bundle.min.js.map",
     // Директория: /javascript/modules
+    "/javascript/modules/ActionVerify.js",
     "/javascript/modules/AnimeCard.js",
     "/javascript/modules/funcitons.js",
     "/javascript/modules/header.js",
@@ -74,6 +75,7 @@ var appShellFilesToCache = [
     "/javascript/pages/search/mod_searchState.js",
     // Директория: /javascript/pages/settings
     "/javascript/pages/settings/mod_select.js",
+    "/javascript/pages/settings/mod_storage.js",
     // Директория: /javascript/pages/user
     "/javascript/pages/user/mod_history.js",
     // Директория: /javascript/pages/watch
@@ -116,6 +118,7 @@ var appShellFilesToCache = [
     "/style/css/search.css",
     "/style/css/settings.css",
     "/style/css/user.css",
+    "/style/css/verifyaction.css",
     "/style/css/watch.css",
     // Директория: /style/fonts
     "/style/fonts/Inter.ttf",
