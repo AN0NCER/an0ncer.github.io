@@ -1,0 +1,107 @@
+@import './windowed';
+
+.window-verify-action {
+    .window-content {
+        max-height: calc(100dvh - env(safe-area-inset-top));
+        overflow-y: hidden;
+        height: 100dvh;
+        border-radius: 0px;
+
+        .content-wraper {
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: 1fr auto;
+            overflow-y: hidden;
+            height: 100%;
+
+            .window-access-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                svg {
+                    fill: #fff;
+                    opacity: .4;
+                }
+            }
+
+            .window-access-footer {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                .detail-access {
+                    text-align: center;
+                    color: rgba($color: #fff, $alpha: 0.4);
+                    margin-bottom: 10px;
+                }
+
+                .access-swiper,
+                .button-access-cancel {
+                    background: #203544;
+                    height: 50px;
+                    overflow: hidden;
+                    border-radius: 5px;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    font-size: 11px;
+
+                }
+
+                .access-swiper {
+                    display: flex;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                    align-items: center;
+                    position: relative;
+
+                    .pin {
+                        position: relative;
+                        display: flex;
+                        height: 44px;
+                        width: 65px;
+                        background: #3587E6;
+                        justify-content: center;
+                        align-items: center;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        z-index: 9;
+                    }
+
+                    span {
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        top: 0;
+                        bottom: 0;
+                        display: grid;
+                        place-items: center;
+                        opacity: .4;
+                    }
+                }
+
+                .button-access-cancel {
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-height: 400px) {
+    .window-verify-action {
+        .window-content {
+
+            .content-wraper {
+                grid-template-rows: 1fr;
+                align-items: end;
+
+                .window-access-icon {
+                    display: none;
+                }
+            }
+        }
+    }
+}
