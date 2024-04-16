@@ -5,6 +5,7 @@ import { Sleep } from "../../modules/funcitons.js";
 import { $ID } from "../watch.js";
 import { UserRate } from "./mod_urate.js";
 import { LoadScreen } from "./mod_load.js";
+import { History } from "./mod_history.js";
 
 export let Screenshots = undefined;
 
@@ -19,11 +20,12 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
         process = [];
     let posterLink = undefined,
         jikanLoaded = false;
-        
+
     try {
+        progress.Step();
         process.push(new Promise(async (resolve) => {
-            progress.Step();
             const anime = await FetchAnime($ID);
+            progress.Step();
             UserRate().init(anime.user_rate, isLogged);
             if (posterLink === undefined) {
                 posterLink = `${SHIKIURL.url}/${anime.image.original}`;
@@ -51,6 +53,8 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
                 process.push(LoadPoster(poster));
             }
             jikanLoaded = true;
+            progress.Step();
+
             resolve(true);
         }));
 
@@ -299,7 +303,7 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
                     );
                 }
             }
-
+            History().custom.init();
             return true;
         }
     }
