@@ -19,30 +19,31 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
         progress = new LoadScreen(9),
         process = [];
     let posterLink = undefined,
-        jikanLoaded = false;
+        jikanLoaded = false,
+        animeData = undefined;
 
     try {
         progress.Step();
         process.push(new Promise(async (resolve) => {
-            const anime = await FetchAnime($ID);
+            animeData = await FetchAnime($ID);
             progress.Step();
-            UserRate().init(anime.user_rate, isLogged);
+            UserRate().init(animeData.user_rate, isLogged);
             if (posterLink === undefined) {
-                posterLink = `${SHIKIURL.url}/${anime.image.original}`;
+                posterLink = `${SHIKIURL.url}/${animeData.image.original}`;
                 if (jikanLoaded) {
                     process.push(LoadPoster(posterLink));
                 }
             }
 
-            SetTitle(anime);
-            Genres(anime);
-            Duration(anime);
-            Status(anime);
-            NextEpisode(anime);
-            Description(anime);
-            Studio(anime);
-            PageTitle(anime);
-            PageMetaTags(anime);
+            SetTitle(animeData);
+            Genres(animeData);
+            Duration(animeData);
+            Status(animeData);
+            NextEpisode(animeData);
+            Description(animeData);
+            Studio(animeData);
+            PageTitle(animeData);
+            PageMetaTags(animeData);
 
             resolve(true);
         }));
@@ -71,7 +72,7 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
             progress.Step();
         }
 
-        e(anime);
+        e(animeData);
     } catch (error) {
         console.log(error);
     }
