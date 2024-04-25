@@ -76,6 +76,8 @@ const Parameters = [
                 param: 'typefrc',
                 variation: [
                     { key: "TV Сериал", val: "TV Сериал" },
+                    { key: "TV Спецвыпуск", val: "TV Спецвыпуск" },
+                    { key: "Спецвыпуск", val: "Спецвыпуск" },
                     { key: "Фильм", val: "Фильм" },
                     { key: "ONA", val: "ONA" },
                     { key: "OVA", val: "OVA" }
