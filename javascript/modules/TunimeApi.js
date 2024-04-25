@@ -311,7 +311,6 @@ export const Tunime = {
 };
 
 (async () => {
-    return;
     const exception = ['/player.html'];
     let minute = 60000;
     if (exception.includes(window.location.pathname))
@@ -337,7 +336,6 @@ export const Tunime = {
 })();
 
 function Fetch(path, { method = 'GET', body = undefined, headers = undefined } = {}) {
-    return;
     const request = {
         method
     };

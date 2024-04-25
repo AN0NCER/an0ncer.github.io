@@ -72,11 +72,7 @@ const WindowUpdate = {
     },
 
     hide: function () {
-        try{
-            let data = JSON.parse(localStorage.getItem(_updateKey));
-            data.show = false;
-            localStorage.setItem(_updateKey, JSON.stringify(data));
-        }catch{}
+        localStorage.setItem(_updateKey, false);
         localStorage.setItem('github-version', JSON.stringify({ tag: this.data.tag_name, published_at: this.data.published_at }));
     },
 

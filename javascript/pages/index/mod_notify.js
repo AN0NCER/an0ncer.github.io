@@ -138,6 +138,7 @@ function GENERATE() {
             return GENERATE().html(e.read, e.id, episode, e.linked.id, e.created_at, body, e.linked.episodes_aired, e.linked.episodes, issetVoice, "Новый эпизод");
         },
         release: (e) => {
+            console.log(e);
             const body = `Завершён показ аниме <b>"${e.linked.russian}"</b>`;
             const issetVoice = localStorage.getItem(e.linked.id) ? true : false;
             if (issetVoice) {
