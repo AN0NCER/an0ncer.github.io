@@ -24,7 +24,7 @@ export function LoadAnimeShikimori({ status = 'ongoing', limit = _limitAnime, ge
     Animes.list(q, async (response) => {
         if (response.failed && response.status == 429) {
             await Sleep(1000);
-            return GetAnimeShikimori();
+            return LoadAnimeShikimori({status, limit, genre, take, reflex, order, exclude_ids});
         }
 
         const element = $('.section-anime');
