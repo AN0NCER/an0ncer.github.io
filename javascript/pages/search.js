@@ -350,7 +350,10 @@ Main((e) => {
     ShowVoice();
     ShowHistory();
     Events();
-    Recomendation();
+    // Recomendation();
+    $('.recomendation-none > span').text('Рекомендации отключены разработчиком');
+    localStorage.removeItem('recomendation-database');
+    localStorage.removeItem('tunime-recomendation');
 });
 
 InitMenu();
