@@ -161,6 +161,7 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
         });
 
         function Complete(response) {
+            console.log(response);
             //Проверяем если есть у нас фрашиза
             if (response.nodes) {
                 //Отоброжаем блок с франшизой

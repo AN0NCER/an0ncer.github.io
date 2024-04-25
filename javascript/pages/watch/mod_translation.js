@@ -45,6 +45,12 @@ const WindowTranslation = {
         });
 
         $('.translation-param > .checkbox > input').prop('checked', $PARAMETERS.watch.dubanime);
+
+        //Автоматическое скрытие окна при выборе озвучки
+        Player().translation.events.onselected((e) => {
+            this.hide();
+            _windowTranslation.hide();
+        });
     },
     show: () => {
         $("body").addClass("loading");
