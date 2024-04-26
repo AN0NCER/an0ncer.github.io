@@ -73,10 +73,8 @@ export class WindowManagement {
     }
 
     #resize() {
-        console.log('called');
         const wHeight = $(window).height(),
             eHeight = $(`${this.element}>.window-content`).height();
-            console.log(wHeight, eHeight, this.element);
         if (wHeight <= eHeight) {
             $(`${this.element}>.window-content`).addClass('border-hide');
         } else {
