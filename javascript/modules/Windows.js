@@ -46,6 +46,7 @@ export class WindowManagement {
         await Sleep(300);
         el.addClass('hide');
         $(`${this.element} > .hide-window`).css('opacity', '');
+        $(window).off(`resize.${this.element}`);
         if (this.target.anim?.hided) {
             this.target.anim.hided();
         }
@@ -64,8 +65,22 @@ export class WindowManagement {
         $(`${this.element} > .window-content`).removeClass('hide');
         await Sleep(10);
         $(`${this.element} > .window-content`).css('transform', 'translateY(0%)')
+        $(window).on(`resize.${this.element}`, this.#resize.bind(this));
+        $(window).resize();
         if (this.target.anim?.showed) {
             this.target.anim.showed();
+        }
+    }
+
+    #resize() {
+        console.log('called');
+        const wHeight = $(window).height(),
+            eHeight = $(`${this.element}>.window-content`).height();
+            console.log(wHeight, eHeight, this.element);
+        if (wHeight <= eHeight) {
+            $(`${this.element}>.window-content`).addClass('border-hide');
+        } else {
+            $(`${this.element}>.window-content`).removeClass('border-hide');
         }
     }
 }  
