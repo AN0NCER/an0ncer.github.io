@@ -33,6 +33,12 @@ const WindowStorage = {
 
             });
         });
+        $('.btn#export-data').on('click', function () {
+            exportLocalStorageToJson('etun.json');
+        });
+        $('.btn#import-data').on('click', function () {
+            importJsonToLocalStorage()
+        })
     },
     show: () => {
     },
@@ -143,4 +149,88 @@ export const Storage = {
         };
         return (_lsTotal / 1024).toFixed(2);
     }
+}
+
+function exportLocalStorageToJson(filename) {
+    // Получаем данные из localStorage
+    const localStorageData = { ...localStorage };
+    const exception = ["recomendation-database", "tunime-recomendation", "access_token", "shadow-api", "tunime-id", "access_whoami", "history-back", "events_handler_list", "application_event"];
+
+    // Создаем объект для данных, которые будут экспортированы
+    const exportData = {};
+
+    // Проходим по каждому элементу в localStorage
+    for (let key in localStorageData) {
+        if (localStorageData.hasOwnProperty(key)) {
+            if (exception.includes(key))
+                continue;
+            // Добавляем данные в объект для экспорта
+            try {
+                exportData[key] = JSON.parse(localStorage.getItem(key));
+            } catch (error) {
+                exportData[key] = localStorage.getItem(key);
+            }
+        }
+    }
+
+    // Конвертируем объект в JSON
+    const jsonData = JSON.stringify(exportData, null, 2);
+
+    // Создаем ссылку для скачивания файла
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    // Создаем ссылку для загрузки файла
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+
+    // Добавляем ссылку на страницу и эмулируем клик для загрузки файла
+    document.body.appendChild(link);
+    link.click();
+
+    // Удаляем ссылку после завершения загрузки
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+function importJsonToLocalStorage() {
+    // Создаем input элемент для выбора файла
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+
+    // Устанавливаем обработчик события изменения файла
+    input.addEventListener('change', function (event) {
+        CreateVerify("Внимание! Вы точно хотите заменить текущие данные из файла?").then(() => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            // Обработчик события загрузки файла
+            reader.onload = function (event) {
+                try {
+                    const jsonData = JSON.parse(event.target.result);
+
+                    // Переводим значения из файла JSON в текст и сохраняем в localStorage
+                    for (const key in jsonData) {
+                        if (jsonData.hasOwnProperty(key)) {
+                            localStorage.setItem(key, JSON.stringify(jsonData[key]));
+                        }
+                    }
+
+                    // Оповещаем пользователя об успешном импорте
+                    window.location.reload();
+                } catch (error) {
+                    // Обрабатываем возможные ошибки при парсинге JSON
+                    alert('Произошла ошибка при импорте данных: ' + error.message);
+                }
+            };
+
+            // Читаем содержимое выбранного файла как текст
+            reader.readAsText(file);
+        });
+    });
+
+    // Триггерим событие клика на input элементе для выбора файла
+    input.click();
 }
