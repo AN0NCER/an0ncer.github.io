@@ -108,6 +108,10 @@
         &.hide {
             display: none;
         }
+
+        &.border-hide{
+            border-radius: 0px 0px 0px 0px;
+        }
     }
 }
 
@@ -126,7 +130,7 @@
         .window-content {
             left: auto;
             max-width: 400px;
-        width: 100%;
+            width: 100%;
         }
     }
 }

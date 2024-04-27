@@ -679,6 +679,9 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 .windowed .window-content.hide {
   display: none;
 }
+.windowed .window-content.border-hide {
+  border-radius: 0px 0px 0px 0px;
+}
 
 @media screen and (min-width: 900px) {
   .windowed .window-content .content-wraper {
@@ -816,7 +819,7 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 .window-app-size .window-content .content-wraper {
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto auto auto;
   overflow-y: hidden;
 }
 .window-app-size .window-content .content-wraper .window-bar {
@@ -869,6 +872,24 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   overflow: hidden;
   padding-right: 20px;
 }
+.window-app-size .window-content .content-wraper .data-controls {
+  display: flex;
+  gap: 10px;
+}
+.window-app-size .window-content .content-wraper .data-controls .btn {
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #282D39;
+  border-radius: 5px;
+  width: 100%;
+}
+.window-app-size .window-content .content-wraper .data-controls .btn svg {
+  height: 16px;
+  fill: #fff;
+}
 .window-app-size .window-content .content-wraper .window-footer {
   color: rgba(255, 255, 255, 0.6);
   display: grid;
@@ -897,10 +918,27 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
     padding-right: 0;
   }
 }
+body[data-orientation="90"].menuver header > .profile-link,
+body[data-orientation="90"].menuver .wraper-input {
+  margin-left: 75px;
+}
+body[data-orientation="90"].menuver .wraper-input .search-filter {
+  margin-left: 10px;
+}
+body[data-orientation="90"].menuver .wraper-input .icon {
+  left: 20px;
+}
 body[data-orientation="90"] main > div,
 body[data-orientation="90"] .wraper-input {
   margin-right: max(10px, env(safe-area-inset-right));
   margin-left: 10px;
+}
+body[data-orientation="270"].menuver header > .profile-link,
+body[data-orientation="270"].menuver .wraper-input {
+  margin-right: 75px;
+}
+body[data-orientation="270"].menuver .search-filter {
+  margin-right: 10px;
 }
 body[data-orientation="270"] main > div,
 body[data-orientation="270"] .wraper-input {

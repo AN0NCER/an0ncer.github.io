@@ -7,7 +7,7 @@ const WindowVerify = {
     anim: {
         hided: () => {
             $(`.window-verify-action`).remove();
-            
+
         }
     },
     show: () => {
@@ -21,10 +21,14 @@ const WindowVerify = {
 
 
 
-export function CreateVerify() {
+export function CreateVerify(text) {
     return new Promise((resolve) => {
         const id = Math.random().toString(19).slice(2);
-        $('body').append(GenVerify(id));
+        if (text) {
+            $('body').append(GenVerify(id, text));
+        } else {
+            $('body').append(GenVerify(id));
+        }
         const wm = new WindowManagement(WindowVerify, '.window-verify-action');
 
         const pin = $(`#pin-${id}`);

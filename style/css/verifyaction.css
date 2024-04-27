@@ -97,6 +97,9 @@
 .windowed .window-content.hide {
   display: none;
 }
+.windowed .window-content.border-hide {
+  border-radius: 0px 0px 0px 0px;
+}
 
 @media screen and (min-width: 900px) {
   .windowed .window-content .content-wraper {

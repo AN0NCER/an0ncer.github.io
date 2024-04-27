@@ -1,6 +1,7 @@
-var version = '169';
-var cacheName = 'pwa-tunime-v' + version;
-var appShellFilesToCache = [
+const version = '2.0.2';
+const hash = '06f11';
+const cacheName = `pwa-tunime-${hash}-v${version}`;
+const appShellFilesToCache = [
     // Директория: /images/icons
     "/images/icons/logo-x192-b.png",
     "/images/icons/logo-x192-o.png",
@@ -137,11 +138,15 @@ var appShellFilesToCache = [
     "/watch.html",
 ];
 
-var dataCacheName = 'pwa-tunime-data-v' + version;
+self.addEventListener('install', async event => {
+    try {
+        if (!isValidKey((await caches.keys())[0])) {
+            self.skipWaiting();
+        }
+    } catch {
+        self.skipWaiting();
+    }
 
-self.addEventListener('install', event => {
-    console.log('[SW]: Installed');
-    self.skipWaiting();
     event.waitUntil(caches.open(cacheName).then((cache) => {
         console.log('[SW]: Caching App Shell');
         return cache.addAll(appShellFilesToCache);
@@ -168,3 +173,27 @@ self.addEventListener('fetch', event => {
         })
     )
 });
+
+self.addEventListener('message', async event => {
+    if (event.data === 215) {
+        const client = event.source;
+        client.postMessage(JSON.stringify({ id: 215, val: version }));
+    } else if (event.data === 221) {
+        self.skipWaiting();
+    } else if (event.data === 216) {
+        const client = event.source;
+        client.postMessage(JSON.stringify({ id: 216, val: hash }));
+    } else if (event.data === 220) {
+        const client = event.source;
+        client.postMessage(JSON.stringify({ id: 220, val: { ver: version, hash: hash } }));
+    }
+});
+
+// Функция для проверки ключа (Удалить через 5 месяцев или раньше)
+function isValidKey(key) {
+    // Регулярное выражение для проверки ключа
+    const regex = /^pwa-tunime-[A-Za-z0-9]{5}-v\d+\.\d+\.\d+$/;
+
+    // Проверяем ключ с помощью регулярного выражения
+    return regex.test(key);
+}

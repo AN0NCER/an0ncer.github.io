@@ -94,7 +94,7 @@ header {
     padding: 20px;
 }
 
-main{
+main {
     margin-top: 111px;
 }
 
@@ -380,7 +380,7 @@ footer {
         }
     }
 
-    header{
+    header {
         max-width: 860px;
         left: auto;
         right: auto;
@@ -393,6 +393,26 @@ footer {
 body {
     &[data-orientation="90"] {
 
+        &.menuver {
+
+            header>.profile-link,
+            .wraper-input {
+                margin-left: 75px;
+            }
+
+            .wraper-input {
+                .search-filter {
+                    margin-left: 10px;
+
+                }
+
+                .icon {
+                    left: 20px;
+                }
+            }
+
+        }
+
         main>div,
         .wraper-input {
             margin-right: max(10px, env(safe-area-inset-right));
@@ -401,6 +421,18 @@ body {
     }
 
     &[data-orientation="270"] {
+
+        &.menuver {
+
+            header>.profile-link,
+            .wraper-input {
+                margin-right: 75px;
+            }
+
+            .search-filter {
+                margin-right: 10px;
+            }
+        }
 
         main>div,
         .wraper-input {
