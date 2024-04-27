@@ -134,7 +134,7 @@ export const Tunime = {
     server: new Server(),
     Online: function (access = this.storage.access) {
         return new Promise((resolve) => {
-            const cods = [666, 403]
+            const cods = [666, 403, 400];
             if (!this.storage.Live(access)) {
                 access = undefined;
             }
@@ -150,6 +150,10 @@ export const Tunime = {
             let responseCode = 503;
             Fetch('/online', { method: 'POST', headers: headers, body: body }).then((response) => {
                 responseCode = response.status;
+                if (responseCode == 401) {
+                    Tunime.storage.access = undefined;
+                    return resolve(this.Online(Tunime.storage.access));
+                }
                 if (cods.includes(responseCode)) {
                     Tunime.storage.access = undefined;
                     return resolve(false);
@@ -195,6 +199,13 @@ export const Tunime = {
             let responseCode = 503;
             Fetch('/video/source', { method: 'POST', body, headers }).then((response) => {
                 responseCode = response.status;
+                if (responseCode == 401) {
+                    Tunime.storage.access = undefined;
+                    return this.Online(Tunime.storage.access).then((val) => {
+                        if (val)
+                            resolve(this.Source(kodik, Tunime.storage.access));
+                    });
+                }
                 response.json().then((value) => {
                     return resolve(value.data);
                 });
@@ -202,8 +213,6 @@ export const Tunime = {
                 console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
                 if (responseCode == 503) {
                     return;
-                    // URL = `onrender.com`;
-                    return resolve(this.Source(kodik, access));
                 }
                 await Sleep(1000);
                 return resolve(this.Source(kodik, access));
@@ -220,6 +229,13 @@ export const Tunime = {
             let responseCode = 503;
             Fetch(`/anime/${aid}`, { method: 'POST', body, headers }).then((response) => {
                 responseCode = response.status;
+                if (responseCode == 401) {
+                    Tunime.storage.access = undefined;
+                    return this.Online(Tunime.storage.access).then((val) => {
+                        if (val)
+                            resolve(this.Anime(aid, Tunime.storage.access));
+                    });
+                }
                 response.json().then((value) => {
                     return resolve(value);
                 });
@@ -227,8 +243,6 @@ export const Tunime = {
                 console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
                 if (responseCode == 503) {
                     return;
-                    // URL = `onrender.com`;
-                    // return resolve(this.Anime(aid, access));
                 }
                 await Sleep(1000);
                 return resolve(this.Anime(aid, access));
@@ -245,6 +259,13 @@ export const Tunime = {
                 let responseCode = 503;
                 Fetch(`/voices/${aid}`, { method: 'GET', headers }).then((response) => {
                     responseCode = response.status;
+                    if (responseCode == 401) {
+                        Tunime.storage.access = undefined;
+                        return this.Online(Tunime.storage.access).then((val) => {
+                            if (val)
+                                resolve(this.Voices(aid, Tunime.storage.access).GET());
+                        });
+                    }
                     response.json().then((value) => {
                         return resolve(value.data);
                     });
@@ -252,8 +273,6 @@ export const Tunime = {
                     console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
                     if (responseCode == 503) {
                         return;
-                        // URL = `onrender.com`;
-                        // return resolve(this.Voices(aid, access).GET());
                     }
                     await Sleep(1000);
                     return resolve(this.Voices(aid, access).GET());
@@ -266,6 +285,13 @@ export const Tunime = {
                     const body = { key: access.key, id: access.id, tid };
                     Fetch(`/voices/${aid}`, { method: 'POST', headers, body }).then((response) => {
                         responseCode = response.status;
+                        if (responseCode == 401) {
+                            Tunime.storage.access = undefined;
+                            return this.Online(Tunime.storage.access).then((val) => {
+                                if (val)
+                                    resolve(this.Voices(aid, Tunime.storage.access).SET(tid));
+                            });
+                        }
                         response.json().then((value) => {
                             return resolve(value);
                         });
@@ -273,8 +299,6 @@ export const Tunime = {
                         console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
                         if (responseCode == 503) {
                             return;
-                            // URL = `onrender.com`;
-                            // return resolve(this.Voices(aid, access).SET(tid));
                         }
                         await Sleep(1000);
                         return resolve(this.Voices(aid, access).SET(tid));
@@ -313,24 +337,44 @@ export const Tunime = {
 (async () => {
     const exception = ['/player.html'];
     let minute = 60000;
+    let interval = undefined;
     if (exception.includes(window.location.pathname))
         return;
+
     if (Tunime.storage.access === undefined || !Tunime.storage.Live()) {
         const access = await Tunime.Online();
         if (access) {
-            const interval = setInterval(async () => {
+            interval = setInterval(async () => {
                 const access = await Tunime.Online();
                 if (!access)
                     clearInterval(interval);
             }, (LIFETIME - minute) - (Date.now() - Tunime.storage.access.date));
         }
     } else {
-        const interval = setInterval(async () => {
+        interval = setInterval(async () => {
             const access = await Tunime.Online();
             if (!access)
                 clearInterval(interval);
         }, (LIFETIME - minute) - (Date.now() - Tunime.storage.access.date));
     }
+
+    //Доработать этот код
+
+    // document.addEventListener('visibilitychange', async function () {
+    //     if (document.visibilityState === "visible") {
+    //         if (!Tunime.storage.Live())
+    //             await Tunime.Online();
+    //         interval = setInterval(async () => {
+    //             const access = await Tunime.Online();
+    //             if (!access)
+    //                 clearInterval(interval);
+    //         }, (LIFETIME - minute) - (Date.now() - Tunime.storage.access.date));
+    //         console.log(`[api] - Continue Interval: Next ${((LIFETIME - minute) - (Date.now() - Tunime.storage.access?.date))} ms`);
+    //     } else {
+    //         console.log(`[api] - Stop Interval`);
+    //         clearInterval(interval);
+    //     }
+    // });
 
     console.log(`[api] - Interval Started: Next ${((LIFETIME - minute) - (Date.now() - Tunime.storage.access?.date))} ms`);
 })();
