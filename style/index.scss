@@ -196,6 +196,7 @@ header {
 }
 
 @import './index/trailers';
+@import './index/update';
 
 .swiper-continue {
   font-family: Manrope;
@@ -454,19 +455,41 @@ header {
   font-family: Manrope;
   margin-top: 50px;
   color: #404246;
-
-  svg {
-    height: 50px;
-    fill: #404246;
-  }
+  gap: 3px;
 
   .title {
     margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .version-hash {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .version {
+      font-size: 14px;
+    }
+
+    .hash {
+      text-transform: uppercase;
+      font-size: 11px;
+      margin-top: -4px;
+    }
+  }
+
+  .date {
+    font-size: 14px;
   }
 }
 
 footer {
-  margin-top: 110px;
+  display: flex;
+  height: calc(120px + env(safe-area-inset-bottom));
+  width: 100%;
+  // margin-top: 110px;
 }
 
 .loading {
@@ -547,6 +570,10 @@ body {
 
       margin-right: max(20px, env(safe-area-inset-right));
     }
+
+    footer {
+      height: 50px;
+    }
   }
 
   &[data-orientation="270"] {
@@ -568,6 +595,10 @@ body {
     .section-anime a:nth-child(1),
     .section-update a:nth-child(1) {
       margin-left: 0px;
+    }
+
+    footer {
+      height: 50px;
     }
   }
 }

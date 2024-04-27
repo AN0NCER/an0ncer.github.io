@@ -918,10 +918,27 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
     padding-right: 0;
   }
 }
+body[data-orientation="90"].menuver header > .profile-link,
+body[data-orientation="90"].menuver .wraper-input {
+  margin-left: 75px;
+}
+body[data-orientation="90"].menuver .wraper-input .search-filter {
+  margin-left: 10px;
+}
+body[data-orientation="90"].menuver .wraper-input .icon {
+  left: 20px;
+}
 body[data-orientation="90"] main > div,
 body[data-orientation="90"] .wraper-input {
   margin-right: max(10px, env(safe-area-inset-right));
   margin-left: 10px;
+}
+body[data-orientation="270"].menuver header > .profile-link,
+body[data-orientation="270"].menuver .wraper-input {
+  margin-right: 75px;
+}
+body[data-orientation="270"].menuver .search-filter {
+  margin-right: 10px;
 }
 body[data-orientation="270"] main > div,
 body[data-orientation="270"] .wraper-input {
