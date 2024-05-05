@@ -1,0 +1,136 @@
+//Обьекты анимации загрузки аниме
+.spinner-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #15171e;
+    display: grid;
+    place-items: center;
+    z-index: 999;
+    font-family: Manrope;
+
+    .access-data {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: #1C1F2D;
+        color: #696B6F;
+        font-size: 9px;
+        text-transform: uppercase;
+        font-weight: bold;
+        padding: 2px 4px;
+        border-radius: 3px;
+
+        .pin {
+            display: flex;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+
+            &.red {
+                background: #730E12;
+            }
+
+            &.green{
+                background: #11730e;
+            }
+        }
+    }
+
+    .player-name {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .name {
+            text-transform: uppercase;
+            font-size: 4.8vw;
+            color: #fff;
+            letter-spacing: .2em;
+
+            @media screen and (min-width: 800px) {
+                &.name {
+                    font-size: 36px;
+                }
+            }
+        }
+
+        .untertitle {
+            text-transform: uppercase;
+            font-size: 2.55vw;
+            font-weight: 200;
+            color: #fff;
+            letter-spacing: .7em;
+
+            @media screen and (min-width: 800px) {
+                &.untertitle {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+
+.loader {
+    margin-top: 1vw;
+    height: 1.6vw;
+    aspect-ratio: 2.5;
+    --_g: no-repeat radial-gradient(farthest-side, #696B6F 90%, #0000);
+    background: var(--_g), var(--_g), var(--_g), var(--_g);
+    background-size: 20% 50%;
+    animation: l44 1s infinite linear alternate;
+
+    @media screen and (min-width: 800px) {
+        &.loader {
+            height: 16px;
+            margin-top: 10px;
+        }
+    }
+}
+
+@keyframes l44 {
+
+    0%,
+    5% {
+        background-position: calc(0*100%/3) 50%, calc(1*100%/3) 50%, calc(2*100%/3) 50%, calc(3*100%/3) 50%
+    }
+
+    12.5% {
+        background-position: calc(0*100%/3) 0, calc(1*100%/3) 50%, calc(2*100%/3) 50%, calc(3*100%/3) 50%
+    }
+
+    25% {
+        background-position: calc(0*100%/3) 0, calc(1*100%/3) 0, calc(2*100%/3) 50%, calc(3*100%/3) 50%
+    }
+
+    37.5% {
+        background-position: calc(0*100%/3) 100%, calc(1*100%/3) 0, calc(2*100%/3) 0, calc(3*100%/3) 50%
+    }
+
+    50% {
+        background-position: calc(0*100%/3) 100%, calc(1*100%/3) 100%, calc(2*100%/3) 0, calc(3*100%/3) 0
+    }
+
+    62.5% {
+        background-position: calc(0*100%/3) 50%, calc(1*100%/3) 100%, calc(2*100%/3) 100%, calc(3*100%/3) 0
+    }
+
+    75% {
+        background-position: calc(0*100%/3) 50%, calc(1*100%/3) 50%, calc(2*100%/3) 100%, calc(3*100%/3) 100%
+    }
+
+    87.5% {
+        background-position: calc(0*100%/3) 50%, calc(1*100%/3) 50%, calc(2*100%/3) 50%, calc(3*100%/3) 100%
+    }
+
+    95%,
+    100% {
+        background-position: calc(0*100%/3) 50%, calc(1*100%/3) 50%, calc(2*100%/3) 50%, calc(3*100%/3) 50%
+    }
+}

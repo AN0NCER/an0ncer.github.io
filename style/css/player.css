@@ -347,39 +347,110 @@ html {
   display: grid;
   place-items: center;
   z-index: 999;
+  font-family: Manrope;
 }
-.spinner-wrapper .spinner {
+.spinner-wrapper .access-data {
+  position: absolute;
+  top: 10px;
+  left: 10px;
   display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #1C1F2D;
+  color: #696B6F;
+  font-size: 9px;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.spinner-wrapper .access-data .pin {
+  display: flex;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.spinner-wrapper .access-data .pin.red {
+  background: #730E12;
+}
+.spinner-wrapper .access-data .pin.green {
+  background: #11730e;
+}
+.spinner-wrapper .player-name {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.spinner-wrapper .spinner .sk-folding-cube {
-  position: absolute;
-  width: 35px;
-  height: 35px;
-  transform: rotateZ(45deg);
-  z-index: 9;
+.spinner-wrapper .player-name .name {
+  text-transform: uppercase;
+  font-size: 4.8vw;
+  color: #fff;
+  letter-spacing: 0.2em;
 }
-.spinner-wrapper .spinner .sk-folding-cube .sk-cube {
-  float: left;
-  width: 50%;
-  height: 50%;
-  position: relative;
-  background-color: #51b2ff;
+@media screen and (min-width: 800px) {
+  .spinner-wrapper .player-name .name.name {
+    font-size: 36px;
+  }
 }
-.spinner-wrapper .spinner .sk-folding-cube .sk-cube1 {
-  transform-origin: 100% 100%;
+.spinner-wrapper .player-name .untertitle {
+  text-transform: uppercase;
+  font-size: 2.55vw;
+  font-weight: 200;
+  color: #fff;
+  letter-spacing: 0.7em;
 }
-.spinner-wrapper .spinner .sk-folding-cube .sk-cube2 {
-  transform-origin: 100% 100%;
-}
-.spinner-wrapper .spinner .sk-folding-cube .sk-cube3 {
-  transform-origin: 0% 0%;
-}
-.spinner-wrapper .spinner .sk-folding-cube .sk-cube4 {
-  transform-origin: 0% 0%;
+@media screen and (min-width: 800px) {
+  .spinner-wrapper .player-name .untertitle.untertitle {
+    font-size: 16px;
+  }
 }
 
+.loader {
+  margin-top: 1vw;
+  height: 1.6vw;
+  aspect-ratio: 2.5;
+  --_g: no-repeat radial-gradient(farthest-side, #696B6F 90%, #0000);
+  background: var(--_g), var(--_g), var(--_g), var(--_g);
+  background-size: 20% 50%;
+  animation: l44 1s infinite linear alternate;
+}
+@media screen and (min-width: 800px) {
+  .loader.loader {
+    height: 16px;
+    margin-top: 10px;
+  }
+}
+
+@keyframes l44 {
+  0%, 5% {
+    background-position: 0% 50%, 33.3333333333% 50%, 66.6666666667% 50%, 100% 50%;
+  }
+  12.5% {
+    background-position: 0% 0, 33.3333333333% 50%, 66.6666666667% 50%, 100% 50%;
+  }
+  25% {
+    background-position: 0% 0, 33.3333333333% 0, 66.6666666667% 50%, 100% 50%;
+  }
+  37.5% {
+    background-position: 0% 100%, 33.3333333333% 0, 66.6666666667% 0, 100% 50%;
+  }
+  50% {
+    background-position: 0% 100%, 33.3333333333% 100%, 66.6666666667% 0, 100% 0;
+  }
+  62.5% {
+    background-position: 0% 50%, 33.3333333333% 100%, 66.6666666667% 100%, 100% 0;
+  }
+  75% {
+    background-position: 0% 50%, 33.3333333333% 50%, 66.6666666667% 100%, 100% 100%;
+  }
+  87.5% {
+    background-position: 0% 50%, 33.3333333333% 50%, 66.6666666667% 50%, 100% 100%;
+  }
+  95%, 100% {
+    background-position: 0% 50%, 33.3333333333% 50%, 66.6666666667% 50%, 100% 50%;
+  }
+}
 @media screen and (max-width: 455px) {
   .player-wrapper .controls-wrapper .player-controls .btn.volume,
   .player-wrapper .controls-wrapper .player-controls .l-controls .volume-slider {
