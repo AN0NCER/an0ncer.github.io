@@ -16,9 +16,20 @@ export const AnimLoadPlayer = {
     start: function () {
         this.load = false;
         _amLoad();
+        try {
+            const data = JSON.parse(sessionStorage.getItem('shadow-api'));
+            if (data.access) {
+                $(`.access-data > .pin`).addClass('green');
+            } else {
+                $(`.access-data > .pin`).addClass('red');
+            }
+        } catch {
+            $(`.access-data > .pin`).addClass('red');
+        }
     },
-    stop: function () {
+    stop: async function () {
         this.load = true;
+        _amLoadEnd();
     }
 };
 
@@ -47,7 +58,17 @@ export const AnimSkip = {
 }
 
 //Html анимцации загрузки 
-const LOAD_PLAYER_HTML = `<div class="spinner-wrapper"><div class="spinner"><div class="sk-folding-cube"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div></div></div>`;
+const LOAD_PLAYER_HTML = `<div class="spinner-wrapper">
+<span class="access-data">
+  <span class="pin"></span>
+  Доступ
+</span>
+<span class="player-name">
+  <span class="name">Tunime</span>
+  <span class="untertitle">Player</span>
+   <div class="loader"></div>
+</span>
+</div>`;
 
 /**
  * Анимация загрузки плеера
@@ -55,69 +76,6 @@ const LOAD_PLAYER_HTML = `<div class="spinner-wrapper"><div class="spinner"><div
 function _amLoad() {
     if ($('.spinner-wrapper').length == 0)
         $('body').append(LOAD_PLAYER_HTML);
-
-    const tl = anime
-        .timeline({
-            loop: true,
-            delay: 0,
-            easing: "linear",
-            opacity: 1,
-            duration: 300,
-            loopComplete: () => {
-                if (!AnimLoadPlayer.load) return;
-                tl.pause();
-                _amLoadEnd();
-            }
-        })
-        .add({
-            targets: ".sk-cube1",
-            rotateY: "90deg",
-            opacity: 0,
-            delay: 300
-        })
-        .add({
-            targets: ".sk-cube2",
-            rotateX: "90deg",
-            transformOrigin: ["100% 100%", "100% 100%"],
-            opacity: 0
-        })
-        .add({
-            targets: ".sk-cube3",
-            rotateY: "90deg",
-            opacity: 0
-        })
-        .add({
-            targets: ".sk-cube4",
-            rotateX: "90deg",
-            transformOrigin: ["0% 0%", "0% 0%"],
-            opacity: 0
-        })
-        .add({
-            targets: ".sk-cube1",
-            rotateX: ["90deg", "0deg"],
-            rotateY: ["0deg", "0deg"],
-            opacity: 1
-        })
-        .add({
-            targets: ".sk-cube2",
-            rotateY: ["90deg", "0deg"],
-            transformOrigin: ["0% 0%", "0% 0%"],
-            rotateX: ["0deg", "0deg"],
-            opacity: 1
-        })
-        .add({
-            targets: ".sk-cube3",
-            rotateX: ["90deg", "0deg"],
-            rotateY: ["0deg", "0deg"],
-            opacity: 1
-        })
-        .add({
-            targets: ".sk-cube4",
-            rotateY: ["90deg", "0deg"],
-            rotateX: ["0deg", "0deg"],
-            transformOrigin: ["100% 100%", "100% 100%"],
-            opacity: 1
-        });
 }
 
 /**
@@ -129,30 +87,14 @@ function _amLoadEnd() {
         duration: 200,
         delay: 0
     }).add({
-        targets: ".sk-folding-cube",
-        rotateZ: ["45deg", "0deg"],
-        complete: () => {
-            $('.spinner-wrapper').css({ 'pointer-events': 'none' })
-            anime({
-                easing: "spring(1, 80, 10, 0)",
-                targets: ".btn-play",
-                opacity: 1,
-                scale: [0.5, 1]
-            });
-            anime({
-                targets: ".sk-folding-cube",
-                easing: "spring(1, 80, 10, 0)",
-                opacity: 0,
-                scale: [1, 0.5]
-            });
-        }
-    });
-    anime({
         targets: ".spinner-wrapper",
-        background: "rgba(16, 19, 24, 0)",
+        opacity: [1, 0],
         complete: () => {
             $('.spinner-wrapper').hide();
             $('.spinner-wrapper').remove();
+        },
+        begin: () => {
+            $('.spinner-wrapper').css({ 'pointer-events': 'none' })
         }
     });
 }
@@ -268,15 +210,15 @@ function _amSkShow(index) {
 /**
  * Анимация скрытия кнопки пропуска сегмента
  */
-function _amSkHide(){
-    if(Skips.showed){
+function _amSkHide() {
+    if (Skips.showed) {
         anime({
             targets: ".player-skip",
             easing: "easeInQuad",
             duration: 100,
             opacity: 0,
-            complete:() => {
-                $('.player-skip').css({right: '', opacity: ''});
+            complete: () => {
+                $('.player-skip').css({ right: '', opacity: '' });
             }
         });
         Skips.index = -1;

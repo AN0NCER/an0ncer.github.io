@@ -412,56 +412,7 @@ html {
     }
 }
 
-//Обьекты анимации загрузки аниме
-.spinner-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #15171e;
-    display: grid;
-    place-items: center;
-    z-index: 999;
-
-    .spinner {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .sk-folding-cube {
-            position: absolute;
-            width: 35px;
-            height: 35px;
-            transform: rotateZ(45deg);
-            z-index: 9;
-
-            .sk-cube {
-                float: left;
-                width: 50%;
-                height: 50%;
-                position: relative;
-                background-color: #51b2ff;
-            }
-
-            .sk-cube1 {
-                transform-origin: 100% 100%;
-            }
-
-            .sk-cube2 {
-                transform-origin: 100% 100%;
-            }
-
-            .sk-cube3 {
-                transform-origin: 0% 0%;
-            }
-
-            .sk-cube4 {
-                transform-origin: 0% 0%;
-            }
-        }
-    }
-}
+@import './player/loadanimation';
 
 @media screen and (max-width:455px) {
 
