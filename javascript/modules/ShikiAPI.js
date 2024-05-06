@@ -209,6 +209,14 @@ export const UserRates = {
                 const response = await request.fetch();
                 event(response);
                 return response;
+            },
+
+            GET: async () => {
+                request.setMethod("GET");
+                request.setHeaders(Headers.bearer());
+                const response = await request.fetch();
+                event(response);
+                return response;
             }
         }
     },
