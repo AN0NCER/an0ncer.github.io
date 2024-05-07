@@ -1401,13 +1401,32 @@ footer .studio span {
 
 .windowed .content-download .content-wraper {
   display: grid;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto auto auto;
   overflow-y: hidden;
 }
 .windowed .content-download .content-wraper .window-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.windowed .content-download .content-wraper .window-bar .window-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.windowed .content-download .content-wraper .window-bar .window-title .help-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #191C21;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.windowed .content-download .content-wraper .window-bar .window-title .help-icon svg {
+  height: 12px;
+  fill: #fff;
 }
 .windowed .content-download .content-wraper .window-bar .window-close {
   width: 40px;
@@ -1419,117 +1438,183 @@ footer .studio span {
 .windowed .content-download .content-wraper .window-bar .window-close svg {
   fill: #fff;
 }
-.windowed .content-download .content-wraper .window-body-fs {
-  overflow-y: auto;
+.windowed .content-download .content-wraper .wrapper-episodes-d {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.windowed .content-download .content-wraper .wrapper-episodes-d .episodes-download {
+  background: #191C21;
+  border-radius: 3px;
+  display: inline-flex;
+  gap: 5px;
+}
+.windowed .content-download .content-wraper .wrapper-episodes-d .episodes-download .d-episode {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-.windowed .content-download .content-wraper .window-body-fs .download-episode {
-  overflow: hidden;
-  overflow-x: hidden;
-  overflow-x: auto;
-  border-radius: 3px;
-}
-.windowed .content-download .content-wraper .window-body-fs .download-episode .down-value {
-  display: inline-flex;
-  background: #15171e;
-  border-radius: 3px;
-  width: auto;
-  position: relative;
-}
-.windowed .content-download .content-wraper .window-body-fs .download-episode .down-value .down-episode {
-  margin: 3px;
-  width: 55px;
-  height: 70px;
-  display: flex;
   justify-content: center;
   align-items: center;
-  font-family: Manrope, serif;
-  font-weight: bold;
-  color: #555657;
-  z-index: 2;
-  position: relative;
-  flex-direction: column;
-  cursor: pointer;
-}
-.windowed .content-download .content-wraper .window-body-fs .download-episode .down-value .down-episode .ep-name {
-  font-size: 11px;
-  margin-top: 5px;
-}
-.windowed .content-download .content-wraper .window-body-fs .download-episode .down-value .down-episode svg {
-  display: none;
-  position: absolute;
-  top: 2px;
-  right: 5px;
-  width: 12px;
-  transform: rotate(20deg);
-  fill: #5fbef3;
-}
-.windowed .content-download .content-wraper .window-body-fs .download-episode .down-value .down-episode.downloaded svg {
-  display: block;
-}
-.windowed .content-download .content-wraper .window-body-fs .download-episode .sel-down {
-  position: absolute;
   width: 55px;
   height: 70px;
-  background: #5fbef3;
+  font-size: 16px;
+  font-weight: bold;
   margin: 3px;
+  gap: 5px;
+  color: #fff;
+  position: relative;
   border-radius: 3px;
-  z-index: 1;
+  opacity: 0.4;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
 }
-.windowed .content-download .content-wraper .window-body-fs .user-help {
+.windowed .content-download .content-wraper .wrapper-episodes-d .episodes-download .d-episode.selected {
+  background: #3C92ED;
+  opacity: 1;
+  cursor: auto;
+}
+.windowed .content-download .content-wraper .wrapper-episodes-d .episodes-download .d-episode span {
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.windowed .content-download .content-wraper .wrapper-episodes-d .episodes-download .d-episode .downloaded {
   display: flex;
-  gap: 20px;
-  font-family: "Manrope";
-  align-items: center;
-  opacity: 0.6;
+  width: 5px;
+  height: 5px;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  background: #3C92ED;
+  border-radius: 50%;
 }
-.windowed .content-download .content-wraper .window-body-fs .user-help .user-help-link {
-  font-weight: bolder;
-  font-size: 24px;
-  color: #51B3FF;
+.windowed .content-download .content-wraper .progress-wrapper {
+  position: relative;
+  height: 25px;
+  padding-top: 20px;
 }
-.windowed .content-download .content-wraper .window-body-fs .user-help .user-help-info {
-  font-size: 13px;
-}
-.windowed .content-download .content-wraper .window-body-fs .download-info {
+.windowed .content-download .content-wraper .progress-wrapper .download-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
   font-size: 14px;
 }
-.windowed .content-download .content-wraper .window-body-fs .progress-download {
-  width: 100%;
+.windowed .content-download .content-wraper .progress-wrapper .progress-download {
+  display: flex;
   height: 25px;
   border-radius: 3px;
-  background: #272b38;
-  display: flex;
+  background: #191C21;
   overflow: hidden;
 }
-.windowed .content-download .content-wraper .window-body-fs .progress-download .value {
-  background: #3283E4;
-  height: 25px;
+.windowed .content-download .content-wraper .progress-wrapper .progress-download .value {
+  display: flex;
   width: 0%;
+  height: 100%;
+  background: #2393F1;
+  position: relative;
+  container-type: inline-size;
   transition: 0.3s ease-in-out;
 }
-.windowed .content-download .content-wraper .window-futter {
+.windowed .content-download .content-wraper .progress-wrapper .progress-download .value .percent {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 200;
+  top: 0;
+  bottom: 0;
+  right: -35px;
   display: flex;
-  gap: 10px;
-}
-.windowed .content-download .content-wraper .window-futter .btn-accept {
-  cursor: pointer;
-  display: flex;
-  height: 40px;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  flex: 1 0 0;
-  border-radius: 4px;
-  background: linear-gradient(135deg, #51B3FF 0%, #3283E4 100%);
   transition: 0.3s ease-in-out;
 }
-.windowed .content-download .content-wraper .window-futter .btn-accept.disabled {
-  opacity: 0.3;
+@container (min-width: 80cqw) {
+  .windowed .content-download .content-wraper .progress-wrapper .progress-download .value .percent {
+    right: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+  }
+}
+.windowed .content-download .content-wraper .error-message {
+  text-align: center;
+  color: #A92527;
+  font-size: 14px;
+  font-family: Inter;
+}
+.windowed .content-download .content-wraper .download-buttons {
+  position: relative;
+}
+.windowed .content-download .content-wraper .download-buttons .btn {
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 3px;
+  font-size: 16px;
+}
+.windowed .content-download .content-wraper .download-buttons .btn.btn-accept {
+  position: relative;
+  z-index: 9;
+  background: #3C92ED;
+}
+.windowed .content-download .content-wraper .download-buttons .btn.btn-accept.disable {
+  transform: translateY(-5px);
+  scale: 0.9;
+  opacity: 0.5;
+  z-index: 8;
+  pointer-events: none;
+}
+.windowed .content-download .content-wraper .download-buttons .btn.btn-stop {
+  position: absolute;
+  background: #F12323;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  transition: 0.3s ease-in-out;
+}
+.windowed .content-download .content-wraper .download-buttons .btn.btn-stop.disable {
+  bottom: 5px;
+  scale: 0.9;
+  opacity: 0.5;
+  z-index: 8;
+  pointer-events: none;
+}
+.windowed .content-download .content-wraper .window-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+}
+.windowed .content-download .content-wraper .window-footer .title {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  color: #FFF;
+  font-family: Manrope;
+  font-size: 14px;
+}
+.windowed .content-download .content-wraper .window-footer .title svg {
+  width: 16px;
+  fill: #fff;
+}
+.windowed .content-download .content-wraper .window-footer .checkbox {
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  background: #C0C0C0;
+  border-radius: 3px;
+}
+.windowed .content-download .content-wraper .window-footer .checkbox input {
+  display: none;
+}
+.windowed .content-download .content-wraper .window-footer .checkbox .switch-check {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background: #3C92ED;
+}
+.windowed .content-download .content-wraper .window-footer .checkbox input:checked + .switch-check {
+  display: grid;
 }
 
 :root {

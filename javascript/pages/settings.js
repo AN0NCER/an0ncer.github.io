@@ -218,7 +218,13 @@ const Parameters = [
                 type: 'boolean',
                 param: 'dautosave',
                 name: 'Автосохранение',
-                description: 'После загрузки автоматически  сохраняет файл.'
+                description: 'После загрузки автоматически сохраняет файл.'
+            },
+            {
+                type: 'boolean',
+                param: 'dautoset',
+                name: 'Автоотметки',
+                description: 'Отмечать загруженые аниме через 12 часов + продолжительность аниме.'
             }
         ]
     }

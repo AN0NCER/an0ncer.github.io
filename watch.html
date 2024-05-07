@@ -389,7 +389,7 @@
             <div class="franchisa-anime scroll-none" style="display: none"></div>
             <!-- #endregion -->
             <!-- #region Similiar-->
-            <div class="title count" style="display: none;">
+            <div class="title count similiar-title" style="display: none;">
                 <div class="title">Похожие</div>
                 <div class="similiar-count count">0</div>
             </div>
@@ -413,7 +413,11 @@
         <span class="window-content content-download hide">
             <span class="content-wraper">
                 <div class="window-bar bar-download">
-                    <div class="window-title">Загрузить</div>
+                    <div class="window-title"><span class="help-icon" id="help-download"><svg xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 320 512">
+                                <path
+                                    d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z" />
+                            </svg></span>Загрузить</div>
                     <div class="window-close">
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
                             <path
@@ -421,34 +425,36 @@
                         </svg>
                     </div>
                 </div>
-                <div class="window-body-fs">
-                    <div class="download-episode scroll-none">
-                        <div class="down-value">
-                            <div class="sel-down" style="top: 0px; left: 0px;"></div>
-                        </div>
+                <div class="wrapper-episodes-d scroll-none hide">
+                    <div class="episodes-download">
                     </div>
-                    <div class="user-help">
-                        <a href="https://github.com/AN0NCER/an0ncer.github.io/wiki/%D0%9A%D0%B0%D0%BA-%D1%81%D0%BA%D0%B0%D1%87%D0%B0%D1%82%D1%8C-%D0%B0%D0%BD%D0%B8%D0%BC%D0%B5%3F"
-                            class="user-help-link">
-                            ?
-                        </a>
-                        <div class="user-help-info">
-                            Для просмотра на устройстве рекомендуется установить VLC Media Player или другой плеер,
-                            поддерживающий формат Transport Stream (TS).
-                        </div>
-                    </div>
+                </div>
+                <div class="progress-wrapper">
                     <div class="download-info">
-                        <span class="voice">Anilibria</span>
-                        <span class="quality">720p</span>
+                        <span class="voice">Voice</span>
+                        <span class="quality">0p</span>
                     </div>
                     <div class="progress-download">
                         <div class="value">
+                            <span class="percent">0%</span>
                         </div>
                     </div>
                 </div>
-                <div class="window-futter">
-                    <div id="btn-download" class="btn-accept" data-status="ready">Загрузить</div>
+                <div class="error-message hide"></div>
+                <div class="download-buttons">
+                    <div class="btn btn-accept" id="btn-download">Загрузить</div>
+                    <div class="btn btn-stop disable" id="btn-stop">Отмена</div>
                 </div>
+                <label class="window-footer autosave-param">
+                    <div class="title"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path
+                                d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                        </svg>Автосохранение</div>
+                    <div class="checkbox">
+                        <input type="checkbox" checked="">
+                        <div class="switch-check"></div>
+                    </div>
+                </label>
             </span>
         </span>
     </span>
@@ -550,4 +556,5 @@
     <script src="/javascript/pages/watch.js" type="module"></script>
     <!-- #endregion -->
 </body>
+
 </html>
