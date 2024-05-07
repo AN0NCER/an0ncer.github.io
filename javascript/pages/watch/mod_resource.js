@@ -8,6 +8,8 @@ import { LoadScreen } from "./mod_load.js";
 import { History } from "./mod_history.js";
 
 export let Screenshots = undefined;
+export let Franchises = [];
+export let Anime = undefined;
 
 /**
  * Загружает аниме на сайт
@@ -19,31 +21,30 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
         progress = new LoadScreen(9),
         process = [];
     let posterLink = undefined,
-        jikanLoaded = false,
-        animeData = undefined;
+        jikanLoaded = false;
 
     try {
         progress.Step();
         process.push(new Promise(async (resolve) => {
-            animeData = await FetchAnime($ID);
+            Anime = await FetchAnime($ID);
             progress.Step();
-            UserRate().init(animeData.user_rate, isLogged);
+            UserRate().init(Anime.user_rate, isLogged);
             if (posterLink === undefined) {
-                posterLink = `${SHIKIURL.url}/${animeData.image.original}`;
+                posterLink = `${SHIKIURL.url}/${Anime.image.original}`;
                 if (jikanLoaded) {
                     process.push(LoadPoster(posterLink));
                 }
             }
 
-            SetTitle(animeData);
-            Genres(animeData);
-            Duration(animeData);
-            Status(animeData);
-            NextEpisode(animeData);
-            Description(animeData);
-            Studio(animeData);
-            PageTitle(animeData);
-            PageMetaTags(animeData);
+            SetTitle(Anime);
+            Genres(Anime);
+            Duration(Anime);
+            Status(Anime);
+            NextEpisode(Anime);
+            Description(Anime);
+            Studio(Anime);
+            PageTitle(Anime);
+            PageMetaTags(Anime);
 
             resolve(true);
         }));
@@ -72,7 +73,7 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
             progress.Step();
         }
 
-        e(animeData);
+        e(Anime);
     } catch (error) {
         console.log(error);
     }
@@ -173,6 +174,8 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
                     if ($PARAMETERS.watch.typefrc.indexOf(element.kind) == -1) {
                         continue;
                     }
+
+                    Franchises.push(element);
 
                     //Создаем елемент
                     const html = `<a data-id="${element.id}" class="${$ID == element.id ? "selected" : ""

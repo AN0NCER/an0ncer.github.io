@@ -38,10 +38,33 @@ let app_installed_device = {
             if (key == 'version')
                 continue;
 
-            if(events_handler_list[key].completed == false && events_handler_list[key].target == app_current_page){
+            if (events_handler_list[key].completed == false && events_handler_list[key].target == app_current_page) {
                 CallEventHandler(key);
             }
         }
+    }
+
+    (() => {
+        const key = "download-a";
+        const File = "download_a.js";
+        /**
+         * @type {[{id_ur: number, episodes: number, downloaded: [{episode: number, date:string}], duration: number}] | []} 
+         */
+        const data = JSON.parse(localStorage.getItem(key)) || [];
+
+        if (data.length === 0)
+            return;
+        
+        OpenScript(File);
+    })();
+
+    function OpenScript(source) {
+        window.onload = function () {
+            const script = document.createElement('script');
+            script.src = `/javascript/auto/${source}`;
+            script.type = "module";
+            document.body.appendChild(script);
+        };
     }
 })();
 
@@ -110,7 +133,7 @@ function LoadEventsHandlerList() {
  */
 function CallEventHandler(params) {
     const events = {
-        onStart: function (){
+        onStart: function () {
             window.location.href = "login.html";
         }
     }
