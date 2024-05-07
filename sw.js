@@ -1,5 +1,5 @@
-const version = '2.0.2';
-const hash = '4907b';
+const version = '2.1.0';
+const hash = '791cf';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
     // Директория: /images/icons
@@ -23,6 +23,8 @@ const appShellFilesToCache = [
     "/images/popup.png",
     "/images/preview-image.png",
     "/images/splashscreen.png",
+    // Директория: /javascript/auto
+    "/javascript/auto/download_a.js",
     // Директория: /javascript/engine
     "/javascript/engine/event_handler.js",
     "/javascript/engine/orientation.js",
