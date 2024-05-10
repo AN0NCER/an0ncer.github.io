@@ -1,6 +1,7 @@
 import { WindowManagement } from "../../modules/Windows.js";
 import { $ID } from "../watch.js";
 import { Player } from "./mod_player.js";
+import { Franchises } from "./mod_resource.js";
 
 const WindowTranslation = {
     init: function () {
@@ -41,6 +42,8 @@ const WindowTranslation = {
                     const id = data[i];
                     $(`.voice[data-id="${id}"] > .voice-save`).addClass('select');
                 }
+
+                WindowTranslation.selectfavorits();
             }
         });
 
@@ -52,17 +55,26 @@ const WindowTranslation = {
             _windowTranslation.hide();
         });
     },
-    show: () => {
+    show: async () => {
+        WindowTranslation.selectfavorits();
         $("body").addClass("loading");
-        const element = $('.content-translation');
-        if (element.height() >= window.innerHeight) {
-            element.css({ 'border-radius': '0px' });
-        }
     },
     hide: () => {
         $("body").removeClass("loading");
     },
-    verif: () => { return true }
+    verif: () => { return true },
+    selectfavorits: () => {
+        if ($PARAMETERS.watch.dubanime) {
+            Franchises.forEach((value) => {
+                /**@type {[number]} */
+                const data = JSON.parse(localStorage.getItem(`save-translations-${value.id}`)) || [];
+                for (let i = 0; i < data.length; i++) {
+                    const tid = data[i];
+                    $(`.voice-save[data-id="${tid}"]`).addClass('select');
+                }
+            });
+        }
+    }
 }
 
 const _windowTranslation = new WindowManagement(WindowTranslation, '.window-translation');
