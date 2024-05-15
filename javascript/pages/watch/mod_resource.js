@@ -8,6 +8,7 @@ import { LoadScreen } from "./mod_load.js";
 import { History } from "./mod_history.js";
 
 export let Screenshots = undefined;
+/**@type {[] | [{date: number, id: number, image_url:string, kind:string, name:string, url:string, weight:number, year:number}]} */
 export let Franchises = [];
 export let Anime = undefined;
 
@@ -18,16 +19,16 @@ export let Anime = undefined;
  */
 export async function LoadAnime(e = () => { }, isLogged = false) {
     const start = Date.now(),
-        progress = new LoadScreen(9),
+        loadScreen = new LoadScreen(9),
         process = [];
     let posterLink = undefined,
         jikanLoaded = false;
 
     try {
-        progress.Step();
+        loadScreen.progress.Step();
         process.push(new Promise(async (resolve) => {
             Anime = await FetchAnime($ID);
-            progress.Step();
+            loadScreen.progress.Step();
             UserRate().init(Anime.user_rate, isLogged);
             if (posterLink === undefined) {
                 posterLink = `${SHIKIURL.url}/${Anime.image.original}`;
@@ -55,7 +56,7 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
                 process.push(LoadPoster(poster));
             }
             jikanLoaded = true;
-            progress.Step();
+            loadScreen.progress.Step();
 
             resolve(true);
         }));
@@ -70,7 +71,7 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
 
         for (let i = 0; i < process.length; i++) {
             await process[i];
-            progress.Step();
+            loadScreen.progress.Step();
         }
 
         e(Anime);

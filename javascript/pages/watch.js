@@ -154,7 +154,7 @@ Main(async (e) => {
 
     //Загружаем аниме
     LoadAnime(async (e) => {
-        await LoadScreen.loaded(() => {
+        await LoadScreen.Loaded(() => {
             if ($SHOWPLAYER) {
                 const element = document.querySelector(".landscape-player");
                 element.scrollIntoView({

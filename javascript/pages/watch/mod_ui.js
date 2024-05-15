@@ -1,6 +1,7 @@
 import { ScrollElementWithMouse } from "../../modules/funcitons.js";
 import { $ID } from "../watch.js";
 import { ShowDwonloadWindow } from "./mod_download.js";
+import { LoadScreen } from "./mod_load.js";
 import { Player } from "./mod_player.js";
 import { LoadImageById } from "./mod_resource.js";
 import { ShowTranslationWindow } from "./mod_translation.js";
@@ -28,7 +29,8 @@ export function Functional() {
         { dom: "#share", func: ShareAnime },
         { dom: "#btn-scroll", func: ShowPlayer },
         { dom: '.translations-wrapper > .button-translation', func: ShowTranslationWindow },
-        { dom: '.translations-wrapper > .button-stars', func: SaveVoice }
+        { dom: '.translations-wrapper > .button-stars', func: SaveVoice },
+        { dom: '.franchise-controls > #centered', func: AutoScrollFranchise }
     ]
 
     for (let i = 0; i < list.length; i++) {
@@ -68,6 +70,34 @@ export function Functional() {
     ScrollingElements();
     CentrumPlayer();
     AnimeStatusSelect();
+    LoadScreen.On('loaded', () => {
+        AutoScrollFranchise();
+    })
+}
+
+export function AutoScrollFranchise() {
+    try {
+        const position = $('.franchisa-anime > .selected').position();
+        const widthscroll = $('.franchisa-anime').width();
+        const widthcard = $('.franchisa-anime > .selected').width();
+        let scrollLeftValue = $('.franchisa-anime').scrollLeft()
+        if ((widthscroll - position.left) < widthcard) {
+            scrollLeftValue = scrollLeftValue + position.left - ((widthscroll - widthcard) / 2);
+        } else if (position.left < 0) {
+            scrollLeftValue = scrollLeftValue + position.left - ((widthscroll - widthcard) / 2);
+        } else {
+            return;
+        }
+
+        anime({
+            targets: '.franchisa-anime',
+            scrollLeft: scrollLeftValue,
+            duration: 500,
+            easing: 'easeInOutQuad'
+        });
+    } catch {
+
+    }
 }
 
 /**
