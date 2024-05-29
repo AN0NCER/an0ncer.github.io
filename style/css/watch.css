@@ -188,6 +188,9 @@ header .preview .schape .btn svg {
   fill: #fff;
   width: 20px;
 }
+header .preview .schape svg {
+  fill: #101318;
+}
 header .preview .btn-back {
   width: 35px;
   height: 35px;
