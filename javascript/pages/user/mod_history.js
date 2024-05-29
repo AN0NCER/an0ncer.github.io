@@ -1,38 +1,42 @@
-import { User } from "../../modules/ShikiUSR.js";
-import { Users } from "../../modules/ShikiAPI.js";
 import { Sleep } from "../../modules/funcitons.js";
+import { Users } from "../../modules/ShikiAPI.js";
+import { User } from "../../modules/ShikiUSR.js";
+import { $USER, OnUser } from "../user.js";
 
-/**
- * Получает историю пользователять просмотра
- * @param {Integer} page - страница запроса 
- * @returns undefined
- */
-export function LoadHistory($ID, page = 1) {
-    if (!User.authorized && !$ID) {
-        return;
-    }
+export function History() {
+    OnUser(data => {
+        if ($USER != (JSON.parse(localStorage.getItem(User.Storage.keys.whoami))?.id || undefined))
+            return;
+        LoadHistory(data.id);
+        $(`[id="history"]`).removeClass('hide');
+    });
+}
 
-    Users.history($ID, { target_type: "Anime", limit: 9, page }, async (res) => {
-        // console.log(`Fail: ${res.failed}`, res);
-        if (res.failed) {
-            await Sleep(1000);
-            return LoadHistory($ID, page);
-        }
-        //Генерируем свой Object для истории
-        const history = GenObjectHistory(res);
-
-        if (res.length == 0) {
+function LoadHistory(id, page = 1) {
+    Users.history(id, { target_type: "Anime", limit: 9, page }, async (response) => {
+        if (response.failed) {
+            if (response.status == 429) {
+                await Sleep(1000);
+                return LoadHistory(id, page);
+            }
             return;
         }
+
+        //Генерируем свой Object для истории
+        const history = GenObjectHistory(response);
+
+        if (response.length == 0) {
+            return;
+        }
+
         //Отображаем историю
         HistoryShow(history);
 
         trackScroll('scrollHistory', 200, (() => {
-            LoadHistory($ID, page + 1);
+            LoadHistory(id, page + 1);
         }));
     }).GET();
 }
-
 
 /**
  * Переделывает Object с историей в массив данных
