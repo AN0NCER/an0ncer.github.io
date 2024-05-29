@@ -1,7 +1,24 @@
 const version = '2.1.0';
-const hash = 'dd7e1';
+const hash = '857d4';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
+    // Директория: /images/genres
+    "/images/genres/comedy.svg",
+    "/images/genres/dementia_psychological.svg",
+    "/images/genres/drama.svg",
+    "/images/genres/fantasy.svg",
+    "/images/genres/historical.svg",
+    "/images/genres/horror_thriller.svg",
+    "/images/genres/mecha.svg",
+    "/images/genres/military.svg",
+    "/images/genres/music.svg",
+    "/images/genres/mystery.svg",
+    "/images/genres/police.svg",
+    "/images/genres/romance.svg",
+    "/images/genres/slice_of_life.svg",
+    "/images/genres/space.svg",
+    "/images/genres/sports.svg",
+    "/images/genres/supernatural.svg",
     // Директория: /images/icons
     "/images/icons/logo-x192-b.png",
     "/images/icons/logo-x192-o.png",
@@ -33,6 +50,7 @@ const appShellFilesToCache = [
     "/javascript/library/hls.js",
     "/javascript/library/hls.js.map",
     "/javascript/library/jqery.min.js",
+    "/javascript/library/jsyaml.js",
     "/javascript/library/rxjs.umd.min.js",
     "/javascript/library/rxjs.umd.min.js.map",
     "/javascript/library/swiper-bundle.min.js",
@@ -52,7 +70,6 @@ const appShellFilesToCache = [
     // Директория: /javascript/pages/index
     "/javascript/pages/index/mod_account.js",
     "/javascript/pages/index/mod_animes.js",
-    "/javascript/pages/index/mod_countdown.js",
     "/javascript/pages/index/mod_github.js",
     "/javascript/pages/index/mod_history_watch.js",
     "/javascript/pages/index/mod_notify.js",
@@ -80,7 +97,15 @@ const appShellFilesToCache = [
     "/javascript/pages/settings/mod_select.js",
     "/javascript/pages/settings/mod_storage.js",
     // Директория: /javascript/pages/user
+    "/javascript/pages/user/mod_achivements.js",
+    "/javascript/pages/user/mod_favorites.js",
+    "/javascript/pages/user/mod_franchises.js",
+    "/javascript/pages/user/mod_friends.js",
+    "/javascript/pages/user/mod_genres.js",
     "/javascript/pages/user/mod_history.js",
+    "/javascript/pages/user/mod_level.js",
+    "/javascript/pages/user/mod_load.js",
+    "/javascript/pages/user/mod_stats.js",
     // Директория: /javascript/pages/watch
     "/javascript/pages/watch/mod_download.js",
     "/javascript/pages/watch/mod_history.js",
