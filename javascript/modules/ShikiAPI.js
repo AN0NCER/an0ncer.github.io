@@ -98,6 +98,27 @@ export const Appear = {
     }
 };
 
+export const Friends = {
+    base_url: () => { return `${SHIKIURL.url}/api/friends` },
+    friends: function (id, event = () => { }) {
+        const url = this.base_url() + "/" + id;
+        const request = Fetch("POST", url, Headers.bearer());
+        return {
+            POST: async () => {
+                const response = await request.fetch();
+                event(response);
+                return response;
+            },
+            DELETE: async () => {
+                request.setMethod('DELETE');
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
+    }
+}
+
 export const Users = {
     base_url: () => { return `${SHIKIURL.url}/api/users` },
     list: function (query = {}, event = () => { }) {
@@ -109,7 +130,17 @@ export const Users = {
     show: function (id, query = {}, event = () => { }) {
         query = ObjectToQuery(query);
         let url = this.base_url() + "/" + id + query;
-        return StandartIDGET(url, event);
+        const request = Fetch("GET", url, Headers.base());
+        return {
+            GET: async (logged = false) => {
+                if (logged) {
+                    request.setHeaders(Headers.bearer());
+                }
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
     },
 
     info: function (id, event = () => { }) {
@@ -130,8 +161,9 @@ export const Users = {
         }
     },
 
-    friends: function (id, event = () => { }) {
-        const url = this.base_url() + "/" + id + "/friends";
+    friends: function (id, query = {}, event = () => { }) {
+        query = ObjectToQuery(query);
+        const url = this.base_url() + "/" + id + "/friends" + query;
         return StandartIDGET(url, event);
     },
 
