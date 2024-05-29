@@ -1,25 +1,4 @@
-import { Sleep } from "../../modules/funcitons.js";
-
-//Класс управляем анимацией загрузки страницы
-export class LoadScreen {
-    static query = ".page-loading";
-
-    /**
-     * Завершает анимацию загрузки страницы
-     * @param {Function} e 
-     * @returns {true}
-     */
-    static loaded(e = () => { }) {
-        return new Promise(async (resolve) => {
-            $(this.query).css("opacity", 0);
-            await Sleep(600);
-            $("body").removeClass("loading");
-            $(this.query).css("display", "none");
-            e();
-            return resolve(true);
-        });
-    }
-
+class Progress {
     constructor(steps = 1) {
         this.progress = 0;
         this.steps = steps;
@@ -32,5 +11,49 @@ export class LoadScreen {
         }
         this.progress += this.prcnt;
         $(`${LoadScreen.query} > .wrapper > .progress > .bar`).css("width", `${this.progress}%`);
+    }
+}
+
+//Класс управляем анимацией загрузки страницы
+export class LoadScreen {
+    static query = ".page-loading";
+    static loaded = false;
+    static #onLoaded = [];
+
+    constructor(steps = 1) {
+        this.progress = new Progress(steps);
+    }
+
+    static Loaded(e = () => { }) {
+        return new Promise(async (resolve) => {
+            anime({
+                targets: this.query,
+                opacity: 0,
+                easing: 'linear',
+                duration: 500,
+                complete: () => {
+                    this.loaded = true;
+                    $("body").removeClass("loading");
+                    $(this.query).css("display", "none");
+                    e();
+                    this.#onLoaded.forEach((val) => val());
+                    return resolve(true);
+                }
+            })
+        });
+    }
+
+    /**
+    * 
+    * @param {'loaded'} name 
+    * @param {function} event 
+    */
+    static On(name, event = () => { }) {
+        if (name === 'loaded') {
+            if (this.loaded) {
+                event();
+            }
+            this.#onLoaded.push(event);
+        }
     }
 }

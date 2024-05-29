@@ -18,7 +18,7 @@
 <body class="loading unselectable">
     <!-- #region Loading Screen-->
     <span class="page-loading"
-        style="position: fixed;top: 0;left: 0;width: 100%;height: 100dvh;background: #101318;transition: 0.6s ease-in-out;opacity: 1;z-index: 9999;">
+        style="position: fixed;top: 0;left: 0;width: 100%;height: 100dvh;background: #101318;opacity: 1;z-index: 9999;">
         <div class="loader">
             <div class="inner one"></div>
             <div class="inner two"></div>
@@ -58,23 +58,10 @@
                         </svg>
 
                     </div>
-                    <svg width="101" height="101" viewBox="0 0 101 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_251_2517)">
-                            <path d="M101 101C75.8027 98.6359 69.1667 78.6828 69 69V101H101Z" fill="#101318" />
-                            <path d="M69 101H34V66H69V101Z" fill="#101318" />
-                            <path
-                                d="M34.5 32C15.3855 32 0 47.3855 0 66.5C0 85.6145 15.3855 101 34.5 101C53.6145 101 69 85.6145 69 66.5C69 47.3855 53.6145 32 34.5 32Z"
-                                fill="#101318" />
-                            <path d="M34 101H0V32H34V101Z" fill="#101318" />
-                            <path d="M32 32C6.8027 29.636 0.167 9.6828 0 -1.90735e-06V32H32Z" fill="#101318" />
-                        </g>
-                        <defs>
-                            <clipPath id="clip0_251_2517">
-                                <rect width="101" height="101" fill="white" transform="matrix(-1 0 0 1 101 0)" />
-                            </clipPath>
-                        </defs>
+                    <svg width="101" height="101" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path
+                            d="M469.3,501.5c-70.5-17.3-120-80.4-120-153v-9.5c0-97.4-78.9-176.3-176.3-176.3h-9.5c-72.6,0-135.7-49.6-153-120L0,0v512h512  L469.3,501.5z" />
                     </svg>
-
                 </div>
                 <div class="schape schape-r">
                     <div class="btn" id="share">
@@ -84,15 +71,9 @@
                                 fill="white"></path>
                         </svg>
                     </div>
-                    <svg width="101" height="101" viewBox="0 0 101 101" fill="#101318"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 101C25.1973 98.6359 31.8333 78.6828 32 69V101H0Z"></path>
-                        <path d="M32 101H67V66H32V101Z"></path>
+                    <svg width="101" height="101" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <path
-                            d="M66.5 32C85.6145 32 101 47.3855 101 66.5C101 85.6145 85.6145 101 66.5 101C47.3855 101 32 85.6145 32 66.5C32 47.3855 47.3855 32 66.5 32Z">
-                        </path>
-                        <path d="M67 101H101V32H67V101Z"></path>
-                        <path d="M69 32C94.1973 29.636 100.833 9.6828 101 -1.66893e-06V32H69Z"></path>
+                            d="M42.7,501.5c70.5-17.3,120-80.4,120-153v-9.5c0-97.4,78.9-176.3,176.3-176.3h9.5c72.6,0,135.7-49.6,153-120L512,0v512H0  L42.7,501.5z" />
                     </svg>
                 </div>
                 <div class="preview-wrapper">
@@ -385,7 +366,16 @@
             </div>
             <!-- #endregion -->
             <!-- #region Franchise-->
-            <div class="title franchise-title" style="display: none">Франшиза</div>
+            <div class="title franchise-title" style="display: none">Франшиза
+                <div class="franchise-controls">
+                    <div class="btn icon" id="centered">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path
+                                d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
             <div class="franchisa-anime scroll-none" style="display: none"></div>
             <!-- #endregion -->
             <!-- #region Similiar-->
@@ -413,8 +403,8 @@
         <span class="window-content content-download hide">
             <span class="content-wraper">
                 <div class="window-bar bar-download">
-                    <div class="window-title"><span class="help-icon" id="help-download"><svg xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 320 512">
+                    <div class="window-title"><span class="help-icon" id="help-download"><svg
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                                 <path
                                     d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z" />
                             </svg></span>Загрузить</div>

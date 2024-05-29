@@ -2,137 +2,221 @@
 <html lang="ru">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport"
-    content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover" />
-  <meta name="page" content="user" />
-  <title>Пользователь - Tunime</title>
-  <link rel="icon" type="image/png" href="/images/icon-web.png" />
-  <link rel="stylesheet" href="/style/css/main.css" />
-  <link rel="stylesheet" href="/style/css/user.css" />
-  <link rel="manifest" href="/images/icons/manifest-o.json">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover" />
+    <meta name="page" content="user" />
+    <title>Tunime - Пользователь</title>
+    <link rel="icon" type="image/png" href="/images/icon-web.png" />
+    <link rel="icon" type="image/png" href="/images/icon-web.png" />
+    <link rel="stylesheet" href="/style/css/main.css" />
+    <link rel="stylesheet" href="/style/css/user.css" />
+    <link rel="manifest" href="/images/icons/manifest-o.json">
+    <script src="/javascript/library/jqery.min.js"></script>
+    <script src="/javascript/engine/event_handler.js"></script>
 </head>
 
 <body class="unselectable">
-  <header>
-    <div class="account-controller">
-      <div class="left-panel">
-        <a href="/settings.html"><div class="btn-head btn-sett">
-          <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-            <path
-              d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z" />
-          </svg>
-        </div>
-      </a>
-      </div>
-      <div class="right-panel">
-        <div class="btn-head"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-            <path
-              d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z" />
-          </svg></div>
-        <div class="btn-head btn--share"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-            <path
-              d="M307 34.8c-11.5 5.1-19 16.6-19 29.2v64H176C78.8 128 0 206.8 0 304C0 417.3 81.5 467.9 100.2 478.1c2.5 1.4 5.3 1.9 8.1 1.9c10.9 0 19.7-8.9 19.7-19.7c0-7.5-4.3-14.4-9.8-19.5C108.8 431.9 96 414.4 96 384c0-53 43-96 96-96h96v64c0 12.6 7.4 24.1 19 29.2s25 3 34.4-5.4l160-144c6.7-6.1 10.6-14.7 10.6-23.8s-3.8-17.7-10.6-23.8l-160-144c-9.4-8.5-22.9-10.6-34.4-5.4z" />
-          </svg></div>
-      </div>
-    </div>
-    <div class="user-profile">
-      <div class="top-content">
-        <div class="avatar">
-          <img src="" alt="">
-        </div>
-        <div class="user-info">
-          <span class="nikname"></span>
-          <span class="description"></span>
-        </div>
-      </div>
-      <div class="bottom-content">
-        <div class="user-online">
-          <div class="description"></div>
-          <div class="date"></div>
-        </div>
-      </div>
-    </div>
-    <div class="user-anime-stat">
-      <span class="planned">15</span>
-      <span class="completed">16</span>
-      <span class="dropped">2</span>
-    </div>
-    <div class="user-anime-info">
-      <div class="point p-plan"></div><span>Запланировано</span>
-      <div class="point p-comp"></div><span>Просмотрено</span>
-      <div class="point p-drop"></div><span>Брошено</span>
-    </div>
-  </header>
-  <main>
-    <div class="title-block">Топ</div>
-    <div class="top-anime-user">
-      <div class="content scroll-none">
-
-      </div>
-    </div>
-    <div class="title-block">Оценки</div>
-    <div class="score-diagrams">
-      <div class="diagram">
-        <div class="content">
-          <div class="line r1">
-            <span class="score">1</span>
-          </div>
-          <div class="line r2">
-            <span class="score">2</span>
-          </div>
-          <div class="line r3">
-            <span class="score">3</span>
-          </div>
-          <div class="line r4">
-            <span class="score">4</span>
-          </div>
-          <div class="line r5">
-            <span class="score">5</span>
-          </div>
-          <div class="line r6">
-            <span class="score">6</span>
-          </div>
-          <div class="line r7">
-            <span class="score">7</span>
-          </div>
-          <div class="line r8">
-            <span class="score">8</span>
-          </div>
-          <div class="line r9">
-            <span class="score">9</span>
-          </div>
-          <div class="line r10">
-            <span class="score">10</span>
-          </div>
-        </div>
-        <div class="panel"></div>
-      </div>
-    </div>
-    <div class="title-block">История</div>
-    <div class="user-history">
-      <div class="block-history" id="scrollHistory">
-        <!-- <div class="content-load">
-          <div class="loader">
+    <!-- #region Loading Screen-->
+    <span class="page-loading"
+        style="position: fixed;top: 0;left: 0;width: 100%;height: 100dvh;background: #101318;transition: 0.6s ease-in-out;opacity: 1;z-index: 79;">
+        <div class="loader">
             <div class="inner one"></div>
             <div class="inner two"></div>
             <div class="inner three"></div>
-          </div>
-        </div> -->
-      </div>
+        </div>
+    </span>
+    <!-- #endregion -->
+    <div class="content-wrapper">
+        <header>
+            <div class="user-wrapper">
+                <div class="user-icon">
+                    <img src="/images/ava.jpeg" alt="avatar">
+                </div>
+                <div class="user-data">
+                    <div class="user-nickname-online">
+                        <div class="user-nickname">
+                            <h1>Tunime</h1>
+                        </div>
+                        <div class="user-online">
+                            <div class="point offline"></div>
+                        </div>
+                    </div>
+                    <div class="user-level-data">
+                        <div class="user-level">
+                            <span class="user-level-wrapper">
+                                <svg width="31" height="35" viewBox="0 0 31 35" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M17.25 32.2576L27.4054 26.3943C28.4883 25.7691 29.1554 24.6137 29.1554 23.3632V11.6368C29.1554 10.3863 28.4883 9.23088 27.4054 8.60566L17.25 2.74241C16.1671 2.1172 14.8329 2.1172 13.75 2.74241L3.59456 8.60566C2.51165 9.23088 1.84456 10.3863 1.84456 11.6368V23.3632C1.84456 24.6137 2.51165 25.7691 3.59456 26.3943L13.75 32.2576C14.8329 32.8828 16.1671 32.8828 17.25 32.2576Z"
+                                        stroke="url(#paint0_linear_655_88)" stroke-width="3" />
+                                    <defs>
+                                        <linearGradient id="paint0_linear_655_88" x1="-2" y1="17.5" x2="33" y2="17.5"
+                                            gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#2393F1" />
+                                            <stop offset="1" stop-color="#1B4C75" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+
+                                <span class="level-text">0</span>
+                            </span>
+                        </div>
+                        <div class="level-details">
+                            <div class="level-promotion">
+                                <span class="current-promotion">0%</span>
+                                <span class="next-level"><span class="next-level-data">1</span> Уровень</span>
+                            </div>
+                            <div class="level-progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                            <div class="level-content">Добро пожаловать!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
     </div>
-  </main>
-  <footer></footer>
-  <!--Scripts-->
-  <!--Library-->
-  <script src="/javascript/library/jqery.min.js"></script>
-  <script src="/javascript/library/anime.min.js"></script>
-  <!--Custom library-->
-  <script src="/javascript/server.js"></script>
-  <script src="/javascript/engine/event_handler.js"></script>
-  <script src="/javascript/parametrs.js"></script>
-  <script src="/javascript/pages/user.js" type="module"></script>
+    <div class="content-full-wrapper">
+        <div class="content-wrapper">
+            <div class="account-controls">
+                <a class="hide btn" id="edit-user" href="#" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path
+                            d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
+                    </svg>
+                </a>
+                <div class="list-button hide">
+                    <div class="btn full" id="add-user">
+                        <span class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="plus">
+                                <path
+                                    d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+                            </svg>
+                        </span>
+                    </div>
+                    <span class="loader">
+                        <div class="loader-anim"></div>
+                    </span>
+                    <div class="btn full" id="remove-user">
+                        <span class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="minus">
+                                <path
+                                    d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM472 200H616c13.3 0 24 10.7 24 24s-10.7 24-24 24H472c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <div class="btn" style="opacity: 0.5;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                        <path
+                            d="M208 352c114.9 0 208-78.8 208-176S322.9 0 208 0S0 78.8 0 176c0 38.6 14.7 74.3 39.6 103.4c-3.5 9.4-8.7 17.7-14.2 24.7c-4.8 6.2-9.7 11-13.3 14.3c-1.8 1.6-3.3 2.9-4.3 3.7c-.5 .4-.9 .7-1.1 .8l-.2 .2 0 0 0 0C1 327.2-1.4 334.4 .8 340.9S9.1 352 16 352c21.8 0 43.8-5.6 62.1-12.5c9.2-3.5 17.8-7.4 25.3-11.4C134.1 343.3 169.8 352 208 352zM448 176c0 112.3-99.1 196.9-216.5 207C255.8 457.4 336.4 512 432 512c38.2 0 73.9-8.7 104.7-23.9c7.5 4 16 7.9 25.2 11.4c18.3 6.9 40.3 12.5 62.1 12.5c6.9 0 13.1-4.5 15.2-11.1c2.1-6.6-.2-13.8-5.8-17.9l0 0 0 0-.2-.2c-.2-.2-.6-.4-1.1-.8c-1-.8-2.5-2-4.3-3.7c-3.6-3.3-8.5-8.1-13.3-14.3c-5.5-7-10.7-15.4-14.2-24.7c24.9-29 39.6-64.7 39.6-103.4c0-92.8-84.9-168.9-192.6-175.5c.4 5.1 .6 10.3 .6 15.5z" />
+                    </svg>
+                </div>
+                <a href="settings.html" class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path
+                            d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z" />
+                    </svg>
+                </a>
+            </div>
+            <div class="btn" id="share">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                    <path
+                        d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div class="content-wrapper">
+        <main>
+            <div class="block-title">
+                Статистика
+            </div>
+            <div class="block-user-stats scroll-none">
+                <div class="list">
+                    <div class="status-data">
+                        <span class="count" id="counts"><span class="val">0</span></span>
+                        <span class="title">Общее количество</span>
+                    </div>
+                    <div class="status-data">
+                        <span class="count" id="watching"><span class="val">0</span><span class="prcnt">0%</span></span>
+                        <span class="title">Смотрю</span>
+                    </div>
+                    <div class="status-data">
+                        <span class="count" id="planned"><span class="val">0</span><span class="prcnt">0%</span></span>
+                        <span class="title">Запланировано</span>
+                    </div>
+                    <div class="status-data">
+                        <span class="count" id="completed"><span class="val">0</span><span
+                                class="prcnt">0%</span></span>
+                        <span class="title">Просмотренно</span>
+                    </div>
+                    <div class="status-data">
+                        <span class="count" id="dropped"><span class="val">0</span><span class="prcnt">0%</span></span>
+                        <span class="title">Брошено</span>
+                    </div>
+                </div>
+            </div>
+            <div class="block-title hide" id="favorites">
+                Избранное
+            </div>
+            <div class="wrapper-favorites hide scroll-none" id="favorites">
+                <div class="list"></div>
+            </div>
+            <div class="block-title-btn hide" id="franchises">
+                Достижения
+                <div class="btn" style="opacity: 0.5;">Список</div>
+            </div>
+            <div class="wrapper-achivements hide scroll-none" id="franchises">
+                <div class="list">
+                </div>
+            </div>
+            <div class="block-title hide" id="unfinished">
+                Неполученные достижения
+            </div>
+            <div class="wrapper-achivements-unfinished hide scroll-none" id="unfinished">
+                <div class="list">
+                </div>
+            </div>
+            <div class="block-title hide" id="genres">
+                Жанры
+            </div>
+            <div class="wrapper-genres hide scroll-none" id="genres">
+                <div class="list">
+                </div>
+            </div>
+            <div class="block-title hide" id="friends">
+                Друзья
+            </div>
+            <div class="wrapper-friends hide scroll-none" id="friends">
+                <div class="list">
+                </div>
+            </div>
+            <div class="block-title hide" id="history">
+                История
+            </div>
+            <div class="user-history hide" id="history">
+                <div class="block-history" id="scrollHistory"></div>
+            </div>
+        </main>
+
+    </div>
+    <footer></footer>
+
+
+
+
+
+    <!-- #region Scripts-->
+    <script src="/javascript/server.js"></script>
+    <script src="/javascript/parametrs.js"></script>
+    <script src="/javascript/library/jsyaml.js"></script>
+    <script src="/javascript/library/anime.min.js"></script>
+    <script src="/javascript/pages/user.js" type="module"></script>
+    <!-- #endregion -->
 </body>
 
 </html>

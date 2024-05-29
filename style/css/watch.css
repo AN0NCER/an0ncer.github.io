@@ -22,7 +22,6 @@ body.loading {
   width: 100%;
   height: 100dvh;
   background: #101318;
-  transition: 0.6s ease-in-out;
   opacity: 1;
   z-index: 9999;
 }
@@ -188,6 +187,9 @@ header .preview .schape .btn {
 header .preview .schape .btn svg {
   fill: #fff;
   width: 20px;
+}
+header .preview .schape svg {
+  fill: #101318;
 }
 header .preview .btn-back {
   width: 35px;
@@ -713,7 +715,7 @@ main .player-title .player-controls .btn {
   flex: 1 0 0;
   cursor: pointer;
   background: #5FBEF3;
-  box-shadow: 2px 0px 0px 0px #032335;
+  box-shadow: 2px 0px 0px 0px rgba(95, 190, 243, 0.1);
   border-radius: 0px 3px 3px 0px;
 }
 .translations-wrapper .button-translation .current-translation {
@@ -768,6 +770,24 @@ main .player-title .player-controls .btn {
 }
 .translations-wrapper .button-stars.selected .unselected {
   display: none;
+}
+
+.franchise-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.franchise-title .franchise-controls .btn {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  background: #191C21;
+  border-radius: 3px;
+}
+.franchise-title .franchise-controls .btn svg {
+  height: 16px;
+  fill: #fff;
 }
 
 .franchisa-anime {

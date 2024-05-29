@@ -1,215 +1,248 @@
-import { Main, User } from "../modules/ShikiUSR.js";
-import { Users, UserRates, Animes } from "../modules/ShikiAPI.js";
-import { Sleep, ScrollElementWithMouse } from "../modules/funcitons.js";
-import { LoadHistory } from "./user/mod_history.js";
 import { InitMenu } from "../menu.js";
-import { SHIKIURL } from "../modules/Settings.js";
+import { Main, User } from "../modules/ShikiUSR.js";
+import { Friends, Users } from "../modules/ShikiAPI.js";
+import { ScrollElementWithMouse, Sleep } from "../modules/funcitons.js";
+import { InitAchivements } from "./user/mod_achivements.js";
+import { InitLeve } from "./user/mod_level.js";
+import { GetIdLoadUser, LoadScreen, UserData } from "./user/mod_load.js";
+import { Franchises } from "./user/mod_franchises.js";
+import { Stats } from "./user/mod_stats.js";
+import { Favourites } from "./user/mod_favorites.js";
+import { InitFriends } from "./user/mod_friends.js";
+import { History } from "./user/mod_history.js";
+import { Tunime } from "../modules/TunimeApi.js";
+import { ShowInfo } from "../modules/Popup.js";
+import { Genres } from "./user/mod_genres.js";
+
+/**
+ * @callback LUser
+ * @param {{about:string, about_html:string, avatar:string, banned:boolean, common_info: [string], full_years:number, id:number, image:{ x160:string, x148:string, x80:string, x16:string, x32:string, x48:string, x64:string }, in_friends:null, is_ignored:boolean, last_online:string, last_online_at:string, location:null, name:null, nickname:string, sex:string, show_comments:boolean, stats:{activity:[{name:[number], value:number}], full_statuses:{anime:[{grouped_id:string, id:number, name:string, size:number, type:string}], manga:[{grouped_id:string, id:number, name:string, size:number, type:string}]},genres:[], has_anime?:boolean, has_manga?:boolean, publishers:[], ratings:{anime:[{name:string, value:number}]}, scores:{anime:[{name:string, value:number}], manga:[]}, statuses:{anime:[{grouped_id:string, id:number, name:string, size:number, type:string}],manga:[{grouped_id:string, id:number, name:string, size:number, type:string}]},studios:[],types:{anime:[{name:string, value:number}], manga:[{name:string, value:number}]}}, style_id:number, url:string, website:string}} data
+ */
 
 //Индентификатор пользователя
-let $ID = new URLSearchParams(window.location.search).get("id");
+export let $USER = new URLSearchParams(window.location.search).get("id");
+
+const MODS = [InitLeve, Franchises, Stats, Favourites, InitFriends, History, Genres];
+
+let Loaded = false; // Были ли загружен пользователь
+let Callbacks = []; //Функция возврата Пользователя
+let LUser = undefined; // Пользователя с shikimori
+
+export function OnUser(/**@type {LUser}*/event = (data) => { }) {
+    if (Loaded)
+        event(LUser);
+
+    Callbacks.push(event);
+}
+
+function InitUser(data) {
+    LUser = data;
+    Loaded = true;
+    Callbacks.forEach((event) => event(LUser));
+}
 
 //Начало программы страницы
 Main((e) => {
-  // console.log('Auth', e);
+    if (!e && $USER === null)
+        window.location.href = "/login.html";
+    GetIdLoadUser().then((value) => {
+        $USER = value;
 
-  //Если пользователь не авторизирован сделать перенапрвление
-  !User.authorized ? window.location.href = "/login.html" : '';
+        MODS.forEach((event) => event());
 
-  //Получаем данные пользователя
-  LoadUser();
+        GetUserById($USER, e).then((value) => {
+            if (value === undefined)
+                return window.location.href = "/404a.html";
+            InitAchivements(value.id);
+            InitUser(value);
+            ShowHeader(value);
 
-  //Скролл мышкой
-  ScrollElementWithMouse('.top-anime-user > .content');
+            if (value.id === (JSON.parse(localStorage.getItem(User.Storage.keys.whoami))?.id || undefined)) {
+                $(`.btn#edit-user`).attr('href', `https://shikimori.one/${value.nickname}/edit/account`);
+                $(`.btn#edit-user`).removeClass('hide');
+            } else if (value.in_friends !== undefined) {
+                if (value.in_friends) {
+                    $(`#add-user`).css({ 'display': 'none' });
+                    $(`#remove-user`).css({ 'display': 'flex', 'opacity': 1 });
+                }
+                $(`.list-button`).removeClass('hide');
+            }
 
-  //Кнопка поделится пользователем
-  $('.btn--share').click(() => {
-    if (!$ID) {
-      return;
-    }
-    navigator.share({
-      title: $(document).attr("title"),
-      text: $('meta[property="og:description"]').attr('content'),
-      url: window.location.origin + window.location.pathname + '?id=' + $ID + '&share'
-    }).catch((error) => console.error('Sharing failed', error));
-  });
+            // if (value.in_friends === false) {
+            $(`.btn#add-user`).on('click', function () {
+                anime({
+                    targets: "#add-user",
+                    scale: [1, 0.5],
+                    opacity: [1, 0],
+                    begin: function () {
+                        $(`.loader`).css('display', `flex`);
+                        anime({
+                            targets: ".loader",
+                            scale: [0.5, 1],
+                            opacity: [0, 1]
+                        })
+                    },
+                    complete: function () {
+                        $(`#add-user`).css('display', `none`);
+                        AddToFriends(value.id);
+                    }
+                })
+                return;
+            });
+
+            $(`.btn#remove-user`).on('click', function () {
+                anime({
+                    targets: "#remove-user",
+                    scale: [1, 0.5],
+                    opacity: [1, 0],
+                    begin: function () {
+                        $(`.loader`).css('display', `flex`);
+                        anime({
+                            targets: ".loader",
+                            scale: [0.5, 1],
+                            opacity: [0, 1]
+                        })
+                    },
+                    complete: function () {
+                        $(`#remove-user`).css('display', `none`);
+                        RemoveFromFriends(value.id);
+                    }
+                })
+            });
+            // }
+
+            $(`.btn#share`).on('click', function () {
+                const link = `https://an0ncer.github.io/user.html?id=${value.id}`;
+                // const link = `${Tunime.server.url}/u/${value.nickname}`; <- доделать на сервере
+                try {
+                    navigator.share({
+                        title: $(document).attr("title"),
+                        url: link
+                    });
+                } catch {
+                    navigator?.clipboard?.writeText(link).then(function () {
+                        ShowInfo('Скопировано', 'copy');
+                    }, function (err) {
+                        console.error('Async: Could not copy text: ', err);
+                    });
+                }
+            });
+
+            ScrollElementWithMouse('.block-user-stats');
+            ScrollElementWithMouse('.wrapper-favorites');
+            ScrollElementWithMouse('.wrapper-achivements');
+            ScrollElementWithMouse('.wrapper-achivements-unfinished');
+            ScrollElementWithMouse('.wrapper-genres');
+            ScrollElementWithMouse('.wrapper-friends');
+        });
+    });
+
+    InitMenu();
 });
 
-InitMenu();
-
-/**
- * Получает данные о пользователе авторизации
- * @returns undefined
- */
-function LoadUser() {
-  if (!User.authorized) {
-    return;
-  }
-
-  Users.whoami(async (res) => {
-    // console.log(`Fail: ${res.failed}`, res);
-    if (res.failed) {
-      await Sleep(1000);
-      return LoadUser();
-    }
-    //
-    User.Storage.Set(res, User.Storage.keys.whoami);
-    //Загружаем статистику пользователя
-    if (!$ID) {
-      $ID = res.id;
-    }
-    LoadStats();
-    LoadHistory($ID);
-    //Загружаем аниме пользователя
-    LoadUserRates();
-  }).GET();
-}
-
-/**
- * Получаем статистику пользователя (пользователь, рейтинги)
- * @returns undefined
- */
-function LoadStats() {
-  if (!User.authorized && !$ID) {
-    return;
-  }
-
-  Users.show($ID, {}, async (res) => {
-    // console.log(`Fail: ${res.failed}`, res);
-    if (res.failed) {
-      await Sleep(1000);
-      return LoadStats();
-    }
-
-    //Устанавливаем изображение
-    $('.avatar > img').attr('src', res.image.x160);
-    $('.nikname').text(res.nickname);
-    $(document).attr("title", "TUN - " + res.nickname);
-    //Описание
-    $('.user-info > .description').append(res.about)
-    //Онлайн пользователя
-    $('.user-online > .description').append(res.last_online);
-    let date = new Date(res.last_online_at);
-    $('.user-online > .date').append(`${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`)
-
-    let prc = ScoreToPrcnt(res.stats.scores);
-
-    for (let i = 0; i < prc.length; i++) {
-      const e = prc[i];
-      $(`.r${e.name}`).css({ height: `${e.value}px` });
-    }
-
-    let animeprc = UserAnimeCountPrcnt(res.stats.full_statuses.anime);
-
-    for (let i = 0; i < animeprc.length; i++) {
-      const e = animeprc[i];
-      // console.log(e);
-      $(`.${e.name}`).css({ width: `${e.prcnt}%` });
-      $(`.${e.name}`).text(e.size);
-    }
-  }).GET();
-
-  function ScoreToPrcnt(scores) {
-    const totalSum = scores.anime.reduce((sum, score) => sum + score.value, 0);
-    const pixelValue = 60; // 100% в пикселях
-
-    const percentagesInPixels = scores.anime.map((score) => ({
-      name: score.name,
-      value: Math.round((score.value / totalSum) * pixelValue),
-    }));
-
-    // console.log('prcnt', percentagesInPixels);
-    return percentagesInPixels;
-  }
-
-  function UserAnimeCountPrcnt(anime) {
-    // console.warn(anime);
-    // Фильтруем массив anime по состояниям planned, completed и dropped
-    const filteredAnime = anime.filter(item =>
-      ["planned", "completed", "dropped"].includes(item.grouped_id)
-    );
-
-    // Считаем общий размер для выбранных состояний
-    const totalSize = filteredAnime.reduce((sum, item) => sum + item.size, 0);
-
-    // Преобразуем размеры в проценты и сохраняем результат в новом массиве
-    const percentages = filteredAnime.map(item => ({
-      ...item,
-      prcnt: (item.size / totalSize) * 100
-    }));
-
-    // console.log(percentages);
-    return percentages;
-  }
-}
-
-function LoadUserRates() {
-  UserRates.list({
-    user_id: $ID,
-    target_type: 'Anime'
-  }, async (res) => {
-    // console.log(`Fail: ${res.failed}`, res);
-    if (res.failed) {
-      await Sleep(1000);
-      return LoadUserRates();
-    }
-
-    //сортируем аниме пользователя
-    res = SorttUserRates(res);
-    // console.log('Sortabled User Rates', res);
-
-    let task_loading = []; // Список который будем загружать аниме
-
-    //Добавляем пустышки на страницу
-    for (let i = 0; i < res.length; i++) {
-      const element = res[i];
-      task_loading.push(element.target_id);
-      $('.top-anime-user > .content').append(`<a href="/watch.html?id=${element.target_id}"  class="card-anime" data-score="${element.score}" data-id="${element.target_id}" data-status="${element.status}" data-type="all" data-loaded="false"></a>`);
-    }
-
-    //Загружаем аниме
-    LoadAnimeList(task_loading);
-
-    function LoadAnimeList(task) {
-      Animes.list({ ids: task.toString(), limit: task.length }, async (res) => {
-        if (res.failed && res.status == 429) {
-          await Sleep(1000);
-          return LoadAnimeList(task);
+function RemoveFromFriends(id) {
+    Friends.friends(id, async (response) => {
+        let begin = function () {
+            $(`#add-user`).css({ 'display': 'flex' });
+            anime({
+                targets: "#add-user",
+                opacity: [0, 1],
+                scale: [0.5, 1]
+            });
+        };
+        if (response.failed) {
+            if (response.status == 429) {
+                await Sleep(1000);
+                return RemoveFromFriends(id);
+            }
+            begin = function(){
+                anime({
+                    targets: "#remove-user",
+                    scale: [0.5, 1],
+                    opacity: [0, 1]
+                })
+            }
         }
 
-        for (let i = 0; i < res.length; i++) {
-          const element = res[i];
-          AddAnime(element);
-        }
-      }).GET();
-    }
+        anime({
+            targets: ".loader",
+            scale: [1, 0.5],
+            opacity: [1, 0],
+            begin: begin,
+            complete: function () {
+                $(`.loader`).css('display', ``);
+            }
+        })
+    }).DELETE();
 
-    /**
-     * Добавляет структуру елемента в документ
-     * @param {Object} response shikimori аниме ответ
-     */
-    function AddAnime(response) {
-      //Текущий елемнт который обрабатывался
-      let target = $(`a[data-id="${response.id}"]`);
-
-      //Присваем стрктуру к елементу
-      target.append(GenerateCardHtml(response, target.attr('data-score')));
-    }
-  }).GET();
 }
 
-function SorttUserRates(resource) {
-  resource.sort(function (a, b) {
-    return b.score - a.score;
-  });
-  return resource.slice(0, 10);
+function AddToFriends(id) {
+    Friends.friends(id, async (response) => {
+        let begin = function () {
+            $(`#remove-user`).css('display', `flex`);
+            anime({
+                targets: "#remove-user",
+                opacity: [0, 1],
+                scale: [0.5, 1]
+            });
+        };
+        if (response.failed) {
+            if (response.status == 429) {
+                await Sleep(1000);
+                return AddToFriends(id);
+            }
+            begin = function () {
+                anime({
+                    targets: "#add-user",
+                    scale: [0.5, 1],
+                    opacity: [0, 1]
+                })
+            };
+        }
+        return anime({
+            targets: ".loader",
+            scale: [1, 0.5],
+            opacity: [1, 0],
+            begin: begin,
+            complete: function () {
+                $(`.loader`).css('display', ``);
+            }
+        })
+    }).POST();
 }
 
 /**
-* Генерирует html код с подготовленными данными об аниме
-* @param {Object} response shikimori ответ anime
-* @param {Int} score оценка пользователя
-* @returns Возваращет готовый html картки аниме
-*/
-function GenerateCardHtml(response, score) {
-  return `<div class="card-content"><img src="${SHIKIURL.suburl('moe')}/${response.image.original}"><div class="title"><span>${response.russian}</span></div>${score > 0 ? `<div class="my-score">${score}</div>` : ""}</div><div class="card-information"><div class="year">${new Date(response.aired_on).getFullYear()}</div><div class="score"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.73196 0.745728C4.65834 0.595337 4.50279 0.499634 4.33196 0.499634C4.16112 0.499634 4.00696 0.595337 3.93196 0.745728L3.0389 2.55452L1.04446 2.84436C0.877789 2.86897 0.7389 2.98381 0.687511 3.14104C0.636122 3.29827 0.677789 3.4719 0.797233 3.58811L2.24446 4.99768L1.90279 6.98967C1.87501 7.15374 1.94446 7.32053 2.08196 7.4176C2.21946 7.51467 2.4014 7.52698 2.5514 7.44905L4.33334 6.51252L6.11529 7.44905C6.26529 7.52698 6.44723 7.51604 6.58473 7.4176C6.72223 7.31917 6.79168 7.15374 6.7639 6.98967L6.42084 4.99768L7.86807 3.58811C7.98751 3.4719 8.03057 3.29827 7.97779 3.14104C7.92501 2.98381 7.78751 2.86897 7.62084 2.84436L5.62501 2.55452L4.73196 0.745728Z" fill="#FFE600"/></svg>${response.score}</div></div>`;
+ * Получить данные о пользователя через id
+ * @param {number} id - индентификатор пользователя
+ * @param {boolean} [logged=false] - авторизирован ли пользователь
+ * @returns {Promise<undefined | {about:string, about_html:string, avatar:string, banned:boolean, common_info: [string], full_years:number, id:number, image:{ x160:string, x148:string, x80:string, x16:string, x32:string, x48:string, x64:string }, in_friends:null, is_ignored:boolean, last_online:string, last_online_at:string, location:null, name:null, nickname:string, sex:string, show_comments:boolean, stats:{activity:[{name:[number], value:number}], full_statuses:{anime:[{grouped_id:string, id:number, name:string, size:number, type:string}], manga:[{grouped_id:string, id:number, name:string, size:number, type:string}]},genres:[], has_anime?:boolean, has_manga?:boolean, publishers:[], ratings:{anime:[{name:string, value:number}]}, scores:{anime:[{name:string, value:number}], manga:[]}, statuses:{anime:[{grouped_id:string, id:number, name:string, size:number, type:string}],manga:[{grouped_id:string, id:number, name:string, size:number, type:string}]},studios:[],types:{anime:[{name:string, value:number}], manga:[{name:string, value:number}]}}, style_id:number, url:string, website:string}>}
+ */
+function GetUserById(id, logged = false) {
+    return new Promise((resolve) => {
+        Users.show(id, {}, async (response) => {
+            if (response.failed) {
+                if (response.status == 429) {
+                    await Sleep(1000);
+                    return resolve(GetUserById(id));
+                }
+                return resolve(undefined);
+            }
+            resolve(response);
+        }).GET(logged);
+    });
+}
+
+function ShowHeader(data) {
+    $(`.user-nickname > h1`).text(data.nickname);
+    $(`.user-icon > img`).attr('src', data.image.x160);
+
+    const last_online_at = new Date(data.last_online_at).getTime();
+    const different_time = new Date().getTime() - last_online_at;
+
+    if (different_time < (30 * 60 * 1000)) {
+        $(`.user-online > .point`).addClass('online');
+        $(`.user-online > .point`).removeClass('offline');
+    }
+    LoadScreen.loaded();
 }
