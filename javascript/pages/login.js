@@ -97,7 +97,7 @@ function VisualFunctional() {
                 window.open(Oauth.GetUrl(), '_blank').focus();
             }
         } else {
-            window.location.href = User.Oauth.GetUrl();
+            window.location.href = Oauth.GetUrl();
         }
     });
 
