@@ -1,3 +1,5 @@
+import { Main, Oauth, User } from "../modules/ShikiUSR.js";
+
 //Слоганы страницы авторизации
 const slogans = [
     "Открой для себя новые миры с Tunime - лучшим сайтом для просмотра аниме!",
@@ -13,7 +15,6 @@ const slogans = [
     "Tunime - где аниме становится частью твоей жизни!"
 ];
 
-
 //Начало программы
 (() => {
     $('.slogan').text(RandomSlogan());
@@ -23,13 +24,13 @@ const slogans = [
             //Если пользователь авторизирован редирект на страничку с пользователем
             window.location.href = "/user.html"
         } else {
-            if (!usr.isteste) {
+            if (!User.isteste) {
                 const urlParams = new URLSearchParams(window.location.search);
                 let code = urlParams.get("code");
                 if (code) {
                     //Проверяем если это сработал автологин то делаем редирект на главную страницу т.к. может только от нее сработать AutoLogin
                     let application_event = localStorage.getItem('application_event');
-                    await usr.Authorizate(code);
+                    await User.Authorizate(code);
                     localStorage.removeItem('application_event');
                     if (application_event == "autologin") {
                         //После авторизации переходим на главную страницу
@@ -84,19 +85,19 @@ function RandomSlogan() {
 function VisualFunctional() {
     //Кнопка авторизации
     $('.btn-login').click(async () => {
-        if (usr.isteste) {
+        if (User.isteste) {
             localStorage.removeItem('application_event');
             //Если тестовый режим то запрашиваем код от пользователя
             let code = prompt("Тестовый режим авторизации:");
             if (code) {
                 //Проверяем авторизацию и переходим на станицу пользователя
-                await usr.Authorizate(code);
+                await User.Authorizate(code);
                 window.location.href = "/user.html"
             } else {
-                window.open(usr.Oauth.GetUrl(), '_blank').focus();
+                window.open(Oauth.GetUrl(), '_blank').focus();
             }
         } else {
-            window.location.href = usr.Oauth.GetUrl();
+            window.location.href = User.Oauth.GetUrl();
         }
     });
 
