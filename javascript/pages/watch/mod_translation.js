@@ -1,7 +1,6 @@
 import { WindowManagement } from "../../modules/Windows.js";
 import { $ID } from "../watch.js";
 import { Player } from "./mod_player.js";
-import { Franchises } from "./mod_resource.js";
 
 const WindowTranslation = {
     init: function () {

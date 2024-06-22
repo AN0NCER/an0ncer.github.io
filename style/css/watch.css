@@ -772,84 +772,6 @@ main .player-title .player-controls .btn {
   display: none;
 }
 
-.franchise-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.franchise-title .franchise-controls .btn {
-  width: 35px;
-  height: 35px;
-  display: grid;
-  place-items: center;
-  background: #191C21;
-  border-radius: 3px;
-}
-.franchise-title .franchise-controls .btn svg {
-  height: 16px;
-  fill: #fff;
-}
-
-.franchisa-anime {
-  display: grid;
-  margin-top: 20px;
-  grid-auto-rows: minmax(100px, auto);
-  grid-auto-columns: 250px;
-  grid-auto-flow: column;
-  overflow-x: auto;
-  grid-gap: 0 10px;
-  min-width: 100%;
-}
-.franchisa-anime a {
-  display: flex;
-  max-width: 250px;
-  border: 1px solid #5fbef3;
-  border-radius: 3px;
-  position: relative;
-}
-.franchisa-anime a .franchise {
-  position: relative;
-  z-index: 2;
-  padding: 10px;
-  color: #fff;
-}
-.franchisa-anime a .franchise .title {
-  font-size: 15px;
-  font-weight: bold;
-  font-family: Manrope;
-}
-.franchisa-anime a .franchise .type {
-  font-size: 12px;
-  margin-top: 5px;
-}
-.franchisa-anime a .year {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  font-weight: bold;
-  font-size: 64px;
-  z-index: 1;
-  opacity: 0.1;
-}
-.franchisa-anime a.selected {
-  background: #5fbef3;
-}
-.franchisa-anime a.selected .franchise {
-  color: #020202;
-}
-.franchisa-anime a:first-child {
-  margin-left: 20px;
-}
-.franchisa-anime a:last-child {
-  margin-right: 20px;
-}
-
 .similiar-anime {
   margin-top: 20px;
   display: flex;
@@ -1637,6 +1559,288 @@ footer .studio span {
   display: grid;
 }
 
+.franchise-title {
+  font-size: 18px;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-weight: bold;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.list-franchise {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  overflow: hidden;
+  overflow-x: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.list-franchise a.franchise {
+  display: flex;
+  min-height: 100px;
+  min-width: 230px;
+  border-radius: 3px;
+  background: #191c21;
+  color: #fff;
+  padding: 10px;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: "Manrope";
+}
+.list-franchise a.franchise.hide {
+  display: none;
+}
+.list-franchise a.franchise.selected {
+  display: flex;
+  background: #5FBEF3;
+  color: #191C21;
+}
+.list-franchise a.franchise.selected .icon-info .status svg {
+  fill: #191C21;
+}
+.list-franchise a.franchise.selected .icon-info .voice {
+  background: #5FBEF3;
+}
+.list-franchise a.franchise.selected .icon-info .voice svg {
+  fill: #191C21;
+}
+.list-franchise a.franchise.selected .icon-info .voice .circle {
+  background: #5FBEF3;
+}
+.list-franchise a.franchise.selected .anime-info .bloc-info .wrapper .score svg {
+  fill: #191C21;
+}
+.list-franchise a.franchise .anime-info {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  max-width: 220px;
+  gap: 10px;
+}
+.list-franchise a.franchise .anime-info .title {
+  font-size: 14px;
+  font-weight: bold;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list-franchise a.franchise .anime-info .bloc-info .anime-type {
+  font-size: 12px;
+}
+.list-franchise a.franchise .anime-info .bloc-info .wrapper {
+  display: flex;
+  gap: 5px;
+}
+.list-franchise a.franchise .anime-info .bloc-info .wrapper .year {
+  font-size: 12px;
+  font-weight: bold;
+}
+.list-franchise a.franchise .anime-info .bloc-info .wrapper .score {
+  font-size: 12px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.list-franchise a.franchise .anime-info .bloc-info .wrapper .score svg {
+  height: 10px;
+  fill: #5fbef3;
+}
+.list-franchise a.franchise .icon-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.list-franchise a.franchise .icon-info .status {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.list-franchise a.franchise .icon-info .status svg {
+  fill: #5FBEF3;
+  height: 10px;
+  display: none;
+}
+.list-franchise a.franchise .icon-info .status.watching svg.i-watching {
+  display: block;
+}
+.list-franchise a.franchise .icon-info .status.planned svg.i-planned {
+  display: block;
+}
+.list-franchise a.franchise .icon-info .status.completed svg.i-completed {
+  display: block;
+}
+.list-franchise a.franchise .icon-info .status.dropped svg.i-dropped {
+  display: block;
+}
+.list-franchise a.franchise .icon-info .voice {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #191c21;
+  border-radius: 3px;
+  position: relative;
+}
+.list-franchise a.franchise .icon-info .voice.none {
+  opacity: 0.1;
+}
+.list-franchise a.franchise .icon-info .voice.none .circle svg.i-xmark {
+  display: block;
+}
+.list-franchise a.franchise .icon-info .voice.none .circle svg.i-circle {
+  display: none;
+}
+.list-franchise a.franchise .icon-info .voice svg {
+  height: 17px;
+  fill: #5fbef3;
+}
+.list-franchise a.franchise .icon-info .voice .circle {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 11px;
+  height: 11px;
+  background: #191c21;
+  border-radius: 50%;
+  right: 3px;
+  bottom: 4px;
+}
+.list-franchise a.franchise .icon-info .voice .circle svg {
+  height: 8px;
+}
+.list-franchise a.franchise .icon-info .voice .circle svg.i-xmark {
+  display: none;
+}
+
+.container-l {
+  --uib-size: 24px;
+  --uib-color: white;
+  --uib-speed: 1.5s;
+  --uib-dot-size: calc(var(--uib-size) * 0.4);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--uib-dot-size);
+  width: var(--uib-size);
+}
+
+.container-l::before,
+.container-l::after {
+  content: "";
+  position: absolute;
+  height: var(--uib-dot-size);
+  width: var(--uib-dot-size);
+  border-radius: 50%;
+  background-color: var(--uib-color);
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+}
+
+.container-l::before {
+  animation: orbit var(--uib-speed) linear infinite;
+}
+
+.container-l::after {
+  animation: orbit var(--uib-speed) linear calc(var(--uib-speed) / -2) infinite;
+}
+
+@keyframes orbit {
+  0% {
+    transform: translateX(calc(var(--uib-size) * 0.25)) scale(0.73684);
+    opacity: 0.65;
+  }
+  5% {
+    transform: translateX(calc(var(--uib-size) * 0.235)) scale(0.684208);
+    opacity: 0.58;
+  }
+  10% {
+    transform: translateX(calc(var(--uib-size) * 0.182)) scale(0.631576);
+    opacity: 0.51;
+  }
+  15% {
+    transform: translateX(calc(var(--uib-size) * 0.129)) scale(0.578944);
+    opacity: 0.44;
+  }
+  20% {
+    transform: translateX(calc(var(--uib-size) * 0.076)) scale(0.526312);
+    opacity: 0.37;
+  }
+  25% {
+    transform: translateX(0%) scale(0.47368);
+    opacity: 0.3;
+  }
+  30% {
+    transform: translateX(calc(var(--uib-size) * -0.076)) scale(0.526312);
+    opacity: 0.37;
+  }
+  35% {
+    transform: translateX(calc(var(--uib-size) * -0.129)) scale(0.578944);
+    opacity: 0.44;
+  }
+  40% {
+    transform: translateX(calc(var(--uib-size) * -0.182)) scale(0.631576);
+    opacity: 0.51;
+  }
+  45% {
+    transform: translateX(calc(var(--uib-size) * -0.235)) scale(0.684208);
+    opacity: 0.58;
+  }
+  50% {
+    transform: translateX(calc(var(--uib-size) * -0.25)) scale(0.73684);
+    opacity: 0.65;
+  }
+  55% {
+    transform: translateX(calc(var(--uib-size) * -0.235)) scale(0.789472);
+    opacity: 0.72;
+  }
+  60% {
+    transform: translateX(calc(var(--uib-size) * -0.182)) scale(0.842104);
+    opacity: 0.79;
+  }
+  65% {
+    transform: translateX(calc(var(--uib-size) * -0.129)) scale(0.894736);
+    opacity: 0.86;
+  }
+  70% {
+    transform: translateX(calc(var(--uib-size) * -0.076)) scale(0.947368);
+    opacity: 0.93;
+  }
+  75% {
+    transform: translateX(0%) scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: translateX(calc(var(--uib-size) * 0.076)) scale(0.947368);
+    opacity: 0.93;
+  }
+  85% {
+    transform: translateX(calc(var(--uib-size) * 0.129)) scale(0.894736);
+    opacity: 0.86;
+  }
+  90% {
+    transform: translateX(calc(var(--uib-size) * 0.182)) scale(0.842104);
+    opacity: 0.79;
+  }
+  95% {
+    transform: translateX(calc(var(--uib-size) * 0.235)) scale(0.789472);
+    opacity: 0.72;
+  }
+  100% {
+    transform: translateX(calc(var(--uib-size) * 0.25)) scale(0.73684);
+    opacity: 0.65;
+  }
+}
 :root {
   --sab: env(safe-area-inset-bottom);
 }

@@ -6,10 +6,9 @@ import { $ID } from "../watch.js";
 import { UserRate } from "./mod_urate.js";
 import { LoadScreen } from "./mod_load.js";
 import { History } from "./mod_history.js";
+import { InitFranchises } from "./mod_franchise.js";
 
 export let Screenshots = undefined;
-/**@type {[] | [{date: number, id: number, image_url:string, kind:string, name:string, url:string, weight:number, year:number}]} */
-export let Franchises = [];
 export let Anime = undefined;
 
 /**
@@ -166,32 +165,10 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
             //Проверяем если есть у нас фрашиза
             if (response.nodes) {
                 //Отоброжаем блок с франшизой
-                for (let i = 0; i < response.nodes.length; i++) {
-                    const element = response.nodes[i]; // Обьект с франшизой
-
-                    //Изначально франшизы скрыты, но после добавления отображаются
-
-                    //Отбираем франшизы по правилам пользователя
-                    if ($PARAMETERS.watch.typefrc.indexOf(element.kind) == -1) {
-                        continue;
-                    }
-
-                    Franchises.push(element);
-
-                    //Создаем елемент
-                    const html = `<a data-id="${element.id}" class="${$ID == element.id ? "selected" : ""
-                        }"><div class="franchise"><div class="title">${element.name
-                        }</div><div class="type">${element.kind
-                        }</div></div><div class="year">${element.year}</div></a>`;
-
-                    //Добавляем елемент
-                    $(".franchisa-anime").append(html);
-                    //Отображаем франщизы
-                    $(".franchise-title, .franchisa-anime").css("display", "");
-                }
+                InitFranchises(response);
 
                 //Событие нажатие
-                $(".franchisa-anime > a").click((e) => {
+                $(".list-franchise > a").click((e) => {
                     //Перенаправляем пользователя без истории
                     window.location.replace(
                         "watch.html?id=" + $(e.currentTarget).data("id")
