@@ -9,6 +9,7 @@ import { DifferenceInData, SaveLData, SetDifferenceData, Synch, SynchLData } fro
 import { UserRate } from "./watch/mod_urate.js";
 import { Tunime } from "../modules/TunimeApi.js";
 import { History } from "./watch/mod_history.js";
+import { InitFranchiseVoices } from "./watch/mod_franchise.js";
 
 //ID ресурса из Shikimori
 export const $ID = new URLSearchParams(window.location.search).get("id");
@@ -167,5 +168,6 @@ Main(async (e) => {
         });
         History().shikiData = e;
         History().custom.init();
+        InitFranchiseVoices();
     }, e);
 });

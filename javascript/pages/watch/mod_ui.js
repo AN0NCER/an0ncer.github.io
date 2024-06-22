@@ -29,8 +29,7 @@ export function Functional() {
         { dom: "#share", func: ShareAnime },
         { dom: "#btn-scroll", func: ShowPlayer },
         { dom: '.translations-wrapper > .button-translation', func: ShowTranslationWindow },
-        { dom: '.translations-wrapper > .button-stars', func: SaveVoice },
-        { dom: '.franchise-controls > #centered', func: AutoScrollFranchise }
+        { dom: '.translations-wrapper > .button-stars', func: SaveVoice }
     ]
 
     for (let i = 0; i < list.length; i++) {
@@ -77,10 +76,10 @@ export function Functional() {
 
 export function AutoScrollFranchise() {
     try {
-        const position = $('.franchisa-anime > .selected').position();
-        const widthscroll = $('.franchisa-anime').width();
-        const widthcard = $('.franchisa-anime > .selected').width();
-        let scrollLeftValue = $('.franchisa-anime').scrollLeft()
+        const position = $('.list-franchise > .selected').position();
+        const widthscroll = $('.list-franchise').width();
+        const widthcard = $('.list-franchise > .selected').width();
+        let scrollLeftValue = $('.list-franchise').scrollLeft()
         if ((widthscroll - position.left) < widthcard) {
             scrollLeftValue = scrollLeftValue + position.left - ((widthscroll - widthcard) / 2);
         } else if (position.left < 0) {
@@ -90,7 +89,7 @@ export function AutoScrollFranchise() {
         }
 
         anime({
-            targets: '.franchisa-anime',
+            targets: '.list-franchise',
             scrollLeft: scrollLeftValue,
             duration: 500,
             easing: 'easeInOutQuad'
@@ -182,7 +181,7 @@ function ScrollingElements() {
     ScrollElementWithMouse('.galery-slider');
     ScrollElementWithMouse('#episodes');
     ScrollElementWithMouse('.genres.scroll-none');
-    ScrollElementWithMouse('.franchisa-anime');
+    ScrollElementWithMouse('.list-franchise');
 }
 
 function ChangePlayer() {
