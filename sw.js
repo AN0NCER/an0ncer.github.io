@@ -1,5 +1,5 @@
-const version = '2.1.0';
-const hash = '50a8b';
+const version = '2.2.0';
+const hash = 'e8c9c';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
     // Директория: /images/genres
@@ -108,6 +108,7 @@ const appShellFilesToCache = [
     "/javascript/pages/user/mod_stats.js",
     // Директория: /javascript/pages/watch
     "/javascript/pages/watch/mod_download.js",
+    "/javascript/pages/watch/mod_franchise.js",
     "/javascript/pages/watch/mod_history.js",
     "/javascript/pages/watch/mod_load.js",
     "/javascript/pages/watch/mod_player.js",
