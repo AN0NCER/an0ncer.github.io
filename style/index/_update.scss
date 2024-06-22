@@ -30,6 +30,14 @@
             font-size: 14px;
             color: #fff;
             font-family: 'Manrope';
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            svg{
+                height: 15px;
+                fill: #fff;
+                opacity: .3;
+            }
         }
 
         .to-version {

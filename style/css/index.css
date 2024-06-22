@@ -454,6 +454,14 @@ header > .notify-search .notification > .dot {
   font-size: 14px;
   color: #fff;
   font-family: "Manrope";
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.app-update .update-content-version .text-update svg {
+  height: 15px;
+  fill: #fff;
+  opacity: 0.3;
 }
 .app-update .update-content-version .to-version {
   display: flex;

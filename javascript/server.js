@@ -109,13 +109,11 @@ let currentVersion = { ver: 'undef', hash: 'undef' };
                     $('.app-update').addClass('show');
                     setTimeout(() => {
                         $('.update-progress > .progress').css({ width: '50%' });
-                        setTimeout(() => {
-                            SW.getRegistration().then((reg) => {
-                                if (reg.waiting) {
-                                    reg.waiting.postMessage(221);
-                                }
-                            });
-                        }, 500)
+                        SW.getRegistration().then((reg) => {
+                            if (reg.waiting) {
+                                reg.waiting.postMessage(221);
+                            }
+                        });
                     }, 500);
                 }, 300)
             }
@@ -124,7 +122,7 @@ let currentVersion = { ver: 'undef', hash: 'undef' };
                 $('.update-progress > .progress').css({ width: '100%' });
                 setTimeout(() => {
                     location.reload()
-                }, 1500);
+                }, 500);
             }
 
             function SetVersion() {
