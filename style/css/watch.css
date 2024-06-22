@@ -1631,6 +1631,16 @@ footer .studio span {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.list-franchise a.franchise .anime-info .status {
+  background: #f7d149;
+  color: #191c21;
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 2px;
+}
 .list-franchise a.franchise .anime-info .bloc-info .anime-type {
   font-size: 12px;
 }

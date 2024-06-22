@@ -1,3 +1,4 @@
+import { Sleep } from "../../modules/funcitons.js";
 import { Kodik } from "../../modules/Kodik.js";
 import { GraphQl } from "../../modules/ShikiAPI.js";
 import { User } from "../../modules/ShikiUSR.js";
@@ -26,19 +27,31 @@ export function InitFranchises(response) {
             $(`.franchise-title`).show();
         }
     }
+    LoadAnimeFranchise();
+}
 
-    GraphQl.animes({ ids: `"${Franchises.toString()}"`, limit: Franchises.length }, (response) => {
+function LoadAnimeFranchise() {
+    GraphQl.animes({ ids: `"${Franchises.toString()}"`, limit: Franchises.length }, async (response) => {
+        if (response.failed) {
+            if (response.status == 429) {
+                await Sleep(1000);
+                return LoadAnimeFranchise();
+            }
+            return console.log('Не удалось загрузить франшизы данные');
+        }
         const list = response.data.animes;
+        const allowed_status = ['anons', 'ongoing'];
         for (let i = 0; i < list.length; i++) {
             const anime = list[i];
             $(`.score[data-id="${anime.id}"] > span`).text(anime.score);
             if (anime?.userRate?.status)
                 $(`.icon-info[data-id="${anime.id}"] > .status`).addClass(anime.userRate.status);
+            if (allowed_status.includes(anime.status))
+                $(StatusToString(anime.status)).insertAfter($(`.franchise[data-id="${anime.id}"] > .anime-info > .title`));
         }
         A_LOADED = true;
         HideLoad();
     }).POST(["id", "russian", "english", "kind", "score", "status", "userRate{status}"], User.authorized);
-
 }
 
 export async function InitFranchiseVoices() {
@@ -52,7 +65,7 @@ export async function InitFranchiseVoices() {
 }
 
 async function UpdateVoices() {
-    if (Franchises.length <= 0 || !Player().translation.id){
+    if (Franchises.length <= 0 || !Player().translation.id) {
         B_LOADED = true;
         return HideLoad();
     }
@@ -85,5 +98,16 @@ async function UpdateVoices() {
 function HideLoad() {
     if (A_LOADED && B_LOADED) {
         $('.container-l').hide();
+    }
+}
+
+function StatusToString(status) {
+    switch (status) {
+        case "anons":
+            return `<div class="status">анонс</div>`;
+        case "ongoing":
+            return `<div class="status">онгоинг</div>`;
+        default:
+            return ``;
     }
 }
