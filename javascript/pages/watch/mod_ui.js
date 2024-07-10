@@ -1,4 +1,5 @@
 import { ScrollElementWithMouse } from "../../modules/funcitons.js";
+import { Tunime } from "../../modules/TunimeApi.js";
 import { $ID } from "../watch.js";
 import { ShowDwonloadWindow } from "./mod_download.js";
 import { LoadScreen } from "./mod_load.js";
@@ -265,7 +266,7 @@ function ShareAnime() {
     navigator.share({
         title: $(document).attr("title"),
         text: $('meta[property="og:description"]').attr('content'),
-        url: `https://tunime.onrender.com/l/${$ID}`
+        url: Tunime.Share.Anime($ID) 
     }).catch((error) => $DEV.error('Sharing failed', error));
 }
 

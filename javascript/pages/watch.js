@@ -77,11 +77,11 @@ Main(async (e) => {
             if (!data[0] && !data[1])
                 return;
             if (data[0] && !data[1]) {
-                Tunime.Voices($ID).SET(data[0].kodik_dub);
+                Tunime.OnActiv.Voice($ID, data[0].kodik_dub);
                 SetDifferenceData(data[0]);
             } else if (data[0] && data[1]) {
                 if (data[0].kodik_dub != data[1].kodik_dub) {
-                    Tunime.Voices($ID).SET(data[0].kodik_dub);
+                    Tunime.OnActiv.Voice($ID, data[0].kodik_dub);
                     SetDifferenceData(data[0]);
                 }
             }
@@ -164,7 +164,7 @@ Main(async (e) => {
                     inline: "nearest",
                 });
             }
-            Tunime.Anime($ID);
+            Tunime.OnActiv.Anime($ID);
         });
         History().shikiData = e;
         History().custom.init();
