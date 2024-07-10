@@ -365,6 +365,20 @@ export const GraphQl = {
                 return response;
             }
         }
+    },
+
+    user_rate: function (arg = {}, event = () => { }) {
+        const url = this.base_url();
+        const request = Fetch("POST", url, Headers.bearer());
+        return {
+            POST: async (body = []) => {
+                body = BodyGraphQl("userRates", arg, body);
+                request.setBody(body);
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
     }
 }
 
