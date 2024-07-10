@@ -1,5 +1,5 @@
-const version = '2.2.0';
-const hash = 'e8c9c';
+const version = '2.3.0';
+const hash = '3111b';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
     // Директория: /images/genres
@@ -31,15 +31,14 @@ const appShellFilesToCache = [
     // Директория: /images
     "/images/anime-dragon.png",
     "/images/ava.jpeg",
+    "/images/black-bg-player.png",
     "/images/error-trailers.png",
     "/images/icon-web.png",
     "/images/login-icon.png",
     "/images/logo-login.png",
-    "/images/magnifying-glass.png",
     "/images/player-icon.png",
     "/images/popup.png",
     "/images/preview-image.png",
-    "/images/splashscreen.png",
     // Директория: /javascript/auto
     "/javascript/auto/download_a.js",
     // Директория: /javascript/engine
@@ -166,6 +165,12 @@ const appShellFilesToCache = [
     "/watch.html",
 ];
 
+const servers = [
+    "https://192.168.31.45",
+    "https://tunime.onrender.com",
+    "https://tunime-hujg.onrender.com"
+];
+
 self.addEventListener('install', async event => {
     try {
         if (!isValidKey((await caches.keys())[0])) {
@@ -190,16 +195,37 @@ self.addEventListener('activate', event => {
     });
 });
 
-self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request).then((response) => {
-            if (response) {
-                return response;
-            } else {
-                return fetch(event.request);
-            }
-        })
-    )
+self.addEventListener('fetch', function (event) {
+    if (servers.some(url => event.request.url.startsWith(url))) {
+        let modifiedHeaders = new Headers(event.request.headers);
+        let authHeader = modifiedHeaders.get('Authorization') || '';
+        authHeader += version;
+        modifiedHeaders.set('Authorization', authHeader);
+
+        const modifiedRequest = new Request(event.request, {
+            method: event.request.method,
+            headers: modifiedHeaders,
+            mode: event.request.mode,
+            credentials: event.request.credentials,
+            redirect: event.request.redirect,
+            referrer: event.request.referrer,
+            referrerPolicy: event.request.referrerPolicy,
+            integrity: event.request.integrity,
+            cache: event.request.cache,
+        });
+
+        event.respondWith(fetch(modifiedRequest));
+    } else {
+        event.respondWith(
+            caches.match(event.request).then((response) => {
+                if (response) {
+                    return response;
+                } else {
+                    return fetch(event.request);
+                }
+            })
+        )
+    }
 });
 
 self.addEventListener('message', async event => {
