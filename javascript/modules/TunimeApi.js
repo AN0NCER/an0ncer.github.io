@@ -1,25 +1,55 @@
-import { Sleep } from "./funcitons.js";
+/**
+ * @typedef {Object} Access - данные доступа
+ * @property {string} id - индентификатор пользователя
+ * @property {string} did - индентификатор устройства
+ * @property {string} key - ключ доступа
+ * @property {[string]} scope - разрешения пользователя
+ * @property {string} end - время в ISO 8601 когда закончиться доступ
+ */
 
-const LIFETIME = 600000;
-const VERSION = '2.0.0';
+/**
+ * @typedef {Object} Source
+ * @property {[{src:string, type:string}]} 
+ * @property {[string]} scips
+ * @property {[string]} thumbinals
+ */
+
+/**
+ * @typedef {Object} Tunime - управление api
+ * @property {Storage} storage
+ * @property {Device} device
+ * @property {Server} server
+ * @property {function(): Promise<Access|false>} Auth
+ * @property {function(Access): Promise<Access|false>} Online
+ * @property {function({q720:string|undefined,q480:string|undefined,q360:string|undefined}): string} Link
+ * @property {{Anime:function(number|string): string, User:function(number|string): string}} Share
+ * @property {function(string, Access): Promise<{data:Source}|false>} Source
+ * @property {{Anime:function(number, Access): Promise<Object|false>, Voice:function(number, number, Access): Promise<Object|false>}} OnActiv
+ */
 
 class Server {
-    #base = 'https://tunime.onrender.com';
+    #base = 'https://tunime.onrender.com'; // Основной URL сервера
     #list = [
-        'https://tunime-hujg.onrender.com',
+        'https://tunime-hujg.onrender.com', // Список дополнительных URL
     ];
-    #url = undefined;
-    #key = 'shadow-url';
-    #id = -1;
+    #url; // Текущий URL
+    #key = 'shadow-url'; // Ключ для хранения данных в sessionStorage
+    #id = -1; // Идентификатор текущего URL в списке
+
+    // Геттер для получения текущего URL
     get url() {
-        if (this.#url !== undefined)
+        // Если URL уже определен, возвращаем его
+        if (this.#url !== undefined) {
             return this.#url;
+        }
 
+        // Изначально используем базовый URL
         this.#url = this.#base;
-        const data = sessionStorage.getItem(this.#key);
 
+        // Получаем данные из sessionStorage
+        const data = sessionStorage.getItem(this.#key);
         if (data !== null) {
-            /**@type {{id:number, url:string}} */
+            /** @type {{id: number, url: string}} */
             const val = JSON.parse(data);
             this.#id = val.id;
             this.#url = val.url;
@@ -28,16 +58,22 @@ class Server {
         return this.#url;
     }
 
-    Next(id = this.#id) {
+    // Метод для переключения на следующий URL в списке
+    next(id = this.#id) {
         let url = this.#base;
+
+        // Если есть следующий URL в списке, переключаемся на него
         if ((id + 1) < this.#list.length) {
             id = id + 1;
             url = this.#list[id];
         } else {
-            id = -1;
+            return false;
         }
+
         this.#id = id;
         this.#url = url;
+
+        // Сохраняем текущий URL и идентификатор в sessionStorage
         sessionStorage.setItem(this.#key, JSON.stringify({ id: this.#id, url: this.#url }));
     }
 }
@@ -48,8 +84,8 @@ class Storage {
     #loaded = false;
 
     /**
-     * @type {{date:number, id:string, key:string, token:string, access: boolean} | undefined}
-     */
+    * @type {Access | undefined}
+    */
     get access() {
         if (this.#val === undefined && this.#loaded === true || this.#val !== undefined) {
             return this.#val;
@@ -67,6 +103,9 @@ class Storage {
         return this.#val;
     }
 
+    /**
+     * @type {Access | undefined}
+     */
     set access(value) {
         this.#val = value;
         if (value === undefined) {
@@ -76,14 +115,16 @@ class Storage {
     }
 
     /**
-     * @param {{date:number, id:string, key:string, token:string, access: boolean} | undefined} access 
+     * Существует ли все еще ключ доступа
+     * @param {Access | undefined} access 
      * @returns {boolean}
      */
     Live(access = this.#val) {
         if (typeof access === 'undefined') {
             return false;
         }
-        if ((new Date() - new Date(access.date)) > LIFETIME) {
+
+        if (0 >= (Date.parse(access.end) - Date.now())) {
             return false;
         }
         return true;
@@ -102,85 +143,105 @@ class Device {
     }
 
     set id(value) {
+        if (this.#id === value)
+            return;
+
         this.#id = value;
         localStorage.setItem(this.#key, this.#id);
     }
 }
 
-class Message {
-    #Task = {
-        'genId': async function () {
-            const id = await Tunime.Device();
-            Tunime.device.id = id;
-        }
+function ApiFetch(path, { method = 'GET', body = undefined } = {}) {
+    const request = {
+        method
+    };
+
+    if (body != undefined) {
+        request['body'] = new URLSearchParams(body);
     }
 
-    constructor(list = []) {
-        if (list !== undefined) {
-            for (let i = 0; i < list.length; i++) {
-                const element = list[i];
-                const task = this.#Task[element];
-                if (task) {
-                    task();
-                }
-            }
-        }
-    }
+    return fetch(`${Tunime.server.url}${path}`, request);
 }
 
+/**
+ * @type {Tunime}
+ */
 export const Tunime = {
     storage: new Storage(),
     device: new Device(),
     server: new Server(),
-    Online: function (access = this.storage.access) {
+    Auth: function () {
         return new Promise((resolve) => {
-            const cods = [666, 403, 400];
-            if (!this.storage.Live(access)) {
-                access = undefined;
-            }
-            let body = { id: 'shadow', key: 'register', vid: VERSION };
-            let headers = undefined;
-            if (access !== undefined) {
-                body = { id: access.id, key: access.key, vid: VERSION };
-                headers = { 'Authorization': `Bearer ${access.token}` }
-            }
+            let path = '/auth';
+            let body = {};
             if (this.device.id !== undefined) {
                 body['did'] = this.device.id;
             }
             let responseCode = 503;
-            Fetch('/online', { method: 'POST', headers: headers, body: body }).then((response) => {
+            ApiFetch(path, { method: 'POST', body }).then((response) => {
                 responseCode = response.status;
-                if (responseCode == 401) {
-                    Tunime.storage.access = undefined;
-                    return resolve(this.Online(Tunime.storage.access));
+
+                if (responseCode === 200) {
+                    return response.json().then((value) => {
+                        Tunime.device.id = value.data.did;
+                        this.storage.access = value.data;
+                        return resolve(value.data);
+                    });
                 }
-                if (cods.includes(responseCode)) {
-                    Tunime.storage.access = undefined;
-                    return resolve(false);
-                }
-                response.json().then((value) => {
-                    let storage = this.storage.access;
-                    if (storage === undefined)
-                        storage = {}
-                    this.storage.access = Object.assign(storage, value.data);
-                    if (value?.message) {
-                        new Message(JSON.parse(value.message));
-                    }
-                    return resolve(true);
-                })
+
+                return resolve(false);
             }).catch(async (reason) => {
                 console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
+
                 if (responseCode == 503) {
-                    Tunime.server.Next();
+                    if (Tunime.server.next() !== false) {
+                        return resolve(this.Auth());
+                    }
+                }
+
+                return resolve(false);
+            });
+        });
+    },
+    Online: function (access = this.storage.access) {
+        return new Promise((resolve) => {
+            if (access === undefined || !access.scope.includes("web")) {
+                return resolve(false);
+            }
+            const path = '/online';
+            const body = { id: access.id, key: access.key };
+            let responseCode = 503;
+            const cods = [401, 429];
+            ApiFetch(path, { method: 'POST', body: body }).then(async (response) => {
+                responseCode = response.status;
+
+                if (cods.includes(responseCode)) {
+                    Tunime.storage.access = undefined;
+                    const access = await Tunime.Auth();
                     return resolve(this.Online(access));
                 }
-                this.storage.access = undefined;
-                await Sleep(1000);
-                return resolve(true);
-            });
-        })
-    },
 
+                if (responseCode === 200) {
+                    return response.json().then((value) => {
+                        this.storage.access = value.data;
+                        return resolve(value.data);
+                    });
+                }
+
+                return resolve(false);
+            }).catch(async (reason) => {
+                console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
+
+                if (responseCode == 503) {
+                    if (Tunime.server.next() !== false) {
+                        return resolve(this.Online(access));
+                    }
+                }
+
+                return resolve(false);
+            })
+        });
+    },
     Link: function ({ q720 = undefined, q480 = undefined, q360 = undefined } = {}) {
         const params = { q720, q480, q360 };
         const queryParams = Object.entries(params)
@@ -189,205 +250,162 @@ export const Tunime = {
             .join('&');
         return `${Tunime.server.url}/video/stream.m3u8?${queryParams}`;
     },
-
-    Source: function (kodik, access = this.storage.access) {
-        return new Promise((resolve) => {
-            if (access === undefined)
-                return;
-            const body = { key: access.key, id: access.id, link: kodik };
-            const headers = { 'Authorization': `Bearer ${access.token}` };
-            let responseCode = 503;
-            Fetch('/video/source', { method: 'POST', body, headers }).then((response) => {
-                responseCode = response.status;
-                if (responseCode == 401) {
-                    Tunime.storage.access = undefined;
-                    return this.Online(Tunime.storage.access).then((val) => {
-                        if (val)
-                            resolve(this.Source(kodik, Tunime.storage.access));
-                    });
-                }
-                response.json().then((value) => {
-                    return resolve(value.data);
-                });
-            }).catch(async (reason) => {
-                console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
-                if (responseCode == 503) {
-                    return;
-                }
-                await Sleep(1000);
-                return resolve(this.Source(kodik, access));
-            })
-        });
-    },
-
-    Anime: function (aid, access = this.storage.access) {
-        return new Promise((resolve) => {
-            if (access === undefined)
-                return;
-            const body = { key: access.key, id: access.id };
-            const headers = { 'Authorization': `Bearer ${access.token}` };
-            let responseCode = 503;
-            Fetch(`/anime/${aid}`, { method: 'POST', body, headers }).then((response) => {
-                responseCode = response.status;
-                if (responseCode == 401) {
-                    Tunime.storage.access = undefined;
-                    return this.Online(Tunime.storage.access).then((val) => {
-                        if (val)
-                            resolve(this.Anime(aid, Tunime.storage.access));
-                    });
-                }
-                response.json().then((value) => {
-                    return resolve(value);
-                });
-            }).catch(async (reason) => {
-                console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
-                if (responseCode == 503) {
-                    return;
-                }
-                await Sleep(1000);
-                return resolve(this.Anime(aid, access));
-            })
-        });
-    },
-
-    Voices: function (aid, access = this.storage.access) {
-        if (access === undefined)
-            return { GET: () => { }, SET: () => { } };
-        const headers = { 'Authorization': `Bearer ${access.token}` };
-        return {
-            GET: () => {
-                let responseCode = 503;
-                Fetch(`/voices/${aid}`, { method: 'GET', headers }).then((response) => {
-                    responseCode = response.status;
-                    if (responseCode == 401) {
-                        Tunime.storage.access = undefined;
-                        return this.Online(Tunime.storage.access).then((val) => {
-                            if (val)
-                                resolve(this.Voices(aid, Tunime.storage.access).GET());
-                        });
-                    }
-                    response.json().then((value) => {
-                        return resolve(value.data);
-                    });
-                }).catch(async (reason) => {
-                    console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
-                    if (responseCode == 503) {
-                        return;
-                    }
-                    await Sleep(1000);
-                    return resolve(this.Voices(aid, access).GET());
-                });
-            },
-
-            SET: (tid) => {
-                return new Promise((resolve) => {
-                    let responseCode = 503;
-                    const body = { key: access.key, id: access.id, tid };
-                    Fetch(`/voices/${aid}`, { method: 'POST', headers, body }).then((response) => {
-                        responseCode = response.status;
-                        if (responseCode == 401) {
-                            Tunime.storage.access = undefined;
-                            return this.Online(Tunime.storage.access).then((val) => {
-                                if (val)
-                                    resolve(this.Voices(aid, Tunime.storage.access).SET(tid));
-                            });
-                        }
-                        response.json().then((value) => {
-                            return resolve(value);
-                        });
-                    }).catch(async (reason) => {
-                        console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
-                        if (responseCode == 503) {
-                            return;
-                        }
-                        await Sleep(1000);
-                        return resolve(this.Voices(aid, access).SET(tid));
-                    });
-                });
-            }
+    Share: {
+        Anime: function (id) {
+            return `${Tunime.server.url}/l/${id}`;
+        },
+        User: function (id) {
+            return `${Tunime.server.url}/u/${id}`;
         }
     },
-
-    Device: function (access = this.storage.access) {
+    Source: function (kodik, access = this.storage.access) {
         return new Promise((resolve) => {
-            if (access === undefined)
-                return;
-            const body = { key: access.key, id: access.id };
-            const headers = { 'Authorization': `Bearer ${access.token}` };
+            if (access === undefined || !access.scope.includes("player")) {
+                return resolve(false);
+            }
+            const path = '/video/source';
+            const body = { id: access.id, key: access.key, link: kodik };
             let responseCode = 503;
-            Fetch(`/device`, { method: 'POST', body, headers }).then((response) => {
+            const cods = [401, 429];
+            ApiFetch(path, { method: 'POST', body: body }).then(async (response) => {
                 responseCode = response.status;
-                response.json().then((value) => {
-                    return resolve(value.id);
-                });
-            }).catch(async (reason) => {
-                console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
-                if (responseCode == 503) {
-                    return;
-                    // URL = `onrender.com`;
-                    // return resolve(this.Device(access));
+
+                if (cods.includes(responseCode)) {
+                    Tunime.storage.access = undefined;
+                    const access = await Tunime.Auth();
+                    return resolve(this.Source(kodik, access));
                 }
-                await Sleep(1000);
-                return resolve(this.Device(access));
+
+                if (responseCode === 200) {
+                    return response.json().then((value) => {
+                        return resolve(value.data);
+                    });
+                }
+
+                return resolve(false);
+            }).catch((reason) => {
+                console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
+
+                if (responseCode == 503) {
+                    if (Tunime.server.next() !== false) {
+                        return resolve(this.Source(kodik, access));
+                    }
+                }
+
+                return resolve(false);
             });
-        })
+        });
+    },
+    OnActiv: {
+        Anime: function (aid, access = Tunime.storage.access) {
+            return new Promise((resolve) => {
+                if (access === undefined || !access.scope.includes("anime")) {
+                    return resolve(false);
+                }
+                const path = `/anime/${aid}`;
+                const body = { id: access.id, key: access.key };
+                let responseCode = 503;
+                const cods = [401, 429];
+                ApiFetch(path, { method: 'POST', body: body }).then(async (response) => {
+                    responseCode = response.status;
+
+                    if (cods.includes(responseCode)) {
+                        Tunime.storage.access = undefined;
+                        const access = await Tunime.Auth();
+                        return resolve(this.Anime(aid, access));
+                    }
+
+                    if (responseCode === 200) {
+                        return response.json().then((value) => {
+                            return resolve(value.data);
+                        });
+                    }
+
+                    return resolve(false);
+                }).catch((reason) => {
+                    console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
+
+                    if (responseCode == 503) {
+                        if (Tunime.server.next() !== false) {
+                            return resolve(this.Anime(aid, access));
+                        }
+                    }
+
+                    return resolve(false);
+                });
+            });
+        },
+        Voice: function (aid, tid, access = Tunime.storage.access) {
+            return new Promise((resolve) => {
+                if (access === undefined || !access.scope.includes("anime")) {
+                    return resolve(false);
+                }
+                const path = `/voices/${aid}`;
+                const body = { id: access.id, key: access.key, tid: tid };
+                let responseCode = 503;
+                const cods = [401, 429];
+                ApiFetch(path, { method: 'POST', body: body }).then(async (response) => {
+                    responseCode = response.status;
+
+                    if (cods.includes(responseCode)) {
+                        Tunime.storage.access = undefined;
+                        const access = await Tunime.Auth();
+                        return resolve(this.Voice(aid, tid, access));
+                    }
+
+                    if (responseCode === 200) {
+                        return response.json().then((value) => {
+                            return resolve(value.data);
+                        });
+                    }
+
+                    return resolve(false);
+                }).catch((reason) => {
+                    console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
+
+                    if (responseCode == 503) {
+                        if (Tunime.server.next() !== false) {
+                            return resolve(this.Voice(aid, tid, access));
+                        }
+                    }
+
+                    return resolve(false);
+                });
+            });
+        }
     }
 };
 
 (async () => {
     const exception = ['/player.html'];
-    let minute = 60000;
-    let interval = undefined;
     if (exception.includes(window.location.pathname))
         return;
 
-    if (Tunime.storage.access === undefined || !Tunime.storage.Live()) {
-        const access = await Tunime.Online();
-        if (access) {
-            interval = setInterval(async () => {
-                const access = await Tunime.Online();
-                if (!access)
-                    clearInterval(interval);
-            }, (LIFETIME - minute) - (Date.now() - Tunime.storage.access.date));
+    let access = Tunime.storage.access;
+
+    if (access === undefined) {
+        access = await Tunime.Auth();
+        if (access && !access.scope.includes("player")) {
+            access = await Tunime.Online();
         }
-    } else {
-        interval = setInterval(async () => {
-            const access = await Tunime.Online();
-            if (!access)
-                clearInterval(interval);
-        }, (LIFETIME - minute) - (Date.now() - Tunime.storage.access.date));
     }
 
-    //Доработать этот код
-
-    // document.addEventListener('visibilitychange', async function () {
-    //     if (document.visibilityState === "visible") {
-    //         if (!Tunime.storage.Live())
-    //             await Tunime.Online();
-    //         interval = setInterval(async () => {
-    //             const access = await Tunime.Online();
-    //             if (!access)
-    //                 clearInterval(interval);
-    //         }, (LIFETIME - minute) - (Date.now() - Tunime.storage.access.date));
-    //         console.log(`[api] - Continue Interval: Next ${((LIFETIME - minute) - (Date.now() - Tunime.storage.access?.date))} ms`);
-    //     } else {
-    //         console.log(`[api] - Stop Interval`);
-    //         clearInterval(interval);
-    //     }
-    // });
-
-    console.log(`[api] - Interval Started: Next ${((LIFETIME - minute) - (Date.now() - Tunime.storage.access?.date))} ms`);
+    OnUpdate();
 })();
 
-function Fetch(path, { method = 'GET', body = undefined, headers = undefined } = {}) {
-    const request = {
-        method
-    };
-    if (body != undefined) {
-        request['body'] = new URLSearchParams(body);
+function OnUpdate(handler = undefined) {
+    const minute = 60000;
+    clearInterval(handler);
+
+    if (Tunime.storage.access) {
+        const time = Date.parse(Tunime.storage.access.end) - Date.now() - minute;
+        const interval = setInterval(async () => {
+            await Tunime.Online();
+            OnUpdate(interval);
+        }, time);
+        console.log(`[api] - Weiter durch ${time} ms`);
     }
-    if (headers != undefined) {
-        request['headers'] = headers;
-    }
-    return fetch(`${Tunime.server.url}${path}`, request);
 }
+
+
+///Сделать проверку на ошибку 426. Проверить последнего ли версия приложение, а если последнего то предложить сбросить кэш
