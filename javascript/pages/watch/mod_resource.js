@@ -230,7 +230,7 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
                 const element = response[i];
                 if (element.roles.includes('Main')) {
                     $('.hero-anime, .hero-anime-title').css('display', '');
-                    $('.hero-anime > .val').append(`<a href="${SHIKIURL.url}${element.character.url}"><img src="${SHIKIURL.suburl('nyaa')}${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div></div></a>`);
+                    $('.hero-anime > .val').append(`<a href="${SHIKIURL.url}${element.character.url}" target="_blank"><img src="${SHIKIURL.suburl('nyaa')}${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div></div></a>`);
                 }
             }
             return true;
@@ -352,7 +352,24 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
         if (!data.description) {
             return;
         }
-        $(".description").append(data.description_html);
+        $(".description").append(addTargetBlankToLinks(data.description_html));
+
+        function addTargetBlankToLinks(text) {
+            // Создаем элемент div, чтобы безопасно работать с HTML-контентом
+            const div = document.createElement('div');
+            div.innerHTML = text;
+
+            // Находим все ссылки внутри этого элемента
+            const links = div.querySelectorAll('a[href]');
+
+            // Проходим по всем найденным ссылкам и добавляем атрибут target="_blank"
+            links.forEach(link => {
+                link.setAttribute('target', '_blank');
+            });
+
+            // Возвращаем измененный HTML-контент
+            return div.innerHTML;
+        }
     }
 
     /**

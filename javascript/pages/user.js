@@ -112,8 +112,7 @@ Main((e) => {
             // }
 
             $(`.btn#share`).on('click', function () {
-                const link = `https://an0ncer.github.io/user.html?id=${value.id}`;
-                // const link = `${Tunime.server.url}/u/${value.nickname}`; <- доделать на сервере
+                const link = Tunime.Share.User(value.id);
                 try {
                     navigator.share({
                         title: $(document).attr("title"),

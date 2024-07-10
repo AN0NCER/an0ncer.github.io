@@ -70,6 +70,10 @@ function autoLogin() {
 function getPosition() {
     fetch('https://api.sypexgeo.net/json/').then(async (response) => {
         const data = await response.json();
-        $('.position > span').text(data.country.name_en + ', ' + data.city.name_en);
+        let country = data.country.name_en;
+        if(data.city?.name_en){
+            country += `, ${data.city.name_en}`;
+        }
+        $('.position > span').text(country);
     });
 }
