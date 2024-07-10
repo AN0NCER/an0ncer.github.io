@@ -166,7 +166,6 @@ const appShellFilesToCache = [
 ];
 
 const servers = [
-    "https://192.168.31.45",
     "https://tunime.onrender.com",
     "https://tunime-hujg.onrender.com"
 ];
