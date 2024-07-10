@@ -86,6 +86,10 @@ let currentVersion = { ver: 'undef', hash: 'undef' };
 
             async function ShowUpdate() {
                 const newVersion = await ParseVersion();
+                caches.keys().then(function (names) {
+                    for (let name of names)
+                        caches.delete(name);
+                });
                 $('.app-update').css({ display: 'flex' });
                 if (currentVersion.ver === newVersion.ver) {
                     $('.update-content-version > .to-version > .cur').text(currentVersion.hash);
