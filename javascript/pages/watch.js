@@ -10,6 +10,7 @@ import { UserRate } from "./watch/mod_urate.js";
 import { Tunime } from "../modules/TunimeApi.js";
 import { History } from "./watch/mod_history.js";
 import { InitFranchiseVoices } from "./watch/mod_franchise.js";
+import { ClearParams } from "../modules/funcitons.js";
 
 //ID ресурса из Shikimori
 export const $ID = new URLSearchParams(window.location.search).get("id");
@@ -17,6 +18,8 @@ export const $ID = new URLSearchParams(window.location.search).get("id");
 export let $CONTINUE = new URLSearchParams(window.location.search).get("continue");
 //Наведение на плеер
 export const $SHOWPLAYER = new URLSearchParams(window.location.search).get("player");
+
+ClearParams(['continue', 'player']);
 
 //Авторизируем пользователя
 Main(async (e) => {
