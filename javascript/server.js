@@ -1,152 +1,211 @@
-const SW = navigator.serviceWorker;
-let currentVersion = { ver: 'undef', hash: 'undef' };
-
-(async () => {
-    if (SW) {
-        //Статус о регистрации sw.js в приложении
-        const regInfo = await SW.getRegistration();
-
-        if (regInfo === undefined) {
-            await SW.register('sw.js', { scope: '/' }).then(() => {
-                console.log('[SW]: Registered successfully.');
+const $SERVER = {
+    sw: navigator.serviceWorker,
+    cache: caches || undefined,
+    version: undefined,
+    hash: undefined,
+    dialog_key: "dialog-update",
+    updatet: false,
+    functions: {
+        // Удаляет регистрацию Service Worker
+        removeRegistration: () => {
+            return $SERVER.sw.getRegistration().then(reg => {
+                return reg.unregister();
+            });
+        },
+        // Регистрирует новый Service Worker
+        newRegistration: async () => {
+            return $SERVER.sw.register("./sw.js", { scope: "/" }).then(() => {
+                console.log('[SW]: Registered successfully');
             }).catch(error => {
-                console.log('[SW]: Registration failed:', error);
+                console.error('[SW]: Registration failed', error);
+            });
+        },
+        // Получает текущую регистрацию Service Worker
+        getRegistration: async () => {
+            return $SERVER.sw.getRegistration().then(reg => {
+                return reg;
             });
         }
+    },
+    On: {
+        complete: false,
+        subscribe: [],
+        // Подписывается на событие обновления
+        Updatet: function (event) {
+            if (typeof event === "function") {
+                this.subscribe.push(event);
+            }
+            if (this.complete) {
+                event($SERVER.updatet);
+            }
+        }
+    }
+};
 
-        Main();
+(async () => {
+    if ($SERVER.sw) {
+        await $SERVER.functions.newRegistration();
+        const { version, hash } = await Events().getVersion();
+        Object.assign($SERVER, { version, hash });
+        console.log(`[SW] - Loaded complete Version: ${$SERVER.version} - Hash: ${$SERVER.hash} to {$SERVER}`);
+
+        ShowUIVersion();
+
+        OnUpdate();
+
+        UpdateSystem();
     }
 
-    async function Main() {
-        const keyStorage = "dialog-update";
-        const pages = ['/', '/index.html'];
-        let newServiceWorker = undefined;
+    // Обрабатывает обновление интерфейса
+    function OnUpdate() {
+        const url = new URL(window.location.href);
+        if (url.searchParams.get('update') === 'true' && url.searchParams.get('ver') && url.searchParams.get('hash')) {
+            SetUIVersion({ ver: url.searchParams.get('ver'), hash: url.searchParams.get('hash') }, true);
+            $('.update-progress > .progress').css({ width: '80%' });
+            $('.text-update > span').text('Обновление завершено');
+            $('.app-update').css({ display: 'flex' });
+            $('.app-update').addClass('show');
 
-
-        //Скрипт только для главной страницы
-        if (pages.includes(window.location.pathname) && SW) {
-            //Сообщения от SW
-            SW.addEventListener('message', (ev) => {
-                try {
-                    /**@type {{id: number, val: string | object}} */
-                    const data = JSON.parse(ev.data);
-                    if (data.id === 220) {
-                        currentVersion = data.val;
-                        SetVersion();
-                    }
-                } catch {
-                    console.log('[SW] - Message', ev);
-                }
-            })
-            //Статус о регистрации sw.js в приложении
-            const regInfo = await SW.getRegistration();
-
-            if (regInfo) {
-                if (regInfo.installing) {
-                    newServiceWorker = regInfo.installing;
-                } else if (regInfo.waiting) {
-                    newServiceWorker = regInfo.waiting;
-                    ShowUpdate();
-                } else if (regInfo.active) {
-                    newServiceWorker = regInfo.active;
-                }
-
-                regInfo.onupdatefound = (ev) => {
-                    SW.getRegistration().then((swr) => {
-                        if (swr.installing) {
-                            newServiceWorker = swr.installing;
-                        } else if (swr.waiting) {
-                            newServiceWorker = swr.waiting;
-                        } else if (swr.active) {
-                            newServiceWorker = swr.active;
-                        }
-                        newServiceWorker.addEventListener('statechange', (ev) => {
-                            if (ev.currentTarget.state === 'activated') {
-                                CompleteUpdate();
-                            }
-                        });
-                    })
-                    //Во время пользоваением приложения было изменение sw.js
-                    ShowUpdate();
-                }
-            }
-
-            newServiceWorker.addEventListener('statechange', ev => {
-                //Установлена новая версия sw.js (обновляем страницу чтобы применить изменения)
-                if (ev.currentTarget.state === 'activated') {
-                    CompleteUpdate();
-                }
-            });
-
-            SW.ready.then(registartion => {
-                if (registartion.active) {
-                    registartion.active.postMessage(220);
-                }
-            });
-
-            async function ShowUpdate() {
-                const newVersion = await ParseVersion();
-                caches.keys().then(function (names) {
-                    for (let name of names)
-                        caches.delete(name);
-                });
-                $('.app-update').css({ display: 'flex' });
-                if (currentVersion.ver === newVersion.ver) {
-                    $('.update-content-version > .to-version > .cur').text(currentVersion.hash);
-                    $('.update-content-version > .to-version > .next').text(newVersion.hash);
-                    try {
-                        let data = JSON.parse(localStorage.getItem(keyStorage));
-                        if (data.show != undefined) {
-                            data.update = new Date().toJSON();
-                            localStorage.setItem(keyStorage, JSON.stringify(data));
-                        }
-                    } catch (err) {
-                        console.log('Не удалось устновить данные', err);
-                    }
-                } else {
-                    $('.update-content-version > .to-version > .cur').text(currentVersion.ver);
-                    $('.update-content-version > .to-version > .next').text(newVersion.ver);
-                    //Указываем что было обновление
-                    localStorage.setItem(keyStorage, JSON.stringify({ show: true, ver: newVersion.ver, update: new Date().toJSON() }));
-                }
-                setTimeout(() => {
-                    $('.app-update').addClass('show');
-                    setTimeout(() => {
-                        $('.update-progress > .progress').css({ width: '50%' });
-                        SW.getRegistration().then((reg) => {
-                            if (reg.waiting) {
-                                reg.waiting.postMessage(221);
-                            }
-                        });
-                    }, 500);
-                }, 300)
-            }
-
-            function CompleteUpdate() {
+            setTimeout(() => {
+                $('.app-update').removeClass('show');
+                const url = new URL(window.location.href);
+                url.searchParams.delete('update');
+                url.searchParams.delete('ver');
+                url.searchParams.delete('hash');
+                window.history.replaceState(null, '', url.toString());
+            }, 3000);
+            setTimeout(() => {
                 $('.update-progress > .progress').css({ width: '100%' });
-                setTimeout(() => {
-                    location.reload()
-                }, 500);
-            }
+            }, 100);
 
-            function SetVersion() {
-                $('.github > .version-hash > .version > span').text(currentVersion.ver);
-                $('.github > .version-hash > .hash').text(currentVersion.hash);
-                try {
-                    let data = JSON.parse(localStorage.getItem(keyStorage))
-                    //Проверка на старрые тип данных до версии 2.0.2
-                    if (!data.update) {
-                        let ver = '2.0.0'
-                        if (currentVersion.ver != 'undef')
-                            ver = currentVersion.ver;
-                        data = { show: data, ver: ver, update: new Date().toJSON() };
-                        localStorage.setItem(keyStorage, JSON.stringify(data));
+        }
+    }
+
+    // Обновляет систему Service Worker
+    async function UpdateSystem() {
+        const reg = await $SERVER.functions.getRegistration();
+        let newServer = undefined;
+
+        if (reg) {
+            if (reg.installing) {
+                newServer = reg.installing;
+            } else if (reg.waiting) {
+                newServer = reg.waiting;
+                const data = await ParseSWVersion();
+                $SERVER.updatet = true;
+                $('.app-update').css({ display: 'flex' });
+                SetUIVersion(data);
+                $('.app-update').addClass('show');
+                $('.update-progress > .progress').css({ width: '50%' });
+
+                const skipData = await Events().skipWaiting();
+            } else if (reg.active) {
+                newServer = reg.active;
+            }
+        }
+
+        $SERVER.On.subscribe.forEach(event => {
+            event($SERVER.updatet);
+        });
+
+        newServer.addEventListener('statechange', ev => {
+            console.log(ev.target.state);
+            if (ev.target.state === 'activating') {
+                $('.update-progress > .progress').css({ width: '80%' });
+            }
+            if (ev.target.state === 'activated' || ev.target.state === 'redundant') {
+                const url = new URL(window.location.href);
+                url.searchParams.set('update', 'true');
+                url.searchParams.set('ver', $SERVER.version);
+                url.searchParams.set('hash', $SERVER.hash);
+                window.location.href = url.toString();
+            }
+        });
+    }
+
+    // Отображает версию интерфейса
+    function ShowUIVersion() {
+        $('.github > .version-hash > .version > span').text($SERVER.version);
+        $('.github > .version-hash > .hash').text($SERVER.hash);
+
+        let data = JSON.parse(localStorage.getItem($SERVER.dialog_key));
+        if (data === undefined) {
+            data = { show: false, version: $SERVER.version, hash: $SERVER.hash, update: new Date().toJSON() };
+            localStorage.setItem($SERVER.dialog_key, JSON.stringify(data));
+        }
+        const date = new Date(data.update);
+        $('.github > .date').text(`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`);
+    }
+
+    // События для взаимодействия с Service Worker
+    function Events() {
+        return {
+            // Получает версию Service Worker
+            getVersion: () => {
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        const data = await eventListener(220);
+                        resolve({ version: data.val.ver, hash: data.val.hash });
+                    } catch (error) {
+                        reject(error);
                     }
-                    const date = new Date(data.update);
-                    $('.github > .date').text(`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`);
-                } catch (error) {
-                    console.log('Ошибка отображения версии', error);
-                }
+                })
+            },
+            // Пропускает ожидание Service Worker
+            skipWaiting: () => {
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        const data = await eventListener(221);
+                        resolve(data);
+                    } catch (error) {
+                        reject(error);
+                    }
+                })
+            }
+        }
+
+        // Слушатель событий для Service Worker
+        function eventListener(code) {
+            return new Promise((resolve, reject) => {
+                $SERVER.sw.addEventListener("message", (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        if (data.id === code) {
+                            resolve(data);
+                        }
+                    } catch (error) {
+                        reject(error);
+                    }
+                    $SERVER.sw.removeEventListener("message", eventListener);
+                });
+
+                $SERVER.sw.ready.then(reg => {
+                    if (reg.active) {
+                        reg.active.postMessage({ id: code });
+                    }
+                });
+            })
+        }
+    }
+
+    // Устанавливает версию интерфейса
+    function SetUIVersion(data, reverse = false) {
+        localStorage.setItem($SERVER.dialog_key, JSON.stringify({ show: true, ver: data.ver, hash: data.hash, update: new Date().toJSON() }));
+        if (reverse) {
+            if ($SERVER.version === data.ver) {
+                $('.update-content-version > .to-version > .cur').text(data.hash);
+                $('.update-content-version > .to-version > .next').text($SERVER.hash);
+            } else {
+                $('.update-content-version > .to-version > .cur').text(data.ver);
+                $('.update-content-version > .to-version > .next').text($SERVER.version);
+            }
+        } else {
+            if ($SERVER.version === data.ver) {
+                $('.update-content-version > .to-version > .cur').text($SERVER.hash);
+                $('.update-content-version > .to-version > .next').text(data.hash);
+            } else {
+                $('.update-content-version > .to-version > .cur').text($SERVER.version);
+                $('.update-content-version > .to-version > .next').text(data.ver);
             }
         }
     }
@@ -156,7 +215,7 @@ let currentVersion = { ver: 'undef', hash: 'undef' };
  * Получает версию с файла sw.js
  * @returns {Promise<{ver: string, hash: string}>}
  */
-function ParseVersion() {
+function ParseSWVersion() {
     return new Promise((resolve) => {
         fetch('sw.js').then((val) => {
             val.text().then(val => {

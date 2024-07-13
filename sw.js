@@ -1,5 +1,5 @@
-const version = '2.3.0';
-const hash = '5d597';
+const version = '2.3.1';
+const hash = '687b5';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
     // Директория: /images/genres
@@ -171,18 +171,14 @@ const servers = [
 ];
 
 self.addEventListener('install', async event => {
-    try {
-        if (!isValidKey((await caches.keys())[0])) {
-            self.skipWaiting();
-        }
-    } catch {
-        self.skipWaiting();
-    }
-
     event.waitUntil(caches.open(cacheName).then((cache) => {
         console.log('[SW]: Caching App Shell');
         return cache.addAll(appShellFilesToCache);
     }));
+
+    setTimeout(() => {
+        self.skipWaiting();
+    }, 5000);
 });
 
 self.addEventListener('activate', event => {
@@ -228,25 +224,17 @@ self.addEventListener('fetch', function (event) {
 });
 
 self.addEventListener('message', async event => {
-    if (event.data === 215) {
-        const client = event.source;
+    const client = event.source;
+    if (event.data.id === 215) {
         client.postMessage(JSON.stringify({ id: 215, val: version }));
-    } else if (event.data === 221) {
-        self.skipWaiting();
-    } else if (event.data === 216) {
+    } else if (event.data.id === 221) {
+        await self.skipWaiting();
+        client.postMessage(JSON.stringify({ id: 221, val: 'ok' }));
+    } else if (event.data.id === 216) {
         const client = event.source;
         client.postMessage(JSON.stringify({ id: 216, val: hash }));
-    } else if (event.data === 220) {
+    } else if (event.data.id === 220) {
         const client = event.source;
         client.postMessage(JSON.stringify({ id: 220, val: { ver: version, hash: hash } }));
     }
 });
-
-// Функция для проверки ключа (Удалить через 5 месяцев или раньше)
-function isValidKey(key) {
-    // Регулярное выражение для проверки ключа
-    const regex = /^pwa-tunime-[A-Za-z0-9]{5}-v\d+\.\d+\.\d+$/;
-
-    // Проверяем ключ с помощью регулярного выражения
-    return regex.test(key);
-}

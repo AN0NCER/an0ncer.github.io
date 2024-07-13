@@ -1,3 +1,5 @@
+import { Sleep } from "./funcitons.js";
+
 /**
  * @typedef {Object} Access - данные доступа
  * @property {string} id - индентификатор пользователя
@@ -195,6 +197,7 @@ export const Tunime = {
 
                 if (responseCode == 503) {
                     if (Tunime.server.next() !== false) {
+                        await Sleep(1000);
                         return resolve(this.Auth());
                     }
                 }
@@ -211,15 +214,8 @@ export const Tunime = {
             const path = '/online';
             const body = { id: access.id, key: access.key };
             let responseCode = 503;
-            const cods = [401, 429];
             ApiFetch(path, { method: 'POST', body: body }).then(async (response) => {
                 responseCode = response.status;
-
-                if (cods.includes(responseCode)) {
-                    Tunime.storage.access = undefined;
-                    const access = await Tunime.Auth();
-                    return resolve(this.Online(access));
-                }
 
                 if (responseCode === 200) {
                     return response.json().then((value) => {
@@ -376,7 +372,19 @@ export const Tunime = {
     }
 };
 
-(async () => {
+(() => {
+    if (typeof $SERVER !== 'undefined' && $SERVER) {
+        $SERVER.On.Updatet((event) => {
+            if (event === false) {
+                AutoUpdateToken();
+            }
+        });
+    } else {
+        AutoUpdateToken();
+    }
+})();
+
+async function AutoUpdateToken() {
     const exception = ['/player.html'];
     if (exception.includes(window.location.pathname))
         return;
@@ -390,22 +398,53 @@ export const Tunime = {
         }
     }
 
-    OnUpdate();
-})();
+    if (access === false) {
+        return;
+    }
 
-function OnUpdate(handler = undefined) {
-    const minute = 60000;
-    clearInterval(handler);
+    console.log(`[api] - Token: ${access.end}`);
+    UpdateToken();
+}
 
-    if (Tunime.storage.access) {
+async function UpdateToken() {
+    let timeout = undefined;
+
+    document.addEventListener('visibilitychange', async function () {
+        if (document.visibilityState === 'visible') {
+            if (!Tunime.storage.Live()) {
+                clearTimeout(timeout);
+                _update();
+            }
+        }
+    })
+
+    async function _update() {
+        const minute = 60000;
+        if (Tunime.storage.access === undefined) {
+            const access = await Tunime.Auth();
+            if (access === false) {
+                return;
+            }
+        }
+
         const time = Date.parse(Tunime.storage.access.end) - Date.now() - minute;
-        const interval = setInterval(async () => {
-            await Tunime.Online();
-            OnUpdate(interval);
+        timeout = setTimeout(async () => {
+            if (!Tunime.storage.Live()) {
+                Tunime.storage.access = undefined;
+                const access = await Tunime.Auth();
+                if (access === false) {
+                    return;
+                }
+            } else {
+                const access = await Tunime.Online();
+                if (access === false) {
+                    return;
+                }
+                _update();
+            }
         }, time);
         console.log(`[api] - Weiter durch ${time} ms`);
     }
+
+    _update();
 }
-
-
-///Сделать проверку на ошибку 426. Проверить последнего ли версия приложение, а если последнего то предложить сбросить кэш

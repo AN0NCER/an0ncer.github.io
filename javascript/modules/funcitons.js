@@ -403,3 +403,13 @@ export function isElementVisible(element) {
 
     return isVisible && isNotHidden;
 }
+
+/**
+ * Удаляет указанные параметры из URL и заменяет их на новые значения.
+ * @param {[string]} params - Массив с параметрами для удаления и замены.
+ */
+export function ClearParams(params) {
+    const url = new URL(window.location.href);
+    params.forEach(param => url.searchParams.delete(param));
+    window.history.replaceState(null, '', url.toString());
+}
