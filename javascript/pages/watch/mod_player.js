@@ -105,7 +105,7 @@ const player = {
          * @param {Int} id - перевода
          */
         select: function (id, user_handler = false) {
-            if (this.id == id) return;
+            if (this.id == id || id === undefined) return;
             // Проверяем на существование такго обьекта в DOM
             const element = $(`.voice[data-id="${id}"]`)[0];
             const data = player.data.find((x) => x.translation.id == id);
