@@ -1,5 +1,5 @@
 const version = '2.3.1';
-const hash = '687b5';
+const hash = '021d1';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
     // Директория: /images/genres
