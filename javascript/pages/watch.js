@@ -139,7 +139,7 @@ Main(async (e) => {
             e.functional.control(e.functional.methods[10], { episode: next_episode });
             e.episodes.selected_episode = next_episode;
             e.episodes.AnimateSelect(next_episode);
-            SaveLData(next_episode, e.translation.id_translation);
+            SaveLData(next_episode, e.translation.id);
             History().add(false, 0, 0, next_episode);
         });
 
