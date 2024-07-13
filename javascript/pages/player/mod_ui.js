@@ -11,7 +11,7 @@ import { Player, onBuffered$ } from "../player.js";
 import { AnimButtonStatus, AnimRate, AnimSettings } from "./mod_animation.js";
 import { onDuration$, onPause$, onPlay$, onTimeUpdate$, onVolumeChange$ } from "./mod_event.js";
 import { CURSOR_WIDTH, onPlaybackRate2$ } from "./mod_functions.js";
-import { AUTO_NEKST, STANDART_CONTROLS, onAutoNekstChange$ } from "./mod_settings.js";
+import { STANDART_CONTROLS } from "./mod_settings.js";
 import { Skips } from "./mod_stream.js";
 
 /**
@@ -68,7 +68,7 @@ export function InitUI() {
         }
     });
 
-    $('.player-skip').on('click', function (){
+    $('.player-skip').on('click', function () {
         Skips.Skip();
     });
 
@@ -76,7 +76,6 @@ export function InitUI() {
 
     SubscribePlayerControlsEvent();
     SubscribeCurrentCursorsEvents();
-    SubscribeTrimCursorEvents();
 }
 
 /**
@@ -89,7 +88,6 @@ export function InitUICallbacks() {
             AnimButtonStatus.pause();
             $('.l-controls > .switch-button').addClass('status-pause');
             subCurrentCursor$.next(true);
-            subTrimCursor$.next(true);
             subControls$.next('p.pause');
         }
     });
@@ -137,17 +135,6 @@ export function InitUICallbacks() {
             $(`.l-controls > .volume-slider > .slide > .current-slide`).css({
                 width: `${prcnt}%`
             })
-        }
-    });
-    onAutoNekstChange$.subscribe({
-        next: () => {
-            if (AUTO_NEKST) {
-                $(`.player-slides > .trim-slid`).removeClass('hide');
-                $(`.trim-cursor`).removeClass('hide');
-            } else {
-                $(`.player-slides > .trim-slid`).addClass('hide');
-                $(`.trim-cursor`).addClass('hide');
-            }
         }
     });
     onPlaybackRate2$.subscribe({
@@ -219,11 +206,9 @@ function SubscribePlayerControlsEvent() {
         inControls = true;
         subControls$.next('c.mouseenter');
         subCurrentCursor$.next(true);
-        subTrimCursor$.next(true);
     });
     controls.on('mousemove', function () {
         subCurrentCursor$.next(true);
-        subTrimCursor$.next(true);
     });
     controls.on('mouseleave', function () {
         inControls = false;
@@ -318,40 +303,6 @@ function HideCurerentCursor() {
     }, 3000);
 }
 
-const subTrimCursor$ = new rxjs.Subject();
-
-function SubscribeTrimCursorEvents() {
-    $('.player-cursors > .trim-cursor').on('touchstart mouseenter', function () {
-        inCursor = true;
-        clearTimeout(timerHideTrimCursor);
-        clearTimeout(timerHideControls);
-
-        clearTimeout(timerHideCurrentCursors);
-        $('.player-cursors > .current-cursor').addClass('hide');
-    });
-    $('.player-cursors > .trim-cursor').on('touchend mouseleave', function () {
-        inCursor = false;
-        subTrimCursor$.next(true);
-        subControls$.next('cl.mouseleave');
-    })
-}
-
-subTrimCursor$.subscribe({
-    next: () => {
-        if (!AUTO_NEKST) return;
-        HideTrimCursor();
-    }
-});
-
-let timerHideTrimCursor;
-
-function HideTrimCursor() {
-    $('.player-cursors > .trim-cursor').removeClass('hide');
-    clearTimeout(timerHideTrimCursor);
-    timerHideTrimCursor = setTimeout(() => {
-        $('.player-cursors > .trim-cursor').addClass('hide');
-    }, 3000);
-}
 
 export function calculatePercentageWatched(videoDuration, currentTime) {
     if (currentTime > videoDuration) {
