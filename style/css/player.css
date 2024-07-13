@@ -13,6 +13,7 @@ html {
   position: relative;
 }
 .player-wrapper video {
+  background: url("../../images/black-bg-player.png");
   height: 100%;
   width: 100%;
 }
