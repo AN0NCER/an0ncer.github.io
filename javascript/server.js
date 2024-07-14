@@ -1,6 +1,5 @@
 const $SERVER = {
     sw: navigator.serviceWorker,
-    cache: caches || undefined,
     version: undefined,
     hash: undefined,
     dialog_key: "dialog-update",
@@ -42,6 +41,10 @@ const $SERVER = {
     }
 };
 
+if(typeof caches !== 'undefined'){
+    $SERVER.cache = caches;
+}
+
 (async () => {
     if ($SERVER.sw) {
         await $SERVER.functions.newRegistration();
@@ -51,9 +54,23 @@ const $SERVER = {
 
         ShowUIVersion();
 
+        HasUpdate();
         OnUpdate();
 
         UpdateSystem();
+    }
+
+    async function HasUpdate() {
+        const data = await ParseSWVersion();
+        if (data.ver === $SERVER.version && data.hash === $SERVER.hash) {
+            $SERVER.updatet = false;
+
+            $SERVER.On.complete = true;
+
+            $SERVER.On.subscribe.forEach(event => {
+                event($SERVER.updatet);
+            });
+        }
     }
 
     // Обрабатывает обновление интерфейса
@@ -85,32 +102,37 @@ const $SERVER = {
     async function UpdateSystem() {
         const reg = await $SERVER.functions.getRegistration();
         let newServer = undefined;
+        let type = 'active';
 
         if (reg) {
-            if (reg.installing) {
-                newServer = reg.installing;
-            } else if (reg.waiting) {
-                newServer = reg.waiting;
-                const data = await ParseSWVersion();
-                $SERVER.updatet = true;
-                $('.app-update').css({ display: 'flex' });
-                SetUIVersion(data);
-                $('.app-update').addClass('show');
-                $('.update-progress > .progress').css({ width: '50%' });
+            newServer = reg.installing || reg.waiting || reg.active;
+            type = reg.installing ? 'installing' : reg.waiting ? 'waiting' : 'active';
 
-                const skipData = await Events().skipWaiting();
-            } else if (reg.active) {
-                newServer = reg.active;
+            reg.onupdatefound = async () => {
+                const swr = await $SERVER.sw.getRegistration();
+                newServer.removeEventListener('statechange', OnStateChange);
+                newServer = swr.installing || swr.waiting || swr.active;
+                type = swr.installing ? 'installing' : swr.waiting ? 'waiting' : 'active';
+
+                if (type === 'installing') {
+                    Install();
+                }
+
+                newServer.addEventListener('statechange', (ev) => OnStateChange(ev, true));
             }
         }
 
-        $SERVER.On.subscribe.forEach(event => {
-            event($SERVER.updatet);
-        });
+        newServer.addEventListener('statechange', OnStateChange);
 
-        newServer.addEventListener('statechange', ev => {
-            console.log(ev.target.state);
-            if (ev.target.state === 'activating') {
+        if (type === 'waiting' || type === 'installing') {
+            Install();
+        }
+
+        async function OnStateChange(ev) {
+            if (ev.target.state === 'waiting' || ev.target.state === 'installing') {
+                Install();
+            }
+            if (ev.target.state === 'activating' || ev.target.state === 'installed') {
                 $('.update-progress > .progress').css({ width: '80%' });
             }
             if (ev.target.state === 'activated' || ev.target.state === 'redundant') {
@@ -120,7 +142,16 @@ const $SERVER = {
                 url.searchParams.set('hash', $SERVER.hash);
                 window.location.href = url.toString();
             }
-        });
+        }
+
+        async function Install() {
+            $('.app-update').css({ display: 'flex' });
+            const data = await ParseSWVersion();
+            SetUIVersion(data);
+            $('.app-update').addClass('show');
+            $('.update-progress > .progress').css({ width: '50%' });
+            newServer.postMessage({ id: 221 });
+        }
     }
 
     // Отображает версию интерфейса
@@ -129,7 +160,7 @@ const $SERVER = {
         $('.github > .version-hash > .hash').text($SERVER.hash);
 
         let data = JSON.parse(localStorage.getItem($SERVER.dialog_key));
-        if (data === undefined) {
+        if (data === undefined || data === null) {
             data = { show: false, version: $SERVER.version, hash: $SERVER.hash, update: new Date().toJSON() };
             localStorage.setItem($SERVER.dialog_key, JSON.stringify(data));
         }
