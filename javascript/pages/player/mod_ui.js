@@ -24,12 +24,13 @@ export function InitUI() {
         $('.points-event').hide();
         $('.controls-wrapper').hide();
     }
-    //Скрыть / Показать громкость
-    $('.l-controls > .volume').on('click', function () {
-        if ($('.volume-slider').hasClass('hide')) {
-            $('.volume-slider').removeClass('hide');
+    //Включить / Отключить звук
+    $('.l-controls > .volume > .icon-controls').on('click', function () {
+        Player.muted = !Player.muted;
+        if (Player.muted) {
+            $('.volume > .icon-controls > .mute').removeClass('hide');
         } else {
-            $('.volume-slider').addClass('hide');
+            $('.volume > .icon-controls > .mute').addClass('hide');
         }
     });
 
@@ -39,7 +40,7 @@ export function InitUI() {
     });
 
     //Управление громкостью
-    $(`.l-controls > .volume-slider > .slide`).on('mousedown touchstart', function (e) {
+    $(`.volume > .volume-slider > .slide`).on('mousedown touchstart', function (e) {
         let startX = e.clientX || e.originalEvent.touches[0].clientX;
         let slide = $(this).find('.current-slide');
         let fullWidth = $(this).width();
@@ -50,6 +51,8 @@ export function InitUI() {
             let currentX = e.clientX || e.originalEvent.touches[0].clientX || e.originalEvent.clientX;
             let swipeDistance = currentX - startX;
             slide.width(width + swipeDistance);
+            let prcnt = (slide.width() / fullWidth) * 100;
+            Player.volume = prcnt / 100;
             if (width + swipeDistance <= 0) {
                 return;
             }
@@ -62,8 +65,6 @@ export function InitUI() {
                 $(window).off('mousemove.sound touchmove.sound');
                 $(window).off('mouseup.sound touchend.sound');
                 event = false;
-                let prcnt = (slide.width() / fullWidth) * 100;
-                Player.volume = prcnt / 100;
             }
         }
     });
@@ -131,10 +132,7 @@ export function InitUICallbacks() {
     });
     onVolumeChange$.subscribe({
         next: () => {
-            let prcnt = Player.volume * 100;
-            $(`.l-controls > .volume-slider > .slide > .current-slide`).css({
-                width: `${prcnt}%`
-            })
+            SetVolume();
         }
     });
     onPlaybackRate2$.subscribe({
@@ -159,7 +157,7 @@ export function ResetUI() {
  */
 function SetVolume() {
     let prcnt = Player.volume * 100;
-    $(`.l-controls > .volume-slider > .slide > .current-slide`).css({
+    $(`.volume > .volume-slider > .slide > .current-slide`).css({
         width: `${prcnt}%`
     })
 }
