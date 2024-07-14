@@ -1,5 +1,5 @@
-const version = '2.3.1';
-const hash = '021d1';
+const version = '2.3.2';
+const hash = '2738d';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
     // Директория: /images/genres
@@ -41,9 +41,6 @@ const appShellFilesToCache = [
     "/images/preview-image.png",
     // Директория: /javascript/auto
     "/javascript/auto/download_a.js",
-    // Директория: /javascript/engine
-    "/javascript/engine/event_handler.js",
-    "/javascript/engine/orientation.js",
     // Директория: /javascript/library
     "/javascript/library/anime.min.js",
     "/javascript/library/hls.js",
@@ -128,6 +125,10 @@ const appShellFilesToCache = [
     "/javascript/pages/settings.js",
     "/javascript/pages/user.js",
     "/javascript/pages/watch.js",
+    // Директория: /javascript/services
+    "/javascript/services/dispatcher.js",
+    "/javascript/services/installing.js",
+    "/javascript/services/update.js",
     // Директория: /javascript
     "/javascript/kodik.js",
     "/javascript/menu.js",
