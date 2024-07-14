@@ -4,16 +4,15 @@
  *              качества, Переключение на следующий эпизод, Упарвлению
  *              громкостью видео.
  * Библиотеки:  rxjs.js, jqery.js
- * Возвращает:  InitSettings, QUALITY, AUTO_NEKST, FULL_PLAYER, AUTOQUALITY,
+ * Возвращает:  InitSettings, QUALITY, FULL_PLAYER, AUTOQUALITY,
  *              STANDART, STANDART_CONTROLS, onQualityChange$, 
- *              onAutoNekstChange$, ALTERNATIVE_FULLSCREEN
+ *              ALTERNATIVE_FULLSCREEN
  */
 
 import { Player, hls } from "../player.js";
 import { onVolumeChange$ } from "./mod_event.js";
 
 export let QUALITY = $PARAMETERS.player.quality;
-export let AUTO_NEKST = $PARAMETERS.player.autonekst;
 export const FULL_PLAYER = $PARAMETERS.player.full;
 export const AUTOQUALITY = $PARAMETERS.player.autoquality;
 export const STANDART = $PARAMETERS.player.standart;
@@ -28,13 +27,6 @@ export const onQualityChange$ = new rxjs.Subject().pipe(
 );
 
 /**
- * Измененеие параметра автопереключение
- */
-export const onAutoNekstChange$ = new rxjs.Subject().pipe(
-    rxjs.distinctUntilChanged()
-);
-
-/**
  * Инициализация окна с настройками
  */
 export function InitSettings() {
@@ -43,13 +35,6 @@ export function InitSettings() {
         $(this).addClass('selected');
         QUALITY = $(this).attr('data-q');
         onQualityChange$.next(QUALITY);
-    });
-
-    $(`.autonekst-setup`).on('click', function (e) {
-        if (e.target.type == "checkbox") {
-            AUTO_NEKST = e.target.checked;
-            onAutoNekstChange$.next(AUTO_NEKST);
-        }
     });
 
     //Управление громкостью видео
@@ -95,7 +80,6 @@ export function InitSettings() {
     SetVolume();
 
     $(`.quality-setup > .quality[data-q="${QUALITY}"]`).addClass('selected');
-    $(`.autonekst-setup > .checkbox > input`).prop('checked', AUTO_NEKST);
 }
 
 //Изменение качество видеоролика

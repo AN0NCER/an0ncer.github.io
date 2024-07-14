@@ -39,6 +39,7 @@ html {
         cursor: pointer;
         z-index: 50;
         transition: .3s ease-in-out;
+
         svg {
             fill: rgba(255, 255, 255, 0.5);
             width: 14px;
@@ -99,30 +100,75 @@ html {
                     }
                 }
 
-                .volume-slider {
-                    .slide {
-                        max-width: 130px;
-                        cursor: pointer;
-                        height: 10px;
-                        background: rgb(37, 58, 76);
-                        width: 130px;
-                        border-radius: 3px;
-                        display: flex;
-                        overflow: hidden;
+                .volume {
+                    display: flex;
+                    min-width: 45px;
+                    width: auto;
+                    align-items: center;
+                    overflow: hidden;
 
-                        .current-slide {
-                            height: 100%;
-                            max-width: 100%;
-                            background: #5fbef3;
+                    .icon-controls {
+                        min-width: 45px;
+                        min-height: 45px;
+                        display: grid;
+                        position: relative;
+                        place-items: center;
+                        cursor: pointer;
+
+                        svg {
+                            fill: #ffffff;
+                            height: 16px;
+                        }
+
+                        .mute{
+                            position: absolute;
+                            right: 8px;
+                            bottom: 8px;
+                            background: #282a2e;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 15px;
+                            border-radius: 50%;
+                            aspect-ratio: 1 / 1;
+                            svg{
+                                height: 9px;
+                            }
+
+                            &.hide{
+                                display: none;
+                            }
                         }
                     }
 
-                    &.hide {
+                    .volume-slider {
                         .slide {
                             max-width: 0px;
+                            cursor: pointer;
+                            height: 10px;
+                            background: rgb(37, 58, 76);
+                            width: 130px;
+                            border-radius: 3px;
+                            display: flex;
+                            overflow: hidden;
+                            transition: .3s ease-in-out;
+
+                            .current-slide {
+                                height: 100%;
+                                max-width: 100%;
+                                background: #5fbef3;
+                            }
                         }
                     }
 
+                    &:hover {
+                        &>.volume-slider {
+                            padding-right: 25px;
+                            .slide{
+                                max-width: 130px;
+                            }
+                        }
+                    }
                 }
 
                 @supports (-webkit-touch-callout: none) {
