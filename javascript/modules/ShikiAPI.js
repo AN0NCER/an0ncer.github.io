@@ -119,6 +119,32 @@ export const Friends = {
     }
 }
 
+export const Favorites = {
+    base_url: () => { return `${SHIKIURL.url}/api/favorites` },
+    /**
+     * @param {"Anime" | "Manga" | "Ranobe" | "Character"} type - Тип избранного
+     * @param {number} id - ID избранного
+     * @param {*} event - Функция обработки ответа
+     */
+    favorites: function (type, id, event = () => { }) {
+        let url = this.base_url() + "/" + type + "/" + id;
+        const request = Fetch("POST", url, Headers.bearer());
+        return {
+            POST: async () => {
+                const response = await request.fetch();
+                event(response);
+                return response;
+            },
+            DELETE: async () => {
+                request.setMethod("DELETE");
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
+    }
+}
+
 export const Users = {
     base_url: () => { return `${SHIKIURL.url}/api/users` },
     list: function (query = {}, event = () => { }) {
