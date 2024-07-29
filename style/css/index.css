@@ -77,17 +77,17 @@ header > .notify-search .notification {
 }
 header > .notify-search .notification svg {
   fill: #fff;
-  height: 14px;
+  height: 17px;
   z-index: 1;
 }
-header > .notify-search .notification > .dot {
-  width: 6px;
-  height: 6px;
-  background: #2393F1;
-  border-radius: 50%;
-  position: absolute;
-  top: 8px;
-  right: 12px;
+header > .notify-search .notification svg.dot {
+  display: none;
+}
+header > .notify-search .notification.dot svg.mail {
+  display: none;
+}
+header > .notify-search .notification.dot svg.dot {
+  display: block;
 }
 
 .mbs {

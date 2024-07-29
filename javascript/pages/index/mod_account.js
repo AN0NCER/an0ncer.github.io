@@ -40,7 +40,7 @@ function userNotification(id) {
             let count = response.messages + response.news + response.notifications;
 
             if (count > 0) {
-                $('.notification > .dot').removeClass('hide');
+                $('.notification').addClass('dot');
             }
         }).GET();
     });
