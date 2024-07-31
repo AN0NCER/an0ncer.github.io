@@ -5,7 +5,7 @@ import { InitAPI, ParentWindow, SendAPI } from "./player/mod_api.js";
 import { FULL_PLAYER, InitSettings, QUALITY } from "./player/mod_settings.js";
 import { AnimLoadPlayer } from "./player/mod_animation.js";
 import { LoadM3U8, LoadM3U8Episode } from "./player/mod_stream.js";
-import { Sleep } from "../modules/funcitons.js";
+import { Sleep } from "../modules/functions.js";
 
 /**@type {HTMLVideoElement}*/
 export const Player = document.getElementById('player');

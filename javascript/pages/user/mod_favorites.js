@@ -1,5 +1,5 @@
 import { ACard } from "../../modules/AnimeCard.js";
-import { Sleep } from "../../modules/funcitons.js";
+import { Sleep } from "../../modules/functions.js";
 import { Animes, Users } from "../../modules/ShikiAPI.js";
 import { OnUser } from "../user.js";
 

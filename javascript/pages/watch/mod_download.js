@@ -1,4 +1,4 @@
-import { ScrollElementWithMouse, Sleep } from "../../modules/funcitons.js";
+import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { Player } from "./mod_player.js";

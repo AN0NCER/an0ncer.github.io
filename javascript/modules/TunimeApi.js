@@ -1,4 +1,4 @@
-import { Sleep } from "./funcitons.js";
+import { Sleep } from "./functions.js";
 
 /**
  * @typedef {Object} Access - данные доступа

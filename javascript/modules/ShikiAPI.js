@@ -1,4 +1,4 @@
-import { ObjectToQuery, Fetch } from "./funcitons.js";
+import { ObjectToQuery, Fetch } from "./functions.js";
 import { Headers } from "./header.js";
 import { SHIKIURL } from "./Settings.js";
 import { User } from "./ShikiUSR.js"

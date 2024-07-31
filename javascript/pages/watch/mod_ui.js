@@ -1,4 +1,4 @@
-import { ScrollElementWithMouse } from "../../modules/funcitons.js";
+import { ScrollElementWithMouse } from "../../modules/functions.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { $ID } from "../watch.js";
 import { ShowDwonloadWindow } from "./mod_download.js";

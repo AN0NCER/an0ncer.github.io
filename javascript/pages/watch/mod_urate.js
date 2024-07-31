@@ -1,6 +1,6 @@
 import { UserRates } from "../../modules/ShikiAPI.js";
 import { User } from "../../modules/ShikiUSR.js";
-import { Sleep } from "../../modules/funcitons.js";
+import { Sleep } from "../../modules/functions.js";
 import { $ID } from "../watch.js";
 
 /**@type {null | { id:number, user_id:number, target_id:number, target_type:string, score:number, status:string, rewatches:number, episodes:number, volumes:number, chapters:number, text:null | string, text_html:string, created_at:string, updated_at:string}} */

@@ -1,5 +1,5 @@
 import { Menu } from "../menu.js";
-import { Fetch, Sleep } from "./funcitons.js";
+import { Fetch, Sleep } from "./functions.js";
 import { Headers, Bodys } from "./header.js";
 import { SHIKIURL } from "./Settings.js";
 import { } from "./TunimeApi.js";

@@ -1,6 +1,6 @@
 import { Users } from "../../modules/ShikiAPI.js";
 import { Oauth, User } from "../../modules/ShikiUSR.js";
-import { Sleep } from "../../modules/funcitons.js";
+import { Sleep } from "../../modules/functions.js";
 import { AnimeLoaded } from "./mod_animes.js";
 
 /**

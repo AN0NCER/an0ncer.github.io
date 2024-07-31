@@ -1,4 +1,4 @@
-import { Sleep } from "../modules/funcitons.js";
+import { Sleep } from "./functions.js";
 import { ShowInfo } from "./Popup.js";
 
 export class WindowManagement {

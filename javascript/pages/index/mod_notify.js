@@ -1,6 +1,6 @@
 import { Messages, Users } from "../../modules/ShikiAPI.js";
 import { User } from "../../modules/ShikiUSR.js";
-import { Sleep } from "../../modules/funcitons.js";
+import { Sleep } from "../../modules/functions.js";
 
 let LOADED = false;
 let USER_ID = undefined;
