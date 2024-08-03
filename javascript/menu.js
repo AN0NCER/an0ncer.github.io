@@ -77,6 +77,7 @@ function addMenu({ icons = { main: "", selected: "" }, id, link = "/", selected 
         if (IntercatMenu[id]) {
             let target = `.btn-menu[data-id="${id}"]`;
             let timer;
+            let called = false;
 
             $(target).contextmenu((e) => {
                 e.preventDefault();
@@ -84,9 +85,13 @@ function addMenu({ icons = { main: "", selected: "" }, id, link = "/", selected 
             });
 
             $(target).bind('touchstart', function (e) {
+                called = false;
                 clearInterval(timer);
                 timer = setInterval(() => {
+                    if (called)
+                        return clearInterval(timer);
                     showInteractMenu(id, e);
+                    called = true;
                 }, 700);
                 // e.preventDefault();
             });
@@ -109,6 +114,7 @@ function addContinue({ icon } = {}) {
     });
 
     let target = `#btnContinue`;
+    let called = false;
     let timer;
 
     $(target).contextmenu((e) => {
@@ -117,9 +123,13 @@ function addContinue({ icon } = {}) {
     });
 
     $(target).bind('touchstart', function (e) {
+        called = false;
         clearInterval(timer);
         timer = setInterval(() => {
+            if (called)
+                return clearInterval(timer);
             showInteractMenu("play", e);
+            called = true;
         }, 700);
         // e.preventDefault();
     });
@@ -171,6 +181,8 @@ export const InitMenu = async () => {
 };
 
 function showInteractMenu(id, e) {
+    if (document.hidden)
+        return;
     const dom = '.user-interactive > .interact-content';
     $(dom).empty();
     for (const key in IntercatMenu[id]) {
