@@ -10,7 +10,8 @@ import { UserRate } from "./watch/mod_urate.js";
 import { Tunime } from "../modules/TunimeApi.js";
 import { History } from "./watch/mod_history.js";
 import { InitFranchiseVoices } from "./watch/mod_franchise.js";
-import { ClearParams } from "../modules/funcitons.js";
+import { ClearParams } from "../modules/functions.js";
+import { Private } from "./watch/mod_private.js";
 
 //ID ресурса из Shikimori
 export const $ID = new URLSearchParams(window.location.search).get("id");
@@ -21,8 +22,17 @@ export const $SHOWPLAYER = new URLSearchParams(window.location.search).get("play
 
 ClearParams(['continue', 'player']);
 
+export let $RULES = undefined;
+
+import(`/javascript/pages/watch/mod_collection.js`);
+
 //Авторизируем пользователя
 Main(async (e) => {
+    try {
+        const data = await import(`/javascript/pages/anime/${$ID}.js`);
+        $RULES = data.default;
+        console.log(`[watch] - Custom RULES uploaded`);
+    } catch { }
     //Проверка на существование такого ID
     const check = await CheckID($ID);
 
@@ -108,7 +118,7 @@ Main(async (e) => {
         Player().events.onplayed((e) => {
             const userRate = UserRate().Get();
             if (userRate != null) {
-                if (userRate.episodes > e || userRate.status == "completed") {
+                if (userRate.episodes > e || userRate.status == "completed" || Private.INCOGNITO) {
                     return;
                 }
                 UserRate().Controls.Episode(Player().episodes.selected_episode)
@@ -158,6 +168,9 @@ Main(async (e) => {
 
     //Загружаем аниме
     LoadAnime(async (e) => {
+        if ($RULES) {
+            $RULES.OnLoad();
+        }
         await LoadScreen.Loaded(() => {
             if ($SHOWPLAYER) {
                 const element = document.querySelector(".landscape-player");
