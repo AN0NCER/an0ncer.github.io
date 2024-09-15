@@ -39,6 +39,7 @@ function LoadAnimeFranchise() {
             }
             return console.log('Не удалось загрузить франшизы данные');
         }
+        if (!response.data?.animes) return;
         const list = response.data.animes;
         const allowed_status = ['anons', 'ongoing'];
         for (let i = 0; i < list.length; i++) {
@@ -51,7 +52,7 @@ function LoadAnimeFranchise() {
         }
         A_LOADED = true;
         HideLoad();
-    }).POST(["id", "russian", "english", "kind", "score", "status", "userRate{status}"], User.authorized);
+    }).POST(["id", "russian", "english", "kind", "score", "status", { userRate: ["status"] }], User.authorized);
 }
 
 export async function InitFranchiseVoices() {

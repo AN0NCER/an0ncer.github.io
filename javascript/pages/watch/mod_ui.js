@@ -1,4 +1,4 @@
-import { ScrollElementWithMouse } from "../../modules/functions.js";
+import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { $ID } from "../watch.js";
 import { ShowDwonloadWindow } from "./mod_download.js";
@@ -70,6 +70,7 @@ export function Functional() {
     ScrollingElements();
     CentrumPlayer();
     AnimeStatusSelect();
+    PageReload(document);
     LoadScreen.On('loaded', () => {
         AutoScrollFranchise();
     })
@@ -98,6 +99,45 @@ export function AutoScrollFranchise() {
     } catch {
 
     }
+}
+
+/**
+ * Перезагрузка страницы
+ */
+function PageReload(dom) {
+    const $reload = $('.app-reload');
+    $(dom).on('touchstart.reload', (e) => {
+        let scroll = 0;
+        let reload = false;
+        $(dom).on('scroll.reload', (e) => {
+            scroll = window.scrollY;
+            if (scroll <= -30 && !reload) {
+                $reload.css({ top: '20px' });
+                $reload.find('.wrapper').css({ padding: '' });
+                $reload.find('.wrapper > svg').css({ width: '' });
+            } else if (!reload) {
+                $reload.css({ top: '-300px' });
+                $reload.find('.wrapper').css({ padding: '' });
+                $reload.find('.wrapper > svg').css({ width: '' });
+
+            }
+            if (scroll <= -100) {
+                $reload.css({ top: '60px' });
+                $reload.find('.wrapper').css({ padding: '17px' });
+                $reload.find('.wrapper > svg').css({ width: '17px' });
+            }
+        })
+        $(dom).on('touchend.reload', async (e) => {
+            if (scroll <= -100) {
+                reload = true;
+                window.location.reload();
+            } else {
+                $reload.css({ top: '-300px' });
+            }
+            $(dom).off('scroll.reload');
+            $(dom).off('touchend.reload');
+        })
+    });
 }
 
 /**
@@ -266,7 +306,7 @@ function ShareAnime() {
     navigator.share({
         title: $(document).attr("title"),
         text: $('meta[property="og:description"]').attr('content'),
-        url: Tunime.Share.Anime($ID) 
+        url: Tunime.Share.Anime($ID)
     }).catch((error) => $DEV.error('Sharing failed', error));
 }
 

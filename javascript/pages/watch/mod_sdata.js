@@ -1,7 +1,8 @@
 import { $ID } from "../watch.js";
+import { Private } from "./mod_private.js";
 import { UserRate } from "./mod_urate.js";
 
-const SYNC_ENABLE = $PARAMETERS.anime.syncdata;
+export let SYNC_ENABLE = $PARAMETERS.anime.syncdata;
 
 /**@type {undefined | {kodik_episode:number, kodik_dub:number, date_update:string}} */
 let LData = undefined;
@@ -71,6 +72,22 @@ export async function SynchLData(userRate) {
 }
 
 
+class EventUpdate {
+    constructor() {
+        this.events = [];
+    }
+
+    On(e = ({ } = { kodik_episode: 0, kodik_dub: 0, date_update: 0 }) => { }) {
+        this.events.push(e);
+    }
+
+    Call(data) {
+        for (let i = 0; i < this.events.length; i++) {
+            const event = this.events[i];
+            event(data);
+        }
+    }
+}
 
 export class Synch {
     /**@type {Synch} */
@@ -86,6 +103,9 @@ export class Synch {
         this.events = [];
         this.called = false;
         this.data = undefined;
+        this.plugins = {
+            update: new EventUpdate()
+        }
     }
 
     On(e = ({ } = { kodik_episode: 0, kodik_dub: 0, date_update: 0 }) => { }) {
@@ -103,6 +123,10 @@ export class Synch {
             event(data);
         }
     }
+
+    Update(e = ({ } = { kodik_episode: 0, kodik_dub: 0, date_update: 0 }) => { }) {
+
+    }
 }
 
 /**
@@ -111,6 +135,8 @@ export class Synch {
  * @param {number} d - ID озвучки
  */
 export function SaveLData(e, d) {
+    if (Private.INCOGNITO)
+        return;
     const data = {
         kodik_episode: e,
         kodik_dub: d,
@@ -146,6 +172,7 @@ export function SaveLData(e, d) {
     user_rate.text += `\r\n[tunime-sync:${data.kodik_episode}:${data.kodik_dub}:${JSON.stringify(data.date_update)}]`;
 
     UserRate().Controls.Note(user_rate.text);
+    Synch.Init().plugins.update.Call(data);
 }
 
 /**
@@ -162,4 +189,8 @@ export function DifferenceInData() {
  */
 export function SetDifferenceData(val) {
     DataDifference = val;
+}
+
+export function SetSynchEnable(val) {
+    SYNC_ENABLE = val;
 }

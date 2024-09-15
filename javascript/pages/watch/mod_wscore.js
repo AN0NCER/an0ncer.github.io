@@ -2,6 +2,10 @@ import { User } from "../../modules/ShikiUSR.js";
 import { Player } from "./mod_player.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { UserRate } from "./mod_urate.js";
+import { SetSynchEnable, SYNC_ENABLE, Synch } from "./mod_sdata.js";
+import { Private } from "./mod_private.js";
+import { ShowCollectionWindow } from "./mod_collection.js";
+import Collection from "../../modules/Collection.js";
 
 const WindowScore = {
     comments: {
@@ -19,8 +23,8 @@ const WindowScore = {
             _windowScore.hide();
         });
 
-        $('.content-score > .content-wraper > textarea').bind('input', () => {
-            this.auto_grow(document.querySelector('.content-score > .content-wraper > textarea'));
+        $('textarea.noten').bind('input', () => {
+            this.auto_grow(document.querySelector('textarea.noten'));
         });
 
         //Отслеживаем изменения оценки пользователем
@@ -61,7 +65,7 @@ const WindowScore = {
         //Отслеживаем сохранение заметки
         $('.content-score > .content-wraper > .btn-commit').click(function () {
             let info = document.querySelector('#info-anime').checked;
-            let val = $('.content-score > .content-wraper > textarea').val();
+            let val = $('textarea.noten').val();
             if (!val && val.length >= 0) {
                 return;
             }
@@ -84,9 +88,9 @@ const WindowScore = {
                 val += '\n' + searchString + ` ${Player().translation.name} - ${Player().translation.id}`;
             }
 
-            $('.content-score > .content-wraper > textarea').val(val);
+            $('textarea.noten').val(val);
             val += WindowScore.comments.footer;
-            WindowScore.auto_grow(document.querySelector('.content-score > .content-wraper > textarea'))
+            WindowScore.auto_grow(document.querySelector('textarea.noten'))
             //Устанавливает заметкку
             UserRate().Controls.Note(val);
             _windowScore.hide();
@@ -96,11 +100,23 @@ const WindowScore = {
             setParameter('saveinfo', this.checked);
         });
 
+        $('#sync-anime').click(function () {
+            SetSynchEnable(this.checked);
+        });
+
+        $('#anime-incognito').click(function () {
+            Private.INCOGNITO = this.checked;
+        })
+
+        $('.collection-select.btn').click(() => {
+            ShowCollectionWindow();
+        })
+
         UserRate().Events.OnInit((res) => {
             UserRate().Events.OnUpdate((res) => {
                 if (res == null) {
                     SetScore(0);
-                    $('.content-score > .content-wraper > textarea').val('')
+                    $('textarea.noten').val('')
                     return;
                 }
 
@@ -115,14 +131,52 @@ const WindowScore = {
             SetScore(res.score);
             SetNote(res.text);
         });
+
+        Synch.Init().On((data) => {
+            try {
+                if (data === undefined)
+                    return;
+
+                const index = Player().data.findIndex(x => x.translation.id === data.kodik_dub);
+
+                if (index === -1)
+                    return;
+
+                const title = Player().data[index].translation.title;
+                const date = new Date(data.date_update);
+
+                $(`.sync-data > .voice`).text(title);
+                $(`.sync-data > .episode`).text(`${data.kodik_episode} Эпизод`);
+                $(`.sync-data > .time`).text(`${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`);
+            } catch (error) {
+                console.log(error);
+            }
+
+        });
+
+        Synch.Init().plugins.update.On((data) => {
+            const index = Player().data.findIndex(x => x.translation.id === data.kodik_dub);
+
+            if (index === -1)
+                return;
+
+            const title = Player().data[index].translation.title;
+            const date = data.date_update;
+
+            $(`.sync-data > .voice`).text(title);
+            $(`.sync-data > .episode`).text(`${data.kodik_episode} Эпизод`);
+            $(`.sync-data > .time`).text(`${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`);
+        });
     },
 
     show: function () {
-
+        $('body').addClass('loading');
+        $('#sync-anime').attr('checked', SYNC_ENABLE);
+        $('#anime-incognito').attr('checked', Private.INCOGNITO);
     },
 
     hide: function () {
-
+        $('body').removeClass('loading');
     },
 
     verif: function () {
@@ -160,8 +214,8 @@ function SetNote(note) {
             text.trim();
         }
         //Устанавливаем значения комментария в input
-        $('.content-score > .content-wraper > textarea').val(text.trim());
-        WindowScore.auto_grow(document.querySelector('.content-score > .content-wraper > textarea'));
+        $('textarea.noten').val(text.trim());
+        WindowScore.auto_grow(document.querySelector('textarea.noten'));
     }
 }
 

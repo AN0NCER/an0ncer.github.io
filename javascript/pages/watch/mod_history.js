@@ -1,5 +1,6 @@
 import { $ID } from "../watch.js";
 import { Player } from "./mod_player.js";
+import { Private } from "./mod_private.js";
 import { Screenshots } from "./mod_resource.js";
 
 //Управление историей
@@ -26,7 +27,7 @@ const _history = {
      * @param {Int} e - текущий эпизод
      */
     add(cnt = false, duration = 0, i = 0, e = Player().episodes.selected_episode) {
-        if (!this.shikiData) {
+        if (!this.shikiData || Private.INCOGNITO) {
             return;
         }
         const history = this.get();
