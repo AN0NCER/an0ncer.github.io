@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,55 +12,300 @@
     <link rel="stylesheet" href="/style/css/list.css">
     <link rel="manifest" href="/images/icons/manifest-o.json">
 </head>
-<body class="unselectable">
-    
-    <header>
-        <div class="wraper-input">
-            <input type="text" placeholder="Фильтр" class="search-filter">
-            <div class="icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path
-                        d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
-                </svg>
-            </div>
-        </div>
-        <div class="wraper-filter scroll-none">
-            <div class="btn-filter btn-selected" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="watching,rewatching">
-                Смотрю
-            </div>
-            <div class="btn-filter" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="planned">
-                Посмотрю
-            </div>
-            <div class="btn-filter" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="completed">
-                Просмотрены
-            </div>
-            <div class="btn-filter" data-type="tv,movie,ova,ona,special,music,tv_13,tv_24,tv_48,all" data-filtr="on_hold,dropped">
-                Заброшены
-            </div>
-            <div class="btn-filter" data-type="tv,ova,ona,special,music,tv_13,tv_24,tv_48,all", data-filtr="planned,completed,watching,rewatching,on_hold,dropped">
-                Сериалы
-            </div>
-            <div class="btn-filter" data-type="movie,all" data-filtr="planned,completed,watching,rewatching,on_hold,dropped">
-                Фильмы
-            </div>
-        </div>
-    </header>
-    <main>
-        <div class="content">
-        </div>
-    </main>
-    <footer></footer>
 
-    <span class="loading">
-        <h1 class="animation">Tunime</h1>
-        <span class="status">Идет авторизация в аккаунт</span>
+<body class="unselectable">
+    <div class="app">
+        <div class="wrapper">
+            <div class="search-block">
+                <div class="wrapper">
+                    <input type="text" id="mainsearch" placeholder="Поиск" autocomplete="off">
+                    <div class="search-icon" id="active-icon">
+                        <div class="wrapper hide">
+                            <span class="num">0</span>
+                            <div class="icons">
+                                <div class="loader"></div>
+                                <svg class="i-search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                    <path
+                                        d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                                </svg>
+                                <svg class="i-xmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-filter">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path
+                            d="M3.9 54.9C10.5 40.9 24.5 32 40 32l432 0c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9 320 448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6l0-79.1L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="title-block collections">
+                <div class="wrapper">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path
+                                d="M50.7 58.5L0 160l208 0 0-128L93.7 32C75.5 32 58.9 42.3 50.7 58.5zM240 160l208 0L397.3 58.5C389.1 42.3 372.5 32 354.3 32L240 32l0 128zm208 32L0 192 0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-224z" />
+                        </svg>
+                    </div>
+                    <span class="title">Колекции</span>
+                </div>
+                <div class="open-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
+                        <path
+                            d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="span-row scroll-none"></div>
+            <div class="anime-content">
+                <div class="fixed-wrapper">
+                    <div class="carousel-block">
+                        <span class="carousel types scroll-none">
+                            <span class="item-wrapper" data-id="0">
+                                <span class="item">Смотрю</span>
+                            </span>
+                            <span class="item-wrapper select" data-id="1">
+                                <span class="item">Посмотрю</span>
+                            </span>
+                            <span class="item-wrapper" data-id="2">
+                                <span class="item">Просмотрел</span>
+                            </span>
+                            <span class="item-wrapper" data-id="3">
+                                <span class="item">Бросил</span>
+                            </span>
+                            <span class="item-wrapper" data-id="4">
+                                <span class="item">Сериалы</span>
+                            </span>
+                            <span class="item-wrapper" data-id="5">
+                                <span class="item">Фильмы</span>
+                            </span>
+                            <span class="block-select"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="anime-list">
+                </div>
+                <div class="anime-search-result hide">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <span class="app-reload" style="top: -300px;">
+        <div class="wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path
+                    d="M463.5 224l8.5 0c13.3 0 24-10.7 24-24l0-128c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8l119.5 0z">
+                </path>
+            </svg>
+        </div>
     </span>
 
+    <!-- #region Window-Collection-->
+    <span class="windowed window-collection hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-collection hide">
+            <div class="content-wraper">
+                <div class="window-bar">
+                    <div class="bar-collection">
+                        <div class="window-title">Колекции</div>
+                        <div class="close-btn btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                                <path
+                                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-wrapper">
+                    <div class="list-collection scroll-none"></div>
+                </div>
+                <div class="collection-search">
+                    <div class="wrapper">
+                        <input type="text" placeholder="Поиск" class="input-collection" autocomplete="off">
+                        <div class="search-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                <path
+                                    d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </span>
+    </span>
+    <!-- #endregion -->
+
+    <!-- #region Window-Anime-->
+    <span class="windowed window-anime hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-anime hide">
+            <div class="content-wraper">
+                <div class="window-bar">
+                    <div class="bar-anime">
+                        <div class="window-title">Название коллекции</div>
+                        <div class="close-btn btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                                <path
+                                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper" id="window-anime">
+                    <div class="list-anime"></div>
+                </div>
+            </div>
+        </span>
+    </span>
+    <!-- #endregion -->
+
+    <!-- #region Window-Filter-->
+    <span class="windowed window-filter hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-filter hide">
+            <div class="content-wraper">
+                <div class="window-bar bar-filter">
+                    <div class="bar-filter">
+                        <div class="clear-btn">Очистить</div>
+                        <div class="window-title">Фильтр</div>
+                        <div class="close-btn btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                                <path
+                                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-filter" id="sort-update">
+                    <div class="wrapper">
+                        <div class="title">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                    <path
+                                        d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
+                                </svg>
+                            </div>
+                            <span>По <b>Изменениям</b></span>
+                        </div>
+                        <div class="filter-wrapper">
+                            <div class="filter-on">
+                                <div class="filter-order">
+                                    <div class="desc">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                            <path
+                                                d="M182.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8l256 0c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <div class="asc">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                            <path
+                                                d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="title-f-block">
+                    <div class="wrapper">
+                        Аниме
+                    </div>
+                </div>
+
+                <div class="item-filter" id="year">
+                    <div class="wrapper">
+                        <div class="title">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path
+                                        d="M128 0c17.7 0 32 14.3 32 32l0 32 128 0 0-32c0-17.7 14.3-32 32-32s32 14.3 32 32l0 32 48 0c26.5 0 48 21.5 48 48l0 48L0 160l0-48C0 85.5 21.5 64 48 64l48 0 0-32c0-17.7 14.3-32 32-32zM0 192l448 0 0 272c0 26.5-21.5 48-48 48L48 512c-26.5 0-48-21.5-48-48L0 192zm64 80l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm128 0l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zM64 400l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zm112 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16z" />
+                                </svg>
+                            </div>
+                            <span>По <b>Годам</b></span>
+                        </div>
+                        <div class="filter-wrapper">
+                            <div class="filter-on"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-filter" id="score">
+                    <div class="wrapper">
+                        <div class="title">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                    <path
+                                        d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+                                </svg>
+                            </div>
+                            <span>По <b>Оценкам</b></span>
+                        </div>
+                        <div class="filter-wrapper">
+                            <div class="filter-on"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-filter" id="popul">
+                    <div class="wrapper">
+                        <div class="title">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path
+                                        d="M159.3 5.4c7.8-7.3 19.9-7.2 27.7 .1c27.6 25.9 53.5 53.8 77.7 84c11-14.4 23.5-30.1 37-42.9c7.9-7.4 20.1-7.4 28 .1c34.6 33 63.9 76.6 84.5 118c20.3 40.8 33.8 82.5 33.8 111.9C448 404.2 348.2 512 224 512C98.4 512 0 404.1 0 276.5c0-38.4 17.8-85.3 45.4-131.7C73.3 97.7 112.7 48.6 159.3 5.4zM225.7 416c25.3 0 47.7-7 68.8-21c42.1-29.4 53.4-88.2 28.1-134.4c-4.5-9-16-9.6-22.5-2l-25.2 29.3c-6.6 7.6-18.5 7.4-24.7-.5c-16.5-21-46-58.5-62.8-79.8c-6.3-8-18.3-8.1-24.7-.1c-33.8 42.5-50.8 69.3-50.8 99.4C112 375.4 162.6 416 225.7 416z" />
+                                </svg>
+                            </div>
+                            <span>По <b>Популярности</b></span>
+                        </div>
+                        <div class="filter-wrapper">
+                            <div class="filter-on"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="title-f-block">
+                    <div class="wrapper">
+                        Отображение
+                    </div>
+                </div>
+
+                <div class="kind-show disable">
+                    <div class="wrapper">
+                        <div class="kind">
+                            Все
+                        </div>
+                        <div class="kind">
+                            Аниме
+                        </div>
+                        <div class="kind">
+                            Фильмы
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-accept">
+                    Применить
+                </div>
+            </div>
+        </span>
+    </span>
+    <!-- #endregion-->
     <script src="/javascript/library/jqery.min.js"></script>
     <script src="/javascript/library/anime.min.js"></script>
-    <script src="/javascript/services/dispatcher.js" type="module"></script>
+    <script src="/javascript/server.js"></script>
     <script src="/javascript/parametrs.js"></script>
-    <script src="/javascript/shikimori.js"></script>
     <script src="/javascript/pages/list.js" type="module"></script>
 </body>
+
 </html>
