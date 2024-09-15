@@ -1,0 +1,30 @@
+.app-reload {
+    position: fixed;
+    top: -300px;
+    left: 20px;
+    right: 20px;
+    bottom: calc(100dvh - 41px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: .3s ease-in-out;
+    pointer-events: none;
+    backdrop-filter: blur(0px);
+    border-radius: 15px;
+    pointer-events: none;
+
+    .wrapper {
+        background: #191C21;
+        position: relative;
+        display: grid;
+        place-items: center;
+        padding: 13px;
+        border-radius: 50%;
+        transition: .3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+        svg {
+            width: 15px;
+            fill: #fff;
+        }
+    }
+}

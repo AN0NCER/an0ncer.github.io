@@ -70,14 +70,11 @@ body {
 
 body[data-orientation="0"]{
     .application-menu{
+        transition: 0.3s ease-in-out;
         &.hide{
             transform: translateY(100%);
         }
     }
-}
-
-.application-menu {
-    transition: 0.3s ease-in-out;
 }
 
 @import './list/window/filter';

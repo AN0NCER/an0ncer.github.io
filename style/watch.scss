@@ -11,7 +11,7 @@ body {
     padding-right: env(safe-area-inset-right);
 
     &.loading {
-        overflow-y: hidden;
+        overflow: hidden !important;
     }
 }
 
@@ -214,7 +214,7 @@ header {
                 }
             }
 
-            svg{
+            svg {
                 fill: #101318;
             }
         }
@@ -964,10 +964,12 @@ footer {
 @import './cards';
 @import './windowed';
 @import './window/translation';
-@import './window/score';
+@import './watch/score';
+@import './watch/collection';
 @import './watch/download';
 @import './watch/franchise';
 @import './popup';
+@import './watch/reload';
 
 .card-anime {
     min-width: 195px;
