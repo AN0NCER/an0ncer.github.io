@@ -1,7 +1,7 @@
 import { InitMenu } from "../menu.js";
 import { Main, User } from "../modules/ShikiUSR.js";
 import { Friends, Users } from "../modules/ShikiAPI.js";
-import { ScrollElementWithMouse, Sleep } from "../modules/funcitons.js";
+import { ScrollElementWithMouse, Sleep } from "../modules/functions.js";
 import { InitAchivements } from "./user/mod_achivements.js";
 import { InitLeve } from "./user/mod_level.js";
 import { GetIdLoadUser, LoadScreen, UserData } from "./user/mod_load.js";

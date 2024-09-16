@@ -1,0 +1,187 @@
+.anime-content {
+    position: relative;
+    min-height: 100dvh;
+
+    .fixed-wrapper {
+        top: 60px;
+        position: sticky;
+        z-index: 5;
+        background: #101318;
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        .carousel-block {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+
+            .carousel {
+                display: flex;
+                gap: 10px;
+                font-family: Manrope;
+                overflow-x: auto;
+                margin-left: 14px;
+                margin-right: 14px;
+                position: relative;
+
+                .item-wrapper {
+                    position: relative;
+                    z-index: 2;
+                    min-height: 36px;
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+
+                    .item {
+                        display: flex;
+                        font-size: 13px;
+                        color: #A4A4A4;
+                        padding: 0px 16px;
+                        border-radius: 6px;
+                    }
+
+                    &.select {
+                        .item {
+                            color: #fff;
+                            font-weight: bold;
+                        }
+                    }
+                }
+
+                &>span.block-select {
+                    display: flex;
+                    height: 36px;
+                    background: #46A0F5;
+                    border-radius: 4px;
+                    position: absolute;
+                    z-index: 1;
+                    transition: .3s ease-in-out;
+                }
+            }
+        }
+    }
+
+    .anime-list,
+    .anime-search-result {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(auto-fit, 200px);
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+        margin-right: 10px;
+
+        &.hide {
+            display: none;
+        }
+
+        .card-anime {
+            &.hide {
+                display: none;
+            }
+        }
+
+        .card-loader {
+            // width: 200px;
+            // height: 304.984px;
+            // max-height: 200px;
+            aspect-ratio: 1 / 1.44;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .loader {
+                transform: rotateZ(45deg);
+                perspective: 1000px;
+                border-radius: 50%;
+                width: 48px;
+                height: 48px;
+                color: #fff;
+            }
+
+            .loader:before,
+            .loader:after {
+                content: '';
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: inherit;
+                height: inherit;
+                border-radius: 50%;
+                transform: rotateX(70deg);
+                animation: .8s spin linear infinite;
+            }
+
+            .loader:after {
+                color: #46A0F5;
+                transform: rotateY(70deg);
+                // animation-delay: .4s;
+            }
+
+            @keyframes rotate {
+                0% {
+                    transform: translate(-50%, -50%) rotateZ(0deg);
+                }
+
+                100% {
+                    transform: translate(-50%, -50%) rotateZ(360deg);
+                }
+            }
+
+            @keyframes rotateccw {
+                0% {
+                    transform: translate(-50%, -50%) rotate(0deg);
+                }
+
+                100% {
+                    transform: translate(-50%, -50%) rotate(-360deg);
+                }
+            }
+
+            @keyframes spin {
+
+                0%,
+                100% {
+                    box-shadow: .2em 0px 0 0px currentcolor;
+                }
+
+                12% {
+                    box-shadow: .2em .2em 0 0 currentcolor;
+                }
+
+                25% {
+                    box-shadow: 0 .2em 0 0px currentcolor;
+                }
+
+                37% {
+                    box-shadow: -.2em .2em 0 0 currentcolor;
+                }
+
+                50% {
+                    box-shadow: -.2em 0 0 0 currentcolor;
+                }
+
+                62% {
+                    box-shadow: -.2em -.2em 0 0 currentcolor;
+                }
+
+                75% {
+                    box-shadow: 0px -.2em 0 0 currentcolor;
+                }
+
+                87% {
+                    box-shadow: .2em -.2em 0 0 currentcolor;
+                }
+            }
+
+        }
+    }
+
+    .anime-list {
+        margin-bottom: max(var(--sab), 10px);
+    }
+}

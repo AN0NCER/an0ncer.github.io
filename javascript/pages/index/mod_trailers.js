@@ -1,7 +1,7 @@
 import { ShowInfo } from "../../modules/Popup.js";
 import { UserRates } from "../../modules/ShikiAPI.js";
 import { User } from "../../modules/ShikiUSR.js";
-import { Sleep } from "../../modules/funcitons.js";
+import { Sleep } from "../../modules/functions.js";
 import { AnimeHidePreview, AnimeLoadingPlayer, AnimePausePlayer, AnimePlayPlayer, AnimeShowPreview } from "./mod_trailers_animation.js";
 
 const TrailersUrl = 'https://raw.githubusercontent.com/AN0NCER/anime-data/main/data-v2.json';

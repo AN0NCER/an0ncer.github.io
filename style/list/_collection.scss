@@ -1,0 +1,249 @@
+.span-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: scroll;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.span-block {
+    display: grid;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+
+    .item-collection {
+        width: 100%;
+        min-width: auto !important;
+        box-sizing: border-box;
+
+        .bg-collection {
+            height: 150px;
+        }
+    }
+}
+
+.item-collection {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    width: 200px;
+    padding: 10px;
+    gap: 10px;
+    background: #191c21;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 109, 117, 0.5);
+        border-radius: 5px;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    &.loading {
+        &::after {
+            animation: loading 1.5s infinite;
+            opacity: 1;
+        }
+    }
+
+    &.not-found {
+        .info-collection {
+            flex-direction: row;
+            flex: 1 0 0;
+            align-items: center;
+            justify-content: center;
+            gap: 0px;
+
+            .collection-counts {
+                display: none;
+            }
+        }
+
+        &::after {
+            display: none;
+        }
+    }
+
+    .bg-collection {
+        display: flex;
+        gap: 5px;
+        height: 186px;
+
+        .preview {
+            border-radius: 3px;
+            width: 45px;
+            height: 100%;
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center;
+
+            &.loading {
+                background-color: #f6f7f8;
+                background: linear-gradient(to right, rgba(238, 238, 238, 0.2) 8%, #bbbbbb 18%, rgba(238, 238, 238, 0.2) 33%);
+                background-size: 800px 104px;
+
+                animation-duration: 4s;
+                animation-fill-mode: forwards;
+                animation-iteration-count: infinite;
+                animation-name: placeHolderShimmer;
+                animation-timing-function: linear;
+                animation-delay: 0.5s;
+            }
+        }
+
+        .block-1 {
+            overflow: hidden;
+            display: flex;
+            border-radius: 5px;
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+
+            &.loading {
+                background-color: #f6f7f8;
+                background: linear-gradient(to right, rgba(238, 238, 238, 0.2) 8%, #bbbbbb 18%, rgba(238, 238, 238, 0.2) 33%);
+                background-size: 800px 104px;
+
+                animation-duration: 4s;
+                animation-fill-mode: forwards;
+                animation-iteration-count: infinite;
+                animation-name: placeHolderShimmer;
+                animation-timing-function: linear;
+            }
+        }
+
+        .block-2 {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        img {
+            width: 45px;
+        }
+
+        &.count-0 {
+            .block-1 {
+                background-image: url('data:image/svg+xml,<svg width="438" height="529" viewBox="0 0 438 529" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M64 0C28.7 0 0 28.7 0 64V448C0 483.3 28.7 512 64 512H233.399C213.213 488.678 201 458.265 201 425C201 351.546 260.546 292 334 292C351.685 292 368.564 295.452 384 301.718V160H256C238.3 160 224 145.7 224 128V0H64ZM256 128H384L256 0V128Z" fill="%23383838"/><g clip-path="url(%23clip0_986_2738)"><path d="M334.5 529C361.95 529 388.276 518.096 407.686 498.686C427.096 479.276 438 452.95 438 425.5C438 398.05 427.096 371.724 407.686 352.314C388.276 332.904 361.95 322 334.5 322C307.05 322 280.724 332.904 261.314 352.314C241.904 371.724 231 398.05 231 425.5C231 452.95 241.904 479.276 261.314 498.686C280.724 518.096 307.05 529 334.5 529ZM324.797 461.078V435.203H298.922C293.545 435.203 289.219 430.877 289.219 425.5C289.219 420.123 293.545 415.797 298.922 415.797H324.797V389.922C324.797 384.545 329.123 380.219 334.5 380.219C339.877 380.219 344.203 384.545 344.203 389.922V415.797H370.078C375.455 415.797 379.781 420.123 379.781 425.5C379.781 430.877 375.455 435.203 370.078 435.203H344.203V461.078C344.203 466.455 339.877 470.781 334.5 470.781C329.123 470.781 324.797 466.455 324.797 461.078Z" fill="%23383838"/></g><defs><clipPath id="clip0_986_2738"><rect width="207" height="207" fill="white" transform="translate(231 322)"/></clipPath></defs></svg>');
+                background-size: 50px;
+                background-repeat: no-repeat;
+            }
+
+            .block-2 {
+                display: none;
+            }
+        }
+
+        &.count-1 {
+            .preview {
+                display: none;
+            }
+        }
+
+        &.count-2 {
+            .block-2 {
+                width: 100%;
+            }
+
+            .preview {
+                width: 100%;
+
+                &:nth-child(2),
+                &:nth-child(3) {
+                    display: none;
+                }
+            }
+        }
+
+        &.count-3 {
+            .block-2 {
+                width: 60%;
+            }
+
+            .preview {
+                width: 100%;
+
+                &:nth-child(3) {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .info-collection {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .collection-name,
+    .collection-counts {
+        font-family: 'Manrope';
+        font-weight: bold;
+
+        &.collection-name {
+            color: #fff;
+            font-size: 13px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &.collection-counts {
+            color: #C2C2C2;
+            font-size: 11px;
+        }
+    }
+}
+
+body.menuver[data-orientation="270"] {
+    .span-row {
+        margin-left: max(10px, var(--sal));
+        margin-right: 20px;
+    }
+}
+
+body.menuver[data-orientation="90"] {
+    .span-row {
+        margin-right: max(10px, var(--sar));
+    }
+}
+
+@keyframes placeHolderShimmer {
+    0% {
+        background-position: -800px 0
+    }
+
+    100% {
+        background-position: 800px 0
+    }
+}
+
+
+@keyframes loading {
+    0% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.1;
+    }
+
+    100% {
+        opacity: 0.5;
+    }
+}

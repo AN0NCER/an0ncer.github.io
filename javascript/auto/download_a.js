@@ -1,4 +1,4 @@
-import { Sleep } from "../modules/funcitons.js";
+import { Sleep } from "../modules/functions.js";
 import { ShowInfo } from "../modules/Popup.js";
 import { UserRates } from "../modules/ShikiAPI.js";
 import { User } from "../modules/ShikiUSR.js";

@@ -1,4 +1,4 @@
-import { ScrollElementWithMouse, Sleep } from "../../modules/funcitons.js";
+import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { Player } from "./mod_player.js";
@@ -143,7 +143,7 @@ class DownloadAnime {
         dL.download = `${this.data.name}-${this.index}${translation}.ts`;
         // Автоматически нажимаем на ссылку для скачивания
         dL.click();
-        // Очищаем ссылку и удаляем ее из DOM\
+        // Очищаем ссылку и удаляем ее из DOM
         URL.revokeObjectURL(dL.href);
         this.#OnCompleted.forEach(event => event(this.index));
     }
@@ -157,7 +157,7 @@ class DownloadAnime {
 
         const url = data[quality][0].src.indexOf("http") != -1 ? data[quality][0].src : "https:" + data[quality][0].src;
         // Строка, которую нужно удалить
-        const searchString = `${quality}.mp4:hls:manifest.m3u8`;
+        let searchString = `${quality}.mp4:hls:manifest.m3u8`;
 
         if (this.#abortet) {
             this.#OnAbbortet.forEach(event => event());
@@ -166,6 +166,19 @@ class DownloadAnime {
         }
 
         fetch(url).then(response => {
+            // Регулярное выражение для извлечения части ссылки с качеством
+            const pattern = /[^\/]+\.[^\/]+:hls:manifest\.m3u8/;
+            
+            // Извлечение части ссылки
+            const match = response.url.match(pattern);
+            
+            // Проверка и вывод результата
+            if (match) {
+                searchString = match[0];
+            } else {
+                return this.#OnError.forEach((event) => { event('critical', 'Не удалось преобразовать ссылку.') });
+            }
+            
             // Удалить подстроку из URL
             const urlkodik = response.url.substring(0, response.url.indexOf(searchString));
 
@@ -576,6 +589,8 @@ const Structure = {
     anim: {
         showed: function () {
             let SelPos = $('.d-episode.selected').position();
+            if(SelPos == undefined)
+                return;
             const WidthEpisodes = $('.wrapper-episodes-d').width();
             const sizeEpisode = (55 + 3);
             if ((WidthEpisodes / 2) > SelPos.left) {

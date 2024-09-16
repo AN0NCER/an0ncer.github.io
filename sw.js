@@ -1,5 +1,5 @@
-const version = '2.3.2';
-const hash = '27eid';
+const version = '2.4.0';
+const hash = '00e74';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
     // Директория: /images/genres
@@ -29,9 +29,10 @@ const appShellFilesToCache = [
     "/images/icons/logo-x512-b.png",
     "/images/icons/logo-x512-o.png",
     // Директория: /images
-    "/images/anime-dragon.png",
+    "/images/anime-not.png",
     "/images/ava.jpeg",
     "/images/black-bg-player.png",
+    "/images/collections.png",
     "/images/error-trailers.png",
     "/images/icon-web.png",
     "/images/login-icon.png",
@@ -54,7 +55,9 @@ const appShellFilesToCache = [
     // Директория: /javascript/modules
     "/javascript/modules/ActionVerify.js",
     "/javascript/modules/AnimeCard.js",
-    "/javascript/modules/funcitons.js",
+    "/javascript/modules/Collection.js",
+    "/javascript/modules/EventTools.js",
+    "/javascript/modules/functions.js",
     "/javascript/modules/header.js",
     "/javascript/modules/Kodik.js",
     "/javascript/modules/Popup.js",
@@ -73,6 +76,16 @@ const appShellFilesToCache = [
     "/javascript/pages/index/mod_trailers.js",
     "/javascript/pages/index/mod_trailers_animation.js",
     "/javascript/pages/index/mod_window.js",
+    // Директория: /javascript/pages/list
+    "/javascript/pages/list/mod_alist.js",
+    "/javascript/pages/list/mod_carousel.js",
+    "/javascript/pages/list/mod_collections.js",
+    "/javascript/pages/list/mod_core.js",
+    "/javascript/pages/list/mod_filter.js",
+    "/javascript/pages/list/mod_html.js",
+    "/javascript/pages/list/mod_search.js",
+    "/javascript/pages/list/mod_ui.js",
+    "/javascript/pages/list/mod_w_anime.js",
     // Директория: /javascript/pages/player
     "/javascript/pages/player/mod_animation.js",
     "/javascript/pages/player/mod_api.js",
@@ -103,11 +116,13 @@ const appShellFilesToCache = [
     "/javascript/pages/user/mod_load.js",
     "/javascript/pages/user/mod_stats.js",
     // Директория: /javascript/pages/watch
+    "/javascript/pages/watch/mod_collection.js",
     "/javascript/pages/watch/mod_download.js",
     "/javascript/pages/watch/mod_franchise.js",
     "/javascript/pages/watch/mod_history.js",
     "/javascript/pages/watch/mod_load.js",
     "/javascript/pages/watch/mod_player.js",
+    "/javascript/pages/watch/mod_private.js",
     "/javascript/pages/watch/mod_resource.js",
     "/javascript/pages/watch/mod_scrolling.js",
     "/javascript/pages/watch/mod_sdata.js",
@@ -134,7 +149,6 @@ const appShellFilesToCache = [
     "/javascript/menu.js",
     "/javascript/parametrs.js",
     "/javascript/server.js",
-    "/javascript/shikimori.js",
     // Директория: /style/css/min
     "/style/css/min/swiper-bundle.min.css",
     // Директория: /style/css

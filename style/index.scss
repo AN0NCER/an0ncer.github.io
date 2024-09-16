@@ -94,19 +94,22 @@ header {
 
       svg {
         fill: #fff;
-        height: 14px;
+        height: 17px;
         z-index: 1;
       }
 
-      &>.dot {
-        $size: 6px;
-        width: $size;
-        height: $size;
-        background: #2393F1;
-        border-radius: 50%;
-        position: absolute;
-        top: 8px;
-        right: 12px;
+      svg.dot {
+        display: none;
+      }
+
+      &.dot {
+        svg.mail {
+          display: none;
+        }
+
+        svg.dot {
+          display: block;
+        }
       }
     }
   }

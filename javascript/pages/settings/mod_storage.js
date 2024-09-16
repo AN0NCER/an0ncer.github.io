@@ -203,7 +203,7 @@ function importJsonToLocalStorage() {
     // Устанавливаем обработчик события изменения файла
     input.addEventListener('change', function (event) {
         CreateVerify("Внимание! Вы точно хотите заменить текущие данные из файла?").then(() => {
-            const file = event.target.files[0];
+            const file = input.files[0];
             const reader = new FileReader();
 
             // Обработчик события загрузки файла

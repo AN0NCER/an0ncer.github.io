@@ -49,7 +49,9 @@ function CreateElementHistory(data) {
     const time = Math.floor(data.duration / 60) + ':' + (data.duration % 60).toString().padEnd(2, '0');
     const ost = Math.floor((data.fullduration - data.duration) / 60) + ':' + Math.floor(((data.fullduration - data.duration) % 60)).toString().padEnd(2, '0');
     const link = `watch.html?id=${data.id}&player=true&continue=${data.continue}`;
-    const image = data.image.includes("https://nyaa.shikimori.me/") ? data.image.replace('https://nyaa.shikimori.me/', '') : data.image.replace('https://nyaa.shikimori.one/', '') ? data.image.replace('https://nyaa.shikimori.one/', '') : data.image;
+    let image = data.image.includes("https://nyaa.shikimori.me/") ? data.image.replace('https://nyaa.shikimori.me/', '') : data.image.replace('https://nyaa.shikimori.one/', '') ? data.image.replace('https://nyaa.shikimori.one/', '') : data.image;
+    if(!image.includes('https://'))
+        image = `${SHIKIURL.suburl('nyaa')}/${image}`;
     const name = data.name ? data.name : "Аниме";
     const episode = data.episode ? data.episode : "?";
     const type = data.type ? data.type : "Аниме";
@@ -97,7 +99,7 @@ function CreateElementHistory(data) {
                     <span>ОСТ <span>${ost}</span></span>
                 </div>
             </div>
-            <div class="continue-frame" style="background-image: url(${SHIKIURL.suburl('nyaa')}/${image});">
+            <div class="continue-frame" style="background-image: url(${image});">
                 <div class="continue-time">
                     <span>${time}</span>
                 </div>

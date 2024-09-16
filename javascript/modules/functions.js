@@ -413,3 +413,14 @@ export function ClearParams(params) {
     params.forEach(param => url.searchParams.delete(param));
     window.history.replaceState(null, '', url.toString());
 }
+
+/**
+ * Проверяет, равны ли два массива.
+ * @param {Array} a - Первый массив для сравнения.
+ * @param {Array} b - Второй массив для сравнения.
+ * @returns {boolean} - `true`, если массивы равны, в противном случае `false`.
+ */
+export function arraysAreEqual(a, b) {
+    if (a.length != b.length) return false;
+    return a.every(element => b.includes(element)) && b.every(element => a.includes(element));
+}

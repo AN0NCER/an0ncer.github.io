@@ -1,240 +1,91 @@
-$bg: #101318;
+:root {
+    --sat: env(safe-area-inset-top);
+    --sar: env(safe-area-inset-right);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+}
 
+html,
 body {
-    background: $bg;
-    // width: 100%;
-    overflow-x: hidden;
+    background: #101318;
+    overflow: hidden;
     -webkit-text-size-adjust: none;
-}
-
-header {
-    display: flex;
-    flex-direction: column;
-    margin-left: max(20px, env(safe-area-inset-left));
-    margin-right: max(20px, env(safe-area-inset-right));
-    padding-top: 20px;
-    max-width: 900px;
-
-    .wraper-input {
-        position: relative;
-        display: flex;
-        align-items: center;
-
-
-
-        .icon {
-            position: absolute;
-            left: 10px;
-            display: flex;
-
-            svg {
-                width: 16px;
-                fill: #fff;
-                opacity: 0.7;
-            }
-        }
-
-
-    }
-
-    .search-filter {
-        font-family: Manrope;
-        width: 100%;
-        height: 40px;
-        border-radius: 7px;
-        border: none;
-        font-size: 13px;
-        background: #282D39;
-        color: #fff;
-        padding-left: 10px;
-        outline: none;
-
-        &::placeholder {
-            padding-left: 30px;
-            color: #fff;
-            opacity: 0.7;
-            transition: .3s ease-in-out;
-        }
-
-        &:focus {
-            &::placeholder {
-                padding-left: 0px;
-            }
-        }
-
-        &:not(:placeholder-shown)~.icon {
-            opacity: 0;
-        }
-
-        &:focus~.icon {
-            opacity: 0;
-        }
-
-        @supports (-moz-appearance:none) {
-            &:placeholder-shown {
-                padding-left: 40px;
-                transition: .3s ease-in-out;
-            }
-
-            &:focus {
-                &:placeholder-shown {
-                    padding-left: 10px;
-                }
-            }
-        }
-    }
-
-    .wraper-filter {
-        display: flex;
-        font-family: Manrope;
-        color: #fff;
-        overflow-x: auto;
-        gap: 10px;
-        margin-top: 15px;
-
-        .btn-filter {
-            display: grid;
-            padding: 0 15px;
-            place-items: center;
-            height: 40px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 15px;
-
-            &.btn-selected {
-                background: linear-gradient(98.26deg, #51B2FF 0%, #2672DA 100%);
-            }
-        }
-    }
-}
-
-main {
-    padding-top: 20px;
-    max-width: 900px;
-    margin-left: max(20px, env(safe-area-inset-left));
-    margin-right: max(20px, env(safe-area-inset-right));
-
-    .content {
-        display: grid;
-        gap: 10px;
-        grid-template-columns: repeat(auto-fit, 200px);
-        align-items: center;
-        justify-content: center;
-    }
-}
-
-span.loading {
-    position: absolute;
-    display: none;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background: $bg;
-    z-index: 99;
-
-    h1 {
-        font-family: 'Nova Square', cursive;
-        color: #fff;
-        font-size: 40px;
-        margin-top: 50px;
-    }
-
-    span.status {
-        color: #fff;
-        font-family: Manrope;
-        margin-top: 20px;
-    }
-}
-
-footer {
-    display: flex;
-    margin-top: max(150px, calc(env(safe-area-inset-top) + 61px));
-    margin-left: max(20px, env(safe-area-inset-left));
-    margin-right: max(20px, env(safe-area-inset-right));
-}
-
-.scroll-none {
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-}
-
-@media screen and (min-width: 900px) {
-
-    header,
-    main {
-        margin: 0 auto;
-    }
-}
-
-@media screen and (max-width: 490px) {
-    main {
-        .content {
-            grid-template-columns: 1fr 1fr;
-
-            a {
-                .card-content {
-                    max-height: 250px;
-                }
-
-                &:empty {
-                    min-height: 270px;
-                }
-            }
-        }
-    }
-}
-
-/*Animation*/
-@keyframes loading {
-    0% {
-        opacity: .04;
-    }
-
-    50% {
-        opacity: .4;
-    }
-
-    100% {
-        opacity: .04;
-    }
 }
 
 @import './phone_menu';
 @import './cards';
+@import './windowed';
+@import './popup';
 
-body.menuver {
-    &[data-orientation="270"] {
-        header {
-            margin-right: 20px;
-        }
+@import './list/collection';
+@import './watch/reload';
 
-        main {
-            margin-right: 20px;
+.app {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100dvh;
+    background: #101318;
 
-            .content {
-                justify-content: flex-start;
-            }
-        }
+    &>.wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 900px;
+
+        @import './list/main';
+        @import './list/content';
     }
 
-    &[data-orientation="90"] {
-        header {
-            margin-left: 20px;
+    @media screen and (min-width: 900px) {
+        &>.wrapper {
+            margin: 0 auto;
         }
+    }
+}
 
-        main {
-            margin-left: 20px;
-
-            .content {
-                justify-content: flex-start;
-            }
+.card-anime {
+    .card-content {
+        // aspect-ratio: auto !important;
+        .score {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            height: 29px;
+            width: 29px;
+            background: linear-gradient(98.26deg, #51B2FF 0%, #2672DA 100%);
+            backdrop-filter: blur(2px);
+            border-radius: 3px;
+            // padding: 4px 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-family: "Nova Square";
+            font-size: 12px;
+            z-index: 4;
         }
+    }
+}
+
+body[data-orientation="0"]{
+    .application-menu{
+        transition: 0.3s ease-in-out;
+        &.hide{
+            transform: translateY(100%);
+        }
+    }
+}
+
+@import './list/window/filter';
+@import './list/window/collection';
+@import './list/window/anime';
+
+@media screen and (max-width: 490px) {
+
+    .anime-list,
+    .list-anime,
+    .anime-search-result {
+        grid-template-columns: 1fr 1fr !important;
     }
 }

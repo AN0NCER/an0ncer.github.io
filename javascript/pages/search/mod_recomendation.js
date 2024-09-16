@@ -1,7 +1,7 @@
 import { ACard } from "../../modules/AnimeCard.js";
 import { UserRates, Animes } from "../../modules/ShikiAPI.js";
 import { User } from "../../modules/ShikiUSR.js";
-import { Sleep, sha256 } from "../../modules/funcitons.js";
+import { Sleep, sha256 } from "../../modules/functions.js";
 
 const key = "tunime-recomendation";
 const keyDB = "recomendation-database";

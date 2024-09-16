@@ -1,7 +1,22 @@
-import { Sleep } from "../modules/funcitons.js";
+import { Sleep } from "./functions.js";
 import { ShowInfo } from "./Popup.js";
 
+/**
+ * @typedef {Object} target
+ * @property {function():void} init - Метод для инициализации окна
+ * @property {function():void} show - Метод для показа окна
+ * @property {function():void} hide - Метод для скрытия окна
+ * @property {Object} anim
+ * @property {function():void} anim.showed - Метод для анимации показа окна
+ * @property {function():void} anim.hided - Метод для анимации скрытия окна
+ * @property {function():boolean} verif - Функция для проверки авторизации
+ */
+
 export class WindowManagement {
+    /**
+     * @param {target} target - Объект с методами для работы с окном
+     * @param {string} el - Селектор элемента окна
+     */
     constructor(target = {
         init: function () { },
         show: function () { },

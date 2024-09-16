@@ -371,7 +371,7 @@
                 Франшиза
             </div>
             <div class="list-franchise scroll-none" style="display: none">
-            <!-- #endregion -->
+                <!-- #endregion -->
             </div>
             <!-- #region Similiar-->
             <div class="title count similiar-title" style="display: none;">
@@ -471,7 +471,6 @@
                         <div class="sc sc-8" data-score="8">8</div>
                         <div class="sc sc-9" data-score="9">9</div>
                         <div class="sc sc-10" data-score="10">10</div>
-                        <div class="shadow"></div>
                     </div>
                     <div class="block-clear-score disabled">
                         <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -481,18 +480,114 @@
                         </svg>
                     </div>
                 </span>
-                <span class="title-block">Заметка</span>
-                <textarea
+                <span class="title-block">Заметки</span>
+                <textarea class="noten"
                     placeholder="Оставьте свое впечатление об просмотренном или заброшенным аниме, поделитесь со своим мнением !"></textarea>
                 <div class="block-check">
                     <input type="checkbox" id="info-anime" name="info">
                     <label for="info-anime">
-                        <div class="check-box"></div>
-                        Записать информацию о просмотре
+                        <div class="check-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="9" height="7" viewBox="0 0 9 7" fill="none"
+                                class="check-arow">
+                                <path d="M1 3.22L3.66571 5.44L7.22 1" stroke="#D4D4D8" stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        Указывать выбранную озвучку
                     </label>
+                </div>
+                <span class="title-block">Колекции</span>
+                <span class="collection-select btn">
+                    <span class="collection-name">Не выбрано</span>
+                    <span class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M50.7 58.5L0 160l208 0 0-128L93.7 32C75.5 32 58.9 42.3 50.7 58.5zM240 160l208 0L397.3 58.5C389.1 42.3 372.5 32 354.3 32L240 32l0 128zm208 32L0 192 0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-224z"/></svg>
+                    </span>
+                </span>
+                <span class="title-block">Настройки</span>
+                <div class="block-check">
+                    <input type="checkbox" id="anime-incognito" name="incognito">
+                    <label for="anime-incognito">
+                        <div class="check-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="9" height="7" viewBox="0 0 9 7" fill="none"
+                                class="check-arow">
+                                <path d="M1 3.22L3.66571 5.44L7.22 1" stroke="#D4D4D8" stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        Не записывать просмотр
+                    </label>
+                </div>
+                <div class="anime-border-sync">
+                    <div class="circle-a"></div>
+                    <div class="circle-b"></div>
+                    <div class="block-check anime-sync">
+                        <input type="checkbox" id="sync-anime" name="sync">
+                        <label for="sync-anime">
+                            <div class="circle-a"></div>
+                            <div class="circle-b"></div>
+                            <div class="sync-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                    <path
+                                        d="M176 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40c-35.3 0-64 28.7-64 64l-40 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l40 0 0 56-40 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l40 0 0 56-40 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l40 0c0 35.3 28.7 64 64 64l0 40c0 13.3 10.7 24 24 24s24-10.7 24-24l0-40 56 0 0 40c0 13.3 10.7 24 24 24s24-10.7 24-24l0-40 56 0 0 40c0 13.3 10.7 24 24 24s24-10.7 24-24l0-40c35.3 0 64-28.7 64-64l40 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-40 0 0-56 40 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-40 0 0-56 40 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-40 0c0-35.3-28.7-64-64-64l0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40-56 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40-56 0 0-40zM160 128l192 0c17.7 0 32 14.3 32 32l0 192c0 17.7-14.3 32-32 32l-192 0c-17.7 0-32-14.3-32-32l0-192c0-17.7 14.3-32 32-32zm192 32l-192 0 0 192 192 0 0-192z" />
+                                </svg>
+                            </div>
+                            <div class="sync-status">
+                                <div class="name-param">Аниме-Синхронизация</div>
+                                <div class="sync-data"><span class="voice">Озвучка</span><svg
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                        <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+                                    </svg><span class="episode">Эпизод</span><svg xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 512 512">
+                                        <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+                                    </svg><span class="time">Дата</span></div>
+                            </div>
+                            <div class="check-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="7" viewBox="0 0 9 7"
+                                    fill="none" class="check-arow">
+                                    <path d="M1 3.22L3.66571 5.44L7.22 1" stroke="#D4D4D8" stroke-width="2"
+                                        stroke-linecap="round" />
+                                </svg>
+                            </div>
+                        </label>
+                    </div>
                 </div>
                 <span class="btn-commit">Сохранить</span>
             </span>
+        </span>
+    </span>
+    <!-- #endregion -->
+
+    <!-- #region Window-Collection-->
+    <span class="windowed window-collection hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-collection hide">
+            <div class="content-wraper">
+                <div class="window-bar bar-collection">
+                    <div class="window-title">Колекции</div>
+                    <div class="add-to-collection btn">
+                        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M13.6667 6.79331H11.7401C10.1601 6.79331 8.87341 5.50665 8.87341 3.92665V1.99998C8.87341 1.63331 8.57341 1.33331 8.20675 1.33331H5.38008C3.32675 1.33331 1.66675 2.66665 1.66675 5.04665V10.9533C1.66675 13.3333 3.32675 14.6666 5.38008 14.6666H10.6201C12.6734 14.6666 14.3334 13.3333 14.3334 10.9533V7.45998C14.3334 7.09331 14.0334 6.79331 13.6667 6.79331Z"
+                                fill="white" />
+                            <path
+                                d="M10.5333 1.47335C10.26 1.20002 9.78662 1.38668 9.78662 1.76668V4.09335C9.78662 5.06668 10.6133 5.87335 11.62 5.87335C12.2533 5.88002 13.1333 5.88002 13.8866 5.88002C14.2666 5.88002 14.4666 5.43335 14.2 5.16668C13.24 4.20002 11.52 2.46002 10.5333 1.47335Z"
+                                fill="white" />
+                        </svg>
+
+                    </div>
+                </div>
+                <div class="list-collection scroll-none"></div>
+                <div class="collection-search" data-state="search">
+                    <input type="text" placeholder="Имя коллекции" class="input-collection">
+                    <div class="btn add-new-collection">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path
+                                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" />
+                        </svg>
+                    </div>
+                </div>
+                <span class="btn-commit">Применить</span>
+            </div>
         </span>
     </span>
     <!-- #endregion -->
@@ -531,6 +626,14 @@
                 </label>
             </span>
         </span>
+    </span>
+    <span class="app-reload">
+        <div class="wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path
+                    d="M463.5 224l8.5 0c13.3 0 24-10.7 24-24l0-128c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8l119.5 0z" />
+            </svg>
+        </div>
     </span>
     <!-- #endregion -->
     <!-- #endregion -->

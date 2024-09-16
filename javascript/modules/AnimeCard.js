@@ -73,5 +73,43 @@ export const ACard = {
                     ${score}
             </div></div></div>`
         }
+    },
+
+    /**
+     * Генерация карточки аниме
+     * @param {{ type: "a" | "div", anime: {id:string, poster: {mainUrl:string}, russian:string, airedOn: {year:number}, score:number}, data: {key:value}, exclude: [string] }} data - Данные аниме
+     * @returns DOM елемента 
+     */
+    GenV2: function ({ type = 'a', anime, data, exclude = [] } = {}) {
+        if (type == 'a') {
+            return `<a href="/watch.html?id=${anime.id}" class="card-anime" data-id="${anime.id}" ${Data()}>${Gen()}</a>`;
+        } else {
+            return `<div class="card-anime" data-id="${anime.id}" ${Data()}>${Gen()}</div>`;
+        }
+
+        function Gen() {
+            return `<div class="card-content">
+                        <img src="${anime.poster.mainUrl}" class="blur">
+                        <img src="${anime.poster.mainUrl}">
+                        <div class="title"><span>${anime.russian}</span></div>
+                        ${data?.score ? `<div class="score">${data.score}</div>` : ''}
+                    </div>
+                    <div class="card-information">
+                        <div class="year">${anime.airedOn.year}</div>
+                        <div class="score">${icon_score}${anime.score}</div>
+                    </div>`;
+        }
+
+        function Data() {
+            if (!data) return '';
+
+            let str = '';
+            for (const key in data) {
+                if (exclude.includes(key)) continue;
+                str += `data-${key}="${data[key]}"`;
+            }
+
+            return str;
+        }
     }
 };

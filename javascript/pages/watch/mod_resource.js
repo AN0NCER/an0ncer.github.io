@@ -1,14 +1,14 @@
 import { ACard } from "../../modules/AnimeCard.js";
 import { SHIKIURL } from "../../modules/Settings.js";
 import { Animes, GraphQl } from "../../modules/ShikiAPI.js";
-import { Sleep } from "../../modules/funcitons.js";
+import { Sleep } from "../../modules/functions.js";
 import { $ID } from "../watch.js";
 import { UserRate } from "./mod_urate.js";
 import { LoadScreen } from "./mod_load.js";
 import { History } from "./mod_history.js";
 import { InitFranchises } from "./mod_franchise.js";
 
-export let Screenshots = undefined;
+export let Screenshots = [];
 export let Anime = undefined;
 
 /**
@@ -86,8 +86,8 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
         return new Promise((resolve) => {
             const mainImg = $(".preview-wrapper > .main");
             const bgImg = $(".bg-wrapper > .bg");
-            mainImg.on('load', function () {
-                bgImg.attr("src", url);
+            mainImg.on('load', function (e) {
+                bgImg.attr("src", $(e.currentTarget).attr("src"));
                 resolve(true);
             });
             mainImg.attr("src", url);

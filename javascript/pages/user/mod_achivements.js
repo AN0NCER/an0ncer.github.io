@@ -3,7 +3,7 @@
  * @param {[id:number, neko_id:string, level:number, progress:number, user_id:number, created_at:string, updated_at:string] | undefined} data
  */
 
-import { Sleep } from "../../modules/funcitons.js";
+import { Sleep } from "../../modules/functions.js";
 import { Achievements } from "../../modules/ShikiAPI.js";
 
 let Loaded = false; // Были ли загружены очивки

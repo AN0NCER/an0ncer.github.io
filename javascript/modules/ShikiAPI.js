@@ -1,4 +1,4 @@
-import { ObjectToQuery, Fetch } from "./funcitons.js";
+import { ObjectToQuery, Fetch } from "./functions.js";
 import { Headers } from "./header.js";
 import { SHIKIURL } from "./Settings.js";
 import { User } from "./ShikiUSR.js"
@@ -111,6 +111,32 @@ export const Friends = {
             },
             DELETE: async () => {
                 request.setMethod('DELETE');
+                const response = await request.fetch();
+                event(response);
+                return response;
+            }
+        }
+    }
+}
+
+export const Favorites = {
+    base_url: () => { return `${SHIKIURL.url}/api/favorites` },
+    /**
+     * @param {"Anime" | "Manga" | "Ranobe" | "Character"} type - Тип избранного
+     * @param {number} id - ID избранного
+     * @param {*} event - Функция обработки ответа
+     */
+    favorites: function (type, id, event = () => { }) {
+        let url = this.base_url() + "/" + type + "/" + id;
+        const request = Fetch("POST", url, Headers.bearer());
+        return {
+            POST: async () => {
+                const response = await request.fetch();
+                event(response);
+                return response;
+            },
+            DELETE: async () => {
+                request.setMethod("DELETE");
                 const response = await request.fetch();
                 event(response);
                 return response;
@@ -383,16 +409,34 @@ export const GraphQl = {
 }
 
 function BodyGraphQl(prof, arg = {}, body = []) {
-    let query = [];
-    for (const key in arg) {
-        const element = arg[key];
-        if (Array.isArray(element)) {
-            query.push(`${key}: "${element}"`);
-        } else {
-            query.push(`${key}: ${element}`);
+    const query = Object.entries(arg).map(([key, value]) => 
+        `${key}: ${Array.isArray(value) ? `"${value}"` : value}`
+    );
+
+    //Updated parser for graphql: Recursive function
+    //["id", "status", { anime: ["id", "russian", "score", { airedOn: ["year"]}] }]
+
+    function processBodyRecursively(element) {
+        if (typeof element === "object" && !Array.isArray(element)) {
+            return Object.entries(element).reduce((acc, [key, value]) => {
+                if (Array.isArray(value)) {
+                    acc += `${key} { ${processBodyRecursively(value)} }`;
+                } else if (typeof value === "object") {
+                    acc += `${key} { ${processBodyRecursively(value)} }`;
+                } else {
+                    acc += `${key} `;
+                }
+                return acc;
+            }, "");
+        } else if (Array.isArray(element)) {
+            return element.map(processBodyRecursively).join(' ');
         }
+        return element;
     }
-    return { query: `{${prof}(${query}){${body}}}` };
+
+    const processedBody = body.map(processBodyRecursively);
+
+    return { query: `{${prof}(${query.join(', ')}){${processedBody.join(' ')}}}` };
 }
 
 function StandartIDGET(url, event) {

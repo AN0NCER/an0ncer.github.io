@@ -1,0 +1,63 @@
+.content-anime {
+    max-height: 100dvh;
+
+    .content-wraper {
+        padding-top: 0px !important;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        gap: 0 !important;
+
+        &>.window-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: calc(env(safe-area-inset-left) + 20px);
+            padding-right: calc(env(safe-area-inset-right) + 20px);
+
+            .bar-anime {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex: 1;
+                max-width: 900px;
+            }
+
+            .window-title {
+                font-size: 13px;
+                font-weight: bold;
+            }
+
+            .close-btn {
+                width: 40px;
+                height: 40px;
+                display: grid;
+                place-items: center;
+                cursor: pointer;
+
+                svg {
+                    fill: #D4D4D8;
+                    width: 16px;
+                }
+            }
+        }
+
+        &>.wrapper {
+            display: flex;
+            justify-content: center;
+            padding-left: calc(env(safe-area-inset-left) + 10px);
+            padding-right: calc(env(safe-area-inset-right) + 10px);
+
+            &>.list-anime {
+                display: grid;
+                gap: 10px;
+                grid-template-columns: repeat(auto-fit, 200px);
+                align-items: center;
+                justify-content: center;
+                max-width: 900px;
+                width: 100%;
+            }
+        }
+    }
+}

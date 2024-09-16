@@ -1,6 +1,6 @@
 import { ACard } from "../../modules/AnimeCard.js";
 import { Animes } from "../../modules/ShikiAPI.js";
-import { Sleep } from "../../modules/funcitons.js";
+import { Sleep } from "../../modules/functions.js";
 
 const _limitAnime = 8;
 const _exclude_ids = [56572, 56560, 56484, 56481, 56575, 56308, 53514, 57131, 57106];

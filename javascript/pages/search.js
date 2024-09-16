@@ -1,5 +1,5 @@
 import { Main } from "../modules/ShikiUSR.js";
-import { Sleep, ScrollElementWithMouse, isObjectEqual } from "../modules/funcitons.js";
+import { Sleep, ScrollElementWithMouse, isObjectEqual } from "../modules/functions.js";
 import { Animes, Genres } from "../modules/ShikiAPI.js";
 import { GetState, SetState } from "./search/mod_searchState.js";
 import { SearchHistory } from "./search/mod_history.js";
