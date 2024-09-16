@@ -1161,12 +1161,11 @@ body.menuver[data-orientation="90"] .span-row {
   z-index: 4;
 }
 
+body[data-orientation="0"] .application-menu {
+  transition: 0.3s ease-in-out;
+}
 body[data-orientation="0"] .application-menu.hide {
   transform: translateY(100%);
-}
-
-.application-menu {
-  transition: 0.3s ease-in-out;
 }
 
 .content-filter {
