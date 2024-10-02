@@ -2,8 +2,7 @@ import { Sleep } from "../../modules/functions.js";
 import { Kodik } from "../../modules/Kodik.js";
 import { GraphQl } from "../../modules/ShikiAPI.js";
 import { User } from "../../modules/ShikiUSR.js";
-import { $ID } from "../watch.js";
-import { Player } from "./mod_player.js";
+import { $ID, Player } from "../watch.js";
 
 let A_LOADED = false;
 let B_LOADED = false;
@@ -57,7 +56,7 @@ function LoadAnimeFranchise() {
 
 export async function InitFranchiseVoices() {
     UpdateVoices();
-    Player().translation.events.onselected((e) => {
+    Player.CTranslation.on("selected", () => {
         $('.container-l').show();
         $(`.icon-info > .voice`).addClass('none');
         B_LOADED = false;
@@ -66,12 +65,12 @@ export async function InitFranchiseVoices() {
 }
 
 async function UpdateVoices() {
-    if (Franchises.length <= 0 || !Player().translation.id) {
+    if (Franchises.length <= 0 || !Player.CTranslation.id) {
         B_LOADED = true;
         return HideLoad();
     }
 
-    const trans_id = Player().translation.id;
+    const trans_id = Player.CTranslation.id;
     const promises = [];
     for (let i = 0; i < Franchises.length; i++) {
         const id = Franchises[i];
