@@ -1,7 +1,7 @@
 import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { WindowManagement } from "../../modules/Windows.js";
-import { Player } from "./mod_player.js";
+import { Player } from "../watch.js";
 import { Anime } from "./mod_resource.js";
 import { UserRate } from "./mod_urate.js";
 
@@ -408,7 +408,7 @@ class Loading {
             return;
         this.#loaded = true;
 
-        const e = Player().episodes.last_episode;
+        const e = Player.CEpisodes.count;
         if (e !== undefined && e > 1)
             $('.wrapper-episodes-d').removeClass('hide');
 
@@ -420,7 +420,7 @@ class Loading {
         }
 
         this.Download.events.OnSelect.bind(this.Download)();
-        this.Download.functions.Select(Player().episodes.selected_episode);
+        this.Download.functions.Select(Player.CEpisodes.selected);
     }
 }
 
@@ -571,8 +571,7 @@ const Structure = {
     show: function () {
         $("body").addClass("loading");
         this.download.Loaded.Load();
-        const index = Player().data.findIndex(x => x.id == Player().data_id);
-        const data = Player().data[index];
+        const data = Player.selected;
         this.download.SetData(data);
         this.download.Automation.Show();
     },
@@ -583,7 +582,7 @@ const Structure = {
     },
 
     verif: function () {
-        return Player().loaded;
+        return Player.loaded;
     },
 
     anim: {
