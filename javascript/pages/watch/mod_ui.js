@@ -1,4 +1,5 @@
 import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
+import { ShowInfo } from "../../modules/Popup.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { $ID, Player } from "../watch.js";
 import { ShowDwonloadWindow } from "./mod_download.js";
@@ -29,7 +30,8 @@ export function Functional() {
         { dom: "#share", func: ShareAnime },
         { dom: "#btn-scroll", func: ShowPlayer },
         { dom: '.translations-wrapper > .button-translation', func: ShowTranslationWindow },
-        { dom: '.translations-wrapper > .button-stars', func: SaveVoice }
+        { dom: '.translations-wrapper > .button-stars', func: SaveVoice },
+        { dom: '.title > .russian', func: CopyTitle }
     ]
 
     for (let i = 0; i < list.length; i++) {
@@ -73,6 +75,11 @@ export function Functional() {
     LoadScreen.On('loaded', () => {
         AutoScrollFranchise();
     })
+
+    //Отслеживаем изменение ориентации экрана для правильного отображения выбраного эпизода
+    window.addEventListener("orientationchange", function () {
+        OrientationChanged();
+    });
 }
 
 export function AutoScrollFranchise() {
@@ -98,6 +105,15 @@ export function AutoScrollFranchise() {
     } catch {
 
     }
+}
+
+async function CopyTitle() {
+    try {
+        await navigator.clipboard.writeText($(`.title > .russian`).text());
+        ShowInfo('Название скопировано')
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
 }
 
 /**
@@ -310,4 +326,8 @@ function ShareAnime() {
  */
 function ShowPlayer() {
     document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function OrientationChanged() {
+    Player.CEpisodes.Revise();
 }
