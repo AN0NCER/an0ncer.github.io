@@ -1,11 +1,13 @@
 import { User } from "../../modules/ShikiUSR.js";
-import { Player } from "./mod_player.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { UserRate } from "./mod_urate.js";
 import { SetSynchEnable, SYNC_ENABLE, Synch } from "./mod_sdata.js";
 import { Private } from "./mod_private.js";
 import { ShowCollectionWindow } from "./mod_collection.js";
 import Collection from "../../modules/Collection.js";
+import { IPlayer } from "./mod_player.js";
+
+const Player = IPlayer.Init();
 
 const WindowScore = {
     comments: {
@@ -85,7 +87,7 @@ const WindowScore = {
                 }
 
                 //Добавляем информацию о тексте
-                val += '\n' + searchString + ` ${Player().translation.name} - ${Player().translation.id}`;
+                val += '\n' + searchString + ` ${Player.CTranslation.name} - ${Player.CTranslation.id}`;
             }
 
             $('textarea.noten').val(val);
@@ -132,40 +134,42 @@ const WindowScore = {
             SetNote(res.text);
         });
 
-        Synch.Init().On((data) => {
-            try {
-                if (data === undefined)
-                    return;
+        Player.on("inited", (results) => {
+            Synch.Init().On((data) => {
+                try {
+                    if (data === undefined)
+                        return;
 
-                const index = Player().data.findIndex(x => x.translation.id === data.kodik_dub);
+                    const index = results.findIndex(x => x.translation.id === data.kodik_dub);
+
+                    if (index === -1)
+                        return;
+
+                    const title = results[index].translation.title;
+                    const date = new Date(data.date_update);
+
+                    $(`.sync-data > .voice`).text(title);
+                    $(`.sync-data > .episode`).text(`${data.kodik_episode} Эпизод`);
+                    $(`.sync-data > .time`).text(`${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`);
+                } catch (error) {
+                    console.log(error);
+                }
+
+            });
+
+            Synch.Init().plugins.update.On((data) => {
+                const index = results.findIndex(x => x.translation.id === data.kodik_dub);
 
                 if (index === -1)
                     return;
 
-                const title = Player().data[index].translation.title;
-                const date = new Date(data.date_update);
+                const title = results[index].translation.title;
+                const date = data.date_update;
 
                 $(`.sync-data > .voice`).text(title);
                 $(`.sync-data > .episode`).text(`${data.kodik_episode} Эпизод`);
                 $(`.sync-data > .time`).text(`${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`);
-            } catch (error) {
-                console.log(error);
-            }
-
-        });
-
-        Synch.Init().plugins.update.On((data) => {
-            const index = Player().data.findIndex(x => x.translation.id === data.kodik_dub);
-
-            if (index === -1)
-                return;
-
-            const title = Player().data[index].translation.title;
-            const date = data.date_update;
-
-            $(`.sync-data > .voice`).text(title);
-            $(`.sync-data > .episode`).text(`${data.kodik_episode} Эпизод`);
-            $(`.sync-data > .time`).text(`${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`);
+            });
         });
     },
 
