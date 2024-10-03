@@ -1,6 +1,7 @@
 import { Kodik } from "../../modules/Kodik.js";
 import { AutoScrollEpisodes } from "./mod_scrolling.js";
 import { $ID } from "../watch.js";
+import { Franchises } from "./mod_franchise.js";
 
 //Функция генерация HTML перевода
 function _genVoice(id, title, episod, save = false) {
@@ -32,7 +33,8 @@ const message_callabcks = {
 }
 
 const translation_callbacks = {
-    selected: []
+    selected: [],
+    loaded: []
 }
 
 const episodes_callbacks = {
@@ -217,6 +219,13 @@ class Translation {
         if ($PARAMETERS.watch.dubanime) this.lskey = "save-translations-" + $ID;
         this.saved = JSON.parse(localStorage.getItem(this.lskey)) || [];
 
+        if($PARAMETERS.watch.dubanime){
+            for (let i = 0; i < Franchises.length; i++) {
+                const fid = Franchises[i];
+                this.saved = this.saved.concat(JSON.parse(localStorage.getItem(`save-translations-${fid}`)) || [])
+            }
+        }
+        
         if (data.length != 0) {
             //Удалить заглушку
             $(".content-voices").empty();
@@ -253,6 +262,8 @@ class Translation {
         $(".voice > .voice-save").click((e) => {
             this.Favorites($(e.currentTarget).data("id"));
         });
+
+        this.#Dispatch('loaded', this.Player);
     }
 
     Favorites(id) {
