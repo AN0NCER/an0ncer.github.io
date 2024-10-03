@@ -71,6 +71,9 @@ export async function LoadM3U8Episode(id, e) {
 }
 
 function GenLink(streams) {
+    if(typeof streams === "boolean"){
+        return;
+    }
     STREAMS = { 360: streams['360'], 480: streams['480'], 720: streams['720'] };
     fixStreamUrls(STREAMS);
     if (AUTOQUALITY) {
@@ -111,10 +114,10 @@ function loadStreamTunime(id, e, kodik_link = undefined) {
         }
         loadFirstSuccessfulImage(tunime_data.thumbinals)
             .then((successfulImage) => {
-                if (successfulImage !== null) {
-                    Player.setAttribute('poster', successfulImage);
-                } else {
+                if (typeof successfulImage === "undefined") {
                     Player.setAttribute('poster', "/images/preview-image.png");
+                } else {
+                    Player.setAttribute('poster', successfulImage);
                 }
             });
     });
@@ -135,6 +138,9 @@ function LoadImage(url) {
 }
 
 async function loadFirstSuccessfulImage(urls) {
+    if(typeof urls === "undefined"){
+        return;
+    }
     for (let url of urls) {
         url = url.indexOf("http") != -1 ? url : "https:" + url;
         const result = await LoadImage(url);

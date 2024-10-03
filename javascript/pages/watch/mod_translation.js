@@ -1,6 +1,9 @@
 import { WindowManagement } from "../../modules/Windows.js";
 import { $ID } from "../watch.js";
-import { Player } from "./mod_player.js";
+import { Franchises } from "./mod_franchise.js";
+import { IPlayer } from "./mod_player.js";
+
+const Player = IPlayer.Init();
 
 const WindowTranslation = {
     init: function () {
@@ -16,13 +19,13 @@ const WindowTranslation = {
                 setParameter('dubanime', e.target.checked);
 
                 if (e.target.checked) {
-                    Player().translation.key = "save-translations-" + $ID;
+                    Player.CTranslation.lskey = "save-translations-" + $ID;
                 } else {
-                    Player().translation.key = "save-translations";
+                    Player.CTranslation.lskey = "save-translations";
                 }
 
-                Player().translation.saved = JSON.parse(localStorage.getItem(Player().translation.key));
-                Player().translation.saved = Player().translation.saved ? Player().translation.saved : [];
+                Player.CTranslation.saved = JSON.parse(localStorage.getItem(Player.CTranslation.lskey));
+                Player.CTranslation.saved = Player.CTranslation.saved ? Player.CTranslation.saved : [];
 
                 //Сделать переключение избранных озвучек
                 //Отключаем все в визуале
@@ -30,10 +33,10 @@ const WindowTranslation = {
                 $('.voice-save.select').removeClass("select");
 
                 //Добавляем только нужные
-                const data = Player().translation.saved;
-                //Проверим выбранное
+                const data = Player.CTranslation.saved;
 
-                if (data.findIndex(x => x == Player().translation.id) != -1) {
+                //Проверим выбранное
+                if (data.findIndex(x => x == Player.CTranslation.id) != -1) {
                     $(".translations-wrapper > .button-stars").addClass("selected");
                 }
 
@@ -49,7 +52,7 @@ const WindowTranslation = {
         $('.translation-param > .checkbox > input').prop('checked', $PARAMETERS.watch.dubanime);
 
         //Автоматическое скрытие окна при выборе озвучки
-        Player().translation.events.onselected((e) => {
+        Player.CTranslation.on('selected', () => {
             this.hide();
             _windowTranslation.hide();
         });

@@ -1,9 +1,9 @@
 import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
+import { ShowInfo } from "../../modules/Popup.js";
 import { Tunime } from "../../modules/TunimeApi.js";
-import { $ID } from "../watch.js";
+import { $ID, Player } from "../watch.js";
 import { ShowDwonloadWindow } from "./mod_download.js";
 import { LoadScreen } from "./mod_load.js";
-import { Player } from "./mod_player.js";
 import { LoadImageById } from "./mod_resource.js";
 import { ShowTranslationWindow } from "./mod_translation.js";
 import { UserRate } from "./mod_urate.js";
@@ -30,7 +30,8 @@ export function Functional() {
         { dom: "#share", func: ShareAnime },
         { dom: "#btn-scroll", func: ShowPlayer },
         { dom: '.translations-wrapper > .button-translation', func: ShowTranslationWindow },
-        { dom: '.translations-wrapper > .button-stars', func: SaveVoice }
+        { dom: '.translations-wrapper > .button-stars', func: SaveVoice },
+        { dom: '.title > .russian', func: CopyTitle }
     ]
 
     for (let i = 0; i < list.length; i++) {
@@ -74,6 +75,11 @@ export function Functional() {
     LoadScreen.On('loaded', () => {
         AutoScrollFranchise();
     })
+
+    //Отслеживаем изменение ориентации экрана для правильного отображения выбраного эпизода
+    window.addEventListener("orientationchange", function () {
+        OrientationChanged();
+    });
 }
 
 export function AutoScrollFranchise() {
@@ -99,6 +105,15 @@ export function AutoScrollFranchise() {
     } catch {
 
     }
+}
+
+async function CopyTitle() {
+    try {
+        await navigator.clipboard.writeText($(`.title > .russian`).text());
+        ShowInfo('Название скопировано')
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
 }
 
 /**
@@ -226,18 +241,14 @@ function ScrollingElements() {
 }
 
 function ChangePlayer() {
-    if (Player().name == "tunime") {
-        Player().update(false);
-    } else {
-        Player().update(true);
-    }
+    Player.Switch();
 }
 
 /**
    * Функция выбора текущей озвучки в избранное или удаление его
    */
 function SaveVoice() {
-    Player().translation.favorites(Player().translation.id);
+    Player.CTranslation.Favorites(Player.CTranslation.id);
 }
 
 let enableCenter = false;
@@ -315,4 +326,8 @@ function ShareAnime() {
  */
 function ShowPlayer() {
     document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function OrientationChanged() {
+    Player.CEpisodes.Revise();
 }

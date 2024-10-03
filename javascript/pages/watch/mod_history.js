@@ -1,5 +1,4 @@
-import { $ID } from "../watch.js";
-import { Player } from "./mod_player.js";
+import { $ID, Player } from "../watch.js";
 import { Private } from "./mod_private.js";
 import { Screenshots } from "./mod_resource.js";
 
@@ -26,7 +25,7 @@ const _history = {
      * @param {Int} i - прибавка эпихода если необходимо (Для переклбчение следующего эпизода)
      * @param {Int} e - текущий эпизод
      */
-    add(cnt = false, duration = 0, i = 0, e = Player().episodes.selected_episode) {
+    add(cnt = false, duration = 0, i = 0, e = Player.CEpisodes.selected) {
         if (!this.shikiData || Private.INCOGNITO) {
             return;
         }
@@ -40,14 +39,13 @@ const _history = {
         } else {
             image = `${screenshots[0].original}`;
         }
-        const dub = Player().translation.name;
+        const dub = Player.CTranslation.name;
         const type = this.shikiData.kind == "movie" ? "Фильм" : this.shikiData.kind == "ova" ? "OVA" : this.shikiData.kind == "ona" ? "ONA" : "Аниме";
-
         const item = {
             id: $ID,
             continue: cnt,
             duration,
-            fullduration: Player().video_data.duration,
+            fullduration: Player.VData.duration,
             episode,
             name: russian,
             image,

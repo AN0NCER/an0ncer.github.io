@@ -40,6 +40,9 @@ export async function LoadEpisode(e) {
  */
 async function LoadAnime(id, e) {
     const stream_file = await LoadM3U8(id, e);
+    if (typeof stream_file === "undefined") {
+        return SendAPI.switch();
+    }
     LoadPlayer(stream_file);
 }
 
