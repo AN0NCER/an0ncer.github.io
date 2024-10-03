@@ -29,7 +29,8 @@ const message_callabcks = {
     play: [],
     error: [],
     next: [],
-    fullscreen: []
+    fullscreen: [],
+    switch: []
 }
 
 const translation_callbacks = {
@@ -219,13 +220,13 @@ class Translation {
         if ($PARAMETERS.watch.dubanime) this.lskey = "save-translations-" + $ID;
         this.saved = JSON.parse(localStorage.getItem(this.lskey)) || [];
 
-        if($PARAMETERS.watch.dubanime){
+        if ($PARAMETERS.watch.dubanime) {
             for (let i = 0; i < Franchises.length; i++) {
                 const fid = Franchises[i];
                 this.saved = this.saved.concat(JSON.parse(localStorage.getItem(`save-translations-${fid}`)) || [])
             }
         }
-        
+
         if (data.length != 0) {
             //Удалить заглушку
             $(".content-voices").empty();
@@ -436,6 +437,10 @@ class Message {
             this.#Dispatch('fullscreen', { value: message.data.value });
         }
 
+        // Переключение плеера
+        if (message.data.key == "tunime_switch") {
+            this.#Dispatch('switch', { value: message.data.value });
+        }
     }
 
     /**

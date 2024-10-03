@@ -115,5 +115,9 @@ export const SendAPI = {
 
     error: (val) => {
         ParentWindow.postMessage({ key: 'tunime_error', value: val }, "*");
+    },
+
+    switch: () => {
+        ParentWindow.postMessage({ key: 'tunime_switch', value: true }, "*");
     }
 }

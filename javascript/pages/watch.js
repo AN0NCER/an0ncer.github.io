@@ -148,6 +148,11 @@ Main(async (e) => {
         }
     });
 
+    //Переключение плеера через Tunime player
+    Player.CMessage.on("switch", () => {
+        Player.Switch();
+    })
+
     //Начинает загрузку плеера после получения синхронизированных данных
     Synch.Init().On((data) => {
         if (data) {
