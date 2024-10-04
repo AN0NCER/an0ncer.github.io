@@ -1,20 +1,25 @@
-______
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AN0NCER/resources/refs/heads/main/git-tunime/github_preview_black.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/AN0NCER/resources/refs/heads/main/git-tunime/github_preview_white.png">
+  <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="https://raw.githubusercontent.com/AN0NCER/resources/refs/heads/main/git-tunime/github_preview_white.png">
+</picture>
 
-<img src="https://github.com/AN0NCER/resources/raw/main/GithubPreview(1).png">
 
-___
-
-
-![Platform](https://img.shields.io/badge/platform-ios%20%7C%20android-brightgreen)
 ![Release](https://img.shields.io/github/v/release/AN0NCER/an0ncer.github.io)
 ![Code](https://img.shields.io/github/languages/top/AN0NCER/an0ncer.github.io)
 
 
-# <img src="https://wotaku.moe/asset/inaidle.webp" width="20" /> Tunime
+# Tunime <img src="https://raw.githubusercontent.com/AN0NCER/resources/refs/heads/main/git-tunime/gif_tunime.gif" width="80" />
 
-<img src="./images/icons/logo-x512-o.png" align="left" width="50" />
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/49330600f3a5954c42ef1a0eb7241d02dbf9ade7/git-tunime/icon_animation.svg" align="left" width="50" />
 
-This site is a mobile application for watching anime. Uses data from **Shikimori** and **Kodik** player, as well as **PWA** functionality.
+**`https://an0ncer.github.io/`** - это онлайн-платформа для просмотра аниме с возможностью управлять своим аккаунтом и управлением аниме. Сайт обладает удобным и простым интерфейсом, имеет множество различных функций и собственный сервер. Кроме того, сайт поддерживает функционал PWA, что позволяет добавить его на главный экран мобильного устройства и использовать как полноценное приложение **(Tunime MAX)**.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AN0NCER/resources/427570e6134fdcece9aba4d68a1b247d5354d9c6/git-tunime/tunime_max_dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/AN0NCER/resources/427570e6134fdcece9aba4d68a1b247d5354d9c6/git-tunime/tunime_max_light.svg">
+  <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="https://raw.githubusercontent.com/AN0NCER/resources/427570e6134fdcece9aba4d68a1b247d5354d9c6/git-tunime/tunime_max_dark.svg">
+</picture>
 
 ## Functional
 
@@ -38,10 +43,6 @@ This site is a mobile application for watching anime. Uses data from **Shikimori
 - [X] List page (User anime).
 - [X] User page.
 - [X] Settings page.
-
-## Description
-
-**`https://an0ncer.github.io/`** - is an online platform for watching anime with the ability to manage your account and save your favorites. The site has a convenient and simple interface, has many filters and categories to search for anime. In addition, the site supports PWA functionality, which allows you to add it to the home screen of a mobile device and use it as a full-fledged application.
 
 ## Stats
 
