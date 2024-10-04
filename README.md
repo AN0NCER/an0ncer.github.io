@@ -40,17 +40,6 @@
 - [X] User page.
 - [X] Settings page.
 
-## Stats
-
-![Alt](https://repobeats.axiom.co/api/embed/ade0779625b8da67b375884494164252f8348c2d.svg "Repobeats analytics image")
-
----
-
-Interactive menu with easy settings options
-
-![Menu](https://github.com/AN0NCER/resources/blob/main/new-interact-menu.png?raw=true)
-___
-
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_2.PNG" align="left" width="23%">
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_3.PNG" align="left" width="23%">
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/main/screenshot_4.PNG" align="left" width="23%">
