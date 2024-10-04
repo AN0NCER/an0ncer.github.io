@@ -5,11 +5,7 @@
 </picture>
 
 
-![Release](https://img.shields.io/github/v/release/AN0NCER/an0ncer.github.io)
-![Code](https://img.shields.io/github/languages/top/AN0NCER/an0ncer.github.io)
-
-
-# Tunime <img src="https://raw.githubusercontent.com/AN0NCER/resources/refs/heads/main/git-tunime/gif_tunime.gif" width="80" />
+# <img src="https://raw.githubusercontent.com/AN0NCER/resources/refs/heads/main/git-tunime/gif_tunime.gif" width="80" /> Tunime
 
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/49330600f3a5954c42ef1a0eb7241d02dbf9ade7/git-tunime/icon_animation.svg" align="left" width="50" />
 
