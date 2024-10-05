@@ -17,23 +17,23 @@
 
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/adaptive_interface.svg" loading="lazy" width="100%">
 
-<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="100%">
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="35%">
 
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/adaptive_window.svg" loading="lazy" width="100%">
 
-<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="100%">
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="35%">
 
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/menu_profile.svg" loading="lazy" width="100%">
 
-<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="100%">
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="35%">
 
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/anime_access.svg" loading="lazy" width="100%">
 
-<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="100%">
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="35%">
 
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/syncronysing.svg" loading="lazy" width="100%">
 
-<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="100%">
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="35%">
 
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/settings.svg" loading="lazy" width="100%">
 
