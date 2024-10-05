@@ -11,9 +11,11 @@
 
 **`https://an0ncer.github.io/`** - это онлайн-платформа для просмотра аниме с возможностью управлять своим аккаунтом и управлением аниме. Сайт обладает удобным и простым интерфейсом, имеет множество различных функций и собственный сервер. Кроме того, сайт поддерживает функционал PWA, что позволяет добавить его на главный экран мобильного устройства и использовать как полноценное приложение **(Tunime MAX)**.
 
-<img src="https://raw.githubusercontent.com/AN0NCER/resources/0dde95ac11bb6a0da63a163507ec6013c207f9b1/git-tunime/tunime_max.svg" loading="lazy" width="100%">
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="35%">
 
-## Функционал
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/4b11a0aeff88cb0430c633dd79f59636b2cb159d/git-tunime/tunime_max_1.svg" loading="lazy" width="100%">
+
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/7731c9ac00ad69422f3991fa454a83918305e191/git-tunime/space.svg" width="35%">
 
 <img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/adaptive_interface.svg" loading="lazy" width="100%">
 
