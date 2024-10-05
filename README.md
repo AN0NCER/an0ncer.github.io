@@ -27,6 +27,28 @@
   <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="https://raw.githubusercontent.com/AN0NCER/resources/1499938db8f911a239b57c039b1a438026865ab2/git-tunime/framchises_detail_dark.svg" loading="lazy" width="100%">
 </picture>
 
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/adaptive_interface.svg" loading="lazy" width="100%">
+
+### Удобные она
+
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/adaptive_window.svg" loading="lazy" width="100%">
+
+### Интерактивное меню & Профиль
+
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/menu_profile.svg" loading="lazy" width="100%">
+
+### Доступность аниме
+
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/anime_access.svg" loading="lazy" width="100%">
+
+### Синхронизация
+
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/syncronysing.svg" loading="lazy" width="100%">
+
+### Настройки
+
+<img src="https://raw.githubusercontent.com/AN0NCER/resources/42a67c99beb8f7b0353c48cdd841459ca1879621/git-tunime/settings.svg" loading="lazy" width="100%">
+
 ## Functional
 
 - [X] Search anime by name.
