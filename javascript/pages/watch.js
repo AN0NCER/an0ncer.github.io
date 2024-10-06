@@ -29,11 +29,13 @@ import(`/javascript/pages/watch/mod_collection.js`);
 
 //Авторизируем пользователя
 Main(async (e) => {
-    try {
-        const data = await import(`/javascript/pages/anime/${$ID}.js`);
-        $RULES = data.default;
-        console.log(`[watch] - Custom RULES uploaded`);
-    } catch { }
+    if ($PARAMETERS.anime.customstyle) {
+        try {
+            const data = await import(`/javascript/pages/anime/${$ID}.js`);
+            $RULES = data.default;
+            console.log(`[watch] - Custom RULES uploaded`);
+        } catch { }
+    }
     //Проверка на существование такого ID
     const check = await CheckID($ID);
 
