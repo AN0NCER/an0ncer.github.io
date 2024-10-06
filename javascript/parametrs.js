@@ -9,6 +9,7 @@ const $PARAMETERS = {
     anime: {
         syncdata: true,
         hidehero: false,
+        customstyle: true,
     },
     watch: {
         dubanime: false,

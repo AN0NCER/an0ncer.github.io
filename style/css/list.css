@@ -1055,7 +1055,6 @@ body.menuver[data-orientation="90"] .span-row {
 }
 .app > .wrapper .anime-content .anime-list .card-loader,
 .app > .wrapper .anime-content .anime-search-result .card-loader {
-  max-height: 200px;
   aspect-ratio: 1/1.44;
   border-radius: 4px;
   display: flex;

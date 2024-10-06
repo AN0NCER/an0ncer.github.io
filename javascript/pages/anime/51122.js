@@ -10,7 +10,7 @@ if (/Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent)) {
 const url = "https://image.tmdb.org/t/p/original/Ao8SbtYJbxBuzFTQFSdHF7lLmDE.jpg";
 const bg = "https://image.tmdb.org/t/p/original/iCqaGYVQw9MYZap5pNgTRkdPBWf.jpg";
 
-$(`.page-loading`).css({ "background": `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1)), url('${load_image}') no-repeat center center / cover` });
+$(`.page-loading`).css("--image", `url(${load_image})`);
 
 export default {
     OnLoad: () => {
