@@ -505,20 +505,6 @@ footer {
     }
 }
 
-@keyframes loading {
-    0% {
-        opacity: .04;
-    }
-
-    50% {
-        opacity: .1;
-    }
-
-    100% {
-        opacity: .04;
-    }
-}
-
 @keyframes rotate {
     0% {
         transform: rotate(0deg);

@@ -440,14 +440,21 @@ header {
 
 .section-anime,
 .section-update {
+  padding-left: 20px;
   margin-top: 20px;
   margin-right: 20px;
   display: flex;
   overflow: hidden;
   overflow-x: scroll;
 
-  a:nth-child(1) {
-    margin-left: 20px;
+  @for $i from 1 through 8 {
+    a:empty+a:nth-child(#{$i}) {
+
+      &::before,
+      &::after {
+        animation-delay: #{$i * 0.3}s;
+      }
+    }
   }
 }
 
