@@ -221,7 +221,7 @@ if(typeof caches !== 'undefined'){
 
     // Устанавливает версию интерфейса
     function SetUIVersion(data, reverse = false) {
-        localStorage.setItem($SERVER.dialog_key, JSON.stringify({ show: true, ver: data.ver, hash: data.hash, update: new Date().toJSON() }));
+        let show = false;
         if (reverse) {
             if ($SERVER.version === data.ver) {
                 $('.update-content-version > .to-version > .cur').text(data.hash);
@@ -239,6 +239,10 @@ if(typeof caches !== 'undefined'){
                 $('.update-content-version > .to-version > .next').text(data.ver);
             }
         }
+        if($SERVER.version !== data.ver){
+            show = true;
+        }
+        localStorage.setItem($SERVER.dialog_key, JSON.stringify({ show, ver: data.ver, hash: data.hash, update: new Date().toJSON() }));
     }
 })();
 
@@ -274,3 +278,5 @@ function ParseSWVersion() {
         });
     });
 }
+
+window.$SERVER = $SERVER;
