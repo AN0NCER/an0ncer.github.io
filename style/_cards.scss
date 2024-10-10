@@ -100,31 +100,30 @@
     }
 
     &:empty {
+        --duration: 1.5s;
         min-height: 308px;
         border-radius: 3px;
         position: relative;
 
         &::after {
-            content: '';
-            position: absolute;
-            width: 100%;
             height: 14.5px;
-            background: #282D39;
             bottom: 0;
-            border-radius: 3px;
-            animation: loading 1.5s infinite;
-            transition: .1s ease-in-out;
+            
         }
 
         &::before {
+            top: 0;
+            bottom: 24.5px;
+        }
+
+        &::before, &::after{
             content: '';
             position: absolute;
             width: 100%;
-            top: 0;
-            bottom: 24.5px;
+            opacity: 0.2;
             background: #282D39;
             border-radius: 3px;
-            animation: loading 1.5s infinite;
+            animation: loading var(--duration) infinite;
         }
     }
 }
@@ -136,5 +135,19 @@
                 background: rgba(0, 0, 0, 0.7);
             }
         }
+    }
+}
+
+@keyframes loading {
+    0% {
+        opacity: 0.2;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 0.2;
     }
 }

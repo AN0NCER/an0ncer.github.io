@@ -4,8 +4,8 @@ const url = "https://api.github.com/repos/AN0NCER/an0ncer.github.io/releases/lat
 
 export function GitHubRel() {
     try {
-        const data = JSON.parse(localStorage.getItem(UpdateKey()));
-        if (data.show) {
+        const data = JSON.parse(localStorage.getItem(UpdateKey())) || undefined;
+        if (typeof data !== "undefined" && data.show) {
             fetch(url).then(async (response) => {
                 if (!response.ok) {
                     return;

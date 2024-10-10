@@ -232,18 +232,3 @@ body.menuver[data-orientation="90"] {
         background-position: 800px 0
     }
 }
-
-
-@keyframes loading {
-    0% {
-        opacity: 0.5;
-    }
-
-    50% {
-        opacity: 0.1;
-    }
-
-    100% {
-        opacity: 0.5;
-    }
-}

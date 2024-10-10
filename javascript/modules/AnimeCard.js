@@ -111,5 +111,18 @@ export const ACard = {
 
             return str;
         }
+    },
+
+    /**
+     * Генерация загрузочной карточки аниме
+     * @param {{type: "a" | "div"}} data - Данные загрузки
+     * @returns 
+     */
+    LoadV2: function ({ type = 'a', id = 0 } = {}) {
+        if(type == 'a'){
+            return `<a class="card-anime" data-id="${id}"></a>`;
+        }else{
+            return `<div class="card-anime" data-id="${id}"></div>`
+        }
     }
 };
