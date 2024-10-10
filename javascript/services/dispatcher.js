@@ -17,6 +17,7 @@ const handlers = {
     },
     'update': (name, data, manager) => {
         if(CurrentPage === 'index'){
+            const url = new URL(window.location);
             url.searchParams.append('update', 'true');
             url.searchParams.append('ver', data.version);
             url.searchParams.append('hash', data.hash);
