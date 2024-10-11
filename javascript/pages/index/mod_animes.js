@@ -3,7 +3,7 @@ import { GraphQl } from "../../modules/ShikiAPI.js";
 import { Sleep } from "../../modules/functions.js";
 
 const _limitAnime = 8;
-const _exclude_ids = [56572, 56560, 56484, 56481, 56575, 56308, 53514, 57131, 57106];
+const _exclude_ids = [56572, 56560, 56484, 56481, 56575, 56308, 53514, 57131, 57106, 59387, 58379, 59883, 54398, 58631];
 
 let _loadedAnime = false;
 let _loadedUpdates = false;
@@ -21,8 +21,10 @@ export function LoadAnimeShikimori({ status = 'ongoing', limit = _limitAnime, ge
         season: `"${new Date().getFullYear() - take}_${new Date().getFullYear()}"`
     }
 
-    for (let i = 0; i < limit; i++) {
-        $(`.section-anime`).append(ACard.LoadV2({id: i}));
+    if(!reflex){
+        for (let i = 0; i < limit; i++) {
+            $(`.section-anime`).append(ACard.LoadV2({id: i}));
+        }
     }
 
     GraphQl.animes(arg, async (response) => {
