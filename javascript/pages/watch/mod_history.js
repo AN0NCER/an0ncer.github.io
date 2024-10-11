@@ -2,6 +2,10 @@ import { $ID, Player } from "../watch.js";
 import { Private } from "./mod_private.js";
 import { Screenshots } from "./mod_resource.js";
 
+function SetImage(id) {
+    Screenshots.Init().Select({ id });
+}
+
 //Управление историей
 const _history = {
     shikiData: undefined,
@@ -33,7 +37,7 @@ const _history = {
         const { russian, screenshots } = this.shikiData;
         const episode = cnt ? e + i : e + i;
         let image = "";
-        this.screenData = Screenshots;
+        this.screenData = Screenshots.Init().list;
         if (this.screenData?.length > 0) {
             image = `${this.screenData[this.idImage].original}`;
         } else {
@@ -71,10 +75,21 @@ const _history = {
 
     //Индивидуальные функции
     custom: {
+        have: false,
+        inited: false,
         /**
          * Инициализация после загрузки изображений slide
          */
-        init: function () {
+        init: function (df) {
+            if (this.inited) {
+                return;
+            }
+            this.inited = true;
+
+            if(df){
+                _history.idImage = df;
+            }
+
             let history = _history.get();
             //Находим ID елемента из списка
             let id = history.findIndex((x) => { return x.id == $ID });
@@ -89,23 +104,20 @@ const _history = {
             }
 
             //Показываем выбор в визуале
-            SetImage();
+            SetImage(_history.idImage);
 
             //Записуемся на функционал клик по изображение изменение idImage
             $('.galery-slider > .slide').click((e) => {
                 let idImage = $(e.currentTarget).data('id');
-                _history.idImage = idImage ? idImage : 0;
-                SetImage();
+                this.click(idImage);
             });
 
-            function SetImage() {
-                $(`.galery-slider > .slide > .selected`).remove();
-                $(`.galery-slider > .slide[data-id="${_history.idImage}"]`).append(`<div class="selected">
-                    <span class="sel-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96 32H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z"/></svg>
-                    </span>
-                </div>`);
-            }
+            
+        },
+
+        click: function (id) {
+            _history.idImage = id ? id : 0;
+            SetImage(_history.idImage);
         }
     }
 };
