@@ -70,6 +70,14 @@ export function ShowStorage(title = "Хранилище") {
         d = 'MB';
         s = (s / 1000).toFixed(2);
     }
+    (async() => {
+        d = 'KB', s = await Storage.Cache.size();
+        if(s > 1000) {
+            d = 'MB';
+            s = (s / 1000).toFixed(2);
+        }
+        $("#cachedata > span").text(`${s} ${d}`);
+    })();
     $("#sesdata > span").text(`${Storage.Session.size()} KB`);
 
     let _xLen, _x;
@@ -102,7 +110,7 @@ export function ShowStorage(title = "Хранилище") {
 
 export const Storage = {
     Local: {
-        size: function () {
+        size: function (fixed = true) {
             var _lsTotal = 0,
                 _xLen, _x;
             for (_x in localStorage) {
@@ -112,11 +120,17 @@ export const Storage = {
                 _xLen = ((localStorage[_x].length + _x.length) * 2);
                 _lsTotal += _xLen;
             };
-            return (_lsTotal / 1024).toFixed(2);
+            
+            // Размер в килобайтах (KB)
+            if(fixed){
+                return (_lsTotal / 1024).toFixed(2);
+            }else{
+                return (_lsTotal / 1024);
+            }
         }
     },
     Session: {
-        size: function () {
+        size: function (fixed = true) {
             var _lsTotal = 0,
                 _xLen, _x;
             for (_x in sessionStorage) {
@@ -126,28 +140,53 @@ export const Storage = {
                 _xLen = ((sessionStorage[_x].length + _x.length) * 2);
                 _lsTotal += _xLen;
             };
-            return (_lsTotal / 1024).toFixed(2);
+           
+            
+            // Размер в килобайтах (KB)
+            if(fixed){
+                return (_lsTotal / 1024).toFixed(2);
+            }else{
+                return (_lsTotal / 1024);
+            }
+        }
+    },
+    Cache: {
+        size: async function (fixed = true) {
+            if(typeof caches === "undefined"){
+                return 0;
+            }
+            let _lsTotal = 0;
+
+            const cacheNames = await caches.keys();
+
+            for (const cacheName of cacheNames) {
+                const cache = await caches.open(cacheName);
+                const requests = await cache.keys();
+
+                for (const request of requests) {
+                    const response = await cache.match(request);
+                    if (response) {
+                        const blob = await response.blob();
+                        _lsTotal += blob.size;
+                    }
+                }
+            }
+
+            // Размер в килобайтах (KB)
+            if(fixed){
+                return (_lsTotal / 1024).toFixed(2);
+            }else{
+                return (_lsTotal / 1024);
+            }
         }
     },
 
-    size: function () {
-        var _lsTotal = 0,
-            _xLen, _x;
-        for (_x in localStorage) {
-            if (!localStorage.hasOwnProperty(_x)) {
-                continue;
-            }
-            _xLen = ((localStorage[_x].length + _x.length) * 2);
-            _lsTotal += _xLen;
-        };
-        for (_x in sessionStorage) {
-            if (!sessionStorage.hasOwnProperty(_x)) {
-                continue;
-            }
-            _xLen = ((sessionStorage[_x].length + _x.length) * 2);
-            _lsTotal += _xLen;
-        };
-        return (_lsTotal / 1024).toFixed(2);
+    size: async function () {
+        var _lsTotal = 0;
+        _lsTotal += parseInt(this.Local.size(false));
+        _lsTotal += parseInt(this.Session.size(false));
+        _lsTotal += parseInt(await this.Cache.size(false));
+        return _lsTotal;
     }
 }
 

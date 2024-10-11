@@ -36,9 +36,16 @@
             .block-title {
                 font-size: 14px;
                 background: #1f2329;
-                padding: 5px 10px;
                 display: flex;
                 justify-content: space-between;
+                min-height: 45px;
+                align-items: center;
+                padding: 0px 10px;
+                font-weight: bold;
+
+                span {
+                    font-weight: normal;
+                }
             }
 
             .wrapper-storage {
@@ -50,12 +57,15 @@
 
             .list-local-storage,
             .list-session-storage {
-                background: #203544;
+                background: #292d39;
 
                 .storage-element {
-                    padding: 5px 10px;
                     display: grid;
                     grid-template-columns: 1fr auto;
+
+                    padding: 0px 10px;
+                    height: 40px;
+                    align-items: center;
 
                     div {
                         text-overflow: ellipsis;
@@ -66,10 +76,11 @@
                 }
             }
 
-            .data-controls{
+            .data-controls {
                 display: flex;
                 gap: 10px;
-                .btn{
+
+                .btn {
                     padding: 10px 15px;
                     cursor: pointer;
                     display: flex;
@@ -78,7 +89,8 @@
                     background: #282D39;
                     border-radius: 5px;
                     width: 100%;
-                    svg{
+
+                    svg {
                         height: 16px;
                         fill: #fff;
                     }

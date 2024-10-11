@@ -845,9 +845,15 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 .window-app-size .window-content .content-wraper .block-title {
   font-size: 14px;
   background: #1f2329;
-  padding: 5px 10px;
   display: flex;
   justify-content: space-between;
+  min-height: 45px;
+  align-items: center;
+  padding: 0px 10px;
+  font-weight: bold;
+}
+.window-app-size .window-content .content-wraper .block-title span {
+  font-weight: normal;
 }
 .window-app-size .window-content .content-wraper .wrapper-storage {
   overflow-y: auto;
@@ -857,13 +863,15 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 }
 .window-app-size .window-content .content-wraper .list-local-storage,
 .window-app-size .window-content .content-wraper .list-session-storage {
-  background: #203544;
+  background: #292d39;
 }
 .window-app-size .window-content .content-wraper .list-local-storage .storage-element,
 .window-app-size .window-content .content-wraper .list-session-storage .storage-element {
-  padding: 5px 10px;
   display: grid;
   grid-template-columns: 1fr auto;
+  padding: 0px 10px;
+  height: 40px;
+  align-items: center;
 }
 .window-app-size .window-content .content-wraper .list-local-storage .storage-element div,
 .window-app-size .window-content .content-wraper .list-session-storage .storage-element div {
