@@ -65,10 +65,12 @@ const WindowScore = {
         });
 
         //Отслеживаем сохранение заметки
-        $('.content-score > .content-wraper > .btn-commit').click(function () {
+        $('.content-score > .content-wraper > .btn-commit').click(() => {
             let info = document.querySelector('#info-anime').checked;
             let val = $('textarea.noten').val();
             if (!val && val.length >= 0) {
+                this.hide();
+                _windowScore.hide();
                 return;
             }
 
@@ -95,6 +97,7 @@ const WindowScore = {
             WindowScore.auto_grow(document.querySelector('textarea.noten'))
             //Устанавливает заметкку
             UserRate().Controls.Note(val);
+            this.hide();
             _windowScore.hide();
         });
 
