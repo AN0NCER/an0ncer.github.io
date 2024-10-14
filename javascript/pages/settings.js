@@ -347,15 +347,18 @@ function _ShowParametrs() {
                             </label>`
                     break;
                 case "app-size":
-                    let s = Storage.size(), d = 'KB';
-                    if (s > 1000) {
-                        d = 'MB';
-                        s = (s / 1000).toFixed(2);
-                    }
                     html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-type="app-size" data-tooltip="${element.description}">
-                                <div class="title">${element.name}</div>
-                                <div class="select">${s > 1000 ? (s / 1000).toFixed(2) : s} ${d}</div>
-                            </label>`
+                                    <div class="title">${element.name}</div>
+                                    <div class="select">0 KB</div>
+                                </label>`;
+                    (async () => {
+                        let s = await Storage.size(), d = 'KB';
+                        if (s > 1000) {
+                            d = 'MB';
+                            s = (s / 1000).toFixed(2);
+                        }
+                        $(`label[data-type="app-size"] > .select`).text(`${s} ${d}`);
+                    })();
                     break;
                 default:
                     break;

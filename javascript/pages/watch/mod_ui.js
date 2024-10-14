@@ -4,7 +4,7 @@ import { Tunime } from "../../modules/TunimeApi.js";
 import { $ID, Player } from "../watch.js";
 import { ShowDwonloadWindow } from "./mod_download.js";
 import { LoadScreen } from "./mod_load.js";
-import { LoadImageById } from "./mod_resource.js";
+import { Screenshots } from "./mod_resource.js";
 import { ShowTranslationWindow } from "./mod_translation.js";
 import { UserRate } from "./mod_urate.js";
 import { ShowScoreWindow } from "./mod_wscore.js";
@@ -111,9 +111,9 @@ async function CopyTitle() {
     try {
         await navigator.clipboard.writeText($(`.title > .russian`).text());
         ShowInfo('Название скопировано')
-      } catch (err) {
+    } catch (err) {
         console.error('Failed to copy: ', err);
-      }
+    }
 }
 
 /**
@@ -218,13 +218,14 @@ function SetStatusList(res) {
  */
 function AutoLoadGallery() {
     const gallerySlider = document.querySelector('.galery-slider');
+    const screenshots = Screenshots.Init();
     $(".galery-slider").on('scroll', (e) => {
         const slides = gallerySlider.querySelectorAll('.slide img');
         const targetSlide = slides[slides.length - 1];
         const targetSlidePosition = targetSlide.getBoundingClientRect().right;
 
         if (targetSlidePosition <= window.innerWidth) {
-            LoadImageById(slides.length);
+            screenshots.Load({ id: slides.length });
         }
     });
 }

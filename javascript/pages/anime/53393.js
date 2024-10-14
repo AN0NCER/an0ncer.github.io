@@ -1,9 +1,16 @@
 import { History } from "../watch/mod_history.js";
 import { Screenshots } from "../watch/mod_resource.js";
 
-const url = "https://image.tmdb.org/t/p/original/fgPa2oJD8lbLaTanzlGDd32tqDE.jpg";
+let load_image = "https://image.tmdb.org/t/p/original/gQpPiPkmQeZNhTzLlUfHdRGbLqm.jpg";
 
-$(`.page-loading`).css("--image", `url(${url})`);
+if (/Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent)) {
+    load_image = "https://image.tmdb.org/t/p/original/p3NtYk9lW1O1gidnfDaIB2NtpNc.jpg";
+}
+
+const url = "https://image.tmdb.org/t/p/original/gQpPiPkmQeZNhTzLlUfHdRGbLqm.jpg";
+const bg = "https://image.tmdb.org/t/p/original/eNLAoqkDA3KdqKDAWQb2l8EPFU8.jpg";
+
+$(`.page-loading`).css("--image", `url(${load_image})`);
 
 const callback = (screenshots) => {
     try {
@@ -28,5 +35,8 @@ export default {
         if (screenshots.init) {
             callback(screenshots);
         }
+
+        $('img.main').attr('src', bg);
+        $('img.bg').attr('src', bg);
     }
 }

@@ -1,7 +1,7 @@
 import { History } from "../watch/mod_history.js";
 import { Screenshots } from "../watch/mod_resource.js";
 
-const url = "https://image.tmdb.org/t/p/original/fgPa2oJD8lbLaTanzlGDd32tqDE.jpg";
+const url = "https://image.tmdb.org/t/p/original/7uxQQUnHvPKc2LmvDXRszgfBka8.jpg";
 
 $(`.page-loading`).css("--image", `url(${url})`);
 

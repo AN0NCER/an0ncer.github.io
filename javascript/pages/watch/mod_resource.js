@@ -8,7 +8,98 @@ import { LoadScreen } from "./mod_load.js";
 import { History } from "./mod_history.js";
 import { InitFranchises } from "./mod_franchise.js";
 
-export let Screenshots = [];
+/**@type {IScreenshots} */
+let _screenshots = undefined;
+
+class IScreenshots {
+    #callbacks = {
+        init: []
+    }
+
+    constructor() {
+        this.list = [];
+        this.init = false;
+    }
+
+    Init(resource) {
+        this.list = resource;
+        this.#Dispatch("init", this);
+        this.init = true;
+    }
+
+    /**
+     * Добавляет превью слайд в скриншоты
+     * @param {{type: "prepend" || "append"}} data 
+     */
+    Add({ type = "prepend", id = 0, url, shikiurl = true } = {}) {
+        let html = `<div class="slide" data-id="${id}">`;
+        if (url) {
+            if (shikiurl) {
+                url = `${SHIKIURL.url}${url}`;
+            }
+            html += `<img src="${url}" loading="lazy">`;
+        }
+        html += `</div>`
+
+        if (type === "prepend") {
+            $(".galery-slider").prepend(html);
+        } else {
+            $(".galery-slider").append(html);
+        }
+    }
+
+    Load({ id = 0 }) {
+        if (this.list.length - 1 < id) {
+            return;
+        }
+        $(`.galery-slider > .slide[data-id="${id}"]`).append(
+            `<img src="${SHIKIURL.url}${this.list[id].preview}">`
+        );
+    }
+
+    Select({ id = 0 }) {
+        $(`.galery-slider > .slide > .selected`).remove();
+        $(`.galery-slider > .slide[data-id="${id}"]`).append(`<div class="selected">
+                    <span class="sel-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96 32H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z"/></svg>
+                    </span>
+                </div>`);
+    }
+
+    static Init() {
+        if (typeof _screenshots === 'undefined') {
+            _screenshots = new Screenshots();
+        }
+        return _screenshots;
+    }
+
+    /**
+     * Подписка на событие
+     * @param {"init"} event - Название события (ключ из player_callbacks)
+     * @param {*} callback - Функция-обработчик для события
+     * @returns {void}
+     */
+    on(event, callback) {
+        if (typeof callback !== "function") return;
+        if (this.#callbacks[event] === undefined) {
+            this.#callbacks[event] = [];
+        }
+        this.#callbacks[event].push(callback);
+    }
+
+    /**
+     * Вызов события
+     * @param {"init"} event - Название события (ключ из player_callbacks)
+     * @param {object} data - Данные обратного вызова
+     * @returns {void}
+     */
+    #Dispatch(event, data) {
+        if (this.#callbacks[event] === undefined) return;
+        this.#callbacks[event].forEach(callback => callback(data));
+    }
+}
+
+export const Screenshots = IScreenshots;
 export let Anime = undefined;
 
 /**
@@ -270,22 +361,19 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
                 $(".title-gallery").css("display", "none");
             }
 
+            const screenshots = Screenshots.Init();
+
             /**@type {[{original:string, preview:string}]} */
-            Screenshots = response;
+            screenshots.Init(response);
 
             for (let i = 0; i < response.length; i++) {
                 const img = response[i];
                 if (i < 3) {
-                    $(".galery-slider").append(
-                        `<div class="slide" data-id="${i}"><img src="${SHIKIURL.url}${img.preview}" loading="lazy"></div>`
-                    );
+                    screenshots.Add({ type: "append", id: i, url: img.preview });
                 } else {
-                    $(".galery-slider").append(
-                        `<div class="slide" data-id="${i}"></div>`
-                    );
+                    screenshots.Add({ type: "append", id: i });
                 }
             }
-            History().custom.init();
             return true;
         }
     }
@@ -471,15 +559,6 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
             }).GET(isLogged);
         });
     }
-}
-
-export function LoadImageById(id) {
-    if (Screenshots.length - 1 < id) {
-        return;
-    }
-    $(`.galery-slider > .slide[data-id="${id}"]`).append(
-        `<img src="${SHIKIURL.url}${Screenshots[id].preview}">`
-    );
 }
 
 /**
