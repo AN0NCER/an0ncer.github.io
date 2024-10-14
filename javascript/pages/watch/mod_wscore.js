@@ -4,7 +4,6 @@ import { UserRate } from "./mod_urate.js";
 import { SetSynchEnable, SYNC_ENABLE, Synch } from "./mod_sdata.js";
 import { Private } from "./mod_private.js";
 import { ShowCollectionWindow } from "./mod_collection.js";
-import Collection from "../../modules/Collection.js";
 import { IPlayer } from "./mod_player.js";
 
 const Player = IPlayer.Init();
@@ -12,6 +11,12 @@ const Player = IPlayer.Init();
 const WindowScore = {
     comments: {
         footer: ""
+    },
+
+    anim: {
+        showed: function () { 
+            WindowScore.auto_grow(document.querySelector('textarea.noten'));
+        }
     },
 
     init: function () {
