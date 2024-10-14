@@ -564,10 +564,15 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
 /**
  * Проверка на существование ID в бд Shikimori
  * @param {string} id 
+ * @param {boolean} isset - уде проверено что аниме существует
  * @returns {boolean}
  */
-export function CheckID(id) {
+export function CheckID(id, isset = false) {
     if (Cache.Get({ id, type: 'isset' })) {
+        return true;
+    }
+    if (isset = true) {
+        Cache.Set({ id: id, type: 'isset', value: true });
         return true;
     }
     return new Promise((resolve) => {

@@ -82,7 +82,7 @@ export const ACard = {
      */
     GenV2: function ({ type = 'a', anime, data, exclude = [] } = {}) {
         if (type == 'a') {
-            return `<a href="/watch.html?id=${anime.id}" class="card-anime" data-id="${anime.id}" ${Data()}>${Gen()}</a>`;
+            return `<a href="/watch.html?id=${anime.id}&iss=true" class="card-anime" data-id="${anime.id}" ${Data()}>${Gen()}</a>`;
         } else {
             return `<div class="card-anime" data-id="${anime.id}" ${Data()}>${Gen()}</div>`;
         }
