@@ -19,7 +19,7 @@ export let $CONTINUE = new URLSearchParams(window.location.search).get("continue
 //Наведение на плеер
 export const $SHOWPLAYER = new URLSearchParams(window.location.search).get("player");
 //Существование аниме
-const $ISSET = new URLSearchParams(window.location.search).get("iss");
+const $ISSET = new URLSearchParams(window.location.search).get("iss") ? true : false;
 
 export const Player = IPlayer.Init({ standart: $PARAMETERS.player.standart });
 
@@ -38,7 +38,6 @@ Main(async (e) => {
             console.log(`[watch] - Custom RULES uploaded`);
         } catch { }
     }
-
     //Проверка на существование такого ID
     const check = await CheckID($ID, $ISSET);
 
