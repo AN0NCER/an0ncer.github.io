@@ -4,7 +4,6 @@ import { UserRate } from "./mod_urate.js";
 import { SetSynchEnable, SYNC_ENABLE, Synch } from "./mod_sdata.js";
 import { Private } from "./mod_private.js";
 import { ShowCollectionWindow } from "./mod_collection.js";
-import Collection from "../../modules/Collection.js";
 import { IPlayer } from "./mod_player.js";
 
 const Player = IPlayer.Init();
@@ -12,6 +11,12 @@ const Player = IPlayer.Init();
 const WindowScore = {
     comments: {
         footer: ""
+    },
+
+    anim: {
+        showed: function () { 
+            WindowScore.auto_grow(document.querySelector('textarea.noten'));
+        }
     },
 
     init: function () {
@@ -210,6 +215,8 @@ function SetScore(score) {
     $('.bar-score > .window-title').text("Оценено");
 }
 
+let last_note;
+
 function SetNote(note) {
     if (note) {
         let text = note;
@@ -220,9 +227,12 @@ function SetNote(note) {
             text = text.replace(match[0], '');
             text.trim();
         }
-        //Устанавливаем значения комментария в input
-        $('textarea.noten').val(text.trim());
-        WindowScore.auto_grow(document.querySelector('textarea.noten'));
+        if(last_note != note){
+            //Устанавливаем значения комментария в input
+            $('textarea.noten').val(text.trim());
+            WindowScore.auto_grow(document.querySelector('textarea.noten'));
+        }
+        last_note = note;
     }
 }
 
