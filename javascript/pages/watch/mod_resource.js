@@ -298,29 +298,28 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
         }
 
         return new Promise((resolve) => {
-            Animes.roles(id, async (response) => {
+            GraphQl.animes({ ids: `"${id}"`, limit: 1 }, async (response) => {
                 if (response.failed && response.status == 429) {
                     await Sleep(1000);
                     return resolve(Heroes(id));
                 }
 
-                if (response.failed) {
-                    alert("Error Load Anime (check console)");
-                    console.log(response);
-                    return;
+                if (response.data.animes.length === 0) {
+                    return resolve(true);
                 }
 
-                Cache.Set({ id, type: 'heroes', value: response });
-                return resolve(Complete(response));
-            }).GET();
+                Cache.Set({ id, type: 'heroes', value: response.data.animes[0].characterRoles });
+                return resolve(Complete(response.data.animes[0].characterRoles))
+
+            }).POST([{ "characterRoles": ["rolesEn", { "character": ["russian", "url", { "poster": ["previewUrl"] }] }] }]);
         });
 
         function Complete(response) {
             for (let i = 0; i < response.length; i++) {
                 const element = response[i];
-                if (element.roles.includes('Main')) {
+                if (element.rolesEn.includes('Main')) {
                     $('.hero-anime, .hero-anime-title').css('display', '');
-                    $('.hero-anime > .val').append(`<a href="${SHIKIURL.url}${element.character.url}" target="_blank"><img src="${SHIKIURL.suburl('nyaa')}${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div></div></a>`);
+                    $('.hero-anime > .val').append(`<a href="${element.character.url}" target="_blank"><img src="${element.character.poster.previewUrl}"/><div class="hero"><div class="name">${element.character.russian}</div></div></a>`);
                 }
             }
             return true;
