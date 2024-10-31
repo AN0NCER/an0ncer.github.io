@@ -4,7 +4,7 @@ import { Animes, GraphQl } from "../../modules/ShikiAPI.js";
 import { Sleep } from "../../modules/functions.js";
 import { $ID } from "../watch.js";
 import { UserRate } from "./mod_urate.js";
-import { LoadScreen } from "./mod_load.js";
+import { LTransition } from "./mod_transition.js";
 import { InitFranchises } from "./mod_franchise.js";
 
 /**@type {IScreenshots} */
@@ -108,16 +108,16 @@ export let Anime = undefined;
  */
 export async function LoadAnime(e = () => { }, isLogged = false) {
     const start = Date.now(),
-        loadScreen = new LoadScreen(9),
         process = [];
+    LTransition.Progress.steps = 9;
     let posterLink = undefined,
         jikanLoaded = false;
 
     try {
-        loadScreen.progress.Step();
+        LTransition.Progress.NewStep();
         process.push(new Promise(async (resolve) => {
             Anime = await FetchAnime($ID);
-            loadScreen.progress.Step();
+            LTransition.Progress.NewStep();
             UserRate().init(Anime.user_rate, isLogged);
             if (posterLink === undefined) {
                 posterLink = `${SHIKIURL.url}/${Anime.image.original}`;
@@ -145,7 +145,7 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
                 process.push(LoadPoster(poster));
             }
             jikanLoaded = true;
-            loadScreen.progress.Step();
+            LTransition.Progress.NewStep();
 
             resolve(true);
         }));
@@ -160,14 +160,14 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
 
         for (let i = 0; i < process.length; i++) {
             await process[i];
-            loadScreen.progress.Step();
+            LTransition.Progress.NewStep();
         }
 
         e(Anime);
     } catch (error) {
         console.log(error);
     }
-    console.log(`Loaded: ${Date.now() - start}ms`);
+    console.log(`[res] - Loaded: ${Date.now() - start}ms`);
 
     /**
      * Загрузка изобюражения
