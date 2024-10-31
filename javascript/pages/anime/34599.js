@@ -1,5 +1,6 @@
 import { History } from "../watch/mod_history.js";
 import { Screenshots } from "../watch/mod_resource.js";
+import { LTransition } from "../watch/mod_transition.js";
 
 let load_image = "https://image.tmdb.org/t/p/original/uzp513qTcHsAavlCJ58x5d73bzy.jpg";
 
@@ -10,7 +11,10 @@ if (/Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent)) {
 const url = "https://image.tmdb.org/t/p/original/uzp513qTcHsAavlCJ58x5d73bzy.jpg";
 const bg = "https://image.tmdb.org/t/p/original/qIJZpiKZfGYC9GpfX2jBSTOW1Dl.jpg";
 
-$(`.page-loading`).css("--image", `url(${load_image})`);
+LTransition.Loading.Parameters([
+    { name: "image", value: `url(${load_image})` },
+    { name: "progress-color", value: `#a1685e` }
+]);
 
 const callback = (screenshots) => {
     try {
@@ -29,14 +33,16 @@ const callback = (screenshots) => {
 };
 
 export default {
-    OnLoad: () => {
-        const screenshots = Screenshots.Init();
-        screenshots.on("init", callback);
-        if (screenshots.init) {
-            callback(screenshots);
-        }
+    on: {
+        load: () => {
+            const screenshots = Screenshots.Init();
+            screenshots.on("init", callback);
+            if (screenshots.init) {
+                callback(screenshots);
+            }
 
-        $('img.main').attr('src', bg);
-        $('img.bg').attr('src', bg);
+            $('img.main').attr('src', bg);
+            $('img.bg').attr('src', bg);
+        }
     }
 }
