@@ -6,6 +6,7 @@ import { IPlayer } from "./mod_player.js";
 const Player = IPlayer.Init();
 
 const WindowTranslation = {
+    windowShow: false,
     init: function () {
         $('.voice-bar > .window-close').on('click', () => {
             this.hide();
@@ -57,12 +58,16 @@ const WindowTranslation = {
             _windowTranslation.hide();
         });
     },
-    show: async () => {
+    show: async function () {
         WindowTranslation.selectfavorits();
         $("body").addClass("loading");
+        this.windowShow = true;
     },
-    hide: () => {
-        $("body").removeClass("loading");
+    hide: function () {
+        if (this.windowShow) {
+            $("body").removeClass("loading");
+        }
+        this.windowShow = false;
     },
     verif: () => { return true },
     selectfavorits: () => {
