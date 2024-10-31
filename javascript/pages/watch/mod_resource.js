@@ -5,7 +5,6 @@ import { Sleep } from "../../modules/functions.js";
 import { $ID } from "../watch.js";
 import { UserRate } from "./mod_urate.js";
 import { LoadScreen } from "./mod_load.js";
-import { History } from "./mod_history.js";
 import { InitFranchises } from "./mod_franchise.js";
 
 /**@type {IScreenshots} */
