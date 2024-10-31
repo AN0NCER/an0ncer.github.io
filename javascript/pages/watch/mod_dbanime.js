@@ -11,7 +11,7 @@ class SLocal {
     }
 
     #Load() {
-        if (localStorage.getItem(this.#key) !== null) {
+        if (localStorage.getItem($ID) !== null) {
             this.#LoadOLD($ID);
         }
         const ld = JSON.parse(localStorage.getItem(this.#key)) || {};
