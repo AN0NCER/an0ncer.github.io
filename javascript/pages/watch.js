@@ -161,7 +161,7 @@ Main(async (e) => {
 
     //Начинает загрузку плеера после получения синхронизированных данных
     aSynch.on("inited", (data) => {
-        if(data) {
+        if (data) {
             Player.Init(data);
         } else {
             Player.Init();

@@ -96,4 +96,15 @@ export class WindowManagement {
             $(`${this.element}>.window-content`).removeClass('border-hide');
         }
     }
-}  
+}
+
+export function PullToClose(scrollElement, callback = () => {}) {
+    const $element = $(scrollElement);
+    $element.on('scroll.closeWindow', function () {
+        const scrollTop = $(this).scrollTop();
+        if(scrollTop < 0 && scrollTop < -80){
+            callback();
+        }
+    })
+
+}
