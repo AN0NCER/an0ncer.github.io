@@ -576,8 +576,10 @@ const windowUpdate = {
             const close = () => {
                 process = false;
                 $('.content-buttons > .btn-submit').removeClass('cl-2');
-                if (reload)
+                if (reload) {
+                    $('.content-buttons > .restart-script').removeClass('show');
                     return;
+                }
                 _windowUpdate.hide();
                 this.hide();
             }
