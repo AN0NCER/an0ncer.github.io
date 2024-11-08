@@ -1,5 +1,5 @@
-const version = '2.5.5';
-const hash = '2dee5';
+const version = '2.6.0';
+const hash = 'df45b';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
     // Директория: /images/genres
@@ -75,6 +75,7 @@ const appShellFilesToCache = [
     "/javascript/pages/index/mod_search.js",
     "/javascript/pages/index/mod_trailers.js",
     "/javascript/pages/index/mod_trailers_animation.js",
+    "/javascript/pages/index/mod_update.js",
     "/javascript/pages/index/mod_window.js",
     // Директория: /javascript/pages/list
     "/javascript/pages/list/mod_alist.js",
@@ -117,15 +118,15 @@ const appShellFilesToCache = [
     "/javascript/pages/user/mod_stats.js",
     // Директория: /javascript/pages/watch
     "/javascript/pages/watch/mod_collection.js",
+    "/javascript/pages/watch/mod_dbanime.js",
     "/javascript/pages/watch/mod_download.js",
     "/javascript/pages/watch/mod_franchise.js",
     "/javascript/pages/watch/mod_history.js",
-    "/javascript/pages/watch/mod_load.js",
     "/javascript/pages/watch/mod_player.js",
     "/javascript/pages/watch/mod_private.js",
     "/javascript/pages/watch/mod_resource.js",
     "/javascript/pages/watch/mod_scrolling.js",
-    "/javascript/pages/watch/mod_sdata.js",
+    "/javascript/pages/watch/mod_transition.js",
     "/javascript/pages/watch/mod_translation.js",
     "/javascript/pages/watch/mod_ui.js",
     "/javascript/pages/watch/mod_urate.js",
