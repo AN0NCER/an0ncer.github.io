@@ -1,9 +1,79 @@
+.window-update {
+    .list-tags {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        background: #191c21;
+        border-radius: 5px;
+        max-height: 140px;
+        overflow-y: scroll;
+        height: 0;
+        z-index: 3;
+
+        .t {
+            padding: 10px 0px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+
+            &.select {
+                background: #468be8;
+            }
+        }
+    }
+}
+
 .content-update {
     font-family: 'Manrope';
     max-height: 100dvh;
 
-    .content-wraper{
+    .filter-hide {
+        display: grid;
+        place-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 8;
+        pointer-events: none;
+        transition: .3s ease-in-out;
+
+        .loader {
+            opacity: 0;
+            transition: .3s ease-in-out;
+        }
+    }
+
+    &.list-show {
+        .filter-hide {
+            pointer-events: all;
+            background: rgba(0, 0, 0, 0.5);
+        }
+    }
+
+    &.load-commit {
+        .filter-hide {
+            pointer-events: all;
+            background: rgba(0, 0, 0, 0.5);
+
+            .loader {
+                opacity: 1;
+                width: 50px;
+                height: 50px;
+                border: 6px solid #3689E8;
+                border-bottom-color: #ffffff;
+            }
+        }
+    }
+
+    .content-wraper {
         overflow-y: auto;
+        padding-top: 0 !important;
+        gap: 0px !important;
+        padding-left: calc(env(safe-area-inset-left) + 0px) !important;
+        padding-right: calc(env(safe-area-inset-right) + 0px) !important;
     }
 
     //Title + tag
@@ -11,10 +81,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-
-        //new code
-        border-bottom: 2px solid rgba(64, 153, 240, 0.4);
-        padding-bottom: 10px;
+        min-height: 60px;
+        margin-left: 10px;
+        margin-right: 10px;
 
         .title {
             font-size: 16px;
@@ -29,6 +98,8 @@
             gap: 10px;
             font-size: 11px;
             font-weight: bold;
+            z-index: 9;
+            cursor: pointer;
 
             svg {
                 width: 9.4px;
@@ -39,38 +110,42 @@
 
     //Update content
     .update-content-wraper {
-        max-height: calc(100vh - 45px - 107px - max(20px, env(safe-area-inset-bottom)));
         overflow-y: auto;
         display: flex;
         flex-direction: column;
         width: 100%;
+        background: #191C21;
+        margin-bottom: 10px;
+        gap: 12px;
 
         .update-page-block {
-            border-bottom: 2px solid rgba(64, 153, 240, 0.4);
-            padding-bottom: 20px;
-            margin-bottom: 10px;
+            padding-bottom: 10px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-
-            &:first-child {
-                margin-top: 10px;
-            }
+            gap: 20px;
         }
 
         .block-title {
             display: flex;
             align-items: center;
-            gap: 10px;
-            // font-size: 14px;
             font-size: calc(16px + 0 * (100vw / 1280));
+            font-weight: bold;
+            background: #468be8;
+            padding: 5px 0;
 
             span {
-                display: flex;
-                width: 6px;
-                height: 6px;
-                background: linear-gradient(90.75deg, #51B3FF 0%, #3283E4 100%);
-                border-radius: 50%;
+                display: grid;
+                place-items: center;
+                aspect-ratio: 1/1;
+                height: 22px;
+
+                &::after {
+                    content: '';
+                    width: 6px;
+                    height: 6px;
+                    background: #3689E8;
+                    border-radius: 50%;
+                }
             }
         }
 
@@ -80,16 +155,24 @@
             gap: 5px;
 
             .block-icon {
+                margin-left: 22px;
                 display: flex;
                 align-items: center;
-                gap: 10px;
-                // font-size: 14px;
+                gap: 5px;
                 font-size: calc(15px + 0 * (100vw / 1280));
                 font-weight: bold;
+                margin-right: 10px;
 
-                svg {
-                    fill: #fff;
-                    width: 12px;
+                .icon {
+                    width: 22px;
+                    height: 22px;
+                    display: grid;
+                    place-items: center;
+
+                    svg {
+                        fill: #ffffff9f;
+                        width: 12px;
+                    }
                 }
             }
 
@@ -99,20 +182,251 @@
                 gap: 10px;
 
                 .content {
-                    // font-size: 11px;
-                    font-size: calc(13px + 0 * (100vw / 1280));
+                    font-size: 13.7px;
                     margin-left: calc(12px + 10px);
+                    margin-right: 10px;
                 }
+
+                .tWrapper {
+                    max-width: 100%;
+                    overflow-x: scroll;
+                }
+
+                .uSwiperWrapper {
+                    margin-left: 20px;
+                    margin-right: 20px;
+                    padding-bottom: 13px;
+                    overflow: hidden;
+
+                    .sWrapper {
+                        position: relative;
+
+                        .swiper-wrapper {
+                            .vWrapper {
+                                border-radius: 5px;
+                                overflow: hidden;
+                                width: 100%;
+                                aspect-ratio: 16 / 9;
+                                position: relative;
+
+                                video {
+                                    width: 100%;
+                                    border-radius: 5px;
+                                }
+
+                                .controls {
+                                    position: absolute;
+                                    bottom: -40px; // 5px
+                                    left: 5px;
+                                    right: 5px;
+                                    height: 35px;
+                                    padding-left: 5px;
+                                    padding-right: 5px;
+                                    background: #1f293b;
+                                    display: flex;
+                                    align-items: center;
+                                    border-radius: 3px;
+                                    justify-content: space-between;
+
+                                    .icon {
+                                        display: flex;
+                                        color: #fff;
+                                        font-size: 12px;
+                                        align-items: center;
+                                        gap: 5px;
+                                        font-weight: bold;
+                                        text-wrap: nowrap;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                        margin-right: 10px;
+
+                                        img {
+                                            width: 22px;
+                                            border-radius: 3px;
+                                        }
+                                    }
+
+                                    .buttons {
+                                        display: flex;
+                                        gap: 3px;
+
+                                        .btn-play-pause {
+                                            &.pause {
+                                                svg.play {
+                                                    opacity: 0;
+                                                }
+                                            }
+
+                                            &.play {
+                                                svg.pause {
+                                                    opacity: 0;
+                                                }
+                                            }
+                                        }
+
+                                        .btn-play-pause,
+                                        a {
+                                            width: 25px;
+                                            height: 25px;
+                                            background: #0f141d;
+                                            border-radius: 3px;
+                                            cursor: pointer;
+                                            display: grid;
+                                            place-items: center;
+                                            position: relative;
+
+                                            svg {
+                                                width: 10px;
+                                                fill: #b2b3b6;
+                                                position: absolute;
+                                            }
+                                        }
+
+                                        a {
+                                            svg {
+                                                width: 12px;
+                                                transform: rotate(45deg);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .swiper-pagination {
+                            --swiper-pagination-bullet-size: 8px;
+                            --swiper-pagination-bullet-width: 50px;
+                            --swiper-pagination-bullet-height: 8px;
+                            --swiper-pagination-bullet-inactive-color: #528de8;
+                            --swiper-pagination-bullet-inactive-opacity: 0.2;
+                            --swiper-pagination-bullet-opacity: 1;
+                            --swiper-pagination-bullet-horizontal-gap: 4px;
+                            --swiper-pagination-bullet-vertical-gap: 6px;
+
+                            .swiper-pagination-bullet {
+                                border-radius: 3px !important;
+                            }
+                        }
+
+                        .swiper-horizontal>.swiper-pagination-bullets,
+                        .swiper-pagination-bullets.swiper-pagination-horizontal,
+                        .swiper-pagination-custom,
+                        .swiper-pagination-fraction {
+                            bottom: -13px !important;
+
+                        }
+
+                        .swiper-pagination-bullet-active {
+                            background: #3689E8 !important;
+                        }
+                    }
+                }
+
+                .modTable {
+                    width: max-content;
+                    min-width: 100%;
+
+                    .tadd,
+                    .trem,
+                    .tedt {
+                        display: flex;
+                        align-items: center;
+                        padding-left: 12px;
+                        width: 100%;
+
+                        .icon {
+                            min-width: 35px;
+                            height: 35px;
+                            display: grid;
+                            place-items: center;
+                            position: sticky;
+                            left: 0px;
+                            z-index: 2;
+
+                            svg {
+                                fill: #fff;
+                                width: 12px;
+                            }
+                        }
+
+                        .value {
+                            text-wrap: nowrap;
+                            position: sticky;
+                            left: 35px;
+                            color: #fff;
+                            margin-right: 10px;
+                            font-size: 14px;
+                        }
+
+                        &.tadd {
+                            background: #1b2639;
+
+                            .icon {
+                                background: #1b2639;
+                            }
+                        }
+
+                        &.tedt {
+                            background: #1f2228;
+
+                            .icon {
+                                background: #1f2228;
+                            }
+                        }
+
+                        &.trem {
+                            background: #391c1c;
+
+                            .icon {
+                                background: #391c1c;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @media screen and (min-width: 900px) {
+            & {
+                border-radius: 5px;
+            }
+        }
+    }
+
+    .btn-wrapper {
+        $height: 40px;
+        display: flex;
+        margin-left: 10px;
+        margin-right: 10px;
+        gap: 10px;
+
+        .restart-script {
+            min-height: $height;
+            max-height: $height;
+            min-width: $height;
+            max-width: $height;
+            display: none;
+            place-items: center;
+            cursor: pointer;
+
+            &.show{
+                display: grid;
+            }
+
+            svg {
+                fill: #fff;
+                width: 15px;
             }
         }
     }
 
     //Button accept updation
     .btn-submit {
+        flex: 1 0 0;
         $height: 40px;
         min-height: $height;
         max-height: $height;
-        background: #2393F1;
+        background: #3689E8;
         border-radius: 4px;
         display: grid;
         place-items: center;
@@ -120,5 +434,55 @@
         font-size: 13px;
         font-weight: bold;
         cursor: pointer;
+        
+        position: relative;
+        overflow: hidden;
+
+        &.cl-2 {
+            .type-2 {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+
+            .type-1 {
+                transform: translateY(-23px);
+                opacity: 0;
+                transition: .1s ease-in-out;
+            }
+        }
+
+
+
+        .type-2 {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transform: translateY(23px);
+            opacity: 0;
+            transition: .1s ease-in-out;
+        }
+    }
+
+    .loader {
+        width: 15px;
+        height: 15px;
+        border: 2px solid #10131847;
+        border-bottom-color: #ffffff;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 }
