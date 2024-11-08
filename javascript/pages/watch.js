@@ -1,10 +1,10 @@
 import { Main } from "../modules/ShikiUSR.js";
-import { LoadScreen } from "./watch/mod_load.js";
+import { LTransition } from "./watch/mod_transition.js";
 import { CheckID, LoadAnime } from "./watch/mod_resource.js";
 import { IPlayer } from "./watch/mod_player.js";
 import { AutoScrollEpisodes } from "./watch/mod_scrolling.js";
 import { Functional } from "./watch/mod_ui.js";
-import { DifferenceInData, SaveLData, SetDifferenceData, Synch, SynchLData } from "./watch/mod_sdata.js";
+import { ASynch } from "./watch/mod_dbanime.js";
 import { UserRate } from "./watch/mod_urate.js";
 import { Tunime } from "../modules/TunimeApi.js";
 import { History } from "./watch/mod_history.js";
@@ -35,7 +35,7 @@ Main(async (e) => {
         try {
             const data = await import(`/javascript/pages/anime/${$ID}.js`);
             $RULES = data.default;
-            console.log(`[watch] - Custom RULES uploaded`);
+            console.log(`[watch] - Custom RULES [${$ID}] loaded`);
         } catch { }
     }
     //Проверка на существование такого ID
@@ -48,8 +48,10 @@ Main(async (e) => {
 
     Functional();
 
+    const aSynch = ASynch.Init();
+
     UserRate().Events.OnInit((res) => {
-        SynchLData(res);
+        aSynch.Synch(res);
     });
 
     //Автоматически проскролит до выбраного эпизода
@@ -69,22 +71,22 @@ Main(async (e) => {
     Player.CTranslation.on('selected', ({ id, user_handler }) => {
         const episode = Player.CEpisodes.selected;
         if (user_handler && episode == 1 && id) {
-            SaveLData(episode, id);
+            aSynch.Save(episode, id);
         }
     });
 
     //Событие отправки выбора озвучки первого просмотра 
     Player.CMessage.on('play', () => {
-        const data = DifferenceInData();
+        const data = aSynch.Diff;
         if (!data[0] && !data[1])
             return;
         if (data[0] && !data[1]) {
             Tunime.OnActiv.Voice($ID, data[0].kodik_dub);
-            SetDifferenceData(data[0]);
+            aSynch.difference = data[0];
         } else if (data[0] && data[1]) {
             if (data[0].kodik_dub != data[1].kodik_dub) {
                 Tunime.OnActiv.Voice($ID, data[0].kodik_dub);
-                SetDifferenceData(data[0]);
+                aSynch.difference = data[0];
             }
         }
     });
@@ -93,7 +95,7 @@ Main(async (e) => {
     //Этот обработчик будет сохранять последние выбраное аниме
     Player.CEpisodes.on('selected', ({ episode, translation, user_handler }) => {
         if (user_handler) {
-            SaveLData(episode, translation);
+            aSynch.Save(episode, translation);
 
             //Добавляем истоию просмотра
             History().add(false, 0, 0, episode);
@@ -139,7 +141,7 @@ Main(async (e) => {
         const next_episode = Player.CEpisodes.selected + 1;
         Player.PControl.Exec("set_episode", { episode: next_episode });
         Player.CEpisodes.Select(next_episode);
-        SaveLData(next_episode, Player.CTranslation.id);
+        aSynch.Save(next_episode, Player.CTranslation.id);
         History().add(false, 0, 0, next_episode);
     });
 
@@ -158,7 +160,7 @@ Main(async (e) => {
     })
 
     //Начинает загрузку плеера после получения синхронизированных данных
-    Synch.Init().On((data) => {
+    aSynch.on("inited", (data) => {
         if (data) {
             Player.Init(data);
         } else {
@@ -169,9 +171,9 @@ Main(async (e) => {
     //Загружаем аниме
     LoadAnime(async (e) => {
         if ($RULES) {
-            $RULES.OnLoad();
+            $RULES.on.load();
         }
-        await LoadScreen.Loaded(() => {
+        await LTransition.Loaded(() => {
             if ($SHOWPLAYER) {
                 const element = document.querySelector(".landscape-player");
                 element.scrollIntoView({

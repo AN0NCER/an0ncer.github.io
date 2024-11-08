@@ -4,8 +4,7 @@ import { Animes, GraphQl } from "../../modules/ShikiAPI.js";
 import { Sleep } from "../../modules/functions.js";
 import { $ID } from "../watch.js";
 import { UserRate } from "./mod_urate.js";
-import { LoadScreen } from "./mod_load.js";
-import { History } from "./mod_history.js";
+import { LTransition } from "./mod_transition.js";
 import { InitFranchises } from "./mod_franchise.js";
 
 /**@type {IScreenshots} */
@@ -109,16 +108,16 @@ export let Anime = undefined;
  */
 export async function LoadAnime(e = () => { }, isLogged = false) {
     const start = Date.now(),
-        loadScreen = new LoadScreen(9),
         process = [];
+    LTransition.Progress.steps = 9;
     let posterLink = undefined,
         jikanLoaded = false;
 
     try {
-        loadScreen.progress.Step();
+        LTransition.Progress.NewStep();
         process.push(new Promise(async (resolve) => {
             Anime = await FetchAnime($ID);
-            loadScreen.progress.Step();
+            LTransition.Progress.NewStep();
             UserRate().init(Anime.user_rate, isLogged);
             if (posterLink === undefined) {
                 posterLink = `${SHIKIURL.url}/${Anime.image.original}`;
@@ -146,7 +145,7 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
                 process.push(LoadPoster(poster));
             }
             jikanLoaded = true;
-            loadScreen.progress.Step();
+            LTransition.Progress.NewStep();
 
             resolve(true);
         }));
@@ -161,14 +160,14 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
 
         for (let i = 0; i < process.length; i++) {
             await process[i];
-            loadScreen.progress.Step();
+            LTransition.Progress.NewStep();
         }
 
         e(Anime);
     } catch (error) {
         console.log(error);
     }
-    console.log(`Loaded: ${Date.now() - start}ms`);
+    console.log(`[res] - Loaded: ${Date.now() - start}ms`);
 
     /**
      * Загрузка изобюражения
@@ -299,29 +298,28 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
         }
 
         return new Promise((resolve) => {
-            Animes.roles(id, async (response) => {
+            GraphQl.animes({ ids: `"${id}"`, limit: 1 }, async (response) => {
                 if (response.failed && response.status == 429) {
                     await Sleep(1000);
                     return resolve(Heroes(id));
                 }
 
-                if (response.failed) {
-                    alert("Error Load Anime (check console)");
-                    console.log(response);
-                    return;
+                if (response.data.animes.length === 0) {
+                    return resolve(true);
                 }
 
-                Cache.Set({ id, type: 'heroes', value: response });
-                return resolve(Complete(response));
-            }).GET();
+                Cache.Set({ id, type: 'heroes', value: response.data.animes[0].characterRoles });
+                return resolve(Complete(response.data.animes[0].characterRoles))
+
+            }).POST([{ "characterRoles": ["rolesEn", { "character": ["russian", "url", { "poster": ["previewUrl"] }] }] }]);
         });
 
         function Complete(response) {
             for (let i = 0; i < response.length; i++) {
                 const element = response[i];
-                if (element.roles.includes('Main')) {
+                if (element.rolesEn.includes('Main')) {
                     $('.hero-anime, .hero-anime-title').css('display', '');
-                    $('.hero-anime > .val').append(`<a href="${SHIKIURL.url}${element.character.url}" target="_blank"><img src="${SHIKIURL.suburl('nyaa')}${element.character.image.original}"/><div class="hero"><div class="name">${element.character.russian}</div></div></a>`);
+                    $('.hero-anime > .val').append(`<a href="${element.character.url}" target="_blank"><img src="${element.character.poster.previewUrl}"/><div class="hero"><div class="name">${element.character.russian}</div></div></a>`);
                 }
             }
             return true;

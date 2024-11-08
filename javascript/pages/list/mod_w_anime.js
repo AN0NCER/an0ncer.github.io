@@ -1,7 +1,7 @@
 import { ACard } from "../../modules/AnimeCard.js";
 import { arraysAreEqual, Sleep } from "../../modules/functions.js";
 import { GraphQl } from "../../modules/ShikiAPI.js";
-import { WindowManagement } from "../../modules/Windows.js";
+import { PullToClose, WindowManagement } from "../../modules/Windows.js";
 
 class Anime {
     constructor(ids = []) {
@@ -88,13 +88,7 @@ const _anime_window = new WindowManagement({
             this.hide();
         });
 
-        const $element = $('.content-anime');
-        $element.on('scroll.closeWindow', function () {
-            const scrollTop = $(this).scrollTop();
-            if(scrollTop < 0 && scrollTop < -80){
-                _anime_window.target.hide();
-            }
-        })
+        PullToClose('.content-anime', () => { _anime_window.target.hide() });
     },
     show: function () {
     },
@@ -122,7 +116,7 @@ const _anime_window = new WindowManagement({
 }, '.window-anime');
 
 export const AnimeWindow = ({ list = [], title } = {}) => {
-    
+
     return new Promise((resolve) => {
         const $element = $('.content-anime');
         _anime_window.target.setup(list).then(() => {

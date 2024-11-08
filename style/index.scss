@@ -9,6 +9,10 @@ body {
   margin: 0 auto;
   -webkit-text-size-adjust: none;
   /* Запрещает автоматическое изменение размера текста */
+
+  &.hidden{
+    overflow: hidden;
+  }
 }
 
 header {

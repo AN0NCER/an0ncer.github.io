@@ -1,10 +1,10 @@
 import { User } from "../../modules/ShikiUSR.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { UserRate } from "./mod_urate.js";
-import { SetSynchEnable, SYNC_ENABLE, Synch } from "./mod_sdata.js";
 import { Private } from "./mod_private.js";
 import { ShowCollectionWindow } from "./mod_collection.js";
 import { IPlayer } from "./mod_player.js";
+import { ASynch } from "./mod_dbanime.js";
 
 const Player = IPlayer.Init();
 
@@ -14,7 +14,7 @@ const WindowScore = {
     },
 
     anim: {
-        showed: function () { 
+        showed: function () {
             WindowScore.auto_grow(document.querySelector('textarea.noten'));
         }
     },
@@ -111,7 +111,7 @@ const WindowScore = {
         });
 
         $('#sync-anime').click(function () {
-            SetSynchEnable(this.checked);
+            ASynch.Init().local.synch = this.checked;
         });
 
         $('#anime-incognito').click(function () {
@@ -143,12 +143,13 @@ const WindowScore = {
         });
 
         Player.on("inited", (results) => {
-            Synch.Init().On((data) => {
+            const aSynch = ASynch.Init();
+            const callback = (data) => {
                 try {
                     if (data === undefined)
                         return;
 
-                    const index = results.findIndex(x => x.translation.id === data.kodik_dub);
+                    const index = results.findIndex(x => x.translation.id === data.kodik_dub)
 
                     if (index === -1)
                         return;
@@ -160,30 +161,19 @@ const WindowScore = {
                     $(`.sync-data > .episode`).text(`${data.kodik_episode} Эпизод`);
                     $(`.sync-data > .time`).text(`${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`);
                 } catch (error) {
-                    console.log(error);
+                    console.log(error)
                 }
+            }
 
-            });
-
-            Synch.Init().plugins.update.On((data) => {
-                const index = results.findIndex(x => x.translation.id === data.kodik_dub);
-
-                if (index === -1)
-                    return;
-
-                const title = results[index].translation.title;
-                const date = data.date_update;
-
-                $(`.sync-data > .voice`).text(title);
-                $(`.sync-data > .episode`).text(`${data.kodik_episode} Эпизод`);
-                $(`.sync-data > .time`).text(`${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`);
-            });
+            callback(aSynch.local.localData.ldata);
+            aSynch.on("inited", callback);
+            aSynch.on("updated", callback);
         });
     },
 
     show: function () {
         $('body').addClass('loading');
-        $('#sync-anime').attr('checked', SYNC_ENABLE);
+        $('#sync-anime').attr('checked', ASynch.Init().local.synch);
         $('#anime-incognito').attr('checked', Private.INCOGNITO);
     },
 
@@ -227,7 +217,7 @@ function SetNote(note) {
             text = text.replace(match[0], '');
             text.trim();
         }
-        if(last_note != note){
+        if (last_note != note) {
             //Устанавливаем значения комментария в input
             $('textarea.noten').val(text.trim());
             WindowScore.auto_grow(document.querySelector('textarea.noten'));

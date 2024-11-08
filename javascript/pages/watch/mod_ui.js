@@ -3,7 +3,7 @@ import { ShowInfo } from "../../modules/Popup.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { $ID, Player } from "../watch.js";
 import { ShowDwonloadWindow } from "./mod_download.js";
-import { LoadScreen } from "./mod_load.js";
+import { LTransition } from "./mod_transition.js";
 import { Screenshots } from "./mod_resource.js";
 import { ShowTranslationWindow } from "./mod_translation.js";
 import { UserRate } from "./mod_urate.js";
@@ -72,7 +72,7 @@ export function Functional() {
     CentrumPlayer();
     AnimeStatusSelect();
     PageReload(document);
-    LoadScreen.On('loaded', () => {
+    LTransition.on('loaded', () => {
         AutoScrollFranchise();
     })
 
