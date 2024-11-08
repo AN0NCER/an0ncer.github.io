@@ -193,9 +193,9 @@
                 }
 
                 .uSwiperWrapper {
-                    margin-left: 20px;
-                    margin-right: 20px;
-                    padding-bottom: 13px;
+                    margin-top: 5px;
+                    padding-bottom: 20px;
+                    margin-bottom: -10px;
                     overflow: hidden;
 
                     .sWrapper {
@@ -203,15 +203,17 @@
 
                         .swiper-wrapper {
                             .vWrapper {
-                                border-radius: 5px;
                                 overflow: hidden;
                                 width: 100%;
                                 aspect-ratio: 16 / 9;
                                 position: relative;
+                                // border-top: 2px solid #3689E8;
+                                // border-bottom: 2px solid #3689E8;
+                                // box-sizing: border-box;
+                                // 
 
                                 video {
                                     width: 100%;
-                                    border-radius: 5px;
                                 }
 
                                 .controls {
@@ -294,14 +296,14 @@
                         }
 
                         .swiper-pagination {
-                            --swiper-pagination-bullet-size: 8px;
-                            --swiper-pagination-bullet-width: 50px;
-                            --swiper-pagination-bullet-height: 8px;
+                            // --swiper-pagination-bullet-size: 8px;
+                            // --swiper-pagination-bullet-width: 50px;
+                            // --swiper-pagination-bullet-height: 8px;
                             --swiper-pagination-bullet-inactive-color: #528de8;
-                            --swiper-pagination-bullet-inactive-opacity: 0.2;
-                            --swiper-pagination-bullet-opacity: 1;
-                            --swiper-pagination-bullet-horizontal-gap: 4px;
-                            --swiper-pagination-bullet-vertical-gap: 6px;
+                            // --swiper-pagination-bullet-inactive-opacity: 0.2;
+                            // --swiper-pagination-bullet-opacity: 1;
+                            // --swiper-pagination-bullet-horizontal-gap: 4px;
+                            // --swiper-pagination-bullet-vertical-gap: 6px;
 
                             .swiper-pagination-bullet {
                                 border-radius: 3px !important;
@@ -312,7 +314,7 @@
                         .swiper-pagination-bullets.swiper-pagination-horizontal,
                         .swiper-pagination-custom,
                         .swiper-pagination-fraction {
-                            bottom: -13px !important;
+                            bottom: -15px !important;
 
                         }
 
@@ -320,7 +322,20 @@
                             background: #3689E8 !important;
                         }
                     }
+                    @media screen and (min-width: 740px) {
+                        & {
+                            margin-left: 20px;
+                            margin-right: 20px;
+                            padding-bottom: 13px;
+                            .swiper-wrapper{
+                                .vWrapper{
+                                    border-radius: 5px;
+                                }
+                            }
+                        }
+                    }
                 }
+                
 
                 .modTable {
                     width: max-content;
@@ -409,7 +424,7 @@
             place-items: center;
             cursor: pointer;
 
-            &.show{
+            &.show {
                 display: grid;
             }
 
@@ -434,7 +449,7 @@
         font-size: 13px;
         font-weight: bold;
         cursor: pointer;
-        
+
         position: relative;
         overflow: hidden;
 

@@ -1553,16 +1553,15 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   overflow-x: scroll;
 }
 .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper {
-  margin-left: 20px;
-  margin-right: 20px;
-  padding-bottom: 13px;
+  margin-top: 5px;
+  padding-bottom: 20px;
+  margin-bottom: -10px;
   overflow: hidden;
 }
 .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper .sWrapper {
   position: relative;
 }
 .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper .sWrapper .swiper-wrapper .vWrapper {
-  border-radius: 5px;
   overflow: hidden;
   width: 100%;
   aspect-ratio: 16/9;
@@ -1570,7 +1569,6 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 }
 .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper .sWrapper .swiper-wrapper .vWrapper video {
   width: 100%;
-  border-radius: 5px;
 }
 .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper .sWrapper .swiper-wrapper .vWrapper .controls {
   position: absolute;
@@ -1634,14 +1632,7 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   transform: rotate(45deg);
 }
 .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper .sWrapper .swiper-pagination {
-  --swiper-pagination-bullet-size: 8px;
-  --swiper-pagination-bullet-width: 50px;
-  --swiper-pagination-bullet-height: 8px;
   --swiper-pagination-bullet-inactive-color: #528de8;
-  --swiper-pagination-bullet-inactive-opacity: 0.2;
-  --swiper-pagination-bullet-opacity: 1;
-  --swiper-pagination-bullet-horizontal-gap: 4px;
-  --swiper-pagination-bullet-vertical-gap: 6px;
 }
 .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper .sWrapper .swiper-pagination .swiper-pagination-bullet {
   border-radius: 3px !important;
@@ -1650,10 +1641,20 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper .sWrapper .swiper-pagination-bullets.swiper-pagination-horizontal,
 .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper .sWrapper .swiper-pagination-custom,
 .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper .sWrapper .swiper-pagination-fraction {
-  bottom: -13px !important;
+  bottom: -15px !important;
 }
 .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper .sWrapper .swiper-pagination-bullet-active {
   background: #3689E8 !important;
+}
+@media screen and (min-width: 740px) {
+  .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper {
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-bottom: 13px;
+  }
+  .content-update .update-content-wraper .block-content .block-text .uSwiperWrapper .swiper-wrapper .vWrapper {
+    border-radius: 5px;
+  }
 }
 .content-update .update-content-wraper .block-content .block-text .modTable {
   width: -moz-max-content;
