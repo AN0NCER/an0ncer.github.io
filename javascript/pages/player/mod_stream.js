@@ -56,7 +56,7 @@ export class Skips {
 
 export async function LoadM3U8(id, e) {
     const streams = await loadStreamTunime(id, e);
-    return GenLink(streams);
+    return GenLink(streams.qualities);
 }
 
 export async function LoadM3U8Episode(id, e) {
@@ -66,7 +66,7 @@ export async function LoadM3U8Episode(id, e) {
             kodik_link = `https:${kodik_link}`;
         }
         const streams = await loadStreamTunime(id, e, kodik_link);
-        return GenLink(streams);
+        return GenLink(streams.qualities);
     }
 }
 
