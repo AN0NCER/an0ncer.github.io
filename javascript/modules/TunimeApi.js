@@ -250,7 +250,6 @@ class Shadow {
 const balancer = new Balancer([
     'https://tunime.onrender.com',
     'https://tunime-hujg.onrender.com',
-    'https://192.168.31.233:3001',
 ]);
 
 const user = new Access();
