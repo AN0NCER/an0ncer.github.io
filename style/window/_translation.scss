@@ -5,6 +5,7 @@
         overscroll-behavior: contain;
 
         .content-wraper {
+            padding-top: 10px;
             display: grid;
             grid-template-columns: auto;
             grid-template-rows: auto auto auto;
