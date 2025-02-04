@@ -506,25 +506,17 @@ const IntercatMenu = {
                 location.replace('watch.html?id=' + data[1].id + '&player=true&continue=' + data[1].continue);
             }
         },
-        one: {
-            text: "Продолжить 1-ое",
-            icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM224 224a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>`,
-            type: "page",
-            disabled: () => {
-                let data = localStorage.getItem('last-watch');
-                if (!data) return true;
-                data = JSON.parse(data);
-                if (!data[0]) return true;
-                return false;
-            },
-            event: () => {
-                let data = localStorage.getItem('last-watch');
-                data = JSON.parse(data);
-                location.replace('watch.html?id=' + data[0].id + '&player=true&continue=' + data[0].continue);
-            }
-        },
         line: {
-
+            type: "line",
+        },
+        downloads: {
+            type: "page",
+            text: "Загруженные аниме",
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 242.7-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7 288 32zM64 352c-35.3 0-64 28.7-64 64l0 32c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-32c0-35.3-28.7-64-64-64l-101.5 0-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352 64 352zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/></svg>`,
+            disabled: () => { return false },
+            event: () => {
+                window.location.href = "downloads.html";
+            }
         },
         fullscreen: {
             type: "parametr",
