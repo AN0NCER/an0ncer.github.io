@@ -1,6 +1,7 @@
 import { InitMenu, Menu } from "../menu.js";
 import { Users } from "../modules/ShikiAPI.js";
 import { Main, User } from "../modules/ShikiUSR.js";
+import { OnClearDB } from "./settings/mod_cleardb.js";
 import { ShowMoreSelect, ShowSelect } from "./settings/mod_select.js";
 import { ShowStorage, Storage } from "./settings/mod_storage.js";
 
@@ -200,7 +201,7 @@ const Parameters = [
         ]
     },
     {
-        name: 'Загрузка',
+        name: 'Загрузчик',
         parameters: [
             {
                 type: 'sel-one',
@@ -216,25 +217,43 @@ const Parameters = [
             },
             {
                 type: 'boolean',
-                param: 'dasync',
-                name: 'Асинхроная загрузка',
-                description: 'Позволяет приложению подгружать контент независимо от основного процесса, улучшая скорость загрузки.'
-            },
-            {
-                type: 'boolean',
                 param: 'dautosave',
                 name: 'Автосохранение',
                 description: 'После загрузки автоматически сохраняет файл.'
             },
+            // {
+            //     type: 'boolean',
+            //     param: '',
+            //     name: 'Открывать загрузки. Оффлайн',
+            //     description: ''
+            // },
             {
-                type: 'boolean',
-                param: 'dautoset',
-                name: 'Автоотметки',
-                description: 'Отмечать загруженые аниме через 12 часов + продолжительность аниме.'
+                type: 'button',
+                param: 'cleardb',
+                name: 'Сбросить загрузчик',
+                description: 'Удаляеть полностью базу данных с загрузками'
             }
+            // {
+            //     type: 'boolean',
+            //     param: 'dautoset',
+            //     name: 'Автоотметки',
+            //     description: 'Отмечать загруженые аниме через 12 часов + продолжительность аниме.'
+            // }
         ]
     }
 ];
+
+export function formatBytes(x) {
+    const units = ['б', 'Кб', 'Мб', 'Гб'];
+
+    let l = 0, n = parseInt(x, 10) || 0;
+
+    while (n >= 1024 && ++l) {
+        n = n / 1024;
+    }
+
+    return (n.toFixed(n < 5 && l > 0 ? 2 : 0) + ' ' + units[l]);
+}
 
 //Отображаем параметры
 _ShowParametrs();
@@ -317,6 +336,7 @@ function _ShowParametrs() {
     eventSelectOne();
     eventSelectMore();
     eventAppStorage();
+    eventButtons();
 
     function __loadParametrs(parametrs) {
         let html = "";
@@ -352,14 +372,12 @@ function _ShowParametrs() {
                                     <div class="select">0 KB</div>
                                 </label>`;
                     (async () => {
-                        let s = await Storage.size(), d = 'KB';
-                        if (s > 1000) {
-                            d = 'MB';
-                            s = (s / 1000).toFixed(2);
-                        }
-                        $(`label[data-type="app-size"] > .select`).text(`${s} ${d}`);
+                        let s = await Storage.size();
+                        $(`label[data-type="app-size"] > .select`).text(`${formatBytes(s)}`);
                     })();
                     break;
+                case "button":
+                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-param="${element.param}" data-type="button" data-tooltip="${element.description}"><button>${element.name}</button></label>`;
                 default:
                     break;
             }
@@ -412,6 +430,12 @@ function eventSelectMore() {
 function eventAppStorage() {
     $('label[data-type="app-size"]').click(function () {
         ShowStorage();
+    });
+}
+
+function eventButtons() {
+    $(`label[data-param="cleardb"] > button`).on('click', () => {
+        OnClearDB("downloader");
     });
 }
 

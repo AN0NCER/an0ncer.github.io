@@ -269,6 +269,27 @@ main {
 
 .parameters-container {
     label {
+        button {
+            display: flex;
+            flex: 1 1 0;
+            height: 35px;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            font-family: 'Manrope';
+            border-radius: 3px;
+            background: #008afb;
+            color: #FFFFFF;
+            outline: none;
+            border: none;
+            cursor: pointer;
+        }
+    }
+}
+
+.parameters-container {
+    label {
         .radio {
             height: 30px;
             display: flex;
@@ -357,6 +378,7 @@ footer {
     }
 }
 
+@import './popup';
 @import './phone_menu';
 @import './windowed';
 @import './settings/slectwindow';
