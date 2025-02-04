@@ -403,11 +403,7 @@
         <span class="window-content content-download hide">
             <span class="content-wraper">
                 <div class="window-bar bar-download">
-                    <div class="window-title"><span class="help-icon" id="help-download"><svg
-                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                                <path
-                                    d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z" />
-                            </svg></span>Загрузить</div>
+                    <div class="window-title">Загрузить</div>
                     <div class="window-close">
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
                             <path
@@ -419,32 +415,114 @@
                     <div class="episodes-download">
                     </div>
                 </div>
+                <div class="btn all-download">
+                    <span>Загрузить все серии</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512">
+                        <path
+                            d="M152.1 38.2c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 113C-2.3 103.6-2.3 88.4 7 79s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zm0 160c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 273c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zM224 96c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zm0 160c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zM160 416c0-17.7 14.3-32 32-32l288 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-288 0c-17.7 0-32-14.3-32-32zM48 368a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
+                    </svg>
+                </div>
+                <div class="info-wrapper">
+                    <div class="block" id="file-size">
+                        <div class="content-a">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path
+                                        d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-242.7c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32L64 32zm0 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-64zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                                </svg>
+                            </div>
+                            <div class="text">Размер: <span class="value">0 Мб</span></div>
+                        </div>
+                        <div class="content-b"><span class="downloaded">0</span>|<span class="count">0</span></div>
+                    </div>
+                    <div class="block" id="download-speed">
+                        <div class="content-a">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                    <path
+                                        d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm320 96c0-26.9-16.5-49.9-40-59.3L280 88c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 204.7c-23.5 9.5-40 32.5-40 59.3c0 35.3 28.7 64 64 64s64-28.7 64-64z" />
+                                </svg>
+                            </div>
+                            <div class="text">Скорость: <span class="value">0</span> MB | S</div>
+                        </div>
+                        <div class="content-b"><span class="time">0:00</span></div>
+                    </div>
+                </div>
+                <div class="block-check">
+                    <input type="checkbox" id="save-as-file" name="saveasfile">
+                    <label for="save-as-file">
+                        <div class="check-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="9" height="7" viewBox="0 0 9 7" fill="none"
+                                class="check-arow">
+                                <path d="M1 3.22L3.66571 5.44L7.22 1" stroke="#D4D4D8" stroke-width="2"
+                                    stroke-linecap="round"></path>
+                            </svg>
+                        </div>
+                        Сохранить как файл
+                    </label>
+                </div>
                 <div class="progress-wrapper">
                     <div class="download-info">
                         <span class="voice">Voice</span>
                         <span class="quality">0p</span>
                     </div>
                     <div class="progress-download">
-                        <div class="value">
-                            <span class="percent">0%</span>
-                        </div>
+                        <div class="value"></div>
+                        <span class="percent">0%</span>
                     </div>
                 </div>
                 <div class="error-message hide"></div>
-                <div class="download-buttons">
-                    <div class="btn btn-accept" id="btn-download">Загрузить</div>
-                    <div class="btn btn-stop disable" id="btn-stop">Отмена</div>
-                </div>
-                <label class="window-footer autosave-param">
-                    <div class="title"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-                        </svg>Автосохранение</div>
-                    <div class="checkbox">
-                        <input type="checkbox" checked="">
-                        <div class="switch-check"></div>
+                <div class="complete-message hide">Добавлено в очередь</div>
+                <div class="wrap-buttons">
+                    <div class="list-buttons loading">
+                        <div class="group-loading group">
+                            <div class="btn">Инициализация</div>
+                        </div>
+                        <div class="group-availble group">
+                            <div class="btn">Загрузить</div>
+                        </div>
+                        <div class="group-save group">
+                            <div class="btn">Сохранить</div>
+                        </div>
+                        <div class="group-download group">
+                            <div class="btn">Остановить</div>
+                        </div>
+                        <div class="group-stoped group">
+                            <div class="btn">Продолжить</div>
+                            <div class="ico-btn">
+                                <span class="remove">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                        <path
+                                            d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="group-completed group">
+                            <div class="btn">Загружено</div>
+                            <div class="ico-btn">
+                                <span class="remove">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                        <path
+                                            d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="group-error group">
+                            <div class="btn">Повторить</div>
+                            <div class="ico-btn">
+                                <span class="remove">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                        <path
+                                            d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                </label>
+                </div>
             </span>
         </span>
     </span>

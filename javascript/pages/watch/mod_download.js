@@ -1,610 +1,742 @@
-import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
-import { Tunime } from "../../modules/TunimeApi.js";
+import { ScrollElementWithMouse } from "../../modules/functions.js";
+import { ShowInfo } from "../../modules/Popup.js";
+import { TDAnime, TDLState, TDownload } from "../../modules/TDownload.js";
 import { WindowManagement } from "../../modules/Windows.js";
-import { Player } from "../watch.js";
+import { $ID, Player } from "../watch.js";
 import { Anime } from "./mod_resource.js";
-import { UserRate } from "./mod_urate.js";
 
-let AutoSave = $PARAMETERS.download.dautosave;
+// TODO: Сделать отображение окна только если есть доступ к Tunime серверу
 
-class Automation {
-    constructor(downl) {
-        this.downl = downl;
-        this.key = "download-a";
-        this.Data = JSON.parse(localStorage.getItem(this.key)) || [];
-        this.Date = new Date().toJSON();
-        this.Autoset = $PARAMETERS.download.dautoset;
+function formatBytes(x) {
+    const units = ['б', 'Кб', 'Мб', 'Гб'];
+
+    let l = 0, n = parseInt(x, 10) || 0;
+
+    while (n >= 1024 && ++l) {
+        n = n / 1024;
     }
 
-    Show() {
-        /**@type {[{id:number, episode: [number]}]} */
-        let localData = JSON.parse(sessionStorage.getItem(this.key)) || [];
-        const ur = UserRate().Get();
-        const index = localData.findIndex(x => x.id == ur.id);
+    return (n.toFixed(n < 5 && l > 0 ? 1 : 0) + ' ' + units[l]);
+}
 
-        if (index === -1) {
-            return;
-        }
+class DOWLocal {
+    #callbacks = {
+        "check": []
+    }
+    /**
+     * @param {Downloader} downloader 
+     */
+    constructor(downloader) {
+        this.dow = downloader;
 
-        for (let i = 0; i < localData[index].episode.length; i++) {
-            const ep = localData[index].episode[i];
-            if ($(`.d-episode[data-e="${ep}"] > .downloaded`).length === 0) {
-                $(`.d-episode[data-e="${ep}"]`).append(`<span class="downloaded"></span>`);
-            }
-        }
+        this.$dom = $('input#save-as-file[type="checkbox"]');
+
+        this.$dom.on('change', (event) => {
+            const key = { v: this.dow.Data.voice.id, e: this.dow.Episodes.selected };
+            const isChecked = $(event.currentTarget).prop('checked');
+            this.#Dispatch("check", key, isChecked);
+        });
     }
 
-    Set(ep) {
-        const duration = Anime.duration;
-        const ur = UserRate().Get();
+    set(value) {
+        this.$dom.prop('checked', value);
+    }
 
-        if (ur !== null && ur.episodes < ep && this.Autoset) {
-            let downlData = { id_ur: undefined, episodes: undefined, downloaded: [], duration: duration };
-            let index = this.Data.findIndex(x => x.id_ur === ur.id);
-
-            if (index !== -1) {
-                downlData = this.Data[index];
-                this.Data.splice(index, 1);
-            }
-
-            downlData.id_ur = ur.id;
-            downlData.episodes = ur.episodes;
-
-            index = downlData.downloaded.findIndex(x => x.episode === ep);
-
-            if (index === -1) {
-                downlData.downloaded.push({ episode: ep, date: this.Date });
-            }
-
-            this.Data.push(downlData);
-            localStorage.setItem(this.key, JSON.stringify(this.Data));
+    on(event, callback) {
+        if (typeof callback !== "function") return;
+        if (this.#callbacks[event] === undefined) {
+            this.#callbacks[event] = [];
         }
+        this.#callbacks[event].push(callback);
+    }
 
-        /**@type {[{id:number, episode: [number]}]} */
-        let localData = JSON.parse(sessionStorage.getItem(this.key)) || [];
-        const index = localData.findIndex(x => x.id == ur.id);
-        let data = { id: ur.id, episode: [] };
-
-        if (index !== -1) {
-            data = localData[index];
-            localData.splice(index, 1)
-        }
-
-        data.episode.push(ep);
-        localData.push(data);
-
-        if ($(`.d-episode[data-e="${ep}"] > .downloaded`).length === 0) {
-            $(`.d-episode[data-e="${ep}"]`).append(`<span class="downloaded"></span>`);
-        }
-
-        sessionStorage.setItem(this.key, JSON.stringify(localData));
+    #Dispatch(event, ...data) {
+        if (this.#callbacks[event] === undefined) return;
+        this.#callbacks[event].forEach(callback => callback(...data));
     }
 }
 
-class DownloadAnime {
-    #abortet = false;
-    constructor(index, data, downl) {
-        this.index = index;
-        this.data = data;
-        this.downl = downl;
-
-        this.eProgress = $('.progress-download > .value');
-        this.eCount = $('.progress-download > .value > .percent');
-
-        const count = `${0}%`
-
-        this.eProgress.css({ width: count });
-        this.eCount.text(count);
-
-        this.Stats = {
-            total: 0,
-            downloaded: 0
-        };
-
-        this.startTime = 0;
-        this.endTime = 0;
-        this.typeDownload = $PARAMETERS.download.dasync;
-        this.downloadLink = undefined;
+class DOWLogText {
+    constructor(downloader) {
+        this.dow = downloader;
+        this.$dom = [
+            $(`.content-wraper > .complete-message`),
+            $(`.content-wraper > .complete-message`)
+        ];
     }
 
-    Abort() {
-        this.#abortet = true;
+    set(text, error = false) {
+        let $el = this.$dom[0];
+
+        if (error)
+            $el = this.$dom[1];
+
+        $el.removeClass('hide');
     }
 
-    async Download() {
-        this.#OnLoading.forEach(event => event());
-
-        let link = `${this.data.link}?episode=${this.index}`;
-
-        if (!link.includes("http")) {
-            link = `https:${link}`;
-        }
-
-        if (this.#abortet) {
-            this.#OnAbbortet.forEach(event => event());
-            this.#OnAbbortet = [];
-            return;
-        }
-
-        const data = await Tunime.Source(link);
-
-        if (data) {
-            this.#LocalDownload(data);
-        } else {
-            this.#OnError.forEach((event) => { event('critical', 'Ошибка получение данных Tunime.') });
-        }
-    }
-
-    DownloadBlob() {
-        const translation = `-${this.data.translation}`;
-        // Создаем ссылку для скачивания
-        const dL = document.createElement('a');
-        dL.href = this.downloadLink;
-        dL.download = `${this.data.name}-${this.index}${translation}.ts`;
-        // Автоматически нажимаем на ссылку для скачивания
-        dL.click();
-        // Очищаем ссылку и удаляем ее из DOM
-        URL.revokeObjectURL(dL.href);
-        this.#OnCompleted.forEach(event => event(this.index));
-    }
-
-    #LocalDownload(data) {
-        const quality = GetQualityDownload(data, this.downl.Quality);
-
-        if (quality == -1) {
-            return this.#OnError.forEach((event) => { event('critical', 'Ошибка выбора качества видео.') });
-        }
-
-        const url = data[quality][0].src.indexOf("http") != -1 ? data[quality][0].src : "https:" + data[quality][0].src;
-        // Строка, которую нужно удалить
-        let searchString = `${quality}.mp4:hls:manifest.m3u8`;
-
-        if (this.#abortet) {
-            this.#OnAbbortet.forEach(event => event());
-            this.#OnAbbortet = [];
-            return;
-        }
-
-        fetch(url).then(response => {
-            // Регулярное выражение для извлечения части ссылки с качеством
-            const pattern = /[^\/]+\.[^\/]+:hls:manifest\.m3u8/;
-            
-            // Извлечение части ссылки
-            const match = response.url.match(pattern);
-            
-            // Проверка и вывод результата
-            if (match) {
-                searchString = match[0];
-            } else {
-                return this.#OnError.forEach((event) => { event('critical', 'Не удалось преобразовать ссылку.') });
-            }
-            
-            // Удалить подстроку из URL
-            const urlkodik = response.url.substring(0, response.url.indexOf(searchString));
-
-            response.text().then(async (m3u8Content) => {
-                // data содержит текст манифеста M3U8
-                const tsUrls = m3u8Content.split('\n').filter(line => line.trim().endsWith('.ts'));
-
-                // Сохраняем время начала загрузки
-                this.startTime = new Date().getTime();
-
-                if (this.typeDownload) {
-                    this.#AsyncDownload(tsUrls, urlkodik)
-                } else {
-                    this.#SyncDonwload(tsUrls, urlkodik);
-                }
-
-            }).catch(error => {
-                return this.#OnError.forEach((event) => { event('critical', 'Ошибка загрузки m3u8 файла.') });
+    hide(all = true, error = false) {
+        if (all) {
+            this.$dom.forEach($el => {
+                $el.addClass('hide');
             });
+        } else {
+            let $el = this.$dom[0];
+
+            if (error)
+                $el = this.$dom[1];
+
+            $el.addClass('hide');
+        }
+    }
+}
+
+class DOWButtons {
+    #callbacks = {
+        "download": [],
+        "abort": [],
+        "delete": [],
+        "alldown": [],
+        "close": []
+    }
+
+    constructor(downloader) {
+        this.dow = downloader;
+        this.$dom = $(`.wrap-buttons > .list-buttons`);
+
+        //Button: Загрузить
+        $(`.group-availble > .btn`).on('click', () => {
+            const key = { v: this.dow.Data.voice.id, e: this.dow.Episodes.selected };
+            this.#Dispatch("download", key);
         });
 
-        function GetQualityDownload(data, currentQuality) {
-            let allowQuality = ['720', '480', '360'];
+        //Button: Остановить
+        $(`.group-download > .btn`).on('click', () => {
+            const key = { v: this.dow.Data.voice.id, e: this.dow.Episodes.selected };
+            this.#Dispatch("abort", key);
+        });
 
-            //Записываем только досутпные разрешения
-            for (let i = 0; i < allowQuality.length; i++) {
-                const e = allowQuality[i];
-                if (data[e].length == 0) {
-                    allowQuality.splice(i, 1);
-                }
-            }
+        //Button: Удалить
+        $(`.group-completed > .ico-btn`).on('click', () => {
+            const key = { v: this.dow.Data.voice.id, e: this.dow.Episodes.selected };
+            this.#Dispatch("delete", key);
+        });
 
-            let idQuality = allowQuality.findIndex(x => x == currentQuality);
+        //Button: Удалить
+        $(`.group-stoped > .ico-btn`).on('click', () => {
+            const key = { v: this.dow.Data.voice.id, e: this.dow.Episodes.selected };
+            this.#Dispatch("delete", key);
+        });
 
-            if (idQuality == -1) {
-                if (allowQuality.length != 0) {
-                    currentQuality = allowQuality[0];
-                } else {
-                    return -1;
-                }
-            }
+        //Button: Продолжить
+        $(`.group-stoped > .btn`).on('click', () => {
+            const key = { v: this.dow.Data.voice.id, e: this.dow.Episodes.selected };
+            this.#Dispatch("download", key);
+        });
 
-            return currentQuality;
-        }
+        $(`.btn.all-download`).on("click", () => {
+            const key = { v: this.dow.Data.voice.id, e: this.dow.Episodes.selected };
+            this.#Dispatch("alldown", key);
+        });
+
+        $(`.bar-download > .window-close`).on("click", () => {
+            this.#Dispatch("close", {});
+        })
     }
-
-    async #AsyncDownload(tsUrls, urlkodik) {
-        if (this.#abortet) {
-            this.#OnAbbortet.forEach(event => event());
-            this.#OnAbbortet = [];
-            return;
-        }
-        const downloadPromises = [];
-        this.Stats.total = tsUrls.length;
-
-        for (let i = 0; i < tsUrls.length; i++) {
-            try {
-                const tsUrl = tsUrls[i];
-                downloadPromises.push(this.#DownloadTsFile(urlkodik + tsUrl))
-            } catch (error) {
-                this.#OnError.forEach((event) => { event('warning', `Ошибка загрузки фрагмента ${i}.`) });
-                console.error(`Failed to fetch ${tsUrls[i]}: ${error.message}`);
-            }
-        }
-
-        try {
-            const tsBlobs = await Promise.all(downloadPromises);
-            if (this.#abortet) {
-                this.#OnAbbortet.forEach(event => event());
-                this.#OnAbbortet = [];
-                return;
-            }
-            // Завершаем загрузку
-            this.endTime = new Date().getTime();
-            // Вычисляем время загрузки
-            const uploadTime = (this.endTime - this.startTime) / 1000; // в секундах
-            console.log(uploadTime);
-
-            if (tsBlobs.length === 0) {
-                return this.#OnError.forEach((event) => { event('critical', `Не удалось загрузить ни один фрагмент.`) });
-            }
-
-            const mergedBlob = new Blob(tsBlobs, { type: 'video/mp2t' });
-            this.downloadLink = URL.createObjectURL(mergedBlob);
-
-            this.#OnCanDownload.forEach((event) => event());
-
-        } catch (error) {
-            console.error('Ошибка при загрузке M3U8: ', error);
-            return this.#OnError.forEach((event) => { event('critical', `Ошибка при загрузке M3U8.`) });
-        }
-    }
-
-    async UpdateProgress() {
-        const progress = (this.Stats.downloaded / this.Stats.total) * 100;
-        this.eProgress.css({ width: `${progress}%` }); // Обновляем индикатор загрузки
-        this.eCount.text(`${progress.toFixed(0)}%`);
-    }
-
-    async #DownloadTsFile(tsUrl) {
-        const tsResponse = await this.#fetchWithRetry(tsUrl);
-        if (this.#abortet) {
-            this.#OnAbbortet.forEach(event => event());
-            this.#OnAbbortet = [];
-            return;
-        }
-        const tsBlob = await tsResponse.blob();
-        this.Stats.downloaded++;
-        this.UpdateProgress();
-        return tsBlob;
-    }
-
-    async #fetchWithRetry(url, retryCount = 25) {
-        try {
-            if (this.#abortet) {
-                this.#OnAbbortet.forEach(event => event());
-                this.#OnAbbortet = [];
-                return;
-            }
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Request failed with status ${response.status}`);
-            }
-            return response;
-        } catch (error) {
-            console.error(`Error fetching ${url}: ${error.message}`);
-            if (retryCount > 0) {
-                console.log(`Retrying in 1 second... (${retryCount} attempts left)`);
-                await Sleep(1000);
-                return this.#fetchWithRetry(url, retryCount - 1);
-            } else {
-                throw new Error(`Failed to fetch ${url} after multiple attempts`);
-            }
-        }
-    }
-
-    async #SyncDonwload() {
-        if (this.#abortet) {
-            this.#OnAbbortet.forEach(event => event());
-            this.#OnAbbortet = [];
-            return;
-        }
-        let tsBlobs = [];
-        this.Stats.total = tsUrls.length;
-        for (let i = 0; i < tsUrls.length; i++) {
-            if (this.#abortet) {
-                this.#OnAbbortet.forEach(event => event());
-                this.#OnAbbortet = [];
-                return;
-            }
-            try {
-                const tsUrl = tsUrls[i];
-                const tsResponse = await this.#fetchWithRetry(urlkodik + tsUrl);
-                const tsBlob = await tsResponse.blob();
-                tsBlobs.push(tsBlob);
-                this.Stats.downloaded++;
-                this.UpdateProgress();
-            } catch (error) {
-                this.#OnError.forEach((event) => { event('warning', `Ошибка загрузки фрагмента ${i}.`) });
-            }
-        }
-
-        // Завершаем загрузку
-        this.endTime = new Date().getTime();
-        // Вычисляем время загрузки
-        const uploadTime = (this.endTime - this.startTime) / 1000; // в секундах
-        console.log(uploadTime);
-
-        if (tsBlobs.length === 0) {
-            return this.#OnError.forEach((event) => { event('critical', `Не удалось загрузить ни один фрагмент.`) });
-        }
-
-        const mergedBlob = new Blob(tsBlobs, { type: 'video/mp2t' });
-        this.downloadLink = URL.createObjectURL(mergedBlob);
-
-        this.#OnCanDownload.forEach((event) => event());
-    }
-
-    Deprecate() {
-        this.#OnAbbortet.forEach(event => event());
-        this.#OnAbbortet = [];
-        return;
-    }
-
-    #OnLoading = [];
-    #OnCanDownload = [];
-    #OnCompleted = [];
-    #OnError = [];
-    #OnAbbortet = [];
 
     /**
-     * 
-     * @param {'loading' | 'candownload' | 'completed' | 'error' | 'abbortet'} name 
-     * @param {function} event 
+    * Устанавливает состояние кнопок
+    * @param {TDLState} state 
+    */
+    set(state) {
+        const list = TDLState.all();
+        this.$dom.removeClass(list).addClass(state.name);
+    }
+
+    on(event, callback) {
+        if (typeof callback !== "function") return;
+        if (this.#callbacks[event] === undefined) {
+            this.#callbacks[event] = [];
+        }
+        this.#callbacks[event].push(callback);
+    }
+
+    #Dispatch(event, ...data) {
+        if (this.#callbacks[event] === undefined) return;
+        this.#callbacks[event].forEach(callback => callback(...data));
+    }
+}
+
+class DOWUiStats {
+    /**
+     * @param {Downloader} dow 
      */
-    On(name, event = () => { }) {
-        if (name === 'loading') {
-            this.#OnLoading.push(event);
-        } else if (name === 'candownload') {
-            this.#OnCanDownload.push(event);
-        } else if (name === 'completed') {
-            this.#OnCompleted.push(event);
-        } else if (name === 'error') {
-            this.#OnError.push(event);
-        } else if (name === 'abbortet') {
-            this.#OnAbbortet.push(event);
+    constructor(dow) {
+        this.dow = dow;
+        this.$dom = {
+            'speed': $('#download-speed > .content-a > .text > .value'),
+            'time': $('#download-speed > .content-b > .time'),
+            'size': $('#file-size > .content-a > .text > .value'),
+            'progress': {
+                'width': $('.progress-download > .value'),
+                'value': $('.progress-download > .percent')
+            },
+            'parts': {
+                'count': $('#file-size > .content-b > .count'),
+                'downloaded': $('#file-size > .content-b > .downloaded'),
+            }
         }
+        ScrollElementWithMouse(".wrapper-episodes-d");
+    }
+
+    set voice(val) {
+        //Указываем озвучку и качество установленное в параметрах
+        $(`.download-info > .quality`).text(`${this.dow.Properties.quality}p`);
+        $(`.download-info > .voice`).text(val);
+    }
+
+    set speed(val) {
+        this.$dom.speed.text(val);
+    }
+
+    set time(time) {
+        // Рассчитываем минуты и секунды
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`; // Форматируем как M:SS
+        this.$dom.time.text(formattedTime);
+    }
+
+    set size(size) {
+        this.$dom.size.text(formatBytes(size));
+    }
+
+    set progress(val) {
+        this.$dom.progress.width.css({ width: `${val.toFixed(2)}%` });
+        this.$dom.progress.value.text(`${val.toFixed(2)}%`);
+    }
+
+    set partscount(val) {
+        this.$dom.parts.count.text(val);
+    }
+
+    set partsdownload(val) {
+        this.$dom.parts.downloaded.text(val);
     }
 }
 
-class Loading {
+class DOWEpisodes {
     #loaded = false;
-
-    constructor(downl) {
-        /**
-         * @type {Download}
-         */
-        this.Download = downl;
+    #callbacks = {
+        "selected": []
     }
 
-    get IsLoaded() {
-        return this.#loaded;
-    }
-
-    Load() {
-        if (this.#loaded)
-            return;
-        this.#loaded = true;
-
-        const e = Player.CEpisodes.count;
-        if (e !== undefined && e > 1)
-            $('.wrapper-episodes-d').removeClass('hide');
-
-        $('.wrapper-episodes-d > .episodes-download').empty();
-
-        for (let i = 0; i < e; i++) {
-            const c = i + 1;
-            $('.wrapper-episodes-d > .episodes-download').append(`<div class="d-episode" data-e="${c}">${c}<span>ep</span></div>`);
-        }
-
-        this.Download.events.OnSelect.bind(this.Download)();
-        this.Download.functions.Select(Player.CEpisodes.selected);
-    }
-}
-
-class Download {
-    #Data = {
-        link: undefined,
-        name: "Anime",
-        translation: undefined,
-    }
-    /**@type {DownloadAnime} */
-    #Download = undefined;
-
+    /**
+     * Инициализация эпизода контроллера
+     */
     constructor() {
-        this.Selected = 0;
-        this.Quality = $PARAMETERS.download.dquality;
-        this.Loaded = new Loading(this);
-        this.Automation = new Automation(this);
+        this.count = 0;
+        this.selected = 0;
+        this.voice = 0;
     }
 
-    Download(index = this.Selected) {
-
-        if (this.#Download !== undefined && this.#Download.downloadLink !== undefined) {
-            this.#Download.DownloadBlob();
-            return;
-        }
-
-        if (index <= 0 || this.#Download !== undefined || this.#Data.link === undefined)
-            return;
-
-        this.#Download = new DownloadAnime(index, this.#Data, this);
-
-        this.#Download.On('loading', () => {
-            $(`#btn-download`).addClass('disable');
-            $(`#btn-stop`).removeClass('disable');
-        });
-
-        this.#Download.On('candownload', () => {
-            $(`#btn-download`).removeClass('disable');
-            $(`#btn-download`).text('Сохранить файл');
-            $(`#btn-stop`).addClass('disable');
-            if (AutoSave) {
-                this.#Download.DownloadBlob();
-            }
-        });
-
-        this.#Download.On('completed', (episode) => {
-            $(`#btn-download`).removeClass('disable');
-            $(`#btn-download`).text('Загрузить');
-            $(`#btn-stop`).addClass('disable');
-
-            this.#Download = undefined;
-            this.Automation.Set(episode);
-        });
-
-        this.#Download.On('abbortet', () => {
-            $(`#btn-download`).removeClass('disable');
-            $(`#btn-stop`).addClass('disable');
-
-            this.#Download = undefined;
-        });
-
-        this.#Download.On('error', (type, msg) => {
-            console.log(msg, type);
-            if (type == "critical") {
-                $(`.error-message`).text(msg);
-                $(`.error-message`).removeClass('hide');
-                this.#Download.Deprecate();
-            }
-        });
-
-        this.#Download.Download();
-    }
-
-    Stop() {
-        if (this.#Download !== undefined)
-            this.#Download.Abort();
-    }
-
-    SetData(data) {
-        if (data) {
-            this.#Data.name = data.title_orig;
-            this.#Data.link = data.link;
-            this.#Data.translation = data.translation.title;
-
-            $('.download-info > .voice').text(this.#Data.translation);
-            $('.download-info > .quality').text(`${this.Quality}p`);
-        } else {
-            console.log('Ошибка в данных', data);
-            Structure.hide();
-        }
-    }
-
-    events = {
-        OnSelect: function () {
+    Init() {
+        const on = () => {
             $('.episodes-download > .d-episode').on('click', (e) => {
                 const element = $(e.currentTarget);
                 const index = element.attr('data-e');
-                this.functions.Select(index);
+                if (element.hasClass('selected'))
+                    return;
+                this.Select(index);
             });
+        };
+
+        const { count, selected } = Player.CEpisodes;
+        this.voice = Player.CTranslation.id;
+
+        if (this.count !== count) {
+            if (count > 1)
+                $('.wrapper-episodes-d').removeClass('hide');
+            else
+                $('.wrapper-episodes-d').addClass('hide');
+
+            $('.wrapper-episodes-d > .episodes-download').empty();
+
+            for (let i = 0; i < count; i++) {
+                const number = (i + 1);
+                $('.wrapper-episodes-d > .episodes-download').append(`<div class="d-episode" data-e="${number}">${number}<span>ep</span></div>`);
+            }
+
+            on();
+            this.count = count;
+            this.Select(selected);
         }
     }
 
-    functions = {
-        Select: (index) => {
-            const element = $(`.d-episode[data-e="${index}"]`);
-            if (element.hasClass('selected'))
-                return;
-            $('.d-episode.selected').removeClass('selected');
-            element.addClass('selected');
-            this.Selected = index;
+    Select(episode) {
+        $('.d-episode.selected').removeClass('selected');
+        $(`.d-episode[data-e="${episode}"]`).addClass('selected');
+        this.selected = parseInt(episode);
+        this.#Dispatch("selected", this.selected);
+    }
+
+    on(event, callback) {
+        if (typeof callback !== "function") return;
+        if (this.#callbacks[event] === undefined) {
+            this.#callbacks[event] = [];
         }
+        this.#callbacks[event].push(callback);
+    }
+
+    #Dispatch(event, data) {
+        if (this.#callbacks[event] === undefined) return;
+        this.#callbacks[event].forEach(callback => callback(data));
     }
 }
 
-const Structure = {
-    download: new Download(),
-    init: function () {
-        $('.bar-download > .window-close').on('click', function () {
-            Structure.hide();
-        });
+class DOWCache {
+    /**
+     * @typedef {Object} Task
+     * @property {string} vId
+     * @property {Object | undefined} manag
+     * @property {boolean} local
+     * @property {boolean} isTask
+     */
 
-        //Переключение парамерта дубляжи избранное по франшизе
-        $('.autosave-param').on('click', (e) => {
-            if (e.target.checked != undefined) {
-                //Переключаем парамерт
-                setParameter('dautosave', e.target.checked);
-                AutoSave = $PARAMETERS.download.dautosave;
-            }
-        });
+    /**
+     * @typedef {Object} oEV
+     * @property {number} v - voice
+     * @property {number} e - episode
+     */
 
-        $('#btn-download').on('click', (e) => {
-            $(`.error-message`).removeClass('hide');
-            this.download.Download();
-        });
-
-        $(`#btn-stop`).on('click', (e) => {
-            this.download.Stop();
-        });
-
-        $(`#help-download`).on('click', (e) => {
-            window.open("https://github.com/AN0NCER/an0ncer.github.io/wiki/%D0%9A%D0%B0%D0%BA-%D1%81%D0%BA%D0%B0%D1%87%D0%B0%D1%82%D1%8C-%D0%B0%D0%BD%D0%B8%D0%BC%D0%B5%3F", "_blank")
-        })
-
-        ScrollElementWithMouse('.wrapper-episodes-d');
-        $('.autosave-param > .checkbox > input').prop('checked', AutoSave);
-    },
-
-    show: function () {
-        $("body").addClass("loading");
-        this.download.Loaded.Load();
-        const data = Player.selected;
-        this.download.SetData(data);
-        this.download.Automation.Show();
-    },
-
-    hide: function () {
-        Window.hide();
-        $("body").removeClass("loading");
-    },
-
-    verif: function () {
-        return Player.loaded;
-    },
-
-    anim: {
-        showed: function () {
-            let SelPos = $('.d-episode.selected').position();
-            if(SelPos == undefined)
-                return;
-            const WidthEpisodes = $('.wrapper-episodes-d').width();
-            const sizeEpisode = (55 + 3);
-            if ((WidthEpisodes / 2) > SelPos.left) {
-                return;
-            }
-            anime({
-                targets: '.wrapper-episodes-d',
-                scrollLeft: (SelPos.left - (WidthEpisodes / 2) + sizeEpisode),
-                duration: 500,
-                easing: 'easeInOutQuad'
-            });
+    constructor() {
+        /**
+         * @type {Object.<number, Object.<number, Task>>}
+         * The first number represents the voice ID, and the second number represents the episode ID.
+        */
+        this.list = {};
+        /**@type {[oEV]} */
+        this.history = [];
+        this.limit = 5;
+    }
+    /**
+     * Установка кэша задач
+     * @param {Task} t 
+     * @param {oEV} param 
+     */
+    set(t, { v, e } = {}) {
+        if (!this.list[v]) {
+            this.list[v] = {};
         }
+
+        if (this.history.length > this.limit) {
+            for (let i = this.history.length - this.limit - 1; i >= 0; i--) {
+                const { e, v } = this.history[i];
+                if (!this.list[v][e].isTask && this.list[v][e].manag.state !== TDLState.download) {
+                    this.history.splice(i, 1);
+                    delete this.list[v][e];
+                }
+            }
+        }
+
+        const index = this.history.findIndex(x => x.e == e && x.v == v);
+        if (index !== -1) {
+            this.history.splice(index, 1);
+        }
+
+        this.history.push({ e, v });
+
+        this.list[v][e] = t;
+    }
+
+    /**
+     * Получение кэш задания
+     * @param {oEV} param
+     * @returns {undefined | Task}
+     */
+    get({ v, e } = {}) {
+        if (this.list[v] && this.list[v][e]) {
+            return this.list[v][e];
+        }
+        return undefined;
     }
 }
 
-const Window = new WindowManagement(Structure, '.window-download');
+class Downloader {
+    constructor() {
+        this.Properties = {
+            quality: $PARAMETERS.download.dquality,
+            autosave: $PARAMETERS.download.dautosave
+        }
 
-export const ShowDwonloadWindow = () => { Window.click("Не доступно!"); };
+        this.Episodes = new DOWEpisodes();
+        this.Cache = new DOWCache();
+        this.Data = new TDAnime({ anime: { id: $ID, name: Anime.russian } });
+        this.Controls = {
+            'ui': new DOWUiStats(this),
+            'btns': new DOWButtons(this),
+            'logs': new DOWLogText(this),
+            'local': new DOWLocal(this),
+        }
+
+        this.VIDs = {
+            open: undefined,
+            download: undefined
+        }
+
+        /**@type {[{v:number,e:number}]} */
+        this.Task = [];
+    }
+
+    Completed() {
+        if (this.Task.length === 0)
+            return;
+
+        this.Download(this.Task.shift());
+    }
+
+    async Download(key = { v: 0, e: 0 }) {
+        if (this.VIDs.open === this.VIDs.download)
+            return ShowInfo('Уже загружаеться', 'dow-info', 999);
+
+        if (this.VIDs.download === undefined) {
+            // Ничего не загружаеться
+            const cache = this.Cache.get(key);
+            this.VIDs.download = cache.vId;
+
+            //Создаем новую загрузку
+            if (this.VIDs.download === this.VIDs.open) {
+                this.Controls['btns'].set(TDLState.loading);
+            }
+
+            let control = await cache.manag.Setup();
+
+            (() => {
+                cache.manag.on("state.dow", (state) => {
+                    if ([TDLState.stoped, TDLState.completed].includes(state)) {
+                        cache.manag.off("state.dow");
+                        control = undefined;
+                    }
+                });
+            })();
+
+            (() => {
+                const { ui } = this.Controls;
+                const end = () => {
+                    this.VIDs.download = undefined;
+                    // control = undefined;
+                    cache.isTask = false;
+                    this.Cache.set(cache, key);
+                }
+
+                control.on("stats", ({ speed, time, size } = {}) => {
+                    ui.speed = speed;
+                    ui.time = time;
+                    ui.size = size;
+                });
+
+                control.on("update", ({ progress, parts }) => {
+                    ui.progress = progress;
+                    ui.partsdownload = parts;
+                    $(`.episodes-download > .d-episode[data-e="${key.e}"]`).css({ '--i-progress': `${progress.toFixed()}%` });
+                });
+
+                control.on("parts", (count) => {
+                    ui.partscount = count;
+                });
+
+                control.on("completed", () => {
+                    end();
+                    this.Completed();
+                });
+
+                control.on("error", (err) => {
+                    this.Controls['logs'].set(err, true);
+                });
+
+                control.on("abortet", () => {
+                    end();
+                });
+
+                control.on("link", async (href) => {
+                    //Надо открыть эту ссылку в новой вкладке
+                    const dL = document.createElement('a');
+                    dL.href = href;
+                    dL.download = `${(Anime.name).toLocaleLowerCase()}-${e}-${(Player.CTranslation.name).toLocaleLowerCase()}.ts`;
+                    if (this.Properties.autosave) {
+                        dL.click();
+                        URL.revokeObjectURL(dL.href);
+                        control.tDr.state = TDLState.completed;
+                        await control.tDr.Isset();
+                        end()
+                    } else {
+                        $(`.group-save > .btn`).on("click", async () => {
+                            dL.click();
+                            URL.revokeObjectURL(dL.href);
+                            control.tDr.state = TDLState.completed;
+                            await control.tDr.Isset();
+                            end();
+                        });
+                    }
+                });
+            })();
+
+            (() => {
+                const { btns } = this.Controls;
+                btns.on("abort", (key1) => {
+                    if (key.e !== key1.e || key.v !== key1.v)
+                        return;
+
+                    if (control)
+                        control.Abort();
+                })
+            })();
+
+            if (!cache.local) {
+                control.Download();
+            } else {
+                control.LocalDownload();
+            }
+        } else {
+            // Добавить задачу т.к. идет уже загрузка
+            if (this.Task.findIndex(x => x === key) !== -1)
+                return this.Controls['logs'].set('Находиться в очереди');
+
+            const cache = this.Cache.get(key);
+            Object.assign(cache, { isTask: true });
+            await cache.manag.Setup();
+            this.Cache.set(cache, key);
+            this.Task.push(key);
+
+            return this.Controls['logs'].set('Добавлено в очередь');
+        }
+    }
+
+    async Super() {
+        if (this.Data.voice.id === 0)
+            return ShowInfo('Ошибка с озвучками', 'dow-error', 999);
+
+        const key = {
+            v: this.Data.voice.id,
+            e: this.Episodes.selected
+        }
+
+        let cache = this.Cache.get(key);
+
+        if (cache) {
+            this.VIDs.open = undefined;
+            if (cache.manag) {
+                this.VIDs.open = cache.vId;
+                return cache.manag.Isset();
+            }
+        }
+
+        let manag = await (async (a, v) => {
+            const { link } = Player.selected;
+            const anime = new TDAnime({ anime: a, voice: v });
+            const episode = this.Episodes.selected;
+
+            return TDownload.Downloader(anime, episode, link, this.Properties.quality);
+        })(this.Data.anime, this.Data.voice);
+
+        this.VIDs.open = manag.vId;
+
+        cache = {
+            isTask: false,
+            local: false,
+            manag: manag,
+            vId: manag.vId
+        }
+
+        this.Cache.set(cache, key);
+
+        (() => {
+            const check = () => {
+                return cache.manag.vId === this.VIDs.open;
+            }
+            //Управление статусами аниме
+            cache.manag.on("state", (state) => {
+                if (!check())
+                    return;
+
+                this.Controls['btns'].check =
+                    this.Controls['btns'].set(state);
+                this.Controls['local'].set(this.Cache.get(key)?.local || false);
+            });
+
+            cache.manag.on("error", (err) => {
+                if (!check())
+                    return;
+
+                this.Controls['logs'].set(err, true);
+            });
+
+            cache.manag.Isset();
+        })()
+    }
+
+    async CreateTask(key = { v: 0, e: 0 }) {
+        if (key.v == 0 || key.e == 0)
+            return ShowInfo('Ошибка запуска задачи', 'dow-download', 999);
+
+        let cache = this.Cache.get(key);
+
+        if (cache) {
+            cache.isTask = true;
+            await cache.manag.Isset();
+            this.Cache.set(cache, key);
+            if (this.Task.findIndex(x => x.e === key.e && x.v === key.v) === -1) {
+                this.Task.push(key);
+            }
+            return;
+        }
+
+        let manag = await (async (a, v) => {
+            const { link } = Player.selected;
+            const anime = new TDAnime({ anime: a, voice: v });
+            const episode = key.e;
+
+            return TDownload.Downloader(anime, episode, link, this.Properties.quality);
+        })(this.Data.anime, this.Data.voice);
+
+        cache = {
+            isTask: true,
+            local: false,
+            manag: manag,
+            vId: manag.vId
+        }
+
+        this.Cache.set(cache, key);
+
+        (() => {
+            const check = () => {
+                return cache.manag.vId === this.VIDs.open;
+            }
+            //Управление статусами аниме
+            cache.manag.on("state", (state) => {
+                if (!check())
+                    return;
+
+                this.Controls['btns'].set(state);
+                this.Controls['local'].set(this.Cache.get(key)?.local || false);
+            });
+
+            cache.manag.on("error", (err) => {
+                if (!check())
+                    return;
+
+                this.Controls['logs'].set(err, true);
+            });
+
+        })();
+
+        await cache.manag.Isset()
+        this.Task.push(key);
+    }
+
+    async All() {
+        const anime = new TDAnime({ anime: this.Data.anime, voice: this.Data.voice });
+        const { link } = Player.selected;
+        let manager = await TDownload.Downloader(anime, 0, link, this.Properties.quality);
+
+        for (let e = 1; e <= this.Episodes.count; e++) {
+            manager.episode = e;
+            manager.kodikLink = link;
+            const state = await manager.Isset();
+            if (state === TDLState.availble || state === TDLState.stoped) {
+                await manager.Setup();
+                await this.CreateTask({ v: anime.voice.id, e });
+            }
+        }
+
+        this.Completed();
+    }
+
+    init() {
+        const { btns, local } = this.Controls;
+        //Выбор эпизода
+        this.Episodes.on("selected", () => {
+            this.Controls['logs'].hide(true);
+            this.Super();
+        });
+
+        btns.on("download", (key) => {
+            this.Download(key);
+        });
+
+        btns.on("delete", (key) => {
+            const cache = this.Cache.get(key);
+            if (cache === undefined)
+                return;
+
+            cache.manag.Delete().then(() => {
+                $(`.btn.all-download`).removeClass('disable');
+                $(`.d-episode[data-e="${key.e}"]`).css({ '--i-progress': '' });
+            });
+        });
+
+        btns.on("alldown", () => {
+            $(`.btn.all-download`).addClass('disable');
+            this.All();
+        });
+
+        btns.on("close", () => {
+            this.hide();
+        });
+
+        local.on("check", (key, val) => {
+            const cache = this.Cache.get(key);
+            cache.local = val;
+            this.Cache.set(cache, key);
+        });
+    }
+
+    show() {
+        const setVoice = () => {
+            const { id, name } = Player.CTranslation;
+            if (this.Data.voice.id === id)
+                return this.Data.voice;
+            return { id: id, name: name };
+        }
+
+        const setEpisodes = async (css = { '--i-progress': '' }) => {
+            $(`.d-episode`).css(css);
+            css["--i-progress"] = '100%';
+            const episodes = await (await TDownload.Manager(this.Data)).getEpisodes();
+
+            if (episodes.length === this.Episodes.count) {
+                $(`.btn.all-download`).addClass('disable');
+            } else {
+                $(`.btn.all-download`).removeClass('disable');
+            }
+
+            episodes.forEach(({ episode } = {}) => {
+                $(`.d-episode[data-e="${episode}"]`).css(css);
+            });
+        }
+
+        $('body').addClass('loading');
+        this.Data.voice = setVoice();
+        this.Episodes.Init();
+
+        setEpisodes().then(() => {
+            this.Controls['ui'].voice = this.Data.voice.name;
+        });
+
+        this.Super();
+    }
+
+    hide() {
+        $('body').removeClass('loading');
+        _window.hide();
+    }
+
+    verif() {
+        return $SHADOW.state.isConnected && $SHADOW.state.hasApiAccess;
+    }
+}
+
+const _window = new WindowManagement(new Downloader(), '.window-download');
+
+export function WDManager() {
+    _window.click("Сервер не загрузился.");
+}
