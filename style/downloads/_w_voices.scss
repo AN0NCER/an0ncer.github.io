@@ -1,0 +1,120 @@
+.content-voices .content-wrapper {
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+    gap: 0 !important;
+}
+
+.content-voices {
+    .content-wrapper {
+        font-family: 'Manrope', serif;
+        padding-bottom: max(var(--sab), 10px) !important;
+
+        .wrapper {
+            max-height: 100dvh;
+
+            .window-bar {
+                margin-top: 10px;
+                margin-left: max(var(--sar), 20px);
+                margin-right: max(var(--sal), 20px);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .window-title {
+                    font-size: 14px;
+                    color: #FFFFFF;
+                }
+
+                .window-close {
+                    width: 40px;
+                    height: 40px;
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+
+                    .ticon {
+                        height: 14px;
+                        background-color: #fff;
+                    }
+                }
+            }
+
+            .voices-list {
+                background: #15171E;
+                padding: 10px max(var(--sar), 20px);
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+                gap: 10px;
+
+                .voice {
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    cursor: pointer;
+                    transition: .3s ease-in-out;
+
+                    .voice-wrapper {
+                        display: flex;
+                        flex-direction: column;
+                        font-weight: bold;
+                        gap: 4px;
+
+                        .nummer {
+                            font-size: 15px;
+                        }
+
+                        .info-wrapper {
+                            display: flex;
+                            gap: 5px;
+                            font-size: 11px;
+                            color: rgba(255, 255, 255, 0.6);
+                        }
+                    }
+
+                    .btn {
+                        width: 35px;
+                        aspect-ratio: 1 / 1;
+                        display: grid;
+                        border-radius: 5px;
+                        place-items: center;
+                        cursor: pointer;
+                        transition: .3s ease-in-out;
+
+                        &.state-1 {
+                            background: rgba(230, 53, 56, 0.4) !important;
+                            border-radius: 50% !important;
+
+                            .ticon {
+                                background-color: #E63538 !important;
+                            }
+                        }
+
+                        .ticon {
+                            pointer-events: none;
+                            background-color: #414653;
+                            height: 16px;
+                            transition: .3s ease-in-out;
+                        }
+                    }
+
+                    &.select {
+                        background: #2393F1;
+                        box-shadow: 0 0 11px 1px rgba(35, 147, 241, 0.3);
+
+                        .btn {
+                            .ticon {
+                                box-shadow: inset 0 0 4px rgba(255, 0, 0, 0.6);
+                                background-color: #101318;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

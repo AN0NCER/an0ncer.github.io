@@ -1,0 +1,545 @@
+.content-player .content-wrapper {
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+    gap: 0 !important;
+}
+
+.content-player {
+    .content-wrapper {
+        font-family: 'Manrope', serif;
+
+        .wrapper {
+            padding-bottom: calc(var(--sab));
+
+            .wrapper-portrait {
+                display: grid;
+                grid-template-rows: auto 1fr auto;
+                max-height: calc(100dvh - var(--sat) - var(--sab));
+                overflow-y: hidden;
+                overscroll-behavior: contain;
+
+                .player-wrapper {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+
+                    .video-wrapper {
+                        display: flex;
+                        position: relative;
+
+                        &.debug{
+                            .points-event{
+                                .left-event{
+                                    background: red;
+                                    opacity: .3;
+                                }
+
+                                .center-event{
+                                    background: green;
+                                    opacity: .3;
+                                }
+
+                                .right-event{
+                                    background: blue;
+                                    opacity: .3;
+                                }
+                            }
+                        }
+
+                        .points-event {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            display: flex;
+
+                            .left-event,
+                            .center-event,
+                            .right-event {
+                                display: flex;
+                                flex: 1 1 0;
+                            }
+                        }
+                    }
+
+                    video {
+                        width: 100%;
+                        aspect-ratio: 16 / 9;
+                        background: #000000;
+                    }
+
+                    .player-controls {
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 5px 20px;
+                        background: #101318;
+                        z-index: 1;
+
+                        .left-side,
+                        .right-side {
+                            display: flex;
+                            align-items: center;
+
+                            .btn.play {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+
+                                .ticon {
+                                    transition: .3s ease-in-out;
+                                    position: absolute;
+                                }
+
+                                &.state-pause {
+                                    .i-pause {
+                                        opacity: 0;
+                                    }
+                                }
+
+                                &.state-play {
+                                    .i-play {
+                                        opacity: 0;
+                                    }
+                                }
+                            }
+
+                            .btn.volume {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+
+                                .ticon {
+                                    opacity: 0;
+                                    height: 16px;
+                                    position: absolute;
+                                    transition: .3s ease-in-out;
+                                }
+
+                                &.state-0 {
+                                    .i-volume-0 {
+                                        opacity: 1;
+                                    }
+                                }
+
+                                &.state-1 {
+                                    .i-volume-1 {
+                                        opacity: 1;
+                                    }
+                                }
+
+                                &.state-2 {
+                                    .i-volume-2 {
+                                        opacity: 1;
+                                    }
+                                }
+
+                                &.state-off {
+                                    .i-volume-off {
+                                        opacity: 1;
+                                    }
+                                }
+                            }
+                        }
+
+                        .btn-voice {
+                            font-size: 10px;
+                            color: #2393F1;
+                            font-weight: bold;
+                            cursor: pointer;
+                            padding: 0px 10px;
+                        }
+
+                        .btn {
+                            width: 40px;
+                            aspect-ratio: 1 / 1;
+                            cursor: pointer;
+                            display: grid;
+                            place-items: center;
+                            overflow: hidden;
+
+                            .ticon {
+                                height: 13px;
+                            }
+                        }
+
+                        .ticon {
+                            background-color: #FFFFFF;
+                        }
+                    }
+
+                    .player-timeline {
+                        bottom: 65px;
+                        left: 0;
+                        right: 0;
+                        position: absolute;
+                        display: flex;
+                        flex-direction: column;
+                        margin: 0 20px;
+                        gap: 4px;
+                        transition: .3s ease-in-out;
+
+                        .line {
+                            width: 100%;
+                            height: 8px;
+                            background: #15171E;
+                            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+                            border-radius: 8px;
+                            display: flex;
+                            align-items: center;
+                            position: relative;
+                            cursor: pointer;
+
+                            .curline {
+                                top: -4px;
+                                left: 0;
+                                bottom: -4px;
+                                position: absolute;
+                                background: #2393F1;
+                                border-radius: 8px 2px 2px 8px;
+                                display: flex;
+                                justify-content: end;
+                                align-items: center;
+                                max-width: 100%;
+                                width: 20%;
+                                pointer-events: none;
+
+                                .point {
+                                    position: absolute;
+                                    right: -5px;
+                                    top: 2px;
+                                    bottom: 2px;
+                                    aspect-ratio: 1/1;
+                                    background: #1E1F25;
+                                    border-radius: 50%;
+                                    outline: 2px solid #2393f1;
+                                    cursor: pointer;
+                                    pointer-events: all;
+
+                                    &::after {
+                                        content: '';
+                                        position: absolute;
+                                        top: -50%;
+                                        left: -50%;
+                                        right: 0;
+                                        bottom: 0;
+                                        padding: 12px;
+                                    }
+                                }
+                            }
+                        }
+
+                        .time {
+                            display: flex;
+                            justify-content: space-between;
+                            font-size: 13px;
+                            color: #555657;
+                        }
+
+                        &.hide {
+                            bottom: 0;
+                        }
+                    }
+                }
+
+                .episodes-list {
+                    background: #15171E;
+                    padding: 10px 20px;
+                    display: flex;
+                    flex-direction: column;
+                    overflow-y: auto;
+                    gap: 10px;
+
+                    .episode {
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        cursor: pointer;
+                        transition: .3s ease-in-out;
+
+                        .episode-wrapper {
+                            display: flex;
+                            flex-direction: column;
+                            font-weight: bold;
+                            gap: 4px;
+
+                            .nummer {
+                                font-size: 15px;
+                            }
+
+                            .info-wrapper {
+                                display: flex;
+                                gap: 5px;
+                                font-size: 11px;
+                                color: rgba(255, 255, 255, 0.6);
+                            }
+                        }
+
+                        .btn {
+                            width: 35px;
+                            aspect-ratio: 1 / 1;
+                            display: grid;
+                            border-radius: 5px;
+                            place-items: center;
+                            cursor: pointer;
+                            transition: .3s ease-in-out;
+
+                            &.state-1 {
+                                background: rgba(230, 53, 56, 0.4) !important;
+                                border-radius: 50% !important;
+
+                                .ticon {
+                                    background-color: #E63538 !important;
+                                }
+                            }
+
+                            .ticon {
+                                pointer-events: none;
+                                background-color: #414653;
+                                height: 16px;
+                                transition: .3s ease-in-out;
+                            }
+                        }
+
+                        &.select {
+                            background: #2393F1;
+                            box-shadow: 0 0 11px 1px rgba(35, 147, 241, 0.3);
+
+                            .btn {
+                                .ticon {
+                                    box-shadow: inset 0 0 4px rgba(255, 0, 0, 0.6);
+                                    background-color: #101318;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .footer {
+
+                    display: grid;
+                    grid-template-columns: auto 1fr auto;
+                    align-items: center;
+                    flex: 1;
+                    max-width: 900px;
+                    margin: 10px 20px;
+
+                    .btn {
+                        width: 40px;
+                        aspect-ratio: 1 / 1;
+                        display: grid;
+                        place-items: center;
+                        margin-right: 8px;
+                        cursor: pointer;
+
+                        .ticon {
+                            background-color: #414653;
+                            height: 15px;
+                        }
+
+                        &.close {
+                            margin-right: 0 !important;
+
+                            .ticon {
+                                height: 17px;
+                                background-color: #FFFFFF;
+                            }
+                        }
+                    }
+
+                    .title {
+                        font-weight: bold;
+                        font-size: 14px;
+                        color: #555657;
+                        text-wrap: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        text-align: center;
+                    }
+                }
+            }
+
+            .wrapper-landscape {
+                display: none;
+
+                .landscape-controls {
+                    position: sticky;
+                    top: 0;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    height: calc(100dvh - 20px);
+                    padding: 10px 0;
+
+                    .top-side {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+
+                        .btn.close {
+                            .ticon {
+                                height: 20px;
+                            }
+                        }
+                    }
+
+                    .bottom-side {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 5px;
+
+                        .btn.volume {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+
+                            .ticon {
+                                opacity: 0;
+                                height: 16px;
+                                position: absolute;
+                                transition: .3s ease-in-out;
+                            }
+
+                            &.state-0 {
+                                .i-volume-0 {
+                                    opacity: 1;
+                                }
+                            }
+
+                            &.state-1 {
+                                .i-volume-1 {
+                                    opacity: 1;
+                                }
+                            }
+
+                            &.state-2 {
+                                .i-volume-2 {
+                                    opacity: 1;
+                                }
+                            }
+
+                            &.state-off {
+                                .i-volume-off {
+                                    opacity: 1;
+                                }
+                            }
+                        }
+
+                        .btn.play {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+
+                            .ticon {
+                                transition: .3s ease-in-out;
+                                position: absolute;
+                            }
+
+                            &.state-pause {
+                                .i-pause {
+                                    opacity: 0;
+                                }
+                            }
+
+                            &.state-play {
+                                .i-play {
+                                    opacity: 0;
+                                }
+                            }
+                        }
+                    }
+
+                    .btn {
+                        width: 40px;
+                        aspect-ratio: 1 / 1;
+                        cursor: pointer;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        overflow: hidden;
+
+                        .ticon {
+                            height: 16px;
+                        }
+                    }
+
+                    .ticon {
+                        background-color: #FFFFFF;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width:900px) {
+
+    .content-player .content-wrapper .wrapper .wrapper-portrait .player-wrapper video,
+    .content-player .content-wrapper .wrapper .wrapper-portrait .episodes-list {
+        border-radius: 5px;
+    }
+}
+
+@media screen and (orientation:landscape) and (max-width: 915px) {
+    .content-player {
+        .content-wrapper {
+            max-height: 100dvh;
+
+            .wrapper {
+                display: grid;
+                grid-template-columns: auto auto;
+                margin-left: max(var(--sar), 20px);
+                margin-right: max(var(--sal), 20px);
+                padding-bottom: 0;
+
+                .wrapper-portrait {
+                    display: grid;
+                    overflow-y: auto;
+                    max-height: unset;
+                    height: fit-content;
+                    grid-template-rows: auto;
+                    // grid-template-rows: 1fr auto auto;
+
+                    .player-wrapper {
+                        video {
+                            width: auto;
+                            height: 100dvh;
+                        }
+
+                        .player-timeline {
+                            bottom: calc(7px + var(--sab));
+
+                            &.hide {
+                                bottom: -40px;
+                            }
+                        }
+
+                        .player-controls {
+                            display: none;
+                        }
+                    }
+
+                    .episodes-list {
+                        // margin-top: 20px;
+                        max-height: 100dvh;
+                        margin-bottom: var(--sab);
+                    }
+
+                    .footer {
+                        display: none;
+                    }
+                }
+
+                .wrapper-landscape {
+                    display: grid;
+                }
+            }
+        }
+    }
+}

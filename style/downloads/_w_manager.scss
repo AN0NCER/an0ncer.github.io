@@ -1,0 +1,455 @@
+.content-manager .content-wrapper {
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+    gap: 0 !important;
+}
+
+.content-manager {
+    .content-wrapper {
+        font-family: 'Manrope', serif;
+        max-height: 100dvh;
+        
+        .wrapper {
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            padding-bottom: max(var(--sab), 10px) !important;
+
+            .window-bar {
+                margin-top: 10px;
+                margin-left: max(var(--sar), 20px);
+                margin-right: max(var(--sal), 20px);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .window-title {
+                    font-size: 14px;
+                    color: #FFFFFF;
+                }
+
+                .window-close {
+                    width: 40px;
+                    height: 40px;
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+
+                    .ticon {
+                        height: 14px;
+                        background-color: #fff;
+                    }
+                }
+            }
+
+            .control-buttons {
+                display: flex;
+                background: #15171E;
+                margin-top: 10px;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+
+                .btn {
+                    display: flex;
+                    flex: 1 0 0;
+                    align-items: center;
+                    justify-content: center;
+                    height: 55px;
+                    cursor: pointer;
+                    transition: .3 ease-in-out;
+
+                    &.btn.continue {
+                        position: relative;
+
+                        .ticon {
+                            opacity: 0;
+                            position: absolute;
+                            transition: .3s ease-in-out;
+                        }
+
+                        &.state-0 {
+                            .i-download {
+                                opacity: 1;
+                            }
+                        }
+
+                        &.state-1 {
+                            .i-play {
+                                opacity: 1;
+                            }
+                        }
+
+                        &.state-2 {
+                            .i-pause {
+                                opacity: 1;
+                            }
+                        }
+                    }
+
+                    .ticon {
+                        background-color: #FFFFFF;
+                        height: 16px;
+
+                        &.i-angle-down,
+                        &.i-angle-up {
+                            height: 20px;
+                        }
+                    }
+
+                    &.disable {
+                        cursor: auto;
+                        opacity: .4;
+                    }
+                }
+            }
+
+            .download-anime {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 20px;
+
+                .wrapper-info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+
+                    .name {
+                        font-size: 15px;
+                        font-weight: bold;
+                    }
+
+                    .wrapper-data {
+                        font-size: 11px;
+                        display: flex;
+                        font-weight: bold;
+                        gap: 5px;
+                        color: #FFFFFF;
+                        opacity: .6;
+                    }
+                }
+
+                .wrapper-progress {
+                    aspect-ratio: 1 / 1;
+                    width: 40px;
+                    display: flex;
+                    position: relative;
+                    align-items: center;
+                    justify-content: center;
+
+                    .circular-progress {
+                        --size: 250px;
+                        --half-size: calc(var(--size) / 2);
+                        --stroke-width: 30px;
+                        --radius: calc((var(--size) - var(--stroke-width)) / 2);
+                        --circumference: calc(var(--radius) * pi * 2);
+                        --dash: calc((var(--progress) * var(--circumference)) / 100);
+
+                        circle {
+                            cx: var(--half-size);
+                            cy: var(--half-size);
+                            r: var(--radius);
+                            stroke-width: var(--stroke-width);
+                            fill: none;
+                            stroke-linecap: round;
+
+                            &.bg {
+                                stroke: #15171E;
+                            }
+
+                            &.fg {
+                                transform: rotate(-90deg);
+                                transform-origin: var(--half-size) var(--half-size);
+                                stroke-dasharray: var(--dash) calc(var(--circumference) - var(--dash));
+                                transition: stroke-dasharray 0.3s linear 0s;
+                                stroke: #F7D149;
+                            }
+                        }
+                    }
+
+                    .progress {
+                        position: absolute;
+                        font-size: 10px;
+                        font-weight: bold;
+                    }
+
+                    &.completed {
+                        .complety {
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+
+                            .ticon {
+                                opacity: 1;
+                            }
+                        }
+                    }
+
+                    .complety {
+                        position: absolute;
+                        background: #2393F1;
+                        top: 50%;
+                        left: 50%;
+                        right: 50%;
+                        bottom: 50%;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                        transition: .3s ease-in-out;
+
+                        .ticon {
+                            background-color: #FFFFFF;
+                            height: 18px;
+                            opacity: 0;
+                        }
+                    }
+                }
+            }
+
+            .block-check {
+                display: flex;
+                align-items: center;
+                margin-left: 10px;
+                margin-right: 10px;
+                margin-top: 10px;
+                gap: 10px;
+
+                input[type="checkbox"] {
+                    width: 0;
+                    height: 0;
+                    opacity: 0;
+                    display: none;
+                    cursor: pointer;
+
+                    &:checked {
+                        &~label>.check-box {
+                            .check-arow {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+
+
+                .check-box {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 20px;
+                    min-height: 20px;
+                    max-width: 20px;
+                    max-height: 20px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    background: #1D2027;
+
+                    .check-arow {
+                        display: none;
+                    }
+                }
+
+                label {
+                    display: flex;
+                    flex-direction: row-reverse;
+                    justify-content: space-between;
+                    align-items: center;
+                    flex: 1 0 0;
+                    gap: 10px;
+                    cursor: pointer;
+                    padding: 10px 10px 10px 20px;
+                    background: #15171E;
+                    border-radius: 6px;
+
+                    .info-text {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1px;
+
+                        .title {
+                            font-size: 13px;
+                            color: #FFF;
+                            font-weight: bold;
+                        }
+
+                        .info {
+                            font-size: 10px;
+                            font-weight: bold;
+                            opacity: .6;
+                        }
+                    }
+                }
+            }
+
+            &>.info-wrapper {
+                display: flex;
+                flex-direction: column;
+                background: #15171E;
+
+                .block {
+                    padding: 10px 20px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-size: 12px;
+                    font-weight: bold;
+                    color: #fff;
+
+                    .content-a {
+                        display: flex;
+                        gap: 10px;
+                        align-items: center;
+
+                        .icon {
+                            background: #101318;
+                            width: 30px;
+                            height: 30px;
+                            display: grid;
+                            place-items: center;
+                            border-radius: 2px;
+
+                            .ticon {
+                                background-color: #FFFFFF;
+                                width: 15px;
+                                height: auto;
+                            }
+                        }
+                    }
+
+                    .content-b {
+                        display: flex;
+                        gap: 1px;
+
+                        .count {
+                            opacity: 0.2;
+                        }
+
+                        .time {
+                            padding: 3px 7px;
+                            background: #F7D149;
+                            border-radius: 3px;
+                            color: #161616;
+                        }
+                    }
+                }
+            }
+
+            .list-wrapper {
+                .title {
+                    padding: 5px 20px;
+                    font-weight: bold;
+                    font-size: 13px;
+                }
+
+                .list {
+                    background: #15171E;
+                    padding: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+
+                    .history,
+                    .task {
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        cursor: pointer;
+                        transition: .3s ease-in-out;
+
+                        .episode-wrapper,
+                        .task-wrapper {
+                            display: flex;
+                            flex-direction: column;
+                            font-weight: bold;
+                            gap: 4px;
+
+                            .name {
+                                font-size: 15px;
+                            }
+
+                            .info-wrapper {
+                                display: flex;
+                                gap: 5px;
+                                font-size: 11px;
+                                color: #FFFFFF;
+                                opacity: .6;
+                            }
+                        }
+
+                        .btn {
+                            width: 35px;
+                            aspect-ratio: 1 / 1;
+                            display: grid;
+                            border-radius: 5px;
+                            place-items: center;
+                            cursor: pointer;
+                            transition: .3s ease-in-out;
+
+                            &.state-1 {
+                                background: rgba(230, 53, 56, 0.4) !important;
+                                border-radius: 50% !important;
+
+                                .ticon {
+                                    background-color: #E63538 !important;
+                                }
+                            }
+
+                            .ticon {
+                                pointer-events: none;
+                                background-color: #414653;
+                                height: 16px;
+                                transition: .3s ease-in-out;
+                            }
+                        }
+
+                        .history-wrapper {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-end;
+                            gap: 4px;
+                            font-size: 10px;
+                            font-weight: bold;
+                            opacity: .6;
+                            color: #FFFFFF;
+                        }
+
+                        &.select {
+                            background: #2393F1;
+                            box-shadow: 0 0 11px 1px rgba(35, 147, 241, 0.3);
+
+                            .btn {
+                                .ticon {
+                                    background-color: #101318;
+                                }
+                            }
+                        }
+
+                        &.hide {
+                            display: none;
+                        }
+                    }
+
+                    .empty-wrapper {
+                        text-align: center;
+                        font-weight: bold;
+
+                        .text {
+                            font-size: 13px;
+                        }
+
+                        .add {
+                            font-size: 10px;
+                            opacity: 0.6;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

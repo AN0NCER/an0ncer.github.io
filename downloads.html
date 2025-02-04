@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description"
+        content="Смотреть аниме оффлайн на сайте Tunime. Открой для себя новые миры с Tunime - лучшим сайтом для просмотра аниме!">
+    <meta name="page" content="downloads">
+    <title>Tunime - загрузки</title>
+    <link rel="icon" type="image/png" href="/images/icon-web.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="./images/icons/logo-x192-o.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="./images/icons/logo-x192-o.png" />
+    <script src="/javascript/library/jqery.min.js"></script>
+    <link rel="manifest" href="/images/icons/manifest-o.json">
+    <link rel="stylesheet" href="/style/css/main.css">
+    <link rel="stylesheet" href="/style/css/ticons.css">
+    <link rel="stylesheet" href="/style/css/downloads.css">
+</head>
+
+<body class="unselectable">
+    <div class="wrapper-900">
+        <header>
+            <div class="header-title">
+                <a href="index.html" class="btn">
+                    <span class="ticon i-caret-left" />
+                </a>
+                <span class="title">
+                    Загрузки
+                </span>
+                <div class="btn manager">
+                    <span class="ticon i-floppy-disk" />
+                </div>
+            </div>
+        </header>
+        <div class="empty-list hide">
+            <div class="wrapper">
+                <img src="/images/tun-card.png">
+                <div class="title">Нет доступных Аниме</div>
+                <div class="add">Для офлайн-просмотра сначала загрузите аниме на странице просмотра.</div>
+            </div>
+        </div>
+        <div class="anime-list"></div>
+    </div>
+    <span class="windowed window-player hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-player hide">
+            <div class="content-wrapper">
+                <div class="wrapper">
+                    <div class="wrapper-landscape">
+                        <div class="landscape-controls">
+                            <div class="top-side">
+                                <div class="btn close" id="player-close">
+                                    <div class="ticon i-caret-left"></div>
+                                </div>
+                            </div>
+                            <div class="bottom-side">
+                                <div class="btn fullscreen">
+                                    <div class="ticon i-expand"></div>
+                                </div>
+                                <div class="btn voice">
+                                    <div class="ticon i-microphone"></div>
+                                </div>
+                                <div class="btn volume state-2">
+                                    <div class="ticon i-volume-off"></div>
+                                    <div class="ticon i-volume-0"></div>
+                                    <div class="ticon i-volume-1"></div>
+                                    <div class="ticon i-volume-2"></div>
+                                </div>
+                                <div class="btn play state-pause">
+                                    <div class="ticon i-play"></div>
+                                    <div class="ticon i-pause"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper-portrait">
+                        <div class="player-wrapper">
+                            <div class="video-wrapper">
+                                <div class="points-event">
+                                    <div class="left-event"></div>
+                                    <div class="center-event"></div>
+                                    <div class="right-event"></div>
+                                </div>
+                                <video poster="./images/preview-image.png" playsinline></video>
+                            </div>
+                            <div class="player-controls">
+                                <div class="left-side">
+                                    <div class="btn play state-pause">
+                                        <div class="ticon i-play"></div>
+                                        <div class="ticon i-pause"></div>
+                                    </div>
+                                    <div class="btn volume state-2">
+                                        <div class="ticon i-volume-off"></div>
+                                        <div class="ticon i-volume-0"></div>
+                                        <div class="ticon i-volume-1"></div>
+                                        <div class="ticon i-volume-2"></div>
+                                    </div>
+                                </div>
+                                <div class="right-side">
+                                    <div class="btn-voice">
+                                        Озвучка
+                                    </div>
+                                    <div class="btn ldownload">
+                                        <div class="ticon i-download"></div>
+                                    </div>
+                                    <div class="btn fullscreen">
+                                        <div class="ticon i-expand"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="player-timeline">
+                                <div class="time">
+                                    <div class="cur">0:00</div>
+                                    <div class="full">00:00</div>
+                                </div>
+                                <div class="line">
+                                    <span class="curline">
+                                        <div class="point"></div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="episodes-list scroll-none">
+                        </div>
+                        <div class="footer">
+                            <div class="btn close" id="player-close">
+                                <div class="ticon i-xmark"></div>
+                            </div>
+                            <div class="title" id="player-name">
+                                Название
+                            </div>
+                            <div class="btn delete">
+                                <div class="ticon i-trash"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </span>
+    </span>
+    <span class="windowed window-voices hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-voices hide">
+            <div class="content-wrapper">
+                <div class="wrapper">
+                    <div class="window-bar bar-voices">
+                        <div class="window-title">Озвучки</div>
+                        <div class="window-close">
+                            <div class="ticon i-xmark"></div>
+                        </div>
+                    </div>
+
+                    <div class="voices-list scroll-none"></div>
+                </div>
+            </div>
+        </span>
+    </span>
+    <span class="windowed window-manager hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-manager hide">
+            <div class="content-wrapper">
+                <div class="wrapper">
+                    <div class="window-bar bar-manager">
+                        <div class="window-title">Загрузчик</div>
+                        <div class="window-close">
+                            <div class="ticon i-xmark"></div>
+                        </div>
+                    </div>
+                    <div class="control-buttons">
+                        <div class="btn continue state-0 disable">
+                            <div class="ticon i-download"></div>
+                            <div class="ticon i-play"></div>
+                            <div class="ticon i-pause"></div>
+                        </div>
+                        <div class="btn toup disable">
+                            <div class="ticon i-angle-up"></div>
+                        </div>
+                        <div class="btn todown disable">
+                            <div class="ticon i-angle-down"></div>
+                        </div>
+                        <div class="btn remove disable">
+                            <div class="ticon i-trash"></div>
+                        </div>
+                    </div>
+                    <div class="download-anime">
+                        <div class="wrapper-info">
+                            <div class="name">Название</div>
+                            <div class="wrapper-data">
+                                <div class="ep">0 Episode</div>
+                                <div class="dub">Озвучка</div>
+                            </div>
+                        </div>
+                        <div class="wrapper-progress">
+                            <svg width="40px" height="40px" viewBox="0 0 250 250" style="--progress: 0;"
+                                class="circular-progress">
+                                <circle class="bg" cx="125" cy="125" r="115" fill="none" stroke="#ddd"
+                                    stroke-width="20"></circle>
+                                <circle class="fg" cx="125" cy="125" r="115" fill="none" stroke="#5394fd"
+                                    stroke-width="20"></circle>
+                            </svg>
+                            <div class="progress">
+                                0
+                            </div>
+                            <div class="complety">
+                                <div class="ticon i-check"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-wrapper">
+                        <div class="block" id="file-size">
+                            <div class="content-a">
+                                <div class="icon">
+                                    <div class="ticon i-floppy-disk"></div>
+                                </div>
+                                <div class="text">Размер: <span class="value">0 Мб</span></div>
+                            </div>
+                            <div class="content-b"><span class="downloaded">0</span>|<span class="count">0</span></div>
+                        </div>
+                        <div class="block" id="download-speed">
+                            <div class="content-a">
+                                <div class="icon">
+                                    <div class="ticon i-guage-simple"></div>
+                                </div>
+                                <div class="text">Скорость: <span class="value">0</span> MB | S</div>
+                            </div>
+                            <div class="content-b"><span class="time">0:00</span></div>
+                        </div>
+                    </div>
+                    <div class="block-check">
+                        <input type="checkbox" id="save-all" name="saveall">
+                        <label for="save-all">
+                            <div class="check-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="7" viewBox="0 0 9 7" fill="none" class="check-arow">
+                                    <path d="M1 3.22L3.66571 5.44L7.22 1" stroke="#D4D4D8" stroke-width="2" stroke-linecap="round"></path>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <div class="title">Автоматическая загрузка</div>
+                                <div class="info">Полностью загружает очередь</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="list-wrapper">
+                        <div class="title">Очередь</div>
+                        <div class="list tasks"></div>
+                    </div>
+                    <div class="list-wrapper">
+                        <div class="title">История</div>
+                        <div class="list historys"></div>
+                    </div>
+                </div>
+            </div>
+        </span>
+    </span>
+    <script src="/javascript/library/anime.min.js"></script>
+    <script src="/javascript/library/hls.js"></script>
+    <script src="/javascript/parametrs.js"></script>
+    <script src="/javascript/pages/downloads.js" type="module"></script>
+</body>
+
+</html>
