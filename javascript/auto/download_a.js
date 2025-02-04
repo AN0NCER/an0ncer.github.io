@@ -3,6 +3,8 @@ import { ShowInfo } from "../modules/Popup.js";
 import { UserRates } from "../modules/ShikiAPI.js";
 import { User } from "../modules/ShikiUSR.js";
 
+//TODO: Файл не используеться перебрать и переделать для новых загрузок
+
 const SYNC_ENABLE = $PARAMETERS.anime.syncdata;
 const AUTO_ENABLE = $PARAMETERS.download.dautoset;
 

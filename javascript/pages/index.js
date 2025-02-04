@@ -84,4 +84,12 @@ function On() {
     $('.notification').on('click', () => {
         ShowNotifyWindow();
     });
+
+    $('.downloads-link > .wrapper').on('click', () => {
+        window.location.href = "/downloads.html";
+    });
+
+    if (!window.navigator.onLine) {
+        $('.mobile.search').after($('.downloads-link'));
+    }
 }

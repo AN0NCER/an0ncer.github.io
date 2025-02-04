@@ -55,9 +55,10 @@ header > .account > .information > .position {
   display: flex;
   align-items: center;
 }
-header > .account > .information > .position svg {
+header > .account > .information > .position .ticon {
   width: 12px;
-  fill: #fff;
+  height: auto;
+  background-color: #FFFFFF;
 }
 header > .account > .information > .position > span {
   margin-left: 5px;
@@ -78,18 +79,18 @@ header > .notify-search .notification {
   border-radius: 5px;
   cursor: pointer;
 }
-header > .notify-search .notification svg {
-  fill: #fff;
+header > .notify-search .notification .ticon {
+  background-color: #FFFFFF;
   height: 17px;
   z-index: 1;
 }
-header > .notify-search .notification svg.dot {
+header > .notify-search .notification .ticon.dot {
   display: none;
 }
-header > .notify-search .notification.dot svg.mail {
+header > .notify-search .notification.dot .ticon.mail {
   display: none;
 }
-header > .notify-search .notification.dot svg.dot {
+header > .notify-search .notification.dot .ticon.dot {
   display: block;
 }
 
@@ -254,10 +255,10 @@ header > .notify-search .notification.dot svg.dot {
   cursor: pointer;
   position: relative;
 }
-.swiper-treilers .swiper-wrapper .swiper-slide > .controls .wrapper-block-info .btn-play svg {
-  fill: #fff;
+.swiper-treilers .swiper-wrapper .swiper-slide > .controls .wrapper-block-info .btn-play .ticon {
   height: 16px;
   position: absolute;
+  background-color: #FFFFFF;
 }
 .swiper-treilers .swiper-wrapper .swiper-slide > .controls .wrapper-block-info .btn-play .load {
   opacity: 0;
@@ -306,18 +307,18 @@ header > .notify-search .notification.dot svg.dot {
   place-items: center;
   cursor: pointer;
 }
-.swiper-treilers .swiper-wrapper .swiper-slide > .controls .control-list .btn-list svg {
-  fill: #fff;
-  height: 16px;
+.swiper-treilers .swiper-wrapper .swiper-slide > .controls .control-list .btn-list .ticon {
+  background-color: #FFFFFF;
+  height: 17px;
 }
-.swiper-treilers .swiper-wrapper .swiper-slide > .controls .control-list .btn-list svg.selected {
+.swiper-treilers .swiper-wrapper .swiper-slide > .controls .control-list .btn-list .ticon.selected {
   display: none;
-  fill: #2393F1;
+  background-color: #2393F1;
 }
-.swiper-treilers .swiper-wrapper .swiper-slide > .controls .control-list .btn-list.selected svg {
+.swiper-treilers .swiper-wrapper .swiper-slide > .controls .control-list .btn-list.selected .ticon {
   display: none;
 }
-.swiper-treilers .swiper-wrapper .swiper-slide > .controls .control-list .btn-list.selected svg.selected {
+.swiper-treilers .swiper-wrapper .swiper-slide > .controls .control-list .btn-list.selected .ticon.selected {
   display: block;
 }
 .swiper-treilers .swiper-wrapper .swiper-slide.slide-load {
@@ -381,9 +382,11 @@ header > .notify-search .notification.dot svg.dot {
   display: grid;
   place-items: center;
 }
-.swiper-treilers .swiper-wrapper .swiper-slide.error-slide .wrapper-error .wrapper-content .content-reload .btn-reolad svg {
+.swiper-treilers .swiper-wrapper .swiper-slide.error-slide .wrapper-error .wrapper-content .content-reload .btn-reolad .ticon {
   width: 10vw;
   max-width: 80px;
+  height: auto;
+  background-color: #FFFFFF;
 }
 .swiper-treilers .swiper-pagination {
   bottom: 80px;
@@ -500,9 +503,9 @@ header > .notify-search .notification.dot svg.dot {
   align-items: center;
   gap: 5px;
 }
-.app-update .update-content-version .text-update svg {
-  height: 12px;
-  fill: #5E6063;
+.app-update .update-content-version .text-update .ticon {
+  height: 12.5px;
+  background-color: #5E6063;
 }
 .app-update .update-content-version .to-version {
   display: flex;
@@ -646,6 +649,9 @@ header > .notify-search .notification.dot svg.dot {
   border-radius: 3px;
   width: 43px;
   height: 43px;
+}
+.swiper-continue .swiper-wrapper .swiper-slide .wrapp-content .continue-content .wrap-continue .button-continue svg {
+  transform: translateX(-1px);
 }
 .swiper-continue .swiper-wrapper .swiper-slide .frame-anime {
   position: relative;
@@ -854,18 +860,88 @@ footer {
   display: none;
 }
 
+.downloads-link {
+  padding-left: 4px;
+  background: linear-gradient(-90deg, #101318 0%, #2393F1 100%);
+  border-radius: 3px;
+}
+.downloads-link > .wrapper {
+  background: #191C21;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 3px;
+  font-family: "Manrope", sans-serif;
+  color: #FFFFFF;
+  overflow: hidden;
+}
+.downloads-link > .wrapper .text-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.downloads-link > .wrapper .text-wrapper .new {
+  display: flex;
+  align-items: center;
+  color: #F7D149;
+  font-weight: bold;
+  font-size: 11px;
+  text-transform: uppercase;
+  gap: 5px;
+}
+.downloads-link > .wrapper .text-wrapper .new .ticon {
+  background-color: #F7D149;
+  height: 11px;
+}
+.downloads-link > .wrapper .text-wrapper > .wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.downloads-link > .wrapper .text-wrapper > .wrapper .title {
+  font-size: 13px;
+  font-weight: bold;
+}
+.downloads-link > .wrapper .text-wrapper > .wrapper .more {
+  font-size: 10px;
+  opacity: 0.3;
+}
+.downloads-link > .wrapper .btn-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #5E6063;
+  gap: 3px;
+}
+.downloads-link > .wrapper .btn-wrapper .btn {
+  width: 43px;
+  aspect-ratio: 1/1;
+  display: grid;
+  place-items: center;
+  background: #2393F1;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.downloads-link > .wrapper .btn-wrapper .btn .ticon {
+  height: 17px;
+  background-color: #FFFFFF;
+}
+
 :root {
   --sab: env(safe-area-inset-bottom);
 }
 
 .popup {
+  --z: 11;
   position: fixed;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 11;
+  z-index: var(--z);
 }
 .popup .popup-content {
   background: #2393F1;
@@ -1335,7 +1411,7 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   transition: 0.3s ease-in-out;
   transform: translateX(100%);
 }
-.windowed-right .window-content .content-wraper {
+.windowed-right .window-content .content-wraper, .windowed-right .window-content .content-wrapper {
   padding-top: 20px;
   padding-left: calc(env(safe-area-inset-left) + 20px);
   padding-right: calc(env(safe-area-inset-right) + 20px);
@@ -1359,7 +1435,7 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   transition: 0.3s ease-in-out;
   transform: translateY(100%);
 }
-.windowed .window-content .content-wraper {
+.windowed .window-content .content-wraper, .windowed .window-content .content-wrapper {
   padding-left: calc(env(safe-area-inset-left) + 20px);
   padding-right: calc(env(safe-area-inset-right) + 20px);
   padding-top: 20px;
@@ -1376,7 +1452,7 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 }
 
 @media screen and (min-width: 900px) {
-  .windowed .window-content .content-wraper {
+  .windowed .window-content .content-wraper, .windowed .window-content .content-wrapper {
     max-width: 900px;
     margin: 0 auto;
     width: 100%;
@@ -1832,6 +1908,10 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   background: #1f2329;
   border-radius: 5px;
 }
+.content-notify .content-wraper .title-content .btn-window-close .ticon {
+  height: 16px;
+  background-color: #FFFFFF;
+}
 .content-notify .content-wraper .title-content .btn-window-close svg {
   fill: #FFF;
   width: 10px;
@@ -2279,7 +2359,8 @@ body[data-orientation="90"] .section-genres,
 body[data-orientation="90"] .section-anime,
 body[data-orientation="90"] .swiper-continue,
 body[data-orientation="90"] .section-update,
-body[data-orientation="90"] .section-countdown {
+body[data-orientation="90"] .section-countdown,
+body[data-orientation="90"] .downloads-link {
   margin-right: max(20px, env(safe-area-inset-right));
 }
 body[data-orientation="90"] footer {
@@ -2291,7 +2372,8 @@ body[data-orientation="270"] .section-anime,
 body[data-orientation="270"] .swiper-continue,
 body[data-orientation="270"] .section-title,
 body[data-orientation="270"] .section-update,
-body[data-orientation="270"] .section-countdown {
+body[data-orientation="270"] .section-countdown,
+body[data-orientation="270"] .downloads-link {
   margin-left: max(20px, env(safe-area-inset-left));
 }
 body[data-orientation="270"] .section-genres > .genres:nth-child(1) {

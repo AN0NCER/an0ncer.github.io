@@ -315,72 +315,9 @@ function YouTubeGetID(url){
 
 function GenSlide(res, key) {
     const type = res.anime.kind != "movie" ? "Сериал" : "Фильм";
-    return `<div class="swiper-slide unselectable" data-key="${key}">
-    <div class="preview-block">
-        <a href="watch.html?id=${res.id}" data-key="${key}">
-            <img src="${res.youtube.preview}" />
-        </a>
-        <div class="player" data-key="${key}">
-            <video type="video/mp4" playsinline></video>
-        </div>
-    </div>
-    <div class="controls">
-        <div class="wrapper-block-info">
-            <div class="btn-play" data-key="${key}">
-                <svg class="play" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
-                    <path
-                        d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" />
-                </svg>
-                <svg class="load" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg>
-                <svg class="pause" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><path d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/></svg>
-            </div>
-            <div class="block-info">
-                <div class="block-name">${res.anime.rus ? res.anime.rus : res.anime.eng}</div>
-                <div class="wrapper-details">
-                    <span class="kind">${type}</span>
-                    <span class="ellipse"></span>
-                    <span class="studio">${res.anime.studio}</span>
-                </div>
-            </div>
-        </div>
-        <div class="control-list">
-            <div class="btn-list" data-id="${res.id}">
-                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
-                    <path
-                        d="M0 48C0 21.5 21.5 0 48 0l0 48V441.4l130.1-92.9c8.3-6 19.6-6 27.9 0L336 441.4V48H48V0H336c26.5 0 48 21.5 48 48V488c0 9-5 17.2-13 21.3s-17.6 3.4-24.9-1.8L192 397.5 37.9 507.5c-7.3 5.2-16.9 5.9-24.9 1.8S0 497 0 488V48z" />
-                </svg>
-                <svg class="selected" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"/></svg>
-            </div>
-        </div>
-    </div>
-</div>`
+    return `<div class="swiper-slide unselectable" data-key="${key}"><div class="preview-block"><a href="watch.html?id=${res.id}" data-key="${key}"><img src="${res.youtube.preview}" /></a><div class="player" data-key="${key}"><video type="video/mp4" playsinline></video></div></div><div class="controls"><div class="wrapper-block-info"><div class="btn-play" data-key="${key}"><div class="ticon i-play play"></div><div class="ticon i-spinner load"></div><div class="ticon i-pause pause"></div></div><div class="block-info"><div class="block-name">${res.anime.rus ? res.anime.rus : res.anime.eng}</div><div class="wrapper-details"><span class="kind">${type}</span><span class="ellipse"></span><span class="studio">${res.anime.studio}</span></div></div></div><div class="control-list"><div class="btn-list" data-id="${res.id}"><div class="ticon i-bookmark-1"></div><div class="ticon i-bookmark-2 selected"></div></div></div></div></div>`
 }
 
 function GenErrorSlide() {
-    return `<div class="swiper-slide error-slide">
-    <div class="wrapper-error">
-        <img src="./images/error-trailers.png" alt="Ошибка загрузки трейлеров">
-        <div class="wrapper-content">
-            <div class="content-info">
-                <div class="title-error">
-                    Ошибка загрузки<br />
-                    трейлеров
-                </div>
-                <div class="info-error">
-                    помоги нам решить проблему
-                </div>
-            </div>
-            <div class="content-reload">
-                <div class="btn-reolad">
-                    <svg viewBox="0 0 56 56" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M50.6953 24.5H51.625C53.0797 24.5 54.25 23.3297 54.25 21.875V7.87501C54.25 6.81407 53.6156 5.85157 52.6312 5.44688C51.6469 5.04219 50.5203 5.26094 49.7656 6.01563L45.2156 10.5656C35.6344 1.10469 20.2016 1.13751 10.675 10.675C1.10469 20.2453 1.10469 35.7547 10.675 45.325C20.2453 54.8953 35.7547 54.8953 45.325 45.325C46.6922 43.9578 46.6922 41.7375 45.325 40.3703C43.9578 39.0031 41.7375 39.0031 40.3703 40.3703C33.5344 47.2063 22.4547 47.2063 15.6187 40.3703C8.78281 33.5344 8.78281 22.4547 15.6187 15.6188C22.4219 8.81563 33.4141 8.78282 40.2609 15.5094L35.7656 20.0156C35.0109 20.7703 34.7922 21.8969 35.1969 22.8813C35.6016 23.8656 36.5641 24.5 37.625 24.5H50.6953Z"
-                            fill="white" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>`
+    return `<div class="swiper-slide error-slide"><div class="wrapper-error"><img src="./images/error-trailers.png" alt="Ошибка загрузки трейлеров"><div class="wrapper-content"><div class="content-info"><div class="title-error">Ошибка загрузки<br />трейлеров</div><div class="info-error">помоги нам решить проблему</div></div><div class="content-reload"><div class="btn-reolad"><div class="ticon i-rotate-right"></div></div></div></div></div></div>`
 }
