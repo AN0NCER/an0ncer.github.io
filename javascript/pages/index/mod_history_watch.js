@@ -88,7 +88,7 @@ function CreateElementHistory(data) {
                 </div>
                 <div class="wrap-continue">
                     <div class="button-continue">
-                        <svg width="44" height="43" viewBox="0 0 44 43" fill="none"
+                        <svg viewBox="0 0 44 43" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M19.4714 13.752C18.9703 13.4271 18.3406 13.4164 17.8294 13.7199C17.3182 14.0234 17 14.5947 17 15.216V27.7852C17 28.4066 17.3182 28.9779 17.8294 29.2814C18.3406 29.5849 18.9703 29.5706 19.4714 29.2493L29.2214 22.9647C29.7055 22.654 30 22.1005 30 21.5006C30 20.9008 29.7055 20.3508 29.2214 20.0366L19.4714 13.752Z"

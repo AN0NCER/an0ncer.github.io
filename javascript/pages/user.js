@@ -132,7 +132,7 @@ Main((e) => {
             ScrollElementWithMouse('.wrapper-achivements');
             ScrollElementWithMouse('.wrapper-achivements-unfinished');
             ScrollElementWithMouse('.wrapper-genres');
-            ScrollElementWithMouse('.wrapper-friends');
+            ScrollElementWithMouse('.wrapper-friends > .list');
         });
     });
 

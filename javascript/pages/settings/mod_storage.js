@@ -1,7 +1,13 @@
 import { CreateVerify } from "../../modules/ActionVerify.js";
+import { TDatabase } from "../../modules/TDatabase.js";
+import { TDownload } from "../../modules/TDownload.js";
 import { WindowManagement } from "../../modules/Windows.js";
+import { formatBytes } from "../settings.js";
 
 const exception = ['tunime-id', 'application_installed'];
+const database = [
+    { name: "Загруженное", key: "downloader" }
+];
 
 const WindowStorage = {
     init: function () {
@@ -9,7 +15,13 @@ const WindowStorage = {
             _windowStorage.hide();
         });
         $('.button-clear-app').on('click', () => {
-            CreateVerify().then((val) => {
+            CreateVerify().then(async (val) => {
+                for (let i = 0; i < database.length; i++) {
+                    const { key } = database[i];
+                    await TDatabase.Delete(key).catch((msg) => {
+                        console.log(msg);
+                    });
+                }
                 for (const key in localStorage) {
                     if (exception.includes(key)) {
                         continue;
@@ -59,26 +71,11 @@ const _windowStorage = new WindowManagement(WindowStorage, '.window-app-size');
 
 export function ShowStorage(title = "Хранилище") {
     $('.select-bar > .window-title').text(title);
-    let d = 'KB', s = Storage.Local.size();
-    if (s > 1000) {
-        d = 'MB';
-        s = (s / 1000).toFixed(2);
-    }
-    $("#locdata > span").text(`${s} ${d}`);
-    d = 'KB', s = Storage.Session.size();
-    if (s > 1000) {
-        d = 'MB';
-        s = (s / 1000).toFixed(2);
-    }
-    (async() => {
-        d = 'KB', s = await Storage.Cache.size();
-        if(s > 1000) {
-            d = 'MB';
-            s = (s / 1000).toFixed(2);
-        }
-        $("#cachedata > span").text(`${s} ${d}`);
+    (async () => {
+        $("#locdata > span").text(formatBytes(Storage.Local.size()));
+        $("#cachedata > span").text(formatBytes((await Storage.Cache.size()) + Storage.Database.downloader.count));
+        $("#sesdata > span").text(`${formatBytes(Storage.Session.size())}`);
     })();
-    $("#sesdata > span").text(`${Storage.Session.size()} KB`);
 
     let _xLen, _x;
     for (_x in localStorage) {
@@ -120,13 +117,8 @@ export const Storage = {
                 _xLen = ((localStorage[_x].length + _x.length) * 2);
                 _lsTotal += _xLen;
             };
-            
-            // Размер в килобайтах (KB)
-            if(fixed){
-                return (_lsTotal / 1024).toFixed(2);
-            }else{
-                return (_lsTotal / 1024);
-            }
+
+            return _lsTotal;
         }
     },
     Session: {
@@ -140,19 +132,13 @@ export const Storage = {
                 _xLen = ((sessionStorage[_x].length + _x.length) * 2);
                 _lsTotal += _xLen;
             };
-           
-            
-            // Размер в килобайтах (KB)
-            if(fixed){
-                return (_lsTotal / 1024).toFixed(2);
-            }else{
-                return (_lsTotal / 1024);
-            }
+
+            return _lsTotal;
         }
     },
     Cache: {
         size: async function (fixed = true) {
-            if(typeof caches === "undefined"){
+            if (typeof caches === "undefined") {
                 return 0;
             }
             let _lsTotal = 0;
@@ -172,11 +158,25 @@ export const Storage = {
                 }
             }
 
-            // Размер в килобайтах (KB)
-            if(fixed){
-                return (_lsTotal / 1024).toFixed(2);
-            }else{
-                return (_lsTotal / 1024);
+            return _lsTotal;
+        }
+    },
+    Database: {
+        downloader: {
+            count: 0,
+            size: async function (fixed = true) {
+                const db = (await TDownload.Manager()).db;
+                const list = await db.getAll("anime");
+                db.Close();
+                
+                let _lsTotal = 0;
+                list.forEach(element => {
+                    _lsTotal += element.size;
+                });
+
+                $(`.list-app-storage`).append(`<div class="storage-element"><div>Загрузчик</div><span>${formatBytes(_lsTotal)}</span></div>`)
+                this.count = _lsTotal;
+                return _lsTotal;
             }
         }
     },
@@ -186,6 +186,7 @@ export const Storage = {
         _lsTotal += parseInt(this.Local.size(false));
         _lsTotal += parseInt(this.Session.size(false));
         _lsTotal += parseInt(await this.Cache.size(false));
+        _lsTotal += parseInt(await this.Database.downloader.size(false));
         return _lsTotal;
     }
 }

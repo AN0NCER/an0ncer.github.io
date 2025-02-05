@@ -250,6 +250,23 @@ main {
   font-weight: bold;
 }
 
+.parameters-container label button {
+  display: flex;
+  flex: 1 1 0;
+  height: 35px;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: "Manrope";
+  border-radius: 3px;
+  background: #008afb;
+  color: #FFFFFF;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
 .parameters-container label .radio {
   height: 30px;
   display: flex;
@@ -331,6 +348,46 @@ footer {
   place-items: center;
   position: absolute;
   cursor: pointer;
+}
+
+:root {
+  --sab: env(safe-area-inset-bottom);
+}
+
+.popup {
+  --z: 11;
+  position: fixed;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z);
+}
+.popup .popup-content {
+  background: #2393F1;
+  color: #fff;
+  font-family: Manrope;
+  font-weight: bold;
+  padding: 10px 30px;
+  font-size: 11px;
+  border-radius: 10px;
+  max-width: 300px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.368627451);
+  position: relative;
+}
+.popup .popup-content img {
+  position: absolute;
+  top: -23px;
+  width: 30px;
+  right: 20px;
+}
+.popup.popup-menu-none {
+  bottom: -40px;
+}
+.popup.popup-menu-visible {
+  bottom: calc(env(safe-area-inset-bottom) - 40px);
 }
 
 .application-menu {
@@ -643,7 +700,7 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   transition: 0.3s ease-in-out;
   transform: translateX(100%);
 }
-.windowed-right .window-content .content-wraper {
+.windowed-right .window-content .content-wraper, .windowed-right .window-content .content-wrapper {
   padding-top: 20px;
   padding-left: calc(env(safe-area-inset-left) + 20px);
   padding-right: calc(env(safe-area-inset-right) + 20px);
@@ -667,7 +724,7 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   transition: 0.3s ease-in-out;
   transform: translateY(100%);
 }
-.windowed .window-content .content-wraper {
+.windowed .window-content .content-wraper, .windowed .window-content .content-wrapper {
   padding-left: calc(env(safe-area-inset-left) + 20px);
   padding-right: calc(env(safe-area-inset-right) + 20px);
   padding-top: 20px;
@@ -684,7 +741,7 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 }
 
 @media screen and (min-width: 900px) {
-  .windowed .window-content .content-wraper {
+  .windowed .window-content .content-wraper, .windowed .window-content .content-wrapper {
     max-width: 900px;
     margin: 0 auto;
     width: 100%;
@@ -862,11 +919,13 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   border-radius: 5px;
 }
 .window-app-size .window-content .content-wraper .list-local-storage,
-.window-app-size .window-content .content-wraper .list-session-storage {
+.window-app-size .window-content .content-wraper .list-session-storage,
+.window-app-size .window-content .content-wraper .list-app-storage {
   background: #292d39;
 }
 .window-app-size .window-content .content-wraper .list-local-storage .storage-element,
-.window-app-size .window-content .content-wraper .list-session-storage .storage-element {
+.window-app-size .window-content .content-wraper .list-session-storage .storage-element,
+.window-app-size .window-content .content-wraper .list-app-storage .storage-element {
   display: grid;
   grid-template-columns: 1fr auto;
   padding: 0px 10px;
@@ -874,7 +933,8 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   align-items: center;
 }
 .window-app-size .window-content .content-wraper .list-local-storage .storage-element div,
-.window-app-size .window-content .content-wraper .list-session-storage .storage-element div {
+.window-app-size .window-content .content-wraper .list-session-storage .storage-element div,
+.window-app-size .window-content .content-wraper .list-app-storage .storage-element div {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

@@ -1,5 +1,5 @@
-const version = '2.6.0';
-const hash = 'df45b';
+const version = '2.7.0';
+const hash = '74e18';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
     // Директория: /images/genres
@@ -40,18 +40,16 @@ const appShellFilesToCache = [
     "/images/player-icon.png",
     "/images/popup.png",
     "/images/preview-image.png",
+    "/images/tun-card.png",
     // Директория: /javascript/auto
     "/javascript/auto/download_a.js",
     // Директория: /javascript/library
     "/javascript/library/anime.min.js",
     "/javascript/library/hls.js",
-    "/javascript/library/hls.js.map",
     "/javascript/library/jqery.min.js",
     "/javascript/library/jsyaml.js",
     "/javascript/library/rxjs.umd.min.js",
-    "/javascript/library/rxjs.umd.min.js.map",
     "/javascript/library/swiper-bundle.min.js",
-    "/javascript/library/swiper-bundle.min.js.map",
     // Директория: /javascript/modules
     "/javascript/modules/ActionVerify.js",
     "/javascript/modules/AnimeCard.js",
@@ -64,8 +62,15 @@ const appShellFilesToCache = [
     "/javascript/modules/Settings.js",
     "/javascript/modules/ShikiAPI.js",
     "/javascript/modules/ShikiUSR.js",
+    "/javascript/modules/TDatabase.js",
+    "/javascript/modules/TDownload.js",
     "/javascript/modules/TunimeApi.js",
     "/javascript/modules/Windows.js",
+    // Директория: /javascript/pages/downloads
+    "/javascript/pages/downloads/mod_manager.js",
+    "/javascript/pages/downloads/mod_player.js",
+    "/javascript/pages/downloads/mod_utils.js",
+    "/javascript/pages/downloads/mod_voice.js",
     // Директория: /javascript/pages/index
     "/javascript/pages/index/mod_account.js",
     "/javascript/pages/index/mod_animes.js",
@@ -104,6 +109,7 @@ const appShellFilesToCache = [
     "/javascript/pages/search/mod_search.js",
     "/javascript/pages/search/mod_searchState.js",
     // Директория: /javascript/pages/settings
+    "/javascript/pages/settings/mod_cleardb.js",
     "/javascript/pages/settings/mod_select.js",
     "/javascript/pages/settings/mod_storage.js",
     // Директория: /javascript/pages/user
@@ -133,6 +139,7 @@ const appShellFilesToCache = [
     "/javascript/pages/watch/mod_wscore.js",
     // Директория: /javascript/pages
     "/javascript/pages/404a.js",
+    "/javascript/pages/downloads.js",
     "/javascript/pages/index.js",
     "/javascript/pages/list.js",
     "/javascript/pages/login.js",
@@ -153,6 +160,7 @@ const appShellFilesToCache = [
     // Директория: /style/css/min
     "/style/css/min/swiper-bundle.min.css",
     // Директория: /style/css
+    "/style/css/downloads.css",
     "/style/css/index.css",
     "/style/css/list.css",
     "/style/css/login.css",
@@ -161,6 +169,7 @@ const appShellFilesToCache = [
     "/style/css/player.css",
     "/style/css/search.css",
     "/style/css/settings.css",
+    "/style/css/ticons.css",
     "/style/css/user.css",
     "/style/css/verifyaction.css",
     "/style/css/watch.css",
@@ -171,6 +180,7 @@ const appShellFilesToCache = [
     // Директория: /
     "/404.html",
     "/404a.html",
+    "/downloads.html",
     "/index.html",
     "/list.html",
     "/login.html",
@@ -190,7 +200,7 @@ self.addEventListener('install', async event => {
     event.waitUntil(caches.open(cacheName).then((cache) => {
         console.log('[SW]: Caching App Shell');
         return cache.addAll(appShellFilesToCache);
-    }));
+    }).catch((err) => { console.log('Не удалось установить файл', err) }));
 
     setTimeout(() => {
         self.skipWaiting();
@@ -206,37 +216,38 @@ self.addEventListener('activate', event => {
     });
 });
 
-self.addEventListener('fetch', function (event) {
-    if (servers.some(url => event.request.url.startsWith(url))) {
-        let modifiedHeaders = new Headers(event.request.headers);
-        let authHeader = modifiedHeaders.get('Authorization') || '';
-        authHeader += version;
-        modifiedHeaders.set('Authorization', authHeader);
+self.addEventListener('fetch', event => {
+    const url = new URL(event.request.url);
 
-        const modifiedRequest = new Request(event.request, {
-            method: event.request.method,
-            headers: modifiedHeaders,
-            mode: event.request.mode,
-            credentials: event.request.credentials,
-            redirect: event.request.redirect,
-            referrer: event.request.referrer,
-            referrerPolicy: event.request.referrerPolicy,
-            integrity: event.request.integrity,
-            cache: event.request.cache,
-        });
-
-        event.respondWith(fetch(modifiedRequest));
-    } else {
-        event.respondWith(
-            caches.match(event.request).then((response) => {
-                if (response) {
-                    return response;
-                } else {
-                    return fetch(event.request);
-                }
+    if (servers.some(s => url.href.startsWith(s))) {
+        event.respondWith(fetch(new Request(event.request, {
+            ...event.request,
+            headers: new Headers({
+                ...Object.fromEntries(event.request.headers),
+                Authorization: (event.request.headers.get('Authorization') || '') + version
             })
-        )
+        })));
+        return;
     }
+
+    event.respondWith((async () => {
+        const url = new URL(event.request.url);
+        const cachedResponse = await caches.match(event.request);
+
+        if (cachedResponse) {
+            return cachedResponse;
+        }
+
+        if (self.location.hostname !== url.hostname) {
+            return fetch(event.request);
+        }
+
+        if (url.pathname === "/") {
+            return caches.match('/index.html') || fetch(event.request);
+        }
+
+        return (await caches.match(url.pathname)) || fetch(event.request);
+    })());
 });
 
 self.addEventListener('message', async event => {

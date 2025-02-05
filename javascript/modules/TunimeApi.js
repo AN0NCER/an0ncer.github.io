@@ -1,99 +1,17 @@
-import { Sleep } from "./functions.js";
-
-/**
- * @typedef {Object} Access - данные доступа
- * @property {string} id - индентификатор пользователя
- * @property {string} did - индентификатор устройства
- * @property {string} key - ключ доступа
- * @property {[string]} scope - разрешения пользователя
- * @property {string} end - время в ISO 8601 когда закончиться доступ
- */
-
-/**
- * @typedef {Object} Source
- * @property {[{src:string, type:string}]} 
- * @property {[string]} scips
- * @property {[string]} thumbinals
- */
-
-/**
- * @typedef {Object} Tunime - управление api
- * @property {Storage} storage
- * @property {Device} device
- * @property {Server} server
- * @property {function(): Promise<Access|false>} Auth
- * @property {function(Access): Promise<Access|false>} Online
- * @property {function({q720:string|undefined,q480:string|undefined,q360:string|undefined}): string} Link
- * @property {{Anime:function(number|string): string, User:function(number|string): string}} Share
- * @property {function(string, Access): Promise<{data:Source}|false>} Source
- * @property {{Anime:function(number, Access): Promise<Object|false>, Voice:function(number, number, Access): Promise<Object|false>}} OnActiv
- */
-
-class Server {
-    #base = 'https://tunime.onrender.com'; // Основной URL сервера
-    #list = [
-        'https://tunime-hujg.onrender.com', // Список дополнительных URL
-    ];
-    #url; // Текущий URL
-    #key = 'shadow-url'; // Ключ для хранения данных в sessionStorage
-    #id = -1; // Идентификатор текущего URL в списке
-
-    // Геттер для получения текущего URL
-    get url() {
-        // Если URL уже определен, возвращаем его
-        if (this.#url !== undefined) {
-            return this.#url;
-        }
-
-        // Изначально используем базовый URL
-        this.#url = this.#base;
-
-        // Получаем данные из sessionStorage
-        const data = sessionStorage.getItem(this.#key);
-        if (data !== null) {
-            /** @type {{id: number, url: string}} */
-            const val = JSON.parse(data);
-            this.#id = val.id;
-            this.#url = val.url;
-        }
-
-        return this.#url;
-    }
-
-    // Метод для переключения на следующий URL в списке
-    next(id = this.#id) {
-        let url = this.#base;
-
-        // Если есть следующий URL в списке, переключаемся на него
-        if ((id + 1) < this.#list.length) {
-            id = id + 1;
-            url = this.#list[id];
-        } else {
-            return false;
-        }
-
-        this.#id = id;
-        this.#url = url;
-
-        // Сохраняем текущий URL и идентификатор в sessionStorage
-        sessionStorage.setItem(this.#key, JSON.stringify({ id: this.#id, url: this.#url }));
-    }
-}
-
-class Storage {
-    #key = 'shadow-api';
+class Access {
     #val = undefined;
-    #loaded = false;
 
-    /**
-    * @type {Access | undefined}
-    */
+    constructor() {
+        this.Key = 'shadow-api';
+        this.Loaded = false;
+    }
+
     get access() {
-        if (this.#val === undefined && this.#loaded === true || this.#val !== undefined) {
+        if (this.#val !== undefined || this.Loaded === true) {
             return this.#val;
         }
 
-        const data = sessionStorage.getItem(this.#key);
+        const data = sessionStorage.getItem(this.Key);
         this.#val = JSON.parse(data) || undefined;
 
         if (this.#val !== undefined) {
@@ -105,174 +23,315 @@ class Storage {
         return this.#val;
     }
 
-    /**
-     * @type {Access | undefined}
-     */
-    set access(value) {
-        this.#val = value;
-        if (value === undefined) {
-            return sessionStorage.removeItem(this.#key);
+    set access(val) {
+        this.#val = val;
+        if (val === undefined) {
+            return sessionStorage.removeItem(this.Key);
         }
-        sessionStorage.setItem(this.#key, JSON.stringify(this.#val));
+        sessionStorage.setItem(this.Key, JSON.stringify(this.#val));
     }
 
-    /**
-     * Существует ли все еще ключ доступа
-     * @param {Access | undefined} access 
-     * @returns {boolean}
-     */
     Live(access = this.#val) {
-        if (typeof access === 'undefined') {
+        if (access === undefined)
             return false;
-        }
 
-        if (0 >= (Date.parse(access.end) - Date.now())) {
+        if (0 >= (Date.parse(access.end) - Date.now()))
             return false;
-        }
         return true;
     }
 }
 
 class Device {
-    #key = 'tunime-id';
     #id = undefined;
-    #loaded = false;
-    get id() {
-        if (this.#id === undefined && this.#loaded === false) {
-            this.#id = localStorage.getItem(this.#key) || undefined;
+
+    constructor() {
+        this.Key = 'tunime-id';
+        this.Loaded = false;
+    }
+
+    get Id() {
+        if (this.#id === undefined && this.Loaded === false) {
+            this.#id = localStorage.getItem(this.Key) || undefined;
         }
         return this.#id;
     }
 
-    set id(value) {
-        if (this.#id === value)
+    set Id(val) {
+        if (this.#id === val)
             return;
 
-        this.#id = value;
-        localStorage.setItem(this.#key, this.#id);
+        this.#id = val;
+        localStorage.setItem(this.Key, this.#id);
     }
 }
 
-function ApiFetch(path, { method = 'GET', body = undefined } = {}) {
-    const request = {
-        method
-    };
+class Balancer {
+    #url = undefined;
 
-    if (body != undefined) {
-        request['body'] = new URLSearchParams(body);
+    constructor(servers) {
+        this.config = {
+            key: 'shadow-url',
+            unlockTime: 5 * 60 * 1000, // 5 минут в миллисекундах
+            checkInterval: 10 * 1000 // Проверка каждые 10 секунд
+        };
+
+        this.state = {
+            servers: servers,
+            id: 0,
+            blocked: false,
+            cycleCount: 0,
+            blockedTime: null
+        };
+
+        // Восстанавливаем состояние из sessionStorage
+        const storedData = sessionStorage.getItem(this.config.key);
+        if (storedData !== null) {
+            Object.assign(this.state, JSON.parse(storedData));
+        }
+
+        // Проверяем, можно ли разблокировать
+        this.checkUnlock();
     }
 
-    return fetch(`${Tunime.server.url}${path}`, request);
-}
 
-/**
- * @type {Tunime}
- */
-export const Tunime = {
-    storage: new Storage(),
-    device: new Device(),
-    server: new Server(),
-    Auth: function () {
-        return new Promise((resolve) => {
-            let path = '/auth';
-            let body = {};
-            if (this.device.id !== undefined) {
-                body['did'] = this.device.id;
+    /**
+     * Переключает сервер и сохраняет его в sessionStorage
+     * @returns {boolean} - true, если сервер успешно переключён, false, если все сервера были уже пройдены
+     */
+    Next() {
+        if (this.state.blocked) return false;
+
+        this.state.id = (this.state.id + 1) % this.state.servers.length;
+
+        if (this.state.id === 0) {
+            this.state.cycleCount++;
+        }
+
+        if (this.state.cycleCount >= 1) {
+            this.state.blocked = true;
+            this.state.blockedTime = Date.now(); // Фиксируем время блокировки
+            this.saveState();
+            return false;
+        }
+
+        this.saveState();
+        return true;
+    }
+
+    /**
+     * Проверяет, прошло ли достаточно времени для разблокировки
+     */
+    checkUnlock() {
+        if (this.state.blocked && this.state.blockedTime) {
+            const elapsedTime = Date.now() - this.state.blockedTime;
+            if (elapsedTime >= this.config.unlockTime) {
+                this.resetBalancer();
             }
-            let responseCode = 503;
-            ApiFetch(path, { method: 'POST', body }).then((response) => {
-                responseCode = response.status;
+        }
+    }
 
-                if (responseCode === 200) {
+    /**
+     * Запускает таймер для проверки разблокировки
+     */
+    startUnlockTimer() {
+        setInterval(() => this.checkUnlock(), this.config.checkInterval);
+    }
+
+    /**
+     * Сбрасывает состояние балансера после таймаута
+     */
+    resetBalancer() {
+        this.state.id = 0;
+        this.state.blocked = false;
+        this.state.cycleCount = 0;
+        this.state.blockedTime = null;
+        this.saveState();
+    }
+
+
+    /**
+     * Сохраняет текущее состояние в sessionStorage
+     */
+    saveState() {
+        sessionStorage.setItem(this.config.key, JSON.stringify(this.state));
+    }
+
+    /**
+     * Получает текущий URL сервера
+     * @returns {string}
+     */
+    get url() {
+        return this.state.servers[this.state.id];
+    }
+
+
+    fetch(path, params = { method: 'GET', body: undefined }) {
+
+        if (params.body !== undefined) {
+            params.body = new URLSearchParams(params.body);
+        } else {
+            delete params.body;
+        }
+
+        const lFetch = (url, params) => {
+            return new Promise((resolve, reject) => {
+                let rCode = 503;
+                fetch(url, params).then((response) => {
+                    rCode = response.status;
+                    return resolve(response);
+                }).catch((reason) => {
+                    if (rCode == 503) {
+                        if (this.Next()) {
+                            return resolve(lFetch(`${this.url}${path}`, params));
+                        }
+                    }
+                    reject(reason);
+                });
+            });
+        }
+
+        return lFetch(`${this.url}${path}`, params);
+    }
+}
+
+class Shadow {
+    constructor() {
+        this._state = {
+            isConnected: false,
+            hasApiAccess: false,
+            permissions: [],
+            sessionExpiry: null,
+            deviceId: null,
+            lastUpdate: null
+        }
+    }
+
+    get state() {
+        return { ...this._state };
+    }
+
+    update() {
+        const currentTime = Date.now();
+
+        this._state = {
+            isConnected: user.access !== undefined,
+            hasApiAccess: user.access?.scope?.includes("player") || false,
+            permissions: user.access?.scope || [],
+            sessionExpiry: user.access?.end ? new Date(user.access.end) : null,
+            deviceId: device.Id,
+            lastUpdate: new Date(currentTime)
+        }
+
+        // Добавляем вычисляемые поля
+        this._state.isSessionValid = user.Live();
+        this._state.timeToExpiry = this._state.sessionExpiry
+            ? this._state.sessionExpiry - currentTime
+            : null;
+    }
+
+    debug() {
+        console.group('Shadow State Debug Info');
+        console.log('Current State:', this.state);
+        console.log('Is Connected:', this.state.isConnected);
+        console.log('API Access:', this.state.hasApiAccess);
+        console.log('Permissions:', this.state.permissions);
+        console.log('Session Valid:', this.state.isSessionValid);
+        if (this.state.sessionExpiry) {
+            console.log('Session Expires:', this.state.sessionExpiry.toLocaleString());
+            console.log('Time to Expiry:', Math.floor(this.state.timeToExpiry / 1000), 'seconds');
+        }
+        console.log('Device ID:', this.state.deviceId);
+        console.log('Last Update:', this.state?.lastUpdate?.toLocaleString());
+        console.groupEnd();
+    }
+}
+
+const balancer = new Balancer([
+    'https://tunime.onrender.com',
+    'https://tunime-hujg.onrender.com',
+]);
+
+const user = new Access();
+const device = new Device();
+window.$SHADOW = new Shadow();
+
+export const Tunime = {
+    Auth: () => {
+        const path = '/auth';
+
+        let body = {};
+        if (device.Id !== undefined) {
+            body['did'] = device.Id;
+        }
+
+        return new Promise((resolve) => {
+            balancer.fetch(path, { method: 'POST', body }).then((response) => {
+                if (response.status === 200) {
                     return response.json().then((value) => {
-                        Tunime.device.id = value.data.did;
-                        this.storage.access = value.data;
+                        device.Id = value.data.did;
+                        user.access = value.data;
                         return resolve(value.data);
-                    });
+                    })
                 }
 
                 return resolve(false);
-            }).catch(async (reason) => {
-                console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
-
-                if (responseCode == 503) {
-                    if (Tunime.server.next() !== false) {
-                        await Sleep(1000);
-                        return resolve(this.Auth());
-                    }
-                }
-
+            }).catch((reason) => {
+                console.log(`[api] Error: ${reason}`);
                 return resolve(false);
             });
         });
     },
-    Online: function (access = this.storage.access) {
-        return new Promise((resolve) => {
-            if (access === undefined || !access.scope.includes("web")) {
-                return resolve(false);
-            }
-            const path = '/online';
-            const body = { id: access.id, key: access.key };
-            let responseCode = 503;
-            ApiFetch(path, { method: 'POST', body: body }).then(async (response) => {
-                responseCode = response.status;
 
-                if (responseCode === 200) {
+    Online: (access = user.access) => {
+        const path = '/online';
+        const body = { id: access.id, key: access.key };
+
+        return new Promise((resolve) => {
+            balancer.fetch(path, { method: 'POST', body: body }).then((response) => {
+                if (response.status === 200) {
                     return response.json().then((value) => {
-                        this.storage.access = value.data;
+                        user.access = value.data;
                         return resolve(value.data);
                     });
                 }
 
                 return resolve(false);
-            }).catch(async (reason) => {
-                console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
-
-                if (responseCode == 503) {
-                    if (Tunime.server.next() !== false) {
-                        return resolve(this.Online(access));
-                    }
-                }
-
+            }).catch((reason) => {
+                console.log(`[api] Error: ${reason}`);
                 return resolve(false);
             })
         });
     },
-    Link: function ({ q720 = undefined, q480 = undefined, q360 = undefined } = {}) {
+
+    Link: ({ q720 = undefined, q480 = undefined, q360 = undefined } = {}) => {
         const params = { q720, q480, q360 };
         const queryParams = Object.entries(params)
             .filter(([key, value]) => value !== undefined)
             .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
             .join('&');
-        return `${Tunime.server.url}/video/stream.m3u8?${queryParams}`;
+        return `${balancer.url}/video/stream.m3u8?${queryParams}`;
     },
+
     Share: {
-        Anime: function (id) {
-            return `${Tunime.server.url}/l/${id}`;
+        Anime: (id) => {
+            return `${balancer.url}/l/${id}`;
         },
-        User: function (id) {
-            return `${Tunime.server.url}/u/${id}`;
+        User: (id) => {
+            return `${balancer.url}/u/${id}`;
         }
     },
-    Source: function (kodik, access = this.storage.access) {
+
+    Source: async (kodik, access = user.access) => {
+        if (access === undefined || !access.scope.includes("player")) {
+            return false;
+        }
+
+        const path = '/video/source';
+        const body = { id: access.id, key: access.key, link: kodik };
+
         return new Promise((resolve) => {
-            if (access === undefined || !access.scope.includes("player")) {
-                return resolve(false);
-            }
-            const path = '/video/source';
-            const body = { id: access.id, key: access.key, link: kodik };
-            let responseCode = 503;
-            const cods = [401, 429];
-            ApiFetch(path, { method: 'POST', body: body }).then(async (response) => {
-                responseCode = response.status;
-
-                if (cods.includes(responseCode)) {
-                    Tunime.storage.access = undefined;
-                    const access = await Tunime.Auth();
-                    return resolve(this.Source(kodik, access));
-                }
-
-                if (responseCode === 200) {
+            balancer.fetch(path, { method: 'POST', body: body }).then((response) => {
+                if (response.status === 200) {
                     return response.json().then((value) => {
                         return resolve(value.data);
                     });
@@ -280,38 +339,24 @@ export const Tunime = {
 
                 return resolve(false);
             }).catch((reason) => {
-                console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
-
-                if (responseCode == 503) {
-                    if (Tunime.server.next() !== false) {
-                        return resolve(this.Source(kodik, access));
-                    }
-                }
-
+                console.log(`[api] Error: ${reason}`);
                 return resolve(false);
-            });
+            })
         });
     },
+
     OnActiv: {
-        Anime: function (aid, access = Tunime.storage.access) {
+        Anime: async (aid, access = user.access) => {
+            if (access === undefined || !access.scope.includes("anime")) {
+                return false;
+            }
+
+            const path = `/anime/${aid}`;
+            const body = { id: access.id, key: access.key };
+
             return new Promise((resolve) => {
-                if (access === undefined || !access.scope.includes("anime")) {
-                    return resolve(false);
-                }
-                const path = `/anime/${aid}`;
-                const body = { id: access.id, key: access.key };
-                let responseCode = 503;
-                const cods = [401, 429];
-                ApiFetch(path, { method: 'POST', body: body }).then(async (response) => {
-                    responseCode = response.status;
-
-                    if (cods.includes(responseCode)) {
-                        Tunime.storage.access = undefined;
-                        const access = await Tunime.Auth();
-                        return resolve(this.Anime(aid, access));
-                    }
-
-                    if (responseCode === 200) {
+                balancer.fetch(path, { method: 'POST', body: body }).then((response) => {
+                    if (response.status === 200) {
                         return response.json().then((value) => {
                             return resolve(value.data);
                         });
@@ -319,37 +364,23 @@ export const Tunime = {
 
                     return resolve(false);
                 }).catch((reason) => {
-                    console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
-
-                    if (responseCode == 503) {
-                        if (Tunime.server.next() !== false) {
-                            return resolve(this.Anime(aid, access));
-                        }
-                    }
-
+                    console.log(`[api] Error: ${reason}`);
                     return resolve(false);
-                });
+                })
             });
         },
-        Voice: function (aid, tid, access = Tunime.storage.access) {
+
+        Voice: async (aid, tid, access = user.access) => {
+            if (access === undefined || !access.scope.includes("anime")) {
+                return false;
+            }
+
+            const path = `/voices/${aid}`;
+            const body = { id: access.id, key: access.key, tid: tid };
+
             return new Promise((resolve) => {
-                if (access === undefined || !access.scope.includes("anime")) {
-                    return resolve(false);
-                }
-                const path = `/voices/${aid}`;
-                const body = { id: access.id, key: access.key, tid: tid };
-                let responseCode = 503;
-                const cods = [401, 429];
-                ApiFetch(path, { method: 'POST', body: body }).then(async (response) => {
-                    responseCode = response.status;
-
-                    if (cods.includes(responseCode)) {
-                        Tunime.storage.access = undefined;
-                        const access = await Tunime.Auth();
-                        return resolve(this.Voice(aid, tid, access));
-                    }
-
-                    if (responseCode === 200) {
+                balancer.fetch(path, { method: 'POST', body: body }).then((response) => {
+                    if (response.status === 200) {
                         return response.json().then((value) => {
                             return resolve(value.data);
                         });
@@ -357,94 +388,74 @@ export const Tunime = {
 
                     return resolve(false);
                 }).catch((reason) => {
-                    console.log(`[api] - Error: ${Tunime.server.url} Code: ${responseCode}\n${reason}`);
-
-                    if (responseCode == 503) {
-                        if (Tunime.server.next() !== false) {
-                            return resolve(this.Voice(aid, tid, access));
-                        }
-                    }
-
+                    console.log(`[api] Error: ${reason}`);
                     return resolve(false);
-                });
+                })
             });
         }
     }
 };
 
-(() => {
-    if (typeof $SERVER !== 'undefined' && $SERVER) {
-        $SERVER.On.Updatet((event) => {
-            if (event === false) {
-                AutoUpdateToken();
+(async (exception) => {
+    if (exception.includes(window.location.pathname)) return;
+
+    const originalAccessSetter = Object.getOwnPropertyDescriptor(Access.prototype, 'access').set;
+    Object.defineProperty(Access.prototype, 'access', {
+        set: function (value) {
+            originalAccessSetter.call(this, value);
+            window.$SHADOW.update();
+        }
+    });
+
+    window.$SHADOW.update();
+
+    if (user.access === undefined) {
+        let acc = await Tunime.Auth();
+        if (acc && !acc.scope.includes("player")) {
+            acc = await Tunime.Online();
+        }
+    }
+
+    (async () => {
+        let timeout = undefined;
+
+        document.addEventListener('visibilitychange', async () => {
+            if (document.visibilityState !== 'visible') return;
+
+            if (!user.Live()) {
+                clearTimeout(timeout);
+                update();
             }
         });
-    } else {
-        AutoUpdateToken();
-    }
-})();
 
-async function AutoUpdateToken() {
-    const exception = ['/player.html'];
-    if (exception.includes(window.location.pathname))
-        return;
-
-    let access = Tunime.storage.access;
-
-    if (access === undefined) {
-        access = await Tunime.Auth();
-        if (access && !access.scope.includes("player")) {
-            access = await Tunime.Online();
-        }
-    }
-
-    if (access === false) {
-        return;
-    }
-
-    console.log(`[api] - Token: ${access.end}`);
-    UpdateToken();
-}
-
-async function UpdateToken() {
-    let timeout = undefined;
-
-    document.addEventListener('visibilitychange', async function () {
-        if (document.visibilityState === 'visible') {
-            if (!Tunime.storage.Live()) {
-                clearTimeout(timeout);
-                _update();
-            }
-        }
-    })
-
-    async function _update() {
-        const minute = 60000;
-        if (Tunime.storage.access === undefined) {
-            const access = await Tunime.Auth();
-            if (access === false) {
-                return;
-            }
-        }
-
-        const time = Date.parse(Tunime.storage.access.end) - Date.now() - minute;
-        timeout = setTimeout(async () => {
-            if (!Tunime.storage.Live()) {
-                Tunime.storage.access = undefined;
-                const access = await Tunime.Auth();
-                if (access === false) {
+        const update = async () => {
+            const time = 60000;
+            if (user.access === undefined) {
+                const acc = await Tunime.Auth();
+                if (acc === false) {
                     return;
                 }
-            } else {
-                const access = await Tunime.Online();
-                if (access === false) {
-                    return;
-                }
-                _update();
             }
-        }, time);
-        console.log(`[api] - Weiter durch ${time} ms`);
-    }
 
-    _update();
-}
+            const date = Date.parse(user.access.end) - Date.now() - time;
+            timeout = setTimeout(async () => {
+                if (!user.Live()) {
+                    user.access = undefined;
+                    const acc = await Tunime.Auth();
+                    if (acc === false) {
+                        return;
+                    }
+                } else {
+                    const acc = await Tunime.Online();
+                    if (acc === false) {
+                        return;
+                    }
+                    update();
+                }
+            }, date);
+            console.log(`[api] - Weiter durch ${date} ms`);
+        }
+
+        update();
+    })();
+})(['/player.html']);

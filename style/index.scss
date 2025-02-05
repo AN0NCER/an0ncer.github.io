@@ -10,7 +10,7 @@ body {
   -webkit-text-size-adjust: none;
   /* Запрещает автоматическое изменение размера текста */
 
-  &.hidden{
+  &.hidden {
     overflow: hidden;
   }
 }
@@ -67,9 +67,10 @@ header {
         display: flex;
         align-items: center;
 
-        svg {
+        .ticon {
           width: 12px;
-          fill: #fff;
+          height: auto;
+          background-color: #FFFFFF;
         }
 
         &>span {
@@ -96,22 +97,22 @@ header {
       border-radius: $radius;
       cursor: pointer;
 
-      svg {
-        fill: #fff;
+      .ticon {
+        background-color: #FFFFFF;
         height: 17px;
         z-index: 1;
       }
 
-      svg.dot {
+      .ticon.dot {
         display: none;
       }
 
       &.dot {
-        svg.mail {
+        .ticon.mail {
           display: none;
         }
 
-        svg.dot {
+        .ticon.dot {
           display: block;
         }
       }
@@ -330,6 +331,10 @@ header {
               border-radius: 3px;
               width: 43px;
               height: 43px;
+
+              svg{
+                transform: translateX(-1px);
+              }
             }
           }
         }
@@ -535,6 +540,86 @@ footer {
   }
 }
 
+.downloads-link {
+  padding-left: 4px;
+  background: linear-gradient(-90deg, #101318 0%, #2393F1 100%);
+  border-radius: 3px;
+
+  &>.wrapper {
+    background: #191C21;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 3px;
+    font-family: 'Manrope', sans-serif;
+    color: #FFFFFF;
+    overflow: hidden;
+
+    .text-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .new{
+        display: flex;
+        align-items: center;
+        color: #F7D149;
+        font-weight: bold;
+        font-size: 11px;
+        text-transform: uppercase;
+        gap: 5px;
+        .ticon{
+          background-color: #F7D149;
+          height: 11px;
+        }
+      }
+
+      &>.wrapper {
+        display: flex;
+        flex-direction: column;
+
+        .title {
+          font-size: 13px;
+          font-weight: bold;
+        }
+
+        .more {
+          font-size: 10px;
+          opacity: .3;
+        }
+      }
+    }
+
+    .btn-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      font-size: 9px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #5E6063;
+      gap: 3px;
+
+      .btn {
+        width: 43px;
+        aspect-ratio: 1 / 1;
+        display: grid;
+        place-items: center;
+        background: #2393F1;
+        border-radius: 3px;
+        // box-shadow: 0 0 5px 5px rgba(35, 147, 241, 0.10);
+        cursor: pointer;
+
+        .ticon {
+          height: 17px;
+          background-color: #FFFFFF;
+        }
+      }
+    }
+  }
+}
+
 @import './popup';
 @import './phone_menu';
 @import './cards';
@@ -580,7 +665,8 @@ body {
     .section-anime,
     .swiper-continue,
     .section-update,
-    .section-countdown {
+    .section-countdown,
+    .downloads-link {
 
       margin-right: max(20px, env(safe-area-inset-right));
     }
@@ -598,7 +684,8 @@ body {
     .swiper-continue,
     .section-title,
     .section-update,
-    .section-countdown {
+    .section-countdown,
+    .downloads-link {
       margin-left: max(20px, env(safe-area-inset-left));
     }
 

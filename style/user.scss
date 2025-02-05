@@ -238,10 +238,13 @@ body {
             }
 
             .wrapper-friends {
-                overflow-x: auto;
+                overflow-x: none;
 
                 .list {
-                    display: inline-flex;
+                    display: grid;
+                    grid-template-rows: auto auto;
+                    grid-auto-flow: column;
+                    overflow-x: scroll;
                     gap: 10px;
 
                     a {
@@ -591,7 +594,7 @@ body {
                     display: none;
                 }
 
-                &.hide{
+                &.hide {
                     display: none;
                 }
             }

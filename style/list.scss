@@ -68,10 +68,11 @@ body {
     }
 }
 
-body[data-orientation="0"]{
-    .application-menu{
+body[data-orientation="0"] {
+    .application-menu {
         transition: 0.3s ease-in-out;
-        &.hide{
+
+        &.hide {
             transform: translateY(100%);
         }
     }

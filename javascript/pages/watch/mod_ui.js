@@ -1,8 +1,7 @@
-import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
+import { ScrollElementWithMouse } from "../../modules/functions.js";
 import { ShowInfo } from "../../modules/Popup.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { $ID, Player } from "../watch.js";
-import { ShowDwonloadWindow } from "./mod_download.js";
 import { LTransition } from "./mod_transition.js";
 import { Screenshots } from "./mod_resource.js";
 import { ShowTranslationWindow } from "./mod_translation.js";
@@ -22,7 +21,7 @@ const anime_status = [
 export function Functional() {
     const list = [
         { dom: "#change-player", func: ChangePlayer },
-        { dom: "#download-anime", func: ShowDwonloadWindow },
+        { dom: "#download-anime", func: () => { import("./mod_download.js").then((mod) => { mod.WDManager() }) } },
         { dom: "#center-player", func: SetPlayerDisplay },
         { dom: "#back-page", func: BackToMainPage },
         { dom: "#show-status", func: ShowStatus },

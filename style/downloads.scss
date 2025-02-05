@@ -1,0 +1,137 @@
+:root {
+    --sat: env(safe-area-inset-top);
+    --sar: env(safe-area-inset-right);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+}
+
+body {
+    background: #101318;
+
+    &.loading {
+        overflow: hidden;
+    }
+}
+
+.wrapper-900 {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: calc(var(--sab) + 75px);
+
+    header {
+        display: flex;
+        flex: 1 0 0;
+        margin: 10px 20px 0;
+
+        .header-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1 0 0;
+
+            .title {
+                font-size: 16px;
+                font-weight: bold;
+                font-family: 'Manrope', serif;
+                color: #FFFFFF;
+            }
+
+            .btn {
+                width: 40px;
+                aspect-ratio: 1 / 1;
+                display: grid;
+                place-items: center;
+                cursor: pointer;
+
+                .ticon {
+                    height: 16px;
+                    background-color: #FFFFFF;
+                }
+            }
+        }
+    }
+
+    .anime-list {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(auto-fit, 200px);
+        align-items: center;
+        justify-content: center;
+        margin: 0 20px;
+        margin-left: 10px;
+        margin-right: 10px;
+
+        @media screen and (max-width: 490px) {
+            & {
+                grid-template-columns: 1fr 1fr !important;
+            }
+        }
+    }
+
+    .empty-list{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+
+        &.hide{
+            display: none;
+        }
+
+        .wrapper{
+            width: 218px;
+            color: #FFFFFF;
+            font-family: 'Manrope', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+
+            img{
+                width: 218px;
+            }
+
+            .title{
+                font-size: 15px;
+                font-weight: bold;
+            }
+
+            .add{
+                font-size: 12px;
+                text-align: center;
+                opacity: .5;
+            }
+        }
+    }
+}
+
+// Importing all the scss files
+
+@import "./phone_menu";
+@import "./cards";
+@import "./windowed";
+@import "./popup";
+@import "./downloads/w_player";
+@import "./downloads/w_voices";
+@import "./downloads/w_manager";
+
+//Changing the importing files
+
+.card-anime {
+    cursor: pointer;
+
+    .card-information .score {
+        .ticon {
+            height: 13px;
+            background-color: #87898B;
+        }
+    }
+}

@@ -20,9 +20,8 @@ const $PARAMETERS = {
     },
     download: {
         dquality: '720',
-        dasync: true,
         dautosave: true,
-        dautoset: true,
+        // dautoset: true,
     },
     player: {
         quality: '720',

@@ -3,13 +3,14 @@
 }
 
 .popup {
+    --z: 11;
     position: fixed;
     left: 0;
     right: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 11;
+    z-index: var(--z);
 
     .popup-content {
         background: #2393F1;

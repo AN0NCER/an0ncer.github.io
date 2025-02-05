@@ -80,11 +80,10 @@ class lTransition {
         }
         this.Image = {
             Load: (url, callback = () => { }) => {
-                const image = new Image();
-                image.onload = () => {
-                    callback(url);
-                };
-                image.src = url
+                fetch(url).then(async (response) => {
+                    const blob = await response.blob();
+                    callback(URL.createObjectURL(blob));
+                });
             }
         }
     }

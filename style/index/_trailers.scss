@@ -78,10 +78,10 @@
                         cursor: pointer;
                         position: relative;
 
-                        svg {
-                            fill: #fff;
+                        .ticon{
                             height: 16px;
                             position: absolute;
+                            background-color: #FFFFFF;
                         }
 
                         .load {
@@ -141,18 +141,18 @@
                         place-items: center;
                         cursor: pointer;
 
-                        svg {
-                            fill: #fff;
-                            height: 16px;
+                        .ticon{
+                            background-color: #FFFFFF;
+                            height: 17px;
                         }
 
-                        svg.selected {
+                        .ticon.selected{
                             display: none;
-                            fill: #2393F1;
+                            background-color: #2393F1;
                         }
 
                         &.selected {
-                            svg {
+                            .ticon {
                                 display: none;
 
                                 &.selected {
@@ -234,9 +234,11 @@
                                 display: grid;
                                 place-items: center;
 
-                                svg {
+                                .ticon{
                                     width: 10vw;
                                     max-width: 80px;
+                                    height: auto;
+                                    background-color: #FFFFFF;
                                 }
                             }
                         }

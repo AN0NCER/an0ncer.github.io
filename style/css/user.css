@@ -205,10 +205,13 @@ body .content-wrapper main .block-user-stats .list .status-data .title {
   font-size: 11px;
 }
 body .content-wrapper main .wrapper-friends {
-  overflow-x: auto;
+  overflow-x: none;
 }
 body .content-wrapper main .wrapper-friends .list {
-  display: inline-flex;
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-auto-flow: column;
+  overflow-x: scroll;
   gap: 10px;
 }
 body .content-wrapper main .wrapper-friends .list a {
@@ -984,13 +987,14 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 }
 
 .popup {
+  --z: 11;
   position: fixed;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 11;
+  z-index: var(--z);
 }
 .popup .popup-content {
   background: #2393F1;

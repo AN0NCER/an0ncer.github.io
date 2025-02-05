@@ -27,6 +27,11 @@
                 background: $object_bg;
                 border-radius: $radius;
 
+                .ticon {
+                    height: 16px;
+                    background-color: #FFFFFF;
+                }
+
                 svg {
                     fill: #FFF;
                     width: 10px;
@@ -119,7 +124,8 @@
                         font-style: normal;
                         font-weight: 700;
                         line-height: normal;
-                        .notify-date{
+
+                        .notify-date {
                             opacity: .5;
                         }
                     }
@@ -312,7 +318,7 @@
             gap: 10px;
             height: 100%;
 
-            &.hide{
+            &.hide {
                 display: none;
             }
         }
