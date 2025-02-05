@@ -799,7 +799,7 @@ class TDownloader {
      */
     async Setup() {
         // Проверка на права пользователя 
-        if (!window.$SHADOW.online && window.$SHADOW.access.includes("player")) {
+        if (!window.$SHADOW.state.isConnected && window.$SHADOW.state.hasApiAccess) {
             return this.#Dispatch("error", `Нету доступа к Tunime серверу`);
         }
 
