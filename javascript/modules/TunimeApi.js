@@ -182,7 +182,6 @@ class Balancer {
                 }).catch((reason) => {
                     if (rCode == 503) {
                         if (this.Next()) {
-                            console.log('Here', rCode);
                             return resolve(lFetch(`${this.url}${path}`, params));
                         }
                     }
