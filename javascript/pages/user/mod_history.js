@@ -32,9 +32,14 @@ function LoadHistory(id, page = 1) {
         //Отображаем историю
         HistoryShow(history);
 
-        trackScroll('scrollHistory', 200, (() => {
-            LoadHistory(id, page + 1);
-        }));
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
+                LoadHistory(id, page + 1);
+                observer.disconnect();
+            }
+        }, {});
+
+        observer.observe($('.user-history > .sentinel')[0]);
     }).GET();
 }
 
@@ -172,36 +177,4 @@ function HistoryShow(data) {
     function EndGenHtmlHistory() {
         return `</div></div>`;
     }
-}
-
-/**
- * Отслеживает, когда пользователь почти прокручивает до конца определенного элемента,
- * вызывает заданную функцию и удаляет отслеживание.
- *
- * @param {string} elementId - Идентификатор элемента, до которого нужно прокрутить.
- * @param {number} threshold - Пороговое значение, по которому определяется, что пользователь почти прокрутил до конца.
- * @param {function} callback - Функция обратного вызова, которую нужно вызвать, когда пользователь почти прокрутил до конца.
- */
-function trackScroll(elementId, threshold, callback) {
-    const $element = $('#' + elementId);
-
-    function handleScroll() {
-        const scrollTop = $(window).scrollTop();
-        const elementHeight = $element.outerHeight();
-        const windowHeight = $(window).height();
-
-        const scrollableDistance = elementHeight - windowHeight;
-        const scrolledDistance = scrollTop - $element.offset().top;
-
-        if (scrolledDistance >= scrollableDistance - threshold) {
-            // Вызываем заданную функцию
-            callback();
-
-            // Удаляем отслеживание прокрутки
-            $(window).off('scroll', handleScroll);
-        }
-    }
-
-    // Начинаем отслеживать прокрутку
-    $(window).on('scroll', handleScroll);
 }
