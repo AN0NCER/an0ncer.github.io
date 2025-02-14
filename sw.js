@@ -1,5 +1,5 @@
-const version = '2.7.0';
-const hash = '74e18';
+const version = '2.7.1';
+const hash = '9a3f7';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
     // Директория: /images/genres
@@ -105,7 +105,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/pages/search
     "/javascript/pages/search/mod_history.js",
     "/javascript/pages/search/mod_list.js",
-    "/javascript/pages/search/mod_recomendation.js",
+    "/javascript/pages/search/mod_popular.js",
     "/javascript/pages/search/mod_search.js",
     "/javascript/pages/search/mod_searchState.js",
     // Директория: /javascript/pages/settings
@@ -122,6 +122,7 @@ const appShellFilesToCache = [
     "/javascript/pages/user/mod_level.js",
     "/javascript/pages/user/mod_load.js",
     "/javascript/pages/user/mod_stats.js",
+    "/javascript/pages/user/mod_w_anime.js",
     // Директория: /javascript/pages/watch
     "/javascript/pages/watch/mod_collection.js",
     "/javascript/pages/watch/mod_dbanime.js",
