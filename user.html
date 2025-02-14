@@ -9,9 +9,11 @@
     <title>Tunime - Пользователь</title>
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
+    <link rel="stylesheet" href="/style/css/min/swiper-bundle.min.css">
     <link rel="stylesheet" href="/style/css/main.css" />
     <link rel="stylesheet" href="/style/css/user.css" />
     <link rel="manifest" href="/images/icons/manifest-o.json">
+    <link rel="stylesheet" href="/style/css/ticons.css" />
     <script src="/javascript/library/jqery.min.js"></script>
     <script src="/javascript/services/dispatcher.js" type="module"></script>
 </head>
@@ -32,6 +34,7 @@
             <div class="user-wrapper">
                 <div class="user-icon">
                     <img src="/images/ava.jpeg" alt="avatar">
+                    <img class="blur" src="/images/ava.jpeg" alt="avatar">
                 </div>
                 <div class="user-data">
                     <div class="user-nickname-online">
@@ -166,13 +169,17 @@
             <div class="wrapper-favorites hide scroll-none" id="favorites">
                 <div class="list"></div>
             </div>
-            <div class="block-title-btn hide" id="franchises">
+            <div class="block-title hide" id="franchises">
                 Достижения
-                <div class="btn" style="opacity: 0.5;">Список</div>
             </div>
-            <div class="wrapper-achivements hide scroll-none" id="franchises">
-                <div class="list">
+            <div class="achivements-finished-wrapper hide" id="franchises">
+                <div class="swiper">
+                    <div class="swiper-wrapper achivements-swiper">
+                    </div>
+                    <div class="swiper-pagination"></div>
                 </div>
+                <img src="" class="bg bg-help">
+                <img src="" class="bg bg-active">
             </div>
             <div class="block-title hide" id="unfinished">
                 Неполученные достижения
@@ -200,20 +207,55 @@
             </div>
             <div class="user-history hide" id="history">
                 <div class="block-history" id="scrollHistory"></div>
+                <div class="sentinel"></div>
             </div>
         </main>
 
     </div>
     <footer></footer>
 
+    <!-- #region Windows-->
+    <span class="windowed window-anime hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-anime hide">
+            <div class="content-wrapper">
+                <div class="wrapper">
+                    <div class="window-bar bar-anime">
+                        <div class="hide-elements state-0">
+                            <div class="btn-state-1 btn">
+                                <div class="icon-wrapper">
+                                    <div class="ticon i-eye-slash"></div>
+                                </div>
+                                Просмотренные
+                            </div>
+                            <div class="btn-state-0 btn">
+                                <div class="icon-wrapper">
+                                    <div class="ticon i-eye"></div>
+                                </div>
+                                Просмотренные
+                            </div>
+                        </div>
+                        <div class="window-close">
+                            <div class="ticon i-xmark"></div>
+                        </div>
+                    </div>
 
-
-
+                    <div class="list-wrapper">
+                        <div class="anime-list scroll-none">
+                        </div>
+                        <div class="sentinel"></div>
+                    </div>
+                </div>
+            </div>
+        </span>
+    </span>
+    <!-- #endregion -->
 
     <!-- #region Scripts-->
     <script src="/javascript/parametrs.js"></script>
     <script src="/javascript/library/jsyaml.js"></script>
     <script src="/javascript/library/anime.min.js"></script>
+    <script src="/javascript/library/swiper-bundle.min.js"></script>
     <script src="/javascript/pages/user.js" type="module"></script>
     <!-- #endregion -->
 </body>
