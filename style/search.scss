@@ -158,6 +158,10 @@ main {
         font-weight: 500;
         line-height: normal;
         margin-top: 10px;
+
+        &.hide{
+            display: none;
+        }
     }
 
     .recomendation-none {
@@ -341,12 +345,17 @@ main.main {
     &>.content {
         margin-top: 20px;
         display: flex;
-        gap: 10px;
+        // gap: 10px;
         overflow-y: auto;
         flex-wrap: nowrap;
+        margin-bottom: 10px;
 
         &>div {
             width: 200px;
+        }
+
+        &.hide{
+            display: none;
         }
     }
 
@@ -387,7 +396,7 @@ main.history {
     &>.content {
         margin-top: 20px;
         display: flex;
-        gap: 10px;
+        // gap: 10px;
         overflow-y: auto;
         flex-wrap: nowrap;
 
