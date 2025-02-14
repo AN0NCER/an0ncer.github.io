@@ -393,6 +393,32 @@ export const Tunime = {
                 })
             });
         }
+    },
+
+    Anime: {
+        Popular: (access = user.access) => {
+            if(access === undefined){
+                return false;
+            }
+
+            const path = '/api/anime/popular';
+            const body = { id: access.id, key: access.key };
+
+            return new Promise((resolve) => {
+                balancer.fetch(path, {method: 'POST', body: body}).then((response) => {
+                    if(response.status === 200){
+                        return response.json().then((value) => {
+                            return resolve(value.data);
+                        });
+                    }
+
+                    return resolve(false);
+                }).catch((reason) => {
+                    console.log(`[api] Error: ${reason}`);
+                    return resolve(false);
+                })
+            });
+        }
     }
 };
 
