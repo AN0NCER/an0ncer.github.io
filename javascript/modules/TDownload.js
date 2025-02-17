@@ -1103,7 +1103,7 @@ class TManager {
             if (data === null)
                 return;
 
-            const { [this.data.voice.id]: voice } = data.video;
+            const { [voiceId]: voice } = data.video;
 
             if (!voice)
                 return;

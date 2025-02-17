@@ -4,6 +4,12 @@ class Access {
     constructor() {
         this.Key = 'shadow-api';
         this.Loaded = false;
+        window.addEventListener("storage", ({ key }) => {
+            if (document.visibilityState !== "hidden" || this.Key !== key) return;
+
+            this.#val = JSON.parse(localStorage.getItem(this.Key));
+            window.$SHADOW.update()
+        });
     }
 
     get access() {
@@ -11,7 +17,7 @@ class Access {
             return this.#val;
         }
 
-        const data = sessionStorage.getItem(this.Key);
+        const data = localStorage.getItem(this.Key);
         this.#val = JSON.parse(data) || undefined;
 
         if (this.#val !== undefined) {
@@ -26,9 +32,10 @@ class Access {
     set access(val) {
         this.#val = val;
         if (val === undefined) {
-            return sessionStorage.removeItem(this.Key);
+            return localStorage.removeItem(this.Key);
         }
-        sessionStorage.setItem(this.Key, JSON.stringify(this.#val));
+
+        localStorage.setItem(this.Key, JSON.stringify(this.#val));
     }
 
     Live(access = this.#val) {
@@ -166,7 +173,6 @@ class Balancer {
 
 
     fetch(path, params = { method: 'GET', body: undefined }) {
-
         if (params.body !== undefined) {
             params.body = new URLSearchParams(params.body);
         } else {
@@ -287,11 +293,17 @@ export const Tunime = {
         const body = { id: access.id, key: access.key };
 
         return new Promise((resolve) => {
-            balancer.fetch(path, { method: 'POST', body: body }).then((response) => {
+            balancer.fetch(path, { method: 'POST', body: body }).then(async (response) => {
                 if (response.status === 200) {
                     return response.json().then((value) => {
                         user.access = value.data;
                         return resolve(value.data);
+                    });
+                }
+
+                if (response.status === 401) {
+                    return response.json().then((value) => {
+                        return resolve(value);
                     });
                 }
 
@@ -393,6 +405,32 @@ export const Tunime = {
                 })
             });
         }
+    },
+
+    Anime: {
+        Popular: (access = user.access) => {
+            if (access === undefined) {
+                return false;
+            }
+
+            const path = '/api/anime/popular';
+            const body = { id: access.id, key: access.key };
+
+            return new Promise((resolve) => {
+                balancer.fetch(path, { method: 'POST', body: body }).then((response) => {
+                    if (response.status === 200) {
+                        return response.json().then((value) => {
+                            return resolve(value.data);
+                        });
+                    }
+
+                    return resolve(false);
+                }).catch((reason) => {
+                    console.log(`[api] Error: ${reason}`);
+                    return resolve(false);
+                })
+            });
+        }
     }
 };
 
@@ -420,12 +458,8 @@ export const Tunime = {
         let timeout = undefined;
 
         document.addEventListener('visibilitychange', async () => {
-            if (document.visibilityState !== 'visible') return;
-
-            if (!user.Live()) {
-                clearTimeout(timeout);
-                update();
-            }
+            if (document.visibilityState !== 'visible') return clearInterval(timeout);
+            [clearTimeout(timeout), update()];
         });
 
         const update = async () => {
@@ -439,6 +473,7 @@ export const Tunime = {
 
             const date = Date.parse(user.access.end) - Date.now() - time;
             timeout = setTimeout(async () => {
+                if (document.visibilityState !== 'visible') return;
                 if (!user.Live()) {
                     user.access = undefined;
                     const acc = await Tunime.Auth();
@@ -447,8 +482,11 @@ export const Tunime = {
                     }
                 } else {
                     const acc = await Tunime.Online();
-                    if (acc === false) {
+
+                    if (typeof acc === "boolean") {
                         return;
+                    } else if (acc.code === 401) {
+                        await Tunime.Auth();
                     }
                     update();
                 }

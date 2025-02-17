@@ -129,7 +129,6 @@ Main((e) => {
 
             ScrollElementWithMouse('.block-user-stats');
             ScrollElementWithMouse('.wrapper-favorites');
-            ScrollElementWithMouse('.wrapper-achivements');
             ScrollElementWithMouse('.wrapper-achivements-unfinished');
             ScrollElementWithMouse('.wrapper-genres');
             ScrollElementWithMouse('.wrapper-friends > .list');

@@ -149,6 +149,9 @@ main .title {
   line-height: normal;
   margin-top: 10px;
 }
+main .title.hide {
+  display: none;
+}
 main .recomendation-none {
   margin-top: 20px;
   border-radius: 4px;
@@ -307,12 +310,15 @@ main.result > .content {
 main.main > .content {
   margin-top: 20px;
   display: flex;
-  gap: 10px;
   overflow-y: auto;
   flex-wrap: nowrap;
+  margin-bottom: 10px;
 }
 main.main > .content > div {
   width: 200px;
+}
+main.main > .content.hide {
+  display: none;
 }
 main.main .content-progress-load {
   display: flex;
@@ -344,7 +350,6 @@ main.history.state_search, main.history.state_result {
 main.history > .content {
   margin-top: 20px;
   display: flex;
-  gap: 10px;
   overflow-y: auto;
   flex-wrap: nowrap;
 }

@@ -3,12 +3,12 @@ import { Sleep, ScrollElementWithMouse, isObjectEqual } from "../modules/functio
 import { Animes, Genres } from "../modules/ShikiAPI.js";
 import { GetState, SetState } from "./search/mod_searchState.js";
 import { SearchHistory } from "./search/mod_history.js";
-import { Recomendation } from "./search/mod_recomendation.js";
 import { Search, SearchFilter, SetEmptyFilter, SearchVoice, GetEmptyFilter, SetEmptyVoice } from "./search/mod_search.js";
 import { AnimeFromVoices } from "./search/mod_list.js";
 import { WindowManagement } from "../modules/Windows.js";
 import { InitMenu } from "../menu.js";
 import { ACard } from "../modules/AnimeCard.js";
+import { TPopular } from "./search/mod_popular.js";
 
 //Поиск
 const InputSearch = $(`.search-input > input`);
@@ -350,10 +350,7 @@ Main((e) => {
     ShowVoice();
     ShowHistory();
     Events();
-    // Recomendation();
-    $('.recomendation-none > span').text('Рекомендации отключены разработчиком');
-    localStorage.removeItem('recomendation-database');
-    localStorage.removeItem('tunime-recomendation');
+    TPopular();
 });
 
 InitMenu();
@@ -368,10 +365,10 @@ function Events() {
         SetState(0);
     });
 
-    ScrollElementWithMouse('.content-recomendation.scroll-none');
     ScrollElementWithMouse('.block-line.genres.scroll-none');
     ScrollElementWithMouse('.block-line.voices.scroll-none');
     ScrollElementWithMouse('.history > .content.scroll-none');
+    ScrollElementWithMouse('.content-popular');
 
     //Проверяем есть ли запрос из вне
     const searchParams = new URLSearchParams(window.location.search).get('val');
