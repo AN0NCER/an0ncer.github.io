@@ -17,8 +17,7 @@ export const AnimLoadPlayer = {
         this.load = false;
         _amLoad();
         try {
-            const data = JSON.parse(sessionStorage.getItem('shadow-api'));
-            if (data?.scope.includes("player")) {
+            if ($SHADOW.state.hasApiAccess) {
                 $(`.access-data > .pin`).addClass('green');
             } else {
                 $(`.access-data > .pin`).addClass('red');
