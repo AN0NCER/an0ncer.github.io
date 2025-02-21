@@ -435,8 +435,6 @@ export const Tunime = {
 };
 
 (async (exception) => {
-    if (exception.includes(window.location.pathname)) return;
-
     const originalAccessSetter = Object.getOwnPropertyDescriptor(Access.prototype, 'access').set;
     Object.defineProperty(Access.prototype, 'access', {
         set: function (value) {
@@ -444,8 +442,10 @@ export const Tunime = {
             window.$SHADOW.update();
         }
     });
-
+    
     window.$SHADOW.update();
+    
+    if (exception.includes(window.location.pathname)) return;
 
     if (user.access === undefined) {
         let acc = await Tunime.Auth();
