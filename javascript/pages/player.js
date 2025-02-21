@@ -39,6 +39,7 @@ export async function LoadEpisode(e) {
  * @param {number} e - Эпизод 
  */
 async function LoadAnime(id, e) {
+    if(!$SHADOW.state.hasApiAccess) return SendAPI.switch();
     const stream_file = await LoadM3U8(id, e);
     if (typeof stream_file === "undefined") {
         return SendAPI.switch();
