@@ -13,6 +13,7 @@ import { History } from "./user/mod_history.js";
 import { Tunime } from "../modules/TunimeApi.js";
 import { ShowInfo } from "../modules/Popup.js";
 import { Genres } from "./user/mod_genres.js";
+import { SHIKIURL } from "../modules/Settings.js";
 
 /**
  * @callback LUser
@@ -233,7 +234,7 @@ function GetUserById(id, logged = false) {
 
 function ShowHeader(data) {
     $(`.user-nickname > h1`).text(data.nickname);
-    $(`.user-icon > img`).attr('src', data.image.x160);
+    $(`.user-icon > img`).attr('src', SHIKIURL.create(data.image.x160));
 
     const last_online_at = new Date(data.last_online_at).getTime();
     const different_time = new Date().getTime() - last_online_at;
