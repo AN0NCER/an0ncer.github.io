@@ -1,3 +1,4 @@
+import { SHIKIURL } from "../../modules/Settings.js";
 import { Users } from "../../modules/ShikiAPI.js";
 import { Oauth, User } from "../../modules/ShikiUSR.js";
 import { Sleep } from "../../modules/functions.js";
@@ -16,7 +17,7 @@ export function ShowUser(looged = false) {
 
     let data = User.Storage.Get(User.Storage.keys.whoami);
 
-    $('.image-profile > img').attr('src', data.avatar);
+    $('.image-profile > img').attr('src', SHIKIURL.create(data.avatar));
     $('.name > b').text(data.nickname);
     $('.name > span').text('С возврашением,')
     $('.account > a').attr('href', 'user.html');

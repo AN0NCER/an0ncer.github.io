@@ -1,4 +1,5 @@
 import { InitMenu, Menu } from "../menu.js";
+import { SHIKIURL } from "../modules/Settings.js";
 import { Users } from "../modules/ShikiAPI.js";
 import { Main, User } from "../modules/ShikiUSR.js";
 import { OnClearDB } from "./settings/mod_cleardb.js";
@@ -264,7 +265,7 @@ Main((e) => {
         GetWhoami();
         let whoami = User.Storage.Get(User.Storage.keys.whoami);
         if (whoami) {
-            $('.profile-info > img').attr('src', whoami.image['x160']);
+            $('.profile-info > img').attr('src', SHIKIURL.create(whoami.image['x160']));
             $('.profile-name').text(whoami.nickname);
             $('.profile-link').attr('href', whoami.url + '/edit/account');
             $('.profile-link').attr('target', '_blank');
@@ -278,8 +279,8 @@ Main((e) => {
                 return GetWhoami(id);
             }
             User.Storage.Set(response, User.Storage.keys.whoami);
-            if ($('.profile-info > img').attr('src') != response.image['x160']) {
-                $('.profile-info > img').attr('src', response.image['x160']);
+            if ($('.profile-info > img').attr('src') != SHIKIURL.create(whoami.image['x160'])) {
+                $('.profile-info > img').attr('src', SHIKIURL.create(whoami.image['x160']));
             }
             $('.profile-name').text(response.nickname);
             $('.profile-link').attr('href', response.url + '/edit/account');

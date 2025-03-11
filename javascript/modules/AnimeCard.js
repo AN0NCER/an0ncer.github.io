@@ -89,8 +89,8 @@ export const ACard = {
 
         function Gen() {
             return `<div class="card-content">
-                        <img src="${anime.poster.mainUrl}" class="blur">
-                        <img src="${anime.poster.mainUrl}">
+                        <img src="${SHIKIURL.create(anime.poster.mainUrl)}" class="blur">
+                        <img src="${SHIKIURL.create(anime.poster.mainUrl)}">
                         <div class="title"><span>${anime.russian}</span></div>
                         ${data?.score ? `<div class="score">${data.score}</div>` : ''}
                     </div>

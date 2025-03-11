@@ -319,7 +319,7 @@ export async function LoadAnime(e = () => { }, isLogged = false) {
                 const element = response[i];
                 if (element.rolesEn.includes('Main')) {
                     $('.hero-anime, .hero-anime-title').css('display', '');
-                    $('.hero-anime > .val').append(`<a href="${element.character.url}" target="_blank"><img src="${element.character.poster.previewUrl}"/><div class="hero"><div class="name">${element.character.russian}</div></div></a>`);
+                    $('.hero-anime > .val').append(`<a href="${element.character.url}" target="_blank"><img src="${SHIKIURL.create(element.character.poster.previewUrl)}"/><div class="hero"><div class="name">${element.character.russian}</div></div></a>`);
                 }
             }
             return true;
