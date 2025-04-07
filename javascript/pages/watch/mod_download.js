@@ -396,10 +396,10 @@ class Downloader {
 
     async Download(key = { v: 0, e: 0 }) {
         if (this.VIDs.open === this.VIDs.download)
-            return ShowInfo('Уже загружаеться', 'dow-info', 999);
+            return ShowInfo('Уже загружается', 'dow-info', 999);
 
         if (this.VIDs.download === undefined) {
-            // Ничего не загружаеться
+            // Ничего не загружается
             const cache = this.Cache.get(key);
             this.VIDs.download = cache.vId;
 
