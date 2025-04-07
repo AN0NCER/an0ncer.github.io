@@ -1,67 +1,66 @@
+import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
 import { ACard } from "../../modules/AnimeCard.js";
-import { Sleep } from "../../modules/functions.js";
 import { GraphQl } from "../../modules/ShikiAPI.js";
 import { Tunime } from "../../modules/TunimeApi.js";
+import { Jikan } from "../../modules/api.jikan.js";
+import { TCache } from "../../modules/TCache.js";
 
-function load(ids, poster = undefined) {
+function ui_load(ids, poster = undefined) {
     const body = ["id", "russian", { airedOn: ["year"] }, "score"];
 
     if (poster === undefined)
         body.push({ poster: ["mainUrl"] });
 
-    GraphQl.animes({ ids: `"${ids}"`, limit: ids.length }, async (response) => {
+    return GraphQl.animes({ ids: `"${ids}"`, limit: ids.length }, async (response) => {
         if (response.failed) {
             if (response.status === 429) {
                 await Sleep(2000);
-                return load(ids, poster);
+                return ui_load(ids, poster);
             }
             return;
         }
 
         const el = $('.content-popular');
+
         response.data.animes.forEach(anime => {
             if (poster)
                 anime = { ...anime, poster: { "mainUrl": poster[anime.id] } }
             el.append(ACard.GenV2({ type: 'a', anime }));
         });
-
-        $('.main > .title.hide').removeClass('hide');
-        $('.content-popular').removeClass('hide');
+        ScrollElementWithMouse('.content-popular');
     }).POST(body);
 }
 
-function tunime(){
-    Tunime.Anime.Popular().then((anime) => {
-        console.log(anime);
-        if(!anime)
-            return jikan();
+function tun_load() {
+    const cache = new TCache();
 
-        load(anime.toString())
-    });
-}
-
-function jikan(){
-    fetch('https://api.jikan.moe/v4/seasons/now?sfw&limit=10').then(response => {
-        if (response.status !== 200)
-            return;
-
-        response.json().then((data) => {
-            const list = Object.fromEntries(data.data.map(el => [el.mal_id, el.images.webp.image_url]));
-            const ids = data.data.map(x => x.mal_id);
-
-            load(ids, list);
+    cache.get("requests", "tunpopular").then((val) => {
+        if (val) {
+            return ui_load(val.toString());
+        }
+        return Tunime.Anime.Popular().then((anime) => {
+            if (!anime) throw new Error("Tunime API is not available");
+            cache.put("requests", "tunpopular", anime);
+            ui_load(anime.toString())
         });
     });
 }
 
-export function TPopular() {
-    try{
-        if ($SHADOW.state.hasApiAccess){
-            tunime();
-        }else{
-            jikan();
+function jikan_load() {
+    return Jikan.seasons.getSeasonNow({ sfw: true, continuing: false, limit: 10 }, ({ data }) => {
+        const list = Object.fromEntries(data.map(el => [el.mal_id, el.images.webp.image_url]));
+        const ids = data.map(x => x.mal_id);
+        ui_load(ids, list);
+    }).GET({}, true, 7 * 24 * 60 * 60 * 1000);
+}
+
+export function Popular() {
+    if ($SHADOW.state.hasApiAccess) {
+        try {
+            return tun_load();
+        } catch {
+            return jikan_load();
         }
-    }catch{
-        jikan();
     }
+    return jikan_load();
 }
