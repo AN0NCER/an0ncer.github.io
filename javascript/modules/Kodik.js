@@ -2,25 +2,25 @@ const api = 'íç»÷\x97\x1DÝî\x1FïNü{·ùw\x8Dôç¯]ë\x9E}';
 const kurl = 'https://' + btoa('\x92\x87b\x91ªb') + '.com';
 
 export const Kodik = {
-    List: function (query = {}, event = () => { }) {
-        return Fetch(query, "list", event);
+    List: function (query = {}, event = () => { }, signal) {
+        return Fetch(query, "list", event, signal);
     },
 
-    Search: function (query = {}, event = () => { }) {
-        return Fetch(query, "search", event);
+    Search: function (query = {}, event = () => { }, signal) {
+        return Fetch(query, "search", event, signal);
     },
 
-    Translations: function (query = {}, event = () => { }) {
-        return Fetch(query, "translations/v2", event);
+    Translations: function (query = {}, event = () => { }, signal) {
+        return Fetch(query, "translations/v2", event, signal);
     }
-
 }
 
-async function Fetch(query = {}, page, event = () => { }) {
+async function Fetch(query = {}, page, event = () => { }, signal) {
     const url = `${kurl}/${page}${Query(query)}`;
     return new Promise((resolve) => {
         fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            signal
         }).then((response) => {
             let ret = { failed: true };
             if (!response.ok) {
@@ -36,6 +36,9 @@ async function Fetch(query = {}, page, event = () => { }) {
                 event(ret);
                 return resolve(ret);
             });
+        }).catch(err => {
+            if (err?.name === "tabort") return;
+            throw err;
         });
     });
 }

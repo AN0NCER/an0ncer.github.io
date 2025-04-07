@@ -79,7 +79,7 @@ export function Fetch(method, url, headers, body = "") {
          * Метод для выполнения HTTP-запроса.
          * @returns {Promise} Промис, который разрешается в JSON-ответе на запрос или объекте badresponse в случае ошибки.
          */
-        fetch: function () {
+        fetch: function (signal) {
             if (!this.url) {
                 return this.badresponse;
             }
@@ -87,6 +87,7 @@ export function Fetch(method, url, headers, body = "") {
             let request = {
                 method: this.method,
                 headers: this.headers,
+                signal
             };
 
             if (this.body) {
@@ -105,12 +106,15 @@ export function Fetch(method, url, headers, body = "") {
                     if (response.status == 204) {
                         return resolve({ ok: response.ok, status: response.status });
                     }
-                    
+
                     response.json().then(json => {
                         return resolve(json);
-                    }).catch(()=>{
+                    }).catch(() => {
                         return resolve({ ok: response.ok, status: response.status });
                     })
+                }).catch(err => {
+                    if (err?.name === "tabort") return;
+                    throw err;
                 });
             });
         },
