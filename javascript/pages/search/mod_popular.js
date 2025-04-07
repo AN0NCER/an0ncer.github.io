@@ -3,7 +3,7 @@ import { ACard } from "../../modules/AnimeCard.js";
 import { GraphQl } from "../../modules/ShikiAPI.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { Jikan } from "../../modules/api.jikan.js";
-import { TCache } from "../../modules/TCache.js";
+import { TCache } from "../../modules/tun.cache.js";
 
 function ui_load(ids, poster = undefined) {
     const body = ["id", "russian", { airedOn: ["year"] }, "score"];

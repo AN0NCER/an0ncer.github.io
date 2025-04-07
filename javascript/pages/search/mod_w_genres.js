@@ -1,6 +1,6 @@
 import { md5 } from "../../library/md5.wasm.min.js";
 import { GraphQl } from "../../modules/ShikiAPI.js";
-import { TCache } from "../../modules/TCache.js";
+import { TCache } from "../../modules/tun.cache.js";
 import { WindowManagement } from "../../modules/Windows.js";
 
 const setup = {

@@ -10,7 +10,7 @@ import { LoadVoiceList } from "./search/mod_voicelist.js";
 import { TInfo, TSearchType, TTSearch } from "./search/mod_search.js";
 import { Main } from "../modules/ShikiUSR.js";
 import { ClearParams } from "../modules/functions.js";
-import { TCache } from "../modules/TCache.js";
+import { TCache } from "../modules/tun.cache.js";
 
 const q = new URLSearchParams(window.location.search).get('q');
 const g = new URLSearchParams(window.location.search).get('g');
