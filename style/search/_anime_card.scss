@@ -1,0 +1,244 @@
+.card-anime-h {
+    font-family: 'Manrope', sans-serif;
+    background: #191C21;
+    padding: 10px;
+    border-radius: 5px;
+    gap: 10px;
+    display: flex;
+    position: relative;
+    min-height: 140px;
+    cursor: pointer;
+
+    .img-wrapper {
+        display: flex;
+        overflow: hidden;
+        border-radius: 3px;
+        min-width: fit-content;
+        width: fit-content;
+        min-height: 170px;
+
+        img {
+            object-fit: cover;
+            width: 120px;
+        }
+    }
+
+    .anime-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .info-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+
+            .title {
+                color: #FFFFFF;
+                font-size: 16px;
+                line-height: 16px;
+                font-weight: bold;
+
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                line-clamp: 2;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-bottom: 5px;
+            }
+
+            .season-type {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                .type {
+                    background: #F7D149;
+                    border-radius: 2px;
+                    font-size: 12px;
+                    padding: 0 2px;
+                    color: #161616;
+                }
+
+                .pin {
+                    width: 5px;
+                    aspect-ratio: 1/1;
+                    display: flex;
+                    border-radius: 50%;
+                    background: #2393F1;
+                }
+
+                .seas {
+                    color: #FFFFFF;
+                    font-size: 12px;
+                    opacity: .5;
+                    text-transform: uppercase;
+                }
+            }
+
+            .video-info {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                .episodes {
+                    color: #FFFFFF;
+                    opacity: .5;
+                    font-size: 12px;
+                }
+
+                .status {
+                    color: #2393F1;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    font-size: 12px;
+                }
+            }
+        }
+
+        .more-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+
+            .in-list {
+                display: flex;
+                color: #FFFFFF;
+                align-items: center;
+                font-size: 12px;
+                gap: 4px;
+                opacity: .5;
+
+                .ticon {
+                    height: 10px;
+                    background-color: #FFFFFF;
+                }
+            }
+
+            .anime-score {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                .shikimori,
+                .mal {
+                    display: flex;
+                    font-size: 12px;
+                    color: #FFFFFF;
+                    align-items: center;
+                    gap: 4px;
+
+                    .ticon {
+                        height: 10px;
+                        background-color: #FFFFFF;
+
+                        &.i-mal {
+                            transform: translateY(1px);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .btn {
+        cursor: pointer;
+        aspect-ratio: 1/1;
+        height: 35px;
+        position: absolute;
+        background: #101318;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 3px;
+        right: 10px;
+        bottom: 10px;
+
+        .wrapper {
+            position: relative;
+            display: grid;
+            place-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ticon {
+            background-color: #FFFFFF;
+            height: 10px;
+            position: absolute;
+            opacity: 0;
+            z-index: 1;
+            transition: .3s ease-in-out;
+            scale: .9;
+        }
+
+        &.state-planned {
+            .i-bookmark-2 {
+                opacity: 1;
+                background-color: #2393F1;
+                z-index: 2;
+                scale: 1;
+            }
+        }
+
+        &.state-undefined {
+            .i-bookmark-1 {
+                opacity: 1;
+                z-index: 2;
+                scale: 1;
+            }
+        }
+
+        &.state-completed {
+            pointer-events: none;
+
+            .i-check {
+                opacity: 1;
+                z-index: 2;
+                scale: 1;
+            }
+        }
+
+        &.state-watching {
+            pointer-events: none;
+
+            .i-play {
+                opacity: 1;
+                z-index: 2;
+                scale: 1;
+            }
+        }
+
+        &.state-dropped {
+            pointer-events: none;
+
+            .i-box-archive {
+                opacity: 1;
+                z-index: 2;
+                scale: 1;
+            }
+        }
+
+        &.loading {
+            .i-circle-notch {
+                opacity: 1;
+                z-index: 2;
+                scale: 1;
+
+                animation: 1s Rotate linear infinite;
+            }
+
+            @keyframes Rotate {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        }
+    }
+}

@@ -969,6 +969,10 @@ footer {
   bottom: calc(env(safe-area-inset-bottom) - 40px);
 }
 
+:root {
+  --m-space: 71px;
+}
+
 .application-menu {
   position: fixed;
   bottom: 0;
@@ -1160,6 +1164,9 @@ footer {
   opacity: 0;
 }
 
+body.menuver[data-orientation="90"], body.menuver[data-orientation="270"] {
+  --m-space: 0px;
+}
 body.menuver[data-orientation="90"] .application-menu, body.menuver[data-orientation="270"] .application-menu {
   bottom: 0;
   top: 0;

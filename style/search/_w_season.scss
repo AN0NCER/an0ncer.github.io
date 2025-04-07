@@ -1,0 +1,356 @@
+.content-season .content-wrapper {
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+    gap: 0 !important;
+}
+
+.content-season {
+    .content-wrapper {
+        font-family: 'Manrope', serif;
+        max-height: 100dvh;
+        overflow-y: hidden;
+
+
+        .wrapper {
+            padding-top: 10px;
+            padding-left: var(--sal);
+            padding-right: var(--sar);
+            padding-bottom: max(var(--sab), 10px) !important;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .window-bar {
+                margin-left: max(var(--sar), 20px);
+                margin-right: max(var(--sal), 20px);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .window-title {
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                }
+
+                .window-close {
+                    width: 40px;
+                    height: 40px;
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+
+                    .ticon {
+                        height: 14px;
+                        background-color: #fff;
+                    }
+                }
+            }
+
+            .top-seasons {
+                padding: 0 10px;
+                display: flex;
+                overflow-x: auto;
+                gap: 10px;
+
+                .btn {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3px;
+                    background: #191C21;
+                    padding: 10px;
+                    border-radius: 3px;
+                    text-wrap: nowrap;
+                    .title{
+                        font-size: 16px;
+                        span{
+                            color: #2393F1;
+                            font-weight: bold;
+                        }
+                    }
+
+                    .anime{
+                        font-size: 12px;
+                    }
+                }
+            }
+
+            .season-wrapper {
+                display: flex;
+                flex-direction: column;
+                padding: 0 10px;
+                gap: 10px;
+
+                .btn {
+                    background-color: #191C21;
+
+                    font-size: 14px;
+                    font-weight: bold;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    height: 45px;
+                    border-radius: 3px;
+                    padding: 0 10px;
+
+                    .wrapper-title {
+                        display: flex;
+                        align-items: center;
+                        gap: 7px;
+                        color: #FFFFFF;
+                        opacity: .4;
+                        transition: .3s ease-in-out;
+
+                        .ticon {
+                            height: auto;
+                            width: 12px;
+                            background-color: #FFFFFF;
+                        }
+                    }
+
+                    .check-box {
+                        width: 25px;
+                        height: 25px;
+                        border-radius: 3px;
+                        display: grid;
+                        place-items: center;
+                        position: relative;
+                        background: #101318;
+
+                        .check-arow {
+                            z-index: 2;
+                            position: relative;
+
+                            .path {
+                                transition: .3s linear;
+                                stroke-dashoffset: -140;
+                                stroke-dasharray: 140;
+                            }
+                        }
+
+                        &::after {
+                            content: '';
+                            inset: 30px;
+                            opacity: 0;
+                            background: #2393F1;
+                            position: absolute;
+                            border-radius: 50%;
+                            transition: .3s linear;
+                            z-index: 1;
+                        }
+                    }
+
+
+                    &.sel {
+                        .wrapper-title {
+                            opacity: 1;
+                        }
+
+                        .check-box {
+                            .path {
+                                transition: .6s linear;
+                                stroke-dashoffset: -155;
+                            }
+
+                            &::after {
+                                inset: 0px;
+                                opacity: 1;
+                                border-radius: 3px;
+                            }
+                        }
+
+                        // background: #2393F1;
+                    }
+                }
+            }
+
+            .season-list-availble {
+                background-color: #191C21;
+                color: rgba(255, 255, 255, 0.4);
+                padding: 10px 20px;
+                font-size: 14px;
+
+                span {
+                    color: #2393F1;
+                    font-weight: bold;
+                }
+            }
+
+            .form-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                background: rgba(35, 147, 241, .25);
+                padding: 10px;
+                margin-left: 10px;
+                margin-right: 10px;
+                border-radius: 5px;
+                overflow: clip;
+                position: relative;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: 20px;
+                    right: -80px;
+                    bottom: 20px;
+                    aspect-ratio: 1 / 1;
+                    background-color: rgba(35, 148, 241, 0.8);
+                    border-radius: 50%;
+                    z-index: 1;
+                    filter: blur(40px);
+                }
+
+                .status {
+                    display: flex;
+                    gap: 7px;
+                    align-items: center;
+                    position: relative;
+                    z-index: 2;
+
+                    .text {
+                        font-size: 14px;
+                        font-weight: bold;
+
+                        &>span {
+                            color: #2393F1;
+
+                            &.err {
+                                color: #F0222C;
+                            }
+                        }
+                    }
+
+                    .icon {
+                        position: relative;
+                        display: flex;
+
+                        .ticon {
+                            height: 16px;
+                            transition: .3s ease-in-out;
+                        }
+
+                        .i-circle {
+                            position: absolute;
+                            background-color: #FFFFFF;
+                            opacity: .5;
+                            left: 0;
+                            top: 0;
+                            animation: .6s load infinite alternate;
+                        }
+
+                        .i-circle-check {
+                            background-color: #2393F1;
+                            opacity: 0;
+                        }
+
+                        .i-circle-xmark {
+                            opacity: 0;
+                            position: absolute;
+                            background-color: #F0222C;
+                            left: 0;
+                            top: 0;
+                        }
+
+                        &.state-1 {
+                            .i-circle {
+                                animation: none;
+                                opacity: 0;
+                            }
+
+                            .i-circle-check {
+                                opacity: 1;
+                            }
+                        }
+
+                        &.state-2 {
+                            .i-circle {
+                                animation: none;
+                                opacity: 0;
+                            }
+
+                            .i-circle-xmark {
+                                opacity: 1;
+                            }
+                        }
+                    }
+                }
+
+                form {
+                    display: flex;
+                    gap: 10px;
+                    position: relative;
+                    z-index: 2;
+
+                    input {
+                        width: 60px;
+                        height: 75px;
+                        text-align: center;
+                        background-color: #191C21;
+                        color: #FFFFFF;
+                        font-size: 24px;
+                        font-weight: bold;
+                        outline: none;
+                        border: none;
+                        border-radius: 3px;
+                        caret-color: transparent;
+
+                        &.sel {
+                            border: 1px solid #2393F1;
+                        }
+                    }
+
+                    .scroller {
+                        display: flex;
+                        flex: 1 0 0;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 5px;
+
+                        div {
+                            display: grid;
+                            height: 2px;
+                            width: 100%;
+                            background: #191C21;
+                            border-radius: 1px;
+
+                            &:nth-child(2n) {
+                                width: calc(100% - 10px);
+                            }
+                        }
+                    }
+                }
+
+                .btn-submit {
+                    background-color: #2393F1;
+                    height: 45px;
+                    border-radius: 3px;
+                    padding: 0 10px;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    position: relative;
+                    z-index: 2;
+
+                    .ticon {
+                        background-color: #FFFFFF;
+                        height: 12px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes load {
+    0% {
+        opacity: 0.3;
+    }
+
+    100% {
+        opacity: 0.5;
+    }
+}
