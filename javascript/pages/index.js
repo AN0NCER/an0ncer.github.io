@@ -69,7 +69,7 @@ function On() {
             if (value.length <= 0) {
                 return;
             }
-            window.location.href = '/search.html?val=' + value;
+            window.location.href = '/search.html?q=' + value;
         }
     });
 
