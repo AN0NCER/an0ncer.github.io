@@ -31,7 +31,7 @@ Main(async (logged) => {
             }).search();
         });
     } else if (s) {
-        return import("./search/mod_genres.js").then(({ LoadStudioById }) => {
+        return import("./search/mod_studios.js").then(({ LoadStudioById }) => {
             return LoadStudioById(s).then(data => {
                 new TTSearch(TSearchType.studio({ id: parseInt(s), val: data.name }), {
                     on: { destroy: reset },
