@@ -25,7 +25,8 @@ function ui_load(ids, poster = undefined) {
         response.data.animes.forEach(anime => {
             if (poster)
                 anime = { ...anime, poster: { "mainUrl": poster[anime.id] } }
-            el.append(ACard.GenV2({ type: 'a', anime }));
+            $('head').append(`<link rel="preload" as="image" href="${anime.poster.mainUrl}" fetchpriority="high">`);
+            el.append(ACard.GenV2({ type: 'a', anime, priority: true }));
         });
         ScrollElementWithMouse('.content-popular');
     }).POST(body);

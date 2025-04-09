@@ -7,10 +7,15 @@
     <meta name="page" content="search">
     <title>Tunime - Поиск</title>
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
+    <link rel="preload" as="style" href="/style/css/main.css">
+    <link rel="preload" as="style" href="/style/css/ticons.css">
+    <link rel="preload" as="style" href="/style/css/search.css">
+    
     <link rel="stylesheet" href="/style/css/main.css">
-    <link rel="stylesheet" href="/style/css/ticons.css">
+    <link rel="stylesheet" href="/style/css/ticons.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="/style/css/search.css">
     <link rel="manifest" href="/images/icons/manifest-o.json">
+    <link rel="preload" href="/style/fonts/Manrope.ttf" as="font" type="font/woff2" crossorigin>
 </head>
 
 <body class="unselectable">
@@ -73,7 +78,7 @@
                 <span>Сезоны</span>
             </div>
             <div class="seasons-list">
-                <div class="seasons-wrapper"></div>
+                <div class="seasons-wrapper" style="min-height: 181px;"></div>
                 <div class="btn-wrapper">
                     <div class="btn">
                         <div class="ticon i-calendar"></div>
@@ -85,7 +90,7 @@
                 <span>Жанры</span>
             </div>
             <div class="genres">
-                <div class="genres-list scroll-none">
+                <div class="genres-list scroll-none" style="min-height: 172px;">
                     <div class="line-1">
                     </div>
                     <div class="line-2">
@@ -99,7 +104,7 @@
                 <span>Студии</span>
             </div>
             <div class="studios">
-                <div class="studios-list scroll-none">
+                <div class="studios-list scroll-none" style="min-height: 172px;">
                     <div class="line-1"></div>
                     <div class="line-2">
                         <div class="sentinel"></div>
@@ -114,7 +119,7 @@
             </div>
             <div class="voices">
                 <div class="sentinel"></div>
-                <div class="voice-list scroll-none">
+                <div class="voice-list scroll-none" style="min-height: 172px;">
                     <div class="line-1"></div>
                     <div class="line-2"></div>
                     <div class="line-3"></div>

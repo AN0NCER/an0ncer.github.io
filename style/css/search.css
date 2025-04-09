@@ -15,7 +15,7 @@ body {
 .body-wrapper {
   display: flex;
   flex-direction: column;
-  margin: 10px auto 0 auto;
+  margin: 20px auto 0 auto;
   max-width: 900px;
   gap: 10px;
   padding-bottom: calc(var(--m-space) + var(--sab));
@@ -453,16 +453,16 @@ header .search-wrapper .btn.btn-filter .ticon {
   z-index: 1;
 }
 .seasons-list .seasons-wrapper .season.winter {
-  --img: url("../../images/seasons/winter.jpg");
+  --img: url("../../images/seasons/winter.webp");
 }
 .seasons-list .seasons-wrapper .season.fall {
-  --img: url("../../images/seasons/autum.jpg");
+  --img: url("../../images/seasons/autum.webp");
 }
 .seasons-list .seasons-wrapper .season.summer {
-  --img: url("../../images/seasons/summer.jpg");
+  --img: url("../../images/seasons/summer.webp");
 }
 .seasons-list .seasons-wrapper .season.spring {
-  --img: url("../../images/seasons/spring.jpg");
+  --img: url("../../images/seasons/spring.webp");
 }
 .seasons-list .seasons-wrapper .season:nth-child(2),
 .seasons-list .seasons-wrapper .season:nth-child(4) {

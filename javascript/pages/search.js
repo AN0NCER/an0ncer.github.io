@@ -1,11 +1,6 @@
 import { InitMenu } from "../menu.js";
 import { WFilter } from "./search/mod_w_filter.js";
-import { GenreInfo, LoadGenres } from "./search/mod_genres.js";
-import { HistoryLoaded, LoadHistory, SearchHistory } from "./search/mod_history.js";
-import { Popular } from "./search/mod_popular.js";
-import { LoadSeasons } from "./search/mod_seasons.js";
-import { LoadStudioById, LoadStudios } from "./search/mod_studios.js";
-import { LoadVoiceList } from "./search/mod_voicelist.js";
+import { HistoryLoaded, SearchHistory } from "./search/mod_history.js";
 
 import { TInfo, TSearchType, TTSearch } from "./search/mod_search.js";
 import { Main } from "../modules/ShikiUSR.js";
@@ -29,20 +24,25 @@ Main(async (logged) => {
     input();
 
     if (g && v) {
-        return new TTSearch(TSearchType.genre({ id: parseInt(g), val: v }), {
-            info: TInfo.genre({ g: v, info: GenreInfo(parseInt(g)) }),
-            on: { destroy: reset }
-        }).search();
-    } else if (s) {
-        return LoadStudioById(s).then(data => {
-            new TTSearch(TSearchType.studio({ id: parseInt(s), val: data.name }), {
-                on: { destroy: reset },
-                info: data.info
+        return import("./search/mod_genres.js").then(({ GenreInfo }) => {
+            return new TTSearch(TSearchType.genre({ id: parseInt(g), val: v }), {
+                info: TInfo.genre({ g: v, info: GenreInfo(parseInt(g)) }),
+                on: { destroy: reset }
             }).search();
-        })
+        });
+    } else if (s) {
+        return import("./search/mod_genres.js").then(({ LoadStudioById }) => {
+            return LoadStudioById(s).then(data => {
+                new TTSearch(TSearchType.studio({ id: parseInt(s), val: data.name }), {
+                    on: { destroy: reset },
+                    info: data.info
+                }).search();
+            })
+        });
+
     } else if (q) {
         $(`.input-wrapper > input`).val(q);
-        new TTSearch(TSearchType.default(), {
+        return new TTSearch(TSearchType.default(), {
             on: { destroy: reset }
         }).search(q);
     }
@@ -191,11 +191,29 @@ function reset() {
     if (IsLaden) return;
     IsLaden = true;
 
-    Popular();
-    LoadSeasons();
-    LoadGenres();
-    LoadVoiceList();
-    LoadStudios();
-    LoadHistory();
+    import('./search/mod_popular.js').then(({ Popular }) => {
+        Popular();
+    });
+
+    import('./search/mod_seasons.js').then(({ LoadSeasons }) => {
+        LoadSeasons();
+    });
+
+    import('./search/mod_genres.js').then(({ LoadGenres }) => {
+        LoadGenres();
+    });
+
+    import("./search/mod_voicelist.js").then(({ LoadVoiceList }) => {
+        LoadVoiceList();
+    });
+
+    import("./search/mod_studios.js").then(({ LoadStudios }) => {
+        LoadStudios();
+    });
+
+    import("./search/mod_history.js").then(({ LoadHistory }) => {
+        LoadHistory();
+    });
+
     new TCache().cleanup();
 }

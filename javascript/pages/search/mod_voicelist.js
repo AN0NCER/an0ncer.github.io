@@ -7,30 +7,33 @@ import { TSearchType, TTSearch } from "./mod_search.js";
 export async function LoadVoiceList() {
     const data = await loadVoice();
 
-    for (let i = 0; i < data.results.length; i++) {
-        const voice = data.results[i];
-        const html = `<div class="voice" data-id="${voice.id}" data-val="${voice.title}">${voice.title}<div class="count">${voice.count}</div></div>`;
+    requestAnimationFrame(() => {
+        for (let i = 0; i < data.results.length; i++) {
 
-        // Получаем все три линии
-        const lines = [".voice-list > .line-1", ".voice-list > .line-2", ".voice-list > .line-3"];
+            const voice = data.results[i];
+            const html = `<div class="voice" data-id="${voice.id}" data-val="${voice.title}">${voice.title}<div class="count">${voice.count}</div></div>`;
 
-        // Определяем линию с наименьшей шириной
-        let minLine = lines.reduce((min, line) => {
-            return $(line).width() < $(min).width() ? line : min;
-        }, lines[0]);
+            // Получаем все три линии
+            const lines = [".voice-list > .line-1", ".voice-list > .line-2", ".voice-list > .line-3"];
+
+            // Определяем линию с наименьшей шириной
+            let minLine = lines.reduce((min, line) => {
+                return $(line).width() < $(min).width() ? line : min;
+            }, lines[0]);
 
 
-        $(minLine).append(html);
-        if (i < 25)
-            anime({
-                targets: $(`.voice[data-id="${voice.id}"]`)[0],
-                opacity: [0, 1],
-                translateX: [50, 0],
-                duration: 800,
-                easing: "easeOutQuad",
-                delay: i * 50, // Поочередная задержка
-            });
-    }
+            $(minLine).append(html);
+            if (i < 25)
+                anime({
+                    targets: $(`.voice[data-id="${voice.id}"]`)[0],
+                    opacity: [0, 1],
+                    translateX: [50, 0],
+                    duration: 800,
+                    easing: "easeOutQuad",
+                    delay: i * 50, // Поочередная задержка
+                });
+        }
+    });
 
     $(`.voice-list`).on('click', '.voice', (e) => {
         const el = $(e.currentTarget);

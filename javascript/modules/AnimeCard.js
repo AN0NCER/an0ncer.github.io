@@ -80,7 +80,7 @@ export const ACard = {
      * @param {{ type: "a" | "div", anime: {id:string, poster: {mainUrl:string}, russian:string, airedOn: {year:number}, score:number}, data: {key:value}, exclude: [string] }} data - Данные аниме
      * @returns DOM елемента 
      */
-    GenV2: function ({ type = 'a', anime, data, exclude = [] } = {}) {
+    GenV2: function ({ type = 'a', anime, data, exclude = [], priority = false } = {}) {
         if (type == 'a') {
             return `<a href="/watch.html?id=${anime.id}&iss=true" class="card-anime" data-id="${anime.id}" ${Data()}>${Gen()}</a>`;
         } else {
@@ -89,8 +89,8 @@ export const ACard = {
 
         function Gen() {
             return `<div class="card-content">
-                        <img src="${anime.poster.mainUrl}" class="blur">
-                        <img src="${anime.poster.mainUrl}">
+                        <img src="${anime.poster.mainUrl}" ${priority ? `fetchpriority="high"` : ``} class="blur">
+                        <img src="${anime.poster.mainUrl}" ${priority ? `fetchpriority="high"` : ``}>
                         <div class="title"><span>${anime.russian}</span></div>
                         ${data?.score ? `<div class="score">${data.score}</div>` : ''}
                     </div>
@@ -119,9 +119,9 @@ export const ACard = {
      * @returns 
      */
     LoadV2: function ({ type = 'a', id = 0 } = {}) {
-        if(type == 'a'){
+        if (type == 'a') {
             return `<a class="card-anime" data-id="${id}"></a>`;
-        }else{
+        } else {
             return `<div class="card-anime" data-id="${id}"></div>`
         }
     }

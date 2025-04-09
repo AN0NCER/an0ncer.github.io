@@ -100,36 +100,40 @@ const setup = {
     }
 }
 
-export function GenreInfo(id){
+export function GenreInfo(id) {
     return setup.descriptio[id];
 }
 
 export async function LoadGenres() {
     const data = await loadGenres();
 
-    for (let i = 0; i < data.length; i++) {
-        const element = data[i];
-        if (!setup.showing.includes(element.kind))
-            continue;
-        const html = `<div class="genre" data-id="${element.id}" data-val="${element.russian}">${element.russian}<div class="type">${setup.ru[element.kind]}</div></div>`
-
-        // Получаем все три линии
-        const lines = [".genres-list > .line-1", ".genres-list > .line-2", ".genres-list > .line-3"];
-
-        // Определяем линию с наименьшей шириной
-        let minLine = lines.reduce((min, line) => {
-            return $(line).width() < $(min).width() ? line : min;
-        }, lines[0]);
 
 
-        $(minLine).append(html);
-    }
+    requestAnimationFrame(() => {
+        for (let i = 0; i < data.length; i++) {
+            const element = data[i];
+            if (!setup.showing.includes(element.kind))
+                continue;
+            const html = `<div class="genre" data-id="${element.id}" data-val="${element.russian}">${element.russian}<div class="type">${setup.ru[element.kind]}</div></div>`
 
-    if ($PARAMETERS.censored) {
-        setup.censored.forEach((id) => {
-            $(`.genre[data-id="${id}"]`).addClass('censored');
-        })
-    }
+            // Получаем все три линии
+            const lines = [".genres-list > .line-1", ".genres-list > .line-2", ".genres-list > .line-3"];
+
+            // Определяем линию с наименьшей шириной
+            let minLine = lines.reduce((min, line) => {
+                return $(line).width() < $(min).width() ? line : min;
+            }, lines[0]);
+
+
+            $(minLine).append(html);
+        }
+
+        if ($PARAMETERS.censored) {
+            setup.censored.forEach((id) => {
+                $(`.genre[data-id="${id}"]`).addClass('censored');
+            })
+        }
+    });
 
     $(`.genres-list`).on('click', '.genre', (e) => {
         const el = $(e.currentTarget);
