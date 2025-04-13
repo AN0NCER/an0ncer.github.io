@@ -55,13 +55,18 @@ function input() {
     const results = $(`.results-wrapper`);
     const el = $(`.input-wrapper > input`);
     let timeOut = setTimeout;
+    let lastVal = null;
 
     const _search = () => {
-        el.blur();
         const val = el.val().trim() || null;
         if (TTSearch.instance !== null) {
+            if (lastVal === val) {
+                return;
+            }
+            lastVal = val;
             TTSearch.instance.search(val);
         } else {
+            lastVal = val;
             new TTSearch(TSearchType.default()).search(val);
         }
     }
@@ -93,6 +98,7 @@ function input() {
 
         if (key == 13) {
             clearTimeout(timeOut);
+            el.blur();
             _search();
         }
 

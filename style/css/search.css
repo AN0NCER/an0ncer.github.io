@@ -22,7 +22,7 @@ body {
 }
 @media screen and (max-width: 940px) {
   .body-wrapper {
-    margin: 10px max(10px, var(--sar)) 0 max(10px, var(--sal));
+    margin: 20px max(10px, var(--sar)) 0 max(10px, var(--sal));
   }
 }
 .body-wrapper.search .main,
@@ -379,7 +379,7 @@ header .search-wrapper .btn.btn-filter .ticon {
   left: 0;
 }
 .results-wrapper.empty, .results-wrapper.load {
-  height: calc(100dvh - (60px + var(--m-space) + var(--sab)));
+  height: calc(100dvh - (70px + var(--m-space) + var(--sab)));
 }
 .results-wrapper.load .load-wrapper {
   display: flex;

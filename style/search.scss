@@ -21,7 +21,7 @@ body {
     padding-bottom: calc(var(--m-space) + var(--sab));
 
     @media screen and (max-width: 940px) {
-        margin: 10px max(10px, var(--sar)) 0 max(10px, var(--sal));
+        margin: 20px max(10px, var(--sar)) 0 max(10px, var(--sal));
     }
 
     &.search {
@@ -130,7 +130,6 @@ header {
         }
 
         .studio {
-            // display: flex;
             gap: 10px;
             display: none;
 
@@ -297,7 +296,7 @@ header {
     }
 
     &.empty, &.load{
-        height: calc(100dvh - (40px + 10px + 10px + var(--m-space) + var(--sab)));
+        height: calc(100dvh - (40px + 20px + 10px + var(--m-space) + var(--sab)));
     }
 
     &.load{
