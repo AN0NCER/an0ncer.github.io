@@ -70,14 +70,17 @@ export class TCache {
 
     /**
      * Очищает устаревшие записи из всех хранилищ.
+     * @param {"requests"|"images"|"metadata"|null} [targetStore=null] - Название хранилища для очистки, либо null для всех.
      * @returns {Promise<void>}
      */
-    async cleanup() {
+    async cleanup(targetStore = null) {
         const now = Date.now();
         await this.db.Open();
         const controls = new DBControls(this.db);
 
-        for (const storeName of ["requests", "images", "metadata"]) {
+        const storeNames = targetStore ? [targetStore] : ["requests", "images", "metadata"];
+
+        for (const storeName of storeNames) {
             const allRecords = await controls.getAll(storeName);
 
             for (const record of allRecords) {
@@ -96,11 +99,11 @@ export class TCache {
      * @param {string} id - Уникальный ключ.
      * @returns {Promise<void>}
      */
-    async delete(storeName, id){
+    async delete(storeName, id) {
         await this.db.Open();
         const controls = new DBControls(this.db);
 
-        await controls.delete(storeName, {id});
+        await controls.delete(storeName, { id });
         controls.Close();
     }
 }
