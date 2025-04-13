@@ -546,7 +546,7 @@ main {
         font-size: 14px;
 
         a {
-            color: #98d4fd;
+            color: #5FBEF3;
             font-size: 14px;
         }
     }
@@ -799,18 +799,22 @@ main {
 
 .similiar-anime {
     margin-top: 20px;
-    display: flex;
-    overflow: hidden;
     overflow-x: auto;
-
-    a:first-child {
-        margin-left: 20px;
+    max-width: 100dvw;
+    position: relative;
+    
+    .view-wrapper{
+        display: inline-flex;
+        gap: 10px;
+        padding: 0 20px;
+        position: relative;
     }
 
-    a:last-child {
-        .card-anime {
-            margin-right: 20px;
-        }
+    .sentinel{
+        position: absolute;
+        top: 0;bottom: 0;right: 0;
+        pointer-events: none;
+        width: 500px;
     }
 }
 
@@ -862,7 +866,6 @@ footer {
 
 .card-anime {
     min-width: 195px;
-    margin-right: 10px;
 }
 
 @media screen and (max-width:920px) {
