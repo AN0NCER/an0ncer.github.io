@@ -60,6 +60,16 @@ class JikanControls {
 
 export const Jikan = {
     anime: {
+        getAnimeFullById: (id, e = () => { }) => {
+            const control = new JikanControls();
+            const url = new URL(`${BASE_URL}/anime/${id}/full`);
+
+            return {
+                GET: (init = {}, cache = true, ttl = 60 * 60 * 1000) => {
+                    return control.fetch(url, init, cache, ttl, e);
+                }
+            }
+        },
         getAnimeSearch: (params = {}, e = () => { }) => {
             const control = new JikanControls();
             const url = new URL(`${BASE_URL}/anime`);
