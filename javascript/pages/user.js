@@ -44,7 +44,7 @@ function InitUser(data) {
 //Начало программы страницы
 Main((e) => {
     if (!e && $USER === null)
-        window.location.href = "/login.html";
+        return window.location.href = "/login.html";
     GetIdLoadUser().then((value) => {
         $USER = value;
 
