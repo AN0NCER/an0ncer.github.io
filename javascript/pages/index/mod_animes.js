@@ -3,7 +3,18 @@ import { GraphQl } from "../../modules/ShikiAPI.js";
 import { Sleep } from "../../modules/functions.js";
 
 const _limitAnime = 8;
-const _exclude_ids = [56572, 56560, 56484, 56481, 56575, 56308, 53514, 57131, 57106, 59387, 58379, 59883, 54398, 58631];
+const _exclude_ids = {
+    '': [60108], // Все
+    4: [], // Комедия
+    24: [58379, 57827, 59883], // Фантастика
+    14: [], // Ужасы
+    10: [], // Фэнтэзи
+    22: [], // Романтика
+    8: [], // Драма
+    18: [57827, 59387], // Меха
+    7: [], // Дэтэктив
+    38: [60207] // Военное
+}
 
 let _loadedAnime = false;
 let _loadedUpdates = false;
@@ -17,7 +28,7 @@ export function LoadAnimeShikimori({ status = 'ongoing', limit = _limitAnime, ge
         status: `"${status}"`,
         limit: limit,
         genre: `"${genre}"`,
-        excludeIds: `"${_exclude_ids.toString()}"`,
+        excludeIds: `"${(_exclude_ids[genre] || []).toString()}"`,
         season: `"${new Date().getFullYear() - take}_${new Date().getFullYear()}"`
     }
 
