@@ -107,11 +107,15 @@ function loadStreamTunime(id, e, kodik_link = undefined) {
     return new Promise(async (resolve) => {
         if (!kodik_link)
             kodik_link = await loadKodikLink(id, e);
-        let tunime_data = await Tunime.Source(kodik_link);
+
+        const user = JSON.parse(localStorage.getItem('shadow-api'));
+        let tunime_data = await Tunime.Source(kodik_link, user);
         resolve(tunime_data);
+
         if ($PARAMETERS.player.skipmoments) {
             new Skips(tunime_data.skips);
         }
+        
         loadFirstSuccessfulImage(tunime_data.thumbinals)
             .then((successfulImage) => {
                 if (typeof successfulImage === "undefined") {
