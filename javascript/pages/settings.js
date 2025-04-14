@@ -110,6 +110,32 @@ const Parameters = [
                 param: 'syncdata',
                 name: 'Синхронизация',
                 description: 'Синхронизация по озвучке и текущему эпизоде по разным приложениям в Tunime'
+            },
+            {
+                type: 'boolean',
+                param: 'anicaching',
+                name: 'Кэширование',
+                description: 'Временно сохраняет данные аниме для быстрой прогрузки'
+            }, 
+            {
+                type: 'sel-one',
+                param: 'anicachlive',
+                default: 'mode-0',
+                variation: [
+                    { key: '1', val: '1 День' },
+                    { key: '2', val: '2 Дня' },
+                    { key: '3', val: '3 Дня' },
+                ],
+                name: 'Хранение кэша',
+                description: 'Как долго будет храниться кэш аниме.',
+            },
+            {
+                type: 'button',
+                param: 'cleardb',
+                name: 'Очистить кэш',
+                description: 'Очищает кэш страницы просмотра и поиска',
+                db: "tun-cache",
+                verif: "Очистить полностью кэш аниме?"
             }
         ]
     },
@@ -231,7 +257,9 @@ const Parameters = [
                 type: 'button',
                 param: 'cleardb',
                 name: 'Сбросить загрузчик',
-                description: 'Удаляеть полностью базу данных с загрузками'
+                description: 'Удаляеть полностью базу данных с загрузками',
+                db: "downloader",
+                verif: "Исчезнеть все загруженное аниме в загрузчике"
             }
             // {
             //     type: 'boolean',
@@ -377,7 +405,7 @@ function _ShowParametrs() {
                     })();
                     break;
                 case "button":
-                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-param="${element.param}" data-type="button" data-tooltip="${element.description}"><button>${element.name}</button></label>`;
+                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-param="${element.param}" data-type="button" data-tooltip="${element.description}"><button data-db="${element.db}" data-verif="${element.verif}">${element.name}</button></label>`;
                 default:
                     break;
             }
@@ -434,8 +462,11 @@ function eventAppStorage() {
 }
 
 function eventButtons() {
-    $(`label[data-param="cleardb"] > button`).on('click', () => {
-        OnClearDB("downloader");
+    $(`label[data-param="cleardb"] > button`).on('click', (e) => {
+        const el = $(e.currentTarget);
+        const db = el.data("db");
+        const verif = el.data("verif");
+        OnClearDB(db, verif);
     });
 }
 

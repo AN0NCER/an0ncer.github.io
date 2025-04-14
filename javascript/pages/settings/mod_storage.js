@@ -1,12 +1,14 @@
 import { CreateVerify } from "../../modules/ActionVerify.js";
-import { TDatabase } from "../../modules/TDatabase.js";
+import { DBControls, TDatabase } from "../../modules/TDatabase.js";
 import { TDownload } from "../../modules/TDownload.js";
+import { TCache } from "../../modules/tun.cache.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { formatBytes } from "../settings.js";
 
 const exception = ['tunime-id', 'application_installed'];
 const database = [
-    { name: "Загруженное", key: "downloader" }
+    { name: "Загруженное", key: "downloader" },
+    { name: "Кэширование", key: "tun-cache" }
 ];
 
 const WindowStorage = {
@@ -73,7 +75,7 @@ export function ShowStorage(title = "Хранилище") {
     $('.select-bar > .window-title').text(title);
     (async () => {
         $("#locdata > span").text(formatBytes(Storage.Local.size()));
-        $("#cachedata > span").text(formatBytes((await Storage.Cache.size()) + Storage.Database.downloader.count));
+        $("#cachedata > span").text(formatBytes((await Storage.Cache.size()) + Storage.Database.downloader.count + Storage.Database.cache.count));
         $("#sesdata > span").text(`${formatBytes(Storage.Session.size())}`);
     })();
 
@@ -168,13 +170,40 @@ export const Storage = {
                 const db = (await TDownload.Manager()).db;
                 const list = await db.getAll("anime");
                 db.Close();
-                
+
                 let _lsTotal = 0;
                 list.forEach(element => {
                     _lsTotal += element.size;
                 });
 
                 $(`.list-app-storage`).append(`<div class="storage-element"><div>Загрузчик</div><span>${formatBytes(_lsTotal)}</span></div>`)
+                this.count = _lsTotal;
+                return _lsTotal;
+            }
+        },
+        cache: {
+            count: 0,
+            size: async function (fixed = true) {
+                const byteSize = str => new Blob([str]).size;
+                const db = new TCache().db;
+                await db.Open();
+                const controls = new DBControls(db);
+                let _lsTotal = 0;
+                // console.log(controls);
+                for (let i = 0; i < db.initStorages.length; i++) {
+                    const { name } = db.initStorages[i];
+                    const list = await controls.getAll(name);
+                    console.log(list);
+                    list.forEach(el => {
+                        const json = JSON.stringify(el);
+                        _lsTotal += byteSize(json);
+                    });
+                }
+
+                controls.Close();
+
+                $(`.list-app-storage`).append(`<div class="storage-element"><div>Аниме-Кэш</div><span>${formatBytes(_lsTotal)}</span></div>`)
+
                 this.count = _lsTotal;
                 return _lsTotal;
             }
@@ -187,6 +216,7 @@ export const Storage = {
         _lsTotal += parseInt(this.Session.size(false));
         _lsTotal += parseInt(await this.Cache.size(false));
         _lsTotal += parseInt(await this.Database.downloader.size(false));
+        _lsTotal += parseInt(await this.Database.cache.size(false));
         return _lsTotal;
     }
 }
