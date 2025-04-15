@@ -454,28 +454,34 @@ header .content .title-with-raiting .raiting svg {
 }
 header .content .genres {
   display: flex;
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-top: 20px;
+  padding: 0 20px;
+  margin-top: 15px;
   overflow-x: auto;
   gap: 10px;
 }
 header .content .genres a {
-  color: #5fbef3;
-  border: 1px solid #5fbef3;
-  height: 30px;
-  padding: 0 10px;
+  color: #FFFFFF;
+  padding: 10px 17px;
   display: flex;
-  align-items: center;
   border-radius: 5px;
   white-space: nowrap;
   font-size: 12px;
+  background: #191C21;
+  flex-direction: column;
+  font-weight: bold;
+}
+header .content .genres a .type {
+  display: flex;
+  align-items: center;
+  color: #5fbef3;
+  font-weight: normal;
+  font-size: 10px;
 }
 header .content .details {
   display: flex;
   flex-direction: column;
   background: #191C21;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 header .content .details .block {
   padding: 10px 20px;
@@ -521,13 +527,12 @@ header .content > .title {
   color: #fff;
 }
 header .content .gallery {
-  margin-left: 0px;
   margin-top: 10px;
-  margin-left: 20px;
 }
 header .content .gallery .galery-slider {
   display: flex;
   overflow-x: auto;
+  padding: 0 20px;
   gap: 10px;
 }
 header .content .gallery .galery-slider .slide {
