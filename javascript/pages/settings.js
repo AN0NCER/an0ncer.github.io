@@ -116,7 +116,7 @@ const Parameters = [
                 param: 'anicaching',
                 name: 'Кэширование',
                 description: 'Временно сохраняет данные аниме для быстрой прогрузки'
-            }, 
+            },
             {
                 type: 'sel-one',
                 param: 'anicachlive',
@@ -317,9 +317,9 @@ Main((e) => {
 
     //Присваевам функцию к кнопке выхода
     $('.btn-logout').click(function () {
-        User.Storage.Clear();
-        setParameter('autologin', false);
-        window.location.replace("/login.html");
+        import("../utils/auth.logout.js").then(({ logout }) => {
+            logout();
+        })
     });
 
     $('.search-filter').on('change keyup paste', function () {
