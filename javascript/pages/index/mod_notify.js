@@ -1,3 +1,4 @@
+import { Kodik } from "../../modules/Kodik.js";
 import { Messages, Users } from "../../modules/ShikiAPI.js";
 import { User } from "../../modules/ShikiUSR.js";
 import { Sleep } from "../../modules/functions.js";
@@ -93,7 +94,7 @@ function SetVoiceStatus(last_episode, episode, notify) {
 
 function KodikGetEpisode(anime_id, translation_id) {
     return new Promise((resolve) => {
-        kodikApi.search({ shikimori_id: anime_id, translation_id: translation_id, limit: 1 }, (response) => {
+        Kodik.Search({ shikimori_id: anime_id, translation_id: translation_id, limit: 1 }, (response) => {
             return resolve(response.results[0]);
         });
     });

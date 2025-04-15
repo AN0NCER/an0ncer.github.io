@@ -5,6 +5,7 @@
  * Возвращает:  LoadM3U8, LoadM3U8Episode, Skips
  */
 
+import { Kodik } from "../../modules/Kodik.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { Player } from "../player.js";
 import { InitMediaSession } from "./mod_mediasession.js";
@@ -157,7 +158,7 @@ async function loadFirstSuccessfulImage(urls) {
 
 function loadKodikLink(id, e) {
     return new Promise((resolve) => {
-        kodikApi.search({ id: id, with_material_data: true }, async (res) => {
+        Kodik.Search({ id: id, with_material_data: true }, async (res) => {
             if (res.results.length == 0) {
                 console.log('[plr] - No video');
                 return;

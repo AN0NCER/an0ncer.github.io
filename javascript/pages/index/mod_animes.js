@@ -1,4 +1,5 @@
 import { ACard } from "../../modules/AnimeCard.js";
+import { Kodik } from "../../modules/Kodik.js";
 import { GraphQl } from "../../modules/ShikiAPI.js";
 import { Sleep } from "../../modules/functions.js";
 
@@ -73,7 +74,7 @@ export function LoadAnimeShikimori({ status = 'ongoing', limit = _limitAnime, ge
  * Получаем обновленные аниме в kodik плеере
  */
 export async function LoadUpdatetAnime() {
-    const response = await kodikApi.list({
+    const response = await Kodik.List({
         sort: 'updated_at',
         limit: _limitAnime,
         types: 'anime-serial'
