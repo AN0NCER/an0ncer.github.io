@@ -23,16 +23,8 @@ ClearParams(['code']);
 (async () => {
     //Проверяем если это сработал автологин то делаем редирект на главную страницу т.к. может только от нее сработать AutoLogin
     if (code && !User.isteste) {
-        let application_event = localStorage.getItem('application_event');
-        await User.Authorizate(code);
-        localStorage.removeItem('application_event');
-        if (application_event == "autologin") {
-            //После авторизации переходим на главную страницу
-            return window.location.href = "/index.html";
-        }
-        //После авторизации переходим на страницу пользователся
-        return window.location.href = "/user.html"
-        //Если авторизация была неудачна, то нас выкинет обратно на страницу авторизации
+        const { login } = await import("../utils/auth.login.js");
+        await login(code);
     }
 
     Main(async (e) => {
@@ -83,9 +75,20 @@ function RandomSlogan() {
 function VisualFunctional() {
     //Кнопка авторизации
     $('.btn-login').click(async () => {
-        import("../utils/auth.login.js").then(({ login }) => {
-            login();
-        });
+        if (User.isteste) {
+            localStorage.removeItem('application_event');
+            //Если тестовый режим то запрашиваем код от пользователя
+            let code = prompt("Тестовый режим авторизации:");
+            if (code) {
+                const { login } = await import("../utils/auth.login.js");
+                //Проверяем авторизацию и переходим на станицу пользователя
+                await login(code);
+            } else {
+                window.open(Oauth.GetUrl(), '_blank').focus();
+            }
+        } else {
+            window.location.href = Oauth.GetUrl();
+        }
     });
 
     //Кнопка настроек
