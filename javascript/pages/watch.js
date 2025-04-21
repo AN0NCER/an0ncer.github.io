@@ -1,6 +1,6 @@
 import { Main } from "../modules/ShikiUSR.js";
 import { LTransition } from "./watch/mod_transition.js";
-import { CheckID, LoadAnime } from "./watch/mod_resource.js";
+import { tLoad } from "./watch/mod.resource.js";
 import { IPlayer } from "./watch/mod_player.js";
 import { AutoScrollEpisodes } from "./watch/mod_scrolling.js";
 import { Functional } from "./watch/mod_ui.js";
@@ -8,7 +8,7 @@ import { ASynch } from "./watch/mod_dbanime.js";
 import { UserRate } from "./watch/mod_urate.js";
 import { Tunime } from "../modules/TunimeApi.js";
 import { History } from "./watch/mod_history.js";
-import { InitFranchiseVoices } from "./watch/mod_franchise.js";
+import { tChronologyVoice } from "./watch/mod.chronology.js";
 import { ClearParams } from "../modules/functions.js";
 import { Private } from "./watch/mod_private.js";
 
@@ -18,8 +18,6 @@ export const $ID = new URLSearchParams(window.location.search).get("id");
 export let $CONTINUE = new URLSearchParams(window.location.search).get("continue");
 //Наведение на плеер
 export const $SHOWPLAYER = new URLSearchParams(window.location.search).get("player");
-//Существование аниме
-const $ISSET = new URLSearchParams(window.location.search).get("iss") ? true : false;
 
 export const Player = IPlayer.Init({ standart: $PARAMETERS.player.standart });
 
@@ -27,23 +25,17 @@ ClearParams(['continue', 'player', 'iss']);
 
 export let $RULES = undefined;
 
-import(`/javascript/pages/watch/mod_collection.js`);
-
 //Авторизируем пользователя
 Main(async (e) => {
     if ($PARAMETERS.anime.customstyle) {
         try {
+            const start = Date.now();
             const data = await import(`/javascript/pages/anime/${$ID}.js`);
             $RULES = data.default;
-            console.log(`[watch] - Custom RULES [${$ID}] loaded`);
-        } catch { }
-    }
-    //Проверка на существование такого ID
-    const check = await CheckID($ID, $ISSET);
-
-    if (!check) {
-        //Аниме с такий ID не существует, перекидываем на страницу 404
-        return document.location.replace('404a.html');
+            console.log(`[mod.${$ID}] - load: ${Date.now() - start}ms.`);
+        } catch (err) {
+            console.log(`[mod.${$ID}] - ${err}`);
+        }
     }
 
     Functional();
@@ -169,7 +161,7 @@ Main(async (e) => {
     });
 
     //Загружаем аниме
-    LoadAnime(async (e) => {
+    tLoad(async (e) => {
         if ($RULES) {
             $RULES.on.load();
         }
@@ -186,6 +178,10 @@ Main(async (e) => {
         });
         History().shikiData = e;
         History().custom.init();
-        InitFranchiseVoices();
-    }, e);
+        tChronologyVoice();
+    }, { logged: e }).catch((err) => {
+        if (err.message.startsWith('mod.resource.e.'))
+            return document.location.replace('404a.html');
+        console.log(err);
+    });
 });

@@ -1,7 +1,7 @@
 import { Kodik } from "../../modules/Kodik.js";
 import { AutoScrollEpisodes } from "./mod_scrolling.js";
 import { $ID } from "../watch.js";
-import { Franchises } from "./mod_franchise.js";
+import { watchSequence } from "./mod.chronology.js";
 
 //Функция генерация HTML перевода
 function _genVoice(id, title, episod, save = false) {
@@ -221,8 +221,8 @@ class Translation {
         this.saved = JSON.parse(localStorage.getItem(this.lskey)) || [];
 
         if ($PARAMETERS.watch.dubanime) {
-            for (let i = 0; i < Franchises.length; i++) {
-                const fid = Franchises[i];
+            for (let i = 0; i < watchSequence.length; i++) {
+                const fid = watchSequence[i];
                 this.saved = this.saved.concat(JSON.parse(localStorage.getItem(`save-translations-${fid}`)) || [])
             }
         }

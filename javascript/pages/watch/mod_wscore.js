@@ -2,7 +2,6 @@ import { User } from "../../modules/ShikiUSR.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { UserRate } from "./mod_urate.js";
 import { Private } from "./mod_private.js";
-import { ShowCollectionWindow } from "./mod_collection.js";
 import { IPlayer } from "./mod_player.js";
 import { ASynch } from "./mod_dbanime.js";
 
@@ -99,9 +98,12 @@ const WindowScore = {
 
             $('textarea.noten').val(val);
             val += WindowScore.comments.footer;
-            WindowScore.auto_grow(document.querySelector('textarea.noten'))
+            WindowScore.auto_grow(document.querySelector('textarea.noten'));
+            
             //Устанавливает заметкку
-            UserRate().Controls.Note(val);
+            if (UserRate().Get().text != val)
+                UserRate().Controls.Note(val);
+
             this.hide();
             _windowScore.hide();
         });
@@ -119,7 +121,7 @@ const WindowScore = {
         })
 
         $('.collection-select.btn').click(() => {
-            ShowCollectionWindow();
+            import("./mod_collection.js").then(val => val.ShowCollectionWindow());
         })
 
         UserRate().Events.OnInit((res) => {
@@ -175,6 +177,7 @@ const WindowScore = {
         $('body').addClass('loading');
         $('#sync-anime').attr('checked', ASynch.Init().local.synch);
         $('#anime-incognito').attr('checked', Private.INCOGNITO);
+        import(`/javascript/pages/watch/mod_collection.js`);
     },
 
     hide: function () {
