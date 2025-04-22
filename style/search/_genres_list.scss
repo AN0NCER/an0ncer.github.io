@@ -1,0 +1,104 @@
+.genres {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .type-selector {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(120px, 1fr) minmax(120px, 1fr) minmax(120px, 1fr) auto;
+        color: #A4A4A4;
+        overflow-y: auto;
+
+        .selector{
+            box-sizing: border-box;
+            position: absolute;
+            background: #2393F1;
+            width: calc((100% - 40px) / 3);
+            height: 40px;
+            border-radius: 5px;
+            z-index: 1;
+            left: calc(((100% - 40px) / 3) * var(--sel));
+            transition: .3s ease-in-out;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+
+            @media screen and (max-width: 440px) {
+                left: calc(120px * var(--sel));
+                width: 120px;
+            }
+        }
+
+        .btn{
+            display: grid;
+            place-items: center;
+            font-weight: bold;
+            font-size: 14px;
+            height: 40px;
+            z-index: 2;
+
+            &.btn-reolad{
+                .ticon{
+                    height: 14px;
+                    width: 40px;
+                    background-color: #FFFFFF;
+                }
+            }
+
+            &.select{
+                color: #FFFFFF;
+            }
+        }
+    }
+
+    .genres-list {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        width: 100%;
+
+        .line-1,
+        .line-2,
+        .line-3 {
+            display: flex;
+            align-items: flex-start;
+            gap: 5px;
+            width: fit-content;
+        }
+
+        .genre {
+            display: flex;
+            flex-direction: column;
+            white-space: nowrap;
+            background: #191C21;
+            color: #A9AAAC;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 9px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            overflow: clip;
+
+            .type{
+                display: flex;
+                align-items: center;
+                color: #2393F1;
+                font-weight: normal;
+                font-size: 12px;
+            }
+
+            &.censored{
+                pointer-events: none;
+                &::before{
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    background: rgba(16, 19, 24, 0.69);
+                    backdrop-filter: blur(4px);
+                }
+            }
+        }
+    }
+}

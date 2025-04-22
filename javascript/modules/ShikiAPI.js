@@ -377,7 +377,7 @@ export const Styles = {
 export const GraphQl = {
     base_url: () => { return `${SHIKIURL.url}/api/graphql` },
 
-    animes: function (arg = {}, event = () => { }) {
+    animes: function (arg = {}, event = () => { }, signal) {
         const url = this.base_url();
         const request = Fetch("POST", url, Headers.base());
         return {
@@ -386,21 +386,35 @@ export const GraphQl = {
                 if (logged)
                     request.setHeaders(Headers.bearer());
                 request.setBody(body);
-                const response = await request.fetch();
+                const response = await request.fetch(signal);
                 event(response);
                 return response;
             }
         }
     },
 
-    user_rate: function (arg = {}, event = () => { }) {
+    user_rate: function (arg = {}, event = () => { }, signal) {
         const url = this.base_url();
         const request = Fetch("POST", url, Headers.bearer());
         return {
             POST: async (body = []) => {
                 body = BodyGraphQl("userRates", arg, body);
                 request.setBody(body);
-                const response = await request.fetch();
+                const response = await request.fetch(signal);
+                event(response);
+                return response;
+            }
+        }
+    },
+
+    genres: function (arg = {}, event = () => { }, signal) {
+        const url = this.base_url();
+        const request = Fetch("POST", url, Headers.base());
+        return {
+            POST: async (body = []) => {
+                body = BodyGraphQl("genres", arg, body);
+                request.setBody(body);
+                const response = await request.fetch(signal);
                 event(response);
                 return response;
             }
@@ -409,7 +423,7 @@ export const GraphQl = {
 }
 
 function BodyGraphQl(prof, arg = {}, body = []) {
-    const query = Object.entries(arg).map(([key, value]) => 
+    const query = Object.entries(arg).map(([key, value]) =>
         `${key}: ${Array.isArray(value) ? `"${value}"` : value}`
     );
 

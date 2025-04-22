@@ -1,3 +1,4 @@
+import { ClearParams } from "../modules/functions.js";
 import { Main, Oauth, User } from "../modules/ShikiUSR.js";
 
 //Слоганы страницы авторизации
@@ -15,34 +16,23 @@ const slogans = [
     "Tunime - где аниме становится частью твоей жизни!"
 ];
 
-//Начало программы
-(() => {
-    $('.slogan').text(RandomSlogan());
-    Animate();
+const code = new URLSearchParams(window.location.search).get('code');
+
+ClearParams(['code']);
+
+(async () => {
+    //Проверяем если это сработал автологин то делаем редирект на главную страницу т.к. может только от нее сработать AutoLogin
+    if (code && !User.isteste) {
+        const { login } = await import("../utils/auth.login.js");
+        await login(code);
+    }
+
     Main(async (e) => {
-        if (e) {
-            //Если пользователь авторизирован редирект на страничку с пользователем
-            window.location.href = "/user.html"
-        } else {
-            if (!User.isteste) {
-                const urlParams = new URLSearchParams(window.location.search);
-                let code = urlParams.get("code");
-                if (code) {
-                    //Проверяем если это сработал автологин то делаем редирект на главную страницу т.к. может только от нее сработать AutoLogin
-                    let application_event = localStorage.getItem('application_event');
-                    await User.Authorizate(code);
-                    localStorage.removeItem('application_event');
-                    if (application_event == "autologin") {
-                        //После авторизации переходим на главную страницу
-                        window.location.href = "/index.html";
-                        return;
-                    }
-                    //После авторизации переходим на страницу пользователся
-                    window.location.href = "/user.html"
-                    //Если авторизация была неудачна, то нас выкинет обратно на страницу авторизации
-                }
-            }
-        }
+        //Если пользователь авторизирован редирект на страничку с пользователем
+        if (e) return window.location.href = "/user.html";
+
+        $('.slogan').text(RandomSlogan());
+        Animate();
         VisualFunctional();
     });
 })();
@@ -90,9 +80,9 @@ function VisualFunctional() {
             //Если тестовый режим то запрашиваем код от пользователя
             let code = prompt("Тестовый режим авторизации:");
             if (code) {
+                const { login } = await import("../utils/auth.login.js");
                 //Проверяем авторизацию и переходим на станицу пользователя
-                await User.Authorizate(code);
-                window.location.href = "/user.html"
+                await login(code);
             } else {
                 window.open(Oauth.GetUrl(), '_blank').focus();
             }
@@ -112,7 +102,7 @@ function VisualFunctional() {
     });
 
     //Checkbox автоматической авторизации
-    $('input[type="checkbox"]').change(function(){
+    $('input[type="checkbox"]').change(function () {
         setParameter('autologin', this.checked);
     });
 

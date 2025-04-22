@@ -1,9 +1,13 @@
 import { $ID, Player } from "../watch.js";
 import { Private } from "./mod_private.js";
-import { Screenshots } from "./mod_resource.js";
+import { IScreenshots } from "./mod.resource.js";
 
 function SetImage(id) {
-    Screenshots.Init().Select({ id });
+    const screenshots = new IScreenshots();
+    if(screenshots.list.length == id){
+        id = 0;
+    }
+    screenshots.select({ id });
 }
 
 //Управление историей
@@ -37,11 +41,11 @@ const _history = {
         const { russian, screenshots } = this.shikiData;
         const episode = cnt ? e + i : e + i;
         let image = "";
-        this.screenData = Screenshots.Init().list;
+        this.screenData = new IScreenshots().list;
         if (this.screenData?.length > 0) {
-            image = `${this.screenData[this.idImage].original}`;
+            image = `${this.screenData[this.idImage].originalUrl}`;
         } else {
-            image = `${screenshots[0].original}`;
+            image = `${screenshots[0].originalUrl}`;
         }
         const dub = Player.CTranslation.name;
         const type = this.shikiData.kind == "movie" ? "Фильм" : this.shikiData.kind == "ova" ? "OVA" : this.shikiData.kind == "ona" ? "ONA" : "Аниме";
@@ -86,7 +90,7 @@ const _history = {
             }
             this.inited = true;
 
-            if(df){
+            if (df) {
                 _history.idImage = df;
             }
 
@@ -112,7 +116,7 @@ const _history = {
                 this.click(idImage);
             });
 
-            
+
         },
 
         click: function (id) {

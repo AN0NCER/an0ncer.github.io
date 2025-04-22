@@ -11,12 +11,6 @@ export class SHIKIURL {
     static suburl(sub) {
         return `${this.protocol}${sub}.${this.domain}`;
     }
-    static create(url){
-        if(!url.startsWith('http://') && !url.startsWith('https://')){
-            return `${this.protocol}${this.domain}${url}`;
-        }
-        return url;
-    }
 }
 
 export const AppStorageKeys = {

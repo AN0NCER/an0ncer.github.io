@@ -2,8 +2,8 @@ import { CreateVerify } from "../../modules/ActionVerify.js";
 import { ShowInfo } from "../../modules/Popup.js";
 import { TDatabase } from "../../modules/TDatabase.js";
 
-export function OnClearDB(name) {
-    CreateVerify("Исчезнеть все загруженное аниме в загрузчике").then((val) => {
+export function OnClearDB(name, description) {
+    CreateVerify(description).then((val) => {
         if (val) {
             ClearDB(name);
         }

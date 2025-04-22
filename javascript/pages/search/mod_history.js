@@ -1,4 +1,9 @@
-import { ACard } from "../../modules/AnimeCard.js";
+import { Sleep } from "../../modules/functions.js";
+import { GraphQl } from "../../modules/ShikiAPI.js";
+import { IsLogged } from "../search.js";
+import { ACardH } from "./mod_card.js";
+
+export let HistoryLoaded = false;
 
 export const SearchHistory = {
     key: 'search-history',
@@ -38,28 +43,26 @@ export const SearchHistory = {
             }
         }
         localStorage.setItem(this.key, JSON.stringify(this.data));
+        $('footer').css({ display: '' });
         //Если это уже есть в списке перенести на первое место
-        if ($(`.history > .content > a[data-id="${id}"]`).length > 0) {
-            $(`.history > .content > a[data-id="${id}"]`).detach().prependTo($('.history > .content'));
+        if ($(`.history-list > a[data-id="${id}"]`).length > 0) {
+            $(`.history-list > a[data-id="${id}"]`).detach().prependTo($('.history-list'));
         } else {
-            if ($(`.history > .content > a`).length >= 10) {
-                $(`.history > .content > a:last`).remove();
+            if ($(`.history-list > a`).length >= 10) {
+                $(`.history-list > a:last`).remove();
             }
 
-            let element = $(`.result > .content > .card-anime[data-id="${id}"]`);
+            const clone = $(`.results > .card-anime-h[data-id="${id}"]`).clone();
+            let $link = $('<a></a>')
+                .html(clone.html()) // копируем содержимое
+                .attr('href', `/watch.html?id=${clone.attr('data-id')}&iss=true`); // задаём ссылку
 
-            let response = {
-                id,
-                image: element.find(`.card-content > img`).attr('src').trim(ACard.GetUrl()),
-                russian: element.find(`.card-content > .title > span`).text(),
-                score: element.find(`.card-information > .score`).text(),
-                aired_on: element.find(`.card-information > .year`).text()
-            };
+            // Копируем атрибуты
+            $.each(clone[0].attributes, function (index, attr) {
+                $link.attr(attr.name, attr.value);
+            });
 
-            response.image = { original: response.image.substring(ACard.GetUrl().length) };
-            response.score = response.score.trim();
-
-            $(`.history > .content`).prepend(ACard.Gen({ response: response }));
+            $(`.history-list`).prepend($link);
         }
     },
 
@@ -70,4 +73,59 @@ export const SearchHistory = {
         this.data = [];
         localStorage.setItem(this.key, JSON.stringify(this.data));
     }
+}
+
+export async function LoadHistory() {
+    const observer = new IntersectionObserver(([entry], obs) => {
+        if (entry.isIntersecting === true) {
+            obs.disconnect();
+            fetchHistory();
+        }
+    }, { rootMargin: '0px' });
+
+    observer.observe($(`.voices > .sentinel`)[0]);
+}
+
+function fetchHistory() {
+    const card = new ACardH({ isLogged: IsLogged });
+
+    const _fetch = (data) => {
+        return new Promise((resolve) => {
+            GraphQl.animes({ ids: `"${data.toString()}"`, limit: data.length }, async (response) => {
+                if (response.failed) {
+                    if (response.status === 429) {
+                        await Sleep(2000);
+                        return _fetch(data);
+                    }
+                    return resolve(null);
+                }
+                return resolve(response);
+            }).POST(["id", { "poster": ["main2xUrl"] }, "name", "russian", "kind", "season", "episodesAired", "episodes", "status", { "statusesStats": ["status", "count"] }, "score", { "userRate": ["status", "id"] }, { "airedOn": ["year"] }], IsLogged)
+        });
+    }
+
+    SearchHistory.loadHistory(async (data) => {
+        $(`.history-list`).empty();
+
+        if (data.length <= 0) {
+            return $('footer').css({ display: 'none' });
+        }
+
+        const response = await _fetch(data);
+
+        if (response == null) {
+            return $('footer').css({ display: 'none' });
+        }
+
+        const { animes } = response.data;
+
+        data.forEach(id => {
+            const anime = animes.find(x => x.id == id);
+
+            anime.personen = anime.statusesStats.reduce((sum, item) => sum + item.count, 0);
+            $(`.history-list`).append(card.gen({ anime, redirects: { image: "poster.main2xUrl" } }, "a"));
+        })
+
+        HistoryLoaded = true;
+    });
 }

@@ -1,6 +1,6 @@
 import { WindowManagement } from "../../modules/Windows.js";
 import { $ID } from "../watch.js";
-import { Franchises } from "./mod_franchise.js";
+import { watchSequence } from "./mod.chronology.js";
 import { IPlayer } from "./mod_player.js";
 
 const Player = IPlayer.Init();
@@ -72,7 +72,7 @@ const WindowTranslation = {
     verif: () => { return true },
     selectfavorits: () => {
         if ($PARAMETERS.watch.dubanime) {
-            Franchises.forEach((value) => {
+            watchSequence.forEach((value) => {
                 /**@type {[number]} */
                 const data = JSON.parse(localStorage.getItem(`save-translations-${value.id}`)) || [];
                 for (let i = 0; i < data.length; i++) {

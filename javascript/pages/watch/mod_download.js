@@ -3,9 +3,7 @@ import { ShowInfo } from "../../modules/Popup.js";
 import { TDAnime, TDLState, TDownload } from "../../modules/TDownload.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { $ID, Player } from "../watch.js";
-import { Anime } from "./mod_resource.js";
-
-// TODO: Сделать отображение окна только если есть доступ к Tunime серверу
+import { tAnime } from "./mod.resource.js";
 
 function formatBytes(x) {
     const units = ['б', 'Кб', 'Мб', 'Гб'];
@@ -370,7 +368,7 @@ class Downloader {
 
         this.Episodes = new DOWEpisodes();
         this.Cache = new DOWCache();
-        this.Data = new TDAnime({ anime: { id: $ID, name: Anime.russian } });
+        this.Data = new TDAnime({ anime: { id: $ID, name: tAnime.russian } });
         this.Controls = {
             'ui': new DOWUiStats(this),
             'btns': new DOWButtons(this),
@@ -396,10 +394,10 @@ class Downloader {
 
     async Download(key = { v: 0, e: 0 }) {
         if (this.VIDs.open === this.VIDs.download)
-            return ShowInfo('Уже загружаеться', 'dow-info', 999);
+            return ShowInfo('Уже загружается', 'dow-info', 999);
 
         if (this.VIDs.download === undefined) {
-            // Ничего не загружаеться
+            // Ничего не загружается
             const cache = this.Cache.get(key);
             this.VIDs.download = cache.vId;
 
@@ -461,7 +459,7 @@ class Downloader {
                     //Надо открыть эту ссылку в новой вкладке
                     const dL = document.createElement('a');
                     dL.href = href;
-                    dL.download = `${(Anime.name).toLocaleLowerCase()}-${e}-${(Player.CTranslation.name).toLocaleLowerCase()}.ts`;
+                    dL.download = `${(tAnime.name).toLocaleLowerCase()}-${e}-${(Player.CTranslation.name).toLocaleLowerCase()}.ts`;
                     if (this.Properties.autosave) {
                         dL.click();
                         URL.revokeObjectURL(dL.href);

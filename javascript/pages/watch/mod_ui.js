@@ -3,7 +3,7 @@ import { ShowInfo } from "../../modules/Popup.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { $ID, Player } from "../watch.js";
 import { LTransition } from "./mod_transition.js";
-import { Screenshots } from "./mod_resource.js";
+import { IScreenshots } from "./mod.resource.js";
 import { ShowTranslationWindow } from "./mod_translation.js";
 import { UserRate } from "./mod_urate.js";
 import { ShowScoreWindow } from "./mod_wscore.js";
@@ -217,14 +217,14 @@ function SetStatusList(res) {
  */
 function AutoLoadGallery() {
     const gallerySlider = document.querySelector('.galery-slider');
-    const screenshots = Screenshots.Init();
+    const screenshots = new IScreenshots();
     $(".galery-slider").on('scroll', (e) => {
         const slides = gallerySlider.querySelectorAll('.slide img');
         const targetSlide = slides[slides.length - 1];
         const targetSlidePosition = targetSlide.getBoundingClientRect().right;
 
         if (targetSlidePosition <= window.innerWidth) {
-            screenshots.Load({ id: slides.length });
+            screenshots.load({ id: slides.length });
         }
     });
 }

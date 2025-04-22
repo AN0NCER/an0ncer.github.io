@@ -1,5 +1,4 @@
 import { Sleep } from "../../modules/functions.js";
-import { SHIKIURL } from "../../modules/Settings.js";
 import { Users } from "../../modules/ShikiAPI.js";
 import { OnUser } from "../user.js";
 
@@ -14,7 +13,7 @@ export function InitFriends() {
                 const last_online_at = new Date(element.last_online_at).getTime();
                 const different_time = new Date().getTime() - last_online_at;
                 $(`.wrapper-friends > .list`).append(`<a href="/user.html?id=${element.id}">
-                <img src="${SHIKIURL.create(element.image.x80)}">
+                <img src="${element.image.x80}">
                 <span class="info">
                     <div class="nickname">${element.nickname}</div>
                     <div class="user-online">

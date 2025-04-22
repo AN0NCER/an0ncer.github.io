@@ -125,9 +125,9 @@ export let User = {
     },
 }
 
-const ips = ["192.168.31.233", "127.0.0.1", "192.168.31.45"]
+const ips = ["127.0", "192.168"];
 
-if (ips.findIndex(x => x == location.hostname) != -1) {
+if (ips.findIndex(x => location.hostname.startsWith(x)) != -1) {
     console.log("[ver] - Test");
     User.test_on();
     var manifestLink = document.querySelector('head > link[rel="manifest"]');

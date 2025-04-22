@@ -1,3 +1,7 @@
+:root{
+    --m-space: 71px;
+}
+
 .application-menu {
     position: fixed;
     bottom: 0;
@@ -227,6 +231,7 @@ body.menuver {
 
     &[data-orientation="90"],
     &[data-orientation="270"] {
+        --m-space: 0px;
         .application-menu {
             bottom: 0;
             top: 0;

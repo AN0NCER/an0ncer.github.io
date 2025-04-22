@@ -1,7 +1,6 @@
 import Collection from "../../modules/Collection.js";
 import { Sleep } from "../../modules/functions.js";
 import { ShowInfo } from "../../modules/Popup.js";
-import { SHIKIURL } from "../../modules/Settings.js";
 import { GraphQl } from "../../modules/ShikiAPI.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { HCollection } from "./mod_html.js";
@@ -82,9 +81,9 @@ class Core {
 
                 for (let j = 0; j < bgs.length; j++) {
                     if (j == 0) {
-                        $(`.item-collection[data-id="${this.control.list[i].id}"] > .bg-collection > .block-1`).attr("style", `--bg-image: url(${SHIKIURL.create(bgs[j])})`).removeClass("loading");
+                        $(`.item-collection[data-id="${this.control.list[i].id}"] > .bg-collection > .block-1`).attr("style", `--bg-image: url(${bgs[j]})`).removeClass("loading");
                     } else {
-                        $(`.item-collection[data-id="${this.control.list[i].id}"] > .bg-collection > .block-2 > .preview:nth-child(${j})`).attr("style", `--bg-image: url(${SHIKIURL.create(bgs[j])})`).removeClass("loading");
+                        $(`.item-collection[data-id="${this.control.list[i].id}"] > .bg-collection > .block-2 > .preview:nth-child(${j})`).attr("style", `--bg-image: url(${bgs[j]})`).removeClass("loading");
                     }
                 }
             }
@@ -117,9 +116,9 @@ class Core {
 
                 for (let j = 0; j < bgs.length; j++) {
                     if (j == 0) {
-                        $(`.item-collection[data-id="${collections[i].id}"] > .bg-collection > .block-1`).attr("style", `--bg-image: url(${SHIKIURL.create(bgs[j])})`).removeClass("loading");
+                        $(`.item-collection[data-id="${collections[i].id}"] > .bg-collection > .block-1`).attr("style", `--bg-image: url(${bgs[j]})`).removeClass("loading");
                     } else {
-                        $(`.item-collection[data-id="${collections[i].id}"] > .bg-collection > .block-2 > .preview:nth-child(${j})`).attr("style", `--bg-image: url(${SHIKIURL.create(bgs[j])})`).removeClass("loading");
+                        $(`.item-collection[data-id="${collections[i].id}"] > .bg-collection > .block-2 > .preview:nth-child(${j})`).attr("style", `--bg-image: url(${bgs[j]})`).removeClass("loading");
                     }
                 }
             }

@@ -1,0 +1,33 @@
+.voices{
+    .voice-list{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        overflow-x: scroll;
+
+        .line-1, .line-2, .line-3{
+            display: flex;
+            gap: 5px;
+            width: fit-content;
+        }
+
+        .voice{
+            display: flex;
+            flex-direction: column;
+            white-space: nowrap;
+            background: #191C21;
+            color: #A9AAAC;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 9px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+
+            .count{
+                color: #2393F1;
+                font-weight: normal;
+                font-size: 12px;
+            }
+        }
+    }
+}

@@ -1,0 +1,132 @@
+$gap: 5px;
+$br: 5px;
+$pt: 20px;
+$pl: 15px;
+
+.seasons-list {
+    display: flex;
+    flex-direction: column;
+    gap: $gap;
+    position: relative;
+
+    .seasons-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: $gap;
+
+        .season {
+            background: #191C21;
+            color: #FFFFFF;
+            padding: $pt $pl;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            border-radius: $br;
+            overflow: hidden;
+            gap: 3px;
+
+            .title {
+                font-size: 20px;
+                font-weight: bold;
+                z-index: 2;
+            }
+
+            .yeahr {
+                font-size: 13px;
+                color: #2393F1;
+                font-weight: normal;
+                z-index: 2;
+            }
+
+            .bg {
+                position: absolute;
+                inset: 0;
+                z-index: 1;
+
+                .img {
+                    position: absolute;
+                    inset: 0;
+                    z-index: 1;
+
+                    background: var(--img);
+                    background-position: center center;
+                    background-size: cover;
+                    transform: translateX(20%);
+                }
+
+                .grd {
+                    background: linear-gradient(90deg, #191C21 30%, #191c2133);
+                    position: absolute;
+                    inset: 0;
+                    z-index: 1;
+                }
+            }
+
+            &.winter {
+                --img: url('../../images/seasons/winter.webp');
+            }
+
+            &.fall {
+                --img: url('../../images/seasons/autum.webp');
+            }
+
+            &.summer {
+                --img: url('../../images/seasons/summer.webp');
+            }
+
+            &.spring {
+                --img: url('../../images/seasons/spring.webp');
+            }
+        }
+
+        .season:nth-child(2),
+        .season:nth-child(4) {
+            align-items: flex-end;
+
+            .bg {
+                .grd {
+                    background: linear-gradient(270deg, #191C21 30%, rgba(25, 28, 33, 0.2));
+                }
+
+                .img {
+                    transform: none;
+                }
+            }
+        }
+    }
+
+    .btn-wrapper {
+        $size: 50px;
+        position: absolute;
+        top: calc(50% - ($size + 5px) / 2);
+        left: calc(50% - ($size + 5px) / 2);
+        z-index: 3;
+
+        .btn {
+            display: grid;
+            place-items: center;
+            width: $size;
+            aspect-ratio: 1/1;
+            border-radius: 10px;
+            border: 1px solid #F7D149;
+            z-index: 5;
+            position: relative;
+            .ticon{
+                background-color: #F7D149;
+                height: 20px;
+            }
+        }
+
+        &::before{
+            content: '';
+            position: absolute;
+            background: red;
+            inset: -5px;
+            z-index: 0;
+            border-radius: 15px;
+            background: #101318;
+        }
+    }
+}

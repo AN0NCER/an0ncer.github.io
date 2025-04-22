@@ -1,5 +1,4 @@
 import { InitMenu, Menu } from "../menu.js";
-import { SHIKIURL } from "../modules/Settings.js";
 import { Users } from "../modules/ShikiAPI.js";
 import { Main, User } from "../modules/ShikiUSR.js";
 import { OnClearDB } from "./settings/mod_cleardb.js";
@@ -111,6 +110,32 @@ const Parameters = [
                 param: 'syncdata',
                 name: 'Синхронизация',
                 description: 'Синхронизация по озвучке и текущему эпизоде по разным приложениям в Tunime'
+            },
+            {
+                type: 'boolean',
+                param: 'anicaching',
+                name: 'Кэширование',
+                description: 'Временно сохраняет данные аниме для быстрой прогрузки'
+            },
+            {
+                type: 'sel-one',
+                param: 'anicachlive',
+                default: 'mode-0',
+                variation: [
+                    { key: '1', val: '1 День' },
+                    { key: '2', val: '2 Дня' },
+                    { key: '3', val: '3 Дня' },
+                ],
+                name: 'Хранение кэша',
+                description: 'Как долго будет храниться кэш аниме.',
+            },
+            {
+                type: 'button',
+                param: 'cleardb',
+                name: 'Очистить кэш',
+                description: 'Очищает кэш страницы просмотра и поиска',
+                db: "tun-cache",
+                verif: "Очистить полностью кэш аниме?"
             }
         ]
     },
@@ -232,7 +257,9 @@ const Parameters = [
                 type: 'button',
                 param: 'cleardb',
                 name: 'Сбросить загрузчик',
-                description: 'Удаляеть полностью базу данных с загрузками'
+                description: 'Удаляеть полностью базу данных с загрузками',
+                db: "downloader",
+                verif: "Исчезнеть все загруженное аниме в загрузчике"
             }
             // {
             //     type: 'boolean',
@@ -265,7 +292,7 @@ Main((e) => {
         GetWhoami();
         let whoami = User.Storage.Get(User.Storage.keys.whoami);
         if (whoami) {
-            $('.profile-info > img').attr('src', SHIKIURL.create(whoami.image['x160']));
+            $('.profile-info > img').attr('src', whoami.image['x160']);
             $('.profile-name').text(whoami.nickname);
             $('.profile-link').attr('href', whoami.url + '/edit/account');
             $('.profile-link').attr('target', '_blank');
@@ -279,8 +306,8 @@ Main((e) => {
                 return GetWhoami(id);
             }
             User.Storage.Set(response, User.Storage.keys.whoami);
-            if ($('.profile-info > img').attr('src') != SHIKIURL.create(whoami.image['x160'])) {
-                $('.profile-info > img').attr('src', SHIKIURL.create(whoami.image['x160']));
+            if ($('.profile-info > img').attr('src') != response.image['x160']) {
+                $('.profile-info > img').attr('src', response.image['x160']);
             }
             $('.profile-name').text(response.nickname);
             $('.profile-link').attr('href', response.url + '/edit/account');
@@ -290,9 +317,9 @@ Main((e) => {
 
     //Присваевам функцию к кнопке выхода
     $('.btn-logout').click(function () {
-        User.Storage.Clear();
-        setParameter('autologin', false);
-        window.location.replace("/login.html");
+        import("../utils/auth.logout.js").then(({ logout }) => {
+            logout();
+        })
     });
 
     $('.search-filter').on('change keyup paste', function () {
@@ -378,7 +405,7 @@ function _ShowParametrs() {
                     })();
                     break;
                 case "button":
-                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-param="${element.param}" data-type="button" data-tooltip="${element.description}"><button>${element.name}</button></label>`;
+                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-param="${element.param}" data-type="button" data-tooltip="${element.description}"><button data-db="${element.db}" data-verif="${element.verif}">${element.name}</button></label>`;
                 default:
                     break;
             }
@@ -435,8 +462,11 @@ function eventAppStorage() {
 }
 
 function eventButtons() {
-    $(`label[data-param="cleardb"] > button`).on('click', () => {
-        OnClearDB("downloader");
+    $(`label[data-param="cleardb"] > button`).on('click', (e) => {
+        const el = $(e.currentTarget);
+        const db = el.data("db");
+        const verif = el.data("verif");
+        OnClearDB(db, verif);
     });
 }
 

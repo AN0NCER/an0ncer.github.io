@@ -10,6 +10,8 @@ const $PARAMETERS = {
         syncdata: true,
         hidehero: false,
         customstyle: true,
+        anicaching: true,
+        anicachlive: '1',
     },
     watch: {
         dubanime: false,
@@ -25,7 +27,7 @@ const $PARAMETERS = {
     },
     player: {
         quality: '720',
-        standart: false,
+        standart: true,
         full: false,
         alternative_full: false,
         standart_controls: false,

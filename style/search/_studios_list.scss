@@ -1,0 +1,73 @@
+.studios {
+    .studios-list {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        overflow-x: scroll;
+        position: relative;
+
+        .line-1,
+        .line-2,
+        .line-3 {
+            display: flex;
+            gap: 5px;
+            width: fit-content;
+            position: relative;
+        }
+
+        .sentinel {
+            position: absolute;
+            top: 0;
+            right: 200px;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .studio {
+            display: flex;
+            flex-direction: column;
+            white-space: nowrap;
+            background: #191C21;
+            color: #A9AAAC;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 9px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            overflow: clip;
+            
+            .title{
+                pointer-events: none;
+            }
+
+            .count {
+                display: flex;
+                gap: 3px;
+                align-items: center;
+                color: #2393F1;
+                font-weight: normal;
+                font-size: 12px;
+                pointer-events: none;
+
+                .ticon {
+                    transform: translateY(0.2px);
+                    background-color: #2393F1;
+                    height: 10px;
+                    pointer-events: none;
+
+                }
+            }
+
+            &.load{
+                &::after{
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background: rgba(255, 255, 255, 0.2);
+                    backdrop-filter: blur(10px);
+                }
+            }
+        }
+    }
+}

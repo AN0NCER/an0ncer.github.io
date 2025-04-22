@@ -5,6 +5,7 @@
  * Возвращает:  LoadM3U8, LoadM3U8Episode, Skips
  */
 
+import { Kodik } from "../../modules/Kodik.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { Player } from "../player.js";
 import { InitMediaSession } from "./mod_mediasession.js";
@@ -107,11 +108,15 @@ function loadStreamTunime(id, e, kodik_link = undefined) {
     return new Promise(async (resolve) => {
         if (!kodik_link)
             kodik_link = await loadKodikLink(id, e);
-        let tunime_data = await Tunime.Source(kodik_link);
+
+        const user = JSON.parse(localStorage.getItem('shadow-api'));
+        let tunime_data = await Tunime.Source(kodik_link, user);
         resolve(tunime_data);
+
         if ($PARAMETERS.player.skipmoments) {
             new Skips(tunime_data.skips);
         }
+        
         loadFirstSuccessfulImage(tunime_data.thumbinals)
             .then((successfulImage) => {
                 if (typeof successfulImage === "undefined") {
@@ -153,7 +158,7 @@ async function loadFirstSuccessfulImage(urls) {
 
 function loadKodikLink(id, e) {
     return new Promise((resolve) => {
-        kodikApi.search({ id: id, with_material_data: true }, async (res) => {
+        Kodik.Search({ id: id, with_material_data: true }, async (res) => {
             if (res.results.length == 0) {
                 console.log('[plr] - No video');
                 return;
