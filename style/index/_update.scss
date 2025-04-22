@@ -1,13 +1,12 @@
 .app-update {
-    transition: .5s ease-in-out;
+    transition: .3s ease-in-out;
     position: relative;
-    margin-top: 0;
     justify-content: center;
     flex-direction: column;
-    display: none;
+    margin-top: 0;
+    display: block;
     gap: 10px;
     max-height: 0px;
-    padding: 0 0 0 0;
     margin-left: 20px;
     margin-right: 20px;
     background: #191C21;
@@ -60,10 +59,14 @@
     }
 
     &.show {
-        padding: 25px 0 19px 0;
-        margin-top: 20px;
-        max-height: 80px;
+        margin-top: 25px;
+        max-height: 95px;
+        height: 95px;
         display: flex;
+
+        .update-wrapper{
+            height: 59px;
+        }
 
         &::before {
             opacity: 1;
@@ -75,60 +78,79 @@
         }
     }
 
-    .update-content-version {
-        margin-left: 20px;
-        margin-right: 20px;
-        position: relative;
-        z-index: 9;
+    .update-wrapper {        
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        gap: 10px;
         overflow: hidden;
+        height: 0px;
+        transition: .3s ease-in-out;
 
-        .text-update {
-            font-size: 14px;
-            color: #fff;
-            font-family: 'Manrope';
+        .update-content-version {
+            margin-left: 20px;
+            margin-right: 20px;
+            position: relative;
+            z-index: 9;
             display: flex;
-            align-items: center;
-            gap: 5px;
+            justify-content: space-between;
+            overflow: hidden;
 
-            .ticon{
-                height: 12.5px;
-                background-color: #5E6063;
+            .text-update {
+                font-size: 14px;
+                color: #fff;
+                font-family: 'Manrope';
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                .ticon {
+                    height: 12.5px;
+                    background-color: #5E6063;
+                }
+            }
+
+            .to-version {
+                display: flex;
+                gap: 10px;
+                font-size: 12px;
+                align-items: center;
+                text-transform: uppercase;
+                font-weight: bold;
+                font-family: 'Manrope';
+                color: #fff;
+
+                .version {
+                    color: #5E6063;
+                }
             }
         }
 
-        .to-version {
+        .update-progress {
+            position: relative;
+            z-index: 9;
             display: flex;
-            gap: 10px;
+            margin-left: 20px;
+            margin-right: 20px;
+            background: #101318;
+            border-radius: 1px;
+            overflow: hidden;
+
+            .progress {
+                background: #2393F1;
+                width: 0%;
+                height: 3px;
+                transition: .3s ease-in-out;
+            }
+        }
+
+        .update-file {
+            margin: 0 20px;
             font-size: 12px;
-            align-items: center;
-            text-transform: uppercase;
-            font-weight: bold;
-            font-family: 'Manrope';
             color: #fff;
-
-            .version {
-                color: #5E6063;
-            }
-        }
-    }
-
-    .update-progress {
-        position: relative;
-        z-index: 9;
-        display: flex;
-        margin-left: 20px;
-        margin-right: 20px;
-        background: #101318;
-        border-radius: 1px;
-        overflow: hidden;
-
-        .progress {
-            background: #2393F1;
-            width: 0%;
-            height: 3px;
-            transition: .3s ease-in-out;
+            font-family: "Manrope";
+            opacity: .5;
+            position: relative;
+            overflow: hidden;
         }
     }
 }

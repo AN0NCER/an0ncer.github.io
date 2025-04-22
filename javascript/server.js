@@ -41,8 +41,37 @@ const $SERVER = {
     }
 };
 
-if(typeof caches !== 'undefined'){
+if (typeof caches !== 'undefined') {
     $SERVER.cache = caches;
+}
+
+let updateShow = false;
+
+if (['/', '/index.html'].includes(window.location.pathname)) {
+    const broadcast = new BroadcastChannel('tun.update');
+
+    const events = {
+        'NEW_VERSION': (payload) => {
+            console.log(payload);
+        },
+        'CACHE_PROGRESS': ({ file, percent }) => {
+            $('.update-progress > .progress').css({ width: `${percent}%` });
+            $('.update-file').text(file);
+        }
+    };
+
+    broadcast.addEventListener("message", ({ data: { type, payload } }) => {
+        if (events[type]) return events[type](payload);
+    });
+
+    broadcast.addEventListener("message", async ({ data: { type } }) => {
+        if (updateShow) return;
+        $('.app-update').css({ display: 'flex' });
+        const data = await ParseSWVersion();
+        SetUIVersion(data);
+        $('.app-update').addClass('show');
+        updateShow = true;
+    }, { once: true });
 }
 
 (async () => {
@@ -78,23 +107,21 @@ if(typeof caches !== 'undefined'){
         const url = new URL(window.location.href);
         if (url.searchParams.get('update') === 'true' && url.searchParams.get('ver') && url.searchParams.get('hash')) {
             SetUIVersion({ ver: url.searchParams.get('ver'), hash: url.searchParams.get('hash') }, true);
-            $('.update-progress > .progress').css({ width: '80%' });
+            updateShow = true;
+            $('.update-progress > .progress').css({ width: '100%' });
             $('.text-update > span').text('Обновление завершено');
             $('.app-update').css({ display: 'flex' });
             $('.app-update').addClass('show');
 
             setTimeout(() => {
                 $('.app-update').removeClass('show');
+                updateShow = false;
                 const url = new URL(window.location.href);
                 url.searchParams.delete('update');
                 url.searchParams.delete('ver');
                 url.searchParams.delete('hash');
                 window.history.replaceState(null, '', url.toString());
             }, 3000);
-            setTimeout(() => {
-                $('.update-progress > .progress').css({ width: '100%' });
-            }, 100);
-
         }
     }
 
@@ -132,9 +159,6 @@ if(typeof caches !== 'undefined'){
             if (ev.target.state === 'waiting' || ev.target.state === 'installing') {
                 Install();
             }
-            if (ev.target.state === 'activating' || ev.target.state === 'installed') {
-                $('.update-progress > .progress').css({ width: '80%' });
-            }
             if (ev.target.state === 'activated' || ev.target.state === 'redundant') {
                 const url = new URL(window.location.href);
                 url.searchParams.set('update', 'true');
@@ -149,7 +173,7 @@ if(typeof caches !== 'undefined'){
             const data = await ParseSWVersion();
             SetUIVersion(data);
             $('.app-update').addClass('show');
-            $('.update-progress > .progress').css({ width: '50%' });
+            updateShow = true;
             newServer.postMessage({ id: 221 });
         }
     }
@@ -218,8 +242,9 @@ if(typeof caches !== 'undefined'){
             })
         }
     }
+})();
 
-    // Устанавливает версию интерфейса
+// Устанавливает версию интерфейса
     function SetUIVersion(data, reverse = false) {
         let show = false;
         if (reverse) {
@@ -239,12 +264,11 @@ if(typeof caches !== 'undefined'){
                 $('.update-content-version > .to-version > .next').text(data.ver);
             }
         }
-        if($SERVER.version !== data.ver){
+        if ($SERVER.version !== data.ver) {
             show = true;
         }
         localStorage.setItem($SERVER.dialog_key, JSON.stringify({ show, ver: data.ver, hash: data.hash, update: new Date().toJSON() }));
     }
-})();
 
 /**
  * Получает версию с файла sw.js

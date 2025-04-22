@@ -418,15 +418,14 @@ header > .notify-search .notification.dot .ticon.dot {
   }
 }
 .app-update {
-  transition: 0.5s ease-in-out;
+  transition: 0.3s ease-in-out;
   position: relative;
-  margin-top: 0;
   justify-content: center;
   flex-direction: column;
-  display: none;
+  margin-top: 0;
+  display: block;
   gap: 10px;
   max-height: 0px;
-  padding: 0 0 0 0;
   margin-left: 20px;
   margin-right: 20px;
   background: #191C21;
@@ -474,10 +473,13 @@ header > .notify-search .notification.dot .ticon.dot {
   }
 }
 .app-update.show {
-  padding: 25px 0 19px 0;
-  margin-top: 20px;
-  max-height: 80px;
+  margin-top: 25px;
+  max-height: 95px;
+  height: 95px;
   display: flex;
+}
+.app-update.show .update-wrapper {
+  height: 59px;
 }
 .app-update.show::before {
   opacity: 1;
@@ -486,7 +488,15 @@ header > .notify-search .notification.dot .ticon.dot {
   transform: scale(1);
   opacity: 1;
 }
-.app-update .update-content-version {
+.app-update .update-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  height: 0px;
+  transition: 0.3s ease-in-out;
+}
+.app-update .update-wrapper .update-content-version {
   margin-left: 20px;
   margin-right: 20px;
   position: relative;
@@ -495,7 +505,7 @@ header > .notify-search .notification.dot .ticon.dot {
   justify-content: space-between;
   overflow: hidden;
 }
-.app-update .update-content-version .text-update {
+.app-update .update-wrapper .update-content-version .text-update {
   font-size: 14px;
   color: #fff;
   font-family: "Manrope";
@@ -503,11 +513,11 @@ header > .notify-search .notification.dot .ticon.dot {
   align-items: center;
   gap: 5px;
 }
-.app-update .update-content-version .text-update .ticon {
+.app-update .update-wrapper .update-content-version .text-update .ticon {
   height: 12.5px;
   background-color: #5E6063;
 }
-.app-update .update-content-version .to-version {
+.app-update .update-wrapper .update-content-version .to-version {
   display: flex;
   gap: 10px;
   font-size: 12px;
@@ -517,10 +527,10 @@ header > .notify-search .notification.dot .ticon.dot {
   font-family: "Manrope";
   color: #fff;
 }
-.app-update .update-content-version .to-version .version {
+.app-update .update-wrapper .update-content-version .to-version .version {
   color: #5E6063;
 }
-.app-update .update-progress {
+.app-update .update-wrapper .update-progress {
   position: relative;
   z-index: 9;
   display: flex;
@@ -530,11 +540,20 @@ header > .notify-search .notification.dot .ticon.dot {
   border-radius: 1px;
   overflow: hidden;
 }
-.app-update .update-progress .progress {
+.app-update .update-wrapper .update-progress .progress {
   background: #2393F1;
   width: 0%;
   height: 3px;
   transition: 0.3s ease-in-out;
+}
+.app-update .update-wrapper .update-file {
+  margin: 0 20px;
+  font-size: 12px;
+  color: #fff;
+  font-family: "Manrope";
+  opacity: 0.5;
+  position: relative;
+  overflow: hidden;
 }
 
 .swiper-continue {
