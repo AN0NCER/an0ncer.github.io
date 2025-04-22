@@ -109,6 +109,7 @@ if (['/', '/index.html'].includes(window.location.pathname)) {
             SetUIVersion({ ver: url.searchParams.get('ver'), hash: url.searchParams.get('hash') }, true);
             updateShow = true;
             $('.update-progress > .progress').css({ width: '100%' });
+            $('.update-file').text('Установлено.');
             $('.text-update > span').text('Обновление завершено');
             $('.app-update').css({ display: 'flex' });
             $('.app-update').addClass('show');
@@ -169,6 +170,7 @@ if (['/', '/index.html'].includes(window.location.pathname)) {
         }
 
         async function Install() {
+            $('.update-file').text('Запуск загрузки...');
             $('.app-update').css({ display: 'flex' });
             const data = await ParseSWVersion();
             SetUIVersion(data);
