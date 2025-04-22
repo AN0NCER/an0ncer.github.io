@@ -1,5 +1,5 @@
-const version = '2.7.1';
-const hash = '0be8e';
+const version = '2.8.0';
+const hash = '214c4';
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const appShellFilesToCache = [
     // Директория: /images/genres
@@ -28,15 +28,22 @@ const appShellFilesToCache = [
     "/images/icons/logo-x384-o.png",
     "/images/icons/logo-x512-b.png",
     "/images/icons/logo-x512-o.png",
+    // Директория: /images/seasons
+    "/images/seasons/autum.webp",
+    "/images/seasons/spring.webp",
+    "/images/seasons/summer.webp",
+    "/images/seasons/winter.webp",
     // Директория: /images
     "/images/anime-not.png",
     "/images/ava.jpeg",
     "/images/black-bg-player.png",
     "/images/collections.png",
+    "/images/endlist.png",
     "/images/error-trailers.png",
     "/images/icon-web.png",
     "/images/login-icon.png",
     "/images/logo-login.png",
+    "/images/noanime.png",
     "/images/player-icon.png",
     "/images/popup.png",
     "/images/preview-image.png",
@@ -48,11 +55,13 @@ const appShellFilesToCache = [
     "/javascript/library/hls.js",
     "/javascript/library/jqery.min.js",
     "/javascript/library/jsyaml.js",
+    "/javascript/library/md5.wasm.min.js",
     "/javascript/library/rxjs.umd.min.js",
     "/javascript/library/swiper-bundle.min.js",
     // Директория: /javascript/modules
     "/javascript/modules/ActionVerify.js",
     "/javascript/modules/AnimeCard.js",
+    "/javascript/modules/api.jikan.js",
     "/javascript/modules/Collection.js",
     "/javascript/modules/EventTools.js",
     "/javascript/modules/functions.js",
@@ -64,6 +73,7 @@ const appShellFilesToCache = [
     "/javascript/modules/ShikiUSR.js",
     "/javascript/modules/TDatabase.js",
     "/javascript/modules/TDownload.js",
+    "/javascript/modules/tun.cache.js",
     "/javascript/modules/TunimeApi.js",
     "/javascript/modules/Windows.js",
     // Директория: /javascript/pages/downloads
@@ -103,11 +113,17 @@ const appShellFilesToCache = [
     "/javascript/pages/player/mod_stream.js",
     "/javascript/pages/player/mod_ui.js",
     // Директория: /javascript/pages/search
+    "/javascript/pages/search/mod_card.js",
+    "/javascript/pages/search/mod_genres.js",
     "/javascript/pages/search/mod_history.js",
-    "/javascript/pages/search/mod_list.js",
     "/javascript/pages/search/mod_popular.js",
     "/javascript/pages/search/mod_search.js",
-    "/javascript/pages/search/mod_searchState.js",
+    "/javascript/pages/search/mod_seasons.js",
+    "/javascript/pages/search/mod_studios.js",
+    "/javascript/pages/search/mod_voicelist.js",
+    "/javascript/pages/search/mod_w_filter.js",
+    "/javascript/pages/search/mod_w_genres.js",
+    "/javascript/pages/search/mod_w_season.js",
     // Директория: /javascript/pages/settings
     "/javascript/pages/settings/mod_cleardb.js",
     "/javascript/pages/settings/mod_select.js",
@@ -124,14 +140,14 @@ const appShellFilesToCache = [
     "/javascript/pages/user/mod_stats.js",
     "/javascript/pages/user/mod_w_anime.js",
     // Директория: /javascript/pages/watch
+    "/javascript/pages/watch/mod.chronology.js",
+    "/javascript/pages/watch/mod.resource.js",
     "/javascript/pages/watch/mod_collection.js",
     "/javascript/pages/watch/mod_dbanime.js",
     "/javascript/pages/watch/mod_download.js",
-    "/javascript/pages/watch/mod_franchise.js",
     "/javascript/pages/watch/mod_history.js",
     "/javascript/pages/watch/mod_player.js",
     "/javascript/pages/watch/mod_private.js",
-    "/javascript/pages/watch/mod_resource.js",
     "/javascript/pages/watch/mod_scrolling.js",
     "/javascript/pages/watch/mod_transition.js",
     "/javascript/pages/watch/mod_translation.js",
@@ -153,8 +169,10 @@ const appShellFilesToCache = [
     "/javascript/services/dispatcher.js",
     "/javascript/services/installing.js",
     "/javascript/services/update.js",
+    // Директория: /javascript/utils
+    "/javascript/utils/auth.login.js",
+    "/javascript/utils/auth.logout.js",
     // Директория: /javascript
-    "/javascript/kodik.js",
     "/javascript/menu.js",
     "/javascript/parametrs.js",
     "/javascript/server.js",
@@ -197,11 +215,50 @@ const servers = [
     "https://tunime-hujg.onrender.com"
 ];
 
-self.addEventListener('install', async event => {
-    event.waitUntil(caches.open(cacheName).then((cache) => {
-        console.log('[SW]: Caching App Shell');
-        return cache.addAll(appShellFilesToCache);
-    }).catch((err) => { console.log('Не удалось установить файл', err) }));
+self.addEventListener('install', event => {
+    const broadcast = new BroadcastChannel('tun.update');
+    broadcast.postMessage({
+        type: 'NEW_VERSION', payload: {
+            version,
+            hash,
+            cacheName
+        }
+    });
+    event.waitUntil(
+        caches.open(cacheName).then(async (cache) => {
+            console.log('[SW]: Caching App Shell');
+
+            const total = appShellFilesToCache.length;
+            let processed = 0;
+
+            for (let i = 0; i < total; i++) {
+                const file = appShellFilesToCache[i];
+                let success = true;
+                try {
+                    await cache.add(file);
+                } catch (err) {
+                    success = false;
+                }
+
+                processed++;
+                const percent = ((processed / total) * 100).toFixed(2);
+
+                broadcast.postMessage({
+                    type: 'CACHE_PROGRESS', payload: {
+                        total,
+                        processed,
+                        percent,
+                        file,
+                        success
+                    }
+                });
+            }
+
+            console.log('[SW]: Caching complete.');
+        }).catch((err) => {
+            console.error('[SW]: Failed to open cache', err);
+        })
+    );
 
     setTimeout(() => {
         self.skipWaiting();
@@ -252,17 +309,23 @@ self.addEventListener('fetch', event => {
 });
 
 self.addEventListener('message', async event => {
+    const call = {
+        215: async (client) => {
+            client.postMessage(JSON.stringify({ id: 215, val: version }));
+        },
+        221: async (client) => {
+            await self.skipWaiting();
+            client.postMessage(JSON.stringify({ id: 221, val: 'ok' }));
+        },
+        216: async (client) => {
+            client.postMessage(JSON.stringify({ id: 216, val: hash }));
+        },
+        220: async (client) => {
+            client.postMessage(JSON.stringify({ id: 220, val: { ver: version, hash: hash } }));
+        }
+    };
+
     const client = event.source;
-    if (event.data.id === 215) {
-        client.postMessage(JSON.stringify({ id: 215, val: version }));
-    } else if (event.data.id === 221) {
-        await self.skipWaiting();
-        client.postMessage(JSON.stringify({ id: 221, val: 'ok' }));
-    } else if (event.data.id === 216) {
-        const client = event.source;
-        client.postMessage(JSON.stringify({ id: 216, val: hash }));
-    } else if (event.data.id === 220) {
-        const client = event.source;
-        client.postMessage(JSON.stringify({ id: 220, val: { ver: version, hash: hash } }));
-    }
+    const id = event.data.id;
+    if (call[id]) return call[id](client);
 });
