@@ -1,6 +1,6 @@
+import { OAuth } from "../core/main.core.js";
 import { arraysAreEqual, Sleep } from "./functions.js";
-import { Favorites, Users } from "./ShikiAPI.js";
-import { User } from "./ShikiUSR.js";
+import { Favorites, Users } from "./api.shiki.js";
 
 let __collection = undefined;
 
@@ -202,7 +202,7 @@ class Collection {
 
     LoadFavourites() {
         return new Promise((resolve, reject) => {
-            Users.favourites(User.Storage.Get(User.Storage.keys.whoami).id, async (response) => {
+            Users.favourites(OAuth.user.id, async (response) => {
                 if (response.failed && response.status == 429) {
                     await Sleep(1000);
                     return resolve(this.LoadFavourites());

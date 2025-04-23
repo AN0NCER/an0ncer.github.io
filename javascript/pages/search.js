@@ -3,7 +3,7 @@ import { WFilter } from "./search/mod_w_filter.js";
 import { HistoryLoaded, SearchHistory } from "./search/mod_history.js";
 
 import { TInfo, TSearchType, TTSearch } from "./search/mod_search.js";
-import { Main } from "../modules/ShikiUSR.js";
+import { Main } from "../core/main.core.js";
 import { ClearParams } from "../modules/functions.js";
 import { TCache } from "../modules/tun.cache.js";
 

@@ -1,6 +1,6 @@
 import { ShowInfo } from "../../modules/Popup.js";
-import { UserRates } from "../../modules/ShikiAPI.js";
-import { User } from "../../modules/ShikiUSR.js";
+import { UserRates } from "../../modules/api.shiki.js";
+import { OAuth } from "../../core/main.core.js";
 import { Sleep } from "../../modules/functions.js";
 import { AnimeHidePreview, AnimeLoadingPlayer, AnimePausePlayer, AnimePlayPlayer, AnimeShowPreview } from "./mod_trailers_animation.js";
 
@@ -99,7 +99,7 @@ export function SetUserRate(data) {
 
 function UserControl() {
     $('.btn-list').on('click', (e) => {
-        if (User.authorized) {
+        if (OAuth.auth) {
             const btn = $(e.currentTarget);
             const target = btn.attr('data-id');
             if (_selectedTrailers.findIndex(x => x.target_id == target) != -1) {
@@ -125,7 +125,7 @@ function UserControl() {
             }
             $(`.btn-list[data-id="${id}"]`).addClass('selected');
             _selectedTrailers.push({ target_id: res.target_id, id: res.id, user_id: res.user_id });
-        }).POST({ "user_rate": { "status": "planned", "target_id": id, "target_type": "Anime", "user_id": User.Storage.Get('access_whoami').id } });
+        }).POST({ "user_rate": { "status": "planned", "target_id": id, "target_type": "Anime", "user_id": OAuth.user.id } });
     }
 
     function _lRemUserRate(id) {
@@ -300,18 +300,18 @@ function LoadYTPlayer(key) {
     }
 }
 
-function YouTubeGetID(url){
+function YouTubeGetID(url) {
     var ID = '';
-    url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-    if(url[2] !== undefined) {
-      ID = url[2].split(/[^0-9a-z_\-]/i);
-      ID = ID[0];
+    url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    if (url[2] !== undefined) {
+        ID = url[2].split(/[^0-9a-z_\-]/i);
+        ID = ID[0];
     }
     else {
-      ID = url;
+        ID = url;
     }
-      return ID;
-  }
+    return ID;
+}
 
 function GenSlide(res, key) {
     const type = res.anime.kind != "movie" ? "Сериал" : "Фильм";

@@ -1,11 +1,11 @@
+import { OAuth } from "../../core/main.core.js";
 import { Sleep } from "../../modules/functions.js";
-import { Users } from "../../modules/ShikiAPI.js";
-import { User } from "../../modules/ShikiUSR.js";
+import { Users } from "../../modules/api.shiki.js";
 import { $USER, OnUser } from "../user.js";
 
 export function History() {
     OnUser(data => {
-        if ($USER != (JSON.parse(localStorage.getItem(User.Storage.keys.whoami))?.id || undefined))
+        if ($USER != (OAuth.user?.id || undefined))
             return;
         LoadHistory(data.id);
         $(`[id="history"]`).removeClass('hide');

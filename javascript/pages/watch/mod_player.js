@@ -1,4 +1,4 @@
-import { Kodik } from "../../modules/Kodik.js";
+import { Kodik } from "../../modules/api.kodik.js";
 import { AutoScrollEpisodes } from "./mod_scrolling.js";
 import { $ID } from "../watch.js";
 import { watchSequence } from "./mod.chronology.js";

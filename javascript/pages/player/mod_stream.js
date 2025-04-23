@@ -5,7 +5,7 @@
  * Возвращает:  LoadM3U8, LoadM3U8Episode, Skips
  */
 
-import { Kodik } from "../../modules/Kodik.js";
+import { Kodik } from "../../modules/api.kodik.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { Player } from "../player.js";
 import { InitMediaSession } from "./mod_mediasession.js";

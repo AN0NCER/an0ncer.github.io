@@ -1,6 +1,6 @@
-import { Kodik } from "../../modules/Kodik.js";
-import { Messages, Users } from "../../modules/ShikiAPI.js";
-import { User } from "../../modules/ShikiUSR.js";
+import { OAuth } from "../../core/main.core.js";
+import { Kodik } from "../../modules/api.kodik.js";
+import { Messages, Users } from "../../modules/api.shiki.js";
 import { Sleep } from "../../modules/functions.js";
 
 let LOADED = false;
@@ -11,11 +11,11 @@ let PAGE = 1;
 let VOICES = [];
 
 export function LoadNotifycation({ e = () => { }, p = 1 } = {}) {
-    if (!User.authorized || LOADED) {
+    if (!OAuth.auth || LOADED) {
         return;
     }
 
-    USER_ID = User.Storage.Get(User.Storage.keys.whoami).id;
+    USER_ID = OAuth.user.id;
     GetNotifycation((e) => {
         $('.notify-load').addClass('hide');
         $('.notify-content').removeClass('hide');

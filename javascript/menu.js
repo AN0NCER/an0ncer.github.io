@@ -1,4 +1,4 @@
-import { User } from "./modules/ShikiUSR.js";
+import { OAuth } from "./core/main.core.js";
 
 const get_orientation = screen?.orientation ? () => {
     if ($PARAMETERS.menu.menureverse) {
@@ -463,7 +463,7 @@ const IntercatMenu = {
         autologin: {
             type: "parametr",
             disabled: () => {
-                return !User.authorized;
+                return !OAuth.auth;
             },
             value: () => {
                 return $PARAMETERS.autologin;
@@ -477,7 +477,7 @@ const IntercatMenu = {
         logout: {
             type: "method",
             disabled: () => {
-                return !User.authorized;
+                return !OAuth.auth;
             },
             event: () => {
                 import("./utils/auth.logout.js").then(({ logout }) => {

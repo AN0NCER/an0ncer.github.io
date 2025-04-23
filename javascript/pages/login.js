@@ -1,5 +1,5 @@
+import { Main, OAuth } from "../core/main.core.js";
 import { ClearParams } from "../modules/functions.js";
-import { Main, Oauth, User } from "../modules/ShikiUSR.js";
 
 //Слоганы страницы авторизации
 const slogans = [
@@ -22,7 +22,7 @@ ClearParams(['code']);
 
 (async () => {
     //Проверяем если это сработал автологин то делаем редирект на главную страницу т.к. может только от нее сработать AutoLogin
-    if (code && !User.isteste) {
+    if (code && !OAuth.mode === 'test') {
         const { login } = await import("../utils/auth.login.js");
         await login(code);
     }
@@ -75,7 +75,7 @@ function RandomSlogan() {
 function VisualFunctional() {
     //Кнопка авторизации
     $('.btn-login').click(async () => {
-        if (User.isteste) {
+        if (OAuth.mode === 'test') {
             localStorage.removeItem('application_event');
             //Если тестовый режим то запрашиваем код от пользователя
             let code = prompt("Тестовый режим авторизации:");
@@ -84,10 +84,10 @@ function VisualFunctional() {
                 //Проверяем авторизацию и переходим на станицу пользователя
                 await login(code);
             } else {
-                window.open(Oauth.GetUrl(), '_blank').focus();
+                window.open(OAuth.events.genLink(), '_blank').focus();
             }
         } else {
-            window.location.href = Oauth.GetUrl();
+            window.location.href = OAuth.events.genLink();
         }
     });
 

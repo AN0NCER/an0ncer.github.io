@@ -1,9 +1,9 @@
-import { User } from "../../modules/ShikiUSR.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { UserRate } from "./mod_urate.js";
 import { Private } from "./mod_private.js";
 import { IPlayer } from "./mod_player.js";
 import { ASynch } from "./mod_dbanime.js";
+import { OAuth } from "../../core/main.core.js";
 
 const Player = IPlayer.Init();
 
@@ -185,7 +185,7 @@ const WindowScore = {
     },
 
     verif: function () {
-        return User.authorized;
+        return OAuth.auth;
     },
 
     auto_grow: function (dom) {

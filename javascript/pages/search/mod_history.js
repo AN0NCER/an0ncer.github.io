@@ -1,5 +1,5 @@
 import { Sleep } from "../../modules/functions.js";
-import { GraphQl } from "../../modules/ShikiAPI.js";
+import { GraphQl } from "../../modules/api.shiki.js";
 import { IsLogged } from "../search.js";
 import { ACardH } from "./mod_card.js";
 

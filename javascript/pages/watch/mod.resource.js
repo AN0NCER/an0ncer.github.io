@@ -1,7 +1,7 @@
+import { OAuth } from "../../core/main.core.js";
 import { ACard } from "../../modules/AnimeCard.js";
 import { Sleep } from "../../modules/functions.js";
-import { Animes, GraphQl, UserRates } from "../../modules/ShikiAPI.js";
-import { User } from "../../modules/ShikiUSR.js";
+import { Animes, GraphQl, UserRates } from "../../modules/api.shiki.js";
 import { TCache } from "../../modules/tun.cache.js";
 import { $ID } from "../watch.js";
 import { tChronology, tReload } from "./mod.chronology.js";
@@ -155,7 +155,7 @@ export function tLoad(e = () => { }, { logged = false } = {}) {
         if (!logged) {
             return null;
         }
-        const response = await UserRates.list({ "user_id": User.Storage.Get('access_whoami').id, "target_id": $ID, limit: 1, "target_type": "Anime" }).GET(logged);
+        const response = await UserRates.list({ "user_id": OAuth.user.id, "target_id": $ID, limit: 1, "target_type": "Anime" }).GET(logged);
         if (response.failed) {
             if (response.status == 429) {
                 await Sleep(1000);

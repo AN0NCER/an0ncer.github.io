@@ -1,6 +1,6 @@
 import { md5 } from "../../library/md5.wasm.min.js";
 import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
-import { GraphQl } from "../../modules/ShikiAPI.js";
+import { GraphQl } from "../../modules/api.shiki.js";
 import { TCache } from "../../modules/tun.cache.js";
 import { TInfo, TSearchType, TTSearch } from "./mod_search.js";
 

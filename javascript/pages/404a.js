@@ -1,7 +1,7 @@
 import { ACard } from "../modules/AnimeCard.js";
 import { ScrollElementWithMouse, Sleep } from "../modules/functions.js";
-import { Animes } from "../modules/ShikiAPI.js";
-import { Main } from "../modules/ShikiUSR.js";
+import { Animes } from "../modules/api.shiki.js";
+import { Main } from "../core/main.core.js";
 import { ShowUser } from "./index/mod_account.js";
 import { ShowNotifyWindow } from "./index/mod_window.js";
 

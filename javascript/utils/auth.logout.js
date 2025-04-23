@@ -2,7 +2,7 @@ const local = ["anime-db", "user-level"];
 const indexdb = ["tun-cache"];
 
 export async function logout() {
-    (await import("../modules/ShikiUSR.js")).User.Storage.Clear();
+    (await import("../core/main.core.js")).OAuth.events.clear();
 
     try {
         setParameter('autologin', false);

@@ -1,6 +1,5 @@
+import { OAuth, Main } from "../core/main.core.js";
 import { InitMenu, Menu } from "../menu.js";
-import { Users } from "../modules/ShikiAPI.js";
-import { Main, User } from "../modules/ShikiUSR.js";
 import { OnClearDB } from "./settings/mod_cleardb.js";
 import { ShowMoreSelect, ShowSelect } from "./settings/mod_select.js";
 import { ShowStorage, Storage } from "./settings/mod_storage.js";
@@ -290,7 +289,7 @@ Main((e) => {
     InitMenu();
     if (e) {
         GetWhoami();
-        let whoami = User.Storage.Get(User.Storage.keys.whoami);
+        let whoami = OAuth.user;
         if (whoami) {
             $('.profile-info > img').attr('src', whoami.image['x160']);
             $('.profile-name').text(whoami.nickname);
@@ -300,19 +299,14 @@ Main((e) => {
     }
 
     function GetWhoami() {
-        Users.whoami(async (response) => {
-            if (response.failed && response.status == 429) {
-                await sleep(1000);
-                return GetWhoami(id);
-            }
-            User.Storage.Set(response, User.Storage.keys.whoami);
+        OAuth.requests.getWhoami().then(async (response) => {
             if ($('.profile-info > img').attr('src') != response.image['x160']) {
                 $('.profile-info > img').attr('src', response.image['x160']);
             }
             $('.profile-name').text(response.nickname);
             $('.profile-link').attr('href', response.url + '/edit/account');
             $('.profile-link').attr('target', '_blank');
-        }).GET();
+        });
     }
 
     //Присваевам функцию к кнопке выхода

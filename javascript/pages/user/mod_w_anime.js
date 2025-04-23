@@ -1,6 +1,6 @@
 import { ACard } from "../../modules/AnimeCard.js";
 import { Sleep } from "../../modules/functions.js";
-import { GraphQl } from "../../modules/ShikiAPI.js";
+import { GraphQl } from "../../modules/api.shiki.js";
 import { WindowManagement } from "../../modules/Windows.js"
 
 const fetchAnime = function () {

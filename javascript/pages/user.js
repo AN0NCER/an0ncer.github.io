@@ -1,10 +1,10 @@
 import { InitMenu } from "../menu.js";
-import { Main, User } from "../modules/ShikiUSR.js";
-import { Friends, Users } from "../modules/ShikiAPI.js";
+import { Main, OAuth } from "../core/main.core.js";
+import { Friends, Users } from "../modules/api.shiki.js";
 import { ScrollElementWithMouse, Sleep } from "../modules/functions.js";
 import { InitAchivements } from "./user/mod_achivements.js";
 import { InitLeve } from "./user/mod_level.js";
-import { GetIdLoadUser, LoadScreen, UserData } from "./user/mod_load.js";
+import { GetIdLoadUser, LoadScreen } from "./user/mod_load.js";
 import { Franchises } from "./user/mod_franchises.js";
 import { Stats } from "./user/mod_stats.js";
 import { Favourites } from "./user/mod_favorites.js";
@@ -57,7 +57,7 @@ Main((e) => {
             InitUser(value);
             ShowHeader(value);
 
-            if (value.id === (JSON.parse(localStorage.getItem(User.Storage.keys.whoami))?.id || undefined)) {
+            if (value.id === (OAuth.user?.id || undefined)) {
                 $(`.btn#edit-user`).attr('href', `https://shikimori.one/${value.nickname}/edit/account`);
                 $(`.btn#edit-user`).removeClass('hide');
             } else if (value.in_friends !== undefined) {

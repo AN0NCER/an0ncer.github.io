@@ -1,8 +1,8 @@
 import { InitMenu } from "../menu.js";
 import { ShowUser } from "./index/mod_account.js";
-import { UserRates } from "../modules/ShikiAPI.js";
+import { UserRates } from "../modules/api.shiki.js";
 import { GitHubRel } from "./index/mod_github.js";
-import { Main, User } from "../modules/ShikiUSR.js";
+import { Main, OAuth } from "../core/main.core.js";
 import { SetUserRate } from "./index/mod_trailers.js";
 import { GetHistoryWatch } from "./index/mod_history_watch.js";
 import { ScrollElementWithMouse, Sleep } from "../modules/functions.js";
@@ -30,10 +30,10 @@ ScrollElementWithMouse('.section-update');
 
 function LoadUserRate() {
     AnimeLoaded(() => {
-        if (!User.authorized) {
+        if (!OAuth.auth) {
             return;
         }
-        let user_id = User.Storage.Get(User.Storage.keys.whoami).id;
+        let user_id = OAuth.user.id;
         UserRates.list({ user_id }, async (response) => {
             if (response.failed) {
                 if (response.status == 429) {

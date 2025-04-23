@@ -1,5 +1,5 @@
 import { Sleep } from "../../modules/functions.js";
-import { Users } from "../../modules/ShikiAPI.js";
+import { Users } from "../../modules/api.shiki.js";
 import { OnUser } from "../user.js";
 
 export function InitFriends() {

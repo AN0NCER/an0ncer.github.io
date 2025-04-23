@@ -1,4 +1,4 @@
-import { User } from "../../modules/ShikiUSR.js";
+import { OAuth } from "../../core/main.core.js";
 import { $USER } from "../user.js";
 import { LoadYaml, OnAchivements } from "./mod_achivements.js";
 import { UserData } from "./mod_load.js";
@@ -13,9 +13,9 @@ export async function InitLeve() {
         content: "Добро пожаловать!"
     };
 
-    // console.log(User.authorized, UserData, $USER);
+    // console.log(OAuth.auth, UserData, $USER);
 
-    if (User.authorized && UserData && UserData.id === $USER) {
+    if (OAuth.auth && UserData && UserData.id === $USER) {
         const data = JSON.parse(localStorage.getItem('user-level')) || undefined;
         // console.log(data);
         if (data !== undefined)
@@ -67,7 +67,7 @@ export async function InitLeve() {
                 complete: function () {
                     $(`.level-details > .level-content`).text(Levels[index].metadata.title_ru);
                     Data.content = Levels[index].metadata.title_ru;
-                    if (User.authorized && UserData && UserData.id === $USER) {
+                    if (OAuth.auth && UserData && UserData.id === $USER) {
                         localStorage.setItem('user-level', JSON.stringify(Data));
                     }
                 }

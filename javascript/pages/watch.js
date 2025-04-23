@@ -1,4 +1,4 @@
-import { Main } from "../modules/ShikiUSR.js";
+import { Main } from "../core/main.core.js";
 import { LTransition } from "./watch/mod_transition.js";
 import { tLoad } from "./watch/mod.resource.js";
 import { IPlayer } from "./watch/mod_player.js";

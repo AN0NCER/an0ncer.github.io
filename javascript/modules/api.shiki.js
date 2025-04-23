@@ -1,19 +1,15 @@
-import { ObjectToQuery, Fetch } from "./functions.js";
-import { Headers } from "./header.js";
-import { SHIKIURL } from "./Settings.js";
-import { User } from "./ShikiUSR.js"
+import { Fetch, Headers, OAuth, sUrl } from "../core/main.core.js";
+import { ObjectToQuery } from "./functions.js";
 
 export const Achievements = {
-    base_url: () => { return `${SHIKIURL.url}/api/achievements` },
+    base_url: () => { return `${sUrl}/api/achievements` },
     achievements: function (query = {}, event = () => { }) {
         query = ObjectToQuery(query);
         const url = this.base_url() + query;
-        const request = Fetch("GET", url);
+        const request = Fetch.get(url);
         return {
             GET: async () => {
-                const method = "GET";
-                request.headers = Headers.base();
-                request.method = method;
+                request.headers = Headers.base;
                 const response = await request.fetch();
                 event(response);
                 return response;
@@ -23,7 +19,7 @@ export const Achievements = {
 }
 
 export const Animes = {
-    base_url: () => { return `${SHIKIURL.url}/api/animes` },
+    base_url: () => { return `${sUrl}/api/animes` },
     list: function (query = {}, event = () => { }) {
         query = ObjectToQuery(query);
         const url = this.base_url() + query;
@@ -32,11 +28,11 @@ export const Animes = {
 
     show: function (id, event = () => { }) {
         const url = this.base_url() + "/" + id;
-        const request = Fetch("GET", url, Headers.base());
+        const request = Fetch.get(url, Headers.base);
         return {
             GET: async (logged = false) => {
                 if (logged) {
-                    request.setHeaders(Headers.bearer());
+                    request.headers = Headers.bearer;
                 }
                 const response = await request.fetch();
                 event(response);
@@ -82,14 +78,14 @@ export const Animes = {
 };
 
 export const Appear = {
-    base_url: () => { return `${SHIKIURL.url}/api/appears` },
+    base_url: () => { return `${sUrl}/api/appears` },
     appears: function (id, event = () => { }) {
         const url = this.base_url() + "/" + id;
-        const request = Fetch("POST", url, Headers.bearer());
+        const request = Fetch.post(url, {}, Headers.bearer);
         return {
             POST: async (body) => {
                 request.setBody(body);
-                request.setHeaders(Headers.bearer());
+                request.headers = Headers.bearer;
                 const response = await request.fetch();
                 event(response);
                 return response;
@@ -99,10 +95,10 @@ export const Appear = {
 };
 
 export const Friends = {
-    base_url: () => { return `${SHIKIURL.url}/api/friends` },
+    base_url: () => { return `${sUrl}/api/friends` },
     friends: function (id, event = () => { }) {
         const url = this.base_url() + "/" + id;
-        const request = Fetch("POST", url, Headers.bearer());
+        const request = Fetch.post(url, {}, Headers.bearer);
         return {
             POST: async () => {
                 const response = await request.fetch();
@@ -120,7 +116,7 @@ export const Friends = {
 }
 
 export const Favorites = {
-    base_url: () => { return `${SHIKIURL.url}/api/favorites` },
+    base_url: () => { return `${sUrl}/api/favorites` },
     /**
      * @param {"Anime" | "Manga" | "Ranobe" | "Character"} type - Тип избранного
      * @param {number} id - ID избранного
@@ -128,7 +124,7 @@ export const Favorites = {
      */
     favorites: function (type, id, event = () => { }) {
         let url = this.base_url() + "/" + type + "/" + id;
-        const request = Fetch("POST", url, Headers.bearer());
+        const request = Fetch.post(url, {}, Headers.bearer);
         return {
             POST: async () => {
                 const response = await request.fetch();
@@ -146,7 +142,7 @@ export const Favorites = {
 }
 
 export const Users = {
-    base_url: () => { return `${SHIKIURL.url}/api/users` },
+    base_url: () => { return `${sUrl}/api/users` },
     list: function (query = {}, event = () => { }) {
         query = ObjectToQuery(query);
         const url = this.base_url() + query;
@@ -156,11 +152,11 @@ export const Users = {
     show: function (id, query = {}, event = () => { }) {
         query = ObjectToQuery(query);
         let url = this.base_url() + "/" + id + query;
-        const request = Fetch("GET", url, Headers.base());
+        const request = Fetch.get(url, Headers.base);
         return {
             GET: async (logged = false) => {
                 if (logged) {
-                    request.setHeaders(Headers.bearer());
+                    request.headers = Headers.bearer;
                 }
                 const response = await request.fetch();
                 event(response);
@@ -175,9 +171,9 @@ export const Users = {
     },
 
     whoami: function (event = () => { }) {
-        if (!User.Authorizate) return "No Authorizate";
+        if (!OAuth.auth) return "No Authorizate";
         const url = this.base_url() + "/whoami";
-        const request = Fetch("GET", url, Headers.bearer());
+        const request = Fetch.get(url, Headers.bearer);
         return {
             GET: async () => {
                 const response = await request.fetch();
@@ -212,7 +208,7 @@ export const Users = {
     messages: function (id, query = { type: "notifications" }, event = () => { }) {
         query = ObjectToQuery(query);
         const url = this.base_url() + "/" + id + "/messages" + query;
-        const request = Fetch("GET", url, Headers.bearer());
+        const request = Fetch.get(url, Headers.bearer);
         return {
             GET: async () => {
                 const response = await request.fetch();
@@ -224,7 +220,7 @@ export const Users = {
 
     unread_messages: function (id, event = () => { }) {
         const url = this.base_url() + "/" + id + "/unread_messages";
-        const request = Fetch("GET", url, Headers.bearer());
+        const request = Fetch.get(url, Headers.bearer);
         return {
             GET: async () => {
                 const response = await request.fetch();
@@ -247,14 +243,14 @@ export const Users = {
 };
 
 export const UserRates = {
-    base_url: () => { return `${SHIKIURL.url}/api/v2/user_rates` },
+    base_url: () => { return `${sUrl}/api/v2/user_rates` },
 
     show: function (id, event = () => { }) {
         const url = this.base_url() + "/" + id;
-        const request = Fetch("DELETE", url, Headers.bearer());
+        const request = Fetch.delete(url, Headers.bearer);
         return {
             DELETE: async () => {
-                request.setHeaders(Headers.bearer());
+                request.headers = Headers.bearer;
                 const response = await request.fetch();
                 event(response);
                 return response;
@@ -262,7 +258,7 @@ export const UserRates = {
 
             PATCH: async (body) => {
                 request.setMethod("PATCH");
-                request.setHeaders(Headers.bearer());
+                request.headers = Headers.bearer;
                 request.setBody(body);
                 const response = await request.fetch();
                 event(response);
@@ -271,7 +267,7 @@ export const UserRates = {
 
             GET: async () => {
                 request.setMethod("GET");
-                request.setHeaders(Headers.bearer());
+                request.headers = Headers.bearer;
                 const response = await request.fetch();
                 event(response);
                 return response;
@@ -282,11 +278,11 @@ export const UserRates = {
     list: function (query = {}, event = () => { }) {
         query = ObjectToQuery(query);
         const url = this.base_url() + query;
-        const request = Fetch("GET", url, Headers.base());
+        const request = Fetch.get(url, Headers.base);
         return {
             GET: async (logged = false) => {
                 if (logged) {
-                    request.setHeaders(Headers.bearer());
+                    request.headers = Headers.bearer;
                 }
                 const response = await request.fetch();
                 event(response);
@@ -294,7 +290,7 @@ export const UserRates = {
             },
             POST: async (body = undefined) => {
                 request.setMethod("POST");
-                request.setHeaders(Headers.bearer());
+                request.headers = Headers.bearer;
                 request.setBody(body);
                 const response = await request.fetch();
                 event(response);
@@ -305,7 +301,7 @@ export const UserRates = {
 };
 
 export const Genres = {
-    base_url: () => { return `${SHIKIURL.url}/api/genres` },
+    base_url: () => { return `${sUrl}/api/genres` },
 
     list: function (event = () => { }) {
         const url = this.base_url();
@@ -314,11 +310,11 @@ export const Genres = {
 }
 
 export const Messages = {
-    base_url: () => { return `${SHIKIURL.url}/api/messages` },
+    base_url: () => { return `${sUrl}/api/messages` },
 
     mark_read: function (event = () => { }) {
         const url = this.base_url() + '/mark_read';
-        const request = Fetch("POST", url, Headers.bearer());
+        const request = Fetch.post(url, {}, Headers.bearer);
         return {
             POST: async (body = undefined) => {
                 request.setBody(body);
@@ -331,7 +327,7 @@ export const Messages = {
 
     delete: function (id, event = () => { }) {
         const url = this.base_url() + '/' + id;
-        const request = Fetch("DELETE", url, Headers.bearer());
+        const request = Fetch.delete(url, Headers.bearer);
         return {
             DELETE: async () => {
                 const response = await request.fetch();
@@ -343,11 +339,11 @@ export const Messages = {
 }
 
 export const Styles = {
-    base_url: () => { return `${SHIKIURL.url}/api/styles` },
+    base_url: () => { return `${sUrl}/api/styles` },
 
     show: function (id, event = () => { }) {
         const url = this.base_url() + '/' + id;
-        const request = Fetch("GET", url, Headers.base());
+        const request = Fetch.get(url, Headers.base);
         return {
             GET: async () => {
                 const response = await request.fetch();
@@ -356,7 +352,7 @@ export const Styles = {
             },
             PATCH: async (body) => {
                 request.setMethod("PATCH");
-                request.setHeaders(Headers.bearer());
+                request.headers = Headers.bearer;
                 request.setBody(body);
                 const response = await request.fetch();
                 event(response);
@@ -364,7 +360,7 @@ export const Styles = {
             },
             PUT: async (body) => {
                 request.setMethod("PUT");
-                request.setHeaders(Headers.bearer());
+                request.headers = Headers.bearer;
                 request.setBody(body);
                 const response = await request.fetch();
                 event(response);
@@ -375,16 +371,16 @@ export const Styles = {
 }
 
 export const GraphQl = {
-    base_url: () => { return `${SHIKIURL.url}/api/graphql` },
+    base_url: () => { return `${sUrl}/api/graphql` },
 
     animes: function (arg = {}, event = () => { }, signal) {
         const url = this.base_url();
-        const request = Fetch("POST", url, Headers.base());
+        const request = Fetch.post(url, {}, Headers.base);
         return {
             POST: async (body = [], logged = false) => {
                 body = BodyGraphQl("animes", arg, body);
                 if (logged)
-                    request.setHeaders(Headers.bearer());
+                    request.headers = Headers.bearer;
                 request.setBody(body);
                 const response = await request.fetch(signal);
                 event(response);
@@ -395,7 +391,7 @@ export const GraphQl = {
 
     user_rate: function (arg = {}, event = () => { }, signal) {
         const url = this.base_url();
-        const request = Fetch("POST", url, Headers.bearer());
+        const request = Fetch.post(url, {}, Headers.bearer);
         return {
             POST: async (body = []) => {
                 body = BodyGraphQl("userRates", arg, body);
@@ -409,7 +405,7 @@ export const GraphQl = {
 
     genres: function (arg = {}, event = () => { }, signal) {
         const url = this.base_url();
-        const request = Fetch("POST", url, Headers.base());
+        const request = Fetch.post(url, {}, Headers.base);
         return {
             POST: async (body = []) => {
                 body = BodyGraphQl("genres", arg, body);
@@ -454,7 +450,7 @@ function BodyGraphQl(prof, arg = {}, body = []) {
 }
 
 function StandartIDGET(url, event) {
-    const request = Fetch("GET", url, Headers.base());
+    const request = Fetch.get(url, Headers.base);
     return {
         GET: async () => {
             const response = await request.fetch();

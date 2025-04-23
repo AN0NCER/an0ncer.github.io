@@ -4,7 +4,7 @@
  */
 
 import { Sleep } from "../../modules/functions.js";
-import { Achievements } from "../../modules/ShikiAPI.js";
+import { Achievements } from "../../modules/api.shiki.js";
 
 let Loaded = false; // Были ли загружены очивки
 let Callbacks = []; //Функция возврата Ачивок

@@ -1,5 +1,6 @@
 //(Experemental)
-import { Animes } from "../../modules/ShikiAPI.js";
+
+import { Animes } from "../../modules/api.shiki.js";
 
 const debug = true;
 

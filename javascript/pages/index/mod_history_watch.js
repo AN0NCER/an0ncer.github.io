@@ -1,5 +1,4 @@
 import { SHIKIURL } from "../../modules/Settings.js";
-import { User } from "../../modules/ShikiUSR.js";
 
 //Слайдер для блока продолжение просмотра
 new Swiper('.swiper-continue', {
@@ -28,7 +27,7 @@ new Swiper('.swiper-continue', {
 
 //Функция для загрузки истории просмотра пользователя
 export function GetHistoryWatch() {
-    let last_watch = User.Storage.Get('last-watch');
+    let last_watch = JSON.parse(localStorage.getItem('last-watch'));
 
     //Для старых версий проверям тип обьекта
     if (Object.prototype.toString.call(last_watch) == '[object Object]') {

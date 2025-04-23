@@ -1,6 +1,6 @@
 import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
 import { ACard } from "../../modules/AnimeCard.js";
-import { GraphQl } from "../../modules/ShikiAPI.js";
+import { GraphQl } from "../../modules/api.shiki.js";
 import { Tunime } from "../../modules/TunimeApi.js";
 import { Jikan } from "../../modules/api.jikan.js";
 import { TCache } from "../../modules/tun.cache.js";

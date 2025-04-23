@@ -1,7 +1,7 @@
 import Collection from "../../modules/Collection.js";
 import { Sleep } from "../../modules/functions.js";
 import { ShowInfo } from "../../modules/Popup.js";
-import { GraphQl } from "../../modules/ShikiAPI.js";
+import { GraphQl } from "../../modules/api.shiki.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { HCollection } from "./mod_html.js";
 import { AnimeWindow } from "./mod_w_anime.js";

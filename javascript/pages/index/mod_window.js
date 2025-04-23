@@ -1,4 +1,4 @@
-import { User } from "../../modules/ShikiUSR.js";
+import { OAuth } from "../../core/main.core.js";
 import { WindowManagement } from "../../modules/Windows.js"
 import { LoadNotifycation } from "./mod_notify.js";
 
@@ -33,7 +33,7 @@ const WindowNotify = {
             });
     },
     hide: () => { },
-    verif: () => { return User.authorized; }
+    verif: () => { return OAuth.auth; }
 }
 
 const _windowNotify = new WindowManagement(WindowNotify, '.window-notify');

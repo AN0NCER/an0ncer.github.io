@@ -1,6 +1,6 @@
 import { ACard } from "../../modules/AnimeCard.js";
 import { arraysAreEqual, Sleep } from "../../modules/functions.js";
-import { GraphQl } from "../../modules/ShikiAPI.js";
+import { GraphQl } from "../../modules/api.shiki.js";
 import { PullToClose, WindowManagement } from "../../modules/Windows.js";
 
 class Anime {

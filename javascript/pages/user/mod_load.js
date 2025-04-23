@@ -1,6 +1,6 @@
+import { OAuth } from "../../core/main.core.js";
 import { Sleep } from "../../modules/functions.js";
-import { Users } from "../../modules/ShikiAPI.js";
-import { User } from "../../modules/ShikiUSR.js";
+import { Users } from "../../modules/api.shiki.js";
 import { $USER } from "../user.js";
 
 /**@type {{avatar:string, birth_on:null, full_years:number, id:number, image:{ x160:string, x148:string, x80:string, x16:string, x32:string, x48:string, x64:string }, last_online_at:string, locale:string, name:null, nickname:string, sex:string, url:string, website: string} | undefined} */
@@ -12,11 +12,10 @@ export let UserData = undefined;
  */
 export async function GetIdLoadUser() {
     return new Promise((resolve) => {
-        if ($USER === null && User.authorized) {
-            Whoami().then((value) => {
+        if ($USER === null && OAuth.auth) {
+            OAuth.requests.getWhoami().then((value) => {
                 if (value !== undefined) {
                     UserData = value;
-                    localStorage.setItem(User.Storage.keys.whoami, JSON.stringify(UserData));
                     return resolve(value.id);
                 }
             });

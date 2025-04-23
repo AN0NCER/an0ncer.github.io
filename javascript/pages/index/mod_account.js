@@ -1,7 +1,7 @@
-import { Users } from "../../modules/ShikiAPI.js";
-import { Oauth, User } from "../../modules/ShikiUSR.js";
+import { Users } from "../../modules/api.shiki.js";
 import { Sleep } from "../../modules/functions.js";
 import { AnimeLoaded } from "./mod_animes.js";
+import { OAuth } from "../../core/main.core.js";
 
 /**
  * Отображение авторизованого пользователя
@@ -14,7 +14,7 @@ export function ShowUser(looged = false) {
         return;
     }
 
-    let data = User.Storage.Get(User.Storage.keys.whoami);
+    let data = OAuth.user;
 
     $('.image-profile > img').attr('src', data.avatar);
     $('.name > b').text(data.nickname);
@@ -35,7 +35,7 @@ function userNotification(id) {
                 }
                 return;
             }
-            
+
             //Смотрим только на количество notifications
             let count = response.messages + response.news + response.notifications;
 
@@ -51,16 +51,16 @@ function userNotification(id) {
  */
 function autoLogin() {
     //Проверяем если пользователь не авторизирован, и то что у пользователя включена автоматический вход
-    if (!User.authorized && $PARAMETERS.autologin && localStorage.getItem('application_event') != "autologin") {
+    if (!OAuth.auth && $PARAMETERS.autologin && localStorage.getItem('application_event') != "autologin") {
         //Нужно будет создать в localStorage ячейку c указанием текущим событием программы
         localStorage.setItem('application_event', "autologin");
         //Для тестового режима своя страничка авторизации
-        if (User.isteste) {
+        if (OAuth.mode === 'test') {
             return window.location.href = "/login.html";
         }
 
         //Пробуем авторизоваться
-        return window.location.href = Oauth.GetUrl();
+        return window.location.href = OAuth.events.genLink();
     }
 }
 
@@ -71,7 +71,7 @@ function getPosition() {
     fetch('https://api.sypexgeo.net/json/').then(async (response) => {
         const data = await response.json();
         let country = data.country.name_en;
-        if(data.city?.name_en){
+        if (data.city?.name_en) {
             country += `, ${data.city.name_en}`;
         }
         $('.position > span').text(country);
