@@ -1,6 +1,6 @@
 const $PARAMETERS = {
     censored: true,
-    autologin: false,
+    autologin: true,
     menu: {
         menuver: true,
         menustyle: 'mode-0',
