@@ -1171,7 +1171,7 @@ export class TDAnime {
             id: parseInt(voice.id),
             name: voice.name
         };
-        this.img = '/images/anime-not.png';
+        this.img = '/images/img.404a.webp';
     }
 
     /**
