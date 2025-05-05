@@ -319,5 +319,5 @@ function GenSlide(res, key) {
 }
 
 function GenErrorSlide() {
-    return `<div class="swiper-slide error-slide"><div class="wrapper-error"><img src="./images/error-trailers.png" alt="Ошибка загрузки трейлеров"><div class="wrapper-content"><div class="content-info"><div class="title-error">Ошибка загрузки<br />трейлеров</div><div class="info-error">помоги нам решить проблему</div></div><div class="content-reload"><div class="btn-reolad"><div class="ticon i-rotate-right"></div></div></div></div></div></div>`
+    return `<div class="swiper-slide error-slide"><div class="wrapper-error"><img src="./images/error-trailers.webp" alt="Ошибка загрузки трейлеров"><div class="wrapper-content"><div class="content-info"><div class="title-error">Ошибка загрузки<br />трейлеров</div><div class="info-error">помоги нам решить проблему</div></div><div class="content-reload"><div class="btn-reolad"><div class="ticon i-rotate-right"></div></div></div></div></div></div>`
 }
