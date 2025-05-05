@@ -435,7 +435,7 @@ header > .notify-search .notification.dot .ticon.dot {
   content: "";
   top: -22px;
   right: 60px;
-  background-image: url(../../images/popup.png);
+  background-image: url(../../images/popup.webp);
   width: 26px;
   height: 26px;
   position: absolute;

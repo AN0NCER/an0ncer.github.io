@@ -39,6 +39,6 @@ export async function ShowInfo(message, id, z = 11) {
 }
 
 function genHtml({ menu = "visible", text, id, z } = {}) {
-    const html = `<div class="popup unselectable popup-menu-${menu} popup-id-${id}" style="--z:${z};"><div class="popup-content">${text}<img src="/images/popup.png" /></div></div>`;
+    const html = `<div class="popup unselectable popup-menu-${menu} popup-id-${id}" style="--z:${z};"><div class="popup-content">${text}<img src="/images/popup.webp" /></div></div>`;
     return html;
 }
