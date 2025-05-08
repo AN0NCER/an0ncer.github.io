@@ -1,5 +1,6 @@
 import { Main, OAuth } from "../core/main.core.js";
 import { ClearParams } from "../modules/functions.js";
+import { createTimeline } from "../library/anime.esm.min.js";
 
 //Слоганы страницы авторизации
 const slogans = [
@@ -13,7 +14,7 @@ const slogans = [
     "С Tunime ты всегда на шаг впереди в мире аниме!",
     "В Tunime ты найдешь аниме для любого настроения и вкуса!",
     "Наслаждайся аниме без ограничений с Tunime!",
-    "Tunime - где аниме становится частью твоей жизни!"
+    "Tunime ведёт вперёд — где фантазия живёт и ждёт."
 ];
 
 const code = new URLSearchParams(window.location.search).get('code');
@@ -31,50 +32,37 @@ ClearParams(['code']);
         //Если пользователь авторизирован редирект на страничку с пользователем
         if (e) return window.location.href = "/user.html";
 
-        $('.slogan').text(RandomSlogan());
+        Events();
         Animate();
-        VisualFunctional();
     });
 })();
 
-/**
- * Анимация загрузки приложения
- */
 function Animate() {
-    //Разбиваем текст на буквы для анимации
-    var textWrapper = document.querySelector('.animation');
-    textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-    //Аниммируем сначало появление текста а после прячим span.loading
-    anime.timeline({ loop: false, complete: () => { $('.loading').css('display', 'none'); } })
-        .add({
-            targets: '.animation .letter',
-            translateX: [40, 0],
-            translateZ: 0,
-            opacity: [0, 1],
-            easing: "easeOutExpo",
-            duration: 1500,
-            delay: (el, i) => 500 + 30 * i,
-
-        })
-        .add({
-            targets: '.loading',
-            opacity: 0,
-            easing: 'easeInOutQuad',
-            duration: 1000
-        });
+    createTimeline({
+        defaults: {
+            loop: false,
+        }
+    }).add('.animation .letter', {
+        x: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 800,
+        ease: 'inOutQuart',
+        delay: (el, i) => 500 + 30 * i,
+        onComplete: () => { $('.loading').css({ 'pointer-events': 'none' }) }
+    }).add('.loading', {
+        opacity: 0,
+        duration: 1000,
+        delay: 800,
+        ease: 'inOutQuart',
+        onComplete: () => { $('.loading').remove() }
+    });
 }
 
-/**
- * Получить случайный слоган из списка
- * @returns {String} - возвращает случайный слоган для Tunime
- */
-function RandomSlogan() {
-    return slogans[Math.floor(Math.random() * slogans.length)];
-}
+function Events() {
+    $('.slogan').text(RandomSlogan());
 
-function VisualFunctional() {
-    //Кнопка авторизации
-    $('.btn-login').click(async () => {
+    $('.btn-login').on('click', async () => {
         if (OAuth.mode === 'test') {
             localStorage.removeItem('application_event');
             //Если тестовый режим то запрашиваем код от пользователя
@@ -91,21 +79,19 @@ function VisualFunctional() {
         }
     });
 
-    //Кнопка настроек
-    $('.btn.mute').click(async () => {
-        window.location.href = "/settings.html";
-    });
-
-    //Кнопка возврата на главную страницу
-    $('.btn.back').click(async () => {
+    $('.btn-back, .btn-skip').on('click', async () => {
         window.location.href = "/index.html";
     });
 
-    //Checkbox автоматической авторизации
-    $('input[type="checkbox"]').change(function () {
-        setParameter('autologin', this.checked);
+    $('.btn-settings').on('click', async () => {
+        window.location.href = "/settings.html";
     });
+}
 
-    //Устанавливаем checkbox по параметру
-    $('input[type="checkbox"]').prop('checked', $PARAMETERS.autologin);
+/**
+ * Получить случайный слоган из списка
+ * @returns {String} - возвращает случайный слоган для Tunime
+ */
+function RandomSlogan() {
+    return slogans[Math.floor(Math.random() * slogans.length)];
 }
