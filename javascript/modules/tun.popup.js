@@ -1,9 +1,28 @@
-import { createTimeline } from "../library/anime.esm.min.js";
+import { createTimeline, utils } from "../library/anime.esm.min.js";
 import { Menu } from "../menu.js";
 
 /**@type {[Popup]} */
 const STACK = [];
 let globalComponentId = 0;
+
+const ORIENTATIONS = {
+    LANDSCAPE: ["90", "270"],
+    PORTRAIT: ["0", "180"]
+};
+
+const POSITIONS = {
+    PORTRAIT_START: -60,
+    LANDSCAPE_START: -120
+};
+
+const TIMING = {
+    SHOW_DURATION: 600,
+    DISPLAY_DELAY: 3000,
+    HIDE_DURATION: 1000,
+    UPDATE_SHAKE_DURATION: 250
+};
+
+const BOTTOM_OFFSET = 10;
 
 class state {
     static get waiting() { return 1; }
@@ -14,92 +33,185 @@ class state {
 
 export class Popup {
     constructor(id, msg, pos = 11) {
-        const index = STACK.findIndex(x => x.data.id === id && x.data.msg === msg && x.state !== state.complete);
-        if (index !== -1) {
-            if (STACK[index].state === state.process) {
-                return STACK[index].update();
-            }
-            return;
+        const existingPopup = this.#findExistingPopup(id, msg);
+        if (existingPopup) {
+            return existingPopup.state === state.process ? existingPopup.update() : undefined;
         }
 
+        this.#initialize(id, msg, pos);
+        this.#addToStack();
+    }
+
+    #findExistingPopup(id, msg) {
+        return STACK.find(x => 
+            x.data.id === id && 
+            x.data.msg === msg && 
+            x.state !== state.complete
+        );
+    }
+
+    #initialize(id, msg, pos) {
         this.id = generateUniqueId();
-        this.data = {
-            id: id,
-            msg: msg
-        }
+        this.data = { id, msg };
         this.z = pos;
         this.state = state.waiting;
+        this.position = { start: POSITIONS.PORTRAIT_START };
+        this.#createTimeline();
+    }
+
+    #createTimeline() {
         this.timeline = createTimeline({
             onBegin: () => { this.state = state.loading; },
             onComplete: () => { this.#next(); }
         });
+    }
 
-        let autorun = false;
-        if (STACK.length === 0) {
-            autorun = true;
-        }
-
+    #addToStack() {
+        const shouldAutorun = STACK.length === 0;
         STACK.push(this);
-        if (autorun) STACK[0].show();
+        if (shouldAutorun) STACK[0].show();
     }
 
     #next() {
+        this.#cleanup();
         STACK.splice(0, 1);
-        if (STACK[0]) return STACK[0].show();
+        if (STACK[0]) STACK[0].show();
     }
 
-    update() {
-        if (this.state !== state.process) return;
+    #cleanup() {
+        $(window).off(`orientationchange.${this.id}`);
+        $(`#${this.id}`).remove();
+    }
 
+    update(delay = TIMING.DISPLAY_DELAY) {
+        if (this.state !== state.process) return this;
+
+        this.#resetTimeline();
+        this.#addShakeAnimation();
+        this.#addHideAnimation(delay);
+        
+        return this;
+    }
+
+    #resetTimeline() {
         this.timeline.cancel();
-        this.timeline = createTimeline({
-            onBegin: () => { this.state = state.loading; },
-            onComplete: () => { this.#next(); }
-        });
+        this.#createTimeline();
+    }
+
+    #addShakeAnimation() {
         this.timeline.add(`#${this.id}`, {
             rotate: [0, 5, 0, -5, 0],
-            duration: 250,
+            duration: TIMING.UPDATE_SHAKE_DURATION,
             ease: 'out(3)',
             onComplete: () => { this.state = state.process; }
         });
+    }
+
+    #addHideAnimation(delay) {
         this.timeline.add(`#${this.id}`, {
-            bottom: -60,
+            bottom: this.position.start,
             rotate: 60,
-            delay: 3000,
-            duration: 1000,
+            delay,
+            duration: TIMING.HIDE_DURATION,
             ease: 'inOutElastic(1, .6)',
             onBegin: () => { this.state = state.complete; }
-        })
+        });
     }
 
     show() {
-        if (STACK[0] !== this || this.state !== state.waiting) return;
+        if (!this.#canShow()) return;
 
-        let hasMenu = Menu().hasMenu();
+        this.#setupOrientationHandler();
+        const positioning = this.#calculateInitialPositioning();
+        this.#renderHTML();
+        this.#setupShowAnimations(positioning);
+    }
 
-        const menu = hasMenu ? "visible" : "none";
-        const body = $('body').append(this.#html({ menu, text: this.data.msg, id: this.id, z: this.z }));
+    #canShow() {
+        return STACK[0] === this && this.state === state.waiting;
+    }
 
-        let height = !hasMenu ? 0 : $(`.application-menu`).outerHeight();
-        if (body.hasClass('menuver') && ["90", "270"].includes(body.attr("data-orientation"))) {
-            height = 0;
+    #setupOrientationHandler() {
+        $(window).on(`orientationchange.${this.id}`, () => {
+            this.#handleOrientationChange();
+        });
+    }
+
+    #handleOrientationChange() {
+        const body = $('body');
+        if (!body.hasClass('menuver')) return;
+
+        const positioning = this.#calculatePositioning(body);
+        
+        if (this.state === state.process) {
+            utils.set(`#${this.id}`, { 
+                bottom: positioning.height + positioning.bottom 
+            });
+            this.update(TIMING.DISPLAY_DELAY - this.timeline.currentTime);
         }
+    }
 
-        this.timeline.add(`#${this.id}`, {
-            bottom: [-60, height + 10],
+    #calculateInitialPositioning() {
+        const body = $('body');
+        return this.#calculatePositioning(body);
+    }
+
+    #calculatePositioning(body) {
+        const hasMenu = Menu().hasMenu();
+        const isLandscape = this.#isLandscapeOrientation(body);
+        
+        let height = 0;
+        let bottom = BOTTOM_OFFSET;
+        let startPosition = POSITIONS.PORTRAIT_START;
+        
+        if (isLandscape) {
+            startPosition = POSITIONS.LANDSCAPE_START;
+            bottom = this.#getSafeAreaBottom(body);
+        } else {
+            height = hasMenu ? $(`.application-menu`).outerHeight() : 0;
+        }
+        
+        this.position.start = startPosition;
+        
+        return { height, bottom };
+    }
+
+    #isLandscapeOrientation(body) {
+        return body.hasClass('menuver') && 
+               ORIENTATIONS.LANDSCAPE.includes(body.attr("data-orientation"));
+    }
+
+    #getSafeAreaBottom(body) {
+        return parseInt(getComputedStyle(body[0]).getPropertyValue("--sab")) || BOTTOM_OFFSET;
+    }
+
+    #renderHTML() {
+        const hasMenu = Menu().hasMenu();
+        const menu = hasMenu ? "visible" : "none";
+        
+        $('body').append(this.#html({ 
+            menu, 
+            text: this.data.msg, 
+            id: this.id, 
+            z: this.z 
+        }));
+    }
+
+    #setupShowAnimations(positioning) {
+        const elementId = `#${this.id}`;
+        const finalBottom = positioning.height + positioning.bottom;
+        
+        // Анимация появления
+        this.timeline.add(elementId, {
+            bottom: [this.position.start, finalBottom],
             rotate: [90, 0],
-            duration: 600,
+            duration: TIMING.SHOW_DURATION,
             ease: 'inOutElastic(1, .8)',
             onComplete: () => { this.state = state.process; }
         });
-        this.timeline.add(`#${this.id}`, {
-            bottom: -60,
-            rotate: 60,
-            delay: 3000,
-            duration: 1000,
-            ease: 'inOutElastic(1, .6)',
-            onBegin: () => { this.state = state.complete; }
-        });
+        
+        // Анимация скрытия с задержкой
+        this.#addHideAnimation(TIMING.DISPLAY_DELAY);
     }
 
     #html({ menu = "visible", text, id, z } = {}) {
