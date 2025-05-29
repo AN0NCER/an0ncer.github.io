@@ -8,152 +8,127 @@
     <meta name="page" content="settings">
     <title>Tunime - Настройка</title>
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
+    <link rel="icon" type="image/png" href="/images/icon-web.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/icons/logo-x192-o.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/icons/logo-x192-o.png" />
     <link rel="stylesheet" href="/style/css/main.css">
-
+    <link rel="stylesheet" href="/style/css/settings.css">
+    <link rel="stylesheet" href="/style/css/ticons.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/images/icons/manifest-o.json">
-    <script src="/javascript/library/jqery.min.js"></script>
-    <script src="/javascript/services/dispatcher.js" type="module"></script>
-    <link rel="stylesheet" href="/style/css/settings.css">
 </head>
 
 <body class="unselectable">
-    <div class="wraper">
+    <div class="app-wrapper">
         <header>
-            <a href="login.html" class="profile-link">
-                <div class="profile">
-                    <div class="profile-info">
-                        <img src="/images/ava.jpeg" alt="Profile">
-                        <div class="profile-content">
-                            <span class="profile-name">Авторизироваться</span>
-                            <span>Параметры</span>
+            <div class="profile-wrapper">
+                <a class="profile-link" href="login.html">
+                    <div class="profile">
+                        <img src="/images/ava.jpeg" alt="">
+                        <div class="content">
+                            <div class="name">Войти</div>
+                            <span>Авторизация</span>
+                        </div>
+                        <div class="icon">
+                            <div class="ticon i-caret-right"></div>
                         </div>
                     </div>
-                    <div class="profile-icon">
-                        <svg width="8" height="15" viewBox="0 0 8 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M7.72461 8.1621C8.09082 7.79589 8.09082 7.20116 7.72461 6.83495L3.97461 3.08495C3.70508 2.81542 3.30371 2.73632 2.95215 2.8828C2.60059 3.02929 2.37207 3.36913 2.37207 3.74999V11.25C2.37207 11.6279 2.60059 11.9707 2.95215 12.1172C3.30371 12.2637 3.70508 12.1816 3.97461 11.915L7.72461 8.16503V8.1621Z"
-                                fill="white" />
-                        </svg>
+                </a>
+                <a class="home settup" href="#">
+                    <div class="ticon i-gear"></div>
+                </a>
+            </div>
+            <div class="search-wrapper">
+                <div class="search-input state-0">
+                    <input type="text" placeholder="Поиск">
+                    <div class="btn btn-empty">
+                        <div class="ticon i-xmark"></div>
                     </div>
-                </div>
-            </a>
-            <div class="wraper-input">
-                <input type="text" placeholder="Поиск" class="search-filter">
-                <div class="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path
-                            d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
-                    </svg>
+                    <div class="btn btn-search">
+                        <div class="ticon i-magnifying-glass"></div>
+                    </div>
                 </div>
             </div>
         </header>
-        <main>
-        </main>
-        <footer>
-            <div class="btn-logout">
-                Выйти
-            </div>
-        </footer>
+        <main></main>
     </div>
-    <!--Окно Выбора-->
-    <span class="windowed window-select hide">
-        <span class="hide-window"></span>
-        <span class="window-content content-select hide">
-            <span class="content-wraper">
-                <div class="window-bar select-bar">
-                    <div class="window-title">Параметры</div>
-                    <div class="window-close">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
-                            <path
-                                d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="content-selectes scroll-none">
-                </div>
-
-                <label class="window-footer button-clear-param">
-                    <span>Сбросить</span>
-                </label>
-            </span>
-        </span>
-    </span>
-    <!--Окно Выбора Mehr-->
-    <span class="windowed window-select-mehr hide">
-        <span class="hide-window"></span>
-        <span class="window-content content-select-mehr hide">
-            <span class="content-wraper">
-                <div class="window-bar select-mehr-bar">
-                    <div class="window-title">Параметры</div>
-                    <div class="window-close">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
-                            <path
-                                d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="content-selectes-more scroll-none">
-                </div>
-
-                <label class="window-footer info-text">
-                    <span></span>
-                </label>
-            </span>
-        </span>
-    </span>
     <!--Окно управление хранилищем-->
     <span class="windowed window-app-size hide">
         <span class="hide-window"></span>
-        <span class="window-content content-select hide">
-            <span class="content-wraper">
-                <div class="window-bar select-bar">
-                    <div class="window-title">Хранилище</div>
-                    <div class="window-close">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
-                            <path
-                                d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
-                            </path>
-                        </svg>
+        <span class="window-content content-storage hide">
+            <span class="content-wrapper">
+                <div class="wrapper">
+                    <div class="window-bar storage-bar">
+                        <div class="window-title">Хранилище</div>
+                        <div class="window-close">
+                            <div class="ticon i-xmark"></div>
+                        </div>
+                    </div>
+                    <div class="storage-wrapper">
+                    </div>
+                    <div class="storage-controls">
+                        <div class="btn" id="export-data">
+                            <div class="icon">
+                                <div class="ticon i-file-arrow-down"></div>
+                            </div>
+                            Экспорт
+                        </div>
+                        <div class="btn" id="import-data">
+                            <div class="icon">
+                                <div class="ticon i-file-arrow-up"></div>
+                            </div>
+                            Импорт
+                        </div>
+                    </div>
+                    <div class="btn reset">
+                        Сбросить приложение
                     </div>
                 </div>
-
-                <div class="wrapper-storage scroll-none">
-                    <div class="block-title" id="locdata">Локальное хранилище <span>0 B</span></div>
-                    <div class="list-local-storage">
-                    </div>
-                    <div class="block-title" id="sesdata">Cессионное хранилище <span>0 B</span></div>
-                    <div class="list-session-storage">
-                    </div>
-                    <div class="block-title" id="cachedata">Приложение <span>0 B</span></div>
-                    <div class="list-app-storage">
-                    </div>
-                </div>
-
-                <div class="data-controls">
-                    <div class="btn" id="export-data"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-                            <path
-                                d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-167l80 80c9.4 9.4 24.6 9.4 33.9 0l80-80c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-39 39V184c0-13.3-10.7-24-24-24s-24 10.7-24 24V318.1l-39-39c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9z" />
-                        </svg>Экспорт</div>
-                    <div class="btn" id="import-data">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-                            <path
-                                d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z" />
-                        </svg>Импорт
-                    </div>
-                </div>
-
-                <label class="window-footer button-clear-app">
-                    <span>Сбросить приложение</span>
-                </label>
             </span>
         </span>
     </span>
-    <script src="/javascript/library/anime.min.js"></script>
+    <!--Окно выбора -->
+    <span class="windowed window-selector hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-selector hide">
+            <span class="content-wrapper">
+                <div class="wrapper">
+                    <div class="window-bar selector-bar">
+                        <div class="window-title">Параметры</div>
+                        <div class="window-close">
+                            <div class="ticon i-xmark"></div>
+                        </div>
+                    </div>
+                    <div class="selector-wrapper">
+                        <div class="option">
+                            <span class="title">TV Сериал</span>
+                            <span class="select -none"></span>
+                        </div>
+                        <div class="option">
+                            <span class="title">TV Сериал</span>
+                            <span class="select -none"></span>
+                        </div>
+                        <div class="option">
+                            <span class="title">TV Сериал</span>
+                            <span class="select -none"></span>
+                        </div>
+                        <div class="option">
+                            <span class="title">TV Сериал</span>
+                            <span class="select -none"></span>
+                        </div>
+                        <div class="option">
+                            <span class="title">TV Сериал</span>
+                            <span class="select -none"></span>
+                        </div>
+                    </div>
+                    <div class="tip-text">
+                        Правила отображения франшиз аниме.
+                    </div>
+                </div>
+            </span>
+        </span>
+    </span>
+    <script src="/javascript/library/jqery.min.js"></script>
     <script src="/javascript/parametrs.js"></script>
     <script src="/javascript/pages/settings.js" type="module"></script>
 </body>

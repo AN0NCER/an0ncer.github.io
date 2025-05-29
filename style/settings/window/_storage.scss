@@ -1,0 +1,174 @@
+.content-storage .content-wrapper {
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+    gap: 0 !important;
+}
+
+.content-storage {
+    .content-wrapper {
+        font-family: 'Manrope', serif;
+        max-height: 100dvh;
+
+        .wrapper {
+            padding-left: var(--sal);
+            padding-right: var(--sar);
+            padding-bottom: max(var(--sab), 10px) !important;
+            gap: 10px;
+
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: auto auto auto auto;
+            overflow: hidden;
+
+            .window-bar {
+                margin-top: 10px;
+                margin-left: max(var(--sar), 20px);
+                margin-right: max(var(--sal), 20px);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .window-title {
+                    font-size: 14px;
+                    color: #FFFFFF;
+                    font-weight: bold;
+                }
+
+                .window-close {
+                    width: 40px;
+                    height: 40px;
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+
+                    .ticon {
+                        height: 14px;
+                        background-color: #fff;
+                    }
+                }
+            }
+
+            .storage-wrapper {
+                background: #191C21;
+                margin: 0 10px;
+                border-radius: 5px;
+                overflow: hidden;
+                overflow-y: auto;
+
+                .closset {
+                    .btn {
+                        background: #2393F1;
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 0 10px;
+                        align-items: center;
+                        height: 45px;
+                        cursor: pointer;
+
+                        .title-block {
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+
+                            .icon {
+                                height: 30px;
+                                width: 30px;
+                                display: grid;
+                                place-items: center;
+
+                                .ticon {
+                                    height: 15px;
+                                    background-color: #FFFFFF;
+                                    transform: rotate(90deg);
+                                    transition: .3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+                                }
+                            }
+
+                            .title {
+                                font-size: 14px;
+                                font-weight: bold;
+                            }
+                        }
+
+                        .size {
+                            font-size: 10px;
+                            font-weight: bold;
+                        }
+                    }
+
+                    .collapse-block {
+                        .collapse-wrapper {
+                            .value {
+                                padding: 0 10px 0 20px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                height: 40px;
+
+                                .key {
+                                    font-size: 14px;
+                                }
+
+                                .size {
+                                    font-size: 10px;
+                                }
+                            }
+                        }
+                    }
+
+                    &.-hide {
+                        .btn {
+                            .icon {
+                                .ticon {
+                                    transform: rotate(0deg);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .storage-controls {
+                display: flex;
+                gap: 10px;
+                margin: 0 10px;
+
+                .btn {
+                    background: #191C21;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex: 1 0 0;
+                    border-radius: 3px;
+                    height: 45px;
+                    font-size: 14px;
+                    font-weight: bold;
+
+                    .icon {
+                        width: 35px;
+                        height: 35px;
+                        display: grid;
+                        place-items: center;
+
+                        .ticon {
+                            background-color: #FFFFFF;
+                            height: 14px;
+                        }
+                    }
+                }
+            }
+
+            .reset {
+                margin: 0 10px;
+                height: 40px;
+                display: grid;
+                place-items: center;
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.5);
+            }
+        }
+    }
+}
