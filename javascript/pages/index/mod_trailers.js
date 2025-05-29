@@ -1,8 +1,8 @@
-import { ShowInfo } from "../../modules/Popup.js";
 import { UserRates } from "../../modules/api.shiki.js";
 import { OAuth } from "../../core/main.core.js";
 import { Sleep } from "../../modules/functions.js";
 import { AnimeHidePreview, AnimeLoadingPlayer, AnimePausePlayer, AnimePlayPlayer, AnimeShowPreview } from "./mod_trailers_animation.js";
+import { Popup } from "../../modules/tun.popup.js";
 
 const TrailersUrl = 'https://raw.githubusercontent.com/AN0NCER/anime-data/main/data-v2.json';
 
@@ -109,7 +109,7 @@ function UserControl() {
                 _lSetUserRate(target);
             }
         } else {
-            ShowInfo("Вы должны авторизоваться!", "auth");
+            new Popup("auth", "Авторизируйтесь!");
         }
     });
 
@@ -120,7 +120,7 @@ function UserControl() {
                     await Sleep(1000);
                     return _lSetUserRate(id);
                 }
-                ShowInfo(`Произошла ошибка! (${res.status})`, "auth");
+                new Popup("auth", `Произошла ошибка! (${res.status})`);
                 return;
             }
             $(`.btn-list[data-id="${id}"]`).addClass('selected');
@@ -140,7 +140,7 @@ function UserControl() {
                     await Sleep(1000);
                     return _lRemUserRate(id);
                 }
-                ShowInfo(`Произошла ошибка! (${res.status})`, "auth");
+                new Popup("auth", `Произошла ошибка! (${res.status})`);
                 return;
             }
             $(`.btn-list[data-id="${id}"]`).removeClass('selected');
