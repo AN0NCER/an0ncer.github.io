@@ -1374,6 +1374,10 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
     opacity: 0.2;
   }
 }
+body.-noscrol {
+  overflow: hidden !important;
+}
+
 .windowed {
   position: fixed;
   top: 0;
@@ -1385,6 +1389,9 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   font-family: "Manrope";
   display: block;
   transition: 0.3s ease-in-out;
+}
+.windowed.-v2, .windowed.-v2 > .hide-window, .windowed.-v2 > .window-content {
+  transition: none !important;
 }
 
 .windowed-right {
@@ -1437,7 +1444,8 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   transition: 0.3s ease-in-out;
   transform: translateX(100%);
 }
-.windowed-right .window-content .content-wraper, .windowed-right .window-content .content-wrapper {
+.windowed-right .window-content .content-wraper,
+.windowed-right .window-content .content-wrapper {
   padding-top: 20px;
   padding-left: calc(env(safe-area-inset-left) + 20px);
   padding-right: calc(env(safe-area-inset-right) + 20px);
@@ -1461,7 +1469,8 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
   transition: 0.3s ease-in-out;
   transform: translateY(100%);
 }
-.windowed .window-content .content-wraper, .windowed .window-content .content-wrapper {
+.windowed .window-content .content-wraper,
+.windowed .window-content .content-wrapper {
   padding-left: calc(env(safe-area-inset-left) + 20px);
   padding-right: calc(env(safe-area-inset-right) + 20px);
   padding-top: 20px;
@@ -1478,7 +1487,8 @@ body.menuver[data-orientation="90"] .interactive-menu .user-interactive .triangl
 }
 
 @media screen and (min-width: 900px) {
-  .windowed .window-content .content-wraper, .windowed .window-content .content-wrapper {
+  .windowed .window-content .content-wraper,
+  .windowed .window-content .content-wrapper {
     max-width: 900px;
     margin: 0 auto;
     width: 100%;
