@@ -49,7 +49,8 @@ const gen = {
         const st = [].concat(styles.map(x => `${x.key}: ${x.val};`));
 
         const id = generateUniqueId('tun');
-        const select = variation.findIndex(x => x.key === getParametrByKey($PARAMETERS, param));
+        let select = variation.findIndex(x => x.key === getParametrByKey($PARAMETERS, param));
+        select = select !== -1 ? select : 0;
 
         const element = (variation = []) => {
             let html = "";
@@ -135,7 +136,7 @@ const gen = {
     },
     'btn': (val) => {
         const { classes = [], styles = [] } = val;
-        const { icon, title, click = () => {} } = val;
+        const { icon, title, click = () => { } } = val;
 
         const cl = ['button-wrapper'].concat(classes);
         const st = [].concat(styles.map(x => `${x.key}: ${x.val};`));
