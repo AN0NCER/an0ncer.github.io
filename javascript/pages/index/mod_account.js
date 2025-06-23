@@ -51,7 +51,7 @@ function userNotification(id) {
  */
 function autoLogin() {
     //Проверяем если пользователь не авторизирован, и то что у пользователя включена автоматический вход
-    if (!OAuth.auth && $PARAMETERS.autologin && localStorage.getItem('application_event') != "autologin") {
+    if (!OAuth.auth && $PARAMETERS.autologin && OAuth.access && localStorage.getItem('application_event') != "autologin") {
         //Нужно будет создать в localStorage ячейку c указанием текущим событием программы
         localStorage.setItem('application_event', "autologin");
         //Для тестового режима своя страничка авторизации
