@@ -60,7 +60,7 @@ function flatten(obj, prefix = '', res = {}) {
 /**
  * Основная функция-фабрика для работы с шаблонами.
  * @param {string} file - Имя файла шаблона (относительно TEMPLATE_BASE_PATH).
- * @returns {Promise<object>} - Промис, разрешающийся с объектом, предоставляющим методы для работы с шаблоном.
+ * @returns Промис, разрешающийся с объектом, предоставляющим методы для работы с шаблоном.
  */
 export async function Template(file) {
     const templatePath = `${TEMPLATE_BASE_PATH}/${file}`;
@@ -71,7 +71,7 @@ export async function Template(file) {
          * Добавляет CSS-файл в <head> страницы, если он ещё не добавлен.
          * @param {string} e - Имя CSS-файла.
          * @param {string} [a='/style/css'] - Базовый путь для CSS-файлов.
-         * @returns {object} - Возвращает объект 'template' для цепочного вызова.
+         * @returns Возвращает объект 'template' для цепочного вызова.
          */
         css: (e, a = '/style/css') => {
             const link = `${a}/${e}`;
@@ -87,7 +87,7 @@ export async function Template(file) {
         /**
          * Заполняет шаблон данными из объекта.
          * @param {object} [e={}] - Объект с данными для замены плейсхолдеров.
-         * @returns {object} - Возвращает объект 'template' для цепочного вызова.
+         * @returns Возвращает объект 'template' для цепочного вызова.
          */
         html: (e = {}) => {
             const flat = flatten(e);
