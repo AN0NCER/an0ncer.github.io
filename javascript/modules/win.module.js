@@ -1,5 +1,5 @@
 import { Module } from "../core/window.core.js";
-import { animate, utils } from "../library/anime.esm.min.js";
+import { createAnimatable } from "../library/anime.esm.min.js";
 
 export class PullToClose extends Module {
     /**
@@ -14,7 +14,7 @@ export class PullToClose extends Module {
     on() {
         if (!this.enable) return;
 
-        this.addEventListener($(this.scroll), 'scroll', (e) => {
+        this.addEventListener($(this.scroll)[0], 'scroll', (e) => {
             const scrollTop = $(e.currentTarget).scrollTop();
             if (scrollTop < 0 && scrollTop < -80) {
                 this.win.hide();
@@ -32,14 +32,20 @@ export class WindowIntercator extends Module {
 
         this.$bar = $(`${this.win.element}`).find(`.window-bar`);
         this.$win = $(`${this.win.element} > .window-content`);
-        this.onmove = false;
+
+        this.animatable = createAnimatable();
+        this.moving = false;
         this.animate = false;
+
         this.coefficient = 1;
         this.closestep = 40;
+
+        this.win.on('animshow', () => { this.on(); }, this.id);
+        this.win.on('hide', () => { this.off(); }, this.id);
     }
 
     on() {
-        if (!this.enable) return;
+        if (!this.win.showed || !this.enable) return;
 
         let startY = 0;
         let height = 0;
@@ -50,9 +56,19 @@ export class WindowIntercator extends Module {
 
         let close = false;
 
+        const gen = () => {
+            this.animatable = createAnimatable(this.$win[0], {
+                y: { unit: 'px' },
+                height: { unit: 'px' },
+                ease: 'out(5)',
+                duration: 300
+            });
+        }
+
         const onStart = (y) => {
-            if (!this.win.showed || this.onmove || this.animate) return;
-            this.onmove = true;
+            if (!this.win.showed || this.moving || this.animate) return;
+
+            this.moving = true;
             this.coefficient = 1;
 
             startY = y;
@@ -62,9 +78,15 @@ export class WindowIntercator extends Module {
             lastStep = 0;
             prevDistance = 0;
 
+            this.animatable.revert();
+            gen();
+
             const w = $(window);
 
-            w.on(`mousemove.${this.id}`, (e) => { onMove(e.originalEvent.clientY); });
+            w.on(`mousemove.${this.id}`, (e) => {
+                onMove(e.originalEvent.clientY);
+            });
+
             w.on(`touchmove.${this.id}`, (e) => {
                 if (e.originalEvent.touches.length > 0) {
                     onMove(e.originalEvent.touches[0].clientY);
@@ -76,7 +98,7 @@ export class WindowIntercator extends Module {
         };
 
         const onMove = (y) => {
-            if (!this.onmove || this.animate) return;
+            if (!this.moving || this.animate) return;
             const translateY = (startY - y) * -1;
             if (translateY < 0) {
                 const distance = Math.abs(translateY);
@@ -93,9 +115,9 @@ export class WindowIntercator extends Module {
 
                 const deltaHeight = delta * this.coefficient;
                 currentHeight += deltaHeight;
-                this.$win.height(currentHeight);
+                this.animatable.height(currentHeight);
             } else {
-                utils.set(this.$win[0], { y: `${translateY}px` });
+                this.animatable.y(translateY);
             }
             if ((translateY / height) * 100 >= this.closestep) {
                 close = true;
@@ -105,8 +127,8 @@ export class WindowIntercator extends Module {
         };
 
         const onEnd = () => {
-            if (!this.onmove) return;
-            this.onmove = false;
+            if (!this.moving) return;
+            this.moving = false;
             this.animate = true;
 
             const w = $(window);
@@ -116,44 +138,51 @@ export class WindowIntercator extends Module {
             w.off(`mouseup.${this.id}`);
             w.off(`touchend.${this.id}`);
 
+            this.win.once('animhide', () => {
+                this.animatable.revert();
+                this.animate = false;
+            })
+
             if (close) {
-                utils.set(this.$win[0], { height: height });
+                this.animatable.height(height);
                 this.win.hide();
             } else {
-                animate(`${this.win.element} > .window-content`, {
-                    translateY: 0,
-                    height: height,
-                    duration: 300,
-                    ease: 'out(3)',
-                    onComplete: () => {
-                        this.animate = false;
-                    }
-                });
+                this.animatable.animations.y.onComplete = () => {
+                    this.animatable.revert();
+                    this.animate = false;
+                }
+
+                this.animatable.height(height);
+                this.animatable.y(0);
             }
+        }
 
-            this.win.once('animhide', () => {
-                this.$win.css('height', '')
-                this.animate = false;
-            });
-        };
+        this.addEventListener(this.$bar[0], 'mousedown', (e) => {
+            onStart(e.clientY);
+        });
 
-        this.addEventListener(this.$bar, 'mousedown', (e) => { onStart(e.originalEvent.clientY) });
-        this.addEventListener(this.$bar, 'touchstart', (e) => {
-            if (e.originalEvent.touches.length > 0) {
-                onStart(e.originalEvent.touches[0].clientY);
+        this.addEventListener(this.$bar[0], 'touchstart', (e) => {
+            if (e.touches.length > 0) {
+                onStart(e.touches[0].clientY);
             }
         });
 
-        this.win.once('hide', () => {
-            this.off();
+        this.addEventListener(window, 'touchmove', (e) => {
+            if ($(e.target).closest('.window-bar').length > 0) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        this.addEventListener(window, 'resize', (e) => {
+            if (this.moving) {
+                onEnd();
+                this.animate = false;
+                this.animatable.revert();
+            }
         });
     }
 
     off() {
         super.off();
-
-        this.win.once('animshow', () => {
-            this.on();
-        });
     }
 }

@@ -9,19 +9,36 @@ export class Module {
         this.win = win;
         this.enable = enable;
         this.id = id;
-        this.events = [];
+        this.events = new WeakMap();
     }
 
-    addEventListener(el, type, event) {
-        type = `${type}.${this.id}`;
-        el.on(type, event);
-        this.events.push({ type, el });
+    #elements = new Set();
+
+    addEventListener(el, eventStr, handler, options) {
+        if (el instanceof jQuery) {
+            el = el[0];
+        }
+
+        const [type, namespace] = eventStr.split('.');
+        const wrapped = function (e) { handler.call(this, e); };
+
+        el.addEventListener(type, wrapped, options);
+
+        if (!this.events.has(el)) this.events.set(el, []);
+        this.events.get(el).push({ type, namespace, handler, wrapped, options });
+        this.#elements.add(el);
     }
 
     off() {
-        for (let i = 0; i < this.events.length; i++) {
-            const { el, type } = this.events[i];
-            el.off(type);
+        for (let key of this.#elements) {
+            if (this.events.has(key)) {
+                this.events.get(key).forEach(({ type, wrapped }) => {
+                    key.removeEventListener(type, wrapped);
+                });
+                this.events.delete(key);
+            }
+
+            this.#elements.delete(key);
         }
     }
 
@@ -32,7 +49,7 @@ export class Module {
         this.off();
 
         // Очистить массив событий
-        this.events = [];
+        this.events = new WeakMap();
 
         // Обнулить ссылки
         this.win = null;
@@ -116,11 +133,11 @@ export class TWindow {
         this.$win = $(`${this.element}`);
         this.$win.addClass('-v2');
 
-        this.on('init', oninit);
-        this.on('show', onshow);
-        this.on('hide', onhide);
-        this.on('animshow', animshow);
-        this.on('animhide', animhide);
+        this.on('init', oninit, 'constructor');
+        this.on('show', onshow, 'constructor');
+        this.on('hide', onhide, 'constructor');
+        this.on('animshow', animshow, 'constructor');
+        this.on('animhide', animhide, 'constructor');
 
         $(`${this.element} > .hide-window`).on(`click${el}`, () => {
             this.hide();
@@ -275,37 +292,31 @@ export class BorderRadius extends Module {
     constructor(win, { }) {
         super(win, { id: 'borderradius' });
 
-        this.win.on('animshow', () => { this.on(); });
-        this.win.on('hide', () => { this.off(); })
+        this.win.on('animshow', () => { this.on(); }, this.id);
+        this.win.on('hide', () => { this.off(); }, this.id);
+    }
+
+    update() {
+        const $content = $(`${this.win.element}>.window-content`);
+
+        const h = {
+            window: $(window).height(),
+            content: $content.height()
+        };
+
+        if (h.window <= h.content) {
+            return $content.addClass('border-hide');
+        }
+
+        return $content.removeClass('border-hide');
     }
 
     on() {
         if (!this.win.showed) return;
 
-        const $content = $(`${this.win.element}>.window-content`);
-        const $window = $(window);
+        this.addEventListener(window, 'resize', () => { this.update() });
 
-        let h = {
-            window: $window.height(),
-            content: $content.height()
-        };
-
-        this.addEventListener($(window), 'resize', () => {
-            h = {
-                window: $window.height(),
-                content: $content.height()
-            };
-
-            if (h.window <= h.content) {
-                return $content.addClass('border-hide');
-            }
-
-            return $content.removeClass('border-hide');
-        });
-
-        if (h.window <= h.content) {
-            return $content.addClass('border-hide');
-        }
+        this.update();
     }
 
     off() {
