@@ -1,5 +1,6 @@
 import { TWindow } from "../core/window.core.js";
 import { animate, utils } from "../library/anime.esm.min.js";
+import { Template } from "./tun.template.js";
 
 const win = {
     animate: {
@@ -13,39 +14,11 @@ const win = {
     }
 }
 
-function injectStyle(file) {
-    const link = `/style/css/${file}`;
-    if ($(`link[href="${link}"]`).length > 0) return;
-
-    $('head').append(`<link rel="stylesheet" href="${link}">`);
-}
-
-async function Template(file) {
-    const response = await fetch(`/templates/${file}`);
-    let tpl = await response.text();
-
-    const menu = {
-        html: (data = {}) => {
-            for (const key in data) {
-                const regex = new RegExp(`{{${key}}}`, 'g');
-                tpl = tpl.replace(regex, data[key]);
-            }
-            return menu;
-        },
-        text: () => {
-            return tpl;
-        }
-    }
-
-    return menu;
-}
-
 export function TVerify({ title = '', warning = '', template = 'win.verify.tpl', append = 'body', window = '.verify-action' } = {}) {
-    injectStyle('verify.css');
     const id = Math.random().toString(19).slice(2);
 
     return new Promise(async (resolve, reason) => {
-        $(append).append((await Template(template)).html({ id, warning, title }).text());
+        $(append).append((await Template(template)).html({ id, warning, title }).css('verify.css').text());
 
         const tw = new TWindow(win, window);
         tw.show();
