@@ -1,4 +1,4 @@
-import { createTimeline, utils } from "../library/anime.esm.min.js";
+import { createTimeline, utils, createSpring } from "../library/anime.esm.min.js";
 import { Menu } from "../menu.js";
 
 /**@type {[Popup]} */
@@ -43,9 +43,9 @@ export class Popup {
     }
 
     #findExistingPopup(id, msg) {
-        return STACK.find(x => 
-            x.data.id === id && 
-            x.data.msg === msg && 
+        return STACK.find(x =>
+            x.data.id === id &&
+            x.data.msg === msg &&
             x.state !== state.complete
         );
     }
@@ -89,7 +89,7 @@ export class Popup {
         this.#resetTimeline();
         this.#addShakeAnimation();
         this.#addHideAnimation(delay);
-        
+
         return this;
     }
 
@@ -142,10 +142,10 @@ export class Popup {
         if (!body.hasClass('menuver')) return;
 
         const positioning = this.#calculatePositioning(body);
-        
+
         if (this.state === state.process) {
-            utils.set(`#${this.id}`, { 
-                bottom: positioning.height + positioning.bottom 
+            utils.set(`#${this.id}`, {
+                bottom: positioning.height + positioning.bottom
             });
             this.update(TIMING.DISPLAY_DELAY - this.timeline.currentTime);
         }
@@ -159,26 +159,26 @@ export class Popup {
     #calculatePositioning(body) {
         const hasMenu = Menu().hasMenu();
         const isLandscape = this.#isLandscapeOrientation(body);
-        
+
         let height = 0;
         let bottom = BOTTOM_OFFSET;
         let startPosition = POSITIONS.PORTRAIT_START;
-        
+
         if (isLandscape) {
             startPosition = POSITIONS.LANDSCAPE_START;
             bottom = this.#getSafeAreaBottom(body);
         } else {
             height = hasMenu ? $(`.application-menu`).outerHeight() : 0;
         }
-        
+
         this.position.start = startPosition;
-        
+
         return { height, bottom };
     }
 
     #isLandscapeOrientation(body) {
-        return body.hasClass('menuver') && 
-               ORIENTATIONS.LANDSCAPE.includes(body.attr("data-orientation"));
+        return body.hasClass('menuver') &&
+            ORIENTATIONS.LANDSCAPE.includes(body.attr("data-orientation"));
     }
 
     #getSafeAreaBottom(body) {
@@ -188,28 +188,32 @@ export class Popup {
     #renderHTML() {
         const hasMenu = Menu().hasMenu();
         const menu = hasMenu ? "visible" : "none";
-        
-        $('body').append(this.#html({ 
-            menu, 
-            text: this.data.msg, 
-            id: this.id, 
-            z: this.z 
+
+        $('body').append(this.#html({
+            menu,
+            text: this.data.msg,
+            id: this.id,
+            z: this.z
         }));
     }
 
     #setupShowAnimations(positioning) {
         const elementId = `#${this.id}`;
         const finalBottom = positioning.height + positioning.bottom;
-        
+
         // Анимация появления
         this.timeline.add(elementId, {
             bottom: [this.position.start, finalBottom],
             rotate: [90, 0],
             duration: TIMING.SHOW_DURATION,
-            ease: 'inOutElastic(1, .8)',
+            ease: createSpring({
+                stiffness: 300,
+                damping: 15,
+                mass: 0.8,
+            }),
             onComplete: () => { this.state = state.process; }
         });
-        
+
         // Анимация скрытия с задержкой
         this.#addHideAnimation(TIMING.DISPLAY_DELAY);
     }
