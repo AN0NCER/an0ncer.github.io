@@ -1,0 +1,248 @@
+.update-wrapper {
+    position: fixed;
+    top: -100%;
+    left: 20px;
+    right: 20px;
+    z-index: 75;
+    pointer-events: none;
+    display: grid;
+    place-items: center;
+
+    .tun-update {
+        --progress: 0%;
+        pointer-events: all;
+        position: relative;
+        display: flex;
+        border-radius: 30px;
+        padding: 2px;
+        overflow: hidden;
+        box-shadow: 0px 0px 8.5px 0px rgba(0, 0, 0, 0.25);
+        background: conic-gradient(from -90deg,
+                #2393F1 0%,
+                #2393F1 var(--progress, 0%),
+                rgba(255, 255, 255, 0.1) var(--progress, 0%),
+                rgba(255, 255, 255, 0.1) 100%);
+        backdrop-filter: blur(10px);
+        animation: tun-glower 20s linear infinite;
+        max-width: 100%;
+
+        .tun-update-content {
+            max-width: 100%;
+            background: #1E1F25;
+            border-radius: 28px;
+            padding: 10px 10px 10px 10px;
+            // padding: 10px;
+            display: flex;
+            align-items: center;
+            // gap: 10px;
+            position: relative;
+            z-index: 1;
+            // animation: tun-glower 20s linear infinite;
+
+            .icon-update {
+                position: relative;
+                height: 40px;
+                width: 40px;
+                min-width: 40px;
+                display: grid;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 50%;
+                overflow: hidden;
+                z-index: 2;
+                margin-right: 10px;
+                transition: .1s ease-in-out;
+
+                .icon {
+                    position: absolute;
+                    top: 100%;
+                    height: 40px;
+                    width: 40px;
+                    display: grid;
+                    place-items: center;
+                    transition: .3s ease-in-out;
+
+                    &.install {
+                        top: -100%;
+                        animation: rotate 2s linear infinite;
+                    }
+
+                    &.reload {
+                        top: 100%;
+                    }
+
+                    &.complete {
+                        top: 200%;
+                    }
+                }
+
+                &.press{
+                    scale: 0.8;
+                }
+
+                .ticon {
+                    background-color: #FFFFFF;
+                    height: 16px;
+                }
+
+                &.-install {
+                    .install {
+                        top: 0%;
+                    }
+                }
+
+                &.-reload {
+                    .reload {
+                        top: 0%;
+                    }
+
+                    .complete {
+                        top: 100%;
+                    }
+                }
+
+                &.-complete {
+                    .complete {
+                        top: 0%;
+                    }
+                }
+
+                &.-download {
+                    cursor: pointer;
+                    -webkit-tap-highlight-color: transparent;
+
+                    .download {
+                        top: 0%;
+                    }
+                }
+            }
+
+            .update-text {
+                display: flex;
+                flex-direction: column;
+                z-index: 2;
+                margin-right: 10px;
+                width: auto;
+                overflow: hidden;
+
+                .update-title {
+                    color: #FFFFFF;
+                    font-weight: bold;
+                    font-family: 'Manrope', sans-serif;
+                    font-size: 14px;
+                    margin: 0;
+                    text-wrap: nowrap;
+
+                    &>span {
+                        text-transform: uppercase;
+                    }
+                }
+
+                .update-info {
+                    color: #FFFFFF;
+                    font-family: 'Manrope', sans-serif;
+                    font-size: 10px;
+                    opacity: 0.6;
+                    margin: 2px 0 0 0;
+                    text-wrap: nowrap;
+                }
+            }
+
+            .tun-update-controls-wrapper {
+                z-index: 2;
+                overflow: hidden;
+                border-radius: 30px;
+                min-width: fit-content;
+                box-sizing: content-box;
+
+                .tun-update-controls {
+                    background: rgba(0, 0, 0, 0.35);
+                    box-shadow: inset 6px 0 3px 0 rgba(0, 0, 0, 0.25), inset -6px 0 3px 0 rgba(0, 0, 0, 0.25);
+                    padding: 2px;
+                    display: flex;
+                    border-radius: 30px;
+                    margin-left: 10px;
+
+                    .btn-cancel {
+                        height: 36px;
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
+                        background: rgba(255, 0, 4, 0.1);
+                        border-radius: 30px;
+                        padding: 0 13px;
+                        border: 0.2px solid rgba(255, 0, 4, 0.4);
+                        color: #FF0000;
+                        font-family: 'Manrope';
+                        font-size: 12px;
+                        cursor: pointer;
+                        -webkit-tap-highlight-color: transparent;
+                        transition: .1s ease-in-out;
+
+                        .ticon {
+                            background-color: #FF0000;
+                            height: 14px;
+                        }
+
+                        &.press {
+                            scale: 0.9;
+                        }
+                    }
+                }
+            }
+
+
+            .tun-mouse {
+                position: absolute;
+                top: calc(50% - 30px);
+                right: calc(50% - 30px);
+                width: 60px;
+                height: 60px;
+                display: grid;
+                background: #2393F1;
+                border-radius: 100%;
+                filter: blur(15px);
+                z-index: 1;
+                opacity: 0;
+            }
+        }
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.ticon {
+    display: inline-block;
+    height: 24px;
+    aspect-ratio: 1 / 1;
+    background-color: black;
+    /* Задаёт цвет иконки */
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
+
+@keyframes tun-glower {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 1% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.i-ios-download {
+    mask-image: url('data:image/svg+xml,<svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="21" y="438.857" width="470.204" height="73.1428" fill="black" /> <path d="M292.673 0H219.53V276.898L120.265 182.857L68.0203 235.102L253.49 417.959L444.183 235.102L391.938 182.857L292.673 276.898V0Z" fill="black" /></svg>');
+}
