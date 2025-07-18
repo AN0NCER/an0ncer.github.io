@@ -1,5 +1,5 @@
+import { $PWA } from "../../core/pwa.core.js";
 import { ClearParams } from "../../modules/functions.js";
-import { AppStorageKeys } from "../../modules/Settings.js";
 
 const url = "https://api.github.com/repos/AN0NCER/an0ncer.github.io/releases/latest";
 
@@ -31,29 +31,17 @@ export function GitHubRel() {
     };
 
     try {
+        const update = $PWA.meta.update.has;
         const param = new URLSearchParams(window.location.search).get("update");
-        const data = JSON.parse(localStorage.getItem(AppStorageKeys.lastUpdate)) || undefined;
-        ClearParams(["update"]);
+        ClearParams(['update']);
 
-
-        if (typeof data !== "undefined" && data.show) {
+        if (update || param) {
             gitFetch().then((value) => {
                 if (typeof value === 'undefined') {
                     return;
                 }
 
-                if (value.tag_name === data.ver) {
-                    showUpdate(value);
-                } else if (param) {
-                    showWindow(value);
-                }
-            });
-        } else if (param) {
-            gitFetch().then((value) => {
-                if (typeof value === 'undefined') {
-                    return;
-                }
-                showWindow(value);
+                showUpdate(value);
             });
         }
     } catch (err) {
@@ -87,11 +75,11 @@ export function GitCommit(tag) {
     })
 }
 
-function GetDraftRelease(token = ""){
+function GetDraftRelease(token = "") {
     const url = `https://api.github.com/repos/AN0NCER/an0ncer.github.io/releases`
     return new Promise((resolve) => {
-        fetch(url, { headers: { Authorization: `Bearer ${token}` }}).then(async (response) => {
-            if(!response.ok){
+        fetch(url, { headers: { Authorization: `Bearer ${token}` } }).then(async (response) => {
+            if (!response.ok) {
                 return resolve({});
             }
             const data = await response.json();
@@ -99,3 +87,12 @@ function GetDraftRelease(token = ""){
         })
     })
 }
+
+$PWA.events.on('load', () => {
+    const meta = $PWA.meta;
+    const date = new Date(meta.date);
+
+    $('.version > span').text(meta.version);
+    $('.version-hash > .hash').text(meta.hash);
+    $('.github > .date').text(`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`);
+}, { replay: true });

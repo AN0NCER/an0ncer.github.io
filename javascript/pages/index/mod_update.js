@@ -1,4 +1,4 @@
-import { AppStorageKeys } from "../../modules/Settings.js";
+import { $PWA } from "../../core/pwa.core.js";
 import { PullToClose, WindowManagement } from "../../modules/Windows.js";
 import { GitCommit, GitTags } from "./mod_github.js";
 
@@ -11,8 +11,6 @@ const icons = {
     "edt": `<svg viewBox="0 0 448 512" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M161.665 206.542L295.048 238.924L353.644 205L375.232 239.695C359.298 256.657 342.85 272.077 325.888 285.955C308.926 299.319 295.819 306.001 286.567 306.001L153.184 273.619L94.588 307.543L73 272.848C88.934 255.886 105.382 240.723 122.344 227.359C139.306 213.481 152.413 206.542 161.665 206.542Z" /></svg>`,
     "rem": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>`
 };
-
-const updateKey = AppStorageKeys.lastUpdate
 
 const update = {
     data: undefined,
@@ -388,13 +386,7 @@ const update = {
 
     hide: function () {
         try {
-            let data = JSON.parse(localStorage.getItem(updateKey));
-            data.show = false;
-            localStorage.setItem(updateKey, JSON.stringify(data));
-            localStorage.setItem(AppStorageKeys.gitVersion, JSON.stringify({
-                tag: this.data.tag_name,
-                published_at: this.data.published_at
-            }));
+            $PWA.meta.update.remove();
         } catch (error) {
             console.log('[update] - Window hide error', error);
         }

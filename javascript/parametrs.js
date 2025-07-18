@@ -34,6 +34,9 @@ const $PARAMETERS = {
         autoquality: true,
         skipmoments: true
     },
+    update: {
+        updateshow: true,
+    },
     develop: false
 };
 

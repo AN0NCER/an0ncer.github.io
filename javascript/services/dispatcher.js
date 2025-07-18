@@ -1,7 +1,3 @@
-if (typeof $SERVER === 'undefined') {
-    import('./update.js');
-}
-
 import('./installing.js');
 
 export const CurrentPage = $($(`head meta[name="page"]`)[0]).attr('content');
@@ -13,16 +9,6 @@ const handlers = {
                 manager.RemoveTask(name);
                 window.location.href = data.redirect;
             }
-        }
-    },
-    'update': (name, data, manager) => {
-        if(CurrentPage === 'index'){
-            const url = new URL(window.location);
-            url.searchParams.append('update', 'true');
-            url.searchParams.append('ver', data.version);
-            url.searchParams.append('hash', data.hash);
-            window.history.replaceState(null, '', url.toString());
-            manager.RemoveTask(name);
         }
     }
 };
@@ -43,7 +29,7 @@ class Dispatcher {
     /**
      * Создать новую задачу
      * @param {string} name - название задачи
-     * @param {'pageload'|'update'} type - тип задачи
+     * @param {'pageload'} type - тип задачи
      * @param {object} data - данные задачи
     */
    NewTask(name, type) {
@@ -56,20 +42,6 @@ class Dispatcher {
                         data: {
                             page: page,
                             redirect: redirect
-                        }
-                    }
-                    this.#AddTask(Task);
-                }
-            }
-        } else if (type === 'update') {
-            return {
-                data: ({ version = '', hash = ''} = {}) => {
-                    const Task = {
-                        type: 'update',
-                        name: name,
-                        data: {
-                            version: version,
-                            hash: hash
                         }
                     }
                     this.#AddTask(Task);
