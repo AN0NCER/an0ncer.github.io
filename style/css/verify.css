@@ -149,12 +149,15 @@ body.-noscrol {
   transform: translateY(-100px);
   transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
   cursor: pointer;
+  border: 0.2px solid rgba(255, 255, 255, 0.1);
 }
 .verify-action .window-content .content-wrapper .verify-task-wrapper .verify-task .icon {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
+  background: #14171B;
+  border-radius: 50%;
 }
 .verify-action .window-content .content-wrapper .verify-task-wrapper .verify-task .icon .ticon {
   background-color: #FFFFFF;
@@ -178,7 +181,7 @@ body.-noscrol {
 }
 .verify-action .window-content .content-wrapper .verify-image-wrapper .verify-image {
   overflow: hidden;
-  border: 1px solid rgba(98, 98, 98, 0.5);
+  border: 0.2px solid rgba(98, 98, 98, 0.5);
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -214,6 +217,7 @@ body.-noscrol {
   max-width: 500px;
   width: 100%;
   margin: 0 auto;
+  border: 0.2px solid rgba(255, 255, 255, 0.1);
 }
 .verify-action .window-content .content-wrapper .access-swiper span {
   position: absolute;
@@ -236,6 +240,7 @@ body.-noscrol {
   cursor: pointer;
   position: relative;
   z-index: 2;
+  border: 0.2px solid rgba(255, 255, 255, 0.1);
 }
 .verify-action .window-content .content-wrapper .access-swiper .pin .ticon {
   background-color: #FFFFFF;

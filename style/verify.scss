@@ -27,13 +27,16 @@
                     transform: translateY(-100px);
                     transition: .3s cubic-bezier(0.075, 0.82, 0.165, 1);
                     cursor: pointer;
+                    border: .2px solid rgba(255, 255, 255, 0.1);
 
                     .icon {
-                        $size: 32px;
+                        $size: 40px;
                         width: $size;
                         height: $size;
                         display: grid;
                         place-items: center;
+                        background: #14171B;
+                        border-radius: 50%;
 
                         .ticon {
                             background-color: #FFFFFF;
@@ -68,7 +71,7 @@
 
                 .verify-image {
                     overflow: hidden;
-                    border: 1px solid rgba(98, 98, 98, 0.5);
+                    border: .2px solid rgba(98, 98, 98, 0.5);
                     border-radius: 5px;
                     display: flex;
                     align-items: center;
@@ -108,6 +111,7 @@
                 max-width: 500px;
                 width: 100%;
                 margin: 0 auto;
+                border: .2px solid rgba(255, 255, 255, 0.1);
 
                 span {
                     position: absolute;
@@ -131,6 +135,7 @@
                     cursor: pointer;
                     position: relative;
                     z-index: 2;
+                    border: .2px solid rgba(255, 255, 255, 0.1);
 
                     .ticon {
                         background-color: #FFFFFF;
