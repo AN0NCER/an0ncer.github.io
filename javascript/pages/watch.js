@@ -129,6 +129,7 @@ Main(async (e) => {
 
     //Обработчик события следующего эпизода
     Player.CMessage.on('next', (e) => {
+        if (!$PARAMETERS.player.autonekst) return;
         if (Player.CEpisodes.count == Player.CEpisodes.selected) return;
         const next_episode = Player.CEpisodes.selected + 1;
         Player.PControl.Exec("set_episode", { episode: next_episode });
