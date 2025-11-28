@@ -10,9 +10,9 @@ import { Stats } from "./user/mod_stats.js";
 import { Favourites } from "./user/mod_favorites.js";
 import { InitFriends } from "./user/mod_friends.js";
 import { History } from "./user/mod_history.js";
-import { Tunime } from "../modules/TunimeApi.js";
 import { ShowInfo } from "../modules/Popup.js";
 import { Genres } from "./user/mod_genres.js";
+import { Tunime } from "../modules/api.tunime.js";
 
 /**
  * @callback LUser

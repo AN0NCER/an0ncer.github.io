@@ -431,6 +431,8 @@ export const Headers = new class {
 }
 
 export const Main = async (callback) => {
+    import("../modules/api.tunime.js");
+
     if (!OAuth.access) {
         if (Menu().hasMenu()) {
             Menu('user').setUrl('login.html');

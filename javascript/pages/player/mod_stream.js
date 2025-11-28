@@ -6,7 +6,7 @@
  */
 
 import { Kodik } from "../../modules/api.kodik.js";
-import { Tunime } from "../../modules/TunimeApi.js";
+import { Tunime } from "../../modules/api.tunime.js";
 import { Player } from "../player.js";
 import { InitMediaSession } from "./mod_mediasession.js";
 import { AUTOQUALITY, QUALITY } from "./mod_settings.js";
@@ -92,11 +92,11 @@ function GenLink(streams) {
             return blobUrl;
         } else {
             if (QUALITY == '720') {
-                return Tunime.Link({ q720: STREAMS[720][0].src, q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
+                return Tunime["/video"]["/hls.m3u8"]({ q720: STREAMS[720][0].src, q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
             } else if (QUALITY == '480') {
-                return Tunime.Link({ q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
+                return Tunime["/video"]["/hls.m3u8"]({ q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
             } else {
-                return Tunime.Link({ q360: STREAMS[360][0].src });
+                return Tunime["/video"]["/hls.m3u8"]({ q360: STREAMS[360][0].src });
             }
         }
     } else {
@@ -110,7 +110,7 @@ function loadStreamTunime(id, e, kodik_link = undefined) {
             kodik_link = await loadKodikLink(id, e);
 
         const user = JSON.parse(localStorage.getItem('shadow-api'));
-        let tunime_data = await Tunime.Source(kodik_link, user);
+        let tunime_data = await Tunime["/video"]["/source"](kodik_link, user);
         resolve(tunime_data);
 
         if ($PARAMETERS.player.skipmoments) {

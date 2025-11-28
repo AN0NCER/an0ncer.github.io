@@ -6,7 +6,7 @@ import { AutoScrollEpisodes } from "./watch/mod_scrolling.js";
 import { Functional } from "./watch/mod_ui.js";
 import { ASynch } from "./watch/mod_dbanime.js";
 import { UserRate } from "./watch/mod_urate.js";
-import { Tunime } from "../modules/TunimeApi.js";
+import { Tunime } from "../modules/api.tunime.js";
 import { History } from "./watch/mod_history.js";
 import { tChronologyVoice } from "./watch/mod.chronology.js";
 import { ClearParams } from "../modules/functions.js";
@@ -73,11 +73,11 @@ Main(async (e) => {
         if (!data[0] && !data[1])
             return;
         if (data[0] && !data[1]) {
-            Tunime.OnActiv.Voice($ID, data[0].kodik_dub);
+            Tunime["/voice"]["/:aid/:vid"]($ID, data[0].kodik_dub);
             aSynch.difference = data[0];
         } else if (data[0] && data[1]) {
             if (data[0].kodik_dub != data[1].kodik_dub) {
-                Tunime.OnActiv.Voice($ID, data[0].kodik_dub);
+                Tunime["/voice"]["/:aid/:vid"]($ID, data[0].kodik_dub);
                 aSynch.difference = data[0];
             }
         }
@@ -175,7 +175,7 @@ Main(async (e) => {
                     inline: "nearest",
                 });
             }
-            Tunime.OnActiv.Anime($ID);
+            Tunime["/anime"]["/:aid"]($ID);
         });
         History().shikiData = e;
         History().custom.init();
