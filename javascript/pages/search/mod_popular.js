@@ -1,7 +1,7 @@
 import { ScrollElementWithMouse, Sleep } from "../../modules/functions.js";
 import { ACard } from "../../modules/AnimeCard.js";
 import { GraphQl } from "../../modules/api.shiki.js";
-import { Tunime } from "../../modules/TunimeApi.js";
+import { Tunime } from "../../modules/api.tunime.js";
 import { Jikan } from "../../modules/api.jikan.js";
 import { TCache } from "../../modules/tun.cache.js";
 
@@ -37,12 +37,12 @@ function tun_load() {
 
     cache.get("requests", "tunpopular").then((val) => {
         if (val) {
-            return ui_load(val.toString());
+            return ui_load(val.map(x => x.animeId).toString());
         }
-        return Tunime.Anime.Popular().then((anime) => {
+        return Tunime["/anime"]["/popular"]().then((anime) => {
             if (!anime) throw new Error("Tunime API is not available");
             cache.put("requests", "tunpopular", anime);
-            ui_load(anime.toString())
+            ui_load(val.map(x => x.animeId).toString())
         });
     });
 }

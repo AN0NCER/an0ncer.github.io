@@ -1,6 +1,6 @@
 import { ScrollElementWithMouse } from "../../modules/functions.js";
 import { ShowInfo } from "../../modules/Popup.js";
-import { Tunime } from "../../modules/TunimeApi.js";
+import { Tunime } from "../../modules/api.tunime.js";
 import { $ID, Player } from "../watch.js";
 import { LTransition } from "./mod_transition.js";
 import { IScreenshots } from "./mod.resource.js";
