@@ -2,9 +2,16 @@ import { ACard } from "../../modules/AnimeCard.js";
 import { Sleep } from "../../modules/functions.js";
 import { GraphQl, Users } from "../../modules/api.shiki.js";
 import { OnUser } from "../user.js";
+import { TCache } from "../../modules/tun.cache.js";
+
+const cache = new TCache();
 
 export function Favourites() {
     OnUser(data => {
+        cache.get("requests", `user-${data.id}-favourites`).then((value) => {
+            ShowAnimes(value, true);
+        });
+
         Get(data.id).then((value) => {
             let ids = [];
             for (let i = 0; i < value.animes.length; i++) {
@@ -17,20 +24,33 @@ export function Favourites() {
 
             LoadAnimes(ids).then((value) => {
                 if (value.length == 0)
-                    return;
-
-                $(`[id="favorites"]`).removeClass('hide');
-                const $list = $(`.wrapper-favorites > .list`);
+                    return $(`[id="favorites"]`).addClass('hide');
 
                 const indexMap = new Map(ids.map((id, i) => [String(id), i]));
                 value.sort((a, b) => indexMap.get(b.id) - indexMap.get(a.id));
+                cache.put("requests", `user-${data.id}-favourites`, value);
 
-                for (const anime of value) {
-                    $list.append(ACard.GenV2({ type: "a", anime }))
-                }
+                ShowAnimes(value);
             });
         });
     })
+}
+
+let updatet = false;
+
+function ShowAnimes(value, cached = false) {
+    if (updatet && cached || !value) return;
+
+    $(`[id="favorites"]`).removeClass('hide');
+
+    const $list = $(`.wrapper-favorites > .list`);
+    const $cards = $(`.wrapper-favorites > .list > .card-anime`); 
+
+    for (const anime of value) {
+        $list.append(ACard.GenV2({ type: "a", anime }));
+    }
+
+    $cards.remove();
 }
 
 function LoadAnimes(ids) {
