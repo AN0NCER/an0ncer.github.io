@@ -1,9 +1,7 @@
 import { ACard } from "../../modules/AnimeCard.js";
 import { Sleep } from "../../modules/functions.js";
-import { Animes, Users } from "../../modules/api.shiki.js";
+import { GraphQl, Users } from "../../modules/api.shiki.js";
 import { OnUser } from "../user.js";
-
-
 
 export function Favourites() {
     OnUser(data => {
@@ -22,12 +20,13 @@ export function Favourites() {
                     return;
 
                 $(`[id="favorites"]`).removeClass('hide');
+                const $list = $(`.wrapper-favorites > .list`);
 
-                for (let i = 0; i < ids.length; i++) {
-                    const id = ids[i];
-                    const index = value.findIndex(x => x.id === id);
-                    if (index !== -1)
-                        $(`.wrapper-favorites > .list`).append(ACard.Gen({ response: value[index] }));
+                const indexMap = new Map(ids.map((id, i) => [String(id), i]));
+                value.sort((a, b) => indexMap.get(b.id) - indexMap.get(a.id));
+
+                for (const anime of value) {
+                    $list.append(ACard.GenV2({ type: "a", anime }))
                 }
             });
         });
@@ -36,18 +35,17 @@ export function Favourites() {
 
 function LoadAnimes(ids) {
     return new Promise((resolve) => {
-        Animes.list({ ids: ids, limit: ids.length }, async (response) => {
+        GraphQl.animes({ ids: `"${ids.join(',')}"`, limit: ids.length }, async (response) => {
             if (response.failed) {
-                if (response.status == 429) {
+                if (response.status === 429) {
                     await Sleep(1000);
                     return resolve(LoadAnimes(ids));
                 }
-                return resolve([]);
+                return resolve([])
             }
-            return resolve(response);
-        }).GET();
+            return resolve(response.data.animes);
+        }).POST(["id", { poster: ["mainUrl"] }, "russian", { airedOn: ["year"] }, "score"])
     });
-
 }
 
 /**
