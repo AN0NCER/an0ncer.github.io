@@ -87,7 +87,7 @@ export function InitAPI() {
                         Player.muted = false;
                         break;
                     case "get_time":
-                        ParentWindow.postMessage({ key: 'kodik_player_time_update', value: Math.floor(VideoPlayer.currentTime) }, '*');
+                        ParentWindow.postMessage({ key: 'kodik_player_time', value: Player.currentTime }, '*');
                         break;
                     case "set_episode":
                         //Сделать загрузку по текущему аниме но на другой эпизод
