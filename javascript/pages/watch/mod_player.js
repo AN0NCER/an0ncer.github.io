@@ -441,6 +441,10 @@ class Message {
         if (message.data.key == "tunime_switch") {
             this.#Dispatch('switch', { value: message.data.value });
         }
+
+        if (message.data.key == "kodik_player_time") {
+            this.#Dispatch('time', { value: message.data.value });
+        }
     }
 
     /**
