@@ -142,5 +142,54 @@ export const Jikan = {
                 }
             }
         }
+    },
+    random: {
+        getRandomAnime: (e = () => { }) => {
+            const control = new JikanControls();
+            const url = new URL(`${BASE_URL}/random/anime`);
+
+            return {
+                GET: (init = {}, cache = false, ttl = 0) => {
+                    return control.fetch(url, init, cache, ttl, e);
+                }
+            }
+        }
+    },
+    recommendations: {
+        getRecentAnimeRecommendations: (params = {}, e = () => { }) => {
+            const control = new JikanControls();
+            const url = new URL(`${BASE_URL}/recommendations/anime`);
+
+            Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
+
+            return {
+                GET: (init = {}, cache = true, ttl = 60 * 60 * 1000) => {
+                    return control.fetch(url, init, cache, ttl, e);
+                }
+            }
+        }
+    },
+    characters: {
+        getCharacterFullById: (id, e = () => { }) => {
+            const control = new JikanControls();
+            const url = new URL(`${BASE_URL}/characters/${id}/full`);
+
+            return {
+                GET: (init = {}, cache = true, ttl = 60 * 60 * 1000) => {
+                    return control.fetch(url, init, cache, ttl, e);
+                }
+            }
+        },
+
+        getCharacterPictures: (id, e = () => { }) => {
+            const control = new JikanControls();
+            const url = new URL(`${BASE_URL}/characters/${id}/pictures`);
+
+            return {
+                GET: (init = {}, cache = true, ttl = 60 * 60 * 1000) => {
+                    return control.fetch(url, init, cache, ttl, e);
+                }
+            }
+        }
     }
 }
