@@ -370,8 +370,39 @@ export const Styles = {
     }
 }
 
+/**
+ * @typedef {Object} QueryConfig
+ * @property {Object} args - Аргументы запроса
+ * @property {Array<string|Object>} fields - Поля для выборки
+ */
+
+/**
+ * @typedef {Object.<string, QueryConfig>} QueriesObject
+ */
+
 export const GraphQl = {
     base_url: () => { return `${sUrl}/api/graphql` },
+
+    /**
+    * Выполняет множественные GraphQL запросы к API
+    * @param {QueriesObject} root - Объект с запросами
+    * ...
+    */
+    query: function (root = {}, event = () => { }, signal) {
+        const url = this.base_url();
+        const request = Fetch.post(url, {}, Headers.base)
+        return {
+            POST: async (logged = false) => {
+                if (logged)
+                    request.headers = Headers.bearer;
+
+                request.setBody(BodyGraphQlMulti(root));
+                const response = await request.fetch(signal);
+                event(response);
+                return response;
+            }
+        }
+    },
 
     animes: function (arg = {}, event = () => { }, signal) {
         const url = this.base_url();
@@ -416,6 +447,53 @@ export const GraphQl = {
             }
         }
     }
+}
+
+// Функция для множественных запросов с объектом
+function BodyGraphQlMulti(root = {}) {
+    function buildArgs(args = {}) {
+        return Object.entries(args)
+            .map(([k, v]) => `${k}: ${serializeValue(v)}`)
+            .join(',');
+    }
+
+    function buildSelection(body) {
+        if (Array.isArray(body))
+            return body.map(buildSelection).join(' ');
+
+        if (typeof body === 'object')
+            return Object.entries(body)
+                .map(([k, v]) => `${k} { ${buildSelection(v)} }`)
+                .join(' ');
+
+        return body;
+    }
+
+    function buildQuery(root) {
+        return Object.entries(root).map(([name, cfg]) => {
+            const args = buildArgs(cfg.args);
+            const body = buildSelection(cfg.fields);
+
+            return `${name}${args ? `(${args})` : ''} {${body}}`;
+        });
+    }
+
+    function serializeValue(value) {
+        if (Array.isArray(value))
+            return `"${value.map(serializeValue).join(', ')}"`;
+
+        if (typeof value === "string")
+            return value;
+
+        if (value === null)
+            return "null";
+
+        return value;
+    }
+
+    return {
+        query: `{${buildQuery(root)}}`
+    };
 }
 
 function BodyGraphQl(prof, arg = {}, body = []) {
