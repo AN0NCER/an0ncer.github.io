@@ -145,6 +145,7 @@ class MRender {
             hostEl.replaceChildren(loaded.tplEl.content.cloneNode(true));
 
             hostEl.dataset.menuStyle = mountedStyle;
+            hostEl.dataset.rotate = TMenu.state.isRotate;
             hostEl.dataset.menuTemplate = loaded.templateId;
 
             return {

@@ -90,3 +90,16 @@ body[angle="0"] {
         grid-template-columns: 1fr 1fr !important;
     }
 }
+
+body[angle="90"],
+body[angle="270"] {
+    @media screen and (max-width: 940px) {
+        &[angle="90"] {
+            padding-left: max(10px, var(--menu-width-safe), var(--sal));
+        }
+
+        &[angle="270"] {
+            padding-right: max(10px, var(--menu-width-safe), var(--sar));
+        }
+    }
+}

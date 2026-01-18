@@ -710,6 +710,7 @@ body {
     .section-countdown,
     .downloads-link {
       margin-left: max(20px, env(safe-area-inset-left));
+      margin-right: var(--menu-width-safe);
     }
 
     header,
@@ -719,6 +720,7 @@ body {
     .section-countdown,
     .downloads-link {
       margin-left: max(20px, env(safe-area-inset-left));
+      margin-right: var(--menu-width-safe);
     }
 
     .section-genres,

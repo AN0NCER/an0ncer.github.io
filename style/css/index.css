@@ -2038,6 +2038,7 @@ body[angle="270"] .swiper-continue,
 body[angle="270"] .section-countdown,
 body[angle="270"] .downloads-link {
   margin-left: max(20px, env(safe-area-inset-left));
+  margin-right: var(--menu-width-safe);
 }
 body[angle="270"] header,
 body[angle="270"] .section-title,
@@ -2046,6 +2047,7 @@ body[angle="270"] .swiper-continue,
 body[angle="270"] .section-countdown,
 body[angle="270"] .downloads-link {
   margin-left: max(20px, env(safe-area-inset-left));
+  margin-right: var(--menu-width-safe);
 }
 body[angle="270"] .section-genres,
 body[angle="270"] .section-anime,

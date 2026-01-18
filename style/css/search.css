@@ -384,7 +384,8 @@ header .search-wrapper .btn.btn-filter .ticon {
 .results-wrapper.load .load-wrapper {
   display: flex;
 }
-.results-wrapper .info.genre ~ .empty, .results-wrapper .info.studio ~ .empty {
+.results-wrapper .info.genre ~ .empty,
+.results-wrapper .info.studio ~ .empty {
   position: relative;
 }
 .results-wrapper.empty {
@@ -2031,4 +2032,15 @@ body.-noscrol {
 
 .card-anime {
   min-width: 195px;
+}
+
+@media screen and (max-width: 940px) {
+  body[angle="90"][angle="90"],
+  body[angle="270"][angle="90"] {
+    padding-left: max(10px, var(--menu-width-safe), var(--sal));
+  }
+  body[angle="90"][angle="270"],
+  body[angle="270"][angle="270"] {
+    padding-right: max(10px, var(--menu-width-safe), var(--sar));
+  }
 }

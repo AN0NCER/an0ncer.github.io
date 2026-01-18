@@ -1,6 +1,6 @@
 body[angle="90"],
 body[angle="270"] {
-    #app-menu-host {
+    #app-menu-host[data-rotate="true"] {
         .app-menu {
             top: 0;
             bottom: 0;
@@ -18,25 +18,29 @@ body[angle="270"] {
     }
 
     &[angle="90"] {
-        .app-menu {
-            right: auto !important;
+        #app-menu-host[data-rotate="true"] {
+            .app-menu {
+                right: auto !important;
 
-            .menu-wrapper {
-                padding-left: 10px;
-                border-radius: 0px 7px 7px 0px;
-                border-right: 1px solid rgba(255, 255, 255, 0.2);
+                .menu-wrapper {
+                    padding-left: 10px;
+                    border-radius: 0px 7px 7px 0px;
+                    border-right: 1px solid rgba(255, 255, 255, 0.2);
+                }
             }
         }
     }
 
     &[angle="270"] {
-        .app-menu {
-            left: auto !important;
+        #app-menu-host[data-rotate="true"] {
+            .app-menu {
+                left: auto !important;
 
-            .menu-wrapper {
-                padding-right: 10px;
-                border-radius: 7px 0px 0px 7px;
-                border-left: 1px solid rgba(255, 255, 255, 0.2);
+                .menu-wrapper {
+                    padding-right: 10px;
+                    border-radius: 7px 0px 0px 7px;
+                    border-left: 1px solid rgba(255, 255, 255, 0.2);
+                }
             }
         }
     }

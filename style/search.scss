@@ -295,25 +295,29 @@ header {
         left: 0;
     }
 
-    &.empty, &.load{
+    &.empty,
+    &.load {
         height: calc(100dvh - (40px + 20px + 10px + var(--m-space) + var(--sab)));
     }
 
-    &.load{
-        .load-wrapper{
+    &.load {
+        .load-wrapper {
             display: flex;
         }
     }
 
-    .info.genre ~ .empty, .info.studio ~ .empty{
+    .info.genre~.empty,
+    .info.studio~.empty {
         position: relative;
     }
 
     &.empty {
         grid-template-rows: auto 1fr;
-        .results{
+
+        .results {
             display: none;
         }
+
         .empty {
             display: flex;
             // position: relative;
@@ -338,4 +342,17 @@ header {
 
 .card-anime {
     min-width: 195px;
+}
+
+body[angle="90"],
+body[angle="270"] {
+    @media screen and (max-width: 940px) {
+        &[angle="90"] {
+            padding-left: max(10px, var(--menu-width-safe), var(--sal));
+        }
+
+        &[angle="270"] {
+            padding-right: max(10px, var(--menu-width-safe), var(--sar));
+        }
+    }
 }

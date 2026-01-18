@@ -210,14 +210,14 @@
     }
 }
 
-body.menuver[data-orientation="270"] {
+body[angle="270"] {
     .span-row {
         margin-left: max(10px, var(--sal));
         margin-right: 20px;
     }
 }
 
-body.menuver[data-orientation="90"] {
+body[angle="90"] {
     .span-row {
         margin-right: max(10px, var(--sar));
     }
