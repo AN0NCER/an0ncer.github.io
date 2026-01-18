@@ -1,4 +1,4 @@
-import { Menu } from "../menu.js";
+import { TMenu } from "../core/menu.core.js";
 
 let _ids = [];
 
@@ -10,10 +10,10 @@ export async function ShowInfo(message, id, z = 11) {
     _ids.push(id);
 
 
-    let ismenu = Menu().hasMenu() ? "visible" : "none";
+    let ismenu = TMenu.isOpen ? "visible" : "none";
     $('body').append(genHtml({ text: message, id: id, menu: ismenu, z }));
     let h = $(`.popup-id-${id} > .popup-content`).height();
-    let h_menu = !Menu().hasMenu() ? 0 : $('.application-menu').outerHeight();
+    let h_menu = !TMenu.isOpen ? 0 : $('.application-menu').outerHeight();
     if ($('body').hasClass('menuver') && ($('body').attr("data-orientation") == "90" || $('body').attr("data-orientation") == "270")) {
         h_menu = 0;
     }
