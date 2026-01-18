@@ -13,8 +13,8 @@ export async function ShowInfo(message, id, z = 11) {
     let ismenu = TMenu.isOpen ? "visible" : "none";
     $('body').append(genHtml({ text: message, id: id, menu: ismenu, z }));
     let h = $(`.popup-id-${id} > .popup-content`).height();
-    let h_menu = !TMenu.isOpen ? 0 : $('.application-menu').outerHeight();
-    if ($('body').hasClass('menuver') && ($('body').attr("data-orientation") == "90" || $('body').attr("data-orientation") == "270")) {
+    let h_menu = !TMenu.isOpen ? 0 : $(`.app-menu`).outerHeight();
+    if ($PARAMETERS.menu.menuver && ($('body').attr("angle") == "90" || $('body').attr("angle") == "270")) {
         h_menu = 0;
     }
 
