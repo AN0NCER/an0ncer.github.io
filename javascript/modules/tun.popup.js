@@ -1,5 +1,5 @@
+import { TMenu } from "../core/menu.core.js";
 import { createTimeline, utils, createSpring } from "../library/anime.esm.min.js";
-import { Menu } from "../menu.js";
 
 /**@type {[Popup]} */
 const STACK = [];
@@ -157,7 +157,7 @@ export class Popup {
     }
 
     #calculatePositioning(body) {
-        const hasMenu = Menu().hasMenu();
+        const hasMenu = isAboveMenu(this.z);
         const isLandscape = this.#isLandscapeOrientation(body);
 
         let height = 0;
@@ -168,7 +168,7 @@ export class Popup {
             startPosition = POSITIONS.LANDSCAPE_START;
             bottom = this.#getSafeAreaBottom(body);
         } else {
-            height = hasMenu ? $(`.application-menu`).outerHeight() : 0;
+            height = hasMenu ? $(`.app-menu`).outerHeight() : 0;
         }
 
         this.position.start = startPosition;
@@ -177,8 +177,8 @@ export class Popup {
     }
 
     #isLandscapeOrientation(body) {
-        return body.hasClass('menuver') &&
-            ORIENTATIONS.LANDSCAPE.includes(body.attr("data-orientation"));
+        return $PARAMETERS.menu.menuver &&
+            ORIENTATIONS.LANDSCAPE.includes(body.attr("angle"));
     }
 
     #getSafeAreaBottom(body) {
@@ -186,7 +186,7 @@ export class Popup {
     }
 
     #renderHTML() {
-        const hasMenu = Menu().hasMenu();
+        const hasMenu = isAboveMenu(this.z);
         const menu = hasMenu ? "visible" : "none";
 
         $('body').append(this.#html({
@@ -225,4 +225,13 @@ export class Popup {
 
 function generateUniqueId() {
     return `pop-${globalComponentId++}`;
+}
+
+function isAboveMenu(z) {
+    console.log('yahoo', z < 80);
+
+    const hasMenu = TMenu.isOpen;
+    console.log(hasMenu)
+    if (z > 80) return false
+    return hasMenu;
 }
