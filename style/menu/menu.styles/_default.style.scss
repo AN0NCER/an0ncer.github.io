@@ -1,0 +1,57 @@
+&[data-menu-style="default"] {
+    .app-menu {
+        .menu-wrapper {
+            position: relative;
+
+            .menu-controls {
+                .menu-btn {
+                    svg {
+                        fill: rgba(255, 255, 255, 0.4);
+                    }
+
+                    &[data-id="user"]{
+                        svg{
+                            height: 34px;
+                        }
+                    }
+
+                    &.primary {
+                        background: linear-gradient(130.55deg, #51B1FE -0.49%, #2774DB 100.49%);
+                        border-radius: 5px;
+
+                        svg {
+                            fill: #FFFFFFFF;
+                        }
+                    }
+
+                    &.-sel {
+                        svg {
+                            stroke-width: 0px;
+                            fill: url(#menu-grad);
+                            stroke: none;
+                        }
+                    }
+                }
+            }
+
+            &::after,
+            &::before {
+                display: none;
+                content: ' ';
+                position: absolute;
+                height: 1px;
+                left: 0;
+                right: 0;
+                background: red;
+            }
+
+            &::after {
+                top: 18px;
+            }
+
+            &::before {
+                bottom: 18px;
+            }
+        }
+    }
+}

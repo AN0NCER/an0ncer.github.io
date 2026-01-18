@@ -1,0 +1,265 @@
+#app-menu-host .app-menu {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  z-index: 80;
+}
+#app-menu-host .app-menu .menu-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: rgb(30, 31, 37);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 7px 7px 0px 0px;
+  padding-bottom: var(--sab);
+  flex: 1 0 0;
+  pointer-events: all;
+}
+#app-menu-host .app-menu .menu-controls {
+  display: flex;
+  gap: 10px;
+}
+#app-menu-host .app-menu .menu-controls .menu-btn {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+#app-menu-host .app-menu .menu-controls .menu-btn svg {
+  z-index: 2;
+  fill: #FFFFFF;
+  height: 26px;
+}
+#app-menu-host .app-menu-context {
+  position: fixed;
+  z-index: 75;
+  inset: 0;
+  font-family: "Manrope", sans-serif;
+}
+#app-menu-host .app-menu-context .context-close-area {
+  position: fixed;
+  z-index: 76;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  inset: 0;
+  transition: 0.3s ease-in-out;
+}
+#app-menu-host .app-menu-context .context-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 77;
+  left: 20px;
+  right: 20px;
+  bottom: var(--menu-height-safe);
+  overflow: hidden;
+  pointer-events: none;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls {
+  display: flex;
+  gap: 10px;
+  background: rgb(30, 31, 37);
+  box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.41);
+  border-radius: 18px;
+  max-width: 350px;
+  width: 100%;
+  padding: 10px;
+  overflow: hidden;
+  transition: 0.2s ease-in-out;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls .animate-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  flex: 0 0 100%;
+  gap: 5px;
+  box-sizing: border-box;
+  min-height: 30px;
+  pointer-events: all;
+  transition: 0.3s ease-in-out;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls.-hide {
+  max-height: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+#app-menu-host .app-menu-context.-hide {
+  display: none;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls .menu-btn,
+#app-menu-host .app-menu-context .context-wrapper .context-controls label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 50px;
+  cursor: pointer;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls .menu-btn .btn-label,
+#app-menu-host .app-menu-context .context-wrapper .context-controls label .btn-label {
+  display: flex;
+  gap: 20px;
+  padding: 10px 30px 10px 10px;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls .menu-btn .btn-label .item-icon,
+#app-menu-host .app-menu-context .context-wrapper .context-controls label .btn-label .item-icon {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls .menu-btn .btn-label .item-icon svg,
+#app-menu-host .app-menu-context .context-wrapper .context-controls label .btn-label .item-icon svg {
+  width: 20px;
+  fill: #FFFFFF;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls .menu-btn .btn-label .item-title,
+#app-menu-host .app-menu-context .context-wrapper .context-controls label .btn-label .item-title {
+  font-size: 16px;
+  color: #FFFFFF;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls .menu-btn .item-action,
+#app-menu-host .app-menu-context .context-wrapper .context-controls label .item-action {
+  margin-right: 10px;
+  font-size: 14px;
+  color: #7E7E7E;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls .item-line {
+  width: 100%;
+  min-height: 1px;
+  max-height: 1px;
+  background: #fff;
+  opacity: 0.1;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls label {
+  box-sizing: border-box;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls label .switch-slider {
+  position: relative;
+  width: 58px;
+  min-height: 32px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  background: #525252;
+  transition: 0.3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls label .switch-slider::after {
+  content: "";
+  position: absolute;
+  transition: 0.3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+  width: 24px;
+  height: 24px;
+  border: 5px solid #FFFFFF;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  left: 5px;
+  box-sizing: border-box;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls label input:checked + .switch-slider {
+  background: #2393F1;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls label input:checked + .switch-slider::after {
+  left: 29px;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0);
+  border: 12px solid #FFFFFF;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls label input {
+  display: none;
+}
+#app-menu-host .app-menu-context .context-wrapper .context-controls label .switch-slider {
+  position: relative;
+  width: 58px;
+  min-height: 32px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  background: #525252;
+  transition: 0.3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+  overflow: hidden;
+}
+#app-menu-host[data-menu-style=default] .app-menu .menu-wrapper {
+  position: relative;
+}
+#app-menu-host[data-menu-style=default] .app-menu .menu-wrapper .menu-controls .menu-btn svg {
+  fill: rgba(255, 255, 255, 0.4);
+}
+#app-menu-host[data-menu-style=default] .app-menu .menu-wrapper .menu-controls .menu-btn[data-id=user] svg {
+  height: 34px;
+}
+#app-menu-host[data-menu-style=default] .app-menu .menu-wrapper .menu-controls .menu-btn.primary {
+  background: linear-gradient(130.55deg, #51B1FE -0.49%, #2774DB 100.49%);
+  border-radius: 5px;
+}
+#app-menu-host[data-menu-style=default] .app-menu .menu-wrapper .menu-controls .menu-btn.primary svg {
+  fill: white;
+}
+#app-menu-host[data-menu-style=default] .app-menu .menu-wrapper .menu-controls .menu-btn.-sel svg {
+  stroke-width: 0px;
+  fill: url(#menu-grad);
+  stroke: none;
+}
+#app-menu-host[data-menu-style=default] .app-menu .menu-wrapper::after, #app-menu-host[data-menu-style=default] .app-menu .menu-wrapper::before {
+  display: none;
+  content: " ";
+  position: absolute;
+  height: 1px;
+  left: 0;
+  right: 0;
+  background: red;
+}
+#app-menu-host[data-menu-style=default] .app-menu .menu-wrapper::after {
+  top: 18px;
+}
+#app-menu-host[data-menu-style=default] .app-menu .menu-wrapper::before {
+  bottom: 18px;
+}
+
+body[angle="90"] #app-menu-host .app-menu,
+body[angle="270"] #app-menu-host .app-menu {
+  top: 0;
+  bottom: 0;
+}
+body[angle="90"] #app-menu-host .app-menu .menu-wrapper,
+body[angle="270"] #app-menu-host .app-menu .menu-wrapper {
+  padding-bottom: 0px;
+  border-top: none;
+  height: 100%;
+}
+body[angle="90"] #app-menu-host .app-menu .menu-wrapper .menu-controls,
+body[angle="270"] #app-menu-host .app-menu .menu-wrapper .menu-controls {
+  flex-direction: column;
+}
+body[angle="90"][angle="90"] .app-menu,
+body[angle="270"][angle="90"] .app-menu {
+  right: auto !important;
+}
+body[angle="90"][angle="90"] .app-menu .menu-wrapper,
+body[angle="270"][angle="90"] .app-menu .menu-wrapper {
+  padding-left: 10px;
+  border-radius: 0px 7px 7px 0px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+body[angle="90"][angle="270"] .app-menu,
+body[angle="270"][angle="270"] .app-menu {
+  left: auto !important;
+}
+body[angle="90"][angle="270"] .app-menu .menu-wrapper,
+body[angle="270"][angle="270"] .app-menu .menu-wrapper {
+  padding-right: 10px;
+  border-radius: 7px 0px 0px 7px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}

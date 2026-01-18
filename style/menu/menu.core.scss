@@ -1,0 +1,138 @@
+@mixin app-menu-context {
+    position: fixed;
+    z-index: 75;
+
+    inset: 0;
+
+    font-family: 'Manrope', sans-serif;
+
+    .context-close-area {
+        position: fixed;
+        z-index: 76;
+
+        background: rgba(000, 000, 000, 0.4);
+        opacity: 0;
+
+        inset: 0;
+
+        transition: .3s ease-in-out;
+    }
+
+    .context-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        position: absolute;
+        z-index: 77;
+
+        left: 20px;
+        right: 20px;
+        bottom: var(--menu-height-safe);
+
+        overflow: hidden;
+        pointer-events: none;
+
+        .context-controls {
+            display: flex;
+            gap: 10px;
+
+            background: rgb(30, 31, 37);
+            box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.41);
+            // border: 0.4px solid rgba(255, 255, 255, 0.3);
+
+            border-radius: 18px;
+            max-width: 350px;
+            width: 100%;
+            padding: 10px;
+
+            overflow: hidden;
+            transition: .2s ease-in-out;
+
+            .animate-wrapper {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                flex: 0 0 100%;
+
+                gap: 5px;
+
+                box-sizing: border-box;
+                min-height: 30px;
+
+                pointer-events: all;
+                transition: .3s ease-in-out;
+            }
+
+            &.-hide {
+                max-height: 0px;
+                padding-top: 0px;
+                padding-bottom: 0px;
+            }
+
+        }
+    }
+
+    &.-hide {
+        display: none;
+    }
+}
+
+@mixin app-menu {
+    position: fixed;
+
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    z-index: 80;
+
+    .menu-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        background: rgb(30, 31, 37);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+        border-radius: 7px 7px 0px 0px;
+        padding-bottom: var(--sab);
+
+        flex: 1 0 0;
+        pointer-events: all;
+    }
+
+    .menu-controls {
+        display: flex;
+        gap: 10px;
+    }
+
+}
+
+#app-menu-host {
+    .app-menu {
+        @include app-menu();
+
+        @import "./menu.btns";
+    }
+
+    .app-menu-context {
+        @include app-menu-context();
+
+        .context-wrapper {
+            .context-controls {
+                @import "./context.gen";
+            }
+        }
+    }
+
+    @import "./menu.styles/default.style";
+}
+
+@import "./rotate.menu";
