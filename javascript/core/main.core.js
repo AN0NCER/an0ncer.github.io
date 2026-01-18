@@ -1,5 +1,3 @@
-import { Menu } from "../menu.js";
-
 export const sUrl = 'https://shikimori.one';
 
 const $IPS = ["127.0", "192.168"] // <- тестовые версии
@@ -434,20 +432,12 @@ export const Main = async (callback) => {
     import("../modules/api.tunime.js");
 
     if (!OAuth.access) {
-        if (Menu().hasMenu()) {
-            Menu('user').setUrl('login.html');
-            Menu('list').setUrl('login.html');
-        }
         return callback(false);
     }
 
     if (OAuth.isExpired()) {
         await OAuth.requests.refreshToken();
         if (!OAuth.auth) {
-            if (Menu().hasMenu()) {
-                Menu('user').setUrl('login.html');
-                Menu('list').setUrl('login.html');
-            }
             return callback(false);
         }
     }
@@ -461,11 +451,4 @@ export const Main = async (callback) => {
     }
 
     callback(OAuth.auth);
-
-    if (!OAuth.auth) {
-        if (Menu().hasMenu()) {
-            Menu('user').setUrl('login.html');
-            Menu('list').setUrl('login.html');
-        }
-    }
 }
