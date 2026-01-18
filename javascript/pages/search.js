@@ -1,4 +1,4 @@
-import { InitMenu } from "../menu.js";
+import { TMenu } from "../core/menu.core.js";
 import { WFilter } from "./search/mod_w_filter.js";
 import { HistoryLoaded, SearchHistory } from "./search/mod_history.js";
 
@@ -17,7 +17,7 @@ ClearParams(['q', 'g', 's', 'v']);
 export let IsLogged = false;
 export let IsLaden = false
 
-InitMenu();
+TMenu.init();
 
 Main(async (logged) => {
     IsLogged = logged;
@@ -156,26 +156,16 @@ function input() {
     });
 
     (() => {
-        const $btn = $('.btn-menu[data-id="search"]');
+        const originalHandler = TMenu.help.MENU_CONTROLLER.search;
 
-        // Делаем глубокую копию обработчиков до off
-        const rawHandlers = $._data($btn[0], "events")?.click || [];
-        const oldClickHandlers = rawHandlers.map(h => ({ ...h }));
-
-        $btn.off('click');
-
-        // Ставим новый обработчик
-        $btn.on('click', function (e) {
+        TMenu.help.MENU_CONTROLLER.search = () => {
             if (TTSearch.instance) {
                 window.scrollTo({ top: 0 });
                 return TTSearch.instance.destroy();
             }
 
-            // Вызов старых обработчиков
-            for (const handler of oldClickHandlers) {
-                handler.handler.call(this, e);
-            }
-        });
+            return originalHandler();
+        }
     })();
 
     (() => {
