@@ -138,7 +138,7 @@ header .search-wrapper .search-input input::-moz-placeholder {
 header .search-wrapper .search-input input::placeholder {
   font-weight: normal;
 }
-header .search-wrapper .search-input input:not(:-moz-placeholder-shown) ~ .btn-empty {
+header .search-wrapper .search-input input:not(:-moz-placeholder) ~ .btn-empty {
   opacity: 1;
   scale: 1;
   pointer-events: all;
@@ -148,7 +148,7 @@ header .search-wrapper .search-input input:not(:placeholder-shown) ~ .btn-empty 
   scale: 1;
   pointer-events: all;
 }
-header .search-wrapper .search-input input:not(:-moz-placeholder-shown) ~ .btn-search {
+header .search-wrapper .search-input input:not(:-moz-placeholder) ~ .btn-search {
   opacity: 0;
   scale: 0.8;
   pointer-events: none;

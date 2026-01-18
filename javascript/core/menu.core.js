@@ -10,26 +10,46 @@ const MENU_SAFE_EXTRA = 10;
  * @param {HTMLElement} menuEl
  * @param {() => boolean} isOpen
  */
-function observeMenuHeight(hostEl, menuEl, isOpen) {
+function observeMenuHeight(hostEl, menuEl, isOpen, isRotate) {
     const root = document.documentElement;
     let first = true;
 
     const ro = new ResizeObserver(entries => {
-        const height = entries[0].contentRect.height;
+        const rect = entries[0].contentRect;
+        const height = rect.height;
+        const width = rect.width;
 
-        // локальные vars компонента
+        // Локальные для самого hostEl (если где-то нужны)
         hostEl.style.setProperty('--menu-height', `${height}px`);
-        hostEl.style.setProperty(
-            '--menu-height-safe',
-            `calc(${height}px + ${MENU_SAFE_EXTRA}px)`
-        );
+        hostEl.style.setProperty('--menu-width', `${width}px`);
 
-        // глобальный offset документа
+        // Определяем угол (с нормализацией -90 → 270)
+        let angle = screen?.orientation?.angle ?? window.orientation ?? 0;
+        if (angle === -90) angle = 270;
+        const isLandscape = angle === 90 || angle === 270;
+
+        const rotate = typeof isRotate === 'function' ? isRotate() : !!isRotate;
+
+        let offset;
+
+        if (rotate && isLandscape) {
+            // Горизонтальный режим + кручение меню → работаем по ширине
+            offset = `calc(${width}px + ${MENU_SAFE_EXTRA}px)`;
+
+            root.style.setProperty('--menu-height-safe', `0px`);
+            root.style.setProperty('--menu-width-safe', offset);
+        } else {
+            // Обычный (вертикальный) → работаем по высоте
+            offset = `calc(${height}px + ${MENU_SAFE_EXTRA}px)`;
+
+            root.style.setProperty('--menu-height-safe', offset);
+            root.style.setProperty('--menu-width-safe', `0px`);
+        }
+
+        // Глобовый offset, если ты его используешь
         root.style.setProperty(
             '--layout-menu-offset',
-            isOpen()
-                ? `calc(${height}px + ${MENU_SAFE_EXTRA}px)`
-                : '0px'
+            isOpen() ? offset : '0px'
         );
 
         if (first) {
@@ -493,6 +513,8 @@ export const TMenu = new class {
     // состояние меню
     state = {
         isOpen: false,
+        isRotate: $PARAMETERS.menu.menuver,
+        isRevers: $PARAMETERS.menu.menureverse,
 
         // ссылка на dom
         host: null,
@@ -525,7 +547,8 @@ export const TMenu = new class {
             this.state._unbindSize = observeMenuHeight(
                 this.state.host,
                 this.state.menuEl,
-                () => this.state.isOpen
+                () => this.state.isOpen,
+                () => this.state.isRotate
             )
         }
 
@@ -576,14 +599,14 @@ export const TMenu = new class {
             this.state._unbindSize = observeMenuHeight(
                 this.state.host,
                 this.state.menuEl,
-                () => this.state.isOpen
+                () => this.state.isOpen,
+                () => this.state.isRotate
             );
         }
     }
 }();
 
 (() => {
-    const revers = $PARAMETERS.menu.menureverse;
     const root = document.documentElement;
     const body = document.body;
 
@@ -613,7 +636,7 @@ export const TMenu = new class {
         let angle = screen?.orientation?.angle ?? window.orientation ?? 0;
         if (angle === -90) angle = 270;
 
-        if (revers) {
+        if (TMenu.state.isRevers) {
             if (angle === 90) angle = 270;
             else if (angle === 270) angle = 90;
         }

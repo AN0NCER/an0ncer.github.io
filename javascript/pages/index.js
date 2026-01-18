@@ -1,4 +1,4 @@
-import { InitMenu } from "../menu.js";
+import { TMenu } from "../core/menu.core.js";
 import { ShowUser } from "./index/mod_account.js";
 import { UserRates } from "../modules/api.shiki.js";
 import { GitHubRel } from "./index/mod_github.js";
@@ -9,7 +9,7 @@ import { ScrollElementWithMouse, Sleep } from "../modules/functions.js";
 import { AnimeLoaded, LoadAnimeShikimori, LoadUpdatetAnime } from "./index/mod_animes.js";
 import { ShowNotifyWindow } from "./index/mod_window.js";
 
-InitMenu();
+TMenu.init();
 
 Main((e) => {
     ShowUser(e);

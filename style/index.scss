@@ -3,6 +3,10 @@ $object_bg: #1f2329;
 $primary: #2393F1;
 $radius: 5px;
 
+html {
+  scrollbar-width: none;
+}
+
 body {
   background: $main_bg;
   max-width: 1100px;
@@ -331,7 +335,7 @@ header {
               width: 43px;
               height: 43px;
 
-              svg{
+              svg {
                 transform: translateX(-1px);
               }
             }
@@ -424,9 +428,10 @@ header {
   font-size: 16px;
   overflow: hidden;
   overflow-x: scroll;
+  padding: 0 20px;
+  gap: 10px;
 
   &>.genres {
-    margin-right: 10px;
     background: $object_bg;
     height: 35px;
     display: grid;
@@ -434,10 +439,6 @@ header {
     padding: 0 25px;
     cursor: pointer;
     border-radius: 5px;
-
-    &:nth-child(1) {
-      margin-left: 20px;
-    }
   }
 
   &>.selected {
@@ -448,7 +449,7 @@ header {
 
 .section-anime,
 .section-update {
-  padding-left: 20px;
+  padding: 0 20px;
   margin-top: 20px;
   margin-right: 20px;
   display: flex;
@@ -472,6 +473,7 @@ header {
   align-items: center;
   font-family: Manrope;
   margin-top: 50px;
+  margin-bottom: 50px;
   color: #404246;
   gap: 3px;
 
@@ -505,9 +507,7 @@ header {
 
 footer {
   display: flex;
-  height: calc(120px + env(safe-area-inset-bottom));
-  width: 100%;
-  // margin-top: 110px;
+  height: var(--menu-height-safe);
 }
 
 .loading {
@@ -559,7 +559,7 @@ footer {
       flex-direction: column;
       justify-content: space-between;
 
-      .new{
+      .new {
         display: flex;
         align-items: center;
         color: #F7D149;
@@ -567,7 +567,8 @@ footer {
         font-size: 11px;
         text-transform: uppercase;
         gap: 5px;
-        .ticon{
+
+        .ticon {
           background-color: #F7D149;
           height: 11px;
         }
@@ -620,7 +621,6 @@ footer {
 }
 
 @import './popup';
-@import './phone_menu';
 @import './cards';
 @import './windowed';
 @import './window/update';
@@ -656,49 +656,76 @@ footer {
   }
 }
 
-body {
-  &[data-orientation="90"] {
+@media (max-width: 1000px) {
 
-    .swiper-treilers,
+  .section-genres,
+  .section-anime,
+  .section-update {
+    margin-right: 0;
+  }
+}
+
+body {
+
+  &[angle="90"],
+  &[angle="270"] {
+
     .section-genres,
     .section-anime,
-    .swiper-continue,
-    .section-update,
-    .section-countdown,
-    .downloads-link {
-
-      margin-right: max(20px, env(safe-area-inset-right));
-    }
-
-    footer {
-      height: 50px;
+    .section-update {
+      margin-right: 0;
     }
   }
 
-  &[data-orientation="270"] {
+  &[angle="90"] {
 
     .swiper-treilers,
+    .swiper-continue,
+    .section-countdown,
+    .downloads-link {
+      margin-right: max(20px, env(safe-area-inset-right));
+    }
+
+    header,
+    .section-title,
+    .swiper-treilers,
+    .swiper-continue,
+    .section-countdown,
+    .downloads-link {
+      margin-left: var(--menu-width-safe);
+    }
+
     .section-genres,
     .section-anime,
+    .section-update {
+      padding-left: var(--menu-width-safe);
+      padding-right: max(20px, env(safe-area-inset-right));
+    }
+  }
+
+  &[angle="270"] {
+
+    .swiper-treilers,
     .swiper-continue,
-    .section-title,
-    .section-update,
     .section-countdown,
     .downloads-link {
       margin-left: max(20px, env(safe-area-inset-left));
     }
 
-    .section-genres>.genres:nth-child(1) {
-      margin-left: 0;
+    header,
+    .section-title,
+    .swiper-treilers,
+    .swiper-continue,
+    .section-countdown,
+    .downloads-link {
+      margin-left: max(20px, env(safe-area-inset-left));
     }
 
-    .section-anime a:nth-child(1),
-    .section-update a:nth-child(1) {
-      margin-left: 0px;
-    }
-
-    footer {
-      height: 50px;
+    .section-genres,
+    .section-anime,
+    .section-update {
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: var(--menu-width-safe);
     }
   }
 }

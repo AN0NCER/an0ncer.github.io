@@ -859,7 +859,7 @@ body.menuver[data-orientation="90"] .span-row {
   transition: 0.3s ease-in-out;
 }
 @supports (-moz-appearance: none) {
-  .app > .wrapper .search-block > .wrapper > input:-moz-placeholder-shown {
+  .app > .wrapper .search-block > .wrapper > input:-moz-placeholder {
     padding-left: 10px;
     -moz-transition: 0.3s ease-in-out;
     transition: 0.3s ease-in-out;
@@ -868,7 +868,7 @@ body.menuver[data-orientation="90"] .span-row {
     padding-left: 10px;
     transition: 0.3s ease-in-out;
   }
-  .app > .wrapper .search-block > .wrapper > input:focus:-moz-placeholder-shown {
+  .app > .wrapper .search-block > .wrapper > input:focus:-moz-placeholder {
     padding-left: 10px;
   }
   .app > .wrapper .search-block > .wrapper > input:focus:placeholder-shown {
