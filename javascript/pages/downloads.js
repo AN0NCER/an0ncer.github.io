@@ -1,4 +1,4 @@
-import { InitMenu } from "../menu.js";
+import { TMenu } from "../core/menu.core.js";
 import { TDAnime, TDownload } from "../modules/TDownload.js";
 import { IManager } from "./downloads/mod_manager.js";
 import { LoadPlayer } from "./downloads/mod_player.js";
@@ -9,7 +9,7 @@ import { countVideo, formatBytes } from "./downloads/mod_utils.js";
 /**@type {DBControls} */
 let db = undefined;
 
-((() => InitMenu())(), async () => {
+((() => TMenu.init())(), async () => {
     // Подключаемся к базе данных
     db = (await TDownload.Manager(new TDAnime())).db;
     //Получаем все аниме и отображаем его
