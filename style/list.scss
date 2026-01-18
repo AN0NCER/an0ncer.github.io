@@ -12,7 +12,6 @@ body {
     -webkit-text-size-adjust: none;
 }
 
-@import './phone_menu';
 @import './cards';
 @import './windowed';
 @import './popup';
@@ -25,6 +24,7 @@ body {
     overflow-y: scroll;
     height: 100dvh;
     background: #101318;
+    scrollbar-width: none;
 
     &>.wrapper {
         width: 100%;
@@ -68,8 +68,8 @@ body {
     }
 }
 
-body[data-orientation="0"] {
-    .application-menu {
+body[angle="0"] {
+    .app-menu {
         transition: 0.3s ease-in-out;
 
         &.hide {

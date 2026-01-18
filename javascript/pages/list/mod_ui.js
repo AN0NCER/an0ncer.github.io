@@ -15,7 +15,7 @@ function ScrollMenu() {
         if (scrollTop > scrollTopPrev) {
             // Если прокрутка прошла порог и меню еще не скрыто, скрываем его
             if (appOffset > threshold && !isMenuHidden) {
-                $(`.application-menu`).addClass(`hide`);
+                $(`.app-menu`).addClass(`hide`);
                 isMenuHidden = true; // Меню скрыто
             }
             // Сбрасываем накопленное расстояние при прокрутке вниз
@@ -29,7 +29,7 @@ function ScrollMenu() {
 
             // Если накопленное расстояние превышает showDistance, показываем меню
             if (accumulatedScrollUp >= showDistance && isMenuHidden) {
-                $(`.application-menu`).removeClass(`hide`);
+                $(`.app-menu`).removeClass(`hide`);
                 isMenuHidden = false; // Меню отображено
                 accumulatedScrollUp = 0; // Сбрасываем накопленное расстояние после отображения меню
             }
