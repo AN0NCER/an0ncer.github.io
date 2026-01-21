@@ -228,6 +228,11 @@
   bottom: 18px;
 }
 
+body[angle="90"] #app-menu-host[data-rotate=true] .app-menu-context .context-wrapper,
+body[angle="270"] #app-menu-host[data-rotate=true] .app-menu-context .context-wrapper {
+  top: 20px;
+  bottom: 20px;
+}
 body[angle="90"] #app-menu-host[data-rotate=true] .app-menu,
 body[angle="270"] #app-menu-host[data-rotate=true] .app-menu {
   top: 0;
@@ -243,6 +248,12 @@ body[angle="90"] #app-menu-host[data-rotate=true] .app-menu .menu-wrapper .menu-
 body[angle="270"] #app-menu-host[data-rotate=true] .app-menu .menu-wrapper .menu-controls {
   flex-direction: column;
 }
+body[angle="90"][angle="90"] #app-menu-host[data-rotate=true] .app-menu-context .context-wrapper,
+body[angle="270"][angle="90"] #app-menu-host[data-rotate=true] .app-menu-context .context-wrapper {
+  left: var(--menu-width-safe);
+  right: 0;
+  justify-content: start;
+}
 body[angle="90"][angle="90"] #app-menu-host[data-rotate=true] .app-menu,
 body[angle="270"][angle="90"] #app-menu-host[data-rotate=true] .app-menu {
   right: auto !important;
@@ -252,6 +263,12 @@ body[angle="270"][angle="90"] #app-menu-host[data-rotate=true] .app-menu .menu-w
   padding-left: 10px;
   border-radius: 0px 7px 7px 0px;
   border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+body[angle="90"][angle="270"] #app-menu-host[data-rotate=true] .app-menu-context .context-wrapper,
+body[angle="270"][angle="270"] #app-menu-host[data-rotate=true] .app-menu-context .context-wrapper {
+  left: 0;
+  right: var(--menu-width-safe);
+  justify-content: end;
 }
 body[angle="90"][angle="270"] #app-menu-host[data-rotate=true] .app-menu,
 body[angle="270"][angle="270"] #app-menu-host[data-rotate=true] .app-menu {

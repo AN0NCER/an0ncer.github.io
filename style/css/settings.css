@@ -40,7 +40,7 @@ body {
 .app-scrollable .app-wrapper {
   max-width: 900px;
   margin: 0 auto;
-  padding-bottom: max(20px, var(--sab) + var(--m-space));
+  padding-bottom: max(20px, var(--menu-height-safe));
   font-family: "Manrope", sans-serif;
 }
 
@@ -254,7 +254,6 @@ main {
   flex-direction: column;
   gap: 10px;
   margin-top: 10px;
-  padding-bottom: var(--menu-height-safe);
 }
 main .block-wrapper {
   display: flex;

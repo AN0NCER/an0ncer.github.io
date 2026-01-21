@@ -5,6 +5,10 @@
   --sal: env(safe-area-inset-left);
 }
 
+html {
+  scrollbar-width: none;
+}
+
 body {
   background: #101318;
   overflow-x: hidden;
@@ -18,7 +22,7 @@ body {
   margin: 20px auto 0 auto;
   max-width: 900px;
   gap: 10px;
-  padding-bottom: calc(var(--m-space) + var(--sab));
+  padding-bottom: max(20px, var(--menu-height-safe));
 }
 @media screen and (max-width: 940px) {
   .body-wrapper {

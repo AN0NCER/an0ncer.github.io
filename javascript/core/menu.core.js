@@ -493,6 +493,8 @@ class MController {
             $(document).on('touchend', () => {
                 clearInterval(timer);
 
+                if (!element) return;
+
                 element.classList.remove('-pressed');
                 element = null;
             });

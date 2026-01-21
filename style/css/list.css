@@ -541,6 +541,7 @@ body[angle="90"] .span-row {
   flex-direction: column;
   gap: 10px;
   max-width: 900px;
+  padding-bottom: max(20px, var(--menu-height-safe));
 }
 .app > .wrapper .title-block {
   font-family: "Manrope";

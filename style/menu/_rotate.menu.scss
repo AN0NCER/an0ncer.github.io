@@ -1,6 +1,13 @@
 body[angle="90"],
 body[angle="270"] {
     #app-menu-host[data-rotate="true"] {
+        .app-menu-context{
+            .context-wrapper{
+                top: 20px;
+                bottom: 20px;
+            }
+        }
+        
         .app-menu {
             top: 0;
             bottom: 0;
@@ -19,6 +26,15 @@ body[angle="270"] {
 
     &[angle="90"] {
         #app-menu-host[data-rotate="true"] {
+            .app-menu-context {
+                .context-wrapper {
+                    left: var(--menu-width-safe);
+                    right: 0;
+
+                    justify-content: start;
+                }
+            }
+
             .app-menu {
                 right: auto !important;
 
@@ -33,6 +49,15 @@ body[angle="270"] {
 
     &[angle="270"] {
         #app-menu-host[data-rotate="true"] {
+            .app-menu-context {
+                .context-wrapper {
+                    left: 0;
+                    right: var(--menu-width-safe);
+    
+                    justify-content: end;
+                }
+            }
+
             .app-menu {
                 left: auto !important;
 

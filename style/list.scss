@@ -32,6 +32,7 @@ body {
         flex-direction: column;
         gap: 10px;
         max-width: 900px;
+        padding-bottom: max(20px, var(--menu-height-safe));
 
         @import './list/main';
         @import './list/content';
