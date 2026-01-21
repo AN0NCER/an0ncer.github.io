@@ -21,16 +21,18 @@
         padding-right: 5px;
         align-items: center;
         position: relative;
-
-
+        
+        
         &::after {
             transition: .3s ease-in-out;
             position: absolute;
             content: '';
             inset: 0;
             background: rgba(255, 255, 255, 0);
+            border: 0.2px solid rgba(255, 255, 255, 0);
             backdrop-filter: blur(0px);
             pointer-events: none;
+            border-radius: 5px;
         }
 
         .btn {
@@ -71,6 +73,7 @@
                 align-items: center;
                 background: #525252;
                 transition: .3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+                overflow: hidden;
 
                 &::after {
                     content: '';
@@ -122,11 +125,41 @@
         &>.checkbox {
 
             &::after {
-                border: 1px solid rgba(98, 98, 98, 0.5);
+                border: 0.2px solid rgba(255, 255, 255, 0.2);
                 background: rgba(255, 255, 255, 0.11);
-                border-radius: 5px;
                 backdrop-filter: blur(4px);
             }
         }
+    }
+
+    &.-load {
+
+        &>.checkbox {
+            label {
+                pointer-events: none;
+
+                &>.checkbox {
+                    .switch-slider {
+                        width: 34px;
+
+                        &::after {
+                            border: 3px solid #FFFFFF;
+                            border-right-color: transparent;
+                            animation: spin 1s linear infinite;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
     }
 }

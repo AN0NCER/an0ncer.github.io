@@ -1,33 +1,22 @@
-import { debounce } from "./mod.func.js";
-
 export function Search() {
     let previousSearchValue = null;
     let currentMatchIndex = 0;
-    const searchInput = $('.search-input > input');
-    const clearButton = $('.search-input > .btn-empty');
 
-    if (!searchInput.length) return;
+    const onIput = (value) => {
+        value = value.trim().toLowerCase();
 
-    searchInput.on('input', debounce(function () {
-        const currentValue = this.value.trim().toLowerCase();
 
-        if (previousSearchValue === currentValue) return;
-        previousSearchValue = currentValue;
-        currentMatchIndex = 0; // Reset index when search changes
+        if (previousSearchValue === value) return;
+        previousSearchValue = value;
+        currentMatchIndex = 0;
 
-        perfomSerach(currentValue);
-    }, 300));
+        perfomSerach(value);
+    }
 
-    searchInput.on('keydown', function (e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            navigateToNextMatch();
-        }
-    });
-
-    clearButton.on('click', function () {
-        clearSearch();
-    });
+    return {
+        oninput: onIput,
+        onsearch: (value) => { navigateToNextMatch() }
+    }
 
     function perfomSerach(searchValue) {
         const searchableItems = $('[param]');
@@ -48,21 +37,6 @@ export function Search() {
             }
         });
 
-        highlightCurrentMatch();
-    }
-
-    function navigateToNextMatch() {
-        const matches = $('.-search');
-
-        if (matches.length === 0) return;
-
-        // Remove current highlight
-        matches.removeClass('-current');
-
-        // Move to next match (cycle back to 0 if at end)
-        currentMatchIndex = (currentMatchIndex + 1) % matches.length;
-
-        // Highlight and scroll to current match
         highlightCurrentMatch();
     }
 
@@ -91,19 +65,18 @@ export function Search() {
         });
     }
 
-    function clearSearch() {
-        // Clear input value
-        searchInput.val('');
+    function navigateToNextMatch() {
+        const matches = $('.-search');
 
-        // Reset variables
-        previousSearchValue = null;
-        currentMatchIndex = 0;
+        if (matches.length === 0) return;
 
-        // Remove all search classes
-        const searchableItems = $('[param]');
-        searchableItems.removeClass('-search -current');
+        // Remove current highlight
+        matches.removeClass('-current');
 
-        // Focus back to input
-        searchInput.focus();
+        // Move to next match (cycle back to 0 if at end)
+        currentMatchIndex = (currentMatchIndex + 1) % matches.length;
+
+        // Highlight and scroll to current match
+        highlightCurrentMatch();
     }
 }

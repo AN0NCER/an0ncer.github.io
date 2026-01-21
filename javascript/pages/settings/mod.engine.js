@@ -1,34 +1,142 @@
 import { animate } from "../../library/anime.esm.min.js";
 
-const dependencyMap = {};
-const paramDefinitions = {};
+let GLOBAL_ID = 0;
 
-const gen = {
+const log = console.log.bind(console, '[mod.engine] ->');
+const err = console.error.bind(console, '[mod.engine] ->');
+const warn = console.warn.bind(console, '[mod.engine] ->');
+
+const dependency = {
+    map: new Map(),
+    register: function (id, dependsOn) {
+        if (dependsOn) {
+            const { param, value } = dependsOn;
+            if (!this.map.get(param)) this.map.set(param, []);
+            this.map.get(param).push({ id, val: value });
+        }
+        return this;
+    },
+    update: function (param, value) {
+        if (!param || typeof value === undefined) return;
+
+        let obj = undefined;
+        if (!(obj = this.map.get(param))) return;
+
+        obj.forEach(({ id, val }) => {
+            const wrapper = $(`[data-id="${id}"]`);
+            if (value === val) {
+                return wrapper.removeClass('-disable');
+            }
+            wrapper.addClass('-disable');
+        });
+    },
+    updateAll: function () {
+        this.map.forEach((params, key) => {
+            const el = iSettings.getByParam(key);
+            params.forEach(({ id, val }) => {
+                const wrapper = $(`[data-id="${id}"]`);
+                if (el.value === val) {
+                    return wrapper.removeClass('-disable');
+                }
+                wrapper.addClass('-disable');
+            });
+        })
+    }
+}
+
+class iElement {
+    constructor(setup, type, defaultValue = undefined) {
+        this.id = generateUniqueId();
+        this.value = defaultValue;
+        this.param = setup.param;
+        this.type = type;
+        iSettings.settings.set(this.id, this);
+        dependency.register(this.id, setup.dependsOn);
+    }
+
+    set(value, event = () => { }) {
+        if (value instanceof Promise) return;
+        this.value = value;
+        event(this.value);
+        dependency.update(this.param, this.value);
+    }
+
+    get() {
+        return this.value;
+    }
+}
+
+const iSettings = new class {
+    constructor() {
+        this.settings = new Map();
+    }
+
+    getByParam(param) {
+        for (let [key, element] of this.settings) {
+            if (element.param === param) return element;
+        }
+    }
+}()
+
+const map = {
     'checkbox.tip': (val) => {
-        const { classes = [], styles = [] } = val;
-        const { title, description, param } = val;
+        const ielement = new iElement(val, 'checkbox', false);
+        const id = ielement.id;
 
-        registerDefinition(val);
+        const { classes = [], styles = [], dependsOn } = val;
+        const { enable = () => { return true } } = val;
+        const { title, description, param } = val;
+        const { click = () => { } } = val;
+
+        const {
+            get = () => { return getParametrByKey($PARAMETERS, param) },
+            set = (checked) => { if (param) setParameter(param, checked); }
+        } = val;
 
         const cl = ['checkbox-wrapper', 'closset', '-hide'].concat(classes);
         const st = [].concat(styles.map(x => `${x.key}: ${x.val};`));
-        const vl = getParametrByKey($PARAMETERS, param);
 
-        return `<div class="${cl.join(' ')}" data-param="${param}" ${st.length > 0 ? `style="${st.join('')}"` : ''}><div class="checkbox" param><div class="btn tooltip"><div class="ticon i-caret-right"></div></div><label><div class="title" tit>${title}</div><div class="checkbox"><input type="checkbox" ${vl ? "checked" : ""}><div class="switch-slider"></div></div></label></div><div class="tips">${description}</div></div>`;
+        const value = get();
+        ielement.set(value);
+        let vl = value;
+
+        if (value instanceof Promise) {
+            vl = false;
+            cl.push('-load');
+            Promise.resolve(value).then((result) => {
+                ielement.set(result);
+                $(`#${id}`).prop('checked', result);
+                $(`[data-id="${id}"]`).removeClass('-load');
+            }).catch((e) => err(`Ошибка получение данных ${id}, ${e}`));
+        }
+
+        if (!enable(ielement.id)) cl.push('-disable');
+
+        setTimeout(() => {
+            $(`.checkbox-wrapper[data-id="${id}"]`).on('change', 'input[type="checkbox"]', function (e) {
+                const checked = $(this).is(':checked');
+                ielement.set(checked, set);
+                click(checked);
+            });
+        }, 0);
+
+        return `<div class="${cl.join(' ')}" ${st.length > 0 ? `style="${st.join('')}"` : ''} data-id="${id}"><div class="checkbox" param><div class="btn tooltip"><div class="ticon i-caret-right"></div></div><label><div class="title" tit>${title}</div><div class="checkbox"><input id="${id}" type="checkbox" ${vl ? "checked" : ""}><div class="switch-slider"></div></div></label></div><div class="tips">${description}</div></div>`;
     },
     'button.event': (val) => {
+        const ielement = new iElement(val, 'button');
+        const id = ielement.id;
+
         const { classes = [], styles = [] } = val;
-        const { title, icon, click = () => { } } = val;
         const { enable = () => { return true } } = val;
+        const { title, description, param } = val;
+        const { click = () => { }, icon } = val;
 
         const cl = ['btn-value-wrapper', 'closset'].concat(classes);
         const st = [].concat(styles.map(x => `${x.key}: ${x.val};`));
 
-        const id = generateUniqueId('tun');
-
         Promise.resolve(val.value()).then(result => {
             $(`#${id}`).html(result).removeClass('-load');
-        }).catch(err => { console.log(err) });
+        }).catch(err => { log(err) });
 
         setTimeout(() => {
             $(`.btn[data-id="${id}"]`).on('click', () => {
@@ -41,16 +149,27 @@ const gen = {
         return `<div class="${cl.join(' ')}" ${st.length > 0 ? `style="${st.join('')}"` : ''}><div class="btn button" data-id="${id}" param><div class="icon"><div class="ticon i-${icon}"></div></div><label><div class="title" tit>${title}</div><div class="value -load" id="${id}"><span class="loader"></span></div></label></div></div>`;
     },
     'img.select': (val) => {
+        const ielement = new iElement(val, 'imageselector');
+        const id = ielement.id;
+
         const { classes = [], styles = [] } = val;
-        const { title, variation, param, description } = val;
         const { click = () => { } } = val;
+        const { variation = [], title, description, param } = val;
+
+        const {
+            get = () => { return getParametrByKey($PARAMETERS, param) },
+            selected = () => { return variation.findIndex(x => x.key == get()) },
+            set = (key) => {
+                setParameter(param, key);
+            }
+        } = val;
 
         const cl = ['img-select-wrapper', '-hide'].concat(classes);
         const st = [].concat(styles.map(x => `${x.key}: ${x.val};`));
 
-        const id = generateUniqueId('tun');
-        let select = variation.findIndex(x => x.key === getParametrByKey($PARAMETERS, param));
+        let select = selected();
         select = select !== -1 ? select : 0;
+        ielement.set(select);
 
         const element = (variation = []) => {
             let html = "";
@@ -60,66 +179,102 @@ const gen = {
             }
             return html;
         }
-
+        //TODO: Add click event
         setTimeout(() => {
             const $element = $(`.img-select-wrapper[data-id="${id}"]`);
             $element.find(`.element-wrapper[data-key="${variation[select].key}"]`).addClass('-select');
+
             $element.on('click', '.element-wrapper', (e) => {
                 const $e = $(e.currentTarget);
                 if ($e.hasClass('-select')) return;
 
                 const key = $e.attr('data-key');
                 const select = variation.findIndex(x => x.key === key);
-                setParameter(param, key);
 
+                ielement.set(key, set);
                 $element.find('label > .value').text(variation[select].val);
                 $element.find('.-select').removeClass('-select');
                 $e.addClass('-select');
-                click(key);
+                click(variation[select]);
             });
         }, 0);
 
         return `<div class="${cl.join(' ')}" ${st.length > 0 ? `style="${st.join('')}"` : ''} data-id="${id}"><div class="button-wrapper"><div class="btn button" param><div class="icon"><div class="ticon i-caret-right"></div></div><label><div class="title" tit>${title}</div><div class="value">${variation[select].val}</div></label></div></div><div class="scroll scroll-none"><div class="list">${element(variation)}</div><div class="tip">${description}</div></div></div>`;
     },
     'btn.tip': (val) => {
+        const ielement = new iElement(val, 'button');
+        const id = ielement.id;
+
         const { classes = [], styles = [] } = val;
-        const { title, description, variation, click, mode } = val;
+        const { enable = () => { return true } } = val;
+        const { title, description, param } = val;
+        const { click, mode, variation } = val;
+
+        const {
+            getParam = () => getParametrByKey($PARAMETERS, param),
+            getIndex = () => variation.findIndex(x => x.key === getParam()),
+        } = val;
+
+        let {
+            getValue = () => getParam().length,
+            setValue = (value) => setParameter(param, value),
+        } = val;
+
+        if (mode === 'single') {
+            getValue = () => variation.find(x => x.key === getParam()).val;
+            setValue = (index) => setParameter(param, variation[index].key);
+        }
+
+        ielement.set(getParam());
+        const modSetValue = (val) => { ielement.set(val, setValue); }
 
         const cl = ['button-tips-wrapper', 'closset', '-hide'].concat(classes);
         const st = [].concat(styles.map(x => `${x.key}: ${x.val};`));
-        const id = generateUniqueId('tun');
 
-        const param = getParametrByKey($PARAMETERS, val.param);
-        const value = mode === "single" ? variation.find(x => x.key === param).val : param.length;
+        const content = getValue();
 
         setTimeout(() => {
             $(`.button-tips-wrapper[data-id="${id}"]`).on('click', 'label', function () {
-                click({ param: val.param, variation, description, mode, title, id });
+                click({ variation, mode, title, id, description, getValue: getParam, setValue: modSetValue, getIndex });
             });
         }, 0);
 
-        return `<div class="${cl.join(' ')}" ${st.length > 0 ? `style="${st.join('')}"` : ''} data-id="${id}"><div class="btn button" param><div class="icon tooltip"><div class="ticon i-caret-right"></div></div><label><div class="title" tit>${title}</div><div class="value">${value}</div></label></div><div class="tips">${description}</div></div>`;
+        return `<div class="${cl.join(' ')}" ${st.length > 0 ? `style="${st.join('')}"` : ''} data-id="${id}"><div class="btn button" param><div class="icon tooltip"><div class="ticon i-caret-right"></div></div><label><div class="title" tit>${title}</div><div class="value">${content}</div></label></div><div class="tips">${description}</div></div>`;
     },
     'sel.one': (val) => {
+        const ielement = new iElement(val, 'selector');
+        const id = ielement.id;
+
         const { classes = [], styles = [] } = val;
-        const { icon, title, description, param, variation } = val;
-        const { click, mode } = val;
+        const { enable = () => { return true } } = val;
+        const { title, description, param } = val;
+        const { variation, click, icon } = val;
+
+        const {
+            getValue = () => variation.find(x => x.key == getParametrByKey($PARAMETERS, param)).val,
+            setValue = (index) => setParameter(param, variation[index].key),
+            getIndex = () => variation.findIndex(x => x.key === getParametrByKey($PARAMETERS, param)),
+        } = val;
+
+        const modSetValue = (val) => { ielement.set(val, setValue); }
 
         const cl = ['select-wrapper'].concat(classes);
         const st = [].concat(styles.map(x => `${x.key}: ${x.val};`));
-        const id = generateUniqueId('tun');
 
-        const value = variation.find(x => x.key == getParametrByKey($PARAMETERS, param)).val;
+        Promise.resolve(getValue()).then(result => {
+            ielement.set(result);
+            $(`#${id}`).html(result).removeClass('-load');
+        }).catch(e => { err(e) });
 
         setTimeout(() => {
             $(`.select-wrapper[data-id="${id}"]`).on('click', '.icon, .title', () => {
-                click({ param: val.param, variation, description, mode, title, id });
+                click({ variation, description, mode: "single", title, id, setValue: modSetValue, getValue, getIndex });
             });
 
             $(`.control[data-id="${id}"]`).on('click', '.btn', function (e) {
                 const $e = $(this);
                 const id = $e.attr('id');
-                let index = variation.findIndex(x => x.key === getParametrByKey($PARAMETERS, param));
+                let index = getIndex();
 
                 if (id === "nx") {
                     index = index < variation.length - 1 ? index + 1 : 0;
@@ -127,98 +282,81 @@ const gen = {
                     index = index > 0 ? index - 1 : variation.length - 1;
                 }
 
-                setParameter(param, variation[index].key);
+                modSetValue(index);
+
                 $(e.delegateTarget).find('.value').text(variation[index].val);
             });
         }, 0);
 
-        return `<div class="${cl.join(' ')}" ${st.length > 0 ? `style="${st.join('')}"` : ''} data-id="${id}"><div class="btn button" param><div class="icon tooltip"><div class="ticon i-${icon}"></div></div><label><div class="title" tit>${title}</div><div class="control" data-id="${id}"><div class="btn" id="ps"><div class="ticon i-caret-left"></div></div><span class="value">${value}</span><div class="btn" id="nx"><div class="ticon i-caret-right"></div></div></div></label></div></div>`;
+        if (!enable(id)) cl.push('-disable');
+
+        return `<div class="${cl.join(' ')}" ${st.length > 0 ? `style="${st.join('')}"` : ''} data-id="${id}"><div class="btn button" param><div class="icon tooltip"><div class="ticon i-${icon}"></div></div><label><div class="title" tit>${title}</div><div class="control" data-id="${id}"><div class="btn" id="ps"><div class="ticon i-caret-left"></div></div><span class="value -load" id="${id}"><span class="loader"></span></span><div class="btn" id="nx"><div class="ticon i-caret-right"></div></div></div></label></div></div>`;
     },
     'btn': (val) => {
+        const ielement = new iElement(val, 'button');
+        const id = ielement.id;
+
         const { classes = [], styles = [] } = val;
-        const { icon, title, click = () => { } } = val;
+        const { enable = () => { return true } } = val;
+        const { title, description, param } = val;
+        const { icon, click } = val;
 
         const cl = ['button-wrapper'].concat(classes);
         const st = [].concat(styles.map(x => `${x.key}: ${x.val};`));
-        const id = generateUniqueId('tun');
 
         setTimeout(() => {
             $(`.button-wrapper[data-id="${id}"]`).on('click', '.o-button', click);
         }, 0);
 
         return `<div class="${cl.join(' ')}" ${st.length > 0 ? `style="${st.join('')}"` : ''} data-id="${id}"><div class="o-button" param><div class="icon"><div class="ticon i-${icon}"></div></div><div class="value" tit>${title}</div></div></div>`;
+    },
+    'custom': (val) => {
+        const ielement = new iElement(val, 'custom');
+        const id = ielement.id;
+
+        const { classes = [], styles = [] } = val;
+        const { html, on } = val;
+
+        const cl = ['custom-element'].concat(classes);
+        const st = [].concat(styles.map(x => `${x.key}: ${x.val};`));
+
+        setTimeout(() => {
+            on(id);
+        }, 0);
+
+        return `<div class="${cl.join(' ')}" ${st.length > 0 ? `style="${st.join('')}"` : ''} id="${id}">${html}</div>`;
     }
 }
 
-let globalComponentId = 0;
-function generateUniqueId(prefix = 'gen') {
-    return `${prefix}-${globalComponentId++}-${Date.now().toString(36)}`;
-}
-
-function updateAllDependents() {
-    Object.keys(dependencyMap).forEach(updateDependcies);
-}
-
-function registerDefinition(def) {
-    const { param, dependsOn } = def;
-    paramDefinitions[param] = def;
-
-    if (dependsOn) {
-        if (!dependencyMap[dependsOn.param]) {
-            dependencyMap[dependsOn.param] = [];
-        }
-        dependencyMap[dependsOn.param].push(param);
-    }
-}
-
-function updateDependcies(changedParam) {
-    const dependents = dependencyMap[changedParam];
-    if (!dependents) return;
-
-    dependents.forEach(depParam => {
-        const def = paramDefinitions[depParam];
-        const wrapper = $(`[data-param="${depParam}"]`);
-        const condition = def.dependsOn;
-        const actual = getParametrByKey($PARAMETERS, condition.param);
-
-        if (actual === condition.value) {
-            return wrapper.removeClass('-disable');
-        }
-
-        wrapper.addClass('-disable');
-    });
-}
-
-export function Engine(param) {
-    const builder = (params) => {
-        let html = "";
-        for (let i = 0; i < params.length; i++) {
-            const { type } = params[i];
-            if (gen[type]) {
-                html += gen[type](params[i]);
+export const Engine = {
+    render: (setup) => {
+        const builder = (params) => {
+            let html = "";
+            for (let i = 0; i < params.length; i++) {
+                const { type } = params[i];
+                try {
+                    if (map[type]) {
+                        html += map[type](params[i]);
+                    }
+                } catch (e) {
+                    err(e);
+                }
             }
+            return html;
         }
-        return html;
+
+        for (let i = 0; i < setup.length; i++) {
+            const { name, params } = setup[i];
+            $('main').append(`<div class="block-wrapper"><div class="title">${name}</div><div class="params-wrapper">${builder(params)}</div></div>`);
+        }
+
+        dependency.updateAll();
+
+        hideAnimation();
     }
+}
 
-    for (let i = 0; i < param.length; i++) {
-        const { name, params } = param[i];
-        $('main').append(`<div class="block-wrapper"><div class="title">${name}</div><div class="params-wrapper">${builder(params)}</div></div>`);
-    }
-
-    updateAllDependents();
-
-    $('.checkbox-wrapper').on('change', 'input[type="checkbox"]', function (e) {
-        const param = $(this).closest('.closset').data('param');
-        const checked = $(this).is(':checked');
-
-        // Пример обновления параметра
-        setParameter(param, checked);
-        updateDependcies(param);
-    });
-
-
-
+function hideAnimation() {
     // Раскрываем: от 0 до scrollHeight
 
     $('.checkbox-wrapper, .button-tips-wrapper').on('click', '.tooltip', function (e) {
@@ -292,6 +430,10 @@ export function Engine(param) {
             });
         }
     });
+}
+
+function generateUniqueId(prefix = 'gen') {
+    return `${prefix}-${GLOBAL_ID++}`;
 }
 
 /**

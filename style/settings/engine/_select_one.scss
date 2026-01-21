@@ -57,4 +57,22 @@
             }
         }
     }
+
+    &.-disable {
+        pointer-events: none;
+
+        &>.btn {
+            position: relative;
+
+            &::after {
+                border: 1px solid rgba(98, 98, 98, 0.5);
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: rgba(255, 255, 255, 0.11);
+                border-radius: 5px;
+                backdrop-filter: blur(4px);
+            }
+        }
+    }
 }

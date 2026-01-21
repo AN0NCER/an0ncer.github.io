@@ -95,6 +95,15 @@ const WindowStorage = {
                 onBegin
             });
         });
+
+        navigator.storage.estimate().then(({ usage, quota }) => {
+            const $el = $('.estimate');
+            $el.find('.app').text(`Используется: ${formatBytes(usage)} из ${formatBytes(quota)}`);
+            $el.find('.storage-state').css({ '--progress': `${Math.round(usage / quota * 100)}%` })
+            $el.find('.free-space').text(formatBytes(quota - usage));
+        }).catch((err) => {
+            console.error(err);
+        })
     },
     onshow: function () {
         if (this.loaded) return;

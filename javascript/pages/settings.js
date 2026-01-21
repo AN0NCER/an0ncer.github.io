@@ -1,11 +1,14 @@
 import { Main, OAuth, sUrl } from "../core/main.core.js";
-import { InitMenu, Menu } from "../menu.js";
+import { TMenu } from "../core/menu.core.js";
 import { ClearParams } from "../modules/functions.js";
 import { Engine } from "./settings/mod.engine.js";
 import { ClearDB, Logout } from "./settings/mod.func.js";
+import { THeader } from "./settings/mod.header.js";
 import { Search } from "./settings/mod.search.js";
 import { WindowSelector } from "./settings/mod.selector.js";
 import { ShowStorage, SizeValue } from "./settings/mod.storage.js";
+
+import sUpdate from "./settings/setup.update.js";
 
 const t = new URLSearchParams(window.location.search).get('t');
 
@@ -59,22 +62,34 @@ const setup = [
                 description: 'Визуальное оформление для персонализированного внешнего вида Меню.',
                 variation: [
                     {
-                        key: 'mode-0',
+                        key: 'default',
                         val: 'Стандарт',
-                        img: 'set.menu.0.png'
+                        img: 'set.menu.default.png'
                     },
-                    {
-                        key: 'mode-2',
-                        val: 'Стиль 1',
-                        img: 'set.menu.1.png'
-                    },
-                    {
-                        key: 'mode-1',
-                        val: 'Стиль 2',
-                        img: 'set.menu.2.png'
-                    }
+                    // {
+                    //     key: 'mode-2',
+                    //     val: 'Стиль 1',
+                    //     img: 'set.menu.1.png'
+                    // },
+                    // {
+                    //     key: 'mode-1',
+                    //     val: 'Стиль 2',
+                    //     img: 'set.menu.2.png'
+                    // }
+                    // {
+                    //     key: 'mode-3',
+                    //     val: 'IOS 26',
+                    //     img: 'set.menu.3.png'
+                    // }
                 ],
             },
+            // {
+            //     param: 'menuopacity',
+            //     type: 'checkbox.tip',
+            //     title: 'Прозрачность',
+            //     description: 'Добавляет прозрачность и размытие в меню.',
+            //     click: () => SwitchMenu()
+            // },
             {
                 param: 'menuver',
                 type: 'checkbox.tip',
@@ -140,7 +155,6 @@ const setup = [
             },
             {
                 click: WindowSelector,
-                mode: 'single',
                 param: 'anicachlive',
                 type: 'sel.one',
                 icon: 'box-open',
@@ -313,20 +327,49 @@ const setup = [
                 description: 'Удаляет все файлы и данные аниме.'
             }
         ]
+    },
+    {
+        name: "Обновления",
+        params: sUpdate
     }
 ];
 
 ClearParams(['t']);
 
-Main(async (e) => {
-    InitMenu();
+TMenu.init();
+THeader.init({
+    events: {
+        onprofil: () => {
+            let location = "login.html";
+            if (OAuth.auth)
+                location = "user.html";
 
+            window.location.href = location;
+        },
+        onbutton: () => {
+            let href = `${sUrl}/users/sign_in`;
+
+            if (OAuth.auth && OAuth.user) {
+                href = `${OAuth.user.url}/edit/account`
+            } else {
+                return window.location.href = "login.html";
+            }
+
+            window.open(href, '_blank').focus();
+        },
+        ...Search()
+    }
+})
+
+Main(async (e) => {
     if (e) User();
 
     Settings(e);
-    Engine(setup);
-    Search();
-    Go(t);
+    Engine.render(setup);
+
+    if (t) {
+        Go(t);
+    }
 });
 
 function Go(param) {
@@ -366,22 +409,10 @@ async function User() {
     let user = OAuth.user;
     if (!user) user = await OAuth.requests.getWhoami();
 
-    $('.profile > img').attr('src', user.image['x160']);
-    $('.profile > .content > .name').text(user.nickname);
-    $('.profile > .content > span').text('Аккаунт');
-    $('.profile-link').attr('href', 'user.html');
+    $('.profile > .ava-wrapper').css('--p-ava-img', `url('${user.image['x160']}')`);
+    $('.profile > .profile-content > .username').text(user.nickname);
 }
 
-function SwitchMenu() {
-    switch ($PARAMETERS.menu.menustyle) {
-        case 'mode-1':
-            Menu().setMode.mode_1();
-            break;
-        case 'mode-2':
-            Menu().setMode.mode_2();
-            break;
-        default:
-            Menu().setMode.mode_0();
-            break;
-    }
+function SwitchMenu(value = { key: $PARAMETERS.menu.menustyle }) {
+    TMenu.setStyle(value.key);
 }

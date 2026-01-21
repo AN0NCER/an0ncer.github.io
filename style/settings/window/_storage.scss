@@ -17,10 +17,8 @@
             padding-bottom: max(var(--sab), 10px) !important;
             gap: 10px;
 
-            display: grid;
-            grid-template-columns: auto;
-            grid-template-rows: auto auto auto auto;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
 
             .window-bar {
                 margin-top: 10px;
@@ -52,10 +50,10 @@
 
             .storage-wrapper {
                 background: #191C21;
+                border: 0.2px solid rgba(255, 255, 255, 0.2);
                 margin: 0 10px;
                 border-radius: 5px;
-                overflow: hidden;
-                overflow-y: auto;
+                overflow: clip;
 
                 .closset {
                     .btn {
@@ -66,6 +64,8 @@
                         align-items: center;
                         height: 45px;
                         cursor: pointer;
+                        position: sticky;
+                        top: 0px;
 
                         .title-block {
                             display: flex;
@@ -131,31 +131,136 @@
             }
 
             .storage-controls {
-                display: flex;
                 gap: 10px;
                 margin: 0 10px;
 
-                .btn {
+                .estimate {
                     background: #191C21;
-                    cursor: pointer;
+                    overflow: hidden;
+                    color: #FFFFFF;
                     display: flex;
+                    flex-direction: column;
+                    border-radius: 5px;
+                    min-height: 52px;
+                    padding: 15px 10px;
                     align-items: center;
                     justify-content: center;
-                    flex: 1 0 0;
-                    border-radius: 3px;
-                    height: 45px;
-                    font-size: 14px;
-                    font-weight: bold;
+                    position: relative;
+                    gap: 10px;
 
-                    .icon {
-                        width: 35px;
-                        height: 35px;
-                        display: grid;
-                        place-items: center;
+                    .storage-info {
+                        font-size: 12px;
+                        width: 100%;
+                        padding: 0 5px;
+                        display: flex;
+                        justify-content: space-between;
 
-                        .ticon {
-                            background-color: #FFFFFF;
-                            height: 14px;
+                        .app {
+                            opacity: .25;
+                        }
+                    }
+
+                    .storage-state {
+                        $min-width: 16px;
+
+                        --progress: 0%;
+                        width: 100%;
+                        background: rgba(35, 148, 241, 0.25);
+                        border-radius: 12px;
+                        display: flex;
+                        overflow: hidden;
+                        padding: 5px;
+                        position: relative;
+                        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+                        border: 0.3px solid rgba(255, 255, 255, 0.15);
+
+                        .usage-space {
+                            width: var(--progress);
+                            border-radius: 8px;
+                            min-width: $min-width;
+                        }
+
+                        .free-space {
+                            width: var(--progress);
+                            color: #2393F1;
+                            flex: 1 0 0;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 12px;
+                            font-weight: bold;
+                            text-wrap: nowrap;
+                            min-width: 50px;
+                        }
+
+                        &::after {
+                            content: '';
+                            display: grid;
+                            position: absolute;
+                            top: 5px;
+                            left: 5px;
+                            bottom: 5px;
+                            width: var(--progress);
+                            background: #2393F1;
+                            min-width: $min-width;
+                            z-index: 1;
+                            border-radius: 8px;
+                        }
+                    }
+
+                    .buttons {
+                        display: flex;
+                        width: 100%;
+                        gap: 8px;
+                        align-items: center;
+                        margin-top: 5px;
+
+                        .btn-wrapper {
+                            display: flex;
+                            flex: 1 0 0;
+                            padding: .3px;
+                            border-radius: 5px;
+
+                            &:nth-child(1) {
+                                background: linear-gradient(150deg, rgba(255, 255, 255, .1) -50%, rgba(255, 255, 255, 0) 100%);
+                            }
+
+                            &:nth-child(3) {
+                                background: linear-gradient(-70deg, rgba(255, 255, 255, .1) -50%, rgba(255, 255, 255, 0) 100%);
+                            }
+                        }
+
+                        .btn {
+                            display: flex;
+                            align-items: center;
+                            font-weight: bold;
+                            font-size: 14px;
+                            flex: 1 0 0;
+                            justify-content: center;
+                            height: 45px;
+                            cursor: pointer;
+                            background: #191C21;
+                            border-radius: 5px;
+
+                            .icon {
+                                width: 35px;
+                                height: 35px;
+                                display: grid;
+                                place-items: center;
+
+                                .ticon {
+                                    height: 14px;
+                                    background-color: #FFFFFF;
+                                }
+                            }
+                        }
+
+                        .separator {
+                            display: grid;
+                            width: 1px;
+                            background: rgba(255, 255, 255, 0.1);
+                            border-radius: 1px;
+                            height: 30px;
                         }
                     }
                 }
