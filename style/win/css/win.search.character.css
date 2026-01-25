@@ -25,8 +25,8 @@
 }
 .window-character-list .window-content .content-wrapper .wrapper .window-bar {
   margin-top: 10px;
-  margin-left: max(var(--sar), 20px);
-  margin-right: max(var(--sal), 20px);
+  margin-left: max(env(safe-area-inset-left), 20px);
+  margin-right: max(env(safe-area-inset-right), 20px);
   display: flex;
   align-items: center;
   justify-content: space-between;

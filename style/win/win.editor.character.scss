@@ -7,6 +7,11 @@
 }
 
 .window-character-edit {
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+    --sar: env(safe-area-inset-right);
+    --sat: env(safe-area-inset-top);
+
     --z: 300;
     z-index: var(--z) !important;
     box-sizing: border-box;
@@ -201,7 +206,7 @@
                     background-color: #D6D6D6;
                 }
 
-                &.btn-character-cancel{
+                &.btn-character-cancel {
                     width: auto;
                     background: #F12326;
                     border: 0.2px solid rgba(255, 255, 255, 0.4);

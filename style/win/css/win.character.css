@@ -7,6 +7,10 @@
 }
 
 .window-character {
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+  --sar: env(safe-area-inset-right);
+  --sat: env(safe-area-inset-top);
   --z: 300;
   z-index: var(--z) !important;
 }
@@ -21,8 +25,8 @@
 }
 .window-character .window-content .content-wrapper .wrapper .window-bar {
   margin-top: 10px;
-  margin-left: max(var(--sar), 10px);
-  margin-right: max(var(--sal), 10px);
+  margin-left: max(var(--sal), 10px);
+  margin-right: max(var(--sar), 10px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -107,8 +111,8 @@
 }
 .window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper {
   padding-top: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
 }
 .window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper .character-preview {
   display: grid;
@@ -179,7 +183,8 @@
   font-weight: bold;
   font-size: 18px;
   max-width: 900px;
-  padding: 0 20px;
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
 }
 .window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper .gallery-tips-wrapper {
   position: relative;
@@ -193,7 +198,8 @@
 .window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper .gallery-wrapper-list .gallery-character {
   display: inline-flex;
   gap: 10px;
-  padding: 0 20px;
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
 }
 .window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper .gallery-wrapper-list .gallery-character .gallery-img {
   display: flex;
@@ -282,7 +288,8 @@
 }
 .window-character .window-content .content-wrapper .character-wrapper .character-role-selector-wrapper {
   display: flex;
-  padding: 0 20px;
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
   align-items: center;
   justify-content: center;
 }
@@ -330,7 +337,8 @@
 .window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .pv-role-list .pv-role-character {
   display: inline-flex;
   gap: 10px;
-  padding: 0 20px;
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
 }
 .window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .main-role-list.-hide,
 .window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .sup-role-list.-hide,
@@ -340,9 +348,11 @@
 .window-character .window-content .content-wrapper .character-wrapper .marquee {
   background: #191c21;
   overflow-x: auto;
-  padding: 20px 10px;
+  padding-top: max(var(--sab), 10px);
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
+  padding-bottom: max(var(--sab), 10px);
   margin-top: 10px;
-  padding-bottom: max(var(--sab), 20px);
 }
 .window-character .window-content .content-wrapper .character-wrapper .marquee .marquee__track {
   display: flex;

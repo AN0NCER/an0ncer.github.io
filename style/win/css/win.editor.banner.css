@@ -7,6 +7,10 @@
 }
 
 .window-banner-edit {
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+  --sar: env(safe-area-inset-right);
+  --sat: env(safe-area-inset-top);
   box-sizing: border-box;
 }
 .window-banner-edit .window-content {
@@ -24,8 +28,8 @@
 }
 .window-banner-edit .window-content .content-wrapper .wrapper .window-bar {
   margin-top: 10px;
-  margin-left: max(var(--sar), 20px);
-  margin-right: max(var(--sal), 20px);
+  margin-left: max(var(--sal), 20px);
+  margin-right: max(var(--sar), 20px);
   display: flex;
   align-items: center;
   justify-content: space-between;

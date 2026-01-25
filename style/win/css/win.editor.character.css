@@ -8,6 +8,10 @@
 }
 
 .window-character-edit {
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+  --sar: env(safe-area-inset-right);
+  --sat: env(safe-area-inset-top);
   --z: 300;
   z-index: var(--z) !important;
   box-sizing: border-box;
