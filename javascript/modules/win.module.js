@@ -1,6 +1,49 @@
 import { Module } from "../core/window.core.js";
 import { createAnimatable } from "../library/anime.esm.min.js";
 
+export class LazyLoad extends Module {
+    constructor(win, { sentinel, callback = () => { }, margin = '200px', threshold = 0 } = {}) {
+        super(win, { id: "lazyloader" });
+
+        this.sentinel = sentinel;
+        this.margin = margin;
+        this.threshold = threshold;
+        this.callback = callback;
+    }
+
+
+    on() {
+        if (!this.enable) return;
+
+        this.observer = new IntersectionObserver((entries) => {
+            const entry = entries[0];
+            // Когда sentinel попадает в зону видимости — вызываем функцию
+            if (entry.isIntersecting) {
+                this.callback();
+            }
+        }, {
+            root: null,
+            rootMargin: this.margin,
+            threshold: this.threshold
+        })
+
+        this.observer.observe($(this.sentinel)[0]);
+    }
+
+    off() {
+        if (!this.observer) return;
+
+        try {
+            this.observer.unobserve($(this.sentinel)[0]);
+        } catch (e) {
+            // sentinel уже удалён или не наблюдался — игнорируем
+        }
+
+        this.observer.disconnect();
+        this.observer = null;
+    }
+}
+
 export class PullToClose extends Module {
     /**
      * @param {TWindow} win 
