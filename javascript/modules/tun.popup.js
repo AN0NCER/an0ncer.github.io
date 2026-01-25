@@ -228,10 +228,7 @@ function generateUniqueId() {
 }
 
 function isAboveMenu(z) {
-    console.log('yahoo', z < 80);
-
     const hasMenu = TMenu.isOpen;
-    console.log(hasMenu)
     if (z > 80) return false
     return hasMenu;
 }

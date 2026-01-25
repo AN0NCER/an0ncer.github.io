@@ -1,0 +1,255 @@
+.content-character-edit .content-wrapper {
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+    gap: 0 !important;
+}
+
+.window-character-edit {
+    --z: 300;
+    z-index: var(--z) !important;
+    box-sizing: border-box;
+
+    .window-content {
+        overflow: hidden;
+        --bot: max(calc(var(--sab) - 10px), 10px);
+        --space: calc(62px + var(--bot));
+
+        .content-wrapper {
+            font-family: "Manrope", serif;
+            max-height: 100dvh;
+            overflow: auto;
+
+            .wrapper {
+                padding-bottom: var(--space);
+
+                .window-bar {
+                    margin-top: 10px;
+                    margin-left: max(var(--sar), 20px);
+                    margin-right: max(var(--sal), 20px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    .window-title {
+                        font-size: 14px;
+                        color: #FFFFFF;
+                        font-weight: bold;
+                    }
+
+                    .window-close {
+                        width: 40px;
+                        height: 40px;
+                        display: grid;
+                        place-items: center;
+                        cursor: pointer;
+
+                        .ticon {
+                            height: 14px;
+                            background-color: #fff;
+                        }
+                    }
+                }
+
+                .character-edit-wrapper {
+                    display: grid;
+                    grid-template-rows: 1fr auto;
+                    gap: 10px;
+
+                    padding: 10px 10px;
+
+                    .character-editor {
+                        display: grid;
+                        place-items: center;
+                        position: relative;
+                        height: 381.66px;
+                        // padding: 0 20px;
+
+                        background-color: #191C21;
+                        /* Создаем точки */
+                        background-image: radial-gradient(#333 1px, transparent 1px);
+                        background-size: 20px 20px;
+                        /* Расстояние между точками */
+                        overflow: hidden;
+                        transition: .3s ease-in-out;
+
+                        border: 0.4px solid rgba(255, 255, 255, 0.4);
+                        box-sizing: border-box;
+                        border-radius: 5px;
+
+                        #hexagon {
+                            position: relative;
+                            z-index: 4;
+                        }
+
+                        .loading {
+                            display: grid;
+                            place-items: center;
+                            position: absolute;
+                            inset: 0;
+                            z-index: 10;
+                            background: #191C21;
+                            transition: .3s ease-in-out;
+
+                            .ticon {
+                                animation: 1s linear infinite rotateI;
+                                background-color: #2393F1;
+
+
+                                @keyframes rotateI {
+                                    0% {
+                                        transform: rotateZ(0deg);
+                                    }
+
+                                    100% {
+                                        transform: rotateZ(360deg);
+                                    }
+                                }
+                            }
+
+                            &.-hide {
+                                opacity: 0;
+                                pointer-events: none;
+                            }
+                        }
+
+                        .character-wrapper-show-box {
+                            position: relative;
+                            display: flex;
+                            // justify-content: center;
+                            align-items: start;
+                        }
+
+                        .img-wrapper {
+                            --width: auto;
+                            --height: auto;
+
+                            box-sizing: border-box;
+                            display: grid;
+                            position: absolute;
+                            transform: translateY(0px) translateX(0px);
+                            z-index: 3;
+
+                            &::after {
+                                content: '';
+                                position: absolute;
+                                inset: 0;
+                                z-index: 4;
+                                border: 1px solid #2393F1;
+                            }
+
+                            img {
+                                position: relative;
+                                width: var(--width);
+                                height: var(--height);
+                                filter: brightness(25%);
+                                z-index: 1;
+                            }
+                        }
+                    }
+                }
+
+                .banner-descripton {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    margin: 0 20px;
+
+                    .d {
+                        font-size: 15px;
+                    }
+                }
+            }
+        }
+    }
+
+    .character-edit-input {
+        display: grid;
+        place-items: center;
+        position: absolute;
+        bottom: var(--bot);
+        right: 20px;
+        left: 20px;
+        z-index: 20;
+
+        .character-edit-input-wrapper {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: 1fr auto auto;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+
+            width: 100%;
+            max-width: 860px;
+            min-width: 40px;
+            padding: 5px;
+
+            border-radius: 30px;
+
+            .btn {
+                width: 40px;
+                height: 40px;
+                display: grid;
+                place-items: center;
+                cursor: pointer;
+                position: relative;
+
+                .ticon {
+                    height: 16px;
+                    background-color: #D6D6D6;
+                }
+
+                &.btn-character-cancel{
+                    width: auto;
+                    background: #F12326;
+                    border: 0.2px solid rgba(255, 255, 255, 0.4);
+                    padding: 0 13px;
+
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+
+                &.btn-character-add {
+                    background: #2393F1;
+                    border: 0.2px solid rgba(255, 255, 255, 0.4);
+                    border-radius: 50%;
+
+                    .ticon {
+                        height: 16px;
+                        background-color: #ffffff;
+                    }
+                }
+            }
+
+            .input {
+                height: 40px;
+                background: #191C21;
+                border: 0.2px solid rgba(255, 255, 255, 0.2);
+                border-radius: 20px;
+                padding: 0 6px;
+                color: #FFFFFF;
+                transition: 0.3s ease-in-out;
+                font-size: 14px;
+                width: 100%;
+                box-sizing: border-box;
+                display: grid;
+                place-items: center;
+            }
+        }
+    }
+}
+
+.i-circle-exclamation {
+    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-192a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm0-192c-18.2 0-32.7 15.5-31.4 33.7l7.4 104c.9 12.6 11.4 22.3 23.9 22.3 12.6 0 23-9.7 23.9-22.3l7.4-104c1.3-18.2-13.1-33.7-31.4-33.7z"/></svg>');
+}
+
+@media screen and (max-width: 650px) {
+
+    .window-friends .window-content .content-wrapper .wrapper .friends-wrapper .friends-list,
+    .window-friends .window-content .content-wrapper .wrapper .friends-wrapper .friends-result-wrapper .friends-results-list {
+        grid-template-columns: 1fr;
+    }
+}
