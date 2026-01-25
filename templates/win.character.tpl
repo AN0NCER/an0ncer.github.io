@@ -19,8 +19,8 @@
                         </div>
                     </div>
                     <div class="btn-character-favorite">
-                        <div class="ticon i-star-regular"></div>
-                        <div class="ticon i-star-solid"></div>
+                        <div class="ticon i-heart-regular"></div>
+                        <div class="ticon i-heart-solid"></div>
                     </div>
                 </div>
                 <div class="character-wrapper">
@@ -33,15 +33,34 @@
                             <div class="btn" id="all-description-character">Развернуть</div>
                         </div>
                     </div>
-                    <div class="character-gallery-wrapper">
+                    <div class="character-gallery-wrapper -hide">
                         <div class="title-wrapper">
                             Галерея
                         </div>
-                        <div class="gallery-wrapper-list scroll-none">
-                            <div class="gallery-character">
+                        <div class="gallery-tips-wrapper">
+                            <div class="gallery-wrapper-list scroll-none">
+                                <div class="gallery-character">
+                                </div>
+                            </div>
+                            <div class="select-character-tips-wrapper -disable">
+                                <div class="select-character-tips">
+                                    <div class="selector-character-preview">
+                                        <div class="tips">
+                                            <p class="main">Вы можете выбрать изображение персонажа.</p>
+                                            <p class="text">Если персонаж уже в избранном, новое изображение применится
+                                                после нажатия «Установить».</p>
+                                        </div>
+                                        <div class="image">
+                                            <img src="/images/noanime.png"
+                                                alt="">
+                                        </div>
+                                    </div>
+                                    <div class="btn-install">Установить</div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="character-role-selector-wrapper">
                         <div class="character-role-selector scroll-none">
                             <div class="role" data-type="main">
