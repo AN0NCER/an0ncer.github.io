@@ -1,5 +1,5 @@
 import { TMenu } from "../core/menu.core.js";
-import { createTimeline, utils, createSpring } from "../library/anime.esm.min.js";
+import { createTimeline, utils, spring } from "../library/anime.esm.min.js";
 
 /**@type {[Popup]} */
 const STACK = [];
@@ -206,7 +206,7 @@ export class Popup {
             bottom: [this.position.start, finalBottom],
             rotate: [90, 0],
             duration: TIMING.SHOW_DURATION,
-            ease: createSpring({
+            ease: spring({
                 stiffness: 300,
                 damping: 15,
                 mass: 0.8,

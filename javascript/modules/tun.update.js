@@ -1,4 +1,4 @@
-import { animate, createAnimatable, createDraggable, createSpring, utils } from "../library/anime.esm.min.js";
+import { animate, createAnimatable, createDraggable, spring, utils } from "../library/anime.esm.min.js";
 import { Template } from "./tun.template.js";
 
 const CONFIG = {
@@ -277,7 +277,7 @@ class UIDrag {
             containerFriction: 0.95,
             scrollThreshold: 0,
             releaseStiffness: 200,
-            releaseEase: createSpring({
+            releaseEase: spring({
                 stiffness: 300,
                 damping: 15,
                 mass: 0.8,
