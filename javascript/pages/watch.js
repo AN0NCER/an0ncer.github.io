@@ -6,11 +6,11 @@ import { AutoScrollEpisodes } from "./watch/mod_scrolling.js";
 import { Functional } from "./watch/mod_ui.js";
 import { ASynch } from "./watch/mod_dbanime.js";
 import { UserRate } from "./watch/mod_urate.js";
-import { Tunime } from "../modules/api.tunime.js";
 import { History } from "./watch/mod_history.js";
 import { tChronologyVoice } from "./watch/mod.chronology.js";
 import { ClearParams } from "../modules/functions.js";
 import { Private } from "./watch/mod_private.js";
+import { Tunime } from "../modules/api.tunime.js";
 
 //ID ресурса из Shikimori
 export const $ID = new URLSearchParams(window.location.search).get("id");
@@ -73,11 +73,11 @@ Main(async (e) => {
         if (!data[0] && !data[1])
             return;
         if (data[0] && !data[1]) {
-            Tunime["/voice"]["/:aid/:vid"]($ID, data[0].kodik_dub);
+            Tunime.mark.voice($ID, data[0].kodik_dub);
             aSynch.difference = data[0];
         } else if (data[0] && data[1]) {
             if (data[0].kodik_dub != data[1].kodik_dub) {
-                Tunime["/voice"]["/:aid/:vid"]($ID, data[0].kodik_dub);
+                Tunime.mark.voice($ID, data[0].kodik_dub);
                 aSynch.difference = data[0];
             }
         }
@@ -175,7 +175,7 @@ Main(async (e) => {
                     inline: "nearest",
                 });
             }
-            Tunime["/anime"]["/:aid"]($ID);
+            Tunime.mark.anime($ID);
         });
         History().shikiData = e;
         History().custom.init();

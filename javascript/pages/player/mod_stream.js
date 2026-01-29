@@ -92,11 +92,11 @@ function GenLink(streams) {
             return blobUrl;
         } else {
             if (QUALITY == '720') {
-                return Tunime["/video"]["/hls.m3u8"]({ q720: STREAMS[720][0].src, q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
+                return Tunime.video.genLink({ q720: STREAMS[720][0].src, q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
             } else if (QUALITY == '480') {
-                return Tunime["/video"]["/hls.m3u8"]({ q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
+                return Tunime.video.genLink({ q480: STREAMS[480][0].src, q360: STREAMS[360][0].src });
             } else {
-                return Tunime["/video"]["/hls.m3u8"]({ q360: STREAMS[360][0].src });
+                return Tunime.video.genLink({ q360: STREAMS[360][0].src });
             }
         }
     } else {
@@ -109,8 +109,7 @@ function loadStreamTunime(id, e, kodik_link = undefined) {
         if (!kodik_link)
             kodik_link = await loadKodikLink(id, e);
 
-        const user = JSON.parse(localStorage.getItem('shadow-api'));
-        let tunime_data = await Tunime["/video"]["/source"](kodik_link, user);
+        let tunime_data = await Tunime.video.source(kodik_link);
         resolve(tunime_data);
 
         if ($PARAMETERS.player.skipmoments) {

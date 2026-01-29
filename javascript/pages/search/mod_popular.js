@@ -35,15 +35,15 @@ function ui_load(ids, poster = undefined) {
 function tun_load() {
     const cache = new TCache();
 
-    cache.get("requests", "tunpopular").then((val) => {
+    cache.get("requests", "tunpopular").then(async (val) => {
         if (val) {
             return ui_load(val.map(x => x.animeId).toString());
         }
-        return Tunime["/anime"]["/popular"]().then((anime) => {
-            if (!anime) throw new Error("Tunime API is not available");
-            cache.put("requests", "tunpopular", anime);
-            ui_load(val.map(x => x.animeId).toString())
-        });
+        const anime = await Tunime.api.anime.get_popular();
+
+        if (!anime) throw new Error("Tunime API is not available");
+        cache.put("requests", "tunpopular", anime);
+        ui_load(anime.map(x => x.animeId))
     });
 }
 

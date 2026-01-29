@@ -317,7 +317,7 @@ function ShareAnime() {
     navigator.share({
         title: $(document).attr("title"),
         text: $('meta[property="og:description"]').attr('content'),
-        url: Tunime.Share.Anime($ID)
+        url: Tunime.share.anime($ID)
     }).catch((error) => $DEV.error('Sharing failed', error));
 }
 

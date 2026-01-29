@@ -1,202 +1,372 @@
-class Access {
+class Session {
+    static key = 'shadow-api';
+
     #val = undefined;
+    #loaded = false;
 
-    constructor() {
-        this.Key = 'shadow-api';
-        this.Loaded = false;
-        window.addEventListener("storage", ({ key }) => {
-            if (document.visibilityState !== "hidden" || this.Key !== key) return;
+    constructor({ onUpdate } = {}) {
+        // колбек, если надо дергать $SHADOW.update()\
+        this.onUpdate = typeof onUpdate === 'function' ? onUpdate : null;
 
-            this.#val = JSON.parse(localStorage.getItem(this.Key));
-            window.$SHADOW.update()
+        // 1) Изменения из других вкладок
+        window.addEventListener('storage', (e) => {
+            if (e.key !== Session.key) return;
+            this.sync({ reason: 'storage' });
         });
+
+        // 2) Возврат из bfcache (Safari/Chrome/Firefox)
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) {
+                this.sync({ reason: 'bfcache' });
+            } else {
+                // обычная загрузка страницы
+                this.sync({ reason: 'pageshow' });
+            }
+        });
+
+        // 3) Возврат на вкладку (мог истечь токен пока вкладка была скрыта)
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                this.sync({ reason: 'visible' });
+            }
+        });
+
+        // начальная синхронизация
+        this.sync({ reason: 'init' });
+    }
+
+    get loaded() {
+        return this.#loaded;
     }
 
     get access() {
-        if (this.#val !== undefined || this.Loaded === true) {
-            return this.#val;
-        }
+        // после первой sync() всегда возвращаем то, что в памяти
+        if (this.#loaded) return this.#val;
 
-        const data = localStorage.getItem(this.Key);
-        this.#val = JSON.parse(data) || undefined;
-
-        if (this.#val !== undefined) {
-            if (!this.Live(this.#val)) {
-                this.#val = undefined;
-            }
-        }
-
+        // на случай, если кто-то вызвал getter до init-sync
+        this.sync({ reason: 'lazy', silent: true });
         return this.#val;
     }
 
-    set access(val) {
-        this.#val = val;
-        if (val === undefined) {
-            return localStorage.removeItem(this.Key);
+    set access(value) {
+        // сохраняем и сразу синхронизируем локальное состояние этой вкладки
+        if (value === undefined) {
+            localStorage.removeItem(Session.key);
+        } else {
+            localStorage.setItem(Session.key, JSON.stringify(value));
         }
 
-        localStorage.setItem(this.Key, JSON.stringify(this.#val));
+        // storage event тут не придёт -> обновляем вручную
+        this.sync({ reason: 'setter' });
     }
 
-    Live(access = this.#val) {
-        if (access === undefined)
-            return false;
+    // "живой ли токен" (true = живой)
+    live(access = this.#val) {
+        if (!access || !access.end) return false;
+        const end = Date.parse(access.end);
+        if (!Number.isFinite(end)) return false;
+        return end > Date.now();
+    }
 
-        if (0 >= (Date.parse(access.end) - Date.now()))
-            return false;
+    setScope(scopes = []) {
+        // если нет сессии — нечего обновлять
+        if (this.#val === undefined) return false;
+
+        // нормализуем вход в массив строк
+        const nextScope = Array.isArray(scopes)
+            ? scopes.filter(Boolean).map(String)
+            : [String(scopes)].filter(Boolean);
+
+        // если уже такое же — ничего не делаем
+        const curr = Array.isArray(this.#val.scope) ? this.#val.scope : (this.#val.scope ? [this.#val.scope] : []);
+        if (this.#deepEqual(curr, nextScope)) return false;
+
+        // обновляем в памяти
+        this.#val = { ...this.#val, scope: nextScope };
+
+        // сохраняем (важно: если #val вдруг стал невалидным — sync сам подчистит)
+        localStorage.setItem(Session.key, JSON.stringify(this.#val));
+
+        // обновляем состояние/триггеры (onUpdate)
+        this.sync({ reason: 'scope', silent: false });
+
         return true;
+    }
+
+
+    // перечитать localStorage -> провалидировать -> обновить #val -> вызвать onUpdate при изменении
+    sync({ reason = 'sync', silent = false } = {}) {
+        const raw = localStorage.getItem(Session.key);
+        const next = this.#safeParse(raw);
+
+        // если next есть, но протух — чистим storage и считаем как undefined
+        let normalized = next;
+        if (normalized !== undefined && !this.live(normalized)) {
+            normalized = undefined;
+            localStorage.removeItem(Session.key);
+        }
+
+        const changed = !this.#deepEqual(this.#val, normalized);
+
+        this.#val = normalized;
+        this.#loaded = true;
+
+        if (!silent && changed && this.onUpdate) {
+            this.onUpdate({ reason, value: this.#val, session: this });
+        }
+    }
+
+    #safeParse(raw) {
+        if (!raw) return undefined;
+        try {
+            const v = JSON.parse(raw);
+            // если там null — тоже считаем "нет сессии"
+            return v ?? undefined;
+        } catch {
+            // мусор -> чистим, чтобы не падать всегда
+            localStorage.removeItem(Session.key);
+            return undefined;
+        }
+    }
+
+    // чтобы не дергать update без реального изменения
+    #deepEqual(a, b) {
+        if (a === b) return true;
+        try {
+            return JSON.stringify(a) === JSON.stringify(b);
+        } catch {
+            return false;
+        }
     }
 }
 
 class Device {
-    #id = undefined;
+    static key = 'tunime-id';
 
-    constructor() {
-        this.Key = 'tunime-id';
-        this.Loaded = false;
+    #id = undefined;
+    #loaded = false;
+
+    constructor({ onUpdate } = {}) {
+        this.onUpdate = typeof onUpdate === 'function' ? onUpdate : null;
+
+        // изменения из других вкладок
+        window.addEventListener('storage', (e) => {
+            if (e.key !== Device.key) return;
+            this.sync({ reason: 'storage' });
+        });
+
+        // bfcache restore / обычный pageshow
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) this.sync({ reason: 'bfcache' });
+        });
+
+        // первичная загрузка
+        this.sync({ reason: 'init', silent: true });
     }
 
-    get Id() {
-        if (this.#id === undefined && this.Loaded === false) {
-            this.#id = localStorage.getItem(this.Key) || undefined;
-        }
+    get loaded() {
+        return this.#loaded;
+    }
+
+    get id() {
+        if (!this.#loaded) this.sync({ reason: 'lazy', silent: true });
         return this.#id;
     }
 
-    set Id(val) {
-        if (this.#id === val)
-            return;
+    set id(value) {
+        // пустое -> удалить ключ
+        const normalized = this.#normalize(value);
 
-        this.#id = val;
-        localStorage.setItem(this.Key, this.#id);
+        if (this.#id === normalized && this.#loaded) return;
+
+        if (normalized === undefined) {
+            localStorage.removeItem(Device.key);
+        } else {
+            localStorage.setItem(Device.key, normalized);
+        }
+
+        // в этой вкладке storage event не придёт
+        this.sync({ reason: 'setter' });
+    }
+
+    sync({ reason = 'sync', silent = false } = {}) {
+        const raw = localStorage.getItem(Device.key);
+        const next = this.#normalize(raw);
+
+        const changed = this.#id !== next || !this.#loaded;
+
+        this.#id = next;
+        this.#loaded = true;
+
+        if (!silent && changed && this.onUpdate) {
+            this.onUpdate({ reason, value: this.#id });
+        }
+    }
+
+    #normalize(value) {
+        // принимаем string | undefined | null
+        if (value === null || value === undefined) return undefined;
+
+        const s = String(value).trim();
+
+        // убираем типичные "мусорные" записи
+        if (!s || s === 'undefined' || s === 'null') return undefined;
+
+        return s;
     }
 }
 
-class Balancer {
-    #url = undefined;
+class Failover {
+    static key = 'shadow-url';
 
-    constructor(servers) {
-        this.config = {
-            key: 'shadow-url',
-            unlockTime: 5 * 60 * 1000, // 5 минут в миллисекундах
-            checkInterval: 10 * 1000 // Проверка каждые 10 секунд
+    #config;
+    #state;
+
+    constructor(servers = [], config = {}) {
+        this.#config = {
+            key: Failover.key,
+            unlockTime: 5 * 60 * 1000,
+            checkInterval: 10 * 1000,
+            requestTimeout: 12 * 1000, // чтобы не висеть вечно
+            ...config
         };
 
-        this.state = {
-            servers: servers,
+        this.#state = {
+            servers: Array.isArray(servers) ? servers.filter(Boolean) : [],
             id: 0,
             blocked: false,
             cycleCount: 0,
             blockedTime: null
         };
 
-        // Восстанавливаем состояние из sessionStorage
-        const storedData = sessionStorage.getItem(this.config.key);
-        if (storedData !== null) {
-            Object.assign(this.state, JSON.parse(storedData));
-        }
-
-        // Проверяем, можно ли разблокировать
+        this.sync({ reason: 'init' });
         this.checkUnlock();
+        this.startUnlockTimer();
     }
 
+    // ---- state ----
 
-    /**
-     * Переключает сервер и сохраняет его в sessionStorage
-     * @returns {boolean} - true, если сервер успешно переключён, false, если все сервера были уже пройдены
-     */
-    Next() {
-        if (this.state.blocked) return false;
+    sync({ reason = 'sync' } = {}) {
+        const raw = sessionStorage.getItem(this.#config.key);
+        if (!raw) return;
 
-        this.state.id = (this.state.id + 1) % this.state.servers.length;
+        try {
+            const stored = JSON.parse(raw);
 
-        if (this.state.id === 0) {
-            this.state.cycleCount++;
+            // Мягко восстанавливаем только ожидаемые поля
+            if (stored && typeof stored === 'object') {
+                if (Array.isArray(stored.servers)) this.#state.servers = stored.servers.filter(Boolean);
+                if (Number.isInteger(stored.id)) this.#state.id = stored.id;
+                if (typeof stored.blocked === 'boolean') this.#state.blocked = stored.blocked;
+                if (Number.isInteger(stored.cycleCount)) this.#state.cycleCount = stored.cycleCount;
+                if (typeof stored.blockedTime === 'number' || stored.blockedTime === null) this.#state.blockedTime = stored.blockedTime;
+            }
+
+            // Нормализация id
+            if (this.#state.servers.length === 0) this.#state.id = 0;
+            else this.#state.id = ((this.#state.id % this.#state.servers.length) + this.#state.servers.length) % this.#state.servers.length;
+
+        } catch {
+            // Если мусор — очищаем, чтобы не падать всегда
+            sessionStorage.removeItem(this.#config.key);
+        }
+    }
+
+    save() {
+        sessionStorage.setItem(this.#config.key, JSON.stringify(this.#state));
+    }
+
+    get url() {
+        return this.#state.servers[this.#state.id];
+    }
+
+    // ---- блокировка после полного круга ----
+
+    next() {
+        if (this.#state.blocked) return false;
+        const n = this.#state.servers.length;
+        if (n === 0) return false;
+
+        this.#state.id = (this.#state.id + 1) % n;
+
+        // если замкнули круг — считаем цикл
+        if (this.#state.id === 0) {
+            this.#state.cycleCount += 1;
         }
 
-        if (this.state.cycleCount >= 1) {
-            this.state.blocked = true;
-            this.state.blockedTime = Date.now(); // Фиксируем время блокировки
-            this.saveState();
+        // после 1 полного круга — блокируем
+        if (this.#state.cycleCount >= 1) {
+            this.#state.blocked = true;
+            this.#state.blockedTime = Date.now();
+            this.save();
             return false;
         }
 
-        this.saveState();
+        this.save();
         return true;
     }
 
-    /**
-     * Проверяет, прошло ли достаточно времени для разблокировки
-     */
     checkUnlock() {
-        if (this.state.blocked && this.state.blockedTime) {
-            const elapsedTime = Date.now() - this.state.blockedTime;
-            if (elapsedTime >= this.config.unlockTime) {
-                this.resetBalancer();
-            }
+        if (!this.#state.blocked || !this.#state.blockedTime) return;
+
+        const elapsed = Date.now() - this.#state.blockedTime;
+        if (elapsed >= this.#config.unlockTime) {
+            this.reset();
         }
     }
 
-    /**
-     * Запускает таймер для проверки разблокировки
-     */
     startUnlockTimer() {
-        setInterval(() => this.checkUnlock(), this.config.checkInterval);
+        setInterval(() => this.checkUnlock(), this.#config.checkInterval);
     }
 
-    /**
-     * Сбрасывает состояние балансера после таймаута
-     */
-    resetBalancer() {
-        this.state.id = 0;
-        this.state.blocked = false;
-        this.state.cycleCount = 0;
-        this.state.blockedTime = null;
-        this.saveState();
+    reset() {
+        this.#state.id = 0;
+        this.#state.blocked = false;
+        this.#state.cycleCount = 0;
+        this.#state.blockedTime = null;
+        this.save();
     }
 
-
-    /**
-     * Сохраняет текущее состояние в sessionStorage
-     */
-    saveState() {
-        sessionStorage.setItem(this.config.key, JSON.stringify(this.state));
-    }
-
-    /**
-     * Получает текущий URL сервера
-     * @returns {string}
-     */
-    get url() {
-        return this.state.servers[this.state.id];
-    }
-
+    // ---- fetch с failover ----
 
     fetch(path, params = { method: 'GET', body: undefined }) {
-        if (params.body !== undefined) {
-            params.body = new URLSearchParams(params.body);
+        // не мутируем входной объект (но если тебе ок — можно убрать копию)
+        const opts = { ...params };
+
+        if (opts.body !== undefined) {
+            opts.body = new URLSearchParams(opts.body);
         } else {
-            delete params.body;
+            delete opts.body;
         }
 
-        const lFetch = (url, params) => {
+        const retryStatuses = new Set([502, 503, 504]);
+        
+        const lFetch = (url) => {
             return new Promise((resolve, reject) => {
-                let rCode = 503;
-                fetch(url, params).then((response) => {
-                    rCode = response.status;
-                    return resolve(response);
-                }).catch((reason) => {
-                    if (rCode == 503) {
-                        if (this.Next()) {
-                            return resolve(lFetch(`${this.url}${path}`, params));
+                fetch(url, opts)
+                    .then((response) => {
+                        if (retryStatuses.has(response.status)) {
+                            // пробуем следующий сервер
+                            if (this.next()) {
+                                return resolve(lFetch(`${this.url}${path}`));
+                            }
+                            return resolve(response);
                         }
-                    }
-                    reject(reason);
-                });
-            });
-        }
 
-        return lFetch(`${this.url}${path}`, params);
+                        // успешный или любой другой статус
+                        return resolve(response);
+                    })
+                    .catch((reason) => {
+                        // network/CORS/timeout(если был AbortController) и т.п.
+                        if (this.next()) {
+                            return resolve(lFetch(`${this.url}${path}`));
+                        }
+                        reject(reason);
+                    });
+            });
+        };
+
+        return lFetch(`${this.url}${path}`);
     }
 }
 
@@ -216,7 +386,7 @@ class Shadow {
         return { ...this._state };
     }
 
-    update() {
+    update(user) {
         const currentTime = Date.now();
 
         this._state = {
@@ -224,12 +394,12 @@ class Shadow {
             hasApiAccess: user.access?.scope?.includes("player") || false,
             permissions: user.access?.scope || [],
             sessionExpiry: user.access?.end ? new Date(user.access.end) : null,
-            deviceId: device.Id,
+            deviceId: device.id,
             lastUpdate: new Date(currentTime)
         }
 
         // Добавляем вычисляемые поля
-        this._state.isSessionValid = user.Live();
+        this._state.isSessionValid = user.live();
         this._state.timeToExpiry = this._state.sessionExpiry
             ? this._state.sessionExpiry - currentTime
             : null;
@@ -252,198 +422,558 @@ class Shadow {
     }
 }
 
-const balancer = new Balancer([
-    'https://tunime.onrender.com',
-    'https://tunime-hujg.onrender.com'
-]);
+/**
+ * @typedef {Object} TResponse
+ * @property {boolean} complete
+ * @property {boolean} parsed
+ * @property {number} status
+ * @property {Object | undefined} value
+ * @property {string} [err]
+ * @property {() => Promise<TResponse>} [retry]
+ */
 
-const user = new Access();
-const device = new Device();
-window.$SHADOW = new Shadow();
+class Controls {
+    static instance = null;
 
-export const Tunime = new class {
-    async '/auth'() {
-        const [method, path] = ["POST", "/login"];
-
-        const body = await (async () => {
-            if ($PARAMETERS.tunsync) {
-                const oauth = (await import("../core/main.core.js")).OAuth;
-                if (oauth.access) {
-                    return {
-                        'token': oauth.access.access_token,
-                        'uid': oauth.user?.id
-                    }
-                }
-            }
-
-            return {};
-        })();
-
-        return new Promise((resolve) => {
-            this.#fetch(path, { method, body }).then((response) => {
-                if (response.status === 200) {
-                    return response.json().then((value) => {
-                        device.Id = value.data.did;
-                        user.access = value.data;
-                        return resolve(value.data);
-                    });
-                }
-
-                return resolve(false);
-            }).catch(r => resolve(false));
-        })
+    constructor() {
+        if (Controls.instance) return Controls.instance;
+        Controls.instance = this;
     }
 
-    async '/keep-alive'() {
-        const [method, path] = ["GET", "/keep-alive"];
+    /**
+     * 
+     * @param {string} url 
+     * @param {RequestInit} [opts] 
+     * @param {(val:TResponse) => {}} e 
+     * @returns {Promise<TResponse>}
+     */
+    async fetch(url, opts = { method: 'GET' }, e = () => { }) {
+        /**@type {TResponse} */
+        let res = {
+            complete: false,
+            parsed: false,
+            status: 0,
+            value: undefined
+        };
 
-        return new Promise((resolve) => {
-            this.#fetch(path, { method }).then(async (response) => {
-                if (response.status === 200) {
-                    return response.json().then((value) => {
-                        user.access = value.data;
-                        return resolve(value.data);
-                    });
+        if (opts.body) {
+            const body = new FormData();
+            this.#appendFormData(body, opts.body);
+            opts.body = body;
+        }
+
+        try {
+            const response = await balancer.fetch(url, {
+                ...opts,
+                headers: {
+                    ...opts.headers,
+                    "x-tun-did": device.id,
+                    "x-tun-key": user.access?.key,
+                    "x-tun-id": user.access?.id
                 }
+            });
 
-                if (response.status === 401) {
-                    return response.json().then((value) => {
-                        return resolve(value);
-                    });
-                }
+            res.status = response.status;
+            res.complete = response.ok;
 
-                return resolve(false);
-            }).catch(r => resolve(false));
-        })
+            const [parsed, raw] = await this.#parse(response);
+            res.parsed = parsed;
+            res.value = raw;
+        } catch (err) {
+            res.err = String(err);
+            res.retry = () => this.fetch(url, opts);
+        }
+
+        e(res);
+        return res;
     }
 
-    '/voice' = {
-        '/:aid/:vid': (aid, vid) => {
-            const [method, path] = ["PUT", `/voice/${aid}/${vid}`];
+    #appendFormData(fd = new FormData(), data, parentKey = '') {
+        for (const key in data) {
+            const value = data[key];
+            const fullKey = parentKey ? `${parentKey}[${key}]` : key;
 
-            if (user.access === undefined || !user.access.scope.includes("anime")) {
-                return false;
+            if (value instanceof File || value instanceof Blob) {
+                fd.append(fullKey, value);
+            } else if (typeof value === 'object' && value !== null) {
+                this.#appendFormData(fd, value, fullKey);
+            } else {
+                fd.append(fullKey, value);
             }
-
-            return new Promise((resolve) => {
-                this.#fetch(path, { method }).then((response) => {
-                    if (response.status === 200) {
-                        return response.json().then((value) => {
-                            return resolve(value.data);
-                        });
-                    }
-
-                    return resolve(false);
-                }).catch(r => resolve(false));
-            })
         }
     }
 
-    '/video' = {
-        '/hls.m3u8': (query = {}) => {
+    /**
+     * 
+     * @param {Response} response
+     * @returns {Promise<[boolean, Object|undefined]>}
+     */
+    async #parse(response) {
+        if (response.status === 404) {
+            return [false, undefined]
+        }
+        try {
+            const raw = await response.json();
+            return [true, raw]
+        } catch {
+            return [false, undefined]
+        }
+    }
+}
+
+class Task {
+    static key = 'tsk-tunime';
+
+    #val = [];
+    #loaded = false;
+
+    #sessionSig = null;      // текущая сигнатура активной сессии
+    #bound = false;          // мы уже знаем user.access?
+
+    constructor({ onUpdate } = {}) {
+        this.onUpdate = typeof onUpdate === 'function' ? onUpdate : null;
+
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) this.sync({ reason: 'bfcache' });
+            else this.sync({ reason: 'pageshow' });
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                this.sync({ reason: 'visible' });
+            }
+        });
+
+        // грузим raw из localStorage, но НЕ принимаем решение чистить/оставлять,
+        // пока не будет bindSession()
+        this.sync({ silent: true, reason: 'init' });
+    }
+
+    /**
+     * , когда user.access появился/обновился/стал undefined.
+     * Здесь и происходит решение: оставить задачи или очистить.
+     */
+    bindSession(access, { silent = false, reason = 'bindSession' } = {}) {
+        const nextSig = this.#makeSessionSig(access);
+
+        if (nextSig === null) {
+            this.#bound = true;
+            this.#sessionSig = null;
+            this.clear({ silent, reason: 'session-null' });
+            return;
+        }
+
+        this.#bound = true;
+        this.#sessionSig = nextSig;
+
+        // проверяем что лежит в storage
+        const payload = this.#readPayload();
+        if (!payload) {
+            // ничего нет — просто закрепили сессию
+            return;
+        }
+
+        // если payload от другой сессии — очищаем
+        if (payload.sessionSig && payload.sessionSig !== nextSig) {
+            this.clear({ silent, reason: 'session-changed' });
+            return;
+        }
+
+        // если payload без sessionSig (старый формат) — лучше очистить
+        if (!payload.sessionSig) {
+            this.clear({ silent, reason: 'missing-sessionSig' });
+            return;
+        }
+
+        // иначе всё ок — оставляем как есть
+        if (!silent && this.onUpdate) {
+            this.onUpdate({ reason, value: this.#val });
+        }
+    }
+
+    // --- API ---
+    update(list = [], { merge = true, silent = false, reason = 'update' } = {}) {
+        // если ещё не знаем сессию — обновлять нельзя, иначе перепутаешь сессии
+        if (!this.#bound) return;
+
+        const incoming = Array.isArray(list) ? list : [];
+        const normalizedIncoming = incoming
+            .filter(t => t && typeof t === 'object' && typeof t.key === 'string' && t.key.trim() !== '')
+            .map(t => ({ key: t.key.trim(), ...t }));
+
+        const next = merge ? this.#mergeByKey(this.#val, normalizedIncoming) : normalizedIncoming;
+        this.#set(next, { silent, reason });
+    }
+
+    has(key) {
+        return this.get(key) !== undefined;
+    }
+
+    get(key) {
+        // пока не bindSession — лучше не отдавать задачи (они “не привязаны”)
+        if (!this.#bound) return undefined;
+
+        if (!this.#loaded) this.sync({ silent: true, reason: 'lazy' });
+        const k = this.#normKey(key);
+        if (!k) return undefined;
+        return this.#val.find(t => t.key === k);
+    }
+
+    list() {
+        if (!this.#bound) return [];
+        if (!this.#loaded) this.sync({ silent: true, reason: 'lazy' });
+        return this.#val;
+    }
+
+    remove(key, { silent = false, reason = 'remove' } = {}) {
+        if (!this.#bound) return false;
+
+        if (!this.#loaded) this.sync({ silent: true, reason: 'lazy' });
+        const k = this.#normKey(key);
+        if (!k) return false;
+
+        const next = this.#val.filter(t => t?.key !== k);
+        const changed = !this.#deepEqual(this.#val, next);
+        if (changed) this.#set(next, { silent, reason });
+        return changed;
+    }
+
+    clear({ silent = false, reason = 'clear' } = {}) {
+        this.#set([], { silent, reason });
+    }
+
+    // --- storage ---
+    sync({ silent = false, reason = 'sync' } = {}) {
+        const payload = this.#readPayload();
+
+        // если нет payload — пусто
+        if (!payload) {
+            this.#set([], { silent, reason, skipWrite: true });
+            return;
+        }
+
+        // Поднимаем список в память (без чистки!)
+        const tasks = Array.isArray(payload.tasks) ? payload.tasks : [];
+        this.#set(tasks, { silent, reason, skipWrite: true });
+
+        // ВАЖНО: тут НЕ очищаем по sessionSig — это делается только в bindSession()
+    }
+
+    // --- internals ---
+    #readPayload() {
+        const raw = localStorage.getItem(Task.key);
+        if (!raw) return null;
+        try {
+            const v = JSON.parse(raw);
+            if (!v || typeof v !== 'object') return null;
+            return v;
+        } catch {
+            localStorage.removeItem(Task.key);
+            return null;
+        }
+    }
+
+    #writePayload() {
+        const payload = {
+            sessionSig: this.#sessionSig, // привязка к текущей сессии
+            tasks: this.#val,
+            updatedAt: Date.now()
+        };
+        localStorage.setItem(Task.key, JSON.stringify(payload));
+    }
+
+    #set(next, { silent = false, reason = 'set', skipWrite = false } = {}) {
+        if (!Array.isArray(next)) next = [];
+        const changed = !this.#deepEqual(this.#val, next);
+
+        this.#val = next;
+        this.#loaded = true;
+
+        if (!skipWrite) this.#writePayload();
+
+        if (!silent && changed && this.onUpdate) {
+            this.onUpdate({ reason, value: this.#val });
+        }
+    }
+
+    #mergeByKey(current, incoming) {
+        const map = new Map();
+        for (const t of current) if (t?.key) map.set(t.key, t);
+        for (const t of incoming) map.set(t.key, { ...(map.get(t.key) || {}), ...t });
+        return Array.from(map.values());
+    }
+
+    #normKey(key) {
+        return typeof key === 'string' ? key.trim() : '';
+    }
+
+    #deepEqual(a, b) {
+        if (a === b) return true;
+        try { return JSON.stringify(a) === JSON.stringify(b); } catch { return false; }
+    }
+
+    #makeSessionSig(access) {
+        // null = нет сессии
+        if (!access) return null;
+        // fallback
+        return `id:${access.id ?? ''}`;
+    }
+}
+
+
+const balancer = new Failover([
+    'https://192.168.31.45:3001',
+    // 'https://tunime.onrender.com',
+    // 'https://tunime-hujg.onrender.com',
+]);
+
+export const Snapshot = new Shadow();
+
+const tsk = new Task();
+
+const device = new Device();
+
+const user = new Session({
+    onUpdate: ({ value, session }) => {
+        Snapshot.update(session);
+        tsk.bindSession(value);
+    }
+});
+
+
+const Api = new class {
+    constructor() {
+        this.control = new Controls();
+    }
+
+    async logout() {
+        const response = await this.control.fetch('/logout', { method: 'GET' });
+
+        if (response.complete && response.parsed) {
+            user.access = response.value.data;
+        }
+
+        return response.value?.data;
+    }
+
+    async checkScope(scope) {
+        const response = await this.control.fetch('/scope', { method: 'GET' });
+
+        if (response.complete && response.parsed) {
+            user.setScope(response.value.data.scope);
+        }
+
+        return user.access.scope.includes(scope);
+    }
+
+    async login() {
+        const body = await this.#body();
+
+        const response = await this.control.fetch('/login', { method: 'POST', body });
+
+        if (response.status !== 200 || !response.parsed) {
+            return null;
+        }
+
+        const { data, task } = response.value;
+
+        device.id = data.did;
+        user.access = data;
+        tsk.update(task, { merge: false });
+
+        return data;
+    }
+
+    async keepAlive() {
+        const response = await this.control.fetch('/keep-alive', { method: 'GET' });
+
+        if (response.status !== 200 || !response.parsed) {
+            if (response.status === 401) {
+                return response.value;
+            }
+            return null;
+        }
+
+        const { data } = response.value;
+
+        user.access = data;
+
+        return data;
+    }
+
+    async #body() {
+        if (!$PARAMETERS.tunsync) return {}
+
+        const OAuth = (await import("../core/main.core.js")).OAuth;
+        if (OAuth.access) {
+            return {
+                'token': OAuth.access.access_token,
+                'uid': OAuth.user?.id
+            }
+        }
+
+        return {};
+    }
+}
+
+export const Tunime = new class {
+    constructor() {
+        this.control = new Controls();
+    }
+
+    api = {
+        users: (event = (/**@type {TResponse} */ r) => { }) => {
+            const basePath = '/api/users/info';
+            return {
+                GET: async (ids = []) => {
+                    const query = `ids=${ids.map(id => encodeURIComponent(id)).join(',')}`;
+                    const fullPath = query ? `${basePath}?${query}` : basePath;
+                    return this.control.fetch(fullPath, { method: 'GET' }, event);
+                }
+            }
+        },
+        user: (id, event = () => { }) => {
+            const url = `/api/user/${id}`;
+
+            const fetch = (method, body) => {
+                return this.control.fetch(url, { method, body }, event);
+            }
+
+            return {
+                GET: async () => {
+                    return fetch('GET');
+                },
+
+                PATCH: async (body = {}) => {
+                    const hasScope = user.access.scope.includes('acc');
+
+                    if (hasScope) {
+                        return fetch('PATCH', body);
+                    }
+
+                    if (tsk.has('shiki')) {
+                        if (await Api.checkScope('acc')) {
+                            tsk.remove('shiki');
+                            return fetch('PATCH', body);
+                        }
+                        throw { msg: 'Проверка аккаунта!', code: '001' }
+                    }
+
+                    throw { msg: 'Нет доступа!', code: '002' }
+                },
+
+                DELETE: async (body = {}) => {
+                    const hasScope = user.access.scope.includes('acc');
+
+                    if (hasScope) {
+                        return fetch('DELETE', body);
+                    }
+
+                    if (tsk.has('shiki')) {
+                        if (await Api.checkScope('acc')) {
+                            tsk.remove('shiki');
+                            return fetch('DELETE', body);
+                        }
+                        throw { msg: 'Проверка аккаунта!', code: '001' }
+                    }
+
+                    throw { msg: 'Нет доступа!', code: '002' }
+                }
+            }
+        },
+        anime: {
+            get_popular: async (event = () => { }) => {
+                const response = await this.control.fetch('/anime/popular', event);
+
+                if (!response.complete || !response.parsed) {
+                    return false;
+                }
+
+                return response.value.data;
+            }
+        }
+    }
+
+    mark = {
+        anime: (aid) => {
+            return this.control.fetch(`/anime/${aid}`, { method: 'PUT' });
+        },
+        voice: (aid, vid) => {
+            return this.control.fetch(`/voice/${aid}/${vid}`, { method: 'PUT' });
+        }
+    }
+
+    video = {
+        genLink: (query = {}) => {
             const url = new URL(`${balancer.url}/video/hls.m3u8`);
             for (const [key, value] of Object.entries(query)) {
                 url.searchParams.append(key, encodeURIComponent(value));
             }
             return url.toString();
         },
-        '/source': (kodik, access = user.access) => {
-            const [method, path, body] = ["POST", "/video/source", { src: kodik }];
+        source: async (kodik) => {
+            const body = { src: kodik };
+            if (user.access === undefined || !user.access.scope.includes("player")) {
+                return false;
+            }
+            const response = await this.control.fetch('/video/source', { method: 'POST', body });
 
-            if (access === undefined || !access.scope.includes("player")) {
+            if (!response.complete || !response.parsed) {
                 return false;
             }
 
-            return new Promise((resolve) => {
-                this.#fetch(path, { method, body }).then((response) => {
-                    if (response.status === 200) {
-                        return response.json().then((value) => {
-                            return resolve(value.data);
-                        });
-                    }
-
-                    return resolve(false);
-                }).catch(r => resolve(false));
-            })
+            return response.value.data;
         }
     }
 
-    '/anime' = {
-        '/popular': () => {
-            const [method, path] = ["GET", "/anime/popular"];
+    share = {
+        anime: (id) => `${balancer.url}/l/${id}`,
+        user: (id) => `${balancer.url}/u/${id}`
+    }
 
-            return new Promise((resolve) => {
-                this.#fetch(path, { method }).then((response) => {
-                    if (response.status === 200) {
-                        return response.json().then((value) => {
-                            return resolve(value.data);
-                        });
-                    }
+    help = {
+        hasAccount: async ({ scope = 'acc', task = 'shiki' } = {}) => {
+            const hasScope = user.access.scope?.includes(scope);
 
-                    return resolve(false);
-                }).catch(r => resolve(false));
-            })
-        },
-        '/:aid': (aid) => {
-            const [method, path] = ["PUT", `/anime/${aid}`];
+            if (hasScope) return true;
 
-            if (user.access === undefined || !user.access.scope.includes("anime")) {
-                return false;
+            if (tsk.has(task)) {
+
+                if (await Api.checkScope(scope)) {
+                    tsk.remove(task);
+                    return true;
+                }
+
+                throw { msg: 'Аккаунт проверяется!', code: '001' }
             }
 
-            return new Promise((resolve) => {
-                this.#fetch(path, { method }).then((response) => {
-                    if (response.status === 200) {
-                        return response.json().then((value) => {
-                            return resolve(value.data);
-                        });
-                    }
-
-                    return resolve(false);
-                }).catch(r => resolve(false));
-            })
-        }
-    }
-
-    Share = {
-        Anime: (id) => {
-            return `${balancer.url}/l/${id}`;
+            return false;
         },
-        User: (id) => {
-            return `${balancer.url}/u/${id}`;
-        }
-    }
+        logout: async () => {
+            return Api.logout();
+        },
+        login: async () => {
+            if (!$PARAMETERS.tunsync) return;
 
-    async #fetch(path, options = {}) {
-        const headers = {
-            "x-tun-did": device.Id,
-            "x-tun-key": user.access?.key,
-            "x-tun-id": user.access?.id
-        }
+            const { OAuth } = (await import("../core/main.core.js"));
+            await OAuth.requests.getWhoami();
+            await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        return balancer.fetch(path, { ...options, headers }).catch((reason) => {
-            console.log(`[api] Error: ${reason}`);
-        });
+            if (OAuth.access) {
+                await Api.login();
+            }
+        }
     }
 }();
 
-(async (exception) => {
-    const originalAccessSetter = Object.getOwnPropertyDescriptor(Access.prototype, 'access').set;
-    Object.defineProperty(Access.prototype, 'access', {
-        set: function (value) {
-            originalAccessSetter.call(this, value);
-            window.$SHADOW.update();
-        }
-    });
-
-    window.$SHADOW.update();
-
+(async ({ exception = [] } = {}) => {
     if (exception.includes(window.location.pathname)) return;
 
     if (user.access === undefined) {
-        let acc = await Tunime['/auth']();
+        let acc = await Api.login();
+
         if (acc && !acc.scope.includes("player")) {
-            acc = await Tunime["/keep-alive"]();
+            acc = await Api.keepAlive();
         }
     }
 
@@ -451,42 +981,51 @@ export const Tunime = new class {
         let timeout = undefined;
 
         document.addEventListener('visibilitychange', async () => {
-            if (document.visibilityState !== 'visible') return clearInterval(timeout);
-            [clearTimeout(timeout), update()];
+            if (document.visibilityState !== 'visible') {
+                clearTimeout(timeout);
+            } else {
+                clearTimeout(timeout);
+                update();
+            }
         });
 
         const update = async () => {
             const time = 60000;
+
             if (user.access === undefined) {
-                const acc = await Tunime["/auth"]();
-                if (acc === false) {
+                const acc = await Api.login();
+                if (!acc) {
                     return;
                 }
             }
 
             const date = Date.parse(user.access.end) - Date.now() - time;
+
             timeout = setTimeout(async () => {
                 if (document.visibilityState !== 'visible') return;
-                if (!user.Live()) {
-                    user.access = undefined;
-                    const acc = await Tunime["/auth"]();
-                    if (acc === false) {
-                        return;
-                    }
-                } else {
-                    const acc = await Tunime["/keep-alive"]();
 
-                    if (typeof acc === "boolean") {
+                if (!user.live()) {
+                    user.access = undefined;
+                    await Api.login();
+                } else {
+                    const acc = await Api.keepAlive();
+
+                    if (!acc) {
                         return;
                     } else if (acc.code === 401) {
-                        await Tunime["/auth"]();
+                        await Api.login();
                     }
+
                     update();
                 }
             }, date);
+
             console.log(`[api] - Weiter durch ${date} ms`);
         }
 
         update();
     })();
-})(['/player.html']);
+})({ exception: ['/player.html'] })
+
+window.$SHADOW = Snapshot;
+window.Tunime = Tunime;

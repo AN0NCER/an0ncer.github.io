@@ -142,9 +142,12 @@ export function WCharacter(id, { dom = 'body', onadd = (id, { x = 0, y = 0, img 
                     ScrollElementWithMouse($dom.find('.character-studios'));
 
                     (() => {
-                        if (!$PARAMETERS.tunsync || !($SHADOW.state.isConnected && $SHADOW.state.permissions.includes('acc'))) {
-                            return;
-                        }
+                        let isBlocked = !$PARAMETERS.tunsync || !$SHADOW.state.permissions.includes('acc');
+
+                        Tunime.help.hasAccount().then((value) => {
+                            isBlocked = !value;
+                        })
+
                         // Константы
                         const MOBILE_BREAKPOINT = 725;
                         const SCROLL_OFFSET = 400; // 400 + 10
@@ -293,6 +296,7 @@ export function WCharacter(id, { dom = 'body', onadd = (id, { x = 0, y = 0, img 
                          * Главный обработчик клика по изображению
                          */
                         function handleImageClick() {
+                            if (isBlocked) return;
                             const $clickedImg = $(this);
                             const wasSelected = $clickedImg.hasClass('-sel');
 
@@ -406,7 +410,12 @@ export function WCharacter(id, { dom = 'body', onadd = (id, { x = 0, y = 0, img 
                 delete local.Character?.[id];
                 localStorage.setItem(config.key, JSON.stringify(local));
 
-                Tunime.api.user(OAuth.user.id).DELETE({ character: [id] });
+                Tunime.help.hasAccount().then((value) => {
+                    if (value) {
+                        Tunime.api.user(OAuth.user.id).DELETE({ character: [id] });
+                    }
+                })
+
             } catch (err) {
                 console.log(err);
             }

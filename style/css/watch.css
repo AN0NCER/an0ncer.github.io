@@ -1,7 +1,7 @@
 @charset "UTF-8";
 html,
 body {
-  scrollbar-gutter: stable;
+  scrollbar-width: none;
   /* Запрещает автоматическое изменение размера текста */
   -webkit-text-size-adjust: none;
 }

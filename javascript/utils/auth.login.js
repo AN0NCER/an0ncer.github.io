@@ -17,6 +17,11 @@ export async function login(code) {
     await OAuth.requests.authorizate(code);
     localStorage.removeItem('application_event');
 
+    if ($PARAMETERS.tunsync) {
+        const { Tunime } = await import("../modules/api.tunime.js");
+        await Tunime.help.login();
+    }
+
     if (application_event == "autologin") {
         //После авторизации переходим на главную страницу
         return window.location.href = "/index.html";

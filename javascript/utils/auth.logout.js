@@ -19,5 +19,8 @@ export async function logout() {
         await TDatabase.Delete(name);
     }
 
+    const { Tunime } = await import("../modules/api.tunime.js");
+    await Tunime.help.logout();
+
     window.location.replace(window.location.href);
 }

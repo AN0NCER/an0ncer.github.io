@@ -24,8 +24,10 @@ ClearParams(['code']);
 (async () => {
     //Проверяем если это сработал автологин то делаем редирект на главную страницу т.к. может только от нее сработать AutoLogin
     if (code && !OAuth.mode === 'test') {
+        $('.app-auth').removeClass('-hide');
         const { login } = await import("../utils/auth.login.js");
         await login(code);
+        $('.app-auth').addClass('-hide');
     }
 
     Main(async (e) => {
@@ -60,30 +62,44 @@ function Animate() {
 }
 
 function Events() {
+    //Блокировка действий после нажатия на авторизацию
+    let isBlocked = false;
+
     $('.slogan').text(RandomSlogan());
 
     $('.btn-login').on('click', async () => {
+        if (isBlocked) return;
+
+        $('.app-auth').removeClass('-hide');
         if (OAuth.mode === 'test') {
-            localStorage.removeItem('application_event');
-            //Если тестовый режим то запрашиваем код от пользователя
-            let code = prompt("Тестовый режим авторизации:");
-            if (code) {
-                const { login } = await import("../utils/auth.login.js");
-                //Проверяем авторизацию и переходим на станицу пользователя
-                await login(code);
-            } else {
-                window.open(OAuth.events.genLink(), '_blank').focus();
+            try {
+                isBlocked = true;
+                //Если тестовый режим то запрашиваем код от пользователя
+                let code = prompt("Тестовый режим авторизации:");
+                if (code) {
+                    const { login } = await import("../utils/auth.login.js");
+                    //Проверяем авторизацию и переходим на станицу пользователя
+                    await login(code);
+                } else {
+                    window.open(OAuth.events.genLink(), '_blank').focus();
+                }
+            } finally {
+                isBlocked = false;
             }
+            localStorage.removeItem('application_event');
         } else {
             window.location.href = OAuth.events.genLink();
         }
+        $('.app-auth').addClass('-hide');
     });
 
     $('.btn-back, .btn-skip').on('click', async () => {
+        if (isBlocked) return;
         window.location.href = "/index.html";
     });
 
     $('.btn-settings').on('click', async () => {
+        if (isBlocked) return;
         window.location.href = "/settings.html";
     });
 }
