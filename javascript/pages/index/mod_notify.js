@@ -290,7 +290,7 @@ function _Events() {
         isSwiping = false;
         deleteElement.width('0px');
         readElement.width('0px');
-        EventsNotify(readed, deletet, swipeElement);
+        EventsNotify(readed, deletet, swipeElement, disable_read);
         readed = false;
         deletet = false;
         swipeElement = undefined;
@@ -305,7 +305,7 @@ function _Events() {
         if (target.hasClass('true')) {
             location.href = `watch.html?id=${target.attr('data-anime')}&player=true`;
         } else {
-            EventsNotify(true, false, target, () => {
+            EventsNotify(true, false, target, disable_read).then(() => {
                 location.href = `watch.html?id=${target.attr('data-anime')}&player=true`;
             });
         }
@@ -313,35 +313,66 @@ function _Events() {
 
 }
 
-function EventsNotify(readed, deletet, element, e = () => { }) {
-    const id = element.attr('data-id');
-    if (readed) {
-        Messages.mark_read(async (res) => {
-            if (res.failed) {
-                if (response.status == 429) {
-                    await Sleep(1000);
-                    return EventsNotify(readed, deletet, element);
-                }
-                return;
-            }
-            $(`.notifycation[data-id="${id}"] > .status-unread`).remove();
-            $(`.notifycation[data-id="${id}"]`).removeClass('false');
-            $(`.notifycation[data-id="${id}"]`).addClass('true');
-            e();
-        }).POST({ ids: id, is_read: "1" });
-    } else if (deletet) {
-        Messages.delete(id, async (res) => {
-            if (res.failed) {
-                if (response.status == 429) {
-                    await Sleep(1000);
-                    return EventsNotify(readed, deletet, element);
-                }
-                return;
-            }
-            $(`.notifycation[data-id="${id}"]`).remove();
-            e();
-        }).DELETE();
+function EventsNotify(readed, deletet, element, disable_read) {
+    const updateCount = () => {
+        const $count = $('#account-edit > .count');
+        const count = Number($count.text() || '0') - 1;
+        if (count <= 0) {
+            $count.remove();
+        } else {
+            $count.text(count);
+        }
     }
+
+    const id = element.attr('data-id');
+    let fetch;
+
+
+    return new Promise((resolve) => {
+        if (readed) {
+            fetch = (() => {
+                Messages.mark_read(async (res) => {
+                    if (res.failed) {
+                        if (response.status === 429) {
+                            await Sleep(1000);
+                            return fetch();
+                        }
+                        return;
+                    }
+
+                    updateCount();
+
+                    $(`.notifycation[data-id="${id}"] > .status-unread`).remove();
+                    $(`.notifycation[data-id="${id}"]`).removeClass('false');
+                    $(`.notifycation[data-id="${id}"]`).addClass('true');
+
+                    resolve();
+                }).POST({ ids: id, is_read: "1" })
+            });
+
+            fetch();
+        } else {
+            fetch = (() => {
+                Messages.delete(id, async (res) => {
+                    if (res.failed) {
+                        if (response.status === 429) {
+                            await Sleep(1000);
+                            return fetch();
+                        }
+                        return;
+                    }
+
+                    if (!disable_read) {
+                        updateCount();
+                    }
+
+                    $(`.notifycation[data-id="${id}"]`).remove();
+
+                    resolve();
+                }).DELETE({ ids: id, is_read: "1" })
+            });
+        }
+    });
 }
 
 function formatDate(inputDate) {
