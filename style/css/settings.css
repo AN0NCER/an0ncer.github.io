@@ -110,10 +110,12 @@ header .head-wrapper .profile .profile-content {
 header .head-wrapper .profile .profile-content .page-title {
   font-size: 16px;
   font-weight: bold;
+  text-wrap: nowrap;
 }
 header .head-wrapper .profile .profile-content .username {
   font-size: 14px;
   opacity: 0.5;
+  text-wrap: nowrap;
 }
 header .head-wrapper .quick-panel {
   --input-placeholder-opacity: 1;

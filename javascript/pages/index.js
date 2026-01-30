@@ -7,7 +7,6 @@ import { SetUserRate } from "./index/mod_trailers.js";
 import { GetHistoryWatch } from "./index/mod_history_watch.js";
 import { ScrollElementWithMouse, Sleep } from "../modules/functions.js";
 import { AnimeLoaded, LoadAnimeShikimori, LoadUpdatetAnime } from "./index/mod_animes.js";
-import { ShowNotifyWindow } from "./index/mod_window.js";
 
 TMenu.init();
 
@@ -60,29 +59,6 @@ function On() {
         target.addClass('selected');
         const genres = target.data('id');
         LoadAnimeShikimori({ genre: genres });
-    });
-
-    //Событие Enter unput search
-    $('.search > input').on('keypress', function (e) {
-        if (e.which == 13) {
-            let value = this.value;
-            if (value.length <= 0) {
-                return;
-            }
-            window.location.href = '/search.html?q=' + value;
-        }
-    });
-
-    $(document).on('keydown', (e) => {
-        if (e.originalEvent.key === "/") {
-            e.preventDefault();
-            $('.desktop > #search-input').focus();
-        }
-    });
-
-    //Событие нажатие на уведомления
-    $('.notification').on('click', () => {
-        ShowNotifyWindow();
     });
 
     $('.downloads-link > .wrapper').on('click', () => {

@@ -23,43 +23,36 @@
 </head>
 <body data-page="index" angle="0">
     <header class="unselectable">
-        <div class="account">
-            <a href="/login.html">
-                <div class="image-profile">
-                    <img src="/images/ava.jpeg" alt="Image Account">
+        <div class="head-wrapper">
+            <div class="profile">
+                <div class="ava-wrapper" style="--p-ava-img:url('/images/ava.jpeg')">
+                    <div class="ava"></div>
                 </div>
-            </a>
-            <div class="information">
-                <div class="name">
-                    <span></span>
-                    <b>Авторизируйтесь</b>
-                </div>
-                <div class="position">
-                    <div class="ticon i-location-dot"></div>
-                    <span>Ocean, Остров</span>
+                <div class="profile-content">
+                    <div class="page-title">Параметры</div>
+                    <div class="username">Авторизация</div>
                 </div>
             </div>
-        </div>
-        <div class="notify-search">
-            <div class="desktop search">
-                <input type="text" name="" id="search-input" autocomplete="new-password" placeholder="Поиск">
-                <div class="shortcut unselectable">
-                    <span>/</span>
+            <div class="quick-panel">
+                <div class="btn" id="page-search">
+                    <div class="i-wrapper">
+                        <div class="c-wrapper">
+                            <div class="icon-state i-search">
+                                <div class="ticon i-ios-search"></div>
+                            </div>
+                            <div class="icon-state i-clear">
+                                <div class="ticon i-xmark"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" placeholder="Поиск" id="search" autocomplete="off">
                 </div>
-            </div>
-            <div class="notification">
-                <div class="ticon i-mail-box-state-0 mail"></div>
-                <div class="ticon i-mail-box-state-1 dot"></div>
+                <div class="btn" id="account-edit">
+                    <div class="ticon i-bell"></div>
+                </div>
             </div>
         </div>
     </header>
-
-    <div class="mobile search mbs">
-        <input type="text" name="" id="search-input" autocomplete="new-password" placeholder="Поиск">
-        <div class="shortcut unselectable">
-            <span>/</span>
-        </div>
-    </div>
 
     <!-- Slider main container -->
     <div class="swiper-treilers mbs">
