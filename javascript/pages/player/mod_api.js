@@ -18,7 +18,7 @@ export const ParentWindow = window.parent; // Данные с iframe
 export function InitAPI() {
     onSeek$.subscribe({
         next: (e) => {
-            ParentWindow.postMessage({ key: 'kodik_player_seek', value: Player.currentTime }, '*');
+            ParentWindow.postMessage({ key: 'kodik_player_seek', value: { time: Player.currentTime } }, '*');
         }
     });
 
