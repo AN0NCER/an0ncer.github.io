@@ -8,7 +8,7 @@
  */
 
 import { LoadEpisode, Player } from "../player.js";
-import { onDuration$, onEnded$, onError$, onPause$, onPlay$, onTimeUpdate$, onVolumeChange$ } from "./mod_event.js";
+import { onDuration$, onEnded$, onError$, onPause$, onPlay$, onSeek$, onTimeUpdate$, onVolumeChange$ } from "./mod_event.js";
 
 export const ParentWindow = window.parent; // Данные с iframe
 
@@ -16,10 +16,16 @@ export const ParentWindow = window.parent; // Данные с iframe
  * Инициализация API плеера между окнами (PrentWindow)
  */
 export function InitAPI() {
+    onSeek$.subscribe({
+        next: (e) => {
+            ParentWindow.postMessage({ key: 'kodik_player_seek', value: Player.currentTime }, '*');
+        }
+    });
+
     onError$.subscribe({
         next: (e) => {
             console.log(e);
-            ParentWindow.postMessage({ key: 'tunime_error', value: e }, "*");
+            ParentWindow.postMessage({ key: 'tunime_error', value: e }, '*');
         }
     });
 
