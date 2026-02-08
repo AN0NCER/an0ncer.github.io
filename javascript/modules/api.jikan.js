@@ -81,6 +81,16 @@ export const Jikan = {
                     return control.fetch(url, init, cache, ttl, e);
                 }
             }
+        },
+        getAnimeCharacters: (id, e = () => { }) => {
+            const control = new JikanControls();
+            const url = new URL(`${BASE_URL}/anime/${id}/characters`);
+
+            return {
+                GET: (init = {}, cache = true, ttl = 60 * 60 * 1000) => {
+                    return control.fetch(url, init, cache, ttl, e);
+                }
+            }
         }
     },
     producers: {
