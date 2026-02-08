@@ -14,13 +14,15 @@ export async function logout() {
 
     const { TDatabase } = await import("../modules/TDatabase.js");
 
-    for (let i = 0; i < indexdb.length; i++) {
-        const name = indexdb[i];
-        await TDatabase.Delete(name);
+    try{
+        for (let i = 0; i < indexdb.length; i++) {
+            const name = indexdb[i];
+            await TDatabase.Delete(name);
+        }
+    }finally{
+        const { Tunime } = await import("../modules/api.tunime.js");
+        await Tunime.help.logout();
+
+        window.location.replace(window.location.href);
     }
-
-    const { Tunime } = await import("../modules/api.tunime.js");
-    await Tunime.help.logout();
-
-    window.location.replace(window.location.href);
 }
