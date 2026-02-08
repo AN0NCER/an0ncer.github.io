@@ -1,0 +1,139 @@
+.user-history-wrapper {
+    font-family: 'Manrope', sans-serif;
+    margin-top: 15px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    max-width: 940px;
+    margin: 15px auto 0 auto;
+
+    .title {
+        font-size: 16px;
+        color: #fff;
+        font-weight: bold;
+        display: flex;
+        padding: 0 40px;
+    }
+
+    @media (max-width: 940px) {
+        .title{
+            padding: 0 20px;
+        }
+    }
+
+    &.-hide{
+        display: none;
+    }
+}
+
+.user-history {
+    display: flex;
+    position: relative;
+    margin: 0 20px;
+
+    .block-history {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .mounth {
+            font-family: 'Inter';
+            font-size: 14px;
+            color: #fff;
+            margin-left: 10px;
+            cursor: default;
+            font-weight: bold;
+
+            span {
+                margin-left: 10px;
+            }
+
+            &:first-child {
+                display: none;
+            }
+        }
+
+        .block-date-data {
+            display: grid;
+            grid-template-columns: 50px 1fr;
+            grid-column-gap: 10px;
+
+            .history-date {
+                position: sticky;
+                top: 0;
+                cursor: default;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                gap: 5px;
+                align-self: flex-start;
+
+                span.day {
+                    color: #fff;
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+
+                span.mon {
+                    color: #fff;
+                    opacity: .25;
+                    font-size: 10px;
+                }
+            }
+
+            .history-data {
+                display: grid;
+                width: 100%;
+                gap: 10px;
+
+                a {
+                    .block {
+                        display: flex;
+                        flex-direction: column;
+                        font-weight: bolder;
+                        color: #fff;
+                        border-radius: 4px;
+                        padding: 10px 0px 10px 10px;
+                        gap: 5px;
+                        background: #191C21;
+
+                        .anime-title {
+                            font-size: 16px;
+                        }
+
+                        .anime-event {
+                            font-size: 11px;
+                        }
+                    }
+                }
+            }
+
+            &:nth-child(2) {
+                .history-data {
+                    a:first-child {
+                        .block {
+                            background: #2292F0
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.-hide {
+        display: none;
+    }
+
+    .sentinel {
+        height: 200px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+}

@@ -8,7 +8,8 @@
         .achivement {
             min-width: 200px;
             max-width: 250px;
-            background: rgba(28, 32, 40, 0.5);
+            background: #1C2028;
+            border: 0.2px solid rgba(255, 255, 255, .2);
             border-radius: 5px;
             font-size: 16px;
             color: #fff;
@@ -21,6 +22,22 @@
             overflow: hidden;
             cursor: pointer;
 
+            .bg {
+                position: absolute;
+                inset: 0;
+                display: grid;
+                place-items: center;
+                filter: blur(17px);
+                opacity: .15;
+                animation: glower 20s linear infinite;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: none;
+                }
+            }
+
             .title {
                 display: -webkit-box;
                 -webkit-line-clamp: 2;
@@ -28,41 +45,45 @@
                 line-clamp: 2;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                opacity: .5;
+                opacity: .6;
             }
 
             .wrapper {
                 width: 100%;
                 margin-top: 25px;
-                opacity: .5;
+                // opacity: .5;
             }
 
             .progress {
-                background: #101318;
+                background: rgba(35, 148, 241, 0.25);
+                border: 0.3px solid rgba(255, 255, 255, .15);
+                padding: 3px;
+                border-radius: 10px;
                 height: 4px;
                 display: flex;
                 position: relative;
 
                 .value {
                     width: 50%;
-                    background: #82ADE7;
+                    background: #2393F1;
                     border-radius: 3px;
                 }
 
-                .current-progress {
-                    position: absolute;
-                    left: 0;
-                    font-size: 12px;
-                    font-weight: normal;
-                    bottom: 6px;
-                }
-
+                .current-progress,
                 .to-next-level {
                     position: absolute;
-                    right: 0;
                     font-size: 12px;
                     font-weight: normal;
-                    bottom: 6px;
+                    bottom: 11px;
+                    color: #7A7A7A;
+
+                    &.current-progress {
+                        left: 0;
+                    }
+
+                    &.to-next-level {
+                        right: 0;
+                    }
                 }
             }
 
@@ -91,8 +112,8 @@
                 }
             }
 
-            &.loading{
-                .loader{
+            &.loading {
+                .loader {
                     opacity: 1;
                 }
             }
@@ -150,7 +171,6 @@
                         100% {
                             transform: rotate(360deg);
                         }
-
                     }
                 }
 
