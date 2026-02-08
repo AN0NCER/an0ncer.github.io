@@ -340,7 +340,7 @@ class Failover {
         }
 
         const retryStatuses = new Set([502, 503, 504]);
-        
+
         const lFetch = (url) => {
             return new Promise((resolve, reject) => {
                 fetch(url, opts)
@@ -891,6 +891,27 @@ export const Tunime = new class {
 
                 return response.value.data;
             }
+        }
+    }
+
+    rooms = {
+        create: (aid, { access, kodikId, episode, friendIds = [], canPause = false } = {}) => {
+            const body = {
+                access,
+                friendIds,
+                kodikId,
+                episode,
+                canPause
+            }
+            return this.control.fetch(`/api/anime/${aid}/rooms`, { method: 'POST', body });
+        },
+
+        list: (aid) => {
+            return this.control.fetch(`/api/anime/${aid}/rooms`, { method: 'GET' });
+        },
+
+        join: (rid) => {
+            return this.control.fetch(`/api/rooms/${rid}/join`, { method: 'POST' })
         }
     }
 
