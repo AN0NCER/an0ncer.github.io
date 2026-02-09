@@ -8,7 +8,7 @@
 
 import { Player } from "../player.js";
 
-export let onPause$, onPlay$, onDuration$, onTimeUpdate$, onError$, onEnded$, onVolumeChange$ = undefined;
+export let onPause$, onPlay$, onDuration$, onTimeUpdate$, onError$, onEnded$, onVolumeChange$, onSeek$ = undefined;
 
 /**
  * Инициализация событий плеера в rxjs
@@ -21,4 +21,5 @@ export function InitEvent() {
     onError$ = rxjs.fromEvent(Player, 'error');
     onEnded$ = rxjs.fromEvent(Player, 'ended');
     onVolumeChange$ = rxjs.fromEvent(Player, 'volumechange');
+    onSeek$ = rxjs.fromEvent(Player, 'seeked');
 }

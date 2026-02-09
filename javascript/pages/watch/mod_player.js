@@ -31,7 +31,8 @@ const message_callabcks = {
     next: [],
     fullscreen: [],
     switch: [],
-    seek: []
+    seek: [],
+    skip_button: []
 }
 
 const translation_callbacks = {

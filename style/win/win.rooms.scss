@@ -1,0 +1,229 @@
+@mixin EmptyCard() {
+    .empty-card {
+        grid-column: 1 / 3;
+        padding: 11px 0;
+        width: 218px;
+        color: #FFFFFF;
+        font-family: "Manrope", sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        justify-content: center;
+        margin: 0 auto;
+        min-height: 200px;
+
+        .title {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .add {
+            font-size: 12px;
+            text-align: center;
+            opacity: 0.5;
+        }
+    }
+}
+
+@mixin RoomCard() {
+    .room-card {
+        display: flex;
+        flex-direction: column;
+        background: #191C21;
+        border-radius: 10px;
+        border: 0.4px solid rgba(255, 255, 255, 0.2);
+
+        .room-description {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+
+            .room-owner {
+                display: flex;
+                justify-content: space-between;
+
+                .owner-wrapper {
+                    display: flex;
+                    gap: 10px;
+
+                    .owner-avatar {
+                        $size: 50px;
+                        --img: url('/images/ava.jpeg');
+
+                        width: $size;
+                        height: $size;
+
+                        background: var(--img);
+                        background-size: cover;
+                        border-radius: 5px;
+                    }
+
+                    .owner-text-wrapper {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-end;
+
+                        .owner-type {
+                            font-size: 13px;
+                            // font-weight: bold;
+                            color: #4A4A4A;
+                        }
+
+                        .owner-nickname {
+                            margin-top: -3px;
+                            font-size: 16px;
+                            font-weight: bold;
+                        }
+                    }
+                }
+
+                .room-type {
+                    font-size: 13px;
+                    color: #3689E8;
+                    font-weight: bold;
+
+                    text-transform: uppercase;
+                    text-align: right;
+                }
+            }
+
+            .room-stats-wrapper {
+                display: grid;
+                gap: 20px;
+                grid-template-columns: 1.2fr auto 0.8fr auto 1.4fr;
+
+                .room-stats {
+                    min-width: 0;
+                    display: flex;
+                    gap: 3px;
+                    flex-direction: column;
+                    text-wrap: nowrap;
+
+                    .stats-name {
+                        font-size: 13px;
+                        color: #4A4A4A;
+                    }
+
+                    .stats-value {
+                        font-weight: bold;
+                        font-size: 16px;
+                        text-wrap: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                    }
+                }
+
+                .vline {
+                    display: flex;
+                    width: 1px;
+                    background: rgba(255, 255, 255, 0.4);
+                }
+
+                .room-connect-btn {
+                    min-width: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background: #2393F1;
+                    color: #FFFFFF;
+                    padding: 13px 0;
+                    border-radius: 7px;
+                    font-weight: bold;
+                    gap: 5px;
+                    cursor: pointer;
+
+                    svg {
+                        height: 20px;
+                        fill: #FFFFFF;
+                    }
+                }
+            }
+        }
+
+        .room-small-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 0.4px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+
+            .left-wrapper {
+                display: flex;
+                gap: 10px;
+            }
+
+            .small-block {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                svg {
+                    height: 20px;
+                    fill: #67696D;
+                }
+
+                span.value {
+                    color: #4A4A4A;
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+}
+
+@import './win.engine';
+$WINDOW: 'rooms';
+
+$SEARCH: 'search.v1', 'search.v1[join]';
+$BAR: 'bar.v1';
+
+@include WEngine($WINDOW, $SEARCH..., $BAR);
+@include WIcons('i-plus');
+
+.content-#{$WINDOW} {
+    .content-wrapper {
+        .wrapper {
+            .#{$WINDOW}-list-wrapper {
+                margin-top: 10px;
+
+                .grid-wrapper-list {
+                    padding-left: max(var(--sal), 10px);
+                    padding-right: max(var(--sar), 10px);
+
+                    .#{$WINDOW}-grid-list {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(370px, 435px));
+                        gap: 10px;
+
+                    }
+                }
+
+                @include EmptyCard();
+                @include RoomCard();
+            }
+        }
+
+        .#{$WINDOW}-list-search {
+            .btn {
+                &.btn-reload {
+                    .timer {
+                        display: none;
+                        font-size: 12px;
+                    }
+
+                    &.-timer {
+                        .ticon {
+                            display: none;
+                        }
+
+                        .timer {
+                            display: block;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
