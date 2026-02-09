@@ -21,6 +21,12 @@ const $PARAMETERS = {
         saveinfo: false,
         previewbs: true,
     },
+    rooms: {
+        roomsenable: true,
+        roomssave: false,
+        roomsautopause: false,
+        roomsindexpage: true
+    },
     download: {
         dquality: '720',
         dautosave: true,

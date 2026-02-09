@@ -220,6 +220,38 @@ const setup = [
         ]
     },
     {
+        name: 'Совместный просмотр',
+        params: [
+            {
+                param: 'roomsenable',
+                type: 'checkbox.tip',
+                title: 'Совместный просмотр',
+                description: `Добавляет на сайте функции совместного просмотра: создание комнат и подключение к ним.`
+            },
+            {
+                param: 'roomssave',
+                type: 'checkbox.tip',
+                title: 'Сохранять просмотр',
+                description: `Сохраняет эпизод и озвучку, с которыми аниме смотрели в комнате. Если отключено - после закрытия комнаты состояние просмотра вернётся к тому, что было до входа в комнату.`,
+                dependsOn: { param: 'roomsenable', value: true }
+            },
+            {
+                param: 'roomsautopause',
+                type: 'checkbox.tip',
+                title: 'Совместные паузы',
+                description: `Любой гость может поставить видео на паузу для всех. Возобновить воспроизведение может только владелец комнаты.`,
+                dependsOn: { param: 'roomsenable', value: true }
+            },
+            {
+                param: 'roomsindexpage',
+                type: 'checkbox.tip',
+                title: 'Приглашения в комнаты (бэта)',
+                description: `Показывает на главной странице комнаты, в которые вы приглашены.`,
+                dependsOn: { param: 'roomsenable', value: true }
+            }
+        ]
+    },
+    {
         name: 'Плеер',
         params: [
             {
