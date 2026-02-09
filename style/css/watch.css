@@ -677,6 +677,9 @@ main .player-title .player-controls .btn {
   place-items: center;
   background: #191C21;
 }
+main .player-title .player-controls .btn.-hide {
+  display: none;
+}
 
 .spotify {
   margin-left: 20px;
@@ -876,6 +879,87 @@ footer .studio {
 footer .studio span {
   font-size: 15px;
   opacity: 0.5;
+}
+
+main > .room-controller-wrapper {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  overflow: hidden;
+  max-height: 54px;
+  transition: 0.3s ease-in-out;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 5px;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images {
+  display: flex;
+  align-items: center;
+  background: #191C21;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  gap: 10px;
+  height: 40px;
+  border-radius: 20px;
+  padding-left: 5px;
+  padding-right: 13px;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images .users-image-wrapper {
+  display: flex;
+  align-items: center;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images .users-image-wrapper .user-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid #191C21;
+  background-image: var(--img);
+  background-size: cover;
+  margin-right: -15px;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images .users-image-wrapper .user-image:last-child {
+  margin-right: 0px;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images .users-count-text {
+  display: none;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images svg {
+  height: 20px;
+  fill: white;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images.-many {
+  padding-left: 13px;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images.-many .users-image-wrapper {
+  display: none;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images.-many .users-count-text {
+  display: block;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .btn {
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: #EC2127;
+  border-radius: 20px;
+  padding: 0 15px;
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+main > .room-controller-wrapper.-hide {
+  margin-top: 0px;
+  max-height: 0px;
+  overflow: hidden;
 }
 
 .card-anime {

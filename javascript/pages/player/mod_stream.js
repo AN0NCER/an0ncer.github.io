@@ -8,6 +8,7 @@
 import { Kodik } from "../../modules/api.kodik.js";
 import { Tunime } from "../../modules/api.tunime.js";
 import { Player } from "../player.js";
+import { ParentWindow } from "./mod_api.js";
 import { InitMediaSession } from "./mod_mediasession.js";
 import { AUTOQUALITY, QUALITY } from "./mod_settings.js";
 
@@ -32,6 +33,7 @@ export class Skips {
         //Пропускает текущий выбранный сегмент
         if (Skips.index > -1) {
             Player.currentTime = Skips.list[Skips.index].end;
+            ParentWindow.postMessage({ key: 'kodik_player_skip_button', value: Skips.list[Skips.index].end }, "*");
         }
     }
 
@@ -72,7 +74,7 @@ export async function LoadM3U8Episode(id, e) {
 }
 
 function GenLink(streams) {
-    if(typeof streams === "boolean"){
+    if (typeof streams === "boolean") {
         return;
     }
     STREAMS = { 360: streams['360'], 480: streams['480'], 720: streams['720'] };
@@ -115,7 +117,7 @@ function loadStreamTunime(id, e, kodik_link = undefined) {
         if ($PARAMETERS.player.skipmoments) {
             new Skips(tunime_data.skips);
         }
-        
+
         loadFirstSuccessfulImage(tunime_data.thumbinals)
             .then((successfulImage) => {
                 if (typeof successfulImage === "undefined") {
@@ -142,7 +144,7 @@ function LoadImage(url) {
 }
 
 async function loadFirstSuccessfulImage(urls) {
-    if(typeof urls === "undefined"){
+    if (typeof urls === "undefined") {
         return;
     }
     for (let url of urls) {

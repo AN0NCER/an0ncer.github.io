@@ -1,0 +1,93 @@
+main>.room-controller-wrapper {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow: hidden;
+    max-height: 54px;
+    transition: .3s ease-in-out;
+
+    &>.room-info-content-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 25px;
+        padding: 5px;
+
+        &>.users-images {
+            display: flex;
+            align-items: center;
+            background: #191C21;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #FFFFFFFF;
+            font-weight: bold;
+            font-size: 13px;
+            gap: 10px;
+
+            height: 40px;
+            border-radius: 20px;
+            padding-left: 5px;
+            padding-right: 13px;
+
+            .users-image-wrapper {
+                display: flex;
+                align-items: center;
+
+                .user-image {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    border: 3px solid #191C21;
+                    background-image: var(--img);
+                    background-size: cover;
+                    margin-right: -15px;
+
+                    &:last-child {
+                        margin-right: 0px;
+                    }
+                }
+            }
+
+            .users-count-text {
+                display: none;
+            }
+
+            svg {
+                height: 20px;
+                fill: #FFFFFFFF;
+            }
+
+            &.-many {
+                padding-left: 13px;
+
+                .users-image-wrapper {
+                    display: none;
+                }
+
+                .users-count-text {
+                    display: block;
+                }
+            }
+        }
+
+        &>.btn {
+            height: 40px;
+            display: grid;
+            place-items: center;
+            background: #EC2127;
+            border-radius: 20px;
+            padding: 0 15px;
+            color: #FFFFFFFF;
+            font-weight: bold;
+            font-size: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    }
+
+    &.-hide {
+        margin-top: 0px;
+        max-height: 0px;
+        overflow: hidden;
+    }
+}

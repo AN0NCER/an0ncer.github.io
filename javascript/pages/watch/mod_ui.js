@@ -31,7 +31,13 @@ export function Functional() {
         { dom: '.translations-wrapper > .button-translation', func: ShowTranslationWindow },
         { dom: '.translations-wrapper > .button-stars', func: SaveVoice },
         { dom: '.title > .russian', func: CopyTitle }
-    ]
+    ];
+
+    if ($PARAMETERS.rooms.roomsenable) {
+        const dom = "#create-room";
+        $(dom).removeClass('-hide');
+        list.push({ dom, func: RoomsWindow });
+    }
 
     for (let i = 0; i < list.length; i++) {
         const element = list[i];
@@ -330,4 +336,9 @@ function ShowPlayer() {
 
 function OrientationChanged() {
     Player.CEpisodes.Revise();
+}
+
+async function RoomsWindow() {
+    const { WRooms } = await import("../../windows/win.rooms.js");
+    WRooms();
 }

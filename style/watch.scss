@@ -632,6 +632,10 @@ main {
                 display: grid;
                 place-items: center;
                 background: #191C21;
+
+                &.-hide{
+                    display: none;
+                }
             }
         }
     }
@@ -862,6 +866,7 @@ footer {
     }
 }
 
+@import './watch/roomstats';
 @import './cards';
 @import './windowed';
 @import './window/translation';
