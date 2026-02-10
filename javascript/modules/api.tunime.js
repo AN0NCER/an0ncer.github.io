@@ -722,9 +722,8 @@ class Task {
 
 
 const balancer = new Failover([
-    'https://192.168.31.45:3001',
-    // 'https://tunime.onrender.com',
-    // 'https://tunime-hujg.onrender.com',
+    'https://tunime.onrender.com',
+    'https://tunime-hujg.onrender.com',
 ]);
 
 export const Snapshot = new Shadow();
@@ -769,7 +768,9 @@ const Api = new class {
     async login() {
         const body = await this.#body();
 
-        const response = await this.control.fetch('/login', { method: 'POST', body });
+        const app = this.#app();
+
+        const response = await this.control.fetch(`/login?app=${app.installed}&date=${app.date}`, { method: 'POST', body });
 
         if (response.status !== 200 || !response.parsed) {
             return null;
@@ -799,6 +800,22 @@ const Api = new class {
         user.access = data;
 
         return data;
+    }
+
+    #app() {
+        const key = 'application_installed';
+
+        let raw;
+        try {
+            raw = JSON.parse(localStorage.getItem(key) ?? 'null');
+        } catch {
+            raw = null;
+        }
+
+        const installed = typeof raw?.installed === 'boolean' ? raw.installed : false;
+        const date = typeof raw?.date === 'string' ? raw.date : '';
+
+        return { installed, date };
     }
 
     async #body() {
@@ -878,6 +895,66 @@ export const Tunime = new class {
                     }
 
                     throw { msg: 'Нет доступа!', code: '002' }
+                }
+            }
+        },
+
+        device: {
+            list: (event = (/**@type {TResponse} */ r) => { }) => {
+                const basePath = '/api/user/devices';
+
+                const chech_acc = async (fetch = () => { }) => {
+                    const hasScope = user.access.scope.includes('acc');
+
+                    if (hasScope) {
+                        return fetch();
+                    }
+
+                    if (tsk.has('shiki')) {
+                        if (await Api.checkScope('acc')) {
+                            tsk.remove('shiki');
+                            return fetch();
+                        }
+                        throw { msg: 'Проверка аккаунта!', code: '001' }
+                    }
+
+                    throw { msg: 'Нет доступа!', code: '002' }
+                }
+
+                return {
+                    GET: () => {
+                        return chech_acc(() => this.control.fetch(basePath, { method: 'GET' }, event));
+                    }
+                }
+            },
+            name: (event = (/**@type {TResponse} */ r) => { }) => {
+                const basePath = '/api/user/device/name';
+
+                const chech_acc = async (fetch = () => { }) => {
+                    const hasScope = user.access.scope.includes('acc');
+
+                    if (hasScope) {
+                        return fetch();
+                    }
+
+                    if (tsk.has('shiki')) {
+                        if (await Api.checkScope('acc')) {
+                            tsk.remove('shiki');
+                            return fetch();
+                        }
+                        throw { msg: 'Проверка аккаунта!', code: '001' }
+                    }
+
+                    throw { msg: 'Нет доступа!', code: '002' }
+                }
+
+                return {
+                    GET: async () => {
+                        return chech_acc(() => this.control.fetch(basePath, { method: 'GET' }, event));
+                    },
+                    PUT: async (body = {}) => {
+                        return chech_acc(() => this.control.fetch(basePath, { method: 'PUT', body }, event));
+                    }
                 }
             }
         },

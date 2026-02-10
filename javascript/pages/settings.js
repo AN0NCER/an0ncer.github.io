@@ -1,5 +1,6 @@
 import { Main, OAuth, sUrl } from "../core/main.core.js";
 import { TMenu } from "../core/menu.core.js";
+import { Snapshot, Tunime } from "../modules/api.tunime.js";
 import { ClearParams } from "../modules/functions.js";
 import { Engine } from "./settings/mod.engine.js";
 import { ClearDB, Logout } from "./settings/mod.func.js";
@@ -42,6 +43,22 @@ const setup = [
                 title: 'Хранилище',
                 icon: 'database',
                 description: 'Управление данными приложения: экспорт, импорт и сброс.'
+            },
+            {
+                enable: () => {
+                    return Snapshot.state.permissions.includes('acc')
+                },
+                value: async () => {
+                    const response = await Tunime.api.device.name().GET();
+                    if (response.status === 200) {
+                        return response.value.data;
+                    }
+                    return 'undefined';
+                },
+                type: 'button.event',
+                title: 'Устройство',
+                icon: 'mobile-button',
+                description: 'Индентификатор устройства Tunime.'
             },
             {
                 enable: () => { return OAuth.auth },
