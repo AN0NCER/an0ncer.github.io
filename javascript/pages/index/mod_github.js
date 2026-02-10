@@ -35,13 +35,21 @@ export function GitHubRel() {
         const param = new URLSearchParams(window.location.search).get("update");
         ClearParams(['update']);
 
-        if (update || param) {
+        if (update) {
             gitFetch().then((value) => {
                 if (typeof value === 'undefined') {
                     return;
                 }
 
                 showUpdate(value);
+            });
+        } else if (param) {
+            gitFetch().then((value) => {
+                if (typeof value === 'undefined') {
+                    return;
+                }
+
+                showWindow(value);
             });
         }
     } catch (err) {

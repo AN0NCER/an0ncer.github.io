@@ -37,6 +37,8 @@ const update = {
         let objectTable = {};
         //Обьект для Swiper
         let swiperElements = {};
+        //Объект для Msg
+        let messageElement = {};
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim();
@@ -44,8 +46,14 @@ const update = {
                 _tProcess(line);
                 continue;
             }
+
             if (Object.keys(swiperElements).length > 0) {
                 _sProcess(line);
+                continue;
+            }
+
+            if (Object.keys(messageElement).length > 0) {
+                _mProcess(line);
                 continue;
             }
             //Если строка начинается на '- ' это основной блок
@@ -78,6 +86,11 @@ const update = {
 
             if (line.includes('#swiper')) {
                 _swiper(line);
+                continue;
+            }
+
+            if (line.includes('#msg')) {
+                _msg(line);
                 continue;
             }
         }
@@ -154,6 +167,10 @@ const update = {
                 return;
             }
 
+            if (line.includes('<!--image')) {
+                _image(line);
+                return;
+            }
         }
 
         function _sProcess(line) {
@@ -164,6 +181,30 @@ const update = {
             }
 
             _sSlide(line);
+        }
+
+        function _sText(line) {
+            if (line.includes('<!--text')) {
+                const regex = /^<!--text:(left|center|right):"([^"]*)"-->$/
+                const match = line.match(regex);
+
+                if (match) {
+                    const align = match[1];
+                    const text = match[2];
+
+                    messageElement.content.push({ type: 'message_text', align, text });
+                }
+            }
+        }
+
+        function _mProcess(line) {
+            if (line.includes('#endmsg')) {
+                objectContent?.content[objectContent.content.length - 1]?.content.push(messageElement);
+                messageElement = {};
+                return;
+            }
+
+            _sText(line);
         }
 
         function _script(line, scripts = []) {
@@ -189,8 +230,31 @@ const update = {
             }
         }
 
+        function _image(line) {
+            const regex = /<!--image:(https?:\/\/[^\s:]+):"([^"]+)":([^\s>]+)-->/;
+            const match = line.match(regex);
+
+            if (match) {
+                const imageUrl = match[1];
+                const title = match[2];
+                const additionalUrl = match[3];
+                swiperElements?.content.push({ type: "image", image: imageUrl, name: title, url: additionalUrl });
+            }
+        }
+
         function _swiper(line) {
             swiperElements = { type: 'swiper', content: [] };
+        }
+
+        function _msg(line) {
+            const regex = /<!--#msg:"([^"]*)":([a-zA-Z0-9_-]+)-->$/;
+            const match = line.match(regex);
+
+            if (match) {
+                const title = match[1];     // Заголовок сообщения
+                const icon = match[2];      // Иконка сообщения
+                messageElement = { type: 'message', title, icon, content: [] };
+            }
         }
     },
 
@@ -214,8 +278,8 @@ const update = {
         //html контент
         let html = "";
         //swiper элемент
-        let swiper;
-        let swiperCss;
+        const swiperMap = new Map();
+        const swiperSet = new Set();
 
         const tRecursion = (data) => {
             for (let i = 0; i < data.length; i++) {
@@ -224,11 +288,27 @@ const update = {
             }
         }
 
+        let g = 1;
+
         const sRecrusion = (data) => {
             for (let i = 0; i < data.length; i++) {
                 const element = data[i];
+                g = g + i + 1;
                 if (element.type === 'video') {
-                    html += `<div class="vWrapper swiper-slide"><video id="player${i}" loop="" muted="" playsinline="" class="video-background" src="${element.video}"></video><div class="controls" id="player${i}"><span class="icon"><img src="./images/icons/logo-x192-o.png">${element.name}</span><div class="buttons"><div class="btn-play-pause play" id="player${i}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="pause"><path d="M48 64C21.5 64 0 85.5 0 112L0 400c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48L48 64zm192 0c-26.5 0-48 21.5-48 48l0 288c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48l-32 0z"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="play"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80L0 432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></div><a href="${element.url}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg></a></div></div></div>`;
+                    html += `<div class="vWrapper swiper-slide"><video id="player${g}" loop="" muted="" playsinline="" class="video-background" src="${element.video}"></video><div class="controls" id="player${g}"><span class="icon"><img src="./images/icons/logo-x192-o.png">${element.name}</span><div class="buttons"><div class="btn-play-pause play" id="player${g}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="pause"><path d="M48 64C21.5 64 0 85.5 0 112L0 400c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48L48 64zm192 0c-26.5 0-48 21.5-48 48l0 288c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48l-32 0z"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="play"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80L0 432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></div><a href="${element.url}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg></a></div></div></div>`;
+                    continue;
+                }
+                if (element.type === 'image') {
+                    html += `<div class="vWrapper iWrapper swiper-slide" id="player${g}"><image id="player${g}" class="image-background" src="${element.image}" /><div class="controls" id="player${g}"><span class="icon"><img src="./images/icons/logo-x192-o.png">${element.name}</span><div class="buttons"><div></div><a href="${element.url}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg></a></div></div></div>`;
+                }
+            }
+        }
+
+        const mRecursion = (data) => {
+            for (let i = 0; i < data.length; i++) {
+                const element = data[i];
+                if (element.type === 'message_text') {
+                    html += `<span style="text-align: ${element.align};">${element.text}</span>`;
                 }
             }
         }
@@ -265,10 +345,17 @@ const update = {
                 }
 
                 if (element.type === "swiper") {
-                    swiperCss = 'random-class-' + Math.floor(Math.random() * 10000);
-                    html += `<div class="uSwiperWrapper"><div class="sWrapper ${swiperCss}"><div class="swiper-wrapper">`;
+                    const css = 'random-class-' + Math.floor(Math.random() * 10000);
+                    swiperSet.add(css);
+                    html += `<div class="uSwiperWrapper"><div class="sWrapper ${css}"><div class="swiper-wrapper">`;
                     sRecrusion(element.content);
                     html += `</div><div class="swiper-pagination"></div></div></div>`;
+                }
+
+                if (element.type === "message") {
+                    html += `<div class="msgElement"><div class="msgTitleWrapper"><span class="msgTitle">${element.title}</span><span class="msgIcon"><div class="ticon i-${element.icon}"></div></span></div><div class="msgContentWrapper">`;
+                    mRecursion(element.content);
+                    html += `</div></div>`;
                 }
             }
         }
@@ -279,14 +366,18 @@ const update = {
 
         $('.content-update > .content-wraper > .update-content-wraper').append(html);
 
-        initSwiper(swiperCss);
+        swiperSet.forEach(css => {
+            initSwiper(css);
+        });
+
+        initControls();
 
         function initSwiper(css) {
-            if (swiper) {
-                swiper.destroy(true, true)
+            if (swiperMap.has(css)) {
+                swiperMap.get(css).destroy(true, true)
             }
 
-            swiper = new Swiper(`.${css}`, {
+            const swiper = new Swiper(`.${css}`, {
                 // Parametrs
                 init: false,
                 slidesPerView: 1,
@@ -311,6 +402,8 @@ const update = {
                 },
             });
 
+            swiperMap.set(css, swiper);
+
             const visibleVideo = () => {
                 const { activeIndex, params, slides } = swiper;
 
@@ -334,6 +427,13 @@ const update = {
             swiper.on('resize', visibleVideo);
 
             swiper.init();
+        }
+
+        function initControls() {
+            $(`.iWrapper`).on('click', (e) => {
+                const id = $(e.currentTarget).attr('id');
+                ShowControls(id);
+            });
 
             $(`.vWrapper > video`).on('click', (e) => {
                 const id = $(e.currentTarget).attr('id');
@@ -343,6 +443,7 @@ const update = {
             $(`.vWrapper > .controls > .buttons > .btn-play-pause`).on('click', (e) => {
                 const id = $(e.currentTarget).attr('id');
                 const video = $(`video#${id}`)[0];
+                console.log(video);
                 if (video.paused) {
                     video.play();
                 } else {
