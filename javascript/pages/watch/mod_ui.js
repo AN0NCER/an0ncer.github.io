@@ -1,12 +1,13 @@
 import { ScrollElementWithMouse } from "../../modules/functions.js";
 import { ShowInfo } from "../../modules/Popup.js";
-import { Tunime } from "../../modules/api.tunime.js";
+import { Snapshot, Tunime } from "../../modules/api.tunime.js";
 import { $ID, Player } from "../watch.js";
 import { LTransition } from "./mod_transition.js";
 import { IScreenshots } from "./mod.resource.js";
 import { ShowTranslationWindow } from "./mod_translation.js";
 import { UserRate } from "./mod_urate.js";
 import { ShowScoreWindow } from "./mod_wscore.js";
+import { Popup } from "../../modules/tun.popup.js";
 
 const anime_status = [
     { id: 0, name: "Посмотрю", sh: ["planned"] },
@@ -88,17 +89,17 @@ export function Functional() {
 
     //Нажатие на главных героев персонажей
     let onload = false;
-    
+
     const handle = async (e) => {
         const id = e.currentTarget.dataset.id;
         if (typeof id === "undefined" || onload) return;
         onload = true;
-        
+
         e.currentTarget.classList.add('-load');
-        
+
         const { WCharacter } = await import("../../windows/win.character.js");
         await WCharacter(id);
-        
+
         e.currentTarget.classList.remove('-load');
         onload = false;
     }
@@ -359,6 +360,9 @@ function OrientationChanged() {
 }
 
 async function RoomsWindow() {
+    if (!Snapshot.state.permissions.includes('acc')) {
+        return new Popup('rooms', 'Нету разрешения.')
+    }
     const { WRooms } = await import("../../windows/win.rooms.js");
     WRooms();
 }

@@ -496,7 +496,6 @@ function Description(data) {
             link.classList.add('t-anime');
         },
         character: (link, { id } = {}) => {
-            console.log(link.attributes);
             link.attributes.removeNamedItem('href');
             link.attributes.removeNamedItem('title');
             link.attributes.removeNamedItem('data-tooltip_url');
