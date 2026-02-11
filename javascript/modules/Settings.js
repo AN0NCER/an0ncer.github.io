@@ -3,7 +3,7 @@ export class SHIKIURL {
         return 'https://';
     }
     static get domain() {
-        return 'shikimori.one';
+        return 'shiki.one';
     }
     static get url() {
         return `${this.protocol}${this.domain}`;
