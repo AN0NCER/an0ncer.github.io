@@ -49,11 +49,22 @@ export function tLoad(e = () => { }, { logged = false } = {}) {
             }));
 
             process.push(new Promise(async (resolve) => {
+                /**@type {HTMLImageElement} */
                 const img = $(".preview-wrapper > .main");
+
                 img.addEventListener('load', (e) => {
                     $(".bg-wrapper > .bg").setAttribute('src', e.currentTarget.getAttribute('src'));
                     resolve(true);
                 });
+
+                img.addEventListener('error', (e) => {
+                    console.log('[error] - Anime poster not loaded');
+                    new Reserv().get().then((value) => {
+                        resolve(true);
+                        img.setAttribute('src', value.images.webp.large_image_url);
+                    });
+                });
+
                 img.setAttribute('src', tAnime["poster"]["originalUrl"]);
             }));
 
@@ -100,7 +111,7 @@ export function tLoad(e = () => { }, { logged = false } = {}) {
 
     async function load(id) {
         return new Promise((resolve, reason) => {
-            const body = ["id", "russian", "name", "score", "status", "episodesAired", "episodes", "duration", "rating", "nextEpisodeAt", "descriptionHtml", "kind", { "characterRoles": ["rolesEn", { "character": ["russian", "url", { "poster": ["previewUrl"] }] }] }, { "chronology": ["id", "russian", "name", "kind", "status", "score", { "airedOn": ["year"] }, { userRate: ["status"] }] }, { "poster": ["originalUrl"] }, { "genres": ["id", "name", "russian", "kind"] }, { "studios": ["id", "name"] }, { "screenshots": ["x332Url", "originalUrl"] }];
+            const body = ["id", "russian", "name", "score", "status", "episodesAired", "episodes", "duration", "rating", "nextEpisodeAt", "descriptionHtml", "kind", { "characterRoles": ["rolesEn", { "character": ["id", "russian", { "poster": ["previewUrl"] }] }] }, { "chronology": ["id", "russian", "name", "kind", "status", "score", { "airedOn": ["year"] }, { userRate: ["status"] }] }, { "poster": ["originalUrl"] }, { "genres": ["id", "name", "russian", "kind"] }, { "studios": ["id", "name"] }, { "screenshots": ["x332Url", "originalUrl"] }];
 
             GraphQl.animes({ ids: `"${id}"`, limit: 1 }, async (response) => {
                 if (response.failed) {
@@ -311,8 +322,8 @@ function Heroes(data) {
     if (data.length <= 0) return;
     $$('.hero-anime, .hero-anime-title').forEach(el => el.style.display = '');
     for (let i = 0; i < data.length; i++) {
-        const { character: { url, poster: { previewUrl }, russian } } = data[i];
-        $('.hero-anime > .val').insertAdjacentHTML('beforeend', `<a href="${url}" target="_blank"><img src="${previewUrl}"/><div class="hero"><div class="name">${russian}</div></div></a>`);
+        const { character: { id, poster: { previewUrl }, russian } } = data[i];
+        $('.hero-anime > .val').insertAdjacentHTML('beforeend', `<a data-id="${id}"><img src="${previewUrl}"/><div class="hero"><div class="name">${russian}</div></div></a>`);
     }
 }
 
@@ -320,22 +331,42 @@ function Heroes(data) {
 * Устанавливает галерею
 */
 function Gallery(data) {
-    if (data.length <= 0) {
-        return $(".content > .title").style.display = "none";
+    if (data.length === 0) {
+        $(".content > .title").style.display = "none";
+        return;
     }
+    /**@type {HTMLImageElement} */
+    const img = document.createElement("img");
 
-    const screenshots = new IScreenshots();
-    screenshots.Init(data);
+    const cleanup = () => {
+        img.onload = img.onerror = img.onabort = null;
+        img.remove();
+    };
 
-    for (let i = 0; i < data.length; i++) {
-        const { x332Url } = data[i];
-        if (i < 3) {
-            screenshots.add({ type: "beforeend", id: i, url: x332Url });
-        } else {
-            screenshots.add({ type: "beforeend", id: i });
+    img.onload = () => {
+        cleanup();
+        console.log('[load] - Init image from Shikimori');
+        const screenshots = new IScreenshots();
+        screenshots.Init(data);
+
+        for (let i = 0; i < data.length; i++) {
+            const { x332Url } = data[i];
+            if (i < 3) {
+                screenshots.add({ type: "beforeend", id: i, url: x332Url });
+            } else {
+                screenshots.add({ type: "beforeend", id: i });
+            }
         }
+    };
 
+    img.onabort = () => { cleanup(); };
+
+    img.onerror = async () => {
+        $(".content > .title").style.display = "none";
+        console.log('[error] - Loading Shikimori Gallery Error');
     }
+
+    img.src = data[0].x332Url;
 }
 
 /**
@@ -453,6 +484,29 @@ function Description(data) {
     if (/<div[^>]*>\s*<\/div>/.test(descriptionHtml)) {
         return $(".description").textContent = descriptions[Math.floor(Math.random() * descriptions.length)];
     }
+
+    const types = {
+        anime: (link, { id } = {}) => {
+            link.attributes.removeNamedItem('href');
+            link.attributes.removeNamedItem('title');
+            link.attributes.removeNamedItem('data-tooltip_url');
+            link.attributes.removeNamedItem('data-attrs');
+
+            link.href = `watch.html?id=${id}`;
+            link.classList.add('t-anime');
+        },
+        character: (link, { id } = {}) => {
+            console.log(link.attributes);
+            link.attributes.removeNamedItem('href');
+            link.attributes.removeNamedItem('title');
+            link.attributes.removeNamedItem('data-tooltip_url');
+            link.attributes.removeNamedItem('data-attrs');
+
+            link.dataset.id = id;
+            link.classList.add('t-chracter');
+        },
+    };
+
     $(".description").insertAdjacentHTML("beforeend", addTargetBlankToLinks(descriptionHtml));
 
     function addTargetBlankToLinks(text) {
@@ -465,7 +519,15 @@ function Description(data) {
 
         // Проходим по всем найденным ссылкам и добавляем атрибут target="_blank"
         links.forEach(link => {
-            link.setAttribute('target', '_blank');
+            try {
+                const val = JSON.parse(link.dataset.attrs);
+                if (types[val.type]) {
+                    types[val.type](link, val);
+                }
+            } catch (err) {
+                if (link.dataset.attrs)
+                    link.setAttribute('target', '_blank');
+            }
         });
 
         // Возвращаем измененный HTML-контент
@@ -576,5 +638,33 @@ export class IScreenshots {
     #dispatch(event, data) {
         if (this.#callbacks[event] === undefined) return;
         this.#callbacks[event].forEach(callback => callback(data));
+    }
+}
+
+class Reserv {
+    static instance = undefined;
+    constructor() {
+        if (Reserv.instance) return Reserv.instance;
+        Reserv.instance = this;
+
+        this.data = undefined;
+        this.promise = undefined;
+    }
+
+    async get() {
+        if (this.data) return this.data;
+
+        if (this.promise === undefined) {
+            this.promise = this.jikan();
+        }
+        return this.promise;
+    }
+
+    async jikan() {
+        const { Jikan } = await import('../../modules/api.jikan.js');
+
+        const response = await Jikan.anime.getAnimeFullById($ID).GET();
+        this.data = response.data;
+        return this.data;
     }
 }

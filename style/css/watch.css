@@ -597,8 +597,7 @@ main > .title.count .count {
   color: #596271;
 }
 main .description {
-  color: #fff;
-  opacity: 0.8;
+  color: rgba(255, 255, 255, 0.8);
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 10px;
@@ -608,6 +607,12 @@ main .description {
 main .description a {
   color: #5FBEF3;
   font-size: 14px;
+  cursor: pointer;
+}
+main .description a.t-chracter, main .description a.t-anime {
+  padding: 0 5px;
+  border-radius: 4px;
+  font-weight: bold;
 }
 main .hero-anime {
   margin-top: 20px;
@@ -625,6 +630,8 @@ main .hero-anime .val a {
   position: relative;
   display: flex;
   border-radius: 4px;
+  cursor: pointer;
+  transition: 0.98s linear(0, 0.0446, 0.164, 0.3348, 0.5333, 0.7374, 0.9286, 1.0927, 1.22, 1.3061, 1.3508, 1.3573, 1.3318, 1.2821, 1.2167, 1.1439, 1.0715, 1.0055, 0.9505, 0.9094, 0.8834, 0.8719, 0.8735, 0.8858, 0.9058, 0.9304, 0.9568, 0.9823, 1.0049, 1.0231, 1.0361, 1.0437, 1.0463, 1.0444, 1.0389, 1.0311, 1.022, 1.0125, 1.0036, 0.996, 0.99, 0.9859, 0.9838, 0.9834, 0.9846, 0.9868, 0.9899, 0.9932, 0.9966, 0.9996, 1.0022, 1.0041, 1.0054, 1.0059, 1.0059, 1.0053, 1.0044, 1.0033, 1.002, 1.0009, 0.9998, 0.999, 0.9983, 0.998, 0.9979, 0.9979, 0.9982, 0.9985, 0.999, 0.9994, 0.9998, 1.0002, 1.0005, 1.0006, 1.0007, 1.0008, 1.0007, 1.0006, 1.0005, 1.0003, 1.0002, 1, 0.9999, 0.9998, 0.9998, 0.9997, 0.9997, 0.9998, 0.9998, 0.9998, 0.9999, 1, 1, 1, 1.0001, 1.0001, 1.0001, 1.0001, 1.0001, 1.0001, 1);
 }
 main .hero-anime .val a img {
   width: 100%;
@@ -652,6 +659,9 @@ main .hero-anime .val a .hero .name {
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+main .hero-anime .val a.-load {
+  scale: 0.9;
 }
 main .hero-anime .val a:first-child {
   margin-left: 20px;

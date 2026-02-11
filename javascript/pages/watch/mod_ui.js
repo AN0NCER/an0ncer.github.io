@@ -85,6 +85,26 @@ export function Functional() {
     window.addEventListener("orientationchange", function () {
         OrientationChanged();
     });
+
+    //Нажатие на главных героев персонажей
+    let onload = false;
+    
+    const handle = async (e) => {
+        const id = e.currentTarget.dataset.id;
+        if (typeof id === "undefined" || onload) return;
+        onload = true;
+        
+        e.currentTarget.classList.add('-load');
+        
+        const { WCharacter } = await import("../../windows/win.character.js");
+        await WCharacter(id);
+        
+        e.currentTarget.classList.remove('-load');
+        onload = false;
+    }
+
+    $('.hero-anime').on('click', 'a', handle);
+    $('.description').on('click', 'a.t-chracter', handle);
 }
 
 export function AutoScrollFranchise() {
