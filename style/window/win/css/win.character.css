@@ -1,0 +1,451 @@
+.contecnt-character .content-wrapper {
+  padding-top: 0px !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-bottom: 0px !important;
+  gap: 0 !important;
+}
+
+.window-character {
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+  --sar: env(safe-area-inset-right);
+  --sat: env(safe-area-inset-top);
+  --z: 300;
+  z-index: var(--z) !important;
+}
+.window-character .window-content .content-wrapper {
+  max-height: 100dvh;
+}
+.window-character .window-content .content-wrapper .wrapper {
+  max-width: 940px;
+  margin: 0 auto;
+  width: 100%;
+  container: win-character/inline-size;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar {
+  margin-top: 10px;
+  margin-left: max(var(--sal), 10px);
+  margin-right: max(var(--sar), 10px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .window-close {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #2292F0;
+  z-index: 2;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .window-close .icon {
+  width: 25px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .window-close .icon .ticon {
+  height: 23px;
+  background-color: #2292F0;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .window-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  gap: 1px;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .window-title .character-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .window-title .character-source {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  gap: 5px;
+  text-transform: uppercase;
+  color: #808080;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .window-title .character-source .point {
+  display: grid;
+  width: 4px;
+  height: 4px;
+  background: #2393F1;
+  border-radius: 50%;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .btn-character-favorite {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  position: relative;
+  place-items: center;
+  z-index: 2;
+  cursor: pointer;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .btn-character-favorite .ticon {
+  position: absolute;
+  height: 20px;
+  background-color: #FFFFFF;
+  transition: 0.3s ease-in-out;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .btn-character-favorite .i-heart-solid {
+  opacity: 0;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .btn-character-favorite.-fav .i-heart-solid {
+  opacity: 1;
+  background-color: #2292F0;
+}
+.window-character .window-content .content-wrapper .wrapper .window-bar .btn-character-favorite.-fav .i-heart-regular {
+  opacity: 0;
+}
+.window-character .window-content .content-wrapper .character-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper {
+  padding-top: 10px;
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper .character-preview {
+  display: grid;
+  padding: 1px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #FFE600;
+  float: left;
+  margin-right: 10px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper .character-preview img {
+  border-radius: 11px;
+  max-width: 155px;
+  width: 20vw;
+  min-width: 100px;
+  box-sizing: border-box;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper .character-description-text {
+  overflow: hidden;
+  position: relative;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper .character-description-text.-hide {
+  max-height: 350px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper .character-description-text.-hide .btn {
+  display: grid;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper p a {
+  color: #2292F0;
+  cursor: pointer;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper p details {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper p details summary {
+  background: #191c21;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-description-wrapper .btn {
+  background: #101318;
+  height: 40px;
+  display: none;
+  place-items: center;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 -20px 20px 20px #101318;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper .title-wrapper {
+  font-weight: bold;
+  font-size: 18px;
+  max-width: 900px;
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper .gallery-tips-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper .gallery-wrapper-list {
+  overflow-x: scroll;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper .gallery-wrapper-list .gallery-character {
+  display: inline-flex;
+  gap: 10px;
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper .gallery-wrapper-list .gallery-character .gallery-img {
+  display: flex;
+  position: relative;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper .gallery-wrapper-list .gallery-character .gallery-img span {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FFE600;
+  border-top: 1px solid rgba(25, 28, 33, 0.5);
+  padding: 7px 10px;
+  border-radius: 0 0 5px 5px;
+  color: #101318;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper .gallery-wrapper-list .gallery-character .gallery-img.-sel span {
+  display: block;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper .gallery-wrapper-list .gallery-character img {
+  min-height: 180px;
+  height: 40vw;
+  max-height: 230px;
+  border-radius: 5px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-gallery-wrapper.-hide {
+  display: none;
+}
+.window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper .select-character-tips {
+  background: #191C21;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 10px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper .select-character-tips .selector-character-preview {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper .select-character-tips .selector-character-preview .tips {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-weight: bold;
+}
+.window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper .select-character-tips .selector-character-preview .tips p.main {
+  font-size: 18px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper .select-character-tips .selector-character-preview .tips p.text {
+  font-size: 14px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper .select-character-tips .selector-character-preview .image {
+  display: flex;
+}
+.window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper .select-character-tips .selector-character-preview img {
+  width: 90px;
+  border-radius: 5px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper .select-character-tips .btn-install {
+  display: grid;
+  place-items: center;
+  height: 40px;
+  background: #FFE600;
+  color: #101318;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper.-disable .btn-install {
+  background: rgba(255, 230, 0, 0.2196078431);
+  cursor: default;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-role-selector-wrapper {
+  display: flex;
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
+  align-items: center;
+  justify-content: center;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-role-selector-wrapper .character-role-selector {
+  padding: 3px;
+  display: flex;
+  background: #191C21;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-role-selector-wrapper .character-role-selector .role {
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  cursor: pointer;
+  text-wrap: nowrap;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-role-selector-wrapper .character-role-selector .role span.count {
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-role-selector-wrapper .character-role-selector .role.-sel {
+  border-radius: 4px;
+  background: #2393F1;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .main-role-list,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .sup-role-list,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .pv-role-list {
+  overflow-x: scroll;
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .main-role-list .main-role-character,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .main-role-list .sup-role-character,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .main-role-list .pv-role-character,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .sup-role-list .main-role-character,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .sup-role-list .sup-role-character,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .sup-role-list .pv-role-character,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .pv-role-list .main-role-character,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .pv-role-list .sup-role-character,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .pv-role-list .pv-role-character {
+  display: inline-flex;
+  gap: 10px;
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
+}
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .main-role-list.-hide,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .sup-role-list.-hide,
+.window-character .window-content .content-wrapper .character-wrapper .character-role-wrapper .pv-role-list.-hide {
+  display: none;
+}
+.window-character .window-content .content-wrapper .character-wrapper .marquee {
+  background: #191c21;
+  overflow-x: auto;
+  padding-top: max(var(--sab), 10px);
+  padding-left: max(var(--sal), 20px);
+  padding-right: max(var(--sar), 20px);
+  padding-bottom: max(var(--sab), 10px);
+  margin-top: 10px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .marquee .marquee__track {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  min-width: -moz-min-content;
+  min-width: min-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .marquee a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-wrap: nowrap;
+  text-transform: uppercase;
+}
+.window-character .window-content .content-wrapper .character-wrapper .marquee a span {
+  display: flex;
+  flex-direction: column;
+}
+.window-character .window-content .content-wrapper .character-wrapper .marquee a span .name {
+  font-size: 20px;
+  font-weight: bold;
+  color: #FFFFFF;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.window-character .window-content .content-wrapper .character-wrapper .marquee a span .count {
+  margin-top: -5px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+.window-character .window-content .content-wrapper .character-wrapper .marquee a img {
+  height: 30px;
+}
+.window-character .window-content .content-wrapper .character-wrapper .marquee .line {
+  display: grid;
+  width: 1px;
+  height: 30px;
+  background: #FFFFFF;
+}
+
+@keyframes move {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--distance));
+  }
+}
+@container win-character (width >=725px) {
+  .window-character .window-content .content-wrapper .character-wrapper:has(.-tip) .character-gallery-wrapper .gallery-wrapper-list .gallery-character {
+    padding-right: 400px;
+  }
+  .window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  .window-character .window-content .content-wrapper .character-wrapper .select-character-tips-wrapper .select-character-tips {
+    max-width: 355px;
+    min-height: 230px;
+    min-width: 390px;
+    justify-content: space-between;
+  }
+}
+@container win-character (width <=300px) {
+  .window-character .window-content .content-wrapper .wrapper .window-bar .window-close span.text {
+    display: none;
+  }
+}
+@media screen and (min-width: 900px) {
+  .window-character .window-content .content-wrapper {
+    max-width: none !important;
+    margin: auto auto;
+  }
+}
+.i-chevron-left {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M169.4 297.4C156.9 309.9 156.9 330.2 169.4 342.7L361.4 534.7C373.9 547.2 394.2 547.2 406.7 534.7C419.2 522.2 419.2 501.9 406.7 489.4L237.3 320L406.6 150.6C419.1 138.1 419.1 117.8 406.6 105.3C394.1 92.8 373.8 92.8 361.3 105.3L169.3 297.3z"/></svg>');
+          mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M169.4 297.4C156.9 309.9 156.9 330.2 169.4 342.7L361.4 534.7C373.9 547.2 394.2 547.2 406.7 534.7C419.2 522.2 419.2 501.9 406.7 489.4L237.3 320L406.6 150.6C419.1 138.1 419.1 117.8 406.6 105.3C394.1 92.8 373.8 92.8 361.3 105.3L169.3 297.3z"/></svg>');
+}
+
+.i-heart-regular {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M442.9 144C415.6 144 389.9 157.1 373.9 179.2L339.5 226.8C335 233 327.8 236.7 320.1 236.7C312.4 236.7 305.2 233 300.7 226.8L266.3 179.2C250.3 157.1 224.6 144 197.3 144C150.3 144 112.2 182.1 112.2 229.1C112.2 279 144.2 327.5 180.3 371.4C221.4 421.4 271.7 465.4 306.2 491.7C309.4 494.1 314.1 495.9 320.2 495.9C326.3 495.9 331 494.1 334.2 491.7C368.7 465.4 419 421.3 460.1 371.4C496.3 327.5 528.2 279 528.2 229.1C528.2 182.1 490.1 144 443.1 144zM335 151.1C360 116.5 400.2 96 442.9 96C516.4 96 576 155.6 576 229.1C576 297.7 533.1 358 496.9 401.9C452.8 455.5 399.6 502 363.1 529.8C350.8 539.2 335.6 543.9 320 543.9C304.4 543.9 289.2 539.2 276.9 529.8C240.4 502 187.2 455.5 143.1 402C106.9 358.1 64 297.7 64 229.1C64 155.6 123.6 96 197.1 96C239.8 96 280 116.5 305 151.1L320 171.8L335 151.1z"/></svg>');
+          mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M442.9 144C415.6 144 389.9 157.1 373.9 179.2L339.5 226.8C335 233 327.8 236.7 320.1 236.7C312.4 236.7 305.2 233 300.7 226.8L266.3 179.2C250.3 157.1 224.6 144 197.3 144C150.3 144 112.2 182.1 112.2 229.1C112.2 279 144.2 327.5 180.3 371.4C221.4 421.4 271.7 465.4 306.2 491.7C309.4 494.1 314.1 495.9 320.2 495.9C326.3 495.9 331 494.1 334.2 491.7C368.7 465.4 419 421.3 460.1 371.4C496.3 327.5 528.2 279 528.2 229.1C528.2 182.1 490.1 144 443.1 144zM335 151.1C360 116.5 400.2 96 442.9 96C516.4 96 576 155.6 576 229.1C576 297.7 533.1 358 496.9 401.9C452.8 455.5 399.6 502 363.1 529.8C350.8 539.2 335.6 543.9 320 543.9C304.4 543.9 289.2 539.2 276.9 529.8C240.4 502 187.2 455.5 143.1 402C106.9 358.1 64 297.7 64 229.1C64 155.6 123.6 96 197.1 96C239.8 96 280 116.5 305 151.1L320 171.8L335 151.1z"/></svg>');
+}
+
+.i-heart-solid {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M305 151.1L320 171.8L335 151.1C360 116.5 400.2 96 442.9 96C516.4 96 576 155.6 576 229.1L576 231.7C576 343.9 436.1 474.2 363.1 529.9C350.7 539.3 335.5 544 320 544C304.5 544 289.2 539.4 276.9 529.9C203.9 474.2 64 343.9 64 231.7L64 229.1C64 155.6 123.6 96 197.1 96C239.8 96 280 116.5 305 151.1z"/></svg>');
+          mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M305 151.1L320 171.8L335 151.1C360 116.5 400.2 96 442.9 96C516.4 96 576 155.6 576 229.1L576 231.7C576 343.9 436.1 474.2 363.1 529.9C350.7 539.3 335.5 544 320 544C304.5 544 289.2 539.4 276.9 529.9C203.9 474.2 64 343.9 64 231.7L64 229.1C64 155.6 123.6 96 197.1 96C239.8 96 280 116.5 305 151.1z"/></svg>');
+}

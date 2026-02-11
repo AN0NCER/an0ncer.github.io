@@ -1,9 +1,9 @@
-import { User } from "../../modules/ShikiUSR.js";
 import { WindowManagement } from "../../modules/Windows.js";
 import { UserRate } from "./mod_urate.js";
 import { Private } from "./mod_private.js";
 import { IPlayer } from "./mod_player.js";
 import { ASynch } from "./mod_dbanime.js";
+import { OAuth } from "../../core/main.core.js";
 
 const Player = IPlayer.Init();
 
@@ -99,7 +99,7 @@ const WindowScore = {
             $('textarea.noten').val(val);
             val += WindowScore.comments.footer;
             WindowScore.auto_grow(document.querySelector('textarea.noten'));
-            
+
             //Устанавливает заметкку
             if (UserRate().Get().text != val)
                 UserRate().Controls.Note(val);
@@ -144,19 +144,19 @@ const WindowScore = {
             SetNote(res.text);
         });
 
-        Player.on("inited", (results) => {
+        Player.on("inited", ({ resultsVoice }) => {
             const aSynch = ASynch.Init();
             const callback = (data) => {
                 try {
                     if (data === undefined)
                         return;
 
-                    const index = results.findIndex(x => x.translation.id === data.kodik_dub)
+                    const translation = resultsVoice.get(data.kodik_dub);
 
-                    if (index === -1)
+                    if (!translation)
                         return;
 
-                    const title = results[index].translation.title;
+                    const title = translation.title;
                     const date = new Date(data.date_update);
 
                     $(`.sync-data > .voice`).text(title);
@@ -185,7 +185,7 @@ const WindowScore = {
     },
 
     verif: function () {
-        return User.authorized;
+        return OAuth.auth;
     },
 
     auto_grow: function (dom) {

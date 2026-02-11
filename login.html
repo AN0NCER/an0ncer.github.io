@@ -4,49 +4,145 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="page" content="login">
-    <title>TUN - Авторизация</title>
+    <title>Авторизация - Tun</title>
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
     <link rel="apple-touch-icon" sizes="120x120" href="icon-192x192.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="icon-192x192.png" />
     <link rel="stylesheet" href="/style/css/main.css">
     <link rel="stylesheet" href="/style/css/login.css">
+    <link rel="stylesheet" href="/style/css/ticons.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/images/icons/manifest-o.json">
 </head>
 
 <body class="unselectable">
-    <span class="loading">
-        <h1 class="animation">Tunime</h1>
+    <span class="loading"
+        style="position: fixed;inset: 0;display: grid;place-items: center;z-index: 50;font-family: 'Manrope';background: #101318;color: #fff;font-weight: bold;">
+        <h1 class="animation" style="font-size: 3rem;">
+            <span class="letter"
+                style="color: #3689E8;display:inline-block; opacity: 0; transform: translateX(40px) scale(0.8);">T</span><span
+                class="letter"
+                style="color: #3689E8;display:inline-block;opacity: 0; transform: translateX(40px) scale(0.8);">u</span><span
+                class="letter"
+                style="color: #3689E8;display:inline-block;opacity: 0; transform: translateX(40px) scale(0.8);">n</span><span
+                class="letter"
+                style="display:inline-block;opacity: 0; transform: translateX(40px) scale(0.8);">i</span><span
+                class="letter"
+                style="display:inline-block;opacity: 0; transform: translateX(40px) scale(0.8);">m</span><span
+                class="letter" style="display:inline-block;opacity: 0; transform: translateX(40px) scale(0.8);">e</span>
+        </h1>
+        <span style="position: absolute; bottom:max(env(safe-area-inset-bottom), 35px); opacity: .5;">загрузка</span>
     </span>
-    <div class="wrapper">
-        <header>
-            <div class="btn back"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path
-                        d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-                </svg>
+    <div class="app-wrapper">
+        <div class="content-container">
+            <header>
+                <div class="btn btn-back">
+                    <div class="ticon i-xmark"></div>
+                </div>
+                <div class="title">Авторизация</div>
+                <div class="btn btn-settings">
+                    <div class="ticon i-gear"></div>
+                </div>
+            </header>
+            <div class="border-wrapper">
+                <div class="content-wrapper">
+                    <div class="bg-wrapper">
+                        <div class="circle-b"></div>
+                    </div>
+
+                    <div class="wrapper">
+                        <div class="tun-wrapper">
+                            <div class="img-wrapper">
+                                <!-- <img src="/images/img.login.jpg" alt=""> -->
+                            </div>
+                            <div class="glass"></div>
+                            <div class="title">
+                                <div>
+                                    <span>Tun</span>ime
+                                </div>
+                            </div>
+                            <div class="container"></div>
+                        </div>
+
+                        <div class="m-title">
+                            <span>Tun</span>ime
+                        </div>
+
+                        <div class="tun-content">
+
+                            <div class="text-wrapper">
+                                <p class="slogan">Открой для себя новые миры с Tunime - лучшим сайтом для просмотра
+                                    аниме!
+                                </p>
+                            </div>
+
+                            <div class="btn-wrapper">
+                                <div class="btn primary btn-login">
+                                    <div class="ticon i-shikimori"></div>Авторизироваться
+                                </div>
+                                <div class="btn btn-skip">Пропустить авторизацию</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="btn mute"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></svg>
+            <div class="help">Ключ авторизации действует 1 день, после чего будет произведена автоматическая
+                авторизация.
             </div>
-        </header>
-        <div class="icon-logo">
-            <img src="/images/login-icon.png" alt="Login">
         </div>
-        <h1>Tunime</h1>
-        <p class="slogan">Открой для себя новые миры с Tunime - лучшим сайтом для просмотра аниме!</p>
-        <a href="#" class="primary btn-login">Авторизироваться</a>
-        <a href="https://shikimori.me/users/sign_up" target="_blank" class="secondary">Регистрация</a>
-        <label class="container">
-            <input type="checkbox" data-param="auto_login">
-            <span class="checkmark"></span>
-            Автоматически авторизироваться по истечению ключа
-        </label>
-        <div class="help">Ключ авторизации действителен в течение 1 дня, после чего потребуется повторная авторизация.</div>
+        <div class="safe-zone">
+            <div class="tun-wrapper">
+                <div class="img-wrapper">
+                    <img src="/images/img.login.jpg" alt="">
+                </div>
+                <div class="glass"></div>
+                <div class="container"></div>
+            </div>
+        </div>
+
     </div>
+    <span class="app-auth -hide">
+        <div class="process">
+            <div class="loader">
+                <div class="loader-inner">
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                    <div class="loader-block"></div>
+                </div>
+            </div>
+        </div>
+        <div class="process-wrapper">
+            <div class="m-title">
+                <span>Tun</span>ime
+            </div>
+            <span class="process-name">Авторизация</span>
+        </div>
+    </span>
     <script src="/javascript/library/jqery.min.js"></script>
-    <script src="/javascript/library/anime.min.js"></script>
     <script src="/javascript/parametrs.js"></script>
     <script src="/javascript/pages/login.js" type="module"></script>
 </body>

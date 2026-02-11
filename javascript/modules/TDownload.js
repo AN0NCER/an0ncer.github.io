@@ -1,6 +1,6 @@
 import { DBControls, DBIndexing, TDatabase } from "./TDatabase.js"
+import { Tunime } from "./api.tunime.js";
 import { Sleep } from "./functions.js";
-import { Tunime } from "./TunimeApi.js";
 
 
 /**
@@ -50,7 +50,7 @@ const getQuality = (data, quality) => {
  */
 const apiGetFLink = (kodikLink, quality) => {
     return new Promise(async (resolve, reject) => {
-        const data = await Tunime.Source(formatUrl(kodikLink));
+        const data = await Tunime.video.source(formatUrl(kodikLink));
 
         if (data.error || data === false)
             return reject('Tunime server error'); //TODO: Вернуть ошибку сервера
@@ -1171,7 +1171,7 @@ export class TDAnime {
             id: parseInt(voice.id),
             name: voice.name
         };
-        this.img = '/images/anime-not.png';
+        this.img = '/images/img.404a.webp';
     }
 
     /**

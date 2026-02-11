@@ -1,0 +1,118 @@
+.user-stats-wrapper {
+    display: flex;
+    font-family: 'Manrope', sans-serif;
+    padding: 20px;
+    overflow-x: auto;
+
+    .user-stats-content {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .block-title {
+        display: flex;
+        color: #FFFFFFFF;
+        font-size: 11px;
+        font-weight: bold;
+        opacity: .5;
+        writing-mode: sideways-lr;
+        position: relative;
+        z-index: 3;
+        text-transform: uppercase;
+        margin-right: 10px;
+
+    }
+
+    .main-stats-wrapper {
+        display: grid;
+        place-items: center;
+        width: max-content;
+
+        --rotate: 0deg;
+        --scroll: 0px;
+
+        &::after {
+            content: '';
+            width: 80px;
+            height: 80px;
+
+            position: absolute;
+            z-index: 1;
+
+            border-radius: 14px;
+            background: linear-gradient(44deg, rgba(35, 147, 241, 1) 0%, rgba(235, 199, 9, 1) 100%);
+            filter: blur(30px);
+
+            transform: translateX(var(--scroll)) rotate(var(--rotate));
+        }
+    }
+
+    .stats-card-wrapper {
+        border-radius: 14px;
+        position: relative;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        width: max-content;
+        z-index: 2;
+
+        .stats-card {
+            display: flex;
+            box-sizing: border-box;
+            flex-direction: column;
+            place-items: center;
+            justify-content: space-between;
+
+            position: relative;
+            z-index: 3;
+
+            border-radius: 10px;
+            min-height: 100px;
+            min-width: 100px;
+            padding: 10px;
+
+            background: #191C21;
+            color: #FFFFFFFF;
+            text-transform: uppercase;
+
+            span.text {
+                display: grid;
+                font-size: 11px;
+                font-weight: bold;
+            }
+
+            span.value {
+                font-size: 29px;
+                font-weight: bold;
+
+                display: grid;
+                place-items: center;
+
+                position: absolute;
+                inset: 0;
+            }
+        }
+
+        &.-main {
+            padding: 4px;
+            box-shadow: none;
+
+            &::after {
+                content: '';
+                inset: -20px;
+
+                position: absolute;
+                z-index: 2;
+
+                background: linear-gradient(44deg, rgba(35, 147, 241, 1) 0%, rgba(235, 199, 9, 1) 100%);
+
+                transform: rotate(var(--rotate));
+            }
+        }
+    }
+}

@@ -1,4 +1,4 @@
-import { Main } from "../modules/ShikiUSR.js";
+import { Main } from "../core/main.core.js";
 import { LTransition } from "./watch/mod_transition.js";
 import { tLoad } from "./watch/mod.resource.js";
 import { IPlayer } from "./watch/mod_player.js";
@@ -6,11 +6,11 @@ import { AutoScrollEpisodes } from "./watch/mod_scrolling.js";
 import { Functional } from "./watch/mod_ui.js";
 import { ASynch } from "./watch/mod_dbanime.js";
 import { UserRate } from "./watch/mod_urate.js";
-import { Tunime } from "../modules/TunimeApi.js";
 import { History } from "./watch/mod_history.js";
 import { tChronologyVoice } from "./watch/mod.chronology.js";
 import { ClearParams } from "../modules/functions.js";
 import { Private } from "./watch/mod_private.js";
+import { Tunime } from "../modules/api.tunime.js";
 
 //ID ресурса из Shikimori
 export const $ID = new URLSearchParams(window.location.search).get("id");
@@ -73,11 +73,11 @@ Main(async (e) => {
         if (!data[0] && !data[1])
             return;
         if (data[0] && !data[1]) {
-            Tunime.OnActiv.Voice($ID, data[0].kodik_dub);
+            Tunime.mark.voice($ID, data[0].kodik_dub);
             aSynch.difference = data[0];
         } else if (data[0] && data[1]) {
             if (data[0].kodik_dub != data[1].kodik_dub) {
-                Tunime.OnActiv.Voice($ID, data[0].kodik_dub);
+                Tunime.mark.voice($ID, data[0].kodik_dub);
                 aSynch.difference = data[0];
             }
         }
@@ -129,6 +129,7 @@ Main(async (e) => {
 
     //Обработчик события следующего эпизода
     Player.CMessage.on('next', (e) => {
+        if (!$PARAMETERS.player.autonekst) return;
         if (Player.CEpisodes.count == Player.CEpisodes.selected) return;
         const next_episode = Player.CEpisodes.selected + 1;
         Player.PControl.Exec("set_episode", { episode: next_episode });
@@ -174,7 +175,7 @@ Main(async (e) => {
                     inline: "nearest",
                 });
             }
-            Tunime.OnActiv.Anime($ID);
+            Tunime.mark.anime($ID);
         });
         History().shikiData = e;
         History().custom.init();

@@ -1,0 +1,293 @@
+@mixin Input {
+    width: 100%;
+    height: 40px;
+
+    background: #191C21;
+    box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.25);
+    border: 0.2px solid rgba(255, 255, 255, 0.2);
+    outline: none;
+
+    padding-left: 15px;
+    border-radius: 20px;
+
+    font-size: 14px;
+    color: #FFFFFF;
+
+    transition: .3s ease-in-out;
+
+    &:focus {
+        border: 0.2px solid #2394f1;
+    }
+
+    &::placeholder {
+        opacity: var(--input-placeholder-opacity);
+    }
+}
+
+@mixin QuickPanel {
+    --input-placeholder-opacity: 1;
+    --input-scale: 1;
+    --panel-max-width: 355px;
+    --panel-min-width: 97px;
+    --panel-safe-zone: 55px; // Ava collaps width and gap 10px
+
+    display: flex;
+    justify-content: end;
+
+    max-width: var(--panel-max-width);
+    width: 100%;
+
+    position: absolute;
+    right: 0;
+
+
+    gap: 5px;
+    padding: 5px;
+
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.25);
+
+    border-radius: 27px;
+    backdrop-filter: blur(10px);
+
+    #account-edit {
+        display: grid;
+        place-items: center;
+
+        min-width: 40px;
+        height: 40px;
+
+        border-radius: 50%;
+
+        background: #191C21;
+        border: 0.2px solid rgba(255, 255, 255, 0.2);
+
+        cursor: pointer;
+
+        .ticon {
+            background-color: #d6d6d6;
+            height: 16px;
+        }
+    }
+
+    #page-search {
+        display: grid;
+
+        position: relative;
+
+        width: 100%;
+        max-width: 300px;
+        min-width: 40px;
+
+        cursor: pointer;
+
+        transform: scale(var(--input-scale));
+
+        .i-wrapper {
+            position: absolute;
+            right: 0;
+            top: 0;
+            min-width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+
+            .c-wrapper {
+                width: 40px;
+                height: 40px;
+                display: grid;
+                place-items: center;
+                position: relative;
+                overflow: hidden;
+                transition: .1 ease-in-out;
+
+                &.-clear {
+                    .i-search {
+                        top: -40px;
+                    }
+
+                    .i-clear {
+                        top: 0;
+                    }
+                }
+
+                .icon-state {
+                    position: absolute;
+                    height: 40px;
+                    width: 40px;
+                    display: grid;
+                    place-items: center;
+                    transition: .3s ease-in-out;
+
+                }
+
+                .i-search {
+                    top: 0;
+                }
+
+                .i-clear {
+                    top: -40px;
+                }
+            }
+
+
+
+            .ticon {
+                background-color: #d6d6d6;
+                height: 16px;
+
+                &.i-xmark {
+                    height: 18px;
+                }
+            }
+        }
+    }
+
+    &.-mini {
+        flex: none;
+        max-width: none;
+        width: auto;
+
+        --input-placeholder-opacity: 0;
+
+        #page-search {
+            max-width: 40px;
+
+            input {
+                pointer-events: none;
+            }
+        }
+    }
+
+    &.-enable {
+        #page-search {
+            max-width: none !important;
+
+            input {
+                pointer-events: all !important;
+            }
+        }
+    }
+}
+
+@mixin Profile {
+    --p-ava-size: 55px;
+    --p-c-width: auto;
+    --p-c-scale: 1;
+    --p-c-opacity: 1;
+    --p-c-x: 0px;
+    --p-gap: 10px;
+
+    display: flex;
+    align-items: center;
+
+    position: relative;
+    z-index: 1;
+
+    gap: var(--p-gap);
+
+    .ava-wrapper {
+        --p-ava-img: url('/images/ava.jpeg');
+
+        display: grid;
+        place-items: center;
+
+        position: relative;
+        overflow: hidden;
+
+        width: var(--p-ava-size);
+        height: var(--p-ava-size);
+
+        padding: 3px;
+
+        border: 2px solid #2393F1;
+        border-radius: 50%;
+
+        box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.25);
+
+        cursor: pointer;
+
+        .ava {
+            aspect-ratio: 1 / 1;
+            width: 100%;
+
+            position: relative;
+            z-index: 2;
+
+            border-radius: 50%;
+
+            background-image: var(--p-ava-img);
+            background-size: cover;
+        }
+    }
+
+    .profile-content {
+        display: flex;
+        flex-direction: column;
+
+        width: var(--p-c-width);
+
+        color: #FFFFFF;
+
+        scale: var(--p-c-scale);
+        opacity: var(--p-c-opacity);
+        transform: translateX(var(--p-c-x));
+
+        .page-title {
+            font-size: 16px;
+            font-weight: bold;
+            text-wrap: nowrap;
+        }
+
+        .username {
+            font-size: 14px;
+            opacity: 0.5;
+            text-wrap: nowrap;
+        }
+    }
+}
+
+/**
+    header.-sticky -> Закрепляет элемент сверху
+**/
+
+header {
+    --z-index: 10;
+    --padding: 20px;
+
+    display: grid;
+    padding: 10px var(--padding) 0px var(--padding);
+    z-index: var(--z-index);
+
+    .head-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        position: relative;
+
+        gap: 10px;
+        min-height: 55px;
+
+        .profile {
+            @include Profile();
+        }
+
+        .quick-panel {
+            @include QuickPanel();
+
+            #page-search {
+                input {
+                    @include Input();
+                }
+            }
+        }
+    }
+
+    //Закрепляет элемент сверху
+    &.-sticky {
+        position: sticky;
+        top: 0;
+    }
+}

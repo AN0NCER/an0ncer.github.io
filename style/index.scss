@@ -3,6 +3,10 @@ $object_bg: #1f2329;
 $primary: #2393F1;
 $radius: 5px;
 
+html {
+  scrollbar-width: none;
+}
+
 body {
   background: $main_bg;
   max-width: 1100px;
@@ -15,110 +19,106 @@ body {
   }
 }
 
+@import "./settings/header";
+
 header {
-  $profile_size: 45px;
+  font-family: 'Manrope', sans-serif;
+  box-sizing: border-box;
 
-  margin-top: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  .head-wrapper {
+    box-sizing: inherit;
 
-  &>.account {
-    display: flex;
-    white-space: nowrap;
-    align-items: center;
+    .profile {
+      box-sizing: inherit;
 
-    .image-profile {
-      overflow: hidden;
-      border-radius: 50%;
-      width: $profile_size;
-      height: $profile_size;
+      .ava-wrapper {
+        box-sizing: inherit;
 
-      img {
-        width: 45px;
-        height: 45px;
-        aspect-ratio: 1 / 1;
-      }
-    }
+        .ava {
+          box-sizing: inherit;
 
-    &>.information {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      margin-left: 10px;
-      color: #fff;
-      font-family: Manrope;
-
-      &>.name {
-        font-size: 16px;
-
-        span {
-          font-size: 14px;
-        }
-
-        b {
-          font-weight: 800;
         }
       }
 
-      &>.position {
-        display: flex;
-        align-items: center;
+      .profile-content {
+        box-sizing: inherit;
 
-        .ticon {
-          width: 12px;
-          height: auto;
-          background-color: #FFFFFF;
+        .page-title {
+          box-sizing: inherit;
         }
 
-        &>span {
-          margin-left: 5px;
-          font-size: 13px;
+        .username {
+          box-sizing: inherit;
         }
       }
     }
-  }
 
-  &>.notify-search {
-    display: flex;
-    gap: 10px;
+    .quick-panel {
+      --panel-max-width: 381px;
 
-    .notification {
-      $size: 40px;
-      min-height: $size;
-      min-width: $size;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: $object_bg;
-      border-radius: $radius;
-      cursor: pointer;
+      box-sizing: inherit;
 
-      .ticon {
-        background-color: #FFFFFF;
-        height: 17px;
-        z-index: 1;
-      }
+      .btn {
+        box-sizing: inherit;
 
-      .ticon.dot {
-        display: none;
-      }
+        .i-wrapper {
+          box-sizing: inherit;
 
-      &.dot {
-        .ticon.mail {
-          display: none;
+          .c-wrapper {
+            box-sizing: inherit;
+
+            .icon-state {
+              box-sizing: inherit;
+            }
+          }
         }
 
-        .ticon.dot {
-          display: block;
+        input {
+          box-sizing: inherit;
+        }
+
+        .i-bell {
+          height: 20px !important;
+        }
+
+        &#account-edit {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 3px;
+          padding-left: 9px;
+          padding-right: 9px;
+          min-width: min-content;
+          border-radius: 20px;
+
+          span.count {
+            min-width: 10px;
+            display: grid;
+            place-items: center;
+            background: #2393F1;
+            color: #FFFFFF;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 3px 6px;
+            border-radius: 14px;
+          }
+        }
+
+        &#page-search {
+          max-width: 324px;
+        }
+
+      }
+
+      &.-mini {
+        #page-search {
+          max-width: 40px;
         }
       }
     }
   }
 }
+
 
 .mbs {
   margin-top: 20px;
@@ -204,7 +204,6 @@ header {
 }
 
 @import './index/trailers';
-@import './index/update';
 
 .swiper-continue {
   font-family: Manrope;
@@ -332,7 +331,7 @@ header {
               width: 43px;
               height: 43px;
 
-              svg{
+              svg {
                 transform: translateX(-1px);
               }
             }
@@ -425,9 +424,10 @@ header {
   font-size: 16px;
   overflow: hidden;
   overflow-x: scroll;
+  padding: 0 20px;
+  gap: 10px;
 
   &>.genres {
-    margin-right: 10px;
     background: $object_bg;
     height: 35px;
     display: grid;
@@ -435,10 +435,6 @@ header {
     padding: 0 25px;
     cursor: pointer;
     border-radius: 5px;
-
-    &:nth-child(1) {
-      margin-left: 20px;
-    }
   }
 
   &>.selected {
@@ -449,7 +445,7 @@ header {
 
 .section-anime,
 .section-update {
-  padding-left: 20px;
+  padding: 0 20px;
   margin-top: 20px;
   margin-right: 20px;
   display: flex;
@@ -473,6 +469,7 @@ header {
   align-items: center;
   font-family: Manrope;
   margin-top: 50px;
+  margin-bottom: 50px;
   color: #404246;
   gap: 3px;
 
@@ -506,9 +503,7 @@ header {
 
 footer {
   display: flex;
-  height: calc(120px + env(safe-area-inset-bottom));
-  width: 100%;
-  // margin-top: 110px;
+  height: var(--menu-height-safe);
 }
 
 .loading {
@@ -560,7 +555,7 @@ footer {
       flex-direction: column;
       justify-content: space-between;
 
-      .new{
+      .new {
         display: flex;
         align-items: center;
         color: #F7D149;
@@ -568,7 +563,8 @@ footer {
         font-size: 11px;
         text-transform: uppercase;
         gap: 5px;
-        .ticon{
+
+        .ticon {
           background-color: #F7D149;
           height: 11px;
         }
@@ -621,7 +617,6 @@ footer {
 }
 
 @import './popup';
-@import './phone_menu';
 @import './cards';
 @import './windowed';
 @import './window/update';
@@ -657,49 +652,86 @@ footer {
   }
 }
 
-body {
-  &[data-orientation="90"] {
+@media (max-width: 1000px) {
 
-    .swiper-treilers,
+  .section-genres,
+  .section-anime,
+  .section-update {
+    margin-right: 0;
+  }
+}
+
+body {
+
+  &[angle="90"],
+  &[angle="270"] {
+
     .section-genres,
     .section-anime,
+    .section-update {
+      margin-right: 0;
+    }
+  }
+
+  &[angle="90"] {
+
+    .swiper-treilers,
     .swiper-continue,
-    .section-update,
     .section-countdown,
     .downloads-link {
-
       margin-right: max(20px, env(safe-area-inset-right));
     }
 
-    footer {
-      height: 50px;
+    header,
+    .section-title,
+    .swiper-treilers,
+    .swiper-continue,
+    .section-countdown,
+    .downloads-link {
+      margin-left: var(--menu-width-safe);
+    }
+
+    .section-genres,
+    .section-anime,
+    .section-update {
+      padding-left: var(--menu-width-safe);
+      padding-right: max(20px, env(safe-area-inset-right));
     }
   }
 
-  &[data-orientation="270"] {
+  &[angle="270"] {
 
     .swiper-treilers,
-    .section-genres,
-    .section-anime,
     .swiper-continue,
-    .section-title,
-    .section-update,
     .section-countdown,
     .downloads-link {
       margin-left: max(20px, env(safe-area-inset-left));
+      margin-right: var(--menu-width-safe);
     }
 
-    .section-genres>.genres:nth-child(1) {
-      margin-left: 0;
+    header,
+    .section-title,
+    .swiper-treilers,
+    .swiper-continue,
+    .section-countdown,
+    .downloads-link {
+      margin-left: max(20px, env(safe-area-inset-left));
+      margin-right: var(--menu-width-safe);
     }
 
-    .section-anime a:nth-child(1),
-    .section-update a:nth-child(1) {
-      margin-left: 0px;
-    }
-
-    footer {
-      height: 50px;
+    .section-genres,
+    .section-anime,
+    .section-update {
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: var(--menu-width-safe);
     }
   }
+}
+
+.i-ios-search {
+  mask-image: url('data:image/svg+xml,<svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 4C8 6.20914 6.20914 8 4 8C1.79086 8 0 6.20914 0 4C0 1.79086 1.79086 0 4 0C6.20914 0 8 1.79086 8 4ZM1.25895 4C1.25895 5.51384 2.48616 6.74105 4 6.74105C5.51384 6.74105 6.74105 5.51384 6.74105 4C6.74105 2.48616 5.51384 1.25895 4 1.25895C2.48616 1.25895 1.25895 2.48616 1.25895 4Z" fill="white"/><rect x="6.85144" y="5.7688" width="4.11406" height="1.63503" rx="0.817516" transform="rotate(45 6.85144 5.7688)" fill="white"/></svg>');
+}
+
+.i-bell {
+  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M320 64C302.3 64 288 78.3 288 96L288 99.2C215 114 160 178.6 160 256L160 277.7C160 325.8 143.6 372.5 113.6 410.1L103.8 422.3C98.7 428.6 96 436.4 96 444.5C96 464.1 111.9 480 131.5 480L508.4 480C528 480 543.9 464.1 543.9 444.5C543.9 436.4 541.2 428.6 536.1 422.3L526.3 410.1C496.4 372.5 480 325.8 480 277.7L480 256C480 178.6 425 114 352 99.2L352 96C352 78.3 337.7 64 320 64zM258 528C265.1 555.6 290.2 576 320 576C349.8 576 374.9 555.6 382 528L258 528z"/></svg>');
 }

@@ -1,3 +1,7 @@
+body.-noscrol {
+    overflow: hidden !important;
+}
+
 .windowed {
     position: fixed;
     top: 0;
@@ -9,6 +13,12 @@
     font-family: 'Manrope';
     display: block;
     transition: .3s ease-in-out;
+
+    &.-v2,
+    &.-v2>.hide-window,
+    &.-v2>.window-content {
+        transition: none !important;
+    }
 }
 
 .windowed-right {
@@ -64,7 +74,8 @@
         transition: .3s ease-in-out;
         transform: translateX(100%);
 
-        .content-wraper, .content-wrapper {
+        .content-wraper,
+        .content-wrapper {
             padding-top: 20px;
             padding-left: calc(env(safe-area-inset-left) + 20px);
             padding-right: calc(env(safe-area-inset-right) + 20px);
@@ -94,7 +105,8 @@
         transition: .3s ease-in-out;
         transform: translateY(100%);
 
-        .content-wraper, .content-wrapper {
+        .content-wraper,
+        .content-wrapper {
             padding-left: calc(env(safe-area-inset-left) + 20px);
             padding-right: calc(env(safe-area-inset-right) + 20px);
             padding-top: 20px;
@@ -109,7 +121,7 @@
             display: none;
         }
 
-        &.border-hide{
+        &.border-hide {
             border-radius: 0px 0px 0px 0px;
         }
     }
@@ -118,7 +130,9 @@
 @media screen and (min-width: 900px) {
     .windowed {
         .window-content {
-            .content-wraper, .content-wrapper {
+
+            .content-wraper,
+            .content-wrapper {
                 max-width: 900px;
                 margin: 0 auto;
                 width: 100%;

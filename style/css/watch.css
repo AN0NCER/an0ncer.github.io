@@ -1,7 +1,7 @@
 @charset "UTF-8";
 html,
 body {
-  scrollbar-gutter: stable;
+  scrollbar-width: none;
   /* Запрещает автоматическое изменение размера текста */
   -webkit-text-size-adjust: none;
 }
@@ -597,8 +597,7 @@ main > .title.count .count {
   color: #596271;
 }
 main .description {
-  color: #fff;
-  opacity: 0.8;
+  color: rgba(255, 255, 255, 0.8);
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 10px;
@@ -608,6 +607,12 @@ main .description {
 main .description a {
   color: #5FBEF3;
   font-size: 14px;
+  cursor: pointer;
+}
+main .description a.t-chracter, main .description a.t-anime {
+  padding: 0 5px;
+  border-radius: 4px;
+  font-weight: bold;
 }
 main .hero-anime {
   margin-top: 20px;
@@ -625,6 +630,8 @@ main .hero-anime .val a {
   position: relative;
   display: flex;
   border-radius: 4px;
+  cursor: pointer;
+  transition: 0.98s linear(0, 0.0446, 0.164, 0.3348, 0.5333, 0.7374, 0.9286, 1.0927, 1.22, 1.3061, 1.3508, 1.3573, 1.3318, 1.2821, 1.2167, 1.1439, 1.0715, 1.0055, 0.9505, 0.9094, 0.8834, 0.8719, 0.8735, 0.8858, 0.9058, 0.9304, 0.9568, 0.9823, 1.0049, 1.0231, 1.0361, 1.0437, 1.0463, 1.0444, 1.0389, 1.0311, 1.022, 1.0125, 1.0036, 0.996, 0.99, 0.9859, 0.9838, 0.9834, 0.9846, 0.9868, 0.9899, 0.9932, 0.9966, 0.9996, 1.0022, 1.0041, 1.0054, 1.0059, 1.0059, 1.0053, 1.0044, 1.0033, 1.002, 1.0009, 0.9998, 0.999, 0.9983, 0.998, 0.9979, 0.9979, 0.9982, 0.9985, 0.999, 0.9994, 0.9998, 1.0002, 1.0005, 1.0006, 1.0007, 1.0008, 1.0007, 1.0006, 1.0005, 1.0003, 1.0002, 1, 0.9999, 0.9998, 0.9998, 0.9997, 0.9997, 0.9998, 0.9998, 0.9998, 0.9999, 1, 1, 1, 1.0001, 1.0001, 1.0001, 1.0001, 1.0001, 1.0001, 1);
 }
 main .hero-anime .val a img {
   width: 100%;
@@ -653,6 +660,9 @@ main .hero-anime .val a .hero .name {
   font-weight: 500;
   line-height: normal;
 }
+main .hero-anime .val a.-load {
+  scale: 0.9;
+}
 main .hero-anime .val a:first-child {
   margin-left: 20px;
 }
@@ -676,6 +686,9 @@ main .player-title .player-controls .btn {
   display: grid;
   place-items: center;
   background: #191C21;
+}
+main .player-title .player-controls .btn.-hide {
+  display: none;
 }
 
 .spotify {
@@ -878,6 +891,87 @@ footer .studio span {
   opacity: 0.5;
 }
 
+main > .room-controller-wrapper {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  overflow: hidden;
+  max-height: 54px;
+  transition: 0.3s ease-in-out;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 5px;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images {
+  display: flex;
+  align-items: center;
+  background: #191C21;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  gap: 10px;
+  height: 40px;
+  border-radius: 20px;
+  padding-left: 5px;
+  padding-right: 13px;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images .users-image-wrapper {
+  display: flex;
+  align-items: center;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images .users-image-wrapper .user-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid #191C21;
+  background-image: var(--img);
+  background-size: cover;
+  margin-right: -15px;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images .users-image-wrapper .user-image:last-child {
+  margin-right: 0px;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images .users-count-text {
+  display: none;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images svg {
+  height: 20px;
+  fill: white;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images.-many {
+  padding-left: 13px;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images.-many .users-image-wrapper {
+  display: none;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .users-images.-many .users-count-text {
+  display: block;
+}
+main > .room-controller-wrapper > .room-info-content-wrapper > .btn {
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: #EC2127;
+  border-radius: 20px;
+  padding: 0 15px;
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+main > .room-controller-wrapper.-hide {
+  margin-top: 0px;
+  max-height: 0px;
+  overflow: hidden;
+}
+
 .card-anime {
   display: grid;
 }
@@ -1010,6 +1104,10 @@ footer .studio span {
     opacity: 0.2;
   }
 }
+body.-noscrol {
+  overflow: hidden !important;
+}
+
 .windowed {
   position: fixed;
   top: 0;
@@ -1021,6 +1119,9 @@ footer .studio span {
   font-family: "Manrope";
   display: block;
   transition: 0.3s ease-in-out;
+}
+.windowed.-v2, .windowed.-v2 > .hide-window, .windowed.-v2 > .window-content {
+  transition: none !important;
 }
 
 .windowed-right {
@@ -1073,7 +1174,8 @@ footer .studio span {
   transition: 0.3s ease-in-out;
   transform: translateX(100%);
 }
-.windowed-right .window-content .content-wraper, .windowed-right .window-content .content-wrapper {
+.windowed-right .window-content .content-wraper,
+.windowed-right .window-content .content-wrapper {
   padding-top: 20px;
   padding-left: calc(env(safe-area-inset-left) + 20px);
   padding-right: calc(env(safe-area-inset-right) + 20px);
@@ -1097,7 +1199,8 @@ footer .studio span {
   transition: 0.3s ease-in-out;
   transform: translateY(100%);
 }
-.windowed .window-content .content-wraper, .windowed .window-content .content-wrapper {
+.windowed .window-content .content-wraper,
+.windowed .window-content .content-wrapper {
   padding-left: calc(env(safe-area-inset-left) + 20px);
   padding-right: calc(env(safe-area-inset-right) + 20px);
   padding-top: 20px;
@@ -1114,7 +1217,8 @@ footer .studio span {
 }
 
 @media screen and (min-width: 900px) {
-  .windowed .window-content .content-wraper, .windowed .window-content .content-wrapper {
+  .windowed .window-content .content-wraper,
+  .windowed .window-content .content-wrapper {
     max-width: 900px;
     margin: 0 auto;
     width: 100%;

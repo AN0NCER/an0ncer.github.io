@@ -1,0 +1,352 @@
+@mixin controlls {
+    .btn-control {
+        width: 40px;
+        height: 40px;
+
+        display: grid;
+        place-items: center;
+        position: relative;
+
+        border: 0.2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 5px;
+
+        cursor: pointer;
+
+        .ticon {
+            display: none;
+            width: 17px;
+            background-color: #FFFFFF;
+        }
+
+        &.-hide {
+            border: none;
+        }
+
+        &.-add {
+            .i-user-plus {
+                display: block;
+            }
+
+            background: #2393F1;
+            box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.41),
+            0 2px 4px 0 rgba(0, 0, 0, 0.19),
+            0 4px 8px 0 rgba(0, 0, 0, 0.08);
+        }
+
+        &.-rem {
+            .i-user-minus {
+                display: block;
+            }
+        }
+    }
+}
+
+@mixin online {
+    .online-wrapper {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 10px;
+
+        &.-app {
+            color: #FFFFFF;
+        }
+    }
+}
+
+@mixin description {
+    .description {
+        color: #FFFFFF;
+        font-size: 10px;
+        font-weight: bold;
+        opacity: .5;
+
+        &.-app {
+            opacity: 1;
+            color: #2393F1;
+        }
+    }
+}
+
+@mixin tag {
+    .tag {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 6px 4px 7px;
+        font-size: 9px;
+        font-weight: 900;
+        text-transform: uppercase;
+        border-radius: 3px;
+
+        .ticon {
+            height: 14px;
+        }
+
+        &.-dev {
+            background: #FFD700;
+            color: #191C21;
+            box-shadow: inset 1px 0 0 0 #917A00;
+
+            .ticon {
+                background-color: #191C21;
+            }
+        }
+
+        &.-user {
+            background: #2393F1;
+            color: #FFFFFF;
+            box-shadow: inset 1px 0 0 0 #195181;
+
+            .ticon {
+                background-color: #FFFFFF;
+            }
+        }
+    }
+}
+
+@mixin nickname {
+    .title {
+        font-size: 19px;
+        font-weight: bold;
+        color: #FFFFFF;
+    }
+}
+
+@mixin avatar {
+    .img-wrapper {
+        width: 60px;
+        height: 60px;
+
+        background-image: var(--img);
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        border-radius: 13px;
+        border: 0.4px solid rgba(255, 255, 255, 0.4);
+    }
+}
+
+.friend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .friend-wrapper {
+        display: flex;
+        gap: 10px;
+        cursor: pointer;
+
+        @include avatar();
+
+        .context-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .title-wrapper {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                @include nickname();
+                @include tag();
+            }
+
+            .rest-wrapper {
+                display: flex;
+                flex-direction: column;
+
+                @include description();
+                @include online();
+            }
+        }
+    }
+
+    @include controlls();
+}
+
+@mixin window {
+    .btn.window-friends {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        background: #2393F1;
+        border: 0.4px solid rgba(0, 0, 0, 0.4);
+        border-radius: 3px;
+        padding: 10px;
+
+        cursor: pointer;
+        box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.25);
+
+        .btn-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            .users-images {
+                $overlay: 15px;
+                display: flex;
+                padding-right: $overlay;
+
+                img {
+                    width: 30px;
+                    height: 30px;
+
+                    border-radius: 50%;
+                    border: 2px solid #2393F1;
+                    margin-right: $overlay * -1;
+                }
+            }
+
+            .btn-title {
+                font-size: 14px;
+                color: #FFFFFF;
+                font-weight: bold;
+            }
+        }
+
+        .btn-icon {
+            width: 30px;
+            height: 30px;
+
+            display: grid;
+            place-items: center;
+
+            .ticon {
+                width: 20px;
+                background-color: #FFFFFF;
+            }
+        }
+    }
+}
+
+@mixin list {
+    --border: 0.2px solid rgba(255, 255, 255, 0.2);
+
+    .friends-list-wrapper {
+        .group-list {
+            display: grid;
+            gap: 15px;
+            background: #191C21;
+            border: var(--border);
+            border-radius: 5px;
+            padding: 10px;
+
+            &>.friend:nth-child(4) {
+                display: none;
+            }
+
+            @include window();
+            
+            @media (min-width: 740px) {
+                grid-template-columns:  1fr 1fr;
+                .btn.window-friends{
+                    grid-column: 1 / 3;
+                }
+                .friend:nth-child(4){
+                    display: flex;
+                }
+            }
+        }
+    }
+
+    @media (max-width:900px) {
+        .friends-list-wrapper {
+            .group-list {
+                border: none;
+                border-radius: 0px;
+                border-top: var(--border);
+                border-bottom: var(--border);
+            }
+        }
+    }
+}
+
+@mixin title {
+    &>.title {
+        font-size: 16px;
+        color: #fff;
+        font-weight: bold;
+        display: flex;
+        padding: 0 20px;
+    }
+}
+
+.friend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .friend-wrapper {
+        display: flex;
+        gap: 10px;
+        cursor: pointer;
+
+        @include avatar();
+
+        .context-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .title-wrapper {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                @include nickname();
+                @include tag();
+            }
+
+            .rest-wrapper {
+                display: flex;
+                flex-direction: column;
+
+                @include description();
+                @include online();
+            }
+        }
+    }
+
+    @include controlls();
+}
+
+.user-friends-wrapper {
+    font-family: 'Manrope', sans-serif;
+    margin-top: 15px;
+
+    .user-friends-conent-wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        gap: 15px;
+
+        @include title();
+
+        @include list();
+    }
+}
+
+.i-user-plus {
+    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M136 192C136 125.7 189.7 72 256 72C322.3 72 376 125.7 376 192C376 258.3 322.3 312 256 312C189.7 312 136 258.3 136 192zM48 546.3C48 447.8 127.8 368 226.3 368L285.7 368C384.2 368 464 447.8 464 546.3C464 562.7 450.7 576 434.3 576L77.7 576C61.3 576 48 562.7 48 546.3zM544 160C557.3 160 568 170.7 568 184L568 232L616 232C629.3 232 640 242.7 640 256C640 269.3 629.3 280 616 280L568 280L568 328C568 341.3 557.3 352 544 352C530.7 352 520 341.3 520 328L520 280L472 280C458.7 280 448 269.3 448 256C448 242.7 458.7 232 472 232L520 232L520 184C520 170.7 530.7 160 544 160z"/></svg>');
+}
+
+.i-user-minus {
+    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M136 192C136 125.7 189.7 72 256 72C322.3 72 376 125.7 376 192C376 258.3 322.3 312 256 312C189.7 312 136 258.3 136 192zM48 546.3C48 447.8 127.8 368 226.3 368L285.7 368C384.2 368 464 447.8 464 546.3C464 562.7 450.7 576 434.3 576L77.7 576C61.3 576 48 562.7 48 546.3zM472 232L616 232C629.3 232 640 242.7 640 256C640 269.3 629.3 280 616 280L472 280C458.7 280 448 269.3 448 256C448 242.7 458.7 232 472 232z"/></svg>');
+}
+
+.i-window-maximize {
+    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M64 64C28.7 64 0 92.7 0 128L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64L64 64zm24 64l336 0c13.3 0 24 10.7 24 24s-10.7 24-24 24L88 176c-13.3 0-24-10.7-24-24s10.7-24 24-24z"/></svg>');
+}
+
+.i-tunime {
+    mask-image: url('data:image/svg+xml,<svg viewBox="0 0 584 512" xmlns="http://www.w3.org/2000/svg"><path d="M581.169 184.32C582.426 184.32 583.446 185.338 583.446 186.596V439.182C583.446 479.346 550.74 512 510.514 512H72.9311C32.7052 512 0 479.346 0 439.182V186.596C3.52042e-06 185.338 1.01936 184.32 2.2768 184.32H581.169ZM231.536 269.653C229.152 269.653 226.768 272.668 226.768 274.292V310.704C226.77 312.328 229.152 315.111 231.238 315.111H254.777C258.242 315.111 259.882 314.472 260.662 311.167C261.059 309.479 261.303 307.699 261.446 306.363C261.576 305.158 262.579 304.21 263.792 304.21H269.185C270.443 304.21 271.462 305.229 271.462 306.486V391.351C271.462 392.352 270.807 393.236 269.846 393.516C268.618 393.875 266.82 394.388 264.906 394.893C261.441 395.81 260.14 397.188 260.14 399.531V422.028C260.14 424.115 261.927 426.667 264.906 426.667H318.538C321.219 426.667 323.306 424.116 323.306 422.26V399.3C323.306 397.445 321.518 395.588 319.432 395.124C318.081 394.824 315.353 394.037 313.601 393.52C312.638 393.236 311.983 392.351 311.983 391.349V306.486C311.983 305.229 313.002 304.21 314.26 304.21H320.05C321.09 304.21 321.997 304.914 322.255 305.92L323.604 311.167C323.901 312.791 325.987 315.111 328.371 315.111H352.208C354.59 315.111 356.676 312.559 356.676 310.935V274.06C356.676 272.436 354.293 269.653 351.91 269.653H231.536ZM147.311 0C149.341 0 150.356 2.45237 148.92 3.88556L8.0911 144.498L7.61751 144.97C7.19063 145.397 6.61214 145.636 6.00885 145.636H2.2768C1.01936 145.636 0 144.617 0 143.36V72.8178C0 32.6542 32.7052 0 72.9311 0H147.311ZM330.11 0C332.137 0.000244733 333.153 2.44782 331.722 3.88222L190.97 144.967C190.543 145.394 189.963 145.636 189.358 145.636H89.8269C87.7981 145.636 86.7819 143.184 88.2172 141.75L229.52 0.665556C229.947 0.239299 230.526 0 231.13 0H330.11ZM513.006 0C515.032 0 516.049 2.4477 514.619 3.88222L373.867 144.967C373.44 145.394 372.859 145.636 372.255 145.636H272.722C270.694 145.636 269.678 143.184 271.114 141.75L412.417 0.665556C412.844 0.239465 413.423 7.80901e-05 414.025 0H513.006ZM565.691 29.1033C566.651 28.1449 568.234 28.2317 569.044 29.32C578.032 41.4104 583.446 56.5536 583.446 72.8178V143.36C583.446 144.617 582.426 145.636 581.169 145.636H454.481C452.451 145.636 451.435 143.184 452.87 141.75L565.691 29.1033Z"/></svg>');
+    aspect-ratio: 73 / 64;
+}
+
+.i-code {
+    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M360.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm64.6 136.1c-12.5 12.5-12.5 32.8 0 45.3l73.4 73.4-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l96-96c12.5-12.5 12.5-32.8 0-45.3l-96-96c-12.5-12.5-32.8-12.5-45.3 0zm-274.7 0c-12.5-12.5-32.8-12.5-45.3 0l-96 96c-12.5 12.5-12.5 32.8 0 45.3l96 96c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 150.6 182.6c12.5-12.5 12.5-32.8 0-45.3z"/></svg>');
+}

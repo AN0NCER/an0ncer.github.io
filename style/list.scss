@@ -12,7 +12,6 @@ body {
     -webkit-text-size-adjust: none;
 }
 
-@import './phone_menu';
 @import './cards';
 @import './windowed';
 @import './popup';
@@ -25,6 +24,7 @@ body {
     overflow-y: scroll;
     height: 100dvh;
     background: #101318;
+    scrollbar-width: none;
 
     &>.wrapper {
         width: 100%;
@@ -32,6 +32,7 @@ body {
         flex-direction: column;
         gap: 10px;
         max-width: 900px;
+        padding-bottom: max(20px, var(--menu-height-safe));
 
         @import './list/main';
         @import './list/content';
@@ -68,8 +69,8 @@ body {
     }
 }
 
-body[data-orientation="0"] {
-    .application-menu {
+body[angle="0"] {
+    .app-menu {
         transition: 0.3s ease-in-out;
 
         &.hide {
@@ -88,5 +89,18 @@ body[data-orientation="0"] {
     .list-anime,
     .anime-search-result {
         grid-template-columns: 1fr 1fr !important;
+    }
+}
+
+body[angle="90"],
+body[angle="270"] {
+    @media screen and (max-width: 940px) {
+        &[angle="90"] {
+            padding-left: max(10px, var(--menu-width-safe), var(--sal));
+        }
+
+        &[angle="270"] {
+            padding-right: max(10px, var(--menu-width-safe), var(--sar));
+        }
     }
 }

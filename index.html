@@ -13,6 +13,7 @@
     <link rel="apple-touch-icon" sizes="120x120" href="./images/icons/logo-x192-o.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="./images/icons/logo-x192-o.png" />
     <link rel="stylesheet" href="/style/css/main.css">
+    <link rel="stylesheet" href="/style/menu/css/menu.core.css">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="/style/css/min/swiper-bundle.min.css">
     <link rel="stylesheet" href="/style/css/index.css">
@@ -20,70 +21,38 @@
     <link rel="manifest" href="/images/icons/manifest-o.json">
     <script src="/javascript/library/jqery.min.js"></script>
 </head>
-
-<body data-orientation="0">
-
+<body data-page="index" angle="0">
     <header class="unselectable">
-        <div class="account">
-            <a href="/login.html">
-                <div class="image-profile">
-                    <img src="/images/ava.jpeg" alt="Image Account">
+        <div class="head-wrapper">
+            <div class="profile">
+                <div class="ava-wrapper" style="--p-ava-img:url('/images/ava.jpeg')">
+                    <div class="ava"></div>
                 </div>
-            </a>
-            <div class="information">
-                <div class="name">
-                    <span></span>
-                    <b>Авторизируйтесь</b>
-                </div>
-                <div class="position">
-                    <div class="ticon i-location-dot"></div>
-                    <span>Ocean, Остров</span>
+                <div class="profile-content">
+                    <div class="page-title">Параметры</div>
+                    <div class="username">Авторизация</div>
                 </div>
             </div>
-        </div>
-        <div class="notify-search">
-            <div class="desktop search">
-                <input type="text" name="" id="search-input" autocomplete="new-password" placeholder="Поиск">
-                <div class="shortcut unselectable">
-                    <span>/</span>
+            <div class="quick-panel">
+                <div class="btn" id="page-search">
+                    <div class="i-wrapper">
+                        <div class="c-wrapper">
+                            <div class="icon-state i-search">
+                                <div class="ticon i-ios-search"></div>
+                            </div>
+                            <div class="icon-state i-clear">
+                                <div class="ticon i-xmark"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" placeholder="Поиск" id="search" autocomplete="off">
                 </div>
-            </div>
-            <div class="notification">
-                <div class="ticon i-mail-box-state-0 mail"></div>
-                <div class="ticon i-mail-box-state-1 dot"></div>
+                <div class="btn" id="account-edit">
+                    <div class="ticon i-bell"></div>
+                </div>
             </div>
         </div>
     </header>
-
-    <div class="mobile search mbs">
-        <input type="text" name="" id="search-input" autocomplete="new-password" placeholder="Поиск">
-        <div class="shortcut unselectable">
-            <span>/</span>
-        </div>
-    </div>
-
-    <div class="app-update">
-        <div class="update-wrapper">
-            <div class="update-content-version">
-                <span class="text-update">
-                    <div class="ticon i-microchip"></div>
-                    <span>Обновление</span>
-                </span>
-                <div class="to-version">
-                    <span class="cur version">4fg5d</span>
-                    <span class="version">></span>
-                    <span class="next">37eeg</span>
-                </div>
-            </div>
-            <div class="update-progress">
-                <div class="progress"></div>
-            </div>
-
-            <div class="update-file">
-                Обновление...
-            </div>
-        </div>
-    </div>
 
     <!-- Slider main container -->
     <div class="swiper-treilers mbs">
@@ -286,16 +255,86 @@
             </span>
         </span>
     </span>
-
-    <footer></footer>
+    <div id="app-menu-host"></div>
+    <footer>
+        <template id="tpl-menu-default">
+            <div class="app-menu-context -hide">
+                <div class="context-close-area"></div>
+                <div class="context-wrapper">
+                    <div class="context-controls -hide"></div>
+                </div>
+            </div>
+            <div class="app-menu unselectable">
+                <div class="menu-wrapper">
+                    <div class="menu-controls">
+                        <div class="menu-btn" data-id="index">
+                            <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                                <use href="#i-home"></use>
+                            </svg>
+                        </div>
+                        <div class="menu-btn" data-id="search">
+                            <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                                <use href="#i-search"></use>
+                            </svg>
+                        </div>
+                        <div class="menu-btn primary" data-id="play">
+                            <svg class="menu-icon" viewBox="0 0 640 640" aria-hidden="true">
+                                <use href="#i-play"></use>
+                            </svg>
+                        </div>
+                        <div class="menu-btn" data-id="list">
+                            <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                                <use href="#i-list"></use>
+                            </svg>
+                        </div>
+                        <div class="menu-btn" data-id="user">
+                            <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                                <use href="#i-user"></use>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <svg xmlns="http://www.w3.org/2000/svg" style="width:0;height:0;overflow:hidden;">
+            <defs>
+                <linearGradient id="menu-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#51B1FE" />
+                    <stop offset="100%" stop-color="#2774DB" />
+                </linearGradient>
+            </defs>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="i-home" viewBox="0 0 512 512">
+                <path
+                    d="M302.8,54.3l133,115c21.5,18.6,33.9,37,33.9,65.4v187.2c0,29.4-23.9,53.3-53.3,53.3h-75.2 c-23.1,0-41.8-18.7-41.8-41.8v-73.5c0-23.9-19.4-43.3-43.3-43.3h0h0h0c-23.9,0-43.3,19.4-43.3,43.3v73.5 c0,23.1-18.7,41.8-41.8,41.8H95.6c-29.4,0-53.3-23.9-53.3-53.3V234.6c0-28.4,12.4-46.8,33.9-65.4l133-115 C236.1,31.1,275.9,31.1,302.8,54.3z" />
+            </symbol>
+            <symbol id="i-search" viewBox="0 0 512 512">
+                <path
+                    d="M213.333 42.6667C168.07 42.6667 124.66 60.6476 92.6539 92.6538C60.6477 124.66 42.6667 168.07 42.6667 213.333C42.6667 258.597 60.6477 302.007 92.6539 334.013C124.66 366.019 168.07 384 213.333 384C258.597 384 302.007 366.019 334.013 334.013C366.019 302.007 384 258.597 384 213.333C384 168.07 366.019 124.66 334.013 92.6538C302.007 60.6476 258.597 42.6667 213.333 42.6667Z M463.083 463.083C459.082 467.082 453.657 469.329 448 469.329C442.343 469.329 436.918 467.082 432.917 463.083L358.251 388.416C354.365 384.392 352.214 379.004 352.263 373.41C352.312 367.817 354.555 362.466 358.511 358.511C362.466 354.555 367.817 352.312 373.41 352.263C379.004 352.214 384.393 354.365 388.416 358.251L463.083 432.917C467.082 436.918 469.329 442.343 469.329 448C469.329 453.657 467.082 459.082 463.083 463.083Z" />
+            </symbol>
+            <symbol id="i-play" viewBox="0 0 640 640">
+                <path
+                    d="M187.2 100.9C174.8 94.1 159.8 94.4 147.6 101.6C135.4 108.8 128 121.9 128 136L128 504C128 518.1 135.5 531.2 147.6 538.4C159.7 545.6 174.8 545.9 187.2 539.1L523.2 355.1C536 348.1 544 334.6 544 320C544 305.4 536 291.9 523.2 284.9L187.2 100.9z" />
+            </symbol>
+            <symbol id="i-list" viewBox="0 0 512 512">
+                <path
+                    d="M298.667 42.6667C326.957 42.6667 354.088 53.9047 374.091 73.9086C394.095 93.9125 405.333 121.044 405.333 149.333V448C405.334 451.862 404.286 455.652 402.301 458.966C400.317 462.279 397.47 464.991 394.064 466.813C390.659 468.635 386.823 469.499 382.965 469.311C379.107 469.124 375.373 467.893 372.16 465.749L256 388.309L139.861 465.749C136.817 467.787 133.299 469.006 129.647 469.289C125.995 469.573 122.331 468.911 119.009 467.368C115.686 465.825 112.817 463.452 110.678 460.478C108.539 457.504 107.202 454.03 106.795 450.389L106.667 448V149.333C106.667 121.044 117.905 93.9125 137.909 73.9086C157.913 53.9047 185.044 42.6667 213.333 42.6667H298.667Z" />
+            </symbol>
+            <symbol id="i-user" viewBox="0 0 512 512">
+                <path
+                    d="M256 85.5C233.368 85.5 211.663 94.508 195.66 110.542C179.657 126.577 170.667 148.324 170.667 171C170.667 193.676 179.657 215.423 195.66 231.458C211.663 247.492 233.368 256.5 256 256.5C278.632 256.5 300.337 247.492 316.34 231.458C332.343 215.423 341.333 193.676 341.333 171C341.333 148.324 332.343 126.577 316.34 110.542C300.337 94.508 278.632 85.5 256 85.5ZM213.333 277.875C190.702 277.875 168.997 286.883 152.994 302.917C136.99 318.952 128 340.699 128 363.375V384.75C128 396.088 132.495 406.962 140.497 414.979C148.498 422.996 159.351 427.5 170.667 427.5H341.333C352.649 427.5 363.502 422.996 371.503 414.979C379.505 406.962 384 396.088 384 384.75V363.375C384 340.699 375.01 318.952 359.006 302.917C343.003 286.883 321.298 277.875 298.667 277.875H213.333Z" />
+            </symbol>
+        </svg>
+    </footer>
     <!--Scripts-->
     <!--Library-->
     <script src="/javascript/library/swiper-bundle.min.js"></script>
     <script src="/javascript/library/anime.min.js"></script>
     <!--Custom library-->
-    <script src="/javascript/server.js"></script>
     <script src="/javascript/services/dispatcher.js" type="module"></script>
     <script src="/javascript/parametrs.js"></script>
+    <script src="/javascript/core/pwa.core.js" type="module"></script>
     <script src="/javascript/pages/index.js" type="module"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
 </body>

@@ -2,7 +2,7 @@ const local = ["anime-db", "user-level"];
 const indexdb = ["tun-cache"];
 
 export async function logout() {
-    (await import("../modules/ShikiUSR.js")).User.Storage.Clear();
+    (await import("../core/main.core.js")).OAuth.events.clear();
 
     try {
         setParameter('autologin', false);
@@ -14,10 +14,15 @@ export async function logout() {
 
     const { TDatabase } = await import("../modules/TDatabase.js");
 
-    for (let i = 0; i < indexdb.length; i++) {
-        const name = indexdb[i];
-        await TDatabase.Delete(name);
-    }
+    try{
+        for (let i = 0; i < indexdb.length; i++) {
+            const name = indexdb[i];
+            await TDatabase.Delete(name);
+        }
+    }finally{
+        const { Tunime } = await import("../modules/api.tunime.js");
+        await Tunime.help.logout();
 
-    window.location.replace(window.location.href);
+        window.location.replace(window.location.href);
+    }
 }

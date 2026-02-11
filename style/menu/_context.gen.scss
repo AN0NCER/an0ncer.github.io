@@ -1,0 +1,112 @@
+.menu-btn,
+label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 50px;
+    cursor: pointer;
+
+    .btn-label {
+        display: flex;
+
+        gap: 20px;
+
+        padding: 10px 30px 10px 10px;
+
+        .item-icon {
+            display: grid;
+            place-items: center;
+
+            width: 25px;
+            height: 25px;
+
+            svg {
+                width: 20px;
+                fill: #FFFFFF;
+            }
+        }
+
+        .item-title {
+            font-size: 16px;
+            color: #FFFFFF;
+
+            text-wrap: nowrap;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+    }
+
+    .item-action {
+        margin-right: 10px;
+        font-size: 14px;
+        color: #7E7E7E;
+    }
+}
+
+.item-line {
+    width: 100%;
+    min-height: 1px;
+    max-height: 1px;
+
+    background: #fff;
+
+    opacity: .1;
+}
+
+label {
+    box-sizing: border-box;
+
+    .switch-slider {
+        position: relative;
+        width: 58px;
+        min-height: 32px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        background: #525252;
+        transition: .3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+        overflow: hidden;
+        box-sizing: border-box;
+
+        &::after {
+            content: '';
+            position: absolute;
+            transition: .3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+            width: 24px;
+            height: 24px;
+            border: 5px solid #FFFFFF;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.25);
+            border-radius: 50%;
+            left: 5px;
+            box-sizing: border-box;
+        }
+    }
+
+    input:checked+.switch-slider {
+        background: #2393F1;
+
+        &::after {
+            left: calc(5px + 24px);
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0);
+            // background: #FFFFFF;
+            border: 12px solid #FFFFFF;
+        }
+    }
+
+    input {
+        display: none;
+    }
+
+    .switch-slider {
+        position: relative;
+        width: 58px;
+        min-height: 32px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        background: #525252;
+        transition: 0.3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+        overflow: hidden;
+    }
+}

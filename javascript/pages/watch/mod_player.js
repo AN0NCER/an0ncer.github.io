@@ -1,4 +1,4 @@
-import { Kodik } from "../../modules/Kodik.js";
+import { Kodik } from "../../modules/api.kodik.js";
 import { AutoScrollEpisodes } from "./mod_scrolling.js";
 import { $ID } from "../watch.js";
 import { watchSequence } from "./mod.chronology.js";
@@ -30,7 +30,9 @@ const message_callabcks = {
     error: [],
     next: [],
     fullscreen: [],
-    switch: []
+    switch: [],
+    seek: [],
+    skip_button: []
 }
 
 const translation_callbacks = {
@@ -104,6 +106,7 @@ class Episodes {
 
     #Functional() {
         $(`.episode[data-index]`).on("click", (e) => {
+            if (!this.Player.isOwner) return;
             const target = e.currentTarget;
             const episode = $(target).data("index");
 
@@ -177,11 +180,14 @@ class Episodes {
      * @returns {void}
      */
     on(event, callback) {
-        if (typeof callback !== "function") return;
+        if (typeof callback !== "function") return () => { };
         if (this.#callbacks[event] === undefined) {
             this.#callbacks[event] = [];
         }
         this.#callbacks[event].push(callback);
+        return () => {
+            this.#callbacks[event] = this.#callbacks[event].filter(cb => cb !== callback);
+        }
     }
 
 
@@ -214,11 +220,11 @@ class Translation {
 
     /**
      * Инициализация озвучек
-     * @param {[{translation:{id:number, title:string},last_episode:number}]} data 
+     * @param {Map<string, {translation:{id:number, title:string},last_episode:number}>} data 
      */
     Init(data, id) {
         if ($PARAMETERS.watch.dubanime) this.lskey = "save-translations-" + $ID;
-        this.saved = JSON.parse(localStorage.getItem(this.lskey)) || [];
+        this.saved = JSON.parse(localStorage.getItem(this.lskye)) || [];
 
         if ($PARAMETERS.watch.dubanime) {
             for (let i = 0; i < watchSequence.length; i++) {
@@ -226,36 +232,36 @@ class Translation {
                 this.saved = this.saved.concat(JSON.parse(localStorage.getItem(`save-translations-${fid}`)) || [])
             }
         }
-
-        if (data.length != 0) {
+        if (data.size != 0) {
             //Удалить заглушку
             $(".content-voices").empty();
         }
 
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i];
-            const translation = element.translation;
+        for (const [id, item] of data) {
+            const translation = item.translation;
+
             let finded = false;
 
             if (this.saved && this.saved.indexOf(translation.id) != -1) {
                 finded = true;
             }
 
-            $(".content-voices").append(_genVoice(translation.id, translation.title, element.last_episode, finded));
+            $(".content-voices").append(_genVoice(translation.id, translation.title, item.last_episode, finded));
 
             if (!this.selected && finded && id === undefined) {
                 this.Select({ id: translation.id });
             }
         }
 
-        if (!this.selected && data.length > 0 && id === undefined) {
-            this.Select({ id: data[0].translation.id });
-        } else if (!this.selected && data.length > 0 && id) {
+        if (!this.selected && data.size > 0 && id === undefined) {
+            this.Select({ id: data.values().next().value.translation.id });
+        } else if (!this.selected && data.size > 0 && id) {
             this.Select({ id });
         }
 
         //Нажатие на перевод
         $(".voice > .voice-content").click((e) => {
+            if (!this.Player.isOwner) return;
             this.Select({ id: $(e.currentTarget).data("id"), user_handler: true });
         });
 
@@ -302,7 +308,7 @@ class Translation {
         if (this.id == id || id === undefined) return;
 
         const element = $(`.voice[data-id="${id}"]`)[0];
-        const data = this.Player.results.find(x => x.translation.id == id);
+        const data = this.Player.resultsVoice.get(id);
 
         if (!data) return console.log('Translation not found');
 
@@ -341,11 +347,14 @@ class Translation {
      * @returns {void}
      */
     on(event, callback) {
-        if (typeof callback !== "function") return;
+        if (typeof callback !== "function") return () => { };
         if (this.#callbacks[event] === undefined) {
             this.#callbacks[event] = [];
         }
         this.#callbacks[event].push(callback);
+        return () => {
+            this.#callbacks[event] = this.#callbacks[event].filter(cb => cb !== callback);
+        }
     }
 
 
@@ -402,44 +411,55 @@ class Message {
     }
 
     #Listener(message) {
-        //Продолжительность всего видео
-        if (message.data.key == "kodik_player_duration_update") {
-            this.Player.VData.duration = message.data.value;
-        }
+        const actions = {
+            //Продолжительность всего видео
+            kodik_player_duration_update: () => {
+                this.Player.VData.duration = message.data.value;
+            },
+            //Текущее время видео
+            kodik_player_time_update: () => {
+                this.Player.VData.time = message.data.value;
+            },
+            //Статус плеера изменен на паузу
+            kodik_player_pause: () => {
+                this.#Dispatch('pause', this.Player.VData);
+            },
+            //Статус плеера изменен на воспроизведение
+            kodik_player_play: () => {
+                this.#Dispatch('play', this.Player.VData);
+            },
+            //Статус плеера tunime ошибка
+            tunime_error: () => {
+                this.#Dispatch('error', { value: message.data.value });
+            },
+            //Статус плеера переключение эпизода
+            tunime_next: () => {
+                this.#Dispatch('next', this.Player);
+            },
+            // Альтернативный полный экран
+            tunime_fullscreen: () => {
+                this.#Dispatch('fullscreen', { value: message.data.value });
+            },
+            // Переключение плеера
+            tunime_switch: () => {
+                this.#Dispatch('switch', { value: message.data.value });
+            },
+            // Запрос из вне на точное время
+            kodik_player_time: () => {
+                this.#Dispatch('time', { value: message.data.value });
+            },
+            // Перемотка на заданную точку
+            kodik_player_seek: () => {
+                this.#Dispatch('seek', { value: message.data.value });
+            },
+            // Нажатие на кнопку пропуска интро/аутро
+            kodik_player_skip_button: () => {
+                this.#Dispatch('skip_button', { value: message.data.value });
+            }
+        };
 
-        //Текущее время видео
-        if (message.data.key == "kodik_player_time_update") {
-            this.Player.VData.time = message.data.value;
-        }
-
-        //Статус плеера изменен на паузу
-        if (message.data.key == "kodik_player_pause") {
-            this.#Dispatch('pause', this.Player.VData);
-        }
-
-        //Статус плеера изменен на воспроизведение
-        if (message.data.key == "kodik_player_play") {
-            this.#Dispatch('play', this.Player.VData);
-        }
-
-        //Статус плеера tunime ошибка
-        if (message.data.key == "tunime_error") {
-            this.#Dispatch('error', { value: message.data.value });
-        }
-
-        //Статус плеера переключение эпизода
-        if (message.data.key == "tunime_next") {
-            this.#Dispatch('next', this.Player);
-        }
-
-        // Альтернативный полный экран
-        if (message.data.key == "tunime_fullscreen") {
-            this.#Dispatch('fullscreen', { value: message.data.value });
-        }
-
-        // Переключение плеера
-        if (message.data.key == "tunime_switch") {
-            this.#Dispatch('switch', { value: message.data.value });
+        if (actions[message.data.key]) {
+            actions[message.data.key]();
         }
     }
 
@@ -450,11 +470,14 @@ class Message {
      * @returns {void}
      */
     on(event, callback) {
-        if (typeof callback !== "function") return;
+        if (typeof callback !== "function") return () => { };
         if (this.#callbacks[event] === undefined) {
             this.#callbacks[event] = [];
         }
         this.#callbacks[event].push(callback);
+        return () => {
+            this.#callbacks[event] = this.#callbacks[event].filter(cb => cb !== callback);
+        }
     }
 
 
@@ -474,7 +497,7 @@ class Player {
     #callbacks = player_callbacks;
 
     constructor({ standart = false } = {}) {
-        this.results = [];
+        this.results = new Map();
 
         this.VData = {
             duration: 0, //Продолжительность эпизода
@@ -489,13 +512,11 @@ class Player {
         this.selected = undefined;
         this.loaded = false;
         this.name = standart ? "tunime" : "kodik";
+        this.isOwner = true;
 
         this.CTranslation.on('selected', ({ id }) => {
-            // Порядковый номервыбраного елемента (озвучки)
-            const idData = this.results.findIndex(x => x.translation.id == id);
-
             // Выбранный елемент текущей озвучки
-            this.selected = this.results[idData];
+            this.selected = this.resultsVoice.get(id);
             this.CEpisodes.Init(this.selected);
         });
 
@@ -508,17 +529,35 @@ class Player {
                 if (kodik_episode) {
                     this.CEpisodes.selected = kodik_episode;
                 }
-                this.results = response.results;
+                this.#buildIndexes(response.results);
                 this.CTranslation.Init(this.results, kodik_dub);
-                this.#Dispatch('inited', this.results);
+                this.#Dispatch('inited', { results: this.results, resultsVoice: this.resultsVoice });
                 return resolve(this.results);
             });
         });
     }
 
+    Load() {
+        this.#Update({ episode: this.CEpisodes.selected });
+    }
+
     Switch() {
         this.name = this.name === "kodik" ? "tunime" : "kodik";
         this.#Update({ episode: this.CEpisodes.selected });
+    }
+
+    #buildIndexes(list) {
+        this.results = new Map();
+        this.resultsVoice = new Map();
+
+        for (const item of list) {
+            // 1) основной ключ
+            if (item?.id) this.results.set(item.id, item);
+
+            // 2) вторичный ключ
+            const trId = item?.translation?.id;
+            if (trId != null) this.resultsVoice.set(trId, item);
+        }
     }
 
     #Update({ episode }) {
@@ -589,11 +628,14 @@ class Player {
      * @returns {void}
      */
     on(event, callback) {
-        if (typeof callback !== "function") return;
+        if (typeof callback !== "function") return () => { };
         if (this.#callbacks[event] === undefined) {
             this.#callbacks[event] = [];
         }
         this.#callbacks[event].push(callback);
+        return () => {
+            this.#callbacks[event] = this.#callbacks[event].filter(cb => cb !== callback);
+        }
     }
 
 

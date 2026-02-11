@@ -1,0 +1,73 @@
+.button-tips-wrapper {
+    --color: #FFFFFF;
+    margin: 0 20px;
+
+    .tips {
+        padding: 7px 10px;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+    }
+
+    .btn {
+        display: flex;
+        background: #191C21;
+        color: var(--color);
+        overflow: hidden;
+        border-radius: 5px;
+        padding-right: 10px;
+        cursor: pointer;
+
+        .icon {
+            width: 52px;
+            height: 52px;
+            display: grid;
+            place-items: center;
+
+            .ticon {
+                background-color: var(--color);
+                height: 15px;
+                transition: .3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+            }
+        }
+
+        label {
+            display: flex;
+            flex: 1 0 0;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+
+            .title {
+                font-size: 14px;
+            }
+
+            .value {
+                color: #FFFFFF;
+                font-size: 10px;
+                font-weight: bold;
+                opacity: .35;
+                text-transform: uppercase;
+                min-width: 58px;
+                text-align: center;
+            }
+        }
+    }
+
+    &.-hide {
+        .tips {
+            opacity: 0;
+            padding: 0px 10px;
+            height: 0px;
+        }
+    }
+
+    &:not(&.-hide) {
+        .btn {
+            .icon {
+                .ticon {
+                    transform: rotate(90deg);
+                }
+            }
+        }
+    }
+}

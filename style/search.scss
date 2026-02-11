@@ -5,6 +5,11 @@
     --sal: env(safe-area-inset-left);
 }
 
+html {
+  scrollbar-width: none;
+}
+
+
 body {
     background: #101318;
     overflow-x: hidden;
@@ -18,7 +23,8 @@ body {
     margin: 20px auto 0 auto;
     max-width: 900px;
     gap: 10px;
-    padding-bottom: calc(var(--m-space) + var(--sab));
+
+    padding-bottom: max(20px, var(--menu-height-safe));
 
     @media screen and (max-width: 940px) {
         margin: 20px max(10px, var(--sar)) 0 max(10px, var(--sal));
@@ -295,28 +301,31 @@ header {
         left: 0;
     }
 
-    &.empty, &.load{
+    &.empty,
+    &.load {
         height: calc(100dvh - (40px + 20px + 10px + var(--m-space) + var(--sab)));
     }
 
-    &.load{
-        .load-wrapper{
+    &.load {
+        .load-wrapper {
             display: flex;
         }
     }
 
-    .info.genre ~ .empty, .info.studio ~ .empty{
+    .info.genre~.empty,
+    .info.studio~.empty {
         position: relative;
     }
 
     &.empty {
         grid-template-rows: auto 1fr;
-        .results{
+
+        .results {
             display: none;
         }
+
         .empty {
             display: flex;
-            // position: relative;
         }
     }
 }
@@ -326,7 +335,6 @@ header {
 @import './search/voices_list';
 @import './search/studios_list';
 @import './cards';
-@import './phone_menu';
 
 @import './windowed';
 @import './search/w_filter';
@@ -339,4 +347,17 @@ header {
 
 .card-anime {
     min-width: 195px;
+}
+
+body[angle="90"],
+body[angle="270"] {
+    @media screen and (max-width: 940px) {
+        &[angle="90"] {
+            padding-left: max(10px, var(--menu-width-safe), var(--sal));
+        }
+
+        &[angle="270"] {
+            padding-right: max(10px, var(--menu-width-safe), var(--sar));
+        }
+    }
 }

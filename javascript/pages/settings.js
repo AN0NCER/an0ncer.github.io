@@ -1,81 +1,143 @@
-import { InitMenu, Menu } from "../menu.js";
-import { Users } from "../modules/ShikiAPI.js";
-import { Main, User } from "../modules/ShikiUSR.js";
-import { OnClearDB } from "./settings/mod_cleardb.js";
-import { ShowMoreSelect, ShowSelect } from "./settings/mod_select.js";
-import { ShowStorage, Storage } from "./settings/mod_storage.js";
+import { Main, OAuth, sUrl } from "../core/main.core.js";
+import { TMenu } from "../core/menu.core.js";
+import { Snapshot, Tunime } from "../modules/api.tunime.js";
+import { ClearParams } from "../modules/functions.js";
+import { Engine } from "./settings/mod.engine.js";
+import { ClearDB, Logout } from "./settings/mod.func.js";
+import { THeader } from "./settings/mod.header.js";
+import { Search } from "./settings/mod.search.js";
+import { WindowSelector } from "./settings/mod.selector.js";
+import { ShowStorage, SizeValue } from "./settings/mod.storage.js";
 
-const Parameters = [
+import sUpdate from "./settings/setup.update.js";
+
+const t = new URLSearchParams(window.location.search).get('t');
+
+const setup = [
     {
         name: 'Основные',
-        parameters: [
+        params: [
             {
-                type: 'boolean',
+                param: 'tunsync',
+                type: 'checkbox.tip',
+                title: 'TUN Аккаунт',
+                description: 'Открывает расширенные функции: синхронизация с Shikimori, друзья, прогресс, совместный просмотр и оформление профиля в Tunime.'
+            },
+            {
                 param: 'censored',
-                name: 'Цензура',
-                description: 'Пользователи могут включать или выключать фильтрацию нежелательного контента.'
+                type: 'checkbox.tip',
+                title: 'Цензура',
+                description: 'Включает или выключает фильтрацию нежелательного контента.'
             },
             {
-                type: 'boolean',
                 param: 'autologin',
-                name: 'Автоматический вход',
-                description: 'Моментальная авторизация пользователей.'
+                type: 'checkbox.tip',
+                title: 'Авто-Вход',
+                description: 'После истечения срока действия ключа приложение автоматически перейдёт к авторизации через Shikimori.'
             },
             {
-                type: 'app-size',
-                name: 'Хранилище',
-                description: 'Возможность управлять данными приложения. Экспортировать, импортировать и сбросить данные.'
+                enable: () => true,
+                value: SizeValue,
+                click: ShowStorage,
+                type: 'button.event',
+                title: 'Хранилище',
+                icon: 'database',
+                description: 'Управление данными приложения: экспорт, импорт и сброс.'
+            },
+            {
+                enable: () => {
+                    return Snapshot.state.permissions.includes('acc')
+                },
+                value: async () => {
+                    const response = await Tunime.api.device.name().GET();
+                    if (response.status === 200) {
+                        return response.value.data;
+                    }
+                    return 'undefined';
+                },
+                type: 'button.event',
+                title: 'Устройство',
+                icon: 'mobile-button',
+                description: 'Индентификатор устройства Tunime.'
+            },
+            {
+                enable: () => { return OAuth.auth },
+                value: () => { return OAuth.user?.nickname || "User" },
+                click: Logout,
+                type: 'button.event',
+                title: 'Выйти',
+                icon: 'right-from-bracket',
+                description: 'Завершить сеанс и выйти из аккаунта Shikimori.',
+                styles: [
+                    { key: '--color', val: '#F13B23' }
+                ]
             }
         ]
     },
     {
         name: 'Меню',
-        parameters: [
+        params: [
             {
-                type: 'sel-one',
+                click: SwitchMenu,
                 param: 'menustyle',
-                default: 'mode-0',
-                variation: [
-                    { key: 'mode-0', val: 'Стандартное' },
-                    { key: 'mode-1', val: 'Стиль 1' },
-                    { key: 'mode-2', val: 'Стиль 2' },
-                ],
-                name: 'Стиль меню',
+                type: 'img.select',
+                title: 'Стиль',
                 description: 'Визуальное оформление для персонализированного внешнего вида Меню.',
-                event: () => {
-                    switch ($PARAMETERS.menu.menustyle) {
-                        case 'mode-1':
-                            Menu().setMode.mode_1();
-                            break;
-                        case 'mode-2':
-                            Menu().setMode.mode_2();
-                            break;
-                        default:
-                            Menu().setMode.mode_0();
-                            break;
-                    }
-                }
+                variation: [
+                    {
+                        key: 'default',
+                        val: 'Стандарт',
+                        img: 'set.menu.default.png'
+                    },
+                    // {
+                    //     key: 'mode-2',
+                    //     val: 'Стиль 1',
+                    //     img: 'set.menu.1.png'
+                    // },
+                    // {
+                    //     key: 'mode-1',
+                    //     val: 'Стиль 2',
+                    //     img: 'set.menu.2.png'
+                    // }
+                    // {
+                    //     key: 'mode-3',
+                    //     val: 'IOS 26',
+                    //     img: 'set.menu.3.png'
+                    // }
+                ],
             },
+            // {
+            //     param: 'menuopacity',
+            //     type: 'checkbox.tip',
+            //     title: 'Прозрачность',
+            //     description: 'Добавляет прозрачность и размытие в меню.',
+            //     click: () => SwitchMenu()
+            // },
             {
-                type: 'boolean',
                 param: 'menuver',
-                name: 'Автоповорот',
-                description: 'Автоматически вращать меню в горизонтальном режиме.'
+                type: 'checkbox.tip',
+                title: 'Авто-Поворот',
+                description: 'Автоматически переключать меню в горизонтальный режим при изменении ориентации экрана.'
             },
             {
-                type: 'boolean',
                 param: 'menureverse',
-                name: 'Горизонт. отражение',
-                description: 'Возможность инвертировать меню горизонтально для изменения его расположения.'
+                type: 'checkbox.tip',
+                title: 'Отразить',
+                description: 'Инвертировать расположение элементов меню по горизонтали.',
+                dependsOn: { param: 'menuver', value: true }
             }
         ]
     },
     {
         name: 'Аниме',
-        parameters: [
+        params: [
             {
-                type: 'sel-mehre',
+                click: WindowSelector,
+                mode: 'multiple',
                 param: 'typefrc',
+                type: 'btn.tip',
+                title: 'Франшизы',
+                description: 'Правила отображения франшиз аниме.',
                 variation: [
                     { key: "TV Сериал", val: "TV Сериал" },
                     { key: "TV Спецвыпуск", val: "TV Спецвыпуск" },
@@ -83,465 +145,329 @@ const Parameters = [
                     { key: "Фильм", val: "Фильм" },
                     { key: "ONA", val: "ONA" },
                     { key: "OVA", val: "OVA" }
-                ],
-                name: 'Франшизы',
-                description: 'Правило для отобора отображение франшизов аниме.'
+                ]
             },
             {
-                type: 'boolean',
                 param: 'hidehero',
-                name: 'Скрыть героев',
-                description: 'Позволяет пользователю убирать изображения персонажей для более нейтрального просмотра сайта.'
+                type: 'checkbox.tip',
+                title: 'Скрыть героев',
+                description: 'Скрывает изображения персонажей для более нейтрального восприятия сайта.'
             },
             {
-                type: 'boolean',
                 param: 'customstyle',
-                name: 'Кастомизация',
-                description: 'Включить кастомные стили для некоторых аниме.'
+                type: 'checkbox.tip',
+                title: 'Кастомизация',
+                description: 'Включает пользовательские стили (моды) для некоторых аниме.'
             },
-            // {
-            //     type: 'boolean',
-            //     param: '',
-            //     name: 'Защита 18+',
-            //     description: 'Ограниченный доступ к контенту для пользователей старше 18 лет, обеспечивая соответствие возрастным ограничениям.'
-            // },
             {
-                type: 'boolean',
                 param: 'syncdata',
-                name: 'Синхронизация',
-                description: 'Синхронизация по озвучке и текущему эпизоде по разным приложениям в Tunime'
-            },
-            {
-                type: 'boolean',
-                param: 'anicaching',
-                name: 'Кэширование',
-                description: 'Временно сохраняет данные аниме для быстрой прогрузки'
-            },
-            {
-                type: 'sel-one',
-                param: 'anicachlive',
-                default: 'mode-0',
-                variation: [
-                    { key: '1', val: '1 День' },
-                    { key: '2', val: '2 Дня' },
-                    { key: '3', val: '3 Дня' },
-                ],
-                name: 'Хранение кэша',
-                description: 'Как долго будет храниться кэш аниме.',
-            },
-            {
-                type: 'button',
-                param: 'cleardb',
-                name: 'Очистить кэш',
-                description: 'Очищает кэш страницы просмотра и поиска',
-                db: "tun-cache",
-                verif: "Очистить полностью кэш аниме?"
+                type: 'checkbox.tip',
+                title: 'Синхронизация',
+                description: 'Синхронизация озвучки и текущего эпизода между разными приложениями Tunime.'
             }
         ]
     },
     {
-        name: 'Страница просмотра',
-        parameters: [
+        name: 'Аниме-Кэш',
+        params: [
             {
-                type: 'sel-one',
-                param: 'episrevers',
-                default: 'left',
+                param: 'anicaching',
+                type: 'checkbox.tip',
+                title: 'Кэширование',
+                description: `Сохраняет аниме на устройство для быстрой загрузки. Кэш имеет ограниченный срок хранения.`
+            },
+            {
+                click: WindowSelector,
+                param: 'anicachlive',
+                type: 'sel.one',
+                icon: 'box-open',
+                title: 'Хранение кэша',
+                description: 'Определяет, как долго будет храниться кэш аниме на устройстве.',
                 variation: [
-                    { key: 'left', val: 'Сбоку' },
-                    { key: 'top', val: 'Сверху' }
-                ],
-                name: 'Эпизоды',
-                description: 'Визуальное отображение для эпизодов.'
+                    { key: '1', val: '1 День' },
+                    { key: '2', val: '2 Дня' },
+                    { key: '3', val: '3 Дня' },
+                ]
             },
             {
-                type: 'boolean',
+                click: () => {
+                    ClearDB('tun-cache', 'Сбросить кэш', 'При сбросе кэша страниц просмотра также будет сброшен кэш страницы поиска.');
+                },
+                type: 'btn',
+                icon: 'trash',
+                title: 'Сбросить кэш',
+                description: 'Удаляет кэш аниме для страниц просмотра и поиска.'
+            }
+        ]
+
+    },
+    {
+        name: 'Просмотр',
+        params: [
+            {
+                click: WindowSelector,
+                mode: 'single',
+                param: 'episrevers',
+                type: 'btn.tip',
+                title: 'Эпизоды',
+                description: 'Выберите расположение списка эпизодов в горизонтальной ориентации.',
+                variation: [
+                    { key: "left", val: "Сбоку" },
+                    { key: "top", val: "Сверху" },
+                ]
+            },
+            {
                 param: 'dubanime',
-                name: 'Озвучки по франшизе',
-                description: 'Отдельный список избранных озвучек по франшизе аниме.'
+                type: 'checkbox.tip',
+                title: 'Озвучки по франшизам',
+                description: `Позволяет сохранять избранные озвучки отдельно для каждой франшизы аниме.`
             },
             {
-                type: 'boolean',
                 param: 'previewbs',
-                name: 'Информация воспроизведения',
-                description: 'Отображает текущее аниме на экране блокировке.'
+                type: 'checkbox.tip',
+                title: 'Экран блокировки',
+                description: `Информация о воспроизведении на экране блокировки.`
+            },
+            {
+                param: 'saveinfo',
+                type: 'checkbox.tip',
+                title: 'Сохранять озвучку',
+                description: `Сохраняет озвучку в заметки после оценивания аниме.`
+            }
+        ]
+    },
+    {
+        name: 'Совместный просмотр',
+        params: [
+            {
+                param: 'roomsenable',
+                type: 'checkbox.tip',
+                title: 'Совместный просмотр',
+                description: `Добавляет на сайте функции совместного просмотра: создание комнат и подключение к ним.`
+            },
+            {
+                param: 'roomssave',
+                type: 'checkbox.tip',
+                title: 'Сохранять просмотр',
+                description: `Сохраняет эпизод и озвучку, с которыми аниме смотрели в комнате. Если отключено - после закрытия комнаты состояние просмотра вернётся к тому, что было до входа в комнату.`,
+                dependsOn: { param: 'roomsenable', value: true }
+            },
+            {
+                param: 'roomsautopause',
+                type: 'checkbox.tip',
+                title: 'Совместные паузы',
+                description: `Любой гость может поставить видео на паузу для всех. Возобновить воспроизведение может только владелец комнаты.`,
+                dependsOn: { param: 'roomsenable', value: true }
+            },
+            {
+                param: 'roomsindexpage',
+                type: 'checkbox.tip',
+                title: 'Приглашения в комнаты (бэта)',
+                description: `Показывает на главной странице комнаты, в которые вы приглашены.`,
+                dependsOn: { param: 'roomsenable', value: true }
             }
         ]
     },
     {
         name: 'Плеер',
-        parameters: [
+        params: [
             {
-                type: 'boolean',
                 param: 'standart',
-                name: 'Tunime Player',
-                description: 'Основным плеером будет Tunime.'
+                type: 'checkbox.tip',
+                title: 'Плеер Tunime',
+                description: `Установить Tunime как основной плеер для видео.`
             },
             {
-                type: 'boolean',
                 param: 'full',
-                name: 'Auto Fullscreen',
-                description: 'Автоматически включает видео на весь экран в плеере Tunime.'
+                type: 'checkbox.tip',
+                title: 'Авто-Полноэкранный режим',
+                description: `Автоматически включает полноэкранный режим при начале воспроизведения.`,
             },
             {
-                type: 'sel-one',
                 param: 'quality',
-                default: '720',
+                type: 'img.select',
+                title: 'Качество видео',
+                description: 'Выберите качество воспроизведения в плеере Tunime.',
                 variation: [
-                    { key: '720', val: '720p' },
-                    { key: '480', val: '480p' },
-                    { key: '360', val: '360p' },
+                    {
+                        key: '720',
+                        val: '720p',
+                        img: 'set.quality.720.png'
+                    },
+                    {
+                        key: '480',
+                        val: '480p',
+                        img: 'set.quality.480.png'
+                    },
+                    {
+                        key: '360',
+                        val: '360p',
+                        img: 'set.quality.360.png'
+                    }
                 ],
-                name: 'Качество',
-                description: 'Качествр воспроизведение видео в плеере Tunime.'
+                classes: ['-mode-1'],
+                styles: [
+                    { key: '--inset', val: '10px' }
+                ],
             },
             {
-                type: 'boolean',
                 param: 'autonekst',
-                name: 'Автопереключение',
-                description: 'При просмотре аниме в плеере Tunime будет происходить автопереключение эпизодов при их окончание просмотра.'
+                type: 'checkbox.tip',
+                title: 'Авто-Переключение',
+                description: `После окончания эпизода автоматически включается следующий.`,
             },
             {
-                type: 'boolean',
-                param: 'saveinfo',
-                name: 'Записывать озвучку',
-                description: 'Записывать озвучку аниме которую оценил в заметки.'
-            },
-            {
-                type: 'boolean',
                 param: 'standart_controls',
-                name: 'Стандартный контроллер',
-                description: 'Стандартное управление Tunime плеера от браузера.'
+                type: 'checkbox.tip',
+                title: 'Стандартный контроллер',
+                description: `Использовать встроенные элементы управления браузера в плеере Tunime.`,
             },
             {
-                type: 'boolean',
                 param: 'autoquality',
-                name: 'Авто качество',
-                description: 'Подгоняет качество под интернет, всегда будет пытаться воспроизводить на выбранном качестве. Рекомендуеться включить.'
+                type: 'checkbox.tip',
+                title: 'Авто-Качество',
+                description: `Выбирает качество на основе скорости интернета. Рекомендуется включить.`,
             },
             {
-                type: 'boolean',
                 param: 'alternative_full',
-                name: 'Альтернативный fulsscreen',
-                description: 'Делает плеер на весь экран не переходя в fullscreen mode и оставляя контроллер Tunime. Больше подходит для IOS девайсов'
+                type: 'checkbox.tip',
+                title: 'Альтернативный полноэкран',
+                description: `Разворачивает плеер без перехода в системный fullscreen. Подходит для iOS.`,
             }
         ]
     },
     {
-        name: 'Загрузчик',
-        parameters: [
+        name: 'Загузчик',
+        params: [
             {
-                type: 'sel-one',
                 param: 'dquality',
-                default: '720',
+                type: 'img.select',
+                title: 'Качество видео',
+                description: 'Выберите качество для загружаемого аниме.',
                 variation: [
-                    { key: '720', val: '720p' },
-                    { key: '480', val: '480p' },
-                    { key: '360', val: '360p' },
+                    {
+                        key: '720',
+                        val: '720p',
+                        img: 'set.quality.720.png'
+                    },
+                    {
+                        key: '480',
+                        val: '480p',
+                        img: 'set.quality.480.png'
+                    },
+                    {
+                        key: '360',
+                        val: '360p',
+                        img: 'set.quality.360.png'
+                    }
                 ],
-                name: 'Качество',
-                description: 'Качествр воспроизведение видео в плеере Tunime.'
+                classes: ['-mode-1'],
+                styles: [
+                    { key: '--inset', val: '10px' }
+                ]
             },
             {
-                type: 'boolean',
                 param: 'dautosave',
-                name: 'Автосохранение',
-                description: 'После загрузки автоматически сохраняет файл.'
+                type: 'checkbox.tip',
+                title: 'Авто-Сохранение',
+                description: `Автоматически сохраняет файл после загрузки.`
             },
-            // {
-            //     type: 'boolean',
-            //     param: '',
-            //     name: 'Открывать загрузки. Оффлайн',
-            //     description: ''
-            // },
             {
-                type: 'button',
-                param: 'cleardb',
-                name: 'Сбросить загрузчик',
-                description: 'Удаляеть полностью базу данных с загрузками',
-                db: "downloader",
-                verif: "Исчезнеть все загруженное аниме в загрузчике"
+                click: () => {
+                    ClearDB('downloader', 'Сбросить загрузчик', 'Удалит все загруженные файлы и сбросит все текущие загрузки.');
+                },
+                type: 'btn',
+                icon: 'trash',
+                title: 'Сбросить загрузчик',
+                description: 'Удаляет все файлы и данные аниме.'
             }
-            // {
-            //     type: 'boolean',
-            //     param: 'dautoset',
-            //     name: 'Автоотметки',
-            //     description: 'Отмечать загруженые аниме через 12 часов + продолжительность аниме.'
-            // }
         ]
+    },
+    {
+        name: "Обновления",
+        params: sUpdate
     }
 ];
 
-export function formatBytes(x) {
-    const units = ['б', 'Кб', 'Мб', 'Гб'];
+ClearParams(['t']);
 
-    let l = 0, n = parseInt(x, 10) || 0;
+TMenu.init();
+THeader.init({
+    events: {
+        onprofil: () => {
+            let location = "login.html";
+            if (OAuth.auth)
+                location = "user.html";
 
-    while (n >= 1024 && ++l) {
-        n = n / 1024;
-    }
+            window.location.href = location;
+        },
+        onbutton: () => {
+            let href = `${sUrl}/users/sign_in`;
 
-    return (n.toFixed(n < 5 && l > 0 ? 2 : 0) + ' ' + units[l]);
-}
-
-//Отображаем параметры
-_ShowParametrs();
-
-Main((e) => {
-    InitMenu();
-    if (e) {
-        GetWhoami();
-        let whoami = User.Storage.Get(User.Storage.keys.whoami);
-        if (whoami) {
-            $('.profile-info > img').attr('src', whoami.image['x160']);
-            $('.profile-name').text(whoami.nickname);
-            $('.profile-link').attr('href', whoami.url + '/edit/account');
-            $('.profile-link').attr('target', '_blank');
-        }
-    }
-
-    function GetWhoami() {
-        Users.whoami(async (response) => {
-            if (response.failed && response.status == 429) {
-                await sleep(1000);
-                return GetWhoami(id);
-            }
-            User.Storage.Set(response, User.Storage.keys.whoami);
-            if ($('.profile-info > img').attr('src') != response.image['x160']) {
-                $('.profile-info > img').attr('src', response.image['x160']);
-            }
-            $('.profile-name').text(response.nickname);
-            $('.profile-link').attr('href', response.url + '/edit/account');
-            $('.profile-link').attr('target', '_blank');
-        }).GET();
-    }
-
-    //Присваевам функцию к кнопке выхода
-    $('.btn-logout').click(function () {
-        import("../utils/auth.logout.js").then(({ logout }) => {
-            logout();
-        })
-    });
-
-    $('.search-filter').on('change keyup paste', function () {
-        if (this.value.length <= 0) {
-            $('label').removeClass('founded');
-            return;
-        }
-
-        const labels = $('label');
-        let erste = undefined;
-
-        for (let i = 0; i < labels.length; i++) {
-            const el = $(labels[i]).find('.title');
-            const title = el.text().trim().toUpperCase();
-            if (title.indexOf(this.value.toUpperCase()) != -1) {
-                $(labels[i]).addClass('founded');
-                if (!erste)
-                    erste = labels[i];
+            if (OAuth.auth && OAuth.user) {
+                href = `${OAuth.user.url}/edit/account`
             } else {
-                $(labels[i]).removeClass('founded');
+                return window.location.href = "login.html";
             }
-        }
 
-        if (erste) {
-            erste.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-                inline: "nearest",
-            });
-        }
-    });
+            window.open(href, '_blank').focus();
+        },
+        ...Search()
+    }
+})
+
+Main(async (e) => {
+    if (e) User();
+
+    Settings(e);
+    Engine.render(setup);
+
+    if (t) {
+        Go(t);
+    }
 });
 
-function _ShowParametrs() {
-    for (let i = 0; i < Parameters.length; i++) {
-        const element = Parameters[i];
-        $('main').append(`<div class="parametr-wrapper"><div class="parameters-title">${element.name}</div><div class="parameters-container">${__loadParametrs(element.parameters)}</div></div>`);
+function Go(param) {
+    if (!param) return;
+
+    const $item = $(`[data-param="${param}"]`);
+
+    if (!$item.length) return;
+
+    const $param = $item.find('[param]');
+
+    $param[0]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest"
+    });
+
+    $param.addClass('-search -current');
+
+    setTimeout(() => {
+        $param.removeClass('-search -current');
+    }, 5000);
+}
+
+function Settings(e) {
+    let href = `${sUrl}/users/sign_in`;
+
+    if (e) {
+        href = `${OAuth.user.url}/edit/account`
     }
 
-    printObject($PARAMETERS);
-    eventBoolean();
-    eventSelectOne();
-    eventSelectMore();
-    eventAppStorage();
-    eventButtons();
-
-    function __loadParametrs(parametrs) {
-        let html = "";
-        for (let i = 0; i < parametrs.length; i++) {
-            const element = parametrs[i];
-
-            switch (element.type) {
-                case "boolean":
-                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}">
-                                <div class="title">${element.name}</div>
-                                <div class="checkbox">
-                                    <input type="checkbox" data-param="${element.param}">
-                                    <div class="switch-slider"></div>
-                                </div>
-                            </label>`;
-                    break;
-                case "sel-one":
-                    const def = element.variation[0];
-                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-param="${element.param}" data-type="select-one" data-val="${def.key}" data-variation='${JSON.stringify(element.variation)}' ${element.event ? `data-event="${element.event}"` : ''} data-default="${element.default}" data-tooltip="${element.description}">
-                                <div class="title">${element.name}</div>
-                                <div class="select">${def.val}</div>
-                            </label>`;
-                    break;
-                case "sel-mehre":
-                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-param="${element.param}" data-type="select-more" data-val="left" data-variation='${JSON.stringify(element.variation)}' data-tooltip="${element.description}">
-                                <div class="title">${element.name}</div>
-                                <div class="select">${element.variation.length}</div>
-                            </label>`
-                    break;
-                case "app-size":
-                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-type="app-size" data-tooltip="${element.description}">
-                                    <div class="title">${element.name}</div>
-                                    <div class="select">0 KB</div>
-                                </label>`;
-                    (async () => {
-                        let s = await Storage.size();
-                        $(`label[data-type="app-size"] > .select`).text(`${formatBytes(s)}`);
-                    })();
-                    break;
-                case "button":
-                    html += `<label class="${i == 0 ? 'border-top' : ''} ${i + 1 == parametrs.length ? 'border-bottom' : ''}" data-param="${element.param}" data-type="button" data-tooltip="${element.description}"><button data-db="${element.db}" data-verif="${element.verif}">${element.name}</button></label>`;
-                default:
-                    break;
-            }
-        }
-        return html;
-    }
+    $('.settup').attr('href', href);
+    $('.settup').attr('target', '_blank');
 }
 
-function eventBoolean() {
-    $('input[type="checkbox"]').change(function () {
-        let param = $(this).data('param');
-        if (param) {
-            setParameter(param, this.checked);
-        }
-    });
+async function User() {
+    let user = OAuth.user;
+    if (!user) user = await OAuth.requests.getWhoami();
+
+    $('.profile > .ava-wrapper').css('--p-ava-img', `url('${user.image['x160']}')`);
+    $('.profile > .profile-content > .username').text(user.nickname);
 }
 
-function eventSelectOne() {
-    $('label[data-type="select-one"]').click(function () {
-        const el = $(this);
-        const title = el.find('.title').text().trim();
-        const param = el.attr('data-param').trim();
-        if (param) {
-            const lval = getParametrByKey($PARAMETERS, param);
-            const def = el.attr('data-default').trim();
-            const parametrs = JSON.parse(el.attr('data-variation'));
-            let event = el.data('event');
-            if (event) {
-                event = eval(event);
-            }
-            ShowSelect(title, param, def, parametrs, lval, event);
-        }
-    });
-}
-
-function eventSelectMore() {
-    $('label[data-type="select-more"]').click(function () {
-        const el = $(this);
-        const title = el.find('.title').text().trim();
-        const param = el.attr('data-param').trim();
-        const description = el.attr('data-tooltip');
-        if (param) {
-            const lval = getParametrByKey($PARAMETERS, param);
-            const parameters = JSON.parse(el.attr('data-variation'));
-            ShowMoreSelect(title, param, parameters, lval, description);
-        }
-    });
-}
-
-function eventAppStorage() {
-    $('label[data-type="app-size"]').click(function () {
-        ShowStorage();
-    });
-}
-
-function eventButtons() {
-    $(`label[data-param="cleardb"] > button`).on('click', (e) => {
-        const el = $(e.currentTarget);
-        const db = el.data("db");
-        const verif = el.data("verif");
-        OnClearDB(db, verif);
-    });
-}
-
-/**
- * Рекурсивно выводит в консоль все ключи и значения объекта, кроме вложенных объектов.
- * 
- * @param {*} obj - объект для вывода.
- * @returns {undefined} - функция ничего не возвращает.
- */
-function printObject(obj) {
-    // проверяем, что переданный аргумент является объектом
-    if (typeof obj !== 'object' || obj === null) {
-        return;
-    }
-
-    // проходим по всем свойствам объекта
-    for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            // проверяем, что значение свойства не является объектом
-            if (typeof obj[key] !== 'object' || obj[key] === null) {
-                if (typeof (obj[key]) == 'boolean') {
-                    $(`input[data-param="${key}"]`).prop("checked", obj[key]);
-                } else if (typeof (obj[key]) == 'string') {
-                    let input = $(`[data-param="${key}"]`);
-                    if (input.data('type') == 'select-one') {
-                        let data = input.data('variation');
-                        for (let index = 0; index < data.length; index++) {
-                            const element = data[index];
-                            if (element.key === obj[key]) {
-                                input.find('.select').text(element.val);
-                                input.attr('data-val', obj[key]);
-                            }
-                        }
-                    };
-                }
-            } else {
-                if (Array.isArray(obj[key])) {
-                    let input = $(`label[data-param="${key}"]`);
-                    if (!input) {
-                        continue;
-                    }
-                    input.find('.select').text(obj[key].length);
-                    continue;
-                }
-                // рекурсивно вызываем функцию для свойства, если оно является объектом
-                printObject(obj[key]);
-            }
-        }
-    }
-}
-
-/**
- * Рекурсивно ищет значение по ключу в объекте, включая вложенные объекты и массивы.
- * @param {*} obj  - Объект, в котором осуществляется поиск.
- * @param {*} lkey - Ключ, значение которого нужно найти.
- * @returns  - Найденное значение или undefined, если значение не найдено.
- */
-function getParametrByKey(obj, lkey) {
-    let response = undefined;
-    for (let key in obj) {
-        if (typeof obj[key] !== 'object' || obj[key] === null) {
-            if (key == lkey) {
-                return obj[key];
-            }
-        } else {
-            if (Array.isArray(obj[key])) {
-                if (key == lkey) {
-                    return obj[key];
-                }
-            }
-            response = getParametrByKey(obj[key], lkey);
-            if (response) {
-                return response;
-            }
-        }
-    }
-    return response;
+function SwitchMenu(value = { key: $PARAMETERS.menu.menustyle }) {
+    TMenu.setStyle(value.key);
 }

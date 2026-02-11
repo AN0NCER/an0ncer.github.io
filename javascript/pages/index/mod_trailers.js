@@ -1,8 +1,8 @@
-import { ShowInfo } from "../../modules/Popup.js";
-import { UserRates } from "../../modules/ShikiAPI.js";
-import { User } from "../../modules/ShikiUSR.js";
+import { UserRates } from "../../modules/api.shiki.js";
+import { OAuth } from "../../core/main.core.js";
 import { Sleep } from "../../modules/functions.js";
 import { AnimeHidePreview, AnimeLoadingPlayer, AnimePausePlayer, AnimePlayPlayer, AnimeShowPreview } from "./mod_trailers_animation.js";
+import { Popup } from "../../modules/tun.popup.js";
 
 const TrailersUrl = 'https://raw.githubusercontent.com/AN0NCER/anime-data/main/data-v2.json';
 
@@ -99,7 +99,7 @@ export function SetUserRate(data) {
 
 function UserControl() {
     $('.btn-list').on('click', (e) => {
-        if (User.authorized) {
+        if (OAuth.auth) {
             const btn = $(e.currentTarget);
             const target = btn.attr('data-id');
             if (_selectedTrailers.findIndex(x => x.target_id == target) != -1) {
@@ -109,7 +109,7 @@ function UserControl() {
                 _lSetUserRate(target);
             }
         } else {
-            ShowInfo("Вы должны авторизоваться!", "auth");
+            new Popup("auth", "Авторизируйтесь!");
         }
     });
 
@@ -120,12 +120,12 @@ function UserControl() {
                     await Sleep(1000);
                     return _lSetUserRate(id);
                 }
-                ShowInfo(`Произошла ошибка! (${res.status})`, "auth");
+                new Popup("auth", `Произошла ошибка! (${res.status})`);
                 return;
             }
             $(`.btn-list[data-id="${id}"]`).addClass('selected');
             _selectedTrailers.push({ target_id: res.target_id, id: res.id, user_id: res.user_id });
-        }).POST({ "user_rate": { "status": "planned", "target_id": id, "target_type": "Anime", "user_id": User.Storage.Get('access_whoami').id } });
+        }).POST({ "user_rate": { "status": "planned", "target_id": id, "target_type": "Anime", "user_id": OAuth.user.id } });
     }
 
     function _lRemUserRate(id) {
@@ -140,7 +140,7 @@ function UserControl() {
                     await Sleep(1000);
                     return _lRemUserRate(id);
                 }
-                ShowInfo(`Произошла ошибка! (${res.status})`, "auth");
+                new Popup("auth", `Произошла ошибка! (${res.status})`);
                 return;
             }
             $(`.btn-list[data-id="${id}"]`).removeClass('selected');
@@ -300,18 +300,18 @@ function LoadYTPlayer(key) {
     }
 }
 
-function YouTubeGetID(url){
+function YouTubeGetID(url) {
     var ID = '';
-    url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-    if(url[2] !== undefined) {
-      ID = url[2].split(/[^0-9a-z_\-]/i);
-      ID = ID[0];
+    url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    if (url[2] !== undefined) {
+        ID = url[2].split(/[^0-9a-z_\-]/i);
+        ID = ID[0];
     }
     else {
-      ID = url;
+        ID = url;
     }
-      return ID;
-  }
+    return ID;
+}
 
 function GenSlide(res, key) {
     const type = res.anime.kind != "movie" ? "Сериал" : "Фильм";
@@ -319,5 +319,5 @@ function GenSlide(res, key) {
 }
 
 function GenErrorSlide() {
-    return `<div class="swiper-slide error-slide"><div class="wrapper-error"><img src="./images/error-trailers.png" alt="Ошибка загрузки трейлеров"><div class="wrapper-content"><div class="content-info"><div class="title-error">Ошибка загрузки<br />трейлеров</div><div class="info-error">помоги нам решить проблему</div></div><div class="content-reload"><div class="btn-reolad"><div class="ticon i-rotate-right"></div></div></div></div></div></div>`
+    return `<div class="swiper-slide error-slide"><div class="wrapper-error"><img src="./images/error-trailers.webp" alt="Ошибка загрузки трейлеров"><div class="wrapper-content"><div class="content-info"><div class="title-error">Ошибка загрузки<br />трейлеров</div><div class="info-error">помоги нам решить проблему</div></div><div class="content-reload"><div class="btn-reolad"><div class="ticon i-rotate-right"></div></div></div></div></div></div>`
 }

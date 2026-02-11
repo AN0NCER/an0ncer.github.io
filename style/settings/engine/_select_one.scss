@@ -1,0 +1,78 @@
+.select-wrapper {
+    padding: 0 20px;
+
+    &>.btn {
+        background: #191C21;
+        overflow: hidden;
+        color: #FFFFFF;
+        display: flex;
+        border-radius: 5px;
+        height: 52px;
+        padding-right: 5px;
+        align-items: center;
+
+        .icon {
+            width: 52px;
+            height: 52px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+
+            .ticon {
+                background-color: #FFFFFF;
+                height: 15px;
+                transition: .3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+            }
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            flex: 1 0 0;
+
+            .title {
+                font-size: 14px;
+            }
+
+            .control {
+                display: flex;
+                align-items: center;
+                font-size: 10px;
+                font-weight: bold;
+
+                .btn {
+                    width: 35px;
+                    height: 35px;
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+
+                    .ticon {
+                        background-color: #FFFFFF;
+                        height: 15px;
+                    }
+                }
+            }
+        }
+    }
+
+    &.-disable {
+        pointer-events: none;
+
+        &>.btn {
+            position: relative;
+
+            &::after {
+                border: 1px solid rgba(98, 98, 98, 0.5);
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: rgba(255, 255, 255, 0.11);
+                border-radius: 5px;
+                backdrop-filter: blur(4px);
+            }
+        }
+    }
+}

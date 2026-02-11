@@ -1,0 +1,91 @@
+.content-selector .content-wrapper {
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+    gap: 0 !important;
+}
+
+.window-selector {
+    .window-content {
+        .content-wrapper {
+            .wrapper {
+                padding-left: var(--sal);
+                padding-right: var(--sar);
+                padding-bottom: max(var(--sab), 10px) !important;
+                gap: 10px;
+                display: flex;
+                flex-direction: column;
+
+                .window-bar {
+                    margin-top: 10px;
+                    margin-left: max(var(--sar), 20px);
+                    margin-right: max(var(--sal), 20px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    .window-title {
+                        font-size: 14px;
+                        color: #FFFFFF;
+                        font-weight: bold;
+                    }
+
+                    .window-close {
+                        width: 40px;
+                        height: 40px;
+                        display: grid;
+                        place-items: center;
+                        cursor: pointer;
+
+                        .ticon {
+                            height: 14px;
+                            background-color: #fff;
+                        }
+                    }
+                }
+
+                .selector-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3px;
+                    padding: 0 10px;
+                }
+
+                .option {
+                    height: 45px;
+                    background: #191C21;
+                    border-radius: 3px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0 10px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    transition: .3s ease-in;
+
+                    .circle {
+                        border-radius: 50%;
+                        display: grid;
+                        width: 12px;
+                        height: 12px;
+                        background: #101318;
+                    }
+
+                    &.-select {
+                        background: #2393F1;
+                        .circle {
+                            background: #FFFFFF;
+                        }
+                    }
+                }
+
+                .tip-text {
+                    padding: 0 20px;
+                    font-size: 14px;
+                    color: rgba(255, 255, 255, .6);
+                }
+            }
+        }
+    }
+}

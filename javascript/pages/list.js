@@ -1,5 +1,5 @@
-import { InitMenu } from "../menu.js";
-import { Main } from "../modules/ShikiUSR.js";
+import { Main } from "../core/main.core.js";
+import { TMenu } from "../core/menu.core.js";
 import { InitCollections } from "./list/mod_collections.js";
 import { InitCore } from "./list/mod_core.js"
 import { InitSearch } from "./list/mod_search.js";
@@ -11,7 +11,7 @@ Main(async (e) => {
     if (!e)
         return window.location.href = "login.html";
 
-    InitMenu();
+    TMenu.init();
     InitCore();
     InitSearch();
     InitUI();

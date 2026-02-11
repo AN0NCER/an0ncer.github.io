@@ -1,5 +1,5 @@
-import { UserRates } from "../../modules/ShikiAPI.js";
-import { User } from "../../modules/ShikiUSR.js";
+import { OAuth } from "../../core/main.core.js";
+import { UserRates } from "../../modules/api.shiki.js";
 import { Sleep } from "../../modules/functions.js";
 import { $ID } from "../watch.js";
 
@@ -72,7 +72,7 @@ const user = {
                 return;
             }
             return Fetch({
-                body: { "user_rate": { "status": status, "target_id": $ID, "target_type": "Anime", "user_id": User.Storage.Get('access_whoami').id } },
+                body: { "user_rate": { "status": status, "target_id": $ID, "target_type": "Anime", "user_id": OAuth.user.id } },
                 event: function (res) {
                     listEvents.call("onupdate", res);
                 }

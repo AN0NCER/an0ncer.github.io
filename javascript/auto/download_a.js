@@ -1,8 +1,7 @@
+import { OAuth } from "../core/main.core.js";
 import { Sleep } from "../modules/functions.js";
 import { ShowInfo } from "../modules/Popup.js";
-import { UserRates } from "../modules/ShikiAPI.js";
-import { User } from "../modules/ShikiUSR.js";
-
+import { UserRates } from "../modules/api.shiki.js";
 //TODO: Файл не используеться перебрать и переделать для новых загрузок
 
 const SYNC_ENABLE = $PARAMETERS.anime.syncdata;
@@ -16,7 +15,7 @@ const AUTO_ENABLE = $PARAMETERS.download.dautoset;
     */
     const data = JSON.parse(localStorage.getItem(key)) || [];
 
-    if (data.length === 0 || !User.authorized || !AUTO_ENABLE)
+    if (data.length === 0 || !OAuth.auth || !AUTO_ENABLE)
         return;
 
     let set = [];

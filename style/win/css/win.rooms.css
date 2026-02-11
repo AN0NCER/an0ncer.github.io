@@ -1,0 +1,324 @@
+.content-rooms .content-wrapper {
+  padding-top: 0px !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-bottom: 0px !important;
+  gap: 0 !important;
+}
+
+.window-rooms {
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+  --sar: env(safe-area-inset-right);
+  --sat: env(safe-area-inset-top);
+}
+.window-rooms .window-content {
+  --bot: max(calc(var(--sab) - 10px), 10px);
+  --space: calc(62px + var(--bot));
+}
+.window-rooms .window-content .content-wrapper {
+  max-height: 100dvh;
+  overflow: auto;
+  scrollbar-width: none;
+}
+.window-rooms .window-content .content-wrapper .wrapper {
+  max-width: 940px;
+  padding-bottom: var(--space);
+}
+.window-rooms .window-content .content-wrapper .wrapper .window-bar {
+  margin-top: 10px;
+  margin-left: max(env(safe-area-inset-left), 20px);
+  margin-right: max(env(safe-area-inset-right), 20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.window-rooms .window-content .content-wrapper .wrapper .window-bar .window-title {
+  font-size: 14px;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+.window-rooms .window-content .content-wrapper .wrapper .window-bar .window-close {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.window-rooms .window-content .content-wrapper .wrapper .window-bar .window-close .ticon {
+  height: 14px;
+  background-color: #fff;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search {
+  position: fixed;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  margin-bottom: max(var(--sab) - 10px, 10px);
+  width: 100%;
+  max-width: 390px;
+  min-width: 40px;
+  padding: 5px;
+  border-radius: 30px;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  position: relative;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn.btn-new {
+  background: #2393F1;
+  border-radius: 50%;
+  border: 0.4px solid rgba(255, 255, 255, 0.4);
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn.btn-new .ticon {
+  height: 16px;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn .ticon {
+  height: 16px;
+  background-color: #D6D6D6;
+  transition: 0.3s ease-in-out;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn .ticon.i-circle-notch {
+  animation: 1s linear infinite rotate;
+  opacity: 0;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn .ticon.i-xmark, .window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn .ticon.i-circle-notch {
+  position: absolute;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn .ticon.i-xmark {
+  height: 18px;
+  opacity: 0;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn.-load .ticon {
+  background-color: #2393F1;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn.-load .ticon.i-circle-notch {
+  opacity: 1;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn.-load .ticon.i-ios-search {
+  opacity: 0;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn.-rem .ticon.i-circle-notch {
+  opacity: 0;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn.-rem .ticon.i-ios-search {
+  opacity: 0;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper .btn.-rem .ticon.i-xmark {
+  opacity: 1;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper input {
+  height: 40px;
+  background: #191C21;
+  border: 0.2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 0 3px;
+  color: #FFFFFF;
+  outline: none;
+  transition: 0.3s ease-in-out;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper input::-moz-placeholder {
+  -moz-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper input::placeholder {
+  transition: 0.3s ease-in-out;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper input:focus {
+  border-color: #2393F1;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper input:focus::-moz-placeholder {
+  opacity: 0.1;
+}
+.window-rooms .window-content .content-wrapper .rooms-list-search .rooms-search-wrapper input:focus::placeholder {
+  opacity: 0.1;
+}
+
+.i-plus {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/></svg>');
+          mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/></svg>');
+}
+
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper {
+  margin-top: 10px;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .grid-wrapper-list {
+  padding-left: max(var(--sal), 10px);
+  padding-right: max(var(--sar), 10px);
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .grid-wrapper-list .rooms-grid-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(370px, 435px));
+  gap: 10px;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .empty-card {
+  grid-column: 1/3;
+  padding: 11px 0;
+  width: 218px;
+  color: #FFFFFF;
+  font-family: "Manrope", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+  margin: 0 auto;
+  min-height: 200px;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .empty-card .title {
+  font-size: 15px;
+  font-weight: bold;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .empty-card .add {
+  font-size: 12px;
+  text-align: center;
+  opacity: 0.5;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card {
+  display: flex;
+  flex-direction: column;
+  background: #191C21;
+  border-radius: 10px;
+  border: 0.4px solid rgba(255, 255, 255, 0.2);
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-owner {
+  display: flex;
+  justify-content: space-between;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-owner .owner-wrapper {
+  display: flex;
+  gap: 10px;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-owner .owner-wrapper .owner-avatar {
+  --img: url("/images/ava.jpeg");
+  width: 50px;
+  height: 50px;
+  background: var(--img);
+  background-size: cover;
+  border-radius: 5px;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-owner .owner-wrapper .owner-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-owner .owner-wrapper .owner-text-wrapper .owner-type {
+  font-size: 13px;
+  color: #4A4A4A;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-owner .owner-wrapper .owner-text-wrapper .owner-nickname {
+  margin-top: -3px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-owner .room-type {
+  font-size: 13px;
+  color: #3689E8;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: right;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-stats-wrapper {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1.2fr auto 0.8fr auto 1.4fr;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-stats-wrapper .room-stats {
+  min-width: 0;
+  display: flex;
+  gap: 3px;
+  flex-direction: column;
+  text-wrap: nowrap;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-stats-wrapper .room-stats .stats-name {
+  font-size: 13px;
+  color: #4A4A4A;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-stats-wrapper .room-stats .stats-value {
+  font-weight: bold;
+  font-size: 16px;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-stats-wrapper .vline {
+  display: flex;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.4);
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-stats-wrapper .room-connect-btn {
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #2393F1;
+  color: #FFFFFF;
+  padding: 13px 0;
+  border-radius: 7px;
+  font-weight: bold;
+  gap: 5px;
+  cursor: pointer;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-stats-wrapper .room-connect-btn svg {
+  height: 20px;
+  fill: #FFFFFF;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-small-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 0.4px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 20px;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-small-info .left-wrapper {
+  display: flex;
+  gap: 10px;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-small-info .small-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-small-info .small-block svg {
+  height: 20px;
+  fill: #67696D;
+}
+.content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-small-info .small-block span.value {
+  color: #4A4A4A;
+  font-size: 13px;
+}
+.content-rooms .content-wrapper .rooms-list-search .btn.btn-reload .timer {
+  display: none;
+  font-size: 12px;
+}
+.content-rooms .content-wrapper .rooms-list-search .btn.btn-reload.-timer .ticon {
+  display: none;
+}
+.content-rooms .content-wrapper .rooms-list-search .btn.btn-reload.-timer .timer {
+  display: block;
+}

@@ -9,8 +9,8 @@
     <title>Tunime - Пользователь</title>
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
-    <link rel="stylesheet" href="/style/css/min/swiper-bundle.min.css">
     <link rel="stylesheet" href="/style/css/main.css" />
+    <link rel="stylesheet" href="/style/menu/css/menu.core.css">
     <link rel="stylesheet" href="/style/css/user.css" />
     <link rel="manifest" href="/images/icons/manifest-o.json">
     <link rel="stylesheet" href="/style/css/ticons.css" />
@@ -18,7 +18,7 @@
     <script src="/javascript/services/dispatcher.js" type="module"></script>
 </head>
 
-<body class="unselectable">
+<body class="unselectable scroll-none" data-page="user" angle="0">
     <!-- #region Loading Screen-->
     <span class="page-loading"
         style="position: fixed;top: 0;left: 0;width: 100%;height: 100dvh;background: #101318;transition: 0.6s ease-in-out;opacity: 1;z-index: 79;">
@@ -29,235 +29,329 @@
         </div>
     </span>
     <!-- #endregion -->
-    <div class="content-wrapper">
-        <header>
-            <div class="user-wrapper">
-                <div class="user-icon">
-                    <img src="/images/ava.jpeg" alt="avatar">
-                    <img class="blur" src="/images/ava.jpeg" alt="avatar">
-                </div>
-                <div class="user-data">
-                    <div class="user-nickname-online">
-                        <div class="user-nickname">
-                            <h1>Tunime</h1>
-                        </div>
-                        <div class="user-online">
-                            <div class="point offline"></div>
-                        </div>
-                    </div>
-                    <div class="user-level-data">
-                        <div class="user-level">
-                            <span class="user-level-wrapper">
-                                <svg width="31" height="35" viewBox="0 0 31 35" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M17.25 32.2576L27.4054 26.3943C28.4883 25.7691 29.1554 24.6137 29.1554 23.3632V11.6368C29.1554 10.3863 28.4883 9.23088 27.4054 8.60566L17.25 2.74241C16.1671 2.1172 14.8329 2.1172 13.75 2.74241L3.59456 8.60566C2.51165 9.23088 1.84456 10.3863 1.84456 11.6368V23.3632C1.84456 24.6137 2.51165 25.7691 3.59456 26.3943L13.75 32.2576C14.8329 32.8828 16.1671 32.8828 17.25 32.2576Z"
-                                        stroke="url(#paint0_linear_655_88)" stroke-width="3" />
-                                    <defs>
-                                        <linearGradient id="paint0_linear_655_88" x1="-2" y1="17.5" x2="33" y2="17.5"
-                                            gradientUnits="userSpaceOnUse">
-                                            <stop stop-color="#2393F1" />
-                                            <stop offset="1" stop-color="#1B4C75" />
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-
-                                <span class="level-text">0</span>
-                            </span>
-                        </div>
-                        <div class="level-details">
-                            <div class="level-promotion">
-                                <span class="current-promotion">0%</span>
-                                <span class="next-level"><span class="next-level-data">1</span> Уровень</span>
-                            </div>
-                            <div class="level-progress-bar">
-                                <div class="progress"></div>
-                            </div>
-                            <div class="level-content">Добро пожаловать!</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-
-    </div>
-    <div class="content-full-wrapper">
-        <div class="content-wrapper">
-            <div class="account-controls">
-                <a class="hide btn" id="edit-user" href="#" target="_blank">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path
-                            d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
-                    </svg>
-                </a>
-                <div class="list-button hide">
-                    <div class="btn full" id="add-user">
-                        <span class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="plus">
-                                <path
-                                    d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
-                            </svg>
-                        </span>
-                    </div>
-                    <span class="loader">
-                        <div class="loader-anim"></div>
-                    </span>
-                    <div class="btn full" id="remove-user">
-                        <span class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="minus">
-                                <path
-                                    d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM472 200H616c13.3 0 24 10.7 24 24s-10.7 24-24 24H472c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-                            </svg>
-                        </span>
-                    </div>
-                </div>
-                <div class="btn" style="opacity: 0.5;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-                        <path
-                            d="M208 352c114.9 0 208-78.8 208-176S322.9 0 208 0S0 78.8 0 176c0 38.6 14.7 74.3 39.6 103.4c-3.5 9.4-8.7 17.7-14.2 24.7c-4.8 6.2-9.7 11-13.3 14.3c-1.8 1.6-3.3 2.9-4.3 3.7c-.5 .4-.9 .7-1.1 .8l-.2 .2 0 0 0 0C1 327.2-1.4 334.4 .8 340.9S9.1 352 16 352c21.8 0 43.8-5.6 62.1-12.5c9.2-3.5 17.8-7.4 25.3-11.4C134.1 343.3 169.8 352 208 352zM448 176c0 112.3-99.1 196.9-216.5 207C255.8 457.4 336.4 512 432 512c38.2 0 73.9-8.7 104.7-23.9c7.5 4 16 7.9 25.2 11.4c18.3 6.9 40.3 12.5 62.1 12.5c6.9 0 13.1-4.5 15.2-11.1c2.1-6.6-.2-13.8-5.8-17.9l0 0 0 0-.2-.2c-.2-.2-.6-.4-1.1-.8c-1-.8-2.5-2-4.3-3.7c-3.6-3.3-8.5-8.1-13.3-14.3c-5.5-7-10.7-15.4-14.2-24.7c24.9-29 39.6-64.7 39.6-103.4c0-92.8-84.9-168.9-192.6-175.5c.4 5.1 .6 10.3 .6 15.5z" />
-                    </svg>
-                </div>
-                <a href="settings.html" class="btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path
-                            d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z" />
-                    </svg>
-                </a>
-            </div>
-            <div class="btn" id="share">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-                    <path
-                        d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z" />
-                </svg>
+    <header>
+        <div class="header-image" style="--bg: url('/images/page.user/head.profile.jpg')">
+            <div class="btn edit-banner">
+                <div class="ticon i-pencil"></div>
+                <div class="ticon i-circle-notch"></div>
             </div>
         </div>
-    </div>
-    <div class="content-wrapper">
-        <main>
-            <div class="block-title">
-                Статистика
-            </div>
-            <div class="block-user-stats scroll-none">
-                <div class="list">
-                    <div class="status-data">
-                        <span class="count" id="counts"><span class="val">0</span></span>
-                        <span class="title">Общее количество</span>
+        <div class="header-wrapper">
+            <div class="profile-wrapper">
+                <div class="profile-avatar-wrapper">
+                    <div class="profile-avatar">
+                        <img src="/images/ava.jpeg" alt="">
                     </div>
-                    <div class="status-data">
-                        <span class="count" id="watching"><span class="val">0</span><span class="prcnt">0%</span></span>
-                        <span class="title">Смотрю</span>
-                    </div>
-                    <div class="status-data">
-                        <span class="count" id="planned"><span class="val">0</span><span class="prcnt">0%</span></span>
-                        <span class="title">Запланировано</span>
-                    </div>
-                    <div class="status-data">
-                        <span class="count" id="completed"><span class="val">0</span><span
-                                class="prcnt">0%</span></span>
-                        <span class="title">Просмотренно</span>
-                    </div>
-                    <div class="status-data">
-                        <span class="count" id="dropped"><span class="val">0</span><span class="prcnt">0%</span></span>
-                        <span class="title">Брошено</span>
+                </div>
+                <div class="profile-controls-wrapper">
+                    <div class="profile-tag-wrapper"></div>
+                    <div class="profile-info-wrapper">
+                        <div class="profile-text-wrapper">
+                            <div class="profile-nickname">Пользователь</div>
+                            <div class="profile-description">Shikimori</div>
+                        </div>
+                        <div class="profile-controls">
+                            <div class="quick-panel">
+                                <div class="btn" id="profile-settings">
+                                    <div class="ticon i-gear"></div>
+                                    <div class="ticon i-user-plus -usr"></div>
+                                    <div class="ticon i-user-minus -usr"></div>
+                                    <div class="ticon i-circle-notch"></div>
+                                </div>
+                                <div class="btn" id="profile-share">
+                                    <div class="ticon i-share"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="block-title hide" id="favorites">
-                Избранное
-            </div>
-            <div class="wrapper-favorites hide scroll-none" id="favorites">
-                <div class="list"></div>
-            </div>
-            <div class="block-title hide" id="franchises">
-                Достижения
-            </div>
-            <div class="achivements-finished-wrapper hide" id="franchises">
-                <div class="swiper">
-                    <div class="swiper-wrapper achivements-swiper">
+            <div class="profile-level">
+                <div class="profile-current-level-wrapper">
+                    <svg width="42" height="42" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_3338_8870)">
+                            <path
+                                d="M23.5 46.8242C24.4282 47.3601 25.5718 47.3601 26.5 46.8242L43.1504 37.2109C44.0786 36.675 44.6504 35.6851 44.6504 34.6133V15.3867C44.6504 14.3149 44.0786 13.325 43.1504 12.7891L26.5 3.17578C25.5718 2.63988 24.4282 2.63988 23.5 3.17578L6.84961 12.7891C5.92142 13.325 5.34962 14.3149 5.34961 15.3867V34.6133C5.34962 35.6851 5.92142 36.675 6.84961 37.2109L23.5 46.8242Z"
+                                stroke="url(#paint0_linear_3338_8870)" stroke-width="4" />
+                        </g>
+                        <defs>
+                            <linearGradient id="paint0_linear_3338_8870" x1="0" y1="25" x2="50" y2="25"
+                                gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#2393F1" />
+                                <stop offset="1" stop-color="#1B4C75" />
+                            </linearGradient>
+                            <clipPath id="clip0_3338_8870">
+                                <rect width="50" height="50" fill="white" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                    <span class="profile-current-level" id="current-level">1</span>
+                </div>
+                <div class="profile-level-progress-wrapper">
+                    <div class="level-promotion" id="metadata-level">
+                        Добро пожаловать!
                     </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-                <img src="" class="bg bg-help">
-                <img src="" class="bg bg-active">
-            </div>
-            <div class="block-title hide" id="unfinished">
-                Неполученные достижения
-            </div>
-            <div class="wrapper-achivements-unfinished hide scroll-none" id="unfinished">
-                <div class="list">
+                    <div class="level-progress-bar">
+                        <div class="progress" id="level-progress"></div>
+                    </div>
+                    <div class="level-next-wrapper">
+                        <span class="current-progress" id="level-progress-num">0%</span>
+                        <div class="next-level" id="next-level">2 Уровень</div>
+                    </div>
                 </div>
             </div>
-            <div class="block-title hide" id="genres">
-                Жанры
-            </div>
-            <div class="wrapper-genres hide scroll-none" id="genres">
-                <div class="list">
+        </div>
+    </header>
+    <main role="main">
+        <div class="user-stats-wrapper scroll-none">
+            <div class="user-stats-content">
+                <div class="main-stats-wrapper">
+                    <div class="stats-card-wrapper -main">
+                        <div class="stats-card">
+                            <span class="text">Всего</span>
+                            <span class="value" id="stat-all">0</span>
+                            <span class="text">Аниме</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-card-wrapper">
+                    <div class="stats-card">
+                        <span class="text">Смотрит</span>
+                        <span class="value" id="stat-watch">0</span>
+                        <span class="text" id="stat-watch-pr">0%</span>
+                    </div>
+                </div>
+
+                <div class="stats-card-wrapper">
+                    <div class="stats-card">
+                        <span class="text">В Планах</span>
+                        <span class="value" id="stat-planned">0</span>
+                        <span class="text" id="stat-planned-pr">0%</span>
+                    </div>
+                </div>
+
+                <div class="stats-card-wrapper">
+                    <div class="stats-card">
+                        <span class="text">Смотрел</span>
+                        <span class="value" id="stat-complete">0</span>
+                        <span class="text" id="stat-complete-pr">0%</span>
+                    </div>
+                </div>
+
+                <div class="stats-card-wrapper">
+                    <div class="stats-card">
+                        <span class="text">Бросил</span>
+                        <span class="value" id="stat-dropped">0</span>
+                        <span class="text" id="stat-dropped-pr">0%</span>
+                    </div>
                 </div>
             </div>
-            <div class="block-title hide" id="friends">
-                Друзья
-            </div>
-            <div class="wrapper-friends hide" id="friends">
-                <div class="list scroll-none">
+        </div>
+        <div class="user-favorites-anime-wrapper -hide">
+            <div class="user-favorites-content-wrapper">
+                <div class="title">Избранное</div>
+                <div class="user-favorites-list scroll-none">
+                    <div class="anime-list-favorites"></div>
+                    <div class="sentinel-wrapper">
+                        <span class="sentinel"></span>
+                    </div>
                 </div>
             </div>
-            <div class="block-title hide" id="history">
-                История
+        </div>
+        <div class="user-characters-favorites-wrapper scroll-none -hide">
+            <div class="user-characters-content-wrapper">
+                <div class="character-row-1"></div>
+                <div class="character-row-2"></div>
             </div>
-            <div class="user-history hide" id="history">
+        </div>
+        <div class="user-achivements-franchises-wrapper -hide">
+            <div class="user-achivements-content-wrapper -hide-completed -hide-unfinished">
+                <div class="title">Достижения</div>
+                <div class="franchises-completed">
+                    <div class="embla__viewport">
+                        <div class="embla__container"></div>
+                    </div>
+
+                    <div class="embla__fraction"></div>
+                </div>
+                <div class="title">Неполученные достижения</div>
+                <div class="franschises-unfinished scroll-none">
+                    <div class="list"></div>
+                </div>
+            </div>
+        </div>
+        <div class="user-friends-wrapper -hide">
+            <div class="user-friends-conent-wrapper">
+                <div class="title">Друзья</div>
+                <div class="friends-list-wrapper">
+                    <div class="group-list"></div>
+                </div>
+            </div>
+        </div>
+        <div class="user-history-wrapper -hide">
+            <div class="title">История</div>
+            <div class="user-history" id="history">
                 <div class="block-history" id="scrollHistory"></div>
                 <div class="sentinel"></div>
             </div>
-        </main>
-
-    </div>
+        </div>
+    </main>
     <footer></footer>
 
-    <!-- #region Windows-->
+    <!-- #region Anime Window-->
     <span class="windowed window-anime hide">
         <span class="hide-window"></span>
         <span class="window-content content-anime hide">
-            <div class="content-wrapper">
+            <div class="content-wrapper scroll-none">
                 <div class="wrapper">
                     <div class="window-bar bar-anime">
-                        <div class="hide-elements state-0">
-                            <div class="btn-state-1 btn">
-                                <div class="icon-wrapper">
-                                    <div class="ticon i-eye-slash"></div>
-                                </div>
-                                Просмотренные
-                            </div>
-                            <div class="btn-state-0 btn">
-                                <div class="icon-wrapper">
-                                    <div class="ticon i-eye"></div>
-                                </div>
-                                Просмотренные
-                            </div>
-                        </div>
+                        <div class="window-title">Франшиза</div>
                         <div class="window-close">
                             <div class="ticon i-xmark"></div>
                         </div>
                     </div>
-
-                    <div class="list-wrapper">
-                        <div class="anime-list scroll-none">
-                        </div>
-                        <div class="sentinel"></div>
+                    <div class="anime-list-wrapper">
+                        <div class="grid-anime-list-wrapper"></div>
                     </div>
+                    <div class="anime-sentinel"></div>
                 </div>
+                <span class="anime-list-search">
+                    <div class="anime-search-wrapper">
+                        <div class="btn btn-visible">
+                            <div class="ticon i-eye"></div>
+                            <div class="ticon i-eye-slash"></div>
+                        </div>
+                        <input type="text" placeholder="Поиск по списку">
+                        <div class="btn btn-filter">
+                            <div class="ticon i-circle-notch"></div>
+                            <div class="ticon i-ios-search"></div>
+                            <div class="ticon i-xmark"></div>
+                        </div>
+                    </div>
+                </span>
             </div>
         </span>
     </span>
     <!-- #endregion -->
 
-    <!-- #region Scripts-->
+    <!-- #region Friends Window -->
+    <span class="windowed window-friends hide">
+        <span class="hide-window"></span>
+        <span class="window-content content-friends hide">
+            <span class="content-wrapper scroll-none">
+                <div class="wrapper">
+                    <div class="window-bar friends-bar">
+                        <div class="window-title">Друзья</div>
+                        <div class="window-close">
+                            <div class="ticon i-xmark"></div>
+                        </div>
+                    </div>
+                    <div class="friends-wrapper">
+                        <div class="friends-list">
+                        </div>
+                        <div class="friends-result-wrapper -hide">
+                            <div class="friends-results-header">
+                                <div class="results-title">Поиск по сайту</div>
+                                <div class="results-close">
+                                    <div class="ticon i-xmark"></div>
+                                </div>
+                            </div>
+                            <div class="friends-results-list">
+
+                            </div>
+                        </div>
+                        <div class="friends-sentinel"></div>
+                    </div>
+                </div>
+            </span>
+            <span class="friends-search">
+                <div class="friends-search-wrapper">
+                    <input type="text" placeholder="Найти человека">
+                    <div class="btn">
+                        <div class="ticon i-circle-notch"></div>
+                        <div class="ticon i-ios-search"></div>
+                        <div class="ticon i-xmark"></div>
+                    </div>
+                </div>
+            </span>
+        </span>
+    </span>
+    <div id="app-menu-host"></div>
+    <template id="tpl-menu-default">
+        <div class="app-menu-context -hide">
+            <div class="context-close-area"></div>
+            <div class="context-wrapper">
+                <div class="context-controls -hide"></div>
+            </div>
+        </div>
+        <div class="app-menu unselectable">
+            <div class="menu-wrapper">
+                <div class="menu-controls">
+                    <div class="menu-btn" data-id="index">
+                        <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                            <use href="#i-home"></use>
+                        </svg>
+                    </div>
+                    <div class="menu-btn" data-id="search">
+                        <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                            <use href="#i-search"></use>
+                        </svg>
+                    </div>
+                    <div class="menu-btn primary" data-id="play">
+                        <svg class="menu-icon" viewBox="0 0 640 640" aria-hidden="true">
+                            <use href="#i-play"></use>
+                        </svg>
+                    </div>
+                    <div class="menu-btn" data-id="list">
+                        <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                            <use href="#i-list"></use>
+                        </svg>
+                    </div>
+                    <div class="menu-btn" data-id="user">
+                        <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                            <use href="#i-user"></use>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <svg xmlns="http://www.w3.org/2000/svg" style="width:0;height:0;overflow:hidden;">
+        <defs>
+            <linearGradient id="menu-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#51B1FE" />
+                <stop offset="100%" stop-color="#2774DB" />
+            </linearGradient>
+        </defs>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="i-home" viewBox="0 0 512 512">
+            <path
+                d="M302.8,54.3l133,115c21.5,18.6,33.9,37,33.9,65.4v187.2c0,29.4-23.9,53.3-53.3,53.3h-75.2 c-23.1,0-41.8-18.7-41.8-41.8v-73.5c0-23.9-19.4-43.3-43.3-43.3h0h0h0c-23.9,0-43.3,19.4-43.3,43.3v73.5 c0,23.1-18.7,41.8-41.8,41.8H95.6c-29.4,0-53.3-23.9-53.3-53.3V234.6c0-28.4,12.4-46.8,33.9-65.4l133-115 C236.1,31.1,275.9,31.1,302.8,54.3z" />
+        </symbol>
+        <symbol id="i-search" viewBox="0 0 512 512">
+            <path
+                d="M213.333 42.6667C168.07 42.6667 124.66 60.6476 92.6539 92.6538C60.6477 124.66 42.6667 168.07 42.6667 213.333C42.6667 258.597 60.6477 302.007 92.6539 334.013C124.66 366.019 168.07 384 213.333 384C258.597 384 302.007 366.019 334.013 334.013C366.019 302.007 384 258.597 384 213.333C384 168.07 366.019 124.66 334.013 92.6538C302.007 60.6476 258.597 42.6667 213.333 42.6667Z M463.083 463.083C459.082 467.082 453.657 469.329 448 469.329C442.343 469.329 436.918 467.082 432.917 463.083L358.251 388.416C354.365 384.392 352.214 379.004 352.263 373.41C352.312 367.817 354.555 362.466 358.511 358.511C362.466 354.555 367.817 352.312 373.41 352.263C379.004 352.214 384.393 354.365 388.416 358.251L463.083 432.917C467.082 436.918 469.329 442.343 469.329 448C469.329 453.657 467.082 459.082 463.083 463.083Z" />
+        </symbol>
+        <symbol id="i-play" viewBox="0 0 640 640">
+            <path
+                d="M187.2 100.9C174.8 94.1 159.8 94.4 147.6 101.6C135.4 108.8 128 121.9 128 136L128 504C128 518.1 135.5 531.2 147.6 538.4C159.7 545.6 174.8 545.9 187.2 539.1L523.2 355.1C536 348.1 544 334.6 544 320C544 305.4 536 291.9 523.2 284.9L187.2 100.9z" />
+        </symbol>
+        <symbol id="i-list" viewBox="0 0 512 512">
+            <path
+                d="M298.667 42.6667C326.957 42.6667 354.088 53.9047 374.091 73.9086C394.095 93.9125 405.333 121.044 405.333 149.333V448C405.334 451.862 404.286 455.652 402.301 458.966C400.317 462.279 397.47 464.991 394.064 466.813C390.659 468.635 386.823 469.499 382.965 469.311C379.107 469.124 375.373 467.893 372.16 465.749L256 388.309L139.861 465.749C136.817 467.787 133.299 469.006 129.647 469.289C125.995 469.573 122.331 468.911 119.009 467.368C115.686 465.825 112.817 463.452 110.678 460.478C108.539 457.504 107.202 454.03 106.795 450.389L106.667 448V149.333C106.667 121.044 117.905 93.9125 137.909 73.9086C157.913 53.9047 185.044 42.6667 213.333 42.6667H298.667Z" />
+        </symbol>
+        <symbol id="i-user" viewBox="0 0 512 512">
+            <path
+                d="M256 85.5C233.368 85.5 211.663 94.508 195.66 110.542C179.657 126.577 170.667 148.324 170.667 171C170.667 193.676 179.657 215.423 195.66 231.458C211.663 247.492 233.368 256.5 256 256.5C278.632 256.5 300.337 247.492 316.34 231.458C332.343 215.423 341.333 193.676 341.333 171C341.333 148.324 332.343 126.577 316.34 110.542C300.337 94.508 278.632 85.5 256 85.5ZM213.333 277.875C190.702 277.875 168.997 286.883 152.994 302.917C136.99 318.952 128 340.699 128 363.375V384.75C128 396.088 132.495 406.962 140.497 414.979C148.498 422.996 159.351 427.5 170.667 427.5H341.333C352.649 427.5 363.502 422.996 371.503 414.979C379.505 406.962 384 396.088 384 384.75V363.375C384 340.699 375.01 318.952 359.006 302.917C343.003 286.883 321.298 277.875 298.667 277.875H213.333Z" />
+        </symbol>
+    </svg>
+    <!-- #endregion -->
     <script src="/javascript/parametrs.js"></script>
     <script src="/javascript/library/jsyaml.js"></script>
-    <script src="/javascript/library/anime.min.js"></script>
-    <script src="/javascript/library/swiper-bundle.min.js"></script>
+    <script src="/javascript/core/pwa.core.js" type="module"></script>
     <script src="/javascript/pages/user.js" type="module"></script>
-    <!-- #endregion -->
 </body>
 
 </html>

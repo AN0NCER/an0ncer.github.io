@@ -1,15 +1,14 @@
-import { InitMenu } from "../menu.js";
+import { TMenu } from "../core/menu.core.js";
 import { ShowUser } from "./index/mod_account.js";
-import { UserRates } from "../modules/ShikiAPI.js";
+import { UserRates } from "../modules/api.shiki.js";
 import { GitHubRel } from "./index/mod_github.js";
-import { Main, User } from "../modules/ShikiUSR.js";
+import { Main, OAuth } from "../core/main.core.js";
 import { SetUserRate } from "./index/mod_trailers.js";
 import { GetHistoryWatch } from "./index/mod_history_watch.js";
 import { ScrollElementWithMouse, Sleep } from "../modules/functions.js";
 import { AnimeLoaded, LoadAnimeShikimori, LoadUpdatetAnime } from "./index/mod_animes.js";
-import { ShowNotifyWindow } from "./index/mod_window.js";
 
-InitMenu();
+TMenu.init();
 
 Main((e) => {
     ShowUser(e);
@@ -30,10 +29,10 @@ ScrollElementWithMouse('.section-update');
 
 function LoadUserRate() {
     AnimeLoaded(() => {
-        if (!User.authorized) {
+        if (!OAuth.auth) {
             return;
         }
-        let user_id = User.Storage.Get(User.Storage.keys.whoami).id;
+        let user_id = OAuth.user.id;
         UserRates.list({ user_id }, async (response) => {
             if (response.failed) {
                 if (response.status == 429) {
@@ -60,29 +59,6 @@ function On() {
         target.addClass('selected');
         const genres = target.data('id');
         LoadAnimeShikimori({ genre: genres });
-    });
-
-    //Событие Enter unput search
-    $('.search > input').on('keypress', function (e) {
-        if (e.which == 13) {
-            let value = this.value;
-            if (value.length <= 0) {
-                return;
-            }
-            window.location.href = '/search.html?q=' + value;
-        }
-    });
-
-    $(document).on('keydown', (e) => {
-        if (e.originalEvent.key === "/") {
-            e.preventDefault();
-            $('.desktop > #search-input').focus();
-        }
-    });
-
-    //Событие нажатие на уведомления
-    $('.notification').on('click', () => {
-        ShowNotifyWindow();
     });
 
     $('.downloads-link > .wrapper').on('click', () => {

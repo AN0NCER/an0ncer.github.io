@@ -1,6 +1,6 @@
 import { ACard } from "../../modules/AnimeCard.js";
-import { Kodik } from "../../modules/Kodik.js";
-import { GraphQl } from "../../modules/ShikiAPI.js";
+import { Kodik } from "../../modules/api.kodik.js";
+import { GraphQl } from "../../modules/api.shiki.js";
 import { Sleep } from "../../modules/functions.js";
 
 const _limitAnime = 8;

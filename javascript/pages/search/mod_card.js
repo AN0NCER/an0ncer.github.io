@@ -1,10 +1,10 @@
+import { OAuth } from "../../core/main.core.js";
 import { Sleep } from "../../modules/functions.js";
-import { UserRates } from "../../modules/ShikiAPI.js";
-import { User } from "../../modules/ShikiUSR.js";
+import { UserRates } from "../../modules/api.shiki.js";
 
 class URControls {
     constructor() {
-        this.userId = User.Storage.Get('access_whoami').id;
+        this.userId = OAuth.user.id;
     }
 
     add(id) {

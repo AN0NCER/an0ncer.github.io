@@ -1,4 +1,4 @@
-import { Kodik } from "../../modules/Kodik.js";
+import { Kodik } from "../../modules/api.kodik.js";
 import { $ID, Player } from "../watch.js";
 
 const ru = {

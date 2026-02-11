@@ -3,9 +3,9 @@ const indexdb = ["tun-cache"];
 
 export async function login(code) {
     const { TDatabase } = await import("../modules/TDatabase.js");
-    const { User } = await import("../modules/ShikiUSR.js");
+    const { OAuth } = await import("../core/main.core.js");
 
-    User.Storage.Clear();
+    OAuth.events.clear();
     local.map(x => localStorage.removeItem(x));
 
     for (let i = 0; i < indexdb.length; i++) {
@@ -14,8 +14,13 @@ export async function login(code) {
     }
 
     let application_event = localStorage.getItem('application_event');
-    await User.Authorizate(code);
+    await OAuth.requests.authorizate(code);
     localStorage.removeItem('application_event');
+
+    if ($PARAMETERS.tunsync) {
+        const { Tunime } = await import("../modules/api.tunime.js");
+        await Tunime.help.login();
+    }
 
     if (application_event == "autologin") {
         //После авторизации переходим на главную страницу

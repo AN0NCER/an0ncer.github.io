@@ -1,12 +1,13 @@
 import { ScrollElementWithMouse } from "../../modules/functions.js";
 import { ShowInfo } from "../../modules/Popup.js";
-import { Tunime } from "../../modules/TunimeApi.js";
+import { Snapshot, Tunime } from "../../modules/api.tunime.js";
 import { $ID, Player } from "../watch.js";
 import { LTransition } from "./mod_transition.js";
 import { IScreenshots } from "./mod.resource.js";
 import { ShowTranslationWindow } from "./mod_translation.js";
 import { UserRate } from "./mod_urate.js";
 import { ShowScoreWindow } from "./mod_wscore.js";
+import { Popup } from "../../modules/tun.popup.js";
 
 const anime_status = [
     { id: 0, name: "Посмотрю", sh: ["planned"] },
@@ -31,7 +32,13 @@ export function Functional() {
         { dom: '.translations-wrapper > .button-translation', func: ShowTranslationWindow },
         { dom: '.translations-wrapper > .button-stars', func: SaveVoice },
         { dom: '.title > .russian', func: CopyTitle }
-    ]
+    ];
+
+    if ($PARAMETERS.rooms.roomsenable) {
+        const dom = "#create-room";
+        $(dom).removeClass('-hide');
+        list.push({ dom, func: RoomsWindow });
+    }
 
     for (let i = 0; i < list.length; i++) {
         const element = list[i];
@@ -79,6 +86,26 @@ export function Functional() {
     window.addEventListener("orientationchange", function () {
         OrientationChanged();
     });
+
+    //Нажатие на главных героев персонажей
+    let onload = false;
+
+    const handle = async (e) => {
+        const id = e.currentTarget.dataset.id;
+        if (typeof id === "undefined" || onload) return;
+        onload = true;
+
+        e.currentTarget.classList.add('-load');
+
+        const { WCharacter } = await import("../../windows/win.character.js");
+        await WCharacter(id);
+
+        e.currentTarget.classList.remove('-load');
+        onload = false;
+    }
+
+    $('.hero-anime').on('click', 'a', handle);
+    $('.description').on('click', 'a.t-chracter', handle);
 }
 
 export function AutoScrollFranchise() {
@@ -317,7 +344,7 @@ function ShareAnime() {
     navigator.share({
         title: $(document).attr("title"),
         text: $('meta[property="og:description"]').attr('content'),
-        url: Tunime.Share.Anime($ID)
+        url: Tunime.share.anime($ID)
     }).catch((error) => $DEV.error('Sharing failed', error));
 }
 
@@ -330,4 +357,12 @@ function ShowPlayer() {
 
 function OrientationChanged() {
     Player.CEpisodes.Revise();
+}
+
+async function RoomsWindow() {
+    if (!Snapshot.state.permissions.includes('acc')) {
+        return new Popup('rooms', 'Нету разрешения.')
+    }
+    const { WRooms } = await import("../../windows/win.rooms.js");
+    WRooms();
 }

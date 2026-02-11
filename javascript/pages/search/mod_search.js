@@ -1,5 +1,5 @@
-import { GraphQl } from "../../modules/ShikiAPI.js";
-import { Kodik } from "../../modules/Kodik.js";
+import { GraphQl } from "../../modules/api.shiki.js";
+import { Kodik } from "../../modules/api.kodik.js";
 import { Sleep } from "../../modules/functions.js";
 import { ACardH } from "./mod_card.js";
 import { Jikan } from "../../modules/api.jikan.js";

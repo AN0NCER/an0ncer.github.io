@@ -1,6 +1,7 @@
 const $PARAMETERS = {
     censored: true,
-    autologin: false,
+    autologin: true,
+    tunsync: true,
     menu: {
         menuver: true,
         menustyle: 'mode-0',
@@ -20,6 +21,12 @@ const $PARAMETERS = {
         saveinfo: false,
         previewbs: true,
     },
+    rooms: {
+        roomsenable: true,
+        roomssave: false,
+        roomsautopause: false,
+        roomsindexpage: true
+    },
     download: {
         dquality: '720',
         dautosave: true,
@@ -29,10 +36,14 @@ const $PARAMETERS = {
         quality: '720',
         standart: true,
         full: false,
+        autonekst: true,
         alternative_full: false,
         standart_controls: false,
         autoquality: true,
         skipmoments: true
+    },
+    update: {
+        updateshow: true,
     },
     develop: false
 };

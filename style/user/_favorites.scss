@@ -1,0 +1,145 @@
+.user-favorites-anime-wrapper {
+    .user-favorites-content-wrapper {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+
+        max-width: 900px;
+        margin: 0 auto;
+        gap: 15px;
+
+        &>.title {
+            font-family: 'Manrope', sans-serif;
+            font-size: 16px;
+            color: #fff;
+            font-weight: bold;
+            display: flex;
+            padding: 0 20px;
+        }
+
+        .user-favorites-list {
+            display: inline-flex;
+            overflow-x: auto;
+            position: relative;
+
+            .anime-list-favorites {
+                display: flex;
+                gap: 10px;
+                padding: 0 20px;
+            }
+
+            .sentinel-wrapper {
+                position: relative;
+                width: 0;
+                visibility: hidden;
+
+                .sentinel {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    display: block;
+                    width: 400px;
+                    background: red;
+                }
+            }
+
+        }
+    }
+
+    &.-hide {
+        display: none;
+    }
+}
+
+.user-characters-favorites-wrapper {
+    margin-top: 40px;
+    // background: #191c21;
+    overflow-x: auto;
+
+    .user-characters-content-wrapper {
+        max-width: 940px;
+        padding: 0 20px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+        min-width: min-content;
+        min-height: min-content;
+
+
+        .character-row-1,
+        .character-row-2,
+        .character-row-3 {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+
+            &.character-row-2,
+            &.character-row-3 {
+                margin-top: calc(-55px * (clamp(142px, 21vw, 174px) / 150px));
+            }
+        }
+
+        .character-hexagon {
+            &[data-id="search"] {
+                .load {
+                    display: none;
+                }
+            }
+
+            &.-load {
+                svg {
+                    opacity: .5;
+                    scale: 0.9;
+                }
+            }
+
+            cursor: pointer;
+            position: relative;
+
+            svg {
+                pointer-events: none;
+                width: 20vw;
+                max-width: 174px;
+                min-width: 135px;
+                transition: .3s ease-in-out;
+            }
+
+            .load {
+                position: absolute;
+                inset: 0;
+                display: grid;
+                place-items: center;
+
+                .ticon {
+                    background-color: #2393F1;
+                    position: absolute;
+                    animation: 1s linear infinite rotate;
+                }
+            }
+        }
+
+
+
+        // display: grid;
+        // grid-template-columns: repeat(4, auto);
+        // gap: 16px;
+        // justify-items: center;
+    }
+
+    &.-hide{
+        display: none;
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotateZ(0deg);
+    }
+
+    to {
+        transform: rotateZ(360deg);
+    }
+}

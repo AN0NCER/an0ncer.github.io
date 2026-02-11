@@ -1,0 +1,443 @@
+.content-users-search .content-wrapper {
+  padding-top: 0px !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-bottom: 0px !important;
+  gap: 0 !important;
+}
+
+.window-users-search {
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+  --sar: env(safe-area-inset-right);
+  --sat: env(safe-area-inset-top);
+}
+.window-users-search .window-content {
+  --bot: max(calc(var(--sab) - 10px), 10px);
+  --space: calc(62px + var(--bot));
+}
+.window-users-search .window-content .content-wrapper {
+  max-height: 100dvh;
+  overflow: auto;
+  scrollbar-width: none;
+}
+.window-users-search .window-content .content-wrapper .wrapper {
+  max-width: 940px;
+  padding-bottom: var(--space);
+}
+.window-users-search .window-content .content-wrapper .wrapper .window-bar {
+  margin-top: 10px;
+  margin-left: max(env(safe-area-inset-left), 20px);
+  margin-right: max(env(safe-area-inset-right), 20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.window-users-search .window-content .content-wrapper .wrapper .window-bar .window-title {
+  font-size: 14px;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+.window-users-search .window-content .content-wrapper .wrapper .window-bar .window-close {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.window-users-search .window-content .content-wrapper .wrapper .window-bar .window-close .ticon {
+  height: 14px;
+  background-color: #fff;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search {
+  position: fixed;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  margin-bottom: max(var(--sab) - 10px, 10px);
+  width: 100%;
+  max-width: 390px;
+  min-width: 40px;
+  padding: 5px;
+  border-radius: 30px;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  position: relative;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn.btn-new {
+  background: #2393F1;
+  border-radius: 50%;
+  border: 0.4px solid rgba(255, 255, 255, 0.4);
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn.btn-new .ticon {
+  height: 16px;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn .ticon {
+  height: 16px;
+  background-color: #D6D6D6;
+  transition: 0.3s ease-in-out;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn .ticon.i-circle-notch {
+  animation: 1s linear infinite rotate;
+  opacity: 0;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn .ticon.i-xmark, .window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn .ticon.i-circle-notch {
+  position: absolute;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn .ticon.i-xmark {
+  height: 18px;
+  opacity: 0;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn.-load .ticon {
+  background-color: #2393F1;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn.-load .ticon.i-circle-notch {
+  opacity: 1;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn.-load .ticon.i-ios-search {
+  opacity: 0;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn.-rem .ticon.i-circle-notch {
+  opacity: 0;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn.-rem .ticon.i-ios-search {
+  opacity: 0;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper .btn.-rem .ticon.i-xmark {
+  opacity: 1;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper input {
+  height: 40px;
+  background: #191C21;
+  border: 0.2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 0 3px;
+  color: #FFFFFF;
+  outline: none;
+  transition: 0.3s ease-in-out;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper input::-moz-placeholder {
+  -moz-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper input::placeholder {
+  transition: 0.3s ease-in-out;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper input:focus {
+  border-color: #2393F1;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper input:focus::-moz-placeholder {
+  opacity: 0.1;
+}
+.window-users-search .window-content .content-wrapper .users-search-list-search .users-search-search-wrapper input:focus::placeholder {
+  opacity: 0.1;
+}
+
+.i-ios-search {
+  -webkit-mask-image: url('data:image/svg+xml,<svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 4C8 6.20914 6.20914 8 4 8C1.79086 8 0 6.20914 0 4C0 1.79086 1.79086 0 4 0C6.20914 0 8 1.79086 8 4ZM1.25895 4C1.25895 5.51384 2.48616 6.74105 4 6.74105C5.51384 6.74105 6.74105 5.51384 6.74105 4C6.74105 2.48616 5.51384 1.25895 4 1.25895C2.48616 1.25895 1.25895 2.48616 1.25895 4Z" fill="white"/><rect x="6.85144" y="5.7688" width="4.11406" height="1.63503" rx="0.817516" transform="rotate(45 6.85144 5.7688)" fill="white"/></svg>');
+          mask-image: url('data:image/svg+xml,<svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 4C8 6.20914 6.20914 8 4 8C1.79086 8 0 6.20914 0 4C0 1.79086 1.79086 0 4 0C6.20914 0 8 1.79086 8 4ZM1.25895 4C1.25895 5.51384 2.48616 6.74105 4 6.74105C5.51384 6.74105 6.74105 5.51384 6.74105 4C6.74105 2.48616 5.51384 1.25895 4 1.25895C2.48616 1.25895 1.25895 2.48616 1.25895 4Z" fill="white"/><rect x="6.85144" y="5.7688" width="4.11406" height="1.63503" rx="0.817516" transform="rotate(45 6.85144 5.7688)" fill="white"/></svg>');
+}
+
+.i-plus {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/></svg>');
+          mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/></svg>');
+}
+
+.i-check {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg>');
+          mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg>');
+}
+
+.i-code {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M360.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm64.6 136.1c-12.5 12.5-12.5 32.8 0 45.3l73.4 73.4-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l96-96c12.5-12.5 12.5-32.8 0-45.3l-96-96c-12.5-12.5-32.8-12.5-45.3 0zm-274.7 0c-12.5-12.5-32.8-12.5-45.3 0l-96 96c-12.5 12.5-12.5 32.8 0 45.3l96 96c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 150.6 182.6c12.5-12.5 12.5-32.8 0-45.3z"/></svg>');
+          mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M360.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm64.6 136.1c-12.5 12.5-12.5 32.8 0 45.3l73.4 73.4-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l96-96c12.5-12.5 12.5-32.8 0-45.3l-96-96c-12.5-12.5-32.8-12.5-45.3 0zm-274.7 0c-12.5-12.5-32.8-12.5-45.3 0l-96 96c-12.5 12.5-12.5 32.8 0 45.3l96 96c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 150.6 182.6c12.5-12.5 12.5-32.8 0-45.3z"/></svg>');
+}
+
+.i-tunime {
+  -webkit-mask-image: url('data:image/svg+xml,<svg viewBox="0 0 584 512" xmlns="http://www.w3.org/2000/svg"><path d="M581.169 184.32C582.426 184.32 583.446 185.338 583.446 186.596V439.182C583.446 479.346 550.74 512 510.514 512H72.9311C32.7052 512 0 479.346 0 439.182V186.596C3.52042e-06 185.338 1.01936 184.32 2.2768 184.32H581.169ZM231.536 269.653C229.152 269.653 226.768 272.668 226.768 274.292V310.704C226.77 312.328 229.152 315.111 231.238 315.111H254.777C258.242 315.111 259.882 314.472 260.662 311.167C261.059 309.479 261.303 307.699 261.446 306.363C261.576 305.158 262.579 304.21 263.792 304.21H269.185C270.443 304.21 271.462 305.229 271.462 306.486V391.351C271.462 392.352 270.807 393.236 269.846 393.516C268.618 393.875 266.82 394.388 264.906 394.893C261.441 395.81 260.14 397.188 260.14 399.531V422.028C260.14 424.115 261.927 426.667 264.906 426.667H318.538C321.219 426.667 323.306 424.116 323.306 422.26V399.3C323.306 397.445 321.518 395.588 319.432 395.124C318.081 394.824 315.353 394.037 313.601 393.52C312.638 393.236 311.983 392.351 311.983 391.349V306.486C311.983 305.229 313.002 304.21 314.26 304.21H320.05C321.09 304.21 321.997 304.914 322.255 305.92L323.604 311.167C323.901 312.791 325.987 315.111 328.371 315.111H352.208C354.59 315.111 356.676 312.559 356.676 310.935V274.06C356.676 272.436 354.293 269.653 351.91 269.653H231.536ZM147.311 0C149.341 0 150.356 2.45237 148.92 3.88556L8.0911 144.498L7.61751 144.97C7.19063 145.397 6.61214 145.636 6.00885 145.636H2.2768C1.01936 145.636 0 144.617 0 143.36V72.8178C0 32.6542 32.7052 0 72.9311 0H147.311ZM330.11 0C332.137 0.000244733 333.153 2.44782 331.722 3.88222L190.97 144.967C190.543 145.394 189.963 145.636 189.358 145.636H89.8269C87.7981 145.636 86.7819 143.184 88.2172 141.75L229.52 0.665556C229.947 0.239299 230.526 0 231.13 0H330.11ZM513.006 0C515.032 0 516.049 2.4477 514.619 3.88222L373.867 144.967C373.44 145.394 372.859 145.636 372.255 145.636H272.722C270.694 145.636 269.678 143.184 271.114 141.75L412.417 0.665556C412.844 0.239465 413.423 7.80901e-05 414.025 0H513.006ZM565.691 29.1033C566.651 28.1449 568.234 28.2317 569.044 29.32C578.032 41.4104 583.446 56.5536 583.446 72.8178V143.36C583.446 144.617 582.426 145.636 581.169 145.636H454.481C452.451 145.636 451.435 143.184 452.87 141.75L565.691 29.1033Z"/></svg>');
+          mask-image: url('data:image/svg+xml,<svg viewBox="0 0 584 512" xmlns="http://www.w3.org/2000/svg"><path d="M581.169 184.32C582.426 184.32 583.446 185.338 583.446 186.596V439.182C583.446 479.346 550.74 512 510.514 512H72.9311C32.7052 512 0 479.346 0 439.182V186.596C3.52042e-06 185.338 1.01936 184.32 2.2768 184.32H581.169ZM231.536 269.653C229.152 269.653 226.768 272.668 226.768 274.292V310.704C226.77 312.328 229.152 315.111 231.238 315.111H254.777C258.242 315.111 259.882 314.472 260.662 311.167C261.059 309.479 261.303 307.699 261.446 306.363C261.576 305.158 262.579 304.21 263.792 304.21H269.185C270.443 304.21 271.462 305.229 271.462 306.486V391.351C271.462 392.352 270.807 393.236 269.846 393.516C268.618 393.875 266.82 394.388 264.906 394.893C261.441 395.81 260.14 397.188 260.14 399.531V422.028C260.14 424.115 261.927 426.667 264.906 426.667H318.538C321.219 426.667 323.306 424.116 323.306 422.26V399.3C323.306 397.445 321.518 395.588 319.432 395.124C318.081 394.824 315.353 394.037 313.601 393.52C312.638 393.236 311.983 392.351 311.983 391.349V306.486C311.983 305.229 313.002 304.21 314.26 304.21H320.05C321.09 304.21 321.997 304.914 322.255 305.92L323.604 311.167C323.901 312.791 325.987 315.111 328.371 315.111H352.208C354.59 315.111 356.676 312.559 356.676 310.935V274.06C356.676 272.436 354.293 269.653 351.91 269.653H231.536ZM147.311 0C149.341 0 150.356 2.45237 148.92 3.88556L8.0911 144.498L7.61751 144.97C7.19063 145.397 6.61214 145.636 6.00885 145.636H2.2768C1.01936 145.636 0 144.617 0 143.36V72.8178C0 32.6542 32.7052 0 72.9311 0H147.311ZM330.11 0C332.137 0.000244733 333.153 2.44782 331.722 3.88222L190.97 144.967C190.543 145.394 189.963 145.636 189.358 145.636H89.8269C87.7981 145.636 86.7819 143.184 88.2172 141.75L229.52 0.665556C229.947 0.239299 230.526 0 231.13 0H330.11ZM513.006 0C515.032 0 516.049 2.4477 514.619 3.88222L373.867 144.967C373.44 145.394 372.859 145.636 372.255 145.636H272.722C270.694 145.636 269.678 143.184 271.114 141.75L412.417 0.665556C412.844 0.239465 413.423 7.80901e-05 414.025 0H513.006ZM565.691 29.1033C566.651 28.1449 568.234 28.2317 569.044 29.32C578.032 41.4104 583.446 56.5536 583.446 72.8178V143.36C583.446 144.617 582.426 145.636 581.169 145.636H454.481C452.451 145.636 451.435 143.184 452.87 141.75L565.691 29.1033Z"/></svg>');
+  aspect-ratio: 73/64;
+}
+
+.i-minus {
+  -webkit-mask-image: url('data:image/svg+xml,<svg viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg"><path d="M96 320C96 302.3 110.3 288 128 288L512 288C529.7 288 544 302.3 544 320C544 337.7 529.7 352 512 352L128 352C110.3 352 96 337.7 96 320z"/></svg>');
+          mask-image: url('data:image/svg+xml,<svg viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg"><path d="M96 320C96 302.3 110.3 288 128 288L512 288C529.7 288 544 302.3 544 320C544 337.7 529.7 352 512 352L128 352C110.3 352 96 337.7 96 320z"/></svg>');
+}
+
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper {
+  margin-top: 10px;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list {
+  padding-left: max(var(--sal), 10px);
+  padding-right: max(var(--sar), 10px);
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .users-search-grid-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  justify-content: center;
+  gap: 10px;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .empty-card {
+  grid-column: 1/3;
+  padding: 11px 0;
+  width: 218px;
+  color: #FFFFFF;
+  font-family: "Manrope", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+  margin: 0 auto;
+  min-height: 200px;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .empty-card .title {
+  font-size: 15px;
+  font-weight: bold;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .empty-card .add {
+  font-size: 12px;
+  text-align: center;
+  opacity: 0.5;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 14px;
+  background: #1E2126;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper {
+  display: flex;
+  gap: 10px;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .img-wrapper {
+  min-width: 66px;
+  min-height: 66px;
+  width: 66px;
+  height: 66px;
+  border-radius: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--img) center/cover no-repeat;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.22);
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-name .tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: rgba(35, 142, 231, 0.23);
+  border: 1px solid rgba(35, 142, 231, 0.27);
+  border-radius: 15px;
+  padding: 5px 8px;
+  color: #238EE7;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-name .tag.-dev {
+  background-color: rgba(255, 217, 0, 0.23);
+  border: 1px solid rgba(255, 217, 0, 0.27);
+  color: #FFD700;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-name .tag.-dev .ticon {
+  background-color: #FFD700;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-name .tag .ticon {
+  background-color: #238EE7;
+  height: 13px;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-name .user-name {
+  font-weight: bold;
+  font-size: 18px;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-status {
+  display: flex;
+  flex-direction: column;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-status .user-profile-type {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-status .user-profile-online {
+  margin-top: -2px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-status .user-profile-online.-app {
+  padding-left: 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-status .user-profile-online.-app::after {
+  content: "";
+  display: grid;
+  width: 7px;
+  height: 7px;
+  background: #808080;
+  box-shadow: 0px 0px 0px 3px rgba(128, 128, 128, 0.18);
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-status .user-profile-online.-online {
+  color: #238EE7;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-profile-wrapper .user-profile-info .user-profile-status .user-profile-online.-online::after {
+  background: #238EE7;
+  box-shadow: 0px 0px 0px 3px rgba(35, 143, 231, 0.18);
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-control-wrapper .btn {
+  display: grid;
+  place-items: center;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-control-wrapper .btn.btn-select {
+  --bg-color: #2393F1;
+  --background: rgba(35, 143, 231, 0.1);
+  --border: rgba(35, 143, 231, 0.2);
+  background-color: var(--background);
+  border-color: var(--border);
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-control-wrapper .btn.btn-select .ticon {
+  background-color: var(--bg-color);
+  height: 20px;
+  transition: 0.3s ease-in-out;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-control-wrapper .btn.btn-select .ticon.i-plus {
+  position: absolute;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-control-wrapper .btn.btn-select .ticon.i-minus {
+  position: absolute;
+  opacity: 0;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-control-wrapper .btn.btn-select.-select {
+  --bg-color: #F12326;
+  --border: rgba(241, 35, 38, 0.2);
+  --background: rgba(241, 35, 38, 0.1);
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-control-wrapper .btn.btn-select.-select .i-plus {
+  opacity: 0;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card .user-control-wrapper .btn.btn-select.-select .i-minus {
+  opacity: 1;
+}
+.content-users-search .content-wrapper .wrapper .users-search-list-wrapper .grid-wrapper-list .user-card.-app .user-profile-wrapper .user-profile-info .user-profile-status .user-profile-type {
+  font-weight: bold;
+  color: #238EE7;
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  min-width: -moz-min-content;
+  min-width: min-content;
+  min-height: -moz-min-content;
+  min-height: min-content;
+  align-items: center;
+  justify-content: center;
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list .config-btn-wrapper {
+  display: flex;
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list .config-btn-wrapper label {
+  --color: #585858;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #191C21;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 65px;
+  padding: 12px 15px;
+  transition: 0.98s linear(0, 0.0446, 0.164, 0.3348, 0.5333, 0.7374, 0.9286, 1.0927, 1.22, 1.3061, 1.3508, 1.3573, 1.3318, 1.2821, 1.2167, 1.1439, 1.0715, 1.0055, 0.9505, 0.9094, 0.8834, 0.8719, 0.8735, 0.8858, 0.9058, 0.9304, 0.9568, 0.9823, 1.0049, 1.0231, 1.0361, 1.0437, 1.0463, 1.0444, 1.0389, 1.0311, 1.022, 1.0125, 1.0036, 0.996, 0.99, 0.9859, 0.9838, 0.9834, 0.9846, 0.9868, 0.9899, 0.9932, 0.9966, 0.9996, 1.0022, 1.0041, 1.0054, 1.0059, 1.0059, 1.0053, 1.0044, 1.0033, 1.002, 1.0009, 0.9998, 0.999, 0.9983, 0.998, 0.9979, 0.9979, 0.9982, 0.9985, 0.999, 0.9994, 0.9998, 1.0002, 1.0005, 1.0006, 1.0007, 1.0008, 1.0007, 1.0006, 1.0005, 1.0003, 1.0002, 1, 0.9999, 0.9998, 0.9998, 0.9997, 0.9997, 0.9998, 0.9998, 0.9998, 0.9999, 1, 1, 1, 1.0001, 1.0001, 1.0001, 1.0001, 1.0001, 1.0001, 1);
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list .config-btn-wrapper label .icon {
+  height: 20px;
+  fill: var(--color);
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list .config-btn-wrapper label .config-info-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list .config-btn-wrapper label .config-info-wrapper .config-name {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--color);
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list .config-btn-wrapper label .config-info-wrapper .type-value {
+  display: none;
+  font-size: 10px;
+  margin-top: -3px;
+  color: var(--color);
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list .config-btn-wrapper label .config-info-wrapper .type-value.-disable {
+  display: block;
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list .config-btn-wrapper input {
+  display: none;
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list .config-btn-wrapper input:checked ~ label {
+  --color: #2393F1;
+  background: rgba(35, 148, 241, 0.15);
+  border: 1px solid #2393F1;
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list .config-btn-wrapper input:checked ~ label .config-info-wrapper .-enable {
+  display: block;
+}
+.content-users-search .content-wrapper .rooms-config-wrapper .config-wrapper-list .config-btn-wrapper input:checked ~ label .config-info-wrapper .-disable {
+  display: none;
+}
+.content-users-search .content-wrapper .users-search-list-search .users-search-search-wrapper .btn-cancel {
+  border: 0.4px solid rgba(255, 255, 255, 0.4);
+  border-radius: 21px;
+  display: grid;
+  place-items: center;
+  background: #F12326;
+  color: #FFFFFF;
+  padding: 0 13px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+}

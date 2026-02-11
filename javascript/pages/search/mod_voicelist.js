@@ -1,6 +1,6 @@
 import { md5 } from "../../library/md5.wasm.min.js";
 import { ScrollElementWithMouse } from "../../modules/functions.js";
-import { Kodik } from "../../modules/Kodik.js";
+import { Kodik } from "../../modules/api.kodik.js";
 import { TCache } from "../../modules/tun.cache.js";
 import { TSearchType, TTSearch } from "./mod_search.js";
 

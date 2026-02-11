@@ -1,5 +1,6 @@
+import { Main, OAuth } from "../core/main.core.js";
 import { ClearParams } from "../modules/functions.js";
-import { Main, Oauth, User } from "../modules/ShikiUSR.js";
+import { createTimeline } from "../library/anime.esm.min.js";
 
 //Слоганы страницы авторизации
 const slogans = [
@@ -13,7 +14,7 @@ const slogans = [
     "С Tunime ты всегда на шаг впереди в мире аниме!",
     "В Tunime ты найдешь аниме для любого настроения и вкуса!",
     "Наслаждайся аниме без ограничений с Tunime!",
-    "Tunime - где аниме становится частью твоей жизни!"
+    "Tunime ведёт вперёд — где фантазия живёт и ждёт."
 ];
 
 const code = new URLSearchParams(window.location.search).get('code');
@@ -22,46 +23,85 @@ ClearParams(['code']);
 
 (async () => {
     //Проверяем если это сработал автологин то делаем редирект на главную страницу т.к. может только от нее сработать AutoLogin
-    if (code && !User.isteste) {
+    if (code && !OAuth.mode === 'test') {
+        $('.app-auth').removeClass('-hide');
         const { login } = await import("../utils/auth.login.js");
         await login(code);
+        $('.app-auth').addClass('-hide');
     }
 
     Main(async (e) => {
         //Если пользователь авторизирован редирект на страничку с пользователем
         if (e) return window.location.href = "/user.html";
 
-        $('.slogan').text(RandomSlogan());
+        Events();
         Animate();
-        VisualFunctional();
     });
 })();
 
-/**
- * Анимация загрузки приложения
- */
 function Animate() {
-    //Разбиваем текст на буквы для анимации
-    var textWrapper = document.querySelector('.animation');
-    textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-    //Аниммируем сначало появление текста а после прячим span.loading
-    anime.timeline({ loop: false, complete: () => { $('.loading').css('display', 'none'); } })
-        .add({
-            targets: '.animation .letter',
-            translateX: [40, 0],
-            translateZ: 0,
-            opacity: [0, 1],
-            easing: "easeOutExpo",
-            duration: 1500,
-            delay: (el, i) => 500 + 30 * i,
+    createTimeline({
+        defaults: {
+            loop: false,
+        }
+    }).add('.animation .letter', {
+        x: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 800,
+        ease: 'inOutQuart',
+        delay: (el, i) => 500 + 30 * i,
+        onComplete: () => { $('.loading').css({ 'pointer-events': 'none' }) }
+    }).add('.loading', {
+        opacity: 0,
+        duration: 1000,
+        delay: 800,
+        ease: 'inOutQuart',
+        onComplete: () => { $('.loading').remove() }
+    });
+}
 
-        })
-        .add({
-            targets: '.loading',
-            opacity: 0,
-            easing: 'easeInOutQuad',
-            duration: 1000
-        });
+function Events() {
+    //Блокировка действий после нажатия на авторизацию
+    let isBlocked = false;
+
+    $('.slogan').text(RandomSlogan());
+
+    $('.btn-login').on('click', async () => {
+        if (isBlocked) return;
+
+        $('.app-auth').removeClass('-hide');
+        if (OAuth.mode === 'test') {
+            try {
+                isBlocked = true;
+                //Если тестовый режим то запрашиваем код от пользователя
+                let code = prompt("Тестовый режим авторизации:");
+                if (code) {
+                    const { login } = await import("../utils/auth.login.js");
+                    //Проверяем авторизацию и переходим на станицу пользователя
+                    await login(code);
+                } else {
+                    window.open(OAuth.events.genLink(), '_blank').focus();
+                }
+            } finally {
+                isBlocked = false;
+            }
+            localStorage.removeItem('application_event');
+        } else {
+            window.location.href = OAuth.events.genLink();
+        }
+        $('.app-auth').addClass('-hide');
+    });
+
+    $('.btn-back, .btn-skip').on('click', async () => {
+        if (isBlocked) return;
+        window.location.href = "/index.html";
+    });
+
+    $('.btn-settings').on('click', async () => {
+        if (isBlocked) return;
+        window.location.href = "/settings.html";
+    });
 }
 
 /**
@@ -70,42 +110,4 @@ function Animate() {
  */
 function RandomSlogan() {
     return slogans[Math.floor(Math.random() * slogans.length)];
-}
-
-function VisualFunctional() {
-    //Кнопка авторизации
-    $('.btn-login').click(async () => {
-        if (User.isteste) {
-            localStorage.removeItem('application_event');
-            //Если тестовый режим то запрашиваем код от пользователя
-            let code = prompt("Тестовый режим авторизации:");
-            if (code) {
-                const { login } = await import("../utils/auth.login.js");
-                //Проверяем авторизацию и переходим на станицу пользователя
-                await login(code);
-            } else {
-                window.open(Oauth.GetUrl(), '_blank').focus();
-            }
-        } else {
-            window.location.href = Oauth.GetUrl();
-        }
-    });
-
-    //Кнопка настроек
-    $('.btn.mute').click(async () => {
-        window.location.href = "/settings.html";
-    });
-
-    //Кнопка возврата на главную страницу
-    $('.btn.back').click(async () => {
-        window.location.href = "/index.html";
-    });
-
-    //Checkbox автоматической авторизации
-    $('input[type="checkbox"]').change(function () {
-        setParameter('autologin', this.checked);
-    });
-
-    //Устанавливаем checkbox по параметру
-    $('input[type="checkbox"]').prop('checked', $PARAMETERS.autologin);
 }

@@ -1,6 +1,6 @@
-import { CreateVerify } from "../../modules/ActionVerify.js";
 import { DBControls } from "../../modules/TDatabase.js";
 import { TDownload } from "../../modules/TDownload.js";
+import { TVerify } from "../../modules/tun.verify.js";
 import { WindowManagement } from "../../modules/Windows.js"
 import { formatDuration, formatBytes, countVideo } from "./mod_utils.js";
 import { SelectVoice } from "./mod_voice.js";
@@ -502,10 +502,9 @@ const Player = {
             });
 
             $(".footer > .btn.delete").on("click", () => {
-                CreateVerify("Удалить полностью аниме?").then(val => {
-                    if (val) {
-                        _RAnime.bind(this)();
-                    }
+                TVerify({ title: "Удалить аниме", warning: "Аниме будет полностью удалено с этого устройства." }).then(val => {
+                    if (!val) return;
+                    _RAnime.bind(this)();
                 });
             });
         };
