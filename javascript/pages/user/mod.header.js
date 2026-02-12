@@ -21,7 +21,7 @@ export const UIBanner = new class {
         ) return;
 
         if (data === undefined) {
-            this.banner = banner;
+            this.banner = this.#default;
             this.set(this.#default);
             this.update(false);
             return;
@@ -125,7 +125,6 @@ export const UIHeader = new class {
             if (UIBanner.is_update) return new Popup('banner-update', "Баннер на рассмотрении!");
 
             Tunime.help.hasAccount().then(async (value) => {
-                console.log(value);
                 try {
                     const win = await import("../../windows/win.editor.banner.js");
 
