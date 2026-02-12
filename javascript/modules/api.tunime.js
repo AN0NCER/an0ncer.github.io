@@ -333,11 +333,7 @@ class Failover {
         // не мутируем входной объект (но если тебе ок — можно убрать копию)
         const opts = { ...params };
 
-        if (opts.body !== undefined) {
-            opts.body = new URLSearchParams(opts.body);
-        } else {
-            delete opts.body;
-        }
+        if (opts.body === undefined) delete opts.body;
 
         const retryStatuses = new Set([502, 503, 504]);
 
@@ -456,10 +452,15 @@ class Controls {
             value: undefined
         };
 
-        if (opts.body) {
-            const body = new FormData();
-            this.#appendFormData(body, opts.body);
-            opts.body = body;
+        if (opts.body && typeof opts.body === "object" && !(opts.body instanceof FormData)) {
+            if (this.#hasBinary(opts.body)) {
+                const fd = new FormData();
+                this.#appendFormData(fd, opts.body);
+                opts.body = fd;
+            } else {
+                opts.headers = { ...(opts.headers || {}), "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" };
+                opts.body = new URLSearchParams(opts.body);
+            }
         }
 
         try {
@@ -488,13 +489,24 @@ class Controls {
         return res;
     }
 
+    #hasBinary(data) {
+        if (!data || typeof data !== "object") return false;
+
+        for (const k in data) {
+            const v = data[k];
+            if (v instanceof File || v instanceof Blob) return true;
+            if (v && typeof v === "object" && this.#hasBinary(v)) return true;
+        }
+        return false;
+    }
+
     #appendFormData(fd = new FormData(), data, parentKey = '') {
         for (const key in data) {
             const value = data[key];
             const fullKey = parentKey ? `${parentKey}[${key}]` : key;
 
             if (value instanceof File || value instanceof Blob) {
-                fd.append(fullKey, value);
+                fd.append(fullKey, value, value?.name);
             } else if (typeof value === 'object' && value !== null) {
                 this.#appendFormData(fd, value, fullKey);
             } else {
@@ -859,6 +871,24 @@ export const Tunime = new class {
             return {
                 GET: async () => {
                     return fetch('GET');
+                },
+
+                POST: async (body = {}) => {
+                    const hasScope = user.access.scope.includes('acc');
+
+                    if (hasScope) {
+                        return fetch('POST', body);
+                    }
+
+                    if (tsk.has('shiki')) {
+                        if (await Api.checkScope('acc')) {
+                            tsk.remove('shiki');
+                            return fetch('POST', body);
+                        }
+                        throw { msg: 'Проверка аккаунта!', code: '001' }
+                    }
+
+                    throw { msg: 'Нет доступа!', code: '002' }
                 },
 
                 PATCH: async (body = {}) => {
