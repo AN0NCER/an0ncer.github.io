@@ -24,6 +24,9 @@
         </span>
         <span class="banner-edit-input">
             <div class="banner-edit-input-wrapper">
+                <div class="btn btn-banner-select">
+                    <div class="ticon i-folder"></div>
+                </div>
                 <input type="text" placeholder="{{placeholder}}" value="{{value}}" />
                 <div class="btn btn-banner-clear">
                     <div class="ticon i-trash"></div>
