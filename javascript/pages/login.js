@@ -23,7 +23,7 @@ ClearParams(['code']);
 
 (async () => {
     //Проверяем если это сработал автологин то делаем редирект на главную страницу т.к. может только от нее сработать AutoLogin
-    if (code && !OAuth.mode === 'test') {
+    if (code && OAuth.mode !== 'test') {
         $('.app-auth').removeClass('-hide');
         const { login } = await import("../utils/auth.login.js");
         await login(code);
