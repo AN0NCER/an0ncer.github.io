@@ -41,6 +41,19 @@ export function GitHubRel() {
                     return;
                 }
 
+                const raw = ((def = { id: 0, tag_name: '0.0.0' }) => {
+                    try {
+                        return JSON.parse(localStorage.getItem('app-confirmed')) || def;
+                    } catch {
+                        return def;
+                    }
+                })();
+
+                if (value.id === raw.id) {
+                    $PWA.meta.update.remove();
+                    return;
+                }
+
                 showUpdate(value);
             });
         } else if (param) {
