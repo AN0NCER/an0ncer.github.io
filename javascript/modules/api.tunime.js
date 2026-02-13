@@ -453,13 +453,14 @@ class Controls {
         };
 
         if (opts.body && typeof opts.body === "object" && !(opts.body instanceof FormData)) {
+            const fd = new FormData();
+            this.#appendFormData(fd, opts.body);
+
             if (this.#hasBinary(opts.body)) {
-                const fd = new FormData();
-                this.#appendFormData(fd, opts.body);
                 opts.body = fd;
             } else {
                 opts.headers = { ...(opts.headers || {}), "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" };
-                opts.body = new URLSearchParams(opts.body);
+                opts.body = new URLSearchParams(fd);
             }
         }
 
