@@ -1,5 +1,5 @@
-const version = '3.0.1';
-const hash = "57f27";
+const version = '3.0.11';
+const hash = "e71fe";
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 
@@ -232,6 +232,7 @@ const appShellFilesToCache = [
     "/style/fonts/Inter.ttf",
     "/style/fonts/Manrope.ttf",
     "/style/fonts/NovaSquare.ttf",
+    "/style/fonts/RobotoMono.ttf",
     // Директория: /style/menu/css
     "/style/menu/css/menu.core.css",
     // Директория: /style/win/css
