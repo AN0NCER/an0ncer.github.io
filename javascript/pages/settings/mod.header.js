@@ -426,10 +426,16 @@ class LogicPannel {
         });
 
         this.input.addEventListener('keydown', (e) => {
-            if(e.code === "Enter"){
+            const isEnter =
+                e.key === 'Enter' ||
+                e.code === 'Enter' ||
+                e.code === 'NumpadEnter' ||
+                e.keyCode === 13;
+
+            if (isEnter) {
                 this.onsearch(this.input.value, this.input)
             }
-        })
+        });
 
         this.input.addEventListener('focus', () => {
             this.io.anim.focus();
