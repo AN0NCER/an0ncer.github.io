@@ -668,6 +668,7 @@ const windowUpdate = {
 
             const close = () => {
                 process = false;
+                localStorage.setItem('app-confirmed', JSON.stringify({ id: update.data.id, tag_name: update.data.tag_name }));
                 $('.content-buttons > .btn-submit').removeClass('cl-2');
                 if (reload) {
                     $('.content-buttons > .restart-script').removeClass('show');

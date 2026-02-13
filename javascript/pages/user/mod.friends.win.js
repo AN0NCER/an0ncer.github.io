@@ -5,7 +5,6 @@ import { Sleep } from "../../modules/functions.js";
 import { LazyLoad, PullToClose, WindowIntercator } from "../../modules/win.module.js";
 import { IOFriends } from "./io.friends.js";
 import { TAppFriends, TFriends, timeAgo } from "./mod.friends.js";
-// import { TAppFriends, TFriends, timeAgo } from "./mod.friends.js";
 
 const _window = {
     oninit: function () {
@@ -49,8 +48,7 @@ const _window = {
         $group.on('click', '.btn-control.-rem', function () {
             const id = $(this).attr('data-id');
             Friends.friends(id, (response) => {
-                console.log(response);
-                TFriends.user.remove(Number(id));
+                IOFriends.removeFriend(Number(id));
                 if (TFriends.userId !== null) {
                     TFriends.cache.delete("requests", `user-${OAuth.user.id}-friends`);
                 }
@@ -64,7 +62,7 @@ const _window = {
             const id = $btn.attr('data-id');
 
             Friends.friends(id, () => {
-                TFriends.user.add(Number(id));
+                IOFriends.addFriend(Number(id));
                 $btn.removeClass('-add').addClass('-rem');
 
                 //Если он в списке .friends-results-list то нужно перенести его в .friends-list

@@ -1,0 +1,133 @@
+@font-face {
+    font-family: 'Roboto Mono';
+    src: url('/style/fonts/RobotoMono.ttf');
+}
+
+footer {
+    margin-top: 20px;
+    color: #FFFFFFFF;
+    background: #0B0D11;
+
+    display: flex;
+    padding-bottom: var(--menu-height-safe);
+
+    --title-size: 24px;
+    --alltext-size: 12px;
+    --color: #5E676E;
+
+    .footer-wrapper {
+        display: flex;
+        flex: 1 0 0;
+        justify-content: space-between;
+        font-family: "Roboto Mono", "Roboto Mono", "Vazirmatn", monospace;
+        padding: 30px 20px;
+
+        .infos-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+            .pwa-app {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+
+                .app-title {
+                    font-size: var(--title-size);
+                }
+
+                .pwa-app-state {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0px;
+                    font-size: var(--alltext-size);
+                    color: var(--color);
+
+                    .pwa-version {
+                        box-sizing: border-box;
+                        display: flex;
+                        gap: 2px;
+
+                        .v {}
+
+                        .h {
+                            text-transform: uppercase;
+                        }
+                    }
+
+                    .pwa-date-update {
+                        box-sizing: border-box;
+                    }
+                }
+            }
+
+            .app-source-links {
+                a {
+                    color: var(--color);
+                    text-transform: uppercase;
+                    text-decoration: underline;
+                    font-size: var(--alltext-size);
+                }
+            }
+        }
+
+        .links-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            align-items: end;
+
+            a {
+                position: relative;
+                display: flex;
+                font-size: var(--alltext-size);
+                color: var(--color);
+                gap: 5px;
+                text-transform: uppercase;
+
+                svg {
+                    fill: var(--color);
+                    width: 16px;
+                }
+
+
+                &.coming {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: end;
+                    gap: 0;
+                    margin-top: 10px;
+
+                    .a {
+                        font-size: 6px;
+                        margin-right: 19px;
+                    }
+
+                    .b {
+                        display: flex;
+                        align-items: center;
+                        gap: 3px;
+                        opacity: .5;
+                    }
+                }
+            }
+        }
+    }
+}
+
+body {
+
+    &[angle="270"] {
+        footer {
+            padding-left: max(0px, env(safe-area-inset-right));
+            padding-right: var(--menu-width-safe);
+        }
+    }
+    
+    &[angle="90"] {
+        footer {
+            padding-right: max(0px, env(safe-area-inset-right));
+            padding-left: var(--menu-width-safe);
+        }
+    }
+}

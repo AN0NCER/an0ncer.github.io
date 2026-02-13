@@ -462,50 +462,6 @@ header {
     }
   }
 }
-
-.github {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: Manrope;
-  margin-top: 50px;
-  margin-bottom: 50px;
-  color: #404246;
-  gap: 3px;
-
-  .title {
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-
-  .version-hash {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .version {
-      font-size: 14px;
-    }
-
-    .hash {
-      text-transform: uppercase;
-      font-size: 11px;
-      margin-top: -4px;
-    }
-  }
-
-  .date {
-    font-size: 14px;
-  }
-}
-
-footer {
-  display: flex;
-  height: var(--menu-height-safe);
-}
-
 .loading {
   position: absolute;
   top: 0;
@@ -622,6 +578,7 @@ footer {
 @import './window/update';
 @import './window/notify';
 @import './window/countdown';
+@import './index/footer';
 
 .card-anime {
   min-width: 195px;

@@ -41,6 +41,19 @@ export function GitHubRel() {
                     return;
                 }
 
+                const raw = ((def = { id: 0, tag_name: '0.0.0' }) => {
+                    try {
+                        return JSON.parse(localStorage.getItem('app-confirmed')) || def;
+                    } catch {
+                        return def;
+                    }
+                })();
+
+                if (value.id === raw.id) {
+                    $PWA.meta.update.remove();
+                    return;
+                }
+
                 showUpdate(value);
             });
         } else if (param) {
@@ -100,7 +113,7 @@ $PWA.events.on('load', () => {
     const meta = $PWA.meta;
     const date = new Date(meta.date);
 
-    $('.version > span').text(meta.version);
-    $('.version-hash > .hash').text(meta.hash);
-    $('.github > .date').text(`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`);
+    $('.pwa-version > .v').text(`v${meta.version}`);
+    $('.pwa-version > .h').text(`[${meta.hash}]`);
+    $('.pwa-date-update').text(`${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`);
 }, { replay: true });
