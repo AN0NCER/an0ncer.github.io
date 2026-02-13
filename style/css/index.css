@@ -876,44 +876,6 @@ header .head-wrapper .quick-panel.-mini #page-search {
   animation-delay: 2.4s;
 }
 
-.github {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: Manrope;
-  margin-top: 50px;
-  margin-bottom: 50px;
-  color: #404246;
-  gap: 3px;
-}
-.github .title {
-  margin-top: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-.github .version-hash {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.github .version-hash .version {
-  font-size: 14px;
-}
-.github .version-hash .hash {
-  text-transform: uppercase;
-  font-size: 11px;
-  margin-top: -4px;
-}
-.github .date {
-  font-size: 14px;
-}
-
-footer {
-  display: flex;
-  height: var(--menu-height-safe);
-}
-
 .loading {
   position: absolute;
   top: 0;
@@ -2241,6 +2203,109 @@ body.-noscrol {
     font-size: 12px;
   }
 }
+@font-face {
+  font-family: "Roboto Mono";
+  src: url("/style/fonts/RobotoMono.ttf");
+}
+footer {
+  margin-top: 20px;
+  color: white;
+  background: #0B0D11;
+  display: flex;
+  padding-bottom: var(--menu-height-safe);
+  --title-size: 24px;
+  --alltext-size: 12px;
+  --color: #5E676E;
+}
+footer .footer-wrapper {
+  display: flex;
+  flex: 1 0 0;
+  justify-content: space-between;
+  font-family: "Roboto Mono", "Roboto Mono", "Vazirmatn", monospace;
+  padding: 30px 20px;
+}
+footer .footer-wrapper .infos-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+footer .footer-wrapper .infos-wrapper .pwa-app {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+footer .footer-wrapper .infos-wrapper .pwa-app .app-title {
+  font-size: var(--title-size);
+}
+footer .footer-wrapper .infos-wrapper .pwa-app .pwa-app-state {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  font-size: var(--alltext-size);
+  color: var(--color);
+}
+footer .footer-wrapper .infos-wrapper .pwa-app .pwa-app-state .pwa-version {
+  box-sizing: border-box;
+  display: flex;
+  gap: 2px;
+}
+footer .footer-wrapper .infos-wrapper .pwa-app .pwa-app-state .pwa-version .h {
+  text-transform: uppercase;
+}
+footer .footer-wrapper .infos-wrapper .pwa-app .pwa-app-state .pwa-date-update {
+  box-sizing: border-box;
+}
+footer .footer-wrapper .infos-wrapper .app-source-links a {
+  color: var(--color);
+  text-transform: uppercase;
+  text-decoration: underline;
+  font-size: var(--alltext-size);
+}
+footer .footer-wrapper .links-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: end;
+}
+footer .footer-wrapper .links-wrapper a {
+  position: relative;
+  display: flex;
+  font-size: var(--alltext-size);
+  color: var(--color);
+  gap: 5px;
+  text-transform: uppercase;
+}
+footer .footer-wrapper .links-wrapper a svg {
+  fill: var(--color);
+  width: 16px;
+}
+footer .footer-wrapper .links-wrapper a.coming {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 0;
+  margin-top: 10px;
+}
+footer .footer-wrapper .links-wrapper a.coming .a {
+  font-size: 6px;
+  margin-right: 19px;
+}
+footer .footer-wrapper .links-wrapper a.coming .b {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  opacity: 0.5;
+}
+
+body[angle="270"] footer {
+  padding-left: max(0px, env(safe-area-inset-right));
+  padding-right: var(--menu-width-safe);
+}
+body[angle="90"] footer {
+  padding-right: max(0px, env(safe-area-inset-right));
+  padding-left: var(--menu-width-safe);
+}
+
 .card-anime {
   min-width: 195px;
   margin-right: 10px;
