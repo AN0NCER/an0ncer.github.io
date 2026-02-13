@@ -1,5 +1,5 @@
 const version = '3.0.1';
-const hash = "ff1aa";
+const hash = "57f27";
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 
@@ -272,6 +272,7 @@ const appShellFilesToCache = [
 ];
 
 const servers = [
+    "https://192.168.31.45:3001",
     "https://tunime.onrender.com",
     "https://tunime-hujg.onrender.com"
 ];
