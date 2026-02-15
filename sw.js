@@ -1,5 +1,5 @@
-const version = '3.0.11';
-const hash = "e71fe";
+const version = '3.1.11';
+const hash = "a3706";
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 
@@ -290,7 +290,7 @@ const setup = {
             channel: 'sw-update',
             activate: true,
             install: true,
-            batchSize: 2
+            batchSize: 3
         }
         // Добавьте другие параметры здесь
     },
