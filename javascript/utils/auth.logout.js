@@ -1,4 +1,4 @@
-const local = ["anime-db"];
+const local = ["anime-db", "access_token", "access_whoami"];
 const indexdb = ["tun-cache"];
 
 export async function logout() {

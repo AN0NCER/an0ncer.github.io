@@ -239,64 +239,24 @@ function updateAppIcons(config) {
 
 export const OAuth = new class {
     constructor() {
-        this.events.setMode($MODE);
-        this.access = JSON.parse(localStorage.getItem('access_token')) || null;
-        this.user = JSON.parse(localStorage.getItem('access_whoami')) || null;
-        this.auth = this.access ? !this.isExpired() : false;
-    }
+        this.refreshing = null;
 
-    get body() {
-        const { client_id, client_secret, redirect_uri, access } = this;
-        return {
-            access: (() => {
-                const form = new FormData();
-                form.append("client_id", client_id);
-                form.append("client_secret", client_secret);
-                form.append("grant_type", "authorization_code");
-                form.append("redirect_uri", redirect_uri);
-                return form;
-            })(),
-            refresh: (() => {
-                const form = new FormData();
-                form.append("client_id", client_id);
-                form.append("client_secret", client_secret);
-                form.append("grant_type", "refresh_token");
-                form.append("refresh_token", access?.refresh_token);
-                return form;
-            })()
-        }
+        this.access = JSON.parse(localStorage.getItem('hub-access')) || null;
+        this.user = JSON.parse(localStorage.getItem('hub-whoami')) || null;
+        this.auth = this.access ? !this.isExpired() : false;
+        this.events.setMode($MODE);
     }
 
     events = {
         setMode: (mode) => {
-            const config = {
-                production: {
-                    client_id: 'EKv75uNamao_d3uzFREIfo71l6cpyG2IEUIpBxFgcAM',
-                    client_secret: 'WKDClcJlc3grYpBWDbxqQyAFEW0SquPgrvTdXeAfhds',
-                    redirect_uri: 'https://an0ncer.github.io/login.html',
-                },
-                test: {
-                    client_id: 'bce7ad35b631293ff006be882496b29171792c8839b5094115268da7a97ca34c',
-                    client_secret: '811459eada36b14ff0cf0cc353f8162e72a7d6e6c7930b647a5c587d1beffe68',
-                    redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
-                }
-            }
-
-            if (!config[mode]) {
-                throw new Error(`Invalid mode "${val}". Use "production" or "test".`);
-            }
-
             this.mode = mode;
-            this.client_id = config[mode].client_id;
-            this.client_secret = config[mode].client_secret;
-            this.redirect_uri = config[mode].redirect_uri;
-            this.response_type = 'code';
-            this.scope = 'user_rates+messages+comments+topics+clubs+friends+ignores';
+            this.scope = this.access ? this.access.scope : []
         },
 
-        genLink: () => {
-            const { client_id, redirect_uri, response_type, scope } = this;
-            return `${sUrl}/oauth/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&response_type=${response_type}&scope=${scope}`;
+        genLink: async (tun) => {
+            const response = await tun.io.genLink();
+            if (!response.complete && !response.parsed) return;
+            return response.value.link;
         },
 
         sleep: (ms) => {
@@ -304,7 +264,7 @@ export const OAuth = new class {
         },
 
         clear: () => {
-            const indexs = ['access_token', 'access_whoami'];
+            const indexs = ['hub-access', 'hub-whoami'];
             for (let i = 0; i < indexs.length; i++) {
                 const key = indexs[i];
                 localStorage.removeItem(key);
@@ -313,61 +273,53 @@ export const OAuth = new class {
     }
 
     requests = {
-        authorizate: (code) => {
-            /**
-             * Выполняет запрос с попытками
-             * @param {Fetch} [request] 
-             */
-            const r = (request) => {
-                return new Promise(async (resolve) => {
-                    const response = await request.fetch();
+        authorizate: (tun, code) => {
+            const r = async () => {
+                const response = await tun.io.auth(code);
+                if (!response.complete || !response.parsed) throw response;
 
-                    if (response.failed) {
-                        if (response.status === 429) {
-                            await this.events.sleep(1000);
-                            return resolve(fetch(request));
-                        }
-                        return resolve();
-                    }
+                const { shiki, whoami } = response.value;
 
-                    this.access = response;
-                    this.auth = true;
-                    localStorage.setItem('access_token', JSON.stringify(this.access));
-                    resolve(this.access);
-                });
+                this.access = {
+                    ...shiki,
+                    scope: shiki.scope.split(' ')
+                };
+
+                this.user = whoami;
+                this.auth = true;
+
+                localStorage.setItem('hub-access', JSON.stringify(this.access));
+                localStorage.setItem('hub-whoami', JSON.stringify(this.user));
+                return this.access;
             }
 
-            const request = Fetch.post(`${sUrl}/oauth/token`, this.body.access, Headers.base);
-            request.body.append("code", code);
-            return r(request);
+            return r();
         },
 
-        refreshToken: () => {
-            /**
-             * Выполняет запрос с попытками
-             * @param {Fetch} [request] 
-             */
-            const r = (request) => {
-                return new Promise(async (resolve) => {
-                    const response = await request.fetch();
+        refreshToken: (tun) => {
+            if (this.refreshing) return this.refreshing;
 
-                    if (response.failed) {
-                        if (response.status === 429) {
-                            await this.events.sleep(1000);
-                            return resolve(fetch(request));
-                        }
-                        return resolve(this.access);
-                    }
+            this.refreshing = (async () => {
+                const response = await tun.io.refresh();
+                if (!response.complete || !response.parsed) {
+                    this.auth = false;
+                    return null;
+                }
 
-                    this.access = response;
-                    this.auth = true;
-                    localStorage.setItem('access_token', JSON.stringify(this.access));
-                    resolve(this.access);
-                });
-            }
+                const { shiki, whoami } = response.value;
 
-            const request = Fetch.post(`${sUrl}/oauth/token`, this.body.refresh, Headers.base);
-            return r(request);
+                this.access = { ...shiki, scope: String(shiki.scope || "").split(" ") };
+                this.user = whoami;
+                this.auth = true;
+
+                localStorage.setItem("hub-access", JSON.stringify(this.access));
+                localStorage.setItem("hub-whoami", JSON.stringify(this.user));
+                return this.access;
+            })().finally(() => {
+                this.refreshing = null;
+            });
+
+            return this.refreshing;
         },
 
         getWhoami: () => {
@@ -382,15 +334,13 @@ export const OAuth = new class {
                     if (response.failed) {
                         if (response.status === 429) {
                             await this.events.sleep(1000);
-                            return resolve(fetch(request));
+                            return resolve(r(request));
                         }
                         return resolve(this.user);
                     }
 
-                    response.update = new Date().toISOString();
-
                     this.user = response;
-                    localStorage.setItem('access_whoami', JSON.stringify(this.user));
+                    localStorage.setItem('hub-whoami', JSON.stringify(this.user));
                     resolve(this.user);
                 });
             }
@@ -400,54 +350,44 @@ export const OAuth = new class {
         }
     }
 
-    isExpired() {
+    isExpired(skewSec = 60) {
         const { access } = this;
-        if (!access) return false;
+        const expRaw = access?.expires_at;
 
-        const currentTime = new Date().getTime();
-        const tokenExpiration = (access.created_at + access.expires_in) * 1000;
-        const liveTime = 6 * 60 * 60 * 1000; // 6 часов в миллисекундах
+        if (!expRaw) return true;
 
-        // Токен истек, если текущее время больше времени истечения
-        // или если оставшееся время жизни меньше liveTime
-        if (currentTime > tokenExpiration || (tokenExpiration - currentTime < liveTime)) {
-            return true;
-        }
+        const now = Math.floor(Date.now() / 1000);
+        const exp = Number(expRaw);
 
-        return false;
+        return now >= (exp - skewSec);
     }
-};
+}
 
 export const Headers = new class {
     get base() {
-        return { "User-Agent": "Tunime", "Accept": "application/json", };
+        return { "Accept": "application/json" };
     }
     get bearer() {
         const { access } = OAuth;
-        return { "User-Agent": "Tunime", "Authorization": `${access.token_type} ${access.access_token}`, "Accept": "application/json", };
+        return {
+            "Authorization": `${access.token_type} ${access.access_token}`,
+            "Accept": "application/json",
+        };
     }
 }
 
 export const Main = async (callback) => {
-    import("../modules/api.tunime.js");
+    const { Tunime } = await import("../modules/api.tunime.js");
 
     if (!OAuth.access) {
         return callback(false);
     }
 
     if (OAuth.isExpired()) {
-        await OAuth.requests.refreshToken();
+        await OAuth.requests.refreshToken(Tunime);
         if (!OAuth.auth) {
             return callback(false);
         }
-    }
-
-    const lastUpdate = OAuth.user?.update ? new Date(OAuth.user.update).getTime() : 0;
-    const currentTime = Date.now();
-    const needsUserUpdate = !OAuth.user || (currentTime - lastUpdate > 24 * 60 * 60 * 1000);
-
-    if (needsUserUpdate) {
-        await OAuth.requests.getWhoami();
     }
 
     callback(OAuth.auth);

@@ -534,206 +534,6 @@ class Controls {
     }
 }
 
-class Task {
-    static key = 'tsk-tunime';
-
-    #val = [];
-    #loaded = false;
-
-    #sessionSig = null;      // текущая сигнатура активной сессии
-    #bound = false;          // мы уже знаем user.access?
-
-    constructor({ onUpdate } = {}) {
-        this.onUpdate = typeof onUpdate === 'function' ? onUpdate : null;
-
-        window.addEventListener('pageshow', (e) => {
-            if (e.persisted) this.sync({ reason: 'bfcache' });
-            else this.sync({ reason: 'pageshow' });
-        });
-
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') {
-                this.sync({ reason: 'visible' });
-            }
-        });
-
-        // грузим raw из localStorage, но НЕ принимаем решение чистить/оставлять,
-        // пока не будет bindSession()
-        this.sync({ silent: true, reason: 'init' });
-    }
-
-    /**
-     * , когда user.access появился/обновился/стал undefined.
-     * Здесь и происходит решение: оставить задачи или очистить.
-     */
-    bindSession(access, { silent = false, reason = 'bindSession' } = {}) {
-        const nextSig = this.#makeSessionSig(access);
-
-        if (nextSig === null) {
-            this.#bound = true;
-            this.#sessionSig = null;
-            this.clear({ silent, reason: 'session-null' });
-            return;
-        }
-
-        this.#bound = true;
-        this.#sessionSig = nextSig;
-
-        // проверяем что лежит в storage
-        const payload = this.#readPayload();
-        if (!payload) {
-            // ничего нет — просто закрепили сессию
-            return;
-        }
-
-        // если payload от другой сессии — очищаем
-        if (payload.sessionSig && payload.sessionSig !== nextSig) {
-            this.clear({ silent, reason: 'session-changed' });
-            return;
-        }
-
-        // если payload без sessionSig (старый формат) — лучше очистить
-        if (!payload.sessionSig) {
-            this.clear({ silent, reason: 'missing-sessionSig' });
-            return;
-        }
-
-        // иначе всё ок — оставляем как есть
-        if (!silent && this.onUpdate) {
-            this.onUpdate({ reason, value: this.#val });
-        }
-    }
-
-    // --- API ---
-    update(list = [], { merge = true, silent = false, reason = 'update' } = {}) {
-        // если ещё не знаем сессию — обновлять нельзя, иначе перепутаешь сессии
-        if (!this.#bound) return;
-
-        const incoming = Array.isArray(list) ? list : [];
-        const normalizedIncoming = incoming
-            .filter(t => t && typeof t === 'object' && typeof t.key === 'string' && t.key.trim() !== '')
-            .map(t => ({ key: t.key.trim(), ...t }));
-
-        const next = merge ? this.#mergeByKey(this.#val, normalizedIncoming) : normalizedIncoming;
-        this.#set(next, { silent, reason });
-    }
-
-    has(key) {
-        return this.get(key) !== undefined;
-    }
-
-    get(key) {
-        // пока не bindSession — лучше не отдавать задачи (они “не привязаны”)
-        if (!this.#bound) return undefined;
-
-        if (!this.#loaded) this.sync({ silent: true, reason: 'lazy' });
-        const k = this.#normKey(key);
-        if (!k) return undefined;
-        return this.#val.find(t => t.key === k);
-    }
-
-    list() {
-        if (!this.#bound) return [];
-        if (!this.#loaded) this.sync({ silent: true, reason: 'lazy' });
-        return this.#val;
-    }
-
-    remove(key, { silent = false, reason = 'remove' } = {}) {
-        if (!this.#bound) return false;
-
-        if (!this.#loaded) this.sync({ silent: true, reason: 'lazy' });
-        const k = this.#normKey(key);
-        if (!k) return false;
-
-        const next = this.#val.filter(t => t?.key !== k);
-        const changed = !this.#deepEqual(this.#val, next);
-        if (changed) this.#set(next, { silent, reason });
-        return changed;
-    }
-
-    clear({ silent = false, reason = 'clear' } = {}) {
-        this.#set([], { silent, reason });
-    }
-
-    // --- storage ---
-    sync({ silent = false, reason = 'sync' } = {}) {
-        const payload = this.#readPayload();
-
-        // если нет payload — пусто
-        if (!payload) {
-            this.#set([], { silent, reason, skipWrite: true });
-            return;
-        }
-
-        // Поднимаем список в память (без чистки!)
-        const tasks = Array.isArray(payload.tasks) ? payload.tasks : [];
-        this.#set(tasks, { silent, reason, skipWrite: true });
-
-        // ВАЖНО: тут НЕ очищаем по sessionSig — это делается только в bindSession()
-    }
-
-    // --- internals ---
-    #readPayload() {
-        const raw = localStorage.getItem(Task.key);
-        if (!raw) return null;
-        try {
-            const v = JSON.parse(raw);
-            if (!v || typeof v !== 'object') return null;
-            return v;
-        } catch {
-            localStorage.removeItem(Task.key);
-            return null;
-        }
-    }
-
-    #writePayload() {
-        const payload = {
-            sessionSig: this.#sessionSig, // привязка к текущей сессии
-            tasks: this.#val,
-            updatedAt: Date.now()
-        };
-        localStorage.setItem(Task.key, JSON.stringify(payload));
-    }
-
-    #set(next, { silent = false, reason = 'set', skipWrite = false } = {}) {
-        if (!Array.isArray(next)) next = [];
-        const changed = !this.#deepEqual(this.#val, next);
-
-        this.#val = next;
-        this.#loaded = true;
-
-        if (!skipWrite) this.#writePayload();
-
-        if (!silent && changed && this.onUpdate) {
-            this.onUpdate({ reason, value: this.#val });
-        }
-    }
-
-    #mergeByKey(current, incoming) {
-        const map = new Map();
-        for (const t of current) if (t?.key) map.set(t.key, t);
-        for (const t of incoming) map.set(t.key, { ...(map.get(t.key) || {}), ...t });
-        return Array.from(map.values());
-    }
-
-    #normKey(key) {
-        return typeof key === 'string' ? key.trim() : '';
-    }
-
-    #deepEqual(a, b) {
-        if (a === b) return true;
-        try { return JSON.stringify(a) === JSON.stringify(b); } catch { return false; }
-    }
-
-    #makeSessionSig(access) {
-        // null = нет сессии
-        if (!access) return null;
-        // fallback
-        return `id:${access.id ?? ''}`;
-    }
-}
-
-
 const balancer = new Failover([
     'https://tunime.onrender.com',
     'https://tunime-hujg.onrender.com',
@@ -741,14 +541,11 @@ const balancer = new Failover([
 
 export const Snapshot = new Shadow();
 
-const tsk = new Task();
-
 const device = new Device();
 
 const user = new Session({
     onUpdate: ({ value, session }) => {
         Snapshot.update(session);
-        tsk.bindSession(value);
     }
 });
 
@@ -759,7 +556,7 @@ const Api = new class {
     }
 
     async logout() {
-        const response = await this.control.fetch('/logout', { method: 'GET' });
+        const response = await this.control.fetch('/shiki/auth', { method: 'DELETE' });
 
         if (response.complete && response.parsed) {
             user.access = response.value.data;
@@ -768,32 +565,19 @@ const Api = new class {
         return response.value?.data;
     }
 
-    async checkScope(scope) {
-        const response = await this.control.fetch('/scope', { method: 'GET' });
-
-        if (response.complete && response.parsed) {
-            user.setScope(response.value.data.scope);
-        }
-
-        return user.access.scope.includes(scope);
-    }
-
     async login() {
         const body = await this.#body();
 
-        const app = this.#app();
-
-        const response = await this.control.fetch(`/login?app=${app.installed}&date=${app.date}`, { method: 'POST', body });
+        const response = await this.control.fetch(`/login`, { method: 'POST', body });
 
         if (response.status !== 200 || !response.parsed) {
             return null;
         }
 
-        const { data, task } = response.value;
+        const { data } = response.value;
 
         device.id = data.did;
         user.access = data;
-        tsk.update(task, { merge: false });
 
         return data;
     }
@@ -815,22 +599,6 @@ const Api = new class {
         return data;
     }
 
-    #app() {
-        const key = 'application_installed';
-
-        let raw;
-        try {
-            raw = JSON.parse(localStorage.getItem(key) ?? 'null');
-        } catch {
-            raw = null;
-        }
-
-        const installed = typeof raw?.installed === 'boolean' ? raw.installed : false;
-        const date = typeof raw?.date === 'string' ? raw.date : '';
-
-        return { installed, date };
-    }
-
     async #body() {
         if (!$PARAMETERS.tunsync) return {}
 
@@ -849,6 +617,30 @@ const Api = new class {
 export const Tunime = new class {
     constructor() {
         this.control = new Controls();
+    }
+
+    io = {
+        auth: async (code) => {
+            const app = this.#app();
+
+            const response = await this.control.fetch(`/shiki/auth?app=${app.installed}&date=${app.date}`, { method: 'POST', body: { code } });
+
+            if (!response.parsed || !response.complete) {
+                return response;
+            }
+
+            const { data } = response.value;
+            user.access = data;
+
+            return response;
+        },
+
+        refresh: () => {
+            return this.control.fetch('/shiki/auth', { method: 'PATCH' });
+        },
+        genLink: () => {
+            return this.control.fetch('/shiki/auth', { method: 'GET' });
+        }
     }
 
     api = {
@@ -881,14 +673,6 @@ export const Tunime = new class {
                         return fetch('POST', body);
                     }
 
-                    if (tsk.has('shiki')) {
-                        if (await Api.checkScope('acc')) {
-                            tsk.remove('shiki');
-                            return fetch('POST', body);
-                        }
-                        throw { msg: 'Проверка аккаунта!', code: '001' }
-                    }
-
                     throw { msg: 'Нет доступа!', code: '002' }
                 },
 
@@ -899,14 +683,6 @@ export const Tunime = new class {
                         return fetch('PATCH', body);
                     }
 
-                    if (tsk.has('shiki')) {
-                        if (await Api.checkScope('acc')) {
-                            tsk.remove('shiki');
-                            return fetch('PATCH', body);
-                        }
-                        throw { msg: 'Проверка аккаунта!', code: '001' }
-                    }
-
                     throw { msg: 'Нет доступа!', code: '002' }
                 },
 
@@ -915,14 +691,6 @@ export const Tunime = new class {
 
                     if (hasScope) {
                         return fetch('DELETE', body);
-                    }
-
-                    if (tsk.has('shiki')) {
-                        if (await Api.checkScope('acc')) {
-                            tsk.remove('shiki');
-                            return fetch('DELETE', body);
-                        }
-                        throw { msg: 'Проверка аккаунта!', code: '001' }
                     }
 
                     throw { msg: 'Нет доступа!', code: '002' }
@@ -939,14 +707,6 @@ export const Tunime = new class {
 
                     if (hasScope) {
                         return fetch();
-                    }
-
-                    if (tsk.has('shiki')) {
-                        if (await Api.checkScope('acc')) {
-                            tsk.remove('shiki');
-                            return fetch();
-                        }
-                        throw { msg: 'Проверка аккаунта!', code: '001' }
                     }
 
                     throw { msg: 'Нет доступа!', code: '002' }
@@ -966,14 +726,6 @@ export const Tunime = new class {
 
                     if (hasScope) {
                         return fetch();
-                    }
-
-                    if (tsk.has('shiki')) {
-                        if (await Api.checkScope('acc')) {
-                            tsk.remove('shiki');
-                            return fetch();
-                        }
-                        throw { msg: 'Проверка аккаунта!', code: '001' }
                     }
 
                     throw { msg: 'Нет доступа!', code: '002' }
@@ -1061,37 +813,32 @@ export const Tunime = new class {
     }
 
     help = {
-        hasAccount: async ({ scope = 'acc', task = 'shiki' } = {}) => {
+        hasAccount: async ({ scope = 'acc' } = {}) => {
             const hasScope = user.access.scope?.includes(scope);
 
             if (hasScope) return true;
-
-            if (tsk.has(task)) {
-
-                if (await Api.checkScope(scope)) {
-                    tsk.remove(task);
-                    return true;
-                }
-
-                throw { msg: 'Аккаунт проверяется!', code: '001' }
-            }
 
             return false;
         },
         logout: async () => {
             return Api.logout();
-        },
-        login: async () => {
-            if (!$PARAMETERS.tunsync) return;
-
-            const { OAuth } = (await import("../core/main.core.js"));
-            await OAuth.requests.getWhoami();
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-
-            if (OAuth.access) {
-                await Api.login();
-            }
         }
+    }
+
+    #app() {
+        const key = 'application_installed';
+
+        let raw;
+        try {
+            raw = JSON.parse(localStorage.getItem(key) ?? 'null');
+        } catch {
+            raw = null;
+        }
+
+        const installed = typeof raw?.installed === 'boolean' ? raw.installed : false;
+        const date = typeof raw?.date === 'string' ? raw.date : '';
+
+        return { installed, date };
     }
 }();
 
@@ -1157,4 +904,3 @@ export const Tunime = new class {
 })({ exception: ['/player.html'] })
 
 window.$SHADOW = Snapshot;
-window.Tunime = Tunime;
