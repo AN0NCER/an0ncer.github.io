@@ -63,8 +63,7 @@
   gap: 5px;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   margin-bottom: max(var(--sab) - 10px, 10px);
   width: 100%;
   max-width: 390px;
@@ -215,7 +214,7 @@
   gap: 10px;
 }
 .content-rooms .content-wrapper .wrapper .rooms-list-wrapper .room-card .room-description .room-owner .owner-wrapper .owner-avatar {
-  --img: url("/images/ava.jpeg");
+  --img: url('/images/ava.jpeg');
   width: 50px;
   height: 50px;
   background: var(--img);

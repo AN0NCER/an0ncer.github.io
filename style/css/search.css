@@ -458,16 +458,16 @@ header .search-wrapper .btn.btn-filter .ticon {
   z-index: 1;
 }
 .seasons-list .seasons-wrapper .season.winter {
-  --img: url("../../images/seasons/winter.webp");
+  --img: url('../../images/seasons/winter.webp');
 }
 .seasons-list .seasons-wrapper .season.fall {
-  --img: url("../../images/seasons/autum.webp");
+  --img: url('../../images/seasons/autum.webp');
 }
 .seasons-list .seasons-wrapper .season.summer {
-  --img: url("../../images/seasons/summer.webp");
+  --img: url('../../images/seasons/summer.webp');
 }
 .seasons-list .seasons-wrapper .season.spring {
-  --img: url("../../images/seasons/spring.webp");
+  --img: url('../../images/seasons/spring.webp');
 }
 .seasons-list .seasons-wrapper .season:nth-child(2),
 .seasons-list .seasons-wrapper .season:nth-child(4) {
@@ -604,8 +604,7 @@ header .search-wrapper .btn.btn-filter .ticon {
   position: absolute;
   inset: 0;
   background: rgba(16, 19, 24, 0.69);
-  -webkit-backdrop-filter: blur(4px);
-          backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 
 .voices .voice-list {
@@ -698,8 +697,7 @@ header .search-wrapper .btn.btn-filter .ticon {
   position: absolute;
   inset: 0;
   background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .card-anime {
@@ -735,8 +733,7 @@ header .search-wrapper .btn.btn-filter .ticon {
   left: 0;
   right: 0;
   background: rgba(16, 19, 24, 0.7);
-  -webkit-backdrop-filter: blur(2.5px);
-          backdrop-filter: blur(2.5px);
+  backdrop-filter: blur(2.5px);
   text-align: center;
   padding: 10px 0px;
   z-index: 4;
@@ -755,8 +752,7 @@ header .search-wrapper .btn.btn-filter .ticon {
   right: 10px;
   top: 10px;
   background: linear-gradient(98.26deg, #51B2FF 0%, #2672DA 100%);
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   border-radius: 3px;
   padding: 4px 8px;
   display: flex;
@@ -885,7 +881,6 @@ body.-noscrol {
   opacity: 1;
   transition: 0.3s ease-in-out;
   background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   cursor: pointer;
 }
@@ -1333,8 +1328,7 @@ body.-noscrol {
   position: absolute;
   inset: 0;
   background: rgba(16, 19, 24, 0.69);
-  -webkit-backdrop-filter: blur(4px);
-          backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 .content-genres .content-wrapper .wrapper .window-genres-list .genre.sel {
   background: #2393F1;

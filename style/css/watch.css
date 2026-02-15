@@ -241,8 +241,7 @@ header .preview .btn-back {
   z-index: 15;
   top: 20px;
   left: 20px;
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   border-radius: 5px;
   display: grid;
   place-items: center;
@@ -307,8 +306,7 @@ header .preview .anime-status .cur-status {
 }
 header .preview .anime-status .cur-status .more-status {
   background: rgba(164, 164, 164, 0.5);
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   /* Note: backdrop-filter has minimal browser support */
   border-radius: 5px 0px 0px 5px;
   width: 18px;
@@ -370,6 +368,9 @@ header .preview .anime-status .list-status > .hide {
   max-height: 0px;
   overflow: hidden;
 }
+header .preview .anime-status .list-status > .status:first-child {
+  border-radius: 3px 3px 0 0;
+}
 header .preview .anime-status .list-status > .status {
   background: rgba(133, 133, 133, 0.8);
   width: 100%;
@@ -378,9 +379,6 @@ header .preview .anime-status .list-status > .status {
   align-items: center;
   justify-content: flex-start;
   cursor: pointer;
-}
-header .preview .anime-status .list-status > .status:first-child {
-  border-radius: 3px 3px 0 0;
 }
 header .preview .anime-status .list-status > .status .safe-area {
   min-width: 35px;
@@ -646,8 +644,7 @@ main .hero-anime .val a .hero {
   place-items: center;
   padding: 10px 0px;
   background: rgba(16, 19, 24, 0.7);
-  -webkit-backdrop-filter: blur(2.5px);
-          backdrop-filter: blur(2.5px);
+  backdrop-filter: blur(2.5px);
   position: absolute;
   bottom: 0;
 }
@@ -1005,8 +1002,7 @@ main > .room-controller-wrapper.-hide {
   left: 0;
   right: 0;
   background: rgba(16, 19, 24, 0.7);
-  -webkit-backdrop-filter: blur(2.5px);
-          backdrop-filter: blur(2.5px);
+  backdrop-filter: blur(2.5px);
   text-align: center;
   padding: 10px 0px;
   z-index: 4;
@@ -1025,8 +1021,7 @@ main > .room-controller-wrapper.-hide {
   right: 10px;
   top: 10px;
   background: linear-gradient(98.26deg, #51B2FF 0%, #2672DA 100%);
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   border-radius: 3px;
   padding: 4px 8px;
   display: flex;
@@ -1155,7 +1150,6 @@ body.-noscrol {
   opacity: 1;
   transition: 0.3s ease-in-out;
   background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   cursor: pointer;
 }
@@ -2619,8 +2613,7 @@ body.-noscrol {
   z-index: 1000;
   transition: 0.3s ease-in-out;
   pointer-events: none;
-  -webkit-backdrop-filter: blur(0px);
-          backdrop-filter: blur(0px);
+  backdrop-filter: blur(0px);
   border-radius: 15px;
   pointer-events: none;
 }

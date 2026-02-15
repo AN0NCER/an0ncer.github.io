@@ -76,7 +76,7 @@ header .head-wrapper .profile {
   gap: var(--p-gap);
 }
 header .head-wrapper .profile .ava-wrapper {
-  --p-ava-img: url("/images/ava.jpeg");
+  --p-ava-img: url('/images/ava.jpeg');
   display: grid;
   place-items: center;
   position: relative;
@@ -135,8 +135,7 @@ header .head-wrapper .quick-panel {
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.25);
   border-radius: 27px;
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 header .head-wrapper .quick-panel #account-edit {
   display: grid;
@@ -303,8 +302,7 @@ main .block-wrapper .checkbox-wrapper .checkbox::after {
   inset: 0;
   background: rgba(255, 255, 255, 0);
   border: 0.2px solid rgba(255, 255, 255, 0);
-  -webkit-backdrop-filter: blur(0px);
-          backdrop-filter: blur(0px);
+  backdrop-filter: blur(0px);
   pointer-events: none;
   border-radius: 5px;
 }
@@ -377,8 +375,7 @@ main .block-wrapper .checkbox-wrapper.-disable {
 main .block-wrapper .checkbox-wrapper.-disable > .checkbox::after {
   border: 0.2px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.11);
-  -webkit-backdrop-filter: blur(4px);
-          backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 main .block-wrapper .checkbox-wrapper.-load > .checkbox label {
   pointer-events: none;
@@ -459,8 +456,7 @@ main .block-wrapper .btn-value-wrapper.-disable > .btn::after {
   inset: 0;
   background: rgba(255, 255, 255, 0.11);
   border-radius: 5px;
-  -webkit-backdrop-filter: blur(4px);
-          backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 main .block-wrapper .loader {
   width: 14px;
@@ -724,8 +720,7 @@ main .block-wrapper .select-wrapper.-disable > .btn::after {
   inset: 0;
   background: rgba(255, 255, 255, 0.11);
   border-radius: 5px;
-  -webkit-backdrop-filter: blur(4px);
-          backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 main .block-wrapper .button-wrapper {
   padding: 0 20px;
@@ -903,7 +898,6 @@ body.-noscrol {
   opacity: 1;
   transition: 0.3s ease-in-out;
   background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   cursor: pointer;
 }
