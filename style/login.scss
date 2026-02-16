@@ -187,6 +187,11 @@ body {
                                     height: 14px;
                                     background-color: #FFFFFF;
                                 }
+
+                                &.-off{
+                                    opacity: .3;
+                                    pointer-events: none;
+                                }
                             }
 
                             .btn-skip {

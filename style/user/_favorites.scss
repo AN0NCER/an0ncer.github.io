@@ -78,6 +78,7 @@
 
             &.character-row-2,
             &.character-row-3 {
+                margin-top: calc(clamp(142px, 21vw, 174px) * -0.3666667);
                 margin-top: calc(-55px * (clamp(142px, 21vw, 174px) / 150px));
             }
         }

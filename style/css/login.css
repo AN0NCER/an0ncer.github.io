@@ -166,6 +166,10 @@ body {
   height: 14px;
   background-color: #FFFFFF;
 }
+.app-wrapper .content-container .border-wrapper .content-wrapper .wrapper .tun-content .btn-wrapper .primary.-off {
+  opacity: 0.3;
+  pointer-events: none;
+}
 .app-wrapper .content-container .border-wrapper .content-wrapper .wrapper .tun-content .btn-wrapper .btn-skip {
   color: #FFFFFF;
   opacity: 0.35;

@@ -142,7 +142,7 @@ export function WCharacter(id, { dom = 'body', onadd = (id, { x = 0, y = 0, img 
                     ScrollElementWithMouse($dom.find('.character-studios'));
 
                     (() => {
-                        let isBlocked = !$PARAMETERS.tunsync || !$SHADOW.state.permissions.includes('acc');
+                        let isBlocked = !$SHADOW.state.permissions.includes('acc');
 
                         Tunime.help.hasAccount().then((value) => {
                             isBlocked = !value;
