@@ -85,6 +85,7 @@ function Events() {
             window.location.href = link;
         } finally {
             $('.app-auth').addClass('-hide');
+            isBlocked = false;
         }
     });
 

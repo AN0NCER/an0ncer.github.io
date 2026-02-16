@@ -566,9 +566,7 @@ const Api = new class {
     }
 
     async login() {
-        const body = await this.#body();
-
-        const response = await this.control.fetch(`/login`, { method: 'POST', body });
+        const response = await this.control.fetch(`/login`, { method: 'POST' });
 
         if (response.status !== 200 || !response.parsed) {
             return null;
@@ -597,20 +595,6 @@ const Api = new class {
         user.access = data;
 
         return data;
-    }
-
-    async #body() {
-        if (!$PARAMETERS.tunsync) return {}
-
-        const OAuth = (await import("../core/main.core.js")).OAuth;
-        if (OAuth.access) {
-            return {
-                'token': OAuth.access.access_token,
-                'uid': OAuth.user?.id
-            }
-        }
-
-        return {};
     }
 }
 

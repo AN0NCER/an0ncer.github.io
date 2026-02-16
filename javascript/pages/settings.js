@@ -18,12 +18,6 @@ const setup = [
         name: 'Основные',
         params: [
             {
-                param: 'tunsync',
-                type: 'checkbox.tip',
-                title: 'TUN Аккаунт',
-                description: 'Открывает расширенные функции: синхронизация с Shikimori, друзья, прогресс, совместный просмотр и оформление профиля в Tunime.'
-            },
-            {
                 param: 'censored',
                 type: 'checkbox.tip',
                 title: 'Цензура',

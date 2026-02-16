@@ -335,7 +335,7 @@ export function WCharacterEditor(img, { dom = 'body', z = 300, title = "Перс
             },
             
             verification: () => {
-                if (!$PARAMETERS.tunsync || !($SHADOW.state.isConnected && $SHADOW.state.permissions.includes('acc'))) {
+                if (!($SHADOW.state.isConnected && $SHADOW.state.permissions.includes('acc'))) {
                     type = 'close';
                     resolve({ type, value: null });
                     return false;

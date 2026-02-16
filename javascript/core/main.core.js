@@ -255,7 +255,7 @@ export const OAuth = new class {
 
         genLink: async (tun) => {
             const response = await tun.io.genLink();
-            if (!response.complete && !response.parsed) return;
+            if (!response.complete || !response.parsed) throw new Error("Не удалось получить ссылку");
             return response.value.link;
         },
 
