@@ -46,7 +46,7 @@ header .head-wrapper .profile {
   gap: var(--p-gap);
 }
 header .head-wrapper .profile .ava-wrapper {
-  --p-ava-img: url("/images/ava.jpeg");
+  --p-ava-img: url('/images/ava.jpeg');
   display: grid;
   place-items: center;
   position: relative;
@@ -105,8 +105,7 @@ header .head-wrapper .quick-panel {
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.25);
   border-radius: 27px;
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 header .head-wrapper .quick-panel #account-edit {
   display: grid;
@@ -1045,8 +1044,7 @@ header .head-wrapper .quick-panel.-mini #page-search {
   left: 0;
   right: 0;
   background: rgba(16, 19, 24, 0.7);
-  -webkit-backdrop-filter: blur(2.5px);
-          backdrop-filter: blur(2.5px);
+  backdrop-filter: blur(2.5px);
   text-align: center;
   padding: 10px 0px;
   z-index: 4;
@@ -1065,8 +1063,7 @@ header .head-wrapper .quick-panel.-mini #page-search {
   right: 10px;
   top: 10px;
   background: linear-gradient(98.26deg, #51B2FF 0%, #2672DA 100%);
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   border-radius: 3px;
   padding: 4px 8px;
   display: flex;
@@ -1195,7 +1192,6 @@ body.-noscrol {
   opacity: 1;
   transition: 0.3s ease-in-out;
   background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   cursor: pointer;
 }

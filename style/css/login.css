@@ -127,6 +127,15 @@ body {
   flex-direction: column;
   justify-content: center;
 }
+.app-wrapper .content-container .border-wrapper .content-wrapper .wrapper .tun-content .text-wrapper.-err .error {
+  color: #e83636;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+.app-wrapper .content-container .border-wrapper .content-wrapper .wrapper .tun-content .text-wrapper.-err p {
+  display: none;
+}
 .app-wrapper .content-container .border-wrapper .content-wrapper .wrapper .tun-content .text-wrapper .slogan {
   font-size: 14px;
   color: #FFFFFF;

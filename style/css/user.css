@@ -251,8 +251,7 @@ body header .header-wrapper .profile-wrapper .profile-controls-wrapper .profile-
   justify-content: end;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 27px;
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   box-sizing: border-box;
 }
 body header .header-wrapper .profile-wrapper .profile-controls-wrapper .profile-info-wrapper .profile-controls .quick-panel .btn {
@@ -562,16 +561,16 @@ body main .user-characters-favorites-wrapper .user-characters-content-wrapper .c
 body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-row-3.character-row-3 {
   margin-top: calc(-55px * clamp(142px, 21vw, 174px) / 150px);
 }
-body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-hexagon {
-  cursor: pointer;
-  position: relative;
-}
 body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-hexagon[data-id=search] .load {
   display: none;
 }
 body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-hexagon.-load svg {
   opacity: 0.5;
   scale: 0.9;
+}
+body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-hexagon {
+  cursor: pointer;
+  position: relative;
 }
 body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-hexagon svg {
   pointer-events: none;
@@ -613,7 +612,6 @@ body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper
   max-width: 900px;
   margin: 0 auto;
   gap: 15px;
-  --border: 1px solid rgba(255, 255, 255, 0.1);
 }
 body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper > .title {
   font-size: 16px;
@@ -621,6 +619,9 @@ body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper
   font-weight: bold;
   display: flex;
   padding: 0 20px;
+}
+body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper {
+  --border: 1px solid rgba(255, 255, 255, 0.1);
 }
 body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper .franchises-completed {
   padding: 10px 0;
@@ -687,10 +688,12 @@ body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper
   overflow: hidden;
   position: relative;
   transition: 0.3s ease-in-out;
-  position: relative;
 }
 body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper .embla__slide .img-wrapper img {
   width: 100%;
+}
+body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper .embla__slide .img-wrapper {
+  position: relative;
 }
 body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper .embla__slide .img-wrapper .load {
   position: absolute;
@@ -718,9 +721,6 @@ body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper
   display: flex;
   flex-direction: column;
   gap: 5px;
-  opacity: 0;
-  transform: translateX(20px);
-  transition: 0.6s ease-in-out;
 }
 body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper .embla__slide .achivement-content .text-wrapper .title {
   font-weight: bold;
@@ -734,6 +734,11 @@ body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper
 body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper .embla__slide .achivement-content .text-wrapper .more {
   font-size: 10px;
   color: #7A7A7A;
+}
+body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper .embla__slide .achivement-content .text-wrapper {
+  opacity: 0;
+  transform: translateX(20px);
+  transition: 0.6s ease-in-out;
 }
 body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper .embla__slide.-activ .achivement-content .text-wrapper {
   opacity: 1;
@@ -1043,8 +1048,7 @@ body footer {
   left: 0;
   right: 0;
   background: rgba(16, 19, 24, 0.7);
-  -webkit-backdrop-filter: blur(2.5px);
-          backdrop-filter: blur(2.5px);
+  backdrop-filter: blur(2.5px);
   text-align: center;
   padding: 10px 0px;
   z-index: 4;
@@ -1063,8 +1067,7 @@ body footer {
   right: 10px;
   top: 10px;
   background: linear-gradient(98.26deg, #51B2FF 0%, #2672DA 100%);
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   border-radius: 3px;
   padding: 4px 8px;
   display: flex;
@@ -1233,7 +1236,6 @@ body.-noscrol {
   opacity: 1;
   transition: 0.3s ease-in-out;
   background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   cursor: pointer;
 }
@@ -1323,12 +1325,6 @@ body.-noscrol {
   max-height: 100dvh;
   overflow: auto;
 }
-.window-anime .window-content .content-wrapper .wrapper {
-  max-width: 940px;
-  margin: 0 auto;
-  width: 100%;
-  padding-bottom: var(--space);
-}
 .window-anime .window-content .content-wrapper .wrapper .window-bar {
   display: flex;
   align-items: center;
@@ -1352,6 +1348,12 @@ body.-noscrol {
 .window-anime .window-content .content-wrapper .wrapper .window-bar .window-close .ticon {
   height: 14px;
   background-color: #fff;
+}
+.window-anime .window-content .content-wrapper .wrapper {
+  max-width: 940px;
+  margin: 0 auto;
+  width: 100%;
+  padding-bottom: var(--space);
 }
 .window-anime .window-content .content-wrapper .wrapper .anime-list-wrapper {
   margin: 10px;
@@ -1418,8 +1420,7 @@ body.-noscrol {
   border-radius: 30px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.5);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   gap: 5px;
   padding: 5px;
   margin-bottom: var(--bot);
@@ -1620,12 +1621,12 @@ body.-noscrol {
 .friend .btn-control.-hide {
   border: none;
 }
+.friend .btn-control.-add .i-user-plus {
+  display: block;
+}
 .friend .btn-control.-add {
   background: #2393F1;
   box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.41), 0 2px 4px 0 rgba(0, 0, 0, 0.19), 0 4px 8px 0 rgba(0, 0, 0, 0.08);
-}
-.friend .btn-control.-add .i-user-plus {
-  display: block;
 }
 .friend .btn-control.-rem .i-user-minus {
   display: block;
@@ -1733,12 +1734,12 @@ body.-noscrol {
 .friend .btn-control.-hide {
   border: none;
 }
+.friend .btn-control.-add .i-user-plus {
+  display: block;
+}
 .friend .btn-control.-add {
   background: #2393F1;
   box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.41), 0 2px 4px 0 rgba(0, 0, 0, 0.19), 0 4px 8px 0 rgba(0, 0, 0, 0.08);
-}
-.friend .btn-control.-add .i-user-plus {
-  display: block;
 }
 .friend .btn-control.-rem .i-user-minus {
   display: block;
@@ -1755,7 +1756,6 @@ body.-noscrol {
   flex-direction: column;
   box-sizing: border-box;
   gap: 15px;
-  --border: 0.2px solid rgba(255, 255, 255, 0.2);
 }
 .user-friends-wrapper .user-friends-conent-wrapper > .title {
   font-size: 16px;
@@ -1763,6 +1763,9 @@ body.-noscrol {
   font-weight: bold;
   display: flex;
   padding: 0 20px;
+}
+.user-friends-wrapper .user-friends-conent-wrapper {
+  --border: 0.2px solid rgba(255, 255, 255, 0.2);
 }
 .user-friends-wrapper .user-friends-conent-wrapper .friends-list-wrapper .group-list {
   display: grid;
@@ -2009,8 +2012,7 @@ body.-noscrol {
   grid-template-columns: 1fr auto;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   width: 100%;
   max-width: 300px;
   min-width: 40px;

@@ -272,5 +272,6 @@ export const RoomOwner = ({ wsUrl, usersMap, onopen = () => {}, onclose = () => 
         offSEvents();
         clearInterval(ctx.vTimer);
         onclose();
+        Player.PControl.Exec("pause");
     });
 }

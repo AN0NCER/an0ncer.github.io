@@ -45,8 +45,7 @@ body {
   left: 0;
   right: 0;
   background: rgba(16, 19, 24, 0.7);
-  -webkit-backdrop-filter: blur(2.5px);
-          backdrop-filter: blur(2.5px);
+  backdrop-filter: blur(2.5px);
   text-align: center;
   padding: 10px 0px;
   z-index: 4;
@@ -65,8 +64,7 @@ body {
   right: 10px;
   top: 10px;
   background: linear-gradient(98.26deg, #51B2FF 0%, #2672DA 100%);
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   border-radius: 3px;
   padding: 4px 8px;
   display: flex;
@@ -195,7 +193,6 @@ body.-noscrol {
   opacity: 1;
   transition: 0.3s ease-in-out;
   background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   cursor: pointer;
 }
@@ -509,8 +506,7 @@ body[angle="90"] .span-row {
   z-index: 1000;
   transition: 0.3s ease-in-out;
   pointer-events: none;
-  -webkit-backdrop-filter: blur(0px);
-          backdrop-filter: blur(0px);
+  backdrop-filter: blur(0px);
   border-radius: 15px;
   pointer-events: none;
 }
@@ -911,8 +907,7 @@ body[angle="90"] .span-row {
   height: 29px;
   width: 29px;
   background: linear-gradient(98.26deg, #51B2FF 0%, #2672DA 100%);
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   border-radius: 3px;
   display: flex;
   justify-content: center;
@@ -1068,6 +1063,10 @@ body[angle="0"] .app-menu.hide {
 .content-filter .content-wraper .item-filter[data-order=asc] .filter-on .filter-order .asc svg {
   opacity: 1;
 }
+.content-filter .content-wraper .title-f-block .wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
 .content-filter .content-wraper .title-f-block {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -1075,10 +1074,6 @@ body[angle="0"] .app-menu.hide {
   padding-right: calc(env(safe-area-inset-right) + 20px);
   font-size: 13px;
   font-weight: bold;
-}
-.content-filter .content-wraper .title-f-block .wrapper {
-  max-width: 900px;
-  margin: 0 auto;
 }
 .content-filter .content-wraper .kind-show {
   padding-bottom: 10px;
