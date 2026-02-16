@@ -1,5 +1,5 @@
 const version = '3.1.12';
-const hash = "b9f1c";
+const hash = "a432c";
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 

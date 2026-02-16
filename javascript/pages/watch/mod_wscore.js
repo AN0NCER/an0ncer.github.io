@@ -151,12 +151,12 @@ const WindowScore = {
                     if (data === undefined)
                         return;
 
-                    const translation = resultsVoice.get(data.kodik_dub);
+                    const kodikInfo = resultsVoice.get(data.kodik_dub);
 
-                    if (!translation)
+                    if (!kodikInfo)
                         return;
 
-                    const title = translation.title;
+                    const title = kodikInfo.translation.title;
                     const date = new Date(data.date_update);
 
                     $(`.sync-data > .voice`).text(title);
