@@ -100,7 +100,8 @@ body .page-loading .inner.three {
 }
 body header {
   font-family: "Manrope", sans-serif;
-  max-width: 1400px;
+  max-width: min(100dvw, 1400px);
+  overflow: hidden;
   margin: 0 auto;
 }
 body header .header-image {
@@ -115,6 +116,7 @@ body header .header-image {
   width: 100%;
   aspect-ratio: 16/5;
   min-height: 300px;
+  max-width: 100dvw;
   max-height: none;
   height: auto;
 }
@@ -187,6 +189,7 @@ body header .header-wrapper .profile-wrapper .profile-controls-wrapper {
   margin-bottom: 3px;
   margin-top: 3px;
   flex: 1 0 0;
+  overflow: hidden;
 }
 body header .header-wrapper .profile-wrapper .profile-controls-wrapper .profile-tag-wrapper {
   display: flex;
@@ -204,6 +207,7 @@ body header .header-wrapper .profile-wrapper .profile-controls-wrapper .profile-
   color: white;
   font-size: 12px;
   font-weight: 900;
+  white-space: nowrap;
   text-wrap: nowrap;
 }
 body header .header-wrapper .profile-wrapper .profile-controls-wrapper .profile-tag-wrapper .profile-tag .ticon {
@@ -635,6 +639,7 @@ body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper
 }
 body main .user-achivements-franchises-wrapper .user-achivements-content-wrapper .franchises-completed {
   padding: 10px 0;
+  overflow: hidden;
   overflow: clip;
   position: relative;
   background: #191C21;
