@@ -2,6 +2,7 @@ import { Main, OAuth } from "../core/main.core.js";
 import { ClearParams } from "../modules/functions.js";
 import { createTimeline } from "../library/anime.esm.min.js";
 import { Tunime } from "../modules/api.tunime.js";
+import { $PWA } from "../core/pwa.core.js";
 
 //Слоганы страницы авторизации
 const slogans = [
@@ -40,6 +41,10 @@ ClearParams(['code']);
         Events();
         Animate();
     });
+    
+    $PWA.events.on('load', () => {
+        $('.btn-login').removeClass('-off');
+    })
 })();
 
 function Animate() {
