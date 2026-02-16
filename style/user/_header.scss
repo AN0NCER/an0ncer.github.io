@@ -1,6 +1,7 @@
 header {
     font-family: 'Manrope', sans-serif;
-    max-width: 1400px;
+    max-width: min(100dvw, 1400px);
+    overflow: hidden;
     margin: 0 auto;
     $border: 3px;
 
@@ -21,6 +22,7 @@ header {
 
         aspect-ratio: 16 / 5;
         min-height: 300px;
+        max-width: 100dvw;
         max-height: none;
         height: auto;
         
@@ -110,6 +112,7 @@ header {
                 margin-bottom: $border;
                 margin-top: $border;
                 flex: 1 0 0;
+                overflow: hidden;
 
                 .profile-tag-wrapper {
                     display: flex;
@@ -127,6 +130,7 @@ header {
                         color: #FFFFFFFF;
                         font-size: 12px;
                         font-weight: 900;
+                        white-space: nowrap;
                         text-wrap: nowrap;
 
                         .ticon {
