@@ -1,3 +1,5 @@
+import { OAuth } from "../core/main.core.js";
+
 class Session {
     static key = 'shadow-api';
 
@@ -534,10 +536,13 @@ class Controls {
     }
 }
 
-const balancer = new Failover([
-    'https://tunime.onrender.com',
-    'https://tunime-hujg.onrender.com',
-]);
+const balancer = new Failover(((list) => {
+    if (OAuth.mode === "test") {
+        const url = ((u) => (u.port = 3001, u.origin))(new URL(window.location.origin));
+        return [url];
+    }
+    return list;
+})(['https://tunime.onrender.com', 'https://tunime-hujg.onrender.com',]));
 
 export const Snapshot = new Shadow();
 

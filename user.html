@@ -164,6 +164,83 @@
                 <div class="character-row-1"></div>
                 <div class="character-row-2"></div>
             </div>
+            <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 186 211" width="0" hidden="0"
+                style="position: absolute; top: 0; left: 0; opacity: 0; pointer-events: none;">
+                <defs>
+                    <filter id="filter0_i_3946_7464" x="0" y="0" width="186" height="213" filterUnits="userSpaceOnUse"
+                        color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                            result="hardAlpha"></feColorMatrix>
+                        <feOffset dy="3"></feOffset>
+                        <feGaussianBlur stdDeviation="1"></feGaussianBlur>
+                        <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"></feComposite>
+                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 0"></feColorMatrix>
+                        <feBlend mode="normal" in2="shape" result="effect1_innerShadow_3946_7464"></feBlend>
+                    </filter>
+                    <filter id="filter1_d_3946_7464" x="1.7002" y="5.69995" width="181.6" height="204.532"
+                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                            result="hardAlpha"></feColorMatrix>
+                        <feOffset dy="2"></feOffset>
+                        <feGaussianBlur stdDeviation="2"></feGaussianBlur>
+                        <feComposite in2="hardAlpha" operator="out"></feComposite>
+                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 0"></feColorMatrix>
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3946_7464"></feBlend>
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3946_7464" result="shape">
+                        </feBlend>
+                    </filter>
+                    <clipPath id="hexClip">
+                        <path
+                            d="M87.6172 9.00306C90.6406 7.26558 94.3594 7.26558 97.3828 9.00306L174.383 53.256C177.424 55.004 179.3 58.2449 179.3 61.7531V150.179C179.3 153.687 177.424 156.928 174.383 158.676L97.3828 202.929C94.3594 204.667 90.6406 204.667 87.6172 202.929L10.6172 158.676C7.57558 156.928 5.7002 153.687 5.7002 150.179V61.7531C5.7002 58.2449 7.57558 55.004 10.6172 53.256L87.6172 9.00306Z" />
+                    </clipPath>
+                </defs>
+            </svg>
+            <template id="hex-character">
+                <div class="character-hexagon" data-id="null">
+                    <svg viewBox="0 0 186 211" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g filter="url(#filter0_i_3946_7464)">
+                            <path
+                                d="M87.7965 1.89241C91.0184 0.0358637 94.9814 0.0358637 98.2034 1.89241L180.26 49.1779C183.501 51.0456 185.5 54.5086 185.5 58.2572V152.742C185.5 156.491 183.501 159.954 180.26 161.822L98.2034 209.107C94.9814 210.964 91.0184 210.964 87.7965 209.107L5.73989 161.822C2.49854 159.954 0.5 156.491 0.5 152.742V58.2572C0.5 54.5086 2.49854 51.0456 5.73989 49.1779L87.7965 1.89241Z"
+                                fill="#3E4147" />
+                        </g>
+                        <path
+                            d="M87.7965 1.89241C91.0184 0.0358637 94.9814 0.0358637 98.2034 1.89241L180.26 49.1779C183.501 51.0456 185.5 54.5086 185.5 58.2572V152.742C185.5 156.491 183.501 159.954 180.26 161.822L98.2034 209.107C94.9814 210.964 91.0184 210.964 87.7965 209.107L5.73989 161.822C2.49854 159.954 0.5 156.491 0.5 152.742V58.2572C0.5 54.5086 2.49854 51.0456 5.73989 49.1779L87.7965 1.89241Z"
+                            fill="none" stroke="#393E46" />
+                        <g filter="url(#filter1_d_3946_7464)">
+                            <g clip-path="url(#hexClip)">
+                                <image class="hex-img" href="#" x="0" y="0" width="181.6" preserveAspectRatio="xMidYMid slice"></image>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+            </template>
+            <template id="hex-empty">
+                <div class="character-hexagon" data-id="null">
+                    <svg viewBox="0 0 186 211"
+                        fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g filter="url(#filter0_i_3946_7464)">
+                            <path
+                                d="M87.7965 1.89241C91.0184 0.0358637 94.9814 0.0358637 98.2034 1.89241L180.26 49.1779C183.501 51.0456 185.5 54.5086 185.5 58.2572V152.742C185.5 156.491 183.501 159.954 180.26 161.822L98.2034 209.107C94.9814 210.964 91.0184 210.964 87.7965 209.107L5.73989 161.822C2.49854 159.954 0.5 156.491 0.5 152.742V58.2572C0.5 54.5086 2.49854 51.0456 5.73989 49.1779L87.7965 1.89241Z"
+                                fill="#3E4147"></path>
+                        </g>
+                        <path
+                            d="M87.7965 1.89241C91.0184 0.0358637 94.9814 0.0358637 98.2034 1.89241L180.26 49.1779C183.501 51.0456 185.5 54.5086 185.5 58.2572V152.742C185.5 156.491 183.501 159.954 180.26 161.822L98.2034 209.107C94.9814 210.964 91.0184 210.964 87.7965 209.107L5.73989 161.822C2.49854 159.954 0.5 156.491 0.5 152.742V58.2572C0.5 54.5086 2.49854 51.0456 5.73989 49.1779L87.7965 1.89241Z"
+                            fill="none" stroke="#393E46"></path>
+                        <g filter="url(#filter1_d_3946_7464)">
+                            <path
+                                d="M87.6172 9.00306C90.6406 7.26558 94.3594 7.26558 97.3828 9.00306L174.383 53.256C177.424 55.004 179.3 58.2449 179.3 61.7531V150.179C179.3 153.687 177.424 156.928 174.383 158.676L97.3828 202.929C94.3594 204.667 90.6406 204.667 87.6172 202.929L10.6172 158.676C7.57558 156.928 5.7002 153.687 5.7002 150.179V61.7531C5.7002 58.2449 7.57558 55.004 10.6172 53.256L87.6172 9.00306Z"
+                                fill="#191C21"></path>
+                        </g>
+                        <path class="icon-add"
+                            d="M96.665 78.0725L113.54 88.0225L113.78 88.18L114.012 88.375L114.278 88.56C115.215 89.2624 115.988 90.1609 116.543 91.1929C117.097 92.2249 117.419 93.3655 117.488 94.535L117.5 95.045V113.255C117.5 116.192 115.893 118.895 113.443 120.237L96.4325 130.992C93.9825 132.337 91.0175 132.338 88.4325 130.913L71.695 120.32C70.4275 119.626 69.3696 118.604 68.6317 117.361C67.8938 116.118 67.503 114.7 67.5 113.255V95.0425C67.5 92.2775 68.925 89.7225 71.19 88.28L88.565 78.035C91.065 76.655 94.1 76.655 96.665 78.0725ZM92.5 94.5C91.837 94.5 91.2011 94.7634 90.7322 95.2322C90.2634 95.7011 90 96.337 90 97V102H85C84.3877 102 83.7967 102.225 83.3391 102.632C82.8815 103.039 82.5891 103.599 82.5175 104.207L82.5 104.5C82.5 105.163 82.7634 105.799 83.2322 106.268C83.7011 106.737 84.337 107 85 107H90V112C90.0001 112.612 90.2249 113.203 90.6318 113.661C91.0387 114.119 91.5994 114.411 92.2075 114.482L92.5 114.5C93.163 114.5 93.7989 114.237 94.2678 113.768C94.7366 113.299 95 112.663 95 112V107H100C100.612 107 101.203 106.775 101.661 106.368C102.119 105.961 102.411 105.401 102.483 104.792L102.5 104.5C102.5 103.837 102.237 103.201 101.768 102.732C101.299 102.263 100.663 102 100 102H95V97C94.9999 96.3877 94.7751 95.7967 94.3682 95.3391C93.9613 94.8815 93.4006 94.5891 92.7925 94.5175L92.5 94.5Z"
+                            fill="#393E46" />
+                    </svg>
+                </div>
+            </template>
         </div>
         <div class="user-achivements-franchises-wrapper -hide">
             <div class="user-achivements-content-wrapper -hide-completed -hide-unfinished">
