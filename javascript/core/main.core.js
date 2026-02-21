@@ -1,4 +1,4 @@
-export const sUrl = 'https://shiki.one';
+export const sUrl = 'https://shikimori.io';
 
 const $IPS = ["127.0", "192.168"] // <- тестовые версии
 let $MODE = 'production'; // <- тип запуска core
