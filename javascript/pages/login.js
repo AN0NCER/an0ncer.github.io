@@ -1,8 +1,7 @@
-import { Main, OAuth } from "../core/main.core.js";
-import { ClearParams } from "../modules/functions.js";
+import { Main } from "../core/main.core.js";
 import { createTimeline } from "../library/anime.esm.min.js";
-import { Tunime } from "../modules/api.tunime.js";
-import { $PWA } from "../core/pwa.core.js";
+import { Page } from "./login/mod.page.js";
+import { Hub } from "../core/hub.core.js";
 
 //Слоганы страницы авторизации
 const slogans = [
@@ -19,32 +18,39 @@ const slogans = [
     "Tunime ведёт вперёд — где фантазия живёт и ждёт."
 ];
 
-const code = new URLSearchParams(window.location.search).get('code');
+const dom = {
+    login: document.querySelector('.btn-login'),
+    slogan: document.querySelector('.slogan'),
+    $text_wrapper: $('.text-wrapper'),
+    $app_auth: $('.app-auth')
+}
 
-ClearParams(['code']);
+Main(async (e) => {
+    //Если пользователь авторизирован редирект на страничку с пользователем
+    if (e) return window.location.href = "/user.html";
 
-(async () => {
-    //Проверяем если это сработал автологин то делаем редирект на главную страницу т.к. может только от нее сработать AutoLogin
-    if (code) {
-        $('.app-auth').removeClass('-hide');
-        const { login } = await import("../utils/auth.login.js");
-        await login(code).catch(async (reason) => {
-            $('.text-wrapper').addClass('-err').append(`<span class="error">${reason?.message}</span>`);
+    Animate();
+    Events();
+}, {
+    beforeInit: Hub.onInit(() => {
+        dom.login.classList.remove('-off');
+    })
+});
+
+
+(() => {
+    if (Page.uCode) {
+        dom.$app_auth.removeClass('-hide');
+        Page.login(Page.uCode, () => {
+            dom.$app_auth.addClass('-hide');
+        }, (msg) => {
+            dom.$text_wrapper.addClass('-err').append(`<span class="error">${String(msg)}</span>`);
         });
-        $('.app-auth').addClass('-hide');
     }
 
-    Main(async (e) => {
-        //Если пользователь авторизирован редирект на страничку с пользователем
-        if (e) return window.location.href = "/user.html";
-
-        Events();
-        Animate();
-    });
-    
-    $PWA.events.on('load', () => {
-        $('.btn-login').removeClass('-off');
-    })
+    if (Page.uAnim) {
+        HideAnimate();
+    }
 })();
 
 function Animate() {
@@ -69,38 +75,47 @@ function Animate() {
     });
 }
 
+function HideAnimate() {
+    $('.loading').css('display', 'none');
+}
+
 function Events() {
-    //Блокировка действий после нажатия на авторизацию
-    let isBlocked = false;
+    dom.slogan.textContent = RandomSlogan();
 
-    $('.slogan').text(RandomSlogan());
+    dom.login.addEventListener('click', async () => {
+        if (Page.isBlocked) return;
+        Page.isBlocked = true;
 
-    $('.btn-login').on('click', async () => {
-        if (isBlocked) return;
+        if (Page.isDev) {
+            localStorage.removeItem('application_event');
+            let code = prompt("Ключ авторизации:");
+            if (code) {
+                window.location.href = `/login.html?code=${code}&anim`;
+            }
+        }
 
         $('.app-auth').removeClass('-hide');
-        isBlocked = true;
 
-        if (OAuth.mode === 'test') {
-            localStorage.removeItem('application_event');
-        }
+        Page.genLink((url) => {
+            if (Page.isDev)
+                window.open(url, '_blank').focus();
+            else
+                window.location.href = url;
 
-        try {
-            const link = await OAuth.events.genLink(Tunime);
-            window.location.href = link;
-        } finally {
             $('.app-auth').addClass('-hide');
-            isBlocked = false;
-        }
+        }, (msg) => {
+            dom.$text_wrapper.addClass('-err').append(`<span class="error">${String(msg)}</span>`);
+            $('.app-auth').addClass('-hide');
+        });
     });
 
     $('.btn-back, .btn-skip').on('click', async () => {
-        if (isBlocked) return;
+        if (Page.isBlocked) return;
         window.location.href = "/index.html";
     });
 
     $('.btn-settings').on('click', async () => {
-        if (isBlocked) return;
+        if (Page.isBlocked) return;
         window.location.href = "/settings.html";
     });
 }
