@@ -8,6 +8,7 @@
  *              AnimRate, AnimSkip
  */
 
+import { Hub } from "../../core/hub.core.js";
 import { Skips } from "./mod_stream.js";
 
 //Отвечает за анимацию загрузки плеера
@@ -17,7 +18,7 @@ export const AnimLoadPlayer = {
         this.load = false;
         _amLoad();
         try {
-            if ($SHADOW.state.hasApiAccess) {
+            if (Hub.snapshot.state.hasApiAccess) {
                 $(`.access-data > .pin`).addClass('green');
             } else {
                 $(`.access-data > .pin`).addClass('red');

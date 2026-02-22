@@ -1,3 +1,4 @@
+import { Hub } from "../core/hub.core.js";
 import { OAuth } from "../core/main.core.js";
 import { TWindow } from "../core/window.core.js";
 import { Tunime } from "../modules/api.tunime.js";
@@ -166,7 +167,7 @@ export function WBanner(image = '/images/page.user/head.profile.jpg', { append =
                 resolve(is_update);
             },
             verification: () => {
-                return $SHADOW.state.permissions.includes("acc");
+                return Hub.snapshot.state.permissions.includes("acc");
             }
         }, config.ell);
         _window.show("Нет доступа!");

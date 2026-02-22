@@ -1,0 +1,32 @@
+@mixin Player() {
+    .player {
+        display: flex;
+
+        iframe {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            display: flex;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        &.fullscreen {
+            aspect-ratio: 16 / 10;
+            width: 100%;
+
+            iframe {
+                position: fixed;
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 999;
+                margin: 0;
+                aspect-ratio: auto;
+                height: 100%;
+            }
+        }
+    }
+}

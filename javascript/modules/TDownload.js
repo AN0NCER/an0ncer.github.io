@@ -1,3 +1,4 @@
+import { Hub } from "../core/hub.core.js";
 import { DBControls, DBIndexing, TDatabase } from "./TDatabase.js"
 import { Tunime } from "./api.tunime.js";
 import { Sleep } from "./functions.js";
@@ -799,7 +800,7 @@ class TDownloader {
      */
     async Setup() {
         // Проверка на права пользователя 
-        if (!window.$SHADOW.state.isConnected && window.$SHADOW.state.hasApiAccess) {
+        if (!Hub.snapshot.state.isConnected && Hub.snapshot.state.hasApiAccess) {
             return this.#Dispatch("error", `Нету доступа к Tunime серверу`);
         }
 

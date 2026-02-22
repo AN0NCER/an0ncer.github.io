@@ -1,8 +1,9 @@
-import { TMenu } from "../core/menu.core.js";
-import { ShowUser } from "./index/mod_account.js";
+import { InitHeader, ShowUser } from "./index/mod_account.js";
 import { UserRates } from "../modules/api.shiki.js";
 import { GitHubRel } from "./index/mod_github.js";
 import { Main, OAuth } from "../core/main.core.js";
+import { TMenu } from "../core/menu.core.js";
+import { Hub } from "../core/hub.core.js";
 import { SetUserRate } from "./index/mod_trailers.js";
 import { GetHistoryWatch } from "./index/mod_history_watch.js";
 import { ScrollElementWithMouse, Sleep } from "../modules/functions.js";
@@ -13,9 +14,12 @@ TMenu.init();
 Main((e) => {
     ShowUser(e);
     LoadUpdatetAnime();
+}, {
+    beforeInit: Hub.onInit()
 });
 
 (() => {
+    InitHeader();
     LoadAnimeShikimori();
     GitHubRel();
     GetHistoryWatch();

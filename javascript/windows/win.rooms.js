@@ -1,7 +1,7 @@
 import { OAuth } from "../core/main.core.js";
 import { TWindow } from "../core/window.core.js";
 import { Users } from "../modules/api.shiki.js";
-import { Tunime } from "../modules/api.tunime.js";
+import { Rooms } from "../modules/api.tunime.js";
 import { Sleep } from "../modules/functions.js";
 import { Popup } from "../modules/tun.popup.js";
 import { Template } from "../modules/tun.template.js"
@@ -41,8 +41,7 @@ export function WRooms({ dom = 'body' } = {}) {
             if (!force && loadedOnce && (now - lastFetchAt) < STALE_MS) return;
 
             lastFetchAt = now;
-
-            const { complete, parsed, value } = await Tunime.rooms.list($ID);
+            const { complete, parsed, value } = await Rooms.list($ID);
             if (!complete || !parsed) return;
 
             const tplCard = $dom.querySelector('#room-card-template');
@@ -81,7 +80,7 @@ export function WRooms({ dom = 'body' } = {}) {
 
             WUsers({
                 oncreate: (ids, access, { canPause, canMembers }) => {
-                    Tunime.rooms.create($ID, {
+                    Rooms.create($ID, {
                         access,
                         friendIds: [...ids.keys()],
                         kodikId: Player.selected.id,
@@ -293,7 +292,7 @@ function UIRooms(data, { tplCard, tplEmpty, host, debug = false, onOwnerLoaded =
             if (room.acess !== "public" && !room.wait.includes(`${OAuth.user.id}`))
                 return new Popup('wss', 'Нет доступа', 301);
 
-            Tunime.rooms.join(room.id).then(async (response) => {
+            Rooms.join(room.id).then(async (response) => {
                 if (!response.complete || !response.parsed) {
                     if (response.status === 404) {
                         return new Popup('wss', 'Комната не существует', 301);

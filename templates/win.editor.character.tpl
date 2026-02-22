@@ -14,12 +14,12 @@
                         <div class="character-wrapper-show-box">
                             <svg id="hexagon" width="174" height="200" viewBox="0 0 174 200">
                                 <defs>
-                                    <clipPath id="hexClip">
+                                    <clipPath id="hexClipEditor">
                                         <path
                                             d="M82.0172 1.32985C85.1024 -0.443295 88.8976 -0.443291 91.9828 1.32986L168.983 45.5827C172.087 47.3665 174 50.6731 174 54.2529V142.679C174 146.259 172.087 149.566 168.983 151.35L91.9828 195.602C88.8976 197.376 85.1024 197.376 82.0172 195.602L5.01715 151.35C1.91348 149.566 0 146.259 0 142.679V54.2529C0 50.6731 1.91348 47.3665 5.01716 45.5827L82.0172 1.32985Z" />
                                     </clipPath>
                                 </defs>
-                                <g clip-path="url(#hexClip)">
+                                <g clip-path="url(#hexClipEditor)">
                                     <image id="mainImage"
                                         href="/images/noanime.png"
                                         x="0" y="0" width="174" preserveAspectRatio="xMidYMid slice" />

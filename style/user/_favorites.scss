@@ -78,12 +78,23 @@
 
             &.character-row-2,
             &.character-row-3 {
-                margin-top: calc(clamp(142px, 21vw, 174px) * -0.3666667);
-                margin-top: calc(-55px * (clamp(142px, 21vw, 174px) / 150px));
+                margin-top: calc(clamp(162px, 21vw, 188px) * -0.3666667);
+                margin-top: calc(-55px * (clamp(162px, 21vw, 188px) / 150px));
             }
         }
 
         .character-hexagon {
+            &[data-id="null"] {
+                svg {
+                    opacity: 0.3;
+                }
+
+                .icon-add {
+                    display: none;
+                }
+                cursor: default;
+            }
+
             &[data-id="search"] {
                 .load {
                     display: none;
@@ -103,8 +114,8 @@
             svg {
                 pointer-events: none;
                 width: 20vw;
-                max-width: 174px;
-                min-width: 135px;
+                max-width: 210px;
+                min-width: 160px;
                 transition: .3s ease-in-out;
             }
 
@@ -130,7 +141,7 @@
         // justify-items: center;
     }
 
-    &.-hide{
+    &.-hide {
         display: none;
     }
 }

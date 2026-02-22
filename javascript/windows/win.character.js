@@ -9,6 +9,7 @@ import { Popup } from "../modules/tun.popup.js";
 import { animate } from "../library/anime.esm.min.js";
 import { Tunime } from "../modules/api.tunime.js";
 import { OAuth } from "../core/main.core.js";
+import { Hub } from "../core/hub.core.js";
 
 const config = {
     key: "user-favorites",
@@ -142,7 +143,7 @@ export function WCharacter(id, { dom = 'body', onadd = (id, { x = 0, y = 0, img 
                     ScrollElementWithMouse($dom.find('.character-studios'));
 
                     (() => {
-                        let isBlocked = !$SHADOW.state.permissions.includes('acc');
+                        let isBlocked = !Hub.snapshot.state.permissions.includes('acc');
 
                         Tunime.help.hasAccount().then((value) => {
                             isBlocked = !value;

@@ -585,11 +585,32 @@ class Characters extends FAV {
     }
 
     #create = (id, link, x, y) => {
-        return $(`<div class="character-hexagon" data-id="${id}"><svg viewBox="0 0 174 200"><defs><clipPath id="hexClip"><path d="M82.0172 1.32985C85.1024 -0.443295 88.8976 -0.443291 91.9828 1.32986L168.983 45.5827C172.087 47.3665 174 50.6731 174 54.2529V142.679C174 146.259 172.087 149.566 168.983 151.35L91.9828 195.602C88.8976 197.376 85.1024 197.376 82.0172 195.602L5.01715 151.35C1.91348 149.566 0 146.259 0 142.679V54.2529C0 50.6731 1.91348 47.3665 5.01716 45.5827L82.0172 1.32985Z" /></clipPath></defs><g clip-path="url(#hexClip)"><image href="${link}" x="${x}" y="${y}" width="174" preserveAspectRatio="xMidYMid slice" /></g><path d="M82.1172 1.50327C85.1406 -0.234211 88.8594 -0.234211 91.8828 1.50327L168.883 45.7562C171.924 47.5042 173.8 50.7451 173.8 54.2533V142.679C173.8 146.187 171.924 149.428 168.883 151.176L91.8828 195.429C88.8594 197.167 85.1406 197.167 82.1172 195.429L5.11719 151.176C2.07558 149.428 0.200195 146.187 0.200195 142.679V54.2533C0.200195 50.7451 2.07558 47.5042 5.11719 45.7562L82.1172 1.50327Z" stroke="white" stroke-opacity="0.8" stroke-width="0.4" fill="none" /></svg></div>`);
+        const tpl = document.getElementById("hex-character");
+
+        const node = tpl.content.cloneNode(true);
+
+        const root = node.querySelector(".character-hexagon");
+        const img = node.querySelector(".hex-img");
+
+        root.dataset.id = id;
+
+        img.setAttribute("href", link);
+        img.setAttribute("x", x);
+        img.setAttribute("y", y);
+
+        return $(node);
     }
 
     #empty = (add = false) => {
-        return $(`<div class="character-hexagon" data-id="${add ? "search" : "null"}"><svg viewBox="0 0 174 200"><path d="M82.1172 1.50327C85.1406 -0.234211 88.8594 -0.234211 91.8828 1.50327L168.883 45.7562C171.924 47.5042 173.8 50.7451 173.8 54.2533V142.679C173.8 146.187 171.924 149.428 168.883 151.176L91.8828 195.429C88.8594 197.167 85.1406 197.167 82.1172 195.429L5.11719 151.176C2.07558 149.428 0.200195 146.187 0.200195 142.679V54.2533C0.200195 50.7451 2.07558 47.5042 5.11719 45.7562L82.1172 1.50327Z" stroke="white" stroke-opacity="0.8" stroke-width="0.4" fill="#191C21" />${add ? `<path d="M87 125C93.6304 125 99.9893 122.366 104.678 117.678C109.366 112.989 112 106.63 112 100C112 93.3696 109.366 87.0107 104.678 82.3223C99.9893 77.6339 93.6304 75 87 75C80.3696 75 74.0107 77.6339 69.3223 82.3223C64.6339 87.0107 62 93.3696 62 100C62 106.63 64.6339 112.989 69.3223 117.678C74.0107 122.366 80.3696 125 87 125ZM84.6562 108.594V102.344H78.4062C77.1074 102.344 76.0625 101.299 76.0625 100C76.0625 98.7012 77.1074 97.6562 78.4062 97.6562H84.6562V91.4062C84.6562 90.1074 85.7012 89.0625 87 89.0625C88.2988 89.0625 89.3438 90.1074 89.3438 91.4062V97.6562H95.5938C96.8926 97.6562 97.9375 98.7012 97.9375 100C97.9375 101.299 96.8926 102.344 95.5938 102.344H89.3438V108.594C89.3438 109.893 88.2988 110.938 87 110.938C85.7012 110.938 84.6562 109.893 84.6562 108.594Z" fill="white" fill-opacity="0.4" /></svg></div>` : ""}`);
+        const tpl = document.getElementById("hex-empty");
+
+        const node = tpl.content.cloneNode(true);
+
+        const root = node.querySelector(".character-hexagon");
+
+        root.dataset.id = add ? "search" : "null";
+
+        return $(node);
     }
 
     async #process([tun, characters]) {

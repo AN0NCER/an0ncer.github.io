@@ -572,8 +572,17 @@ body main .user-characters-favorites-wrapper .user-characters-content-wrapper .c
 body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-row-2.character-row-3,
 body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-row-3.character-row-2,
 body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-row-3.character-row-3 {
-  margin-top: calc(clamp(142px, 21vw, 174px) * -0.3666667);
-  margin-top: calc(-55px * clamp(142px, 21vw, 174px) / 150px);
+  margin-top: calc(clamp(162px, 21vw, 188px) * -0.3666667);
+  margin-top: calc(-55px * clamp(162px, 21vw, 188px) / 150px);
+}
+body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-hexagon[data-id=null] svg {
+  opacity: 0.3;
+}
+body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-hexagon[data-id=null] .icon-add {
+  display: none;
+}
+body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-hexagon[data-id=null] {
+  cursor: default;
 }
 body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-hexagon[data-id=search] .load {
   display: none;
@@ -589,8 +598,8 @@ body main .user-characters-favorites-wrapper .user-characters-content-wrapper .c
 body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-hexagon svg {
   pointer-events: none;
   width: 20vw;
-  max-width: 174px;
-  min-width: 135px;
+  max-width: 210px;
+  min-width: 160px;
   transition: 0.3s ease-in-out;
 }
 body main .user-characters-favorites-wrapper .user-characters-content-wrapper .character-hexagon .load {
@@ -836,7 +845,7 @@ body main .franschises-unfinished .list .achivement .background {
   background: var(--img);
   background-size: cover;
 }
-body main .franschises-unfinished .list .achivement title {
+body main .franschises-unfinished .list .achivement .title {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

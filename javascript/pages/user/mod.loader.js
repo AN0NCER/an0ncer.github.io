@@ -1,3 +1,4 @@
+import { Hub } from "../../core/hub.core.js";
 import { OAuth } from "../../core/main.core.js";
 import { Users } from "../../modules/api.shiki.js";
 import { Tunime } from "../../modules/api.tunime.js";
@@ -34,8 +35,8 @@ export const IOUser = new class extends TEvents {
         }
 
         // 2) если нет доступа/соединения — отдаем null и выходим
-        const hasPerm = !!$SHADOW.state.permissions.includes(this.#scope);
-        if (!$SHADOW?.state?.isConnected || !hasPerm) {
+        const hasPerm = !!Hub.snapshot.state.permissions.includes(this.#scope);
+        if (!Hub.snapshot?.state?.isConnected || !hasPerm) {
             this.update(null, { source: 'permission' });
             return;
         }

@@ -8,7 +8,7 @@
 
 import { Player } from "../player.js";
 
-export let onPause$, onPlay$, onDuration$, onTimeUpdate$, onError$, onEnded$, onVolumeChange$, onSeek$ = undefined;
+export let onPause$, onPlay$, onDuration$, onTimeUpdate$, onError$, onEnded$, onVolumeChange$, fullscreenChange$, iosFullscreen$, onSeek$ = undefined;
 
 /**
  * Инициализация событий плеера в rxjs
@@ -22,4 +22,20 @@ export function InitEvent() {
     onEnded$ = rxjs.fromEvent(Player, 'ended');
     onVolumeChange$ = rxjs.fromEvent(Player, 'volumechange');
     onSeek$ = rxjs.fromEvent(Player, 'seeked');
+    fullscreenChange$ = rxjs.merge(
+        rxjs.fromEvent(document, 'fullscreenchange'),
+        rxjs.fromEvent(document, 'webkitfullscreenchange'),
+        rxjs.fromEvent(document, 'mozfullscreenchange'),
+        rxjs.fromEvent(document, 'MSFullscreenChange'),
+    ).pipe(
+        rxjs.operators.map(() => Boolean(document.fullscreenElement))
+    );
+
+    iosFullscreen$ = rxjs.merge(
+        rxjs.fromEvent(Player, 'webkitbeginfullscreen')
+            .pipe(rxjs.operators.map(() => true)),
+        rxjs.fromEvent(Player, 'webkitendfullscreen')
+            .pipe(rxjs.operators.map(() => false))
+    );
+
 }

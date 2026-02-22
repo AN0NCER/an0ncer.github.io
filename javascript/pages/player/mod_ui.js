@@ -9,7 +9,7 @@
 
 import { Player, onBuffered$ } from "../player.js";
 import { AnimButtonStatus, AnimRate, AnimSettings } from "./mod_animation.js";
-import { onDuration$, onPause$, onPlay$, onTimeUpdate$, onVolumeChange$ } from "./mod_event.js";
+import { fullscreenChange$, onDuration$, onPause$, onPlay$, onTimeUpdate$, onVolumeChange$ } from "./mod_event.js";
 import { CURSOR_WIDTH, onPlaybackRate2$ } from "./mod_functions.js";
 import { STANDART_CONTROLS } from "./mod_settings.js";
 import { Skips } from "./mod_stream.js";
@@ -73,6 +73,8 @@ export function InitUI() {
         Skips.Skip();
     });
 
+    InitPIPButton();
+    InitVolume();
     SetVolume();
 
     SubscribePlayerControlsEvent();
@@ -132,6 +134,7 @@ export function InitUICallbacks() {
     });
     onVolumeChange$.subscribe({
         next: () => {
+            SaveVolume();
             SetVolume();
         }
     });
@@ -142,6 +145,13 @@ export function InitUICallbacks() {
             } else {
                 AnimRate.hide();
             }
+        }
+    });
+    fullscreenChange$.subscribe({
+        next: (isfull) => {
+            inControls = false;
+            inWindow = !isfull;
+            subControls$.next('c.mouseleave');
         }
     })
 }
@@ -160,6 +170,42 @@ function SetVolume() {
     $(`.volume > .volume-slider > .slide > .current-slide`).css({
         width: `${prcnt}%`
     })
+}
+
+/**
+ * Достает значение громкости сессии и устанавливает в плеер
+ */
+function InitVolume() {
+    const volumeSession = Number(sessionStorage.getItem('player-volume') ?? Player.volume);
+    Player.volume = volumeSession;
+}
+
+// Таймер после чего будет сохранено громкость плеера
+let saveVolueTimeout = null;
+
+/**
+ * Сохраняет значение громкости сессии
+ */
+function SaveVolume() {
+    clearTimeout(saveVolueTimeout);
+
+    saveVolueTimeout = setTimeout(() => {
+        const volumeSession = Player.volume;
+        sessionStorage.setItem('player-volume', volumeSession);
+    }, 300);
+}
+
+/**
+ * Скрывает кнопку PIP если та не доступна в браузере
+ */
+function InitPIPButton() {
+    const isPiPSupported =
+        'pictureInPictureEnabled' in document &&
+        typeof HTMLVideoElement.prototype.requestPictureInPicture === 'function';
+
+    if (!isPiPSupported) {
+        document.querySelector('.btn.pip').style.display = 'none';
+    }
 }
 
 /**

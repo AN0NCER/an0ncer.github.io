@@ -1,6 +1,7 @@
+import { Hub } from "../core/hub.core.js";
 import { Main, OAuth, sUrl } from "../core/main.core.js";
 import { TMenu } from "../core/menu.core.js";
-import { Snapshot, Tunime } from "../modules/api.tunime.js";
+import { Tunime } from "../modules/api.tunime.js";
 import { ClearParams } from "../modules/functions.js";
 import { Engine } from "./settings/mod.engine.js";
 import { ClearDB, Logout } from "./settings/mod.func.js";
@@ -40,7 +41,7 @@ const setup = [
             },
             {
                 enable: () => {
-                    return Snapshot.state.permissions.includes('acc')
+                    return Hub.snapshot.state.permissions.includes('acc')
                 },
                 value: async () => {
                     const response = await Tunime.api.device.name().GET();
