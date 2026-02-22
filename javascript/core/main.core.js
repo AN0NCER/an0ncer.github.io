@@ -321,10 +321,10 @@ export const OAuth = new class {
         },
 
         clear: () => {
-            const indexs = ['hub-access', 'hub-whoami'];
+            const indexs = [this.key.access, this.key.user];
             for (let i = 0; i < indexs.length; i++) {
                 const key = indexs[i];
-                localStorage.removeItem(key);
+                this.storage.removeItem(key);
             }
         }
     }
@@ -354,6 +354,12 @@ export const OAuth = new class {
             this.refreshing = (async () => {
                 const response = await Hub.api.refresh();
                 if (!response.complete || !response.parsed) {
+                    if(response.parsed && ["SHIKI_INVALID_GRANT", "USER_NOT_AUTHORIZED"].includes(response.value.code)){
+                        this.#access = null;
+                        this.#user = null;
+                        this.events.clear();
+                    }
+                    
                     this.auth = false;
                     return null;
                 }
