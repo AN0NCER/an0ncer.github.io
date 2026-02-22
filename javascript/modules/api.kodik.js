@@ -1,5 +1,6 @@
-const api = 'íç»÷\x97\x1DÝî\x1FïNü{·ùw\x8Dôç¯]ë\x9E}';
-const kurl = 'https://' + btoa('\x92\x87b\x91ªb') + '.com';
+// URL Cloudflare Worker (замените на ваш после деплоя)
+// Пример: 'https://kodik-proxy.your-account.workers.dev'
+const kurl = 'https://YOUR_WORKER_URL';
 
 export const Kodik = {
     List: function (query = {}, event = () => { }, signal) {
@@ -44,7 +45,7 @@ async function Fetch(query = {}, page, event = () => { }, signal) {
 }
 
 function Query(query) {
-    let q = "?token=" + btoa(api) + "&";
+    let q = "?";
     if (Object.keys(query).length > 0) {
         q += new URLSearchParams(query).toString();
     }
