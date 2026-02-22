@@ -1,5 +1,5 @@
-const version = '3.1.12';
-const hash = "a432c";
+const version = '3.1.13';
+const hash = "3ea85";
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 
@@ -62,6 +62,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/auto
     "/javascript/auto/download_a.js",
     // Директория: /javascript/core
+    "/javascript/core/hub.core.js",
     "/javascript/core/main.core.js",
     "/javascript/core/menu.core.js",
     "/javascript/core/menu.help.js",
@@ -124,6 +125,8 @@ const appShellFilesToCache = [
     "/javascript/pages/list/mod_search.js",
     "/javascript/pages/list/mod_ui.js",
     "/javascript/pages/list/mod_w_anime.js",
+    // Директория: /javascript/pages/login
+    "/javascript/pages/login/mod.page.js",
     // Директория: /javascript/pages/player
     "/javascript/pages/player/mod_animation.js",
     "/javascript/pages/player/mod_api.js",
