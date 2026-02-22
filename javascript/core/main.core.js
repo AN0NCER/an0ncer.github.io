@@ -1,5 +1,4 @@
 import { Hub } from "./hub.core.js";
-
 export const sUrl = 'https://shikimori.io';
 
 const $IPS = ["127.0", "192.168"] // <- тестовые версии
