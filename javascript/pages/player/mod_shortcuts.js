@@ -10,48 +10,52 @@ import { SendAPI } from "./mod_api.js";
 import { ALTERNATIVE_FULLSCREEN } from "./mod_settings.js";
 
 export function InitShortcuts() {
-    $(window).on('keyup', function (event) {
-        //Стрелка вправо
-        if (event.which == 32) {
-            //Пазуа воспроизведение видео
-            if (Player.paused) {
-                Player.play();
-            } else {
-                Player.pause();
-            }
-        }
-        //Стрелка влево
-        if (event.which == 37) {
-            //Перемотка назад на 10 секунд
-            Player.currentTime -= 10;
-        }
-        //Стрелка вправо
-        if (event.which == 39) {
-            //Перемотка вперед на 10 секунд
-            Player.currentTime += 10;
-        }
-        //Стрелка вверх
-        if (event.which == 38) {
-            Player.volume += 0.1;
-        }
-        //Стрелка вниз
-        if (event.which == 40) {
-            Player.volume -= 0.1;
-        }
-        //ESC 27
-        if (event.which == 27) {
-            if (document.fullscreenElement || Player.webkitEnterFullscreen) {
+    window.addEventListener('keydown', (event) => {
+        const tag = document.activeElement?.tagName;
+        const isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable;
+
+        if (isTyping) return;
+
+        switch (event.code) {
+
+            case 'Space':
+                event.preventDefault();
+                if (Player.paused) {
+                    Player.play();
+                } else {
+                    Player.pause();
+                }
+                break;
+
+            case 'ArrowLeft':
+                Player.currentTime = Math.max(0, Player.currentTime - 10);
+                break;
+
+            case 'ArrowRight':
+                Player.currentTime = Math.min(Player.duration, Player.currentTime + 10);
+                break;
+
+            case 'ArrowUp':
+                Player.volume = Math.min(1, Player.volume + 0.1);
+                break;
+
+            case 'ArrowDown':
+                Player.volume = Math.max(0, Player.volume - 0.1);
+                break;
+
+            case 'Escape':
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                }
+                if (ALTERNATIVE_FULLSCREEN) {
+                    SendAPI.fullscreen(false);
+                }
+                break;
+
+            case 'KeyF':
+                event.preventDefault();
                 toggleFullScreen();
-            }
-            if (ALTERNATIVE_FULLSCREEN) {
-                SendAPI.fullscreen(false);
-            }
-        }
-        event.preventDefault()
-    });
-    window.addEventListener('keydown', (e) => {
-        if (e.keyCode === 32 && e.target === document.body) {
-            e.preventDefault();
+                break;
         }
     });
 }
