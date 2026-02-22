@@ -73,6 +73,7 @@ export function InitUI() {
         Skips.Skip();
     });
 
+    InitPIPButton();
     InitVolume();
     SetVolume();
 
@@ -174,7 +175,7 @@ function SetVolume() {
 /**
  * Достает значение громкости сессии и устанавливает в плеер
  */
-function InitVolume(){
+function InitVolume() {
     const volumeSession = Number(sessionStorage.getItem('player-volume') ?? Player.volume);
     Player.volume = volumeSession;
 }
@@ -185,13 +186,26 @@ let saveVolueTimeout = null;
 /**
  * Сохраняет значение громкости сессии
  */
-function SaveVolume(){
+function SaveVolume() {
     clearTimeout(saveVolueTimeout);
 
     saveVolueTimeout = setTimeout(() => {
         const volumeSession = Player.volume;
         sessionStorage.setItem('player-volume', volumeSession);
     }, 300);
+}
+
+/**
+ * Скрывает кнопку PIP если та не доступна в браузере
+ */
+function InitPIPButton() {
+    const isPiPSupported =
+        'pictureInPictureEnabled' in document &&
+        typeof HTMLVideoElement.prototype.requestPictureInPicture === 'function';
+
+    if (!isPiPSupported) {
+        document.querySelector('.btn.pip').style.display = 'none';
+    }
 }
 
 /**
