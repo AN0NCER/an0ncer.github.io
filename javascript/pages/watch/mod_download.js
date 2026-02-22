@@ -1,3 +1,4 @@
+import { Hub } from "../../core/hub.core.js";
 import { ScrollElementWithMouse } from "../../modules/functions.js";
 import { ShowInfo } from "../../modules/Popup.js";
 import { TDAnime, TDLState, TDownload } from "../../modules/TDownload.js";
@@ -729,7 +730,7 @@ class Downloader {
     }
 
     verif() {
-        return $SHADOW.state.isConnected && $SHADOW.state.hasApiAccess;
+        return Hub.snapshot.state.isConnected && Hub.snapshot.state.hasApiAccess;
     }
 }
 

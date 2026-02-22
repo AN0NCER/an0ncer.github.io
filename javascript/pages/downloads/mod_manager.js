@@ -1,3 +1,4 @@
+import { Hub } from "../../core/hub.core.js";
 import { DBControls } from "../../modules/TDatabase.js";
 import { TDAnime, TDLState, TDownload } from "../../modules/TDownload.js";
 import { PullToClose, WindowManagement } from "../../modules/Windows.js";
@@ -518,7 +519,7 @@ class Manager {
         _window.hide();
     }
     verif() {
-        return $SHADOW.state.isConnected && $SHADOW.state.hasApiAccess;
+        return Hub.snapshot.state.isConnected && Hub.snapshot.state.hasApiAccess;
     }
 }
 

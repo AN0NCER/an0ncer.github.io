@@ -1,3 +1,4 @@
+import { Hub } from "../core/hub.core.js";
 import { TWindow } from "../core/window.core.js";
 import { Template } from "../modules/tun.template.js";
 import { WindowIntercator } from "../modules/win.module.js";
@@ -335,7 +336,7 @@ export function WCharacterEditor(img, { dom = 'body', z = 300, title = "Перс
             },
             
             verification: () => {
-                if (!($SHADOW.state.isConnected && $SHADOW.state.permissions.includes('acc'))) {
+                if (!(Hub.snapshot.state.isConnected && Hub.snapshot.state.permissions.includes('acc'))) {
                     type = 'close';
                     resolve({ type, value: null });
                     return false;

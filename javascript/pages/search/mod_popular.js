@@ -4,6 +4,7 @@ import { GraphQl } from "../../modules/api.shiki.js";
 import { Tunime } from "../../modules/api.tunime.js";
 import { Jikan } from "../../modules/api.jikan.js";
 import { TCache } from "../../modules/tun.cache.js";
+import { Hub } from "../../core/hub.core.js";
 
 function ui_load(ids, poster = undefined) {
     const body = ["id", "russian", { airedOn: ["year"] }, "score"];
@@ -56,7 +57,7 @@ function jikan_load() {
 }
 
 export function Popular() {
-    if ($SHADOW.state.hasApiAccess) {
+    if (Hub.snapshot.state.hasApiAccess) {
         try {
             return tun_load();
         } catch {

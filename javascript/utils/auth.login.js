@@ -7,7 +7,6 @@ const codes = {
 }
 
 export async function login(code) {
-    const { Tunime } = await import("../modules/api.tunime.js");
     const { TDatabase } = await import("../modules/TDatabase.js");
     const { OAuth } = await import("../core/main.core.js");
 
@@ -21,7 +20,7 @@ export async function login(code) {
 
     let application_event = localStorage.getItem('application_event');
     try {
-        await OAuth.requests.authorizate(Tunime, code);
+        await OAuth.requests.authorizate(code);
         localStorage.removeItem('application_event');
 
         if (application_event == "autologin") {

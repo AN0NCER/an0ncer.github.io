@@ -1,4 +1,6 @@
-export const sUrl = 'https://shiki.one';
+import { Hub } from "./hub.core.js";
+
+export const sUrl = 'https://shikimori.io';
 
 const $IPS = ["127.0", "192.168"] // <- тестовые версии
 let $MODE = 'production'; // <- тип запуска core
@@ -238,23 +240,78 @@ function updateAppIcons(config) {
 }
 
 export const OAuth = new class {
+    /**@type {null | {access_token:string,expires_at:number,scope:string[],token_type:string}} */
+    #access = null;
+    /**@type {null | {id:number,image:Object.<string,string>, nickname:string}} */
+    #user = null;
+
     constructor() {
         this.refreshing = null;
 
-        this.access = JSON.parse(localStorage.getItem('hub-access')) || null;
-        this.user = JSON.parse(localStorage.getItem('hub-whoami')) || null;
+        this.key = {
+            access: 'hub-access',
+            user: 'hub-whoami'
+        };
+
+        this.storage = localStorage;
+
+        this.#access = JSON.parse(this.storage.getItem(this.key.access)) || null;
+        this.#user = JSON.parse(this.storage.getItem(this.key.user)) || null;
+
         this.auth = this.access ? !this.isExpired() : false;
         this.events.setMode($MODE);
     }
 
+    get access() {
+        return this.#access;
+    }
+
+    get user() {
+        return this.#user;
+    }
+
+    set access(value) {
+        if (!value?.scope || !value?.access_token || !value?.expires_at) return;
+
+        if (!Array.isArray(value.scope)) {
+            value.scope = value.scope.split(' ');
+        }
+
+        const changed = value !== this.#access;
+
+        this.#access = {
+            ...this.#access,
+            ...value
+        };
+
+        this.auth = this.#access ? true : false;
+
+        if (!changed) return;
+
+        this.storage.setItem(this.key.access, JSON.stringify(this.#access));
+    }
+
+    set user(value) {
+        if (typeof value !== "object") return;
+
+        const changed = value !== this.#user;
+
+        this.#user = value;
+
+        if (!changed) return;
+
+        this.storage.setItem(this.key.user, JSON.stringify(this.#user));
+    }
+
     events = {
         setMode: (mode) => {
+            this.isDev = mode === 'test';
             this.mode = mode;
             this.scope = this.access ? this.access.scope : []
         },
 
-        genLink: async (tun) => {
-            const response = await tun.io.genLink();
+        genLink: async () => {
+            const response = await Hub.api.link();
             if (!response.complete || !response.parsed) throw new Error("Не удалось получить ссылку");
             return response.value.link;
         },
@@ -273,34 +330,29 @@ export const OAuth = new class {
     }
 
     requests = {
-        authorizate: (tun, code) => {
+        authorizate: (code) => {
             const r = async () => {
-                const response = await tun.io.auth(code);
+                const response = await Hub.api.auth(code);
                 if (!response.complete || !response.parsed) throw response;
 
                 const { shiki, whoami } = response.value;
 
-                this.access = {
-                    ...shiki,
-                    scope: shiki.scope.split(' ')
-                };
-
+                this.access = shiki;
                 this.user = whoami;
+
                 this.auth = true;
 
-                localStorage.setItem('hub-access', JSON.stringify(this.access));
-                localStorage.setItem('hub-whoami', JSON.stringify(this.user));
                 return this.access;
             }
 
             return r();
         },
 
-        refreshToken: (tun) => {
+        refreshToken: () => {
             if (this.refreshing) return this.refreshing;
 
             this.refreshing = (async () => {
-                const response = await tun.io.refresh();
+                const response = await Hub.api.refresh();
                 if (!response.complete || !response.parsed) {
                     this.auth = false;
                     return null;
@@ -308,12 +360,10 @@ export const OAuth = new class {
 
                 const { shiki, whoami } = response.value;
 
-                this.access = { ...shiki, scope: String(shiki.scope || "").split(" ") };
+                this.access = shiki
                 this.user = whoami;
-                this.auth = true;
 
-                localStorage.setItem("hub-access", JSON.stringify(this.access));
-                localStorage.setItem("hub-whoami", JSON.stringify(this.user));
+                this.auth = true;
                 return this.access;
             })().finally(() => {
                 this.refreshing = null;
@@ -340,7 +390,6 @@ export const OAuth = new class {
                     }
 
                     this.user = response;
-                    localStorage.setItem('hub-whoami', JSON.stringify(this.user));
                     resolve(this.user);
                 });
             }
@@ -376,15 +425,23 @@ export const Headers = new class {
     }
 }
 
-export const Main = async (callback) => {
-    const { Tunime } = await import("../modules/api.tunime.js");
+/**
+ * @param {(logged:boolean) => {}} callback 
+ * @param {{beforeInit: Promise<any>}} opts
+ */
+export const Main = async (callback, opts) => {
+    const beforeInit = opts?.beforeInit || new Promise((resolve) => { resolve() });
+
+    try {
+        await beforeInit;
+    } finally { }
 
     if (!OAuth.access) {
         return callback(false);
     }
 
     if (OAuth.isExpired()) {
-        await OAuth.requests.refreshToken(Tunime);
+        await OAuth.requests.refreshToken();
         if (!OAuth.auth) {
             return callback(false);
         }
@@ -392,3 +449,5 @@ export const Main = async (callback) => {
 
     callback(OAuth.auth);
 }
+
+window.OAuth = OAuth;
