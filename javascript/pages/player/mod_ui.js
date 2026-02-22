@@ -73,6 +73,7 @@ export function InitUI() {
         Skips.Skip();
     });
 
+    InitVolume();
     SetVolume();
 
     SubscribePlayerControlsEvent();
@@ -132,6 +133,7 @@ export function InitUICallbacks() {
     });
     onVolumeChange$.subscribe({
         next: () => {
+            SaveVolume();
             SetVolume();
         }
     });
@@ -167,6 +169,29 @@ function SetVolume() {
     $(`.volume > .volume-slider > .slide > .current-slide`).css({
         width: `${prcnt}%`
     })
+}
+
+/**
+ * Достает значение громкости сессии и устанавливает в плеер
+ */
+function InitVolume(){
+    const volumeSession = Number(sessionStorage.getItem('player-volume') ?? Player.volume);
+    Player.volume = volumeSession;
+}
+
+// Таймер после чего будет сохранено громкость плеера
+let saveVolueTimeout = null;
+
+/**
+ * Сохраняет значение громкости сессии
+ */
+function SaveVolume(){
+    clearTimeout(saveVolueTimeout);
+
+    saveVolueTimeout = setTimeout(() => {
+        const volumeSession = Player.volume;
+        sessionStorage.setItem('player-volume', volumeSession);
+    }, 300);
 }
 
 /**
