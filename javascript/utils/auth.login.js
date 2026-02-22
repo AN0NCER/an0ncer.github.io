@@ -3,6 +3,7 @@ const indexdb = ["tun-cache"];
 
 const codes = {
     'DEVICE_BLOCKED': "Устройство было заблокировано пользователем.",
+    'CODE_REQUIRED': "Нажми авторизоваться.",
     'DEFAULT': "Непредвиденная ошибка."
 }
 

@@ -9,7 +9,7 @@
 
 import { Player, onBuffered$ } from "../player.js";
 import { AnimButtonStatus, AnimRate, AnimSettings } from "./mod_animation.js";
-import { onDuration$, onPause$, onPlay$, onTimeUpdate$, onVolumeChange$ } from "./mod_event.js";
+import { fullscreenChange$, onDuration$, onPause$, onPlay$, onTimeUpdate$, onVolumeChange$ } from "./mod_event.js";
 import { CURSOR_WIDTH, onPlaybackRate2$ } from "./mod_functions.js";
 import { STANDART_CONTROLS } from "./mod_settings.js";
 import { Skips } from "./mod_stream.js";
@@ -142,6 +142,13 @@ export function InitUICallbacks() {
             } else {
                 AnimRate.hide();
             }
+        }
+    });
+    fullscreenChange$.subscribe({
+        next: (isfull) => {
+            inControls = false;
+            inWindow = !isfull;
+            subControls$.next('c.mouseleave');
         }
     })
 }
