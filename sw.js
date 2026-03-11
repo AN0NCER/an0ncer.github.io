@@ -1,5 +1,5 @@
 const version = '3.1.13';
-const hash = "63e40";
+const hash = "6fdb3";
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 
@@ -618,44 +618,50 @@ async function caching(filesToCache, { channel, batchSize }) {
 
 (() => {
     worker.addEventListener('fetch', event => {
-        event.respondWith((async () => {
-            const url = new URL(event.request.url);
-            try {
-                if (servers.some(s => url.href.startsWith(s))) {
-                    return fetch(new Request(event.request, {
-                        ...event.request,
-                        headers: new Headers({
-                            ...Object.fromEntries(event.request.headers),
-                            Authorization: (event.request.headers.get('Authorization') || '') + version
-                        })
-                    }));
-                }
+        const url = new URL(event.request.url);
 
-                if (url.pathname.startsWith('/javascript/pages/anime/')) {
-                    const response = await fetch(event.request);
-                    if (response.status !== 404) return response;
+        // игнорировать чужие домены
+        if (url.origin !== self.location.origin && !servers.includes(url.origin)) {
+            return;
+        }
 
-                    return fetch('/javascript/pages/anime/default.js');
-                }
-
-                if (worker.location.hostname !== url.hostname) {
-                    return fetch(event.request);
-                }
-
-                const cached = await caches.match(event.request);
-                if (cached) return cached;
-
-                if (url.pathname === "/") {
-                    return (await caches.match('/index.html')) || fetch(event.request);
-                }
-
-                return (await caches.match(url.pathname)) || fetch(event.request);
-            } catch (e) {
-                warn(`fetch error ${e}`)
-                return fetch(event.request);
-            }
-        })());
+        event.respondWith(handleRequest(event.request));
     });
+
+    const handleRequest = async (request) => {
+        const url = new URL(request.url);
+
+        try {
+            if (servers.some(s => url.href.startsWith(s))) {
+                return fetch(new Request(request, {
+                    headers: new Headers({
+                        ...Object.fromEntries(request.headers),
+                        Authorization: (request.headers.get('Authorization') || '') + version
+                    })
+                }));
+            }
+
+            if (url.pathname.startsWith('/javascript/pages/anime/')) {
+                const response = await fetch(request);
+                if (response.status !== 404) return response;
+
+                return fetch('/javascript/pages/anime/default.js');
+            }
+
+            const cached = await caches.match(request);
+            if (cached) return cached;
+
+            if (url.pathname === "/") {
+                return (await caches.match('/index.html')) || fetch(request);
+            }
+
+            return (await caches.match(url.pathname)) || fetch(request);
+
+        } catch (e) {
+            warn(`fetch error ${e}`);
+            return fetch(request);
+        }
+    }
 })(log('fetch event support enabled'));
 
 (() => {
