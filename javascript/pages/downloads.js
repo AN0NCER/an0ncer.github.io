@@ -45,7 +45,7 @@ async function getAnime() {
             id: anime.id,
             name: anime.name,
             count: countVideo(anime.video),
-            img: URL.createObjectURL(anime.poster.h),
+            img: typeof anime.poster.h === "string" ? anime.poster.h : URL.createObjectURL(anime.poster.h),
             size: formatBytes(anime.size)
         });
     })
@@ -67,7 +67,7 @@ async function showAnime(list = []) {
         }
     });
 
-    if(isHide){
+    if (isHide) {
         $('.empty-list').removeClass('hide');
     }
 }
