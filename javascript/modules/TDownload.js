@@ -395,6 +395,8 @@ class TDControl {
 
         /**@type {[Promise]} */
         let promiseTasks = [];
+        /**@type {[Promise]} */
+        const activeTasks = [];
         let downloaded = 0;
 
         const { blobs } = this.vValue;
@@ -405,6 +407,8 @@ class TDControl {
 
         this.#Dispatch("parts", blobs.length);
 
+        const CONCURRENCY_LIMIT = 5;
+
         for (let i = 0; i < blobs.length; i++) {
             const { b, t } = blobs[i];
 
@@ -413,40 +417,68 @@ class TDControl {
                 continue;
             }
 
-            promiseTasks.push(tryFetch(`${url}${b}`).then(async (blob) => {
-                this.vValue.blobs[i].b = blob;
-                this.vValue.info.duration += t;
-                downloaded++;
+            const task = (async (index, blobPath, duration) => {
+                try {
+                    const blob = await tryFetch(`${url}${blobPath}`);
 
-                if (downloaded % 30 === 0 && downloaded !== blobs.length) {
-                    this.tValue.speed = averageSpeedMBps;
-                    this.tValue.size = sizeLoaded;
-                    this.tValue.time = elapsedTime;
+                    this.vValue.blobs[index].b = blob;
+                    this.vValue.info.duration += duration;
+                    downloaded++;
 
-                    await this.tDr.db.set("video", { id: this.tDr.vId }, this.vValue);
-                    await this.tDr.db.set("task", { id: this.tValue.id }, this.tValue);
-                } else if (downloaded === blobs.length) {
-                    await this.tDr.db.set("video", { id: this.tDr.vId }, this.vValue);
+                    // Логика сохранения в БД (каждые 30 чанков или в конце)
+                    if (downloaded % 30 === 0 && downloaded !== blobs.length) {
+                        this.tValue.speed = averageSpeedMBps;
+                        this.tValue.size = sizeLoaded;
+                        this.tValue.time = elapsedTime;
+
+                        await this.tDr.db.set("video", { id: this.tDr.vId }, this.vValue);
+                        await this.tDr.db.set("task", { id: this.tValue.id }, this.tValue);
+                    } else if (downloaded === blobs.length) {
+                        await this.tDr.db.set("video", { id: this.tDr.vId }, this.vValue);
+                    }
+
+                    const progress = (downloaded / blobs.length) * 100;
+                    this.#Dispatch("update", { progress, parts: downloaded });
+                } finally {
+                    const idx = activeTasks.indexOf(task);
+                    if (idx > -1) activeTasks.splice(idx, 1);
                 }
+            })(i, b, t);
 
-                progress = downloaded / blobs.length * 100;
-                this.#Dispatch("update", { progress, parts: downloaded });
-            }));
+            // Добавляем задачу в список активных
+            promiseTasks.push(task);
+            activeTasks.push(task);
+
+            // Если достигли лимита, ждем, пока освободится хотя бы одно место
+            if (activeTasks.length >= CONCURRENCY_LIMIT) {
+                // Ждем, пока освободится хотя бы одно место
+                // Теперь race будет ждать реально работающие задачи
+                await Promise.race(activeTasks);
+            }
         }
 
-        Promise.all(promiseTasks).then(() => {
-            const finish = () => {
-                clearInterval(this.#statsInterval);
-                tasks.splice(tasks.findIndex(x => x === this.tDr.vId), 1);
-                this.#Dispatch("completed", { size: sizeLoaded, time: elapsedTime, speed: averageSpeedMBps, duration: this.vValue.info.duration });
-            }
+        // Ждем завершения абсолютно всех задач (включая последние 5)
+        await Promise.all(promiseTasks);
 
-            if (promiseRetry.length === 0) {
-                finish();
-            } else {
-                Promise.all(promiseRetry).then(finish);
-            }
-        });
+        // Вызываем finish
+        const finish = () => {
+            clearInterval(this.#statsInterval);
+            const taskIdx = tasks.findIndex(x => x === this.tDr.vId);
+            if (taskIdx > -1) tasks.splice(taskIdx, 1);
+            this.#Dispatch("completed", {
+                size: sizeLoaded,
+                time: elapsedTime,
+                speed: averageSpeedMBps,
+                duration: this.vValue.info.duration
+            });
+        };
+
+        if (promiseRetry.length === 0) {
+            finish();
+        } else {
+            await Promise.all(promiseRetry);
+            finish();
+        }
     }
 
     async LocalDownload() {
@@ -1203,7 +1235,14 @@ export class TDAnime {
                 try {
                     const response = await fetch(`https://api.jikan.moe/v4/anime/${this.anime.id}/pictures`);
                     const { data } = await response.json();
-                    resolve(imageToBlob(data[0].jpg.image_url));
+
+                    let url = data[0].jpg.image_url;
+
+                    if (!url.includes('cdn.')) {
+                        url = url.replace('https://', 'https://cdn.');
+                    }
+                    
+                    resolve(imageToBlob(url));
                 } catch {
                     resolve(this.img);
                 }
