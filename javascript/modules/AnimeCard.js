@@ -89,8 +89,7 @@ export const ACard = {
 
         function Gen() {
             return `<div class="card-content">
-                        <img src="${anime.poster.mainUrl}" ${priority ? `fetchpriority="high"` : ``} class="blur">
-                        <img src="${anime.poster.mainUrl}" ${priority ? `fetchpriority="high"` : ``}>
+                        ${GenImg()}
                         <div class="title"><span>${anime.russian}</span></div>
                         ${data?.score ? `<div class="score">${data.score}</div>` : ''}
                     </div>
@@ -110,6 +109,28 @@ export const ACard = {
             }
 
             return str;
+        }
+
+        function GenImg() {
+            if (anime?.poster?.mainUrl) {
+                return `<img src="${anime?.poster?.mainUrl}" ${priority ? `fetchpriority="high"` : ``} class="blur"><img src="${anime?.poster?.mainUrl}" ${priority ? `fetchpriority="high"` : ``}>`;
+            }
+
+            const id = `jikan-${Math.random().toString(36).substring(2, 15)}`;
+
+            try {
+                fetch(`https://api.jikan.moe/v4/anime/${anime.id}/pictures`).then(async (res) => {
+                    const json = await res.json();
+
+                    if (json?.data[0]?.webp?.large_image_url) {
+                        document.querySelectorAll(`[data-id="${id}"]`).forEach((el) => {
+                            el.src = json?.data[0]?.webp?.large_image_url
+                        });
+                    }
+                });
+            } finally { }
+
+            return `<img data-id="${id}" src="/images/noanime.png" ${priority ? `fetchpriority="high"` : ``} class="blur"><img data-id="${id}" src="/images/noanime.png" ${priority ? `fetchpriority="high"` : ``}>`;
         }
     },
 
