@@ -57,15 +57,25 @@ export function tLoad(e = () => { }, { logged = false } = {}) {
                     resolve(true);
                 });
 
+                const error = async () => {
+                    try {
+                        await new Reserv().get().then((value) => {
+                            img.setAttribute('src', value.images.webp.large_image_url);
+                        });
+                    } finally {
+                        resolve(true);
+                    }
+                }
+
                 img.addEventListener('error', (e) => {
                     console.log('[error] - Anime poster not loaded');
-                    new Reserv().get().then((value) => {
-                        resolve(true);
-                        img.setAttribute('src', value.images.webp.large_image_url);
-                    });
+                    error();
                 });
 
-                img.setAttribute('src', tAnime["poster"]["originalUrl"]);
+                if (tAnime["poster"] && tAnime["poster"]["originalUrl"])
+                    img.setAttribute('src', tAnime["poster"]["originalUrl"]);
+                else
+                    error();
             }));
 
             Chronology(tAnime["chronology"]);
@@ -180,8 +190,8 @@ export function tLoad(e = () => { }, { logged = false } = {}) {
 }
 
 /**
-     * Загрузка похожих аниме
-     */
+* Загрузка похожих аниме
+*/
 async function Similiar(id) {
     const cache = new TCache();
     let ids = null;
