@@ -39,7 +39,8 @@ const $PARAMETERS = {
         alternative_full: false,
         standart_controls: false,
         autoquality: true,
-        skipmoments: true
+        skipmoments: true,
+        error_quality: true
     },
     update: {
         updateshow: true,

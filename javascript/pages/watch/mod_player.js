@@ -496,6 +496,19 @@ class Message {
 class Player {
     #callbacks = player_callbacks;
 
+    #name = undefined;
+
+    set name(value) {
+        this.#name = value;
+        const el = document.querySelector('.player');
+        el.setAttribute('data-type', this.#name);
+        el.setAttribute('default-controls', $PARAMETERS.player.standart_controls);
+    }
+
+    get name() {
+        return this.#name;
+    }
+
     constructor({ standart = false } = {}) {
         this.results = new Map();
 
@@ -565,7 +578,7 @@ class Player {
         this.loaded = false;
         let url = `${uri}?hide_selectors=true&episode=${episode}`;
         if (this.name === "tunime") {
-            url = `player.html?id=${this.selected.id}&e=${episode}`
+            url = `tplayer.html?id=${this.selected.id}&e=${episode}`
         }
         document.querySelector("#kodik-player").contentWindow.location.replace(url);
         this.#Loading();

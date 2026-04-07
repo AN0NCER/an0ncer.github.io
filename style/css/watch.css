@@ -740,16 +740,31 @@ main .player-title .player-controls .btn.-hide {
   display: flex;
 }
 .player iframe {
-  width: 100%;
-  aspect-ratio: 16/10;
-  display: flex;
-  border-radius: 5px;
   margin-top: 10px;
-  margin-left: 20px;
-  margin-right: 20px;
+  width: 100%;
+  aspect-ratio: 16/9;
+}
+.player[data-type=tunime][default-controls=false] iframe {
+  width: 100%;
+  min-height: calc(56.25vw + 48px);
+  display: flex;
+  aspect-ratio: auto;
+}
+@media (orientation: landscape) {
+  .player iframe {
+    aspect-ratio: 16/9 !important;
+    min-height: auto !important;
+  }
+}
+@media screen and (min-width: 900px) {
+  .player iframe {
+    min-height: auto !important;
+    border-radius: 5px !important;
+    aspect-ratio: 16/9 !important;
+  }
 }
 .player.fullscreen {
-  aspect-ratio: 16/10;
+  aspect-ratio: 16/9;
   width: 100%;
 }
 .player.fullscreen iframe {

@@ -2,18 +2,39 @@
     .player {
         display: flex;
 
-        iframe {
-            width: 100%;
-            aspect-ratio: 16 / 10;
-            display: flex;
-            border-radius: 5px;
+        iframe{
             margin-top: 10px;
-            margin-left: 20px;
-            margin-right: 20px;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+        }
+
+        &[data-type="tunime"][default-controls="false"]{
+            iframe {
+                width: 100%;
+                min-height: calc((100vw * 9 / 16) + 48px);
+                display: flex;
+                aspect-ratio: auto;
+            }
+        }
+
+        @media (orientation: landscape) {
+            iframe{
+                aspect-ratio: 16/9 !important;
+                min-height: auto !important;
+            }
+        }
+
+
+        @media screen and (min-width:900px) {
+            iframe {
+                min-height: auto !important;
+                border-radius: 5px !important;
+                aspect-ratio: 16/9 !important;
+            }
         }
 
         &.fullscreen {
-            aspect-ratio: 16 / 10;
+            aspect-ratio: 16 / 9;
             width: 100%;
 
             iframe {

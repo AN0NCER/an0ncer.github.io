@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TPlayer</title>
+    <link rel="icon" type="image/png" href="/images/player-icon.png">
+    <link rel="stylesheet" href="/style/css/tplayer.css">
+</head>
+
+<body class="-focus">
+    <div class="video-loader">
+        <svg viewBox="25 25 50 50" class="container">
+            <circle cx="50" cy="50" r="20" class="loader"></circle>
+        </svg>
+    </div>
+    <div class="video-wrapper" id="video-wrapper">
+        <div class="skip-moment-wrapper">
+            <div class="content-value">
+                Пропустить
+            </div>
+            <svg viewBox="0 0 640 640" class="play" aria-hidden="true">
+                <use href="#i-angle-right"></use>
+            </svg>
+        </div>
+        <div class="video-controller">
+            <div class="progress-bar-wrapper -hide">
+                <div class="video-timeline-controller">
+                    <div class="current-time" id="media-progress-bar">
+                        <div class="point"></div>
+                    </div>
+                    <div class="load-progress" id="media-load-bar"></div>
+                </div>
+            </div>
+            <div class="video-controller-wrapper">
+                <div class="l-controlls">
+                    <div class="btn w48 h48" id="media-play-button">
+                        <svg viewBox="0 0 640 640" class="play" aria-hidden="true">
+                            <use href="#i-play"></use>
+                        </svg>
+                        <svg viewBox="0 0 640 640" class="pause" aria-hidden="true">
+                            <use href="#i-pause"></use>
+                        </svg>
+                    </div>
+                    <div class="vtime">
+                        <span class="current-time" id="media-current-time">0:0</span>
+                        <span class="divider">/</span>
+                        <span class="durration" id="media-source-duration">0:0</span>
+                    </div>
+                </div>
+                <div class="r-controlls">
+                    <div class="volume-contoller" id="media-volume-container">
+                        <div class="tag" data-type="volume-tag">
+                            live
+                        </div>
+                        <div class="volume-slider" id="media-volume-slider" data-type="volume-slider">
+                            <div class="value" data-source="volume"></div>
+                        </div>
+                        <div class="btn w48 h48 v-100" id="media-volume-btn" data-type="volume-btn">
+                            <svg viewBox="0 0 640 640" class="v100" aria-hidden="true">
+                                <use href="#i-volume"></use>
+                            </svg>
+                            <svg viewBox="0 0 640 640" class="v50" aria-hidden="true">
+                                <use href="#i-volume-low"></use>
+                            </svg>
+                            <svg viewBox="0 0 640 640" class="v0" aria-hidden="true">
+                                <use href="#i-volume-off"></use>
+                            </svg>
+                            <svg viewBox="0 0 640 640" class="v-mute" aria-hidden="true">
+                                <use href="#i-volume-xmark"></use>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="quality-wrapper-btn">
+                        <div class="open-quality-selector" id="media-qiality-button" data-source="quality">
+                            0p
+                        </div>
+                    </div>
+                    <div class="btn w48 h48 -load" id="media-pip-button">
+                        <svg viewBox="0 0 640 640" aria-hidden="true">
+                            <use href="#i-picture-in-picture"></use>
+                        </svg>
+                    </div>
+                    <div class="btn w48 h48" id="media-fullscreen-button">
+                        <svg viewBox="0 0 640 640" aria-hidden="true">
+                            <use href="#i-expand"></use>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="interactive quality-selector -hide" id="media-quality-interactive">
+                    <div class="quality-select-wrapper">
+                        <div class="current-quality" data-source="quality">
+                            0p
+                        </div>
+                        <div class="quality-list" id="media-quality-selectors"></div>
+                        <div class="btn w48 h48" id="media-close-quality">
+                            <svg viewBox="0 0 640 640" aria-hidden="true">
+                                <use href="#i-xmark"></use>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="interactive volume-controller -hide" id="media-volume-interactive">
+                    <div class="volume-controller-wrapper">
+                        <div class="btn w48 h48" id="media-close-volume">
+                            <svg viewBox="0 0 640 640" aria-hidden="true">
+                                <use href="#i-xmark"></use>
+                            </svg>
+                        </div>
+                        <div class="volume-controller-overlay">
+                            <div class="btn w48 h48 v-100" id="media-volume-btn" data-type="volume-btn">
+                                <svg viewBox="0 0 640 640" class="v100" aria-hidden="true">
+                                    <use href="#i-volume"></use>
+                                </svg>
+                                <svg viewBox="0 0 640 640" class="v50" aria-hidden="true">
+                                    <use href="#i-volume-low"></use>
+                                </svg>
+                                <svg viewBox="0 0 640 640" class="v0" aria-hidden="true">
+                                    <use href="#i-volume-off"></use>
+                                </svg>
+                                <svg viewBox="0 0 640 640" class="v-mute" aria-hidden="true">
+                                    <use href="#i-volume-xmark"></use>
+                                </svg>
+                            </div>
+                            <div class="volume-slider" id="media-volume-slider" data-type="volume-slider">
+                                <div class="value" data-source="volume"></div>
+                            </div>
+                            <div class="tag" data-type="volume-tag">
+                                live
+                            </div>
+                        </div>
+                        <div class="presets-list">
+                            <div class="btn w48 h48 -select">
+                                <svg viewBox="0 0 640 640" aria-hidden="true">
+                                    <use href="#i-headphones"></use>
+                                </svg>
+                            </div>
+                            <span class="line"></span>
+                            <div class="btn w48 h48">
+                                <svg viewBox="0 0 640 640" aria-hidden="true">
+                                    <use href="#i-speaker"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <video src="" id="player" poster="/images/preview-image.png" playsinline muted></video>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+        <symbol id="i-play" viewBox="0 0 640 640">
+            <path
+                d="M187.2 100.9C174.8 94.1 159.8 94.4 147.6 101.6C135.4 108.8 128 121.9 128 136L128 504C128 518.1 135.5 531.2 147.6 538.4C159.7 545.6 174.8 545.9 187.2 539.1L523.2 355.1C536 348.1 544 334.6 544 320C544 305.4 536 291.9 523.2 284.9L187.2 100.9z" />
+        </symbol>
+        <symbol id="i-pause" viewBox="0 0 640 640">
+            <path
+                d="M176 96C149.5 96 128 117.5 128 144L128 496C128 522.5 149.5 544 176 544L240 544C266.5 544 288 522.5 288 496L288 144C288 117.5 266.5 96 240 96L176 96zM400 96C373.5 96 352 117.5 352 144L352 496C352 522.5 373.5 544 400 544L464 544C490.5 544 512 522.5 512 496L512 144C512 117.5 490.5 96 464 96L400 96z" />
+        </symbol>
+        <symbol id="i-expand" viewBox="0 0 640 640">
+            <path
+                d="M128 96C110.3 96 96 110.3 96 128L96 224C96 241.7 110.3 256 128 256C145.7 256 160 241.7 160 224L160 160L224 160C241.7 160 256 145.7 256 128C256 110.3 241.7 96 224 96L128 96zM160 416C160 398.3 145.7 384 128 384C110.3 384 96 398.3 96 416L96 512C96 529.7 110.3 544 128 544L224 544C241.7 544 256 529.7 256 512C256 494.3 241.7 480 224 480L160 480L160 416zM416 96C398.3 96 384 110.3 384 128C384 145.7 398.3 160 416 160L480 160L480 224C480 241.7 494.3 256 512 256C529.7 256 544 241.7 544 224L544 128C544 110.3 529.7 96 512 96L416 96zM544 416C544 398.3 529.7 384 512 384C494.3 384 480 398.3 480 416L480 480L416 480C398.3 480 384 494.3 384 512C384 529.7 398.3 544 416 544L512 544C529.7 544 544 529.7 544 512L544 416z" />
+        </symbol>
+        <symbol id="i-picture-in-picture" viewBox="0 0 640 640">
+            <path
+                d="M512 96C547.3 96 576 124.7 576 160L576 272L512 272L512 160L128 160L128 480L272 480L272 544L128 544L121.5 543.7C91.4 540.6 67.4 516.7 64.4 486.6L64 480L64 160C64 126.9 89.2 99.6 121.5 96.3L128 96L512 96zM528 320C554.5 320 576 341.5 576 368L576 496C576 522.5 554.5 544 528 544L368 544C341.5 544 320 522.5 320 496L320 368C320 341.5 341.5 320 368 320L528 320z" />
+        </symbol>
+        <symbol id="i-volume" viewBox="0 0 640 640">
+            <path
+                d="M112 416L160 416L294.1 535.2C300.5 540.9 308.7 544 317.2 544C336.4 544 352 528.4 352 509.2L352 130.8C352 111.6 336.4 96 317.2 96C308.7 96 300.5 99.1 294.1 104.8L160 224L112 224C85.5 224 64 245.5 64 272L64 368C64 394.5 85.5 416 112 416zM505.1 171C494.8 162.6 479.7 164.2 471.3 174.5C462.9 184.8 464.5 199.9 474.8 208.3C507.3 234.7 528 274.9 528 320C528 365.1 507.3 405.3 474.8 431.8C464.5 440.2 463 455.3 471.3 465.6C479.6 475.9 494.8 477.4 505.1 469.1C548.3 433.9 576 380.2 576 320.1C576 260 548.3 206.3 505.1 171.1zM444.6 245.5C434.3 237.1 419.2 238.7 410.8 249C402.4 259.3 404 274.4 414.3 282.8C425.1 291.6 432 305 432 320C432 335 425.1 348.4 414.3 357.3C404 365.7 402.5 380.8 410.8 391.1C419.1 401.4 434.3 402.9 444.6 394.6C466.1 376.9 480 350.1 480 320C480 289.9 466.1 263.1 444.5 245.5z" />
+        </symbol>
+        <symbol id="i-volume-low" viewBox="0 0 640 640">
+            <path
+                d="M144 416L192 416L326.1 535.2C332.5 540.9 340.7 544 349.2 544C368.4 544 384 528.4 384 509.2L384 130.8C384 111.6 368.4 96 349.2 96C340.7 96 332.5 99.1 326.1 104.8L192 224L144 224C117.5 224 96 245.5 96 272L96 368C96 394.5 117.5 416 144 416zM476.6 245.5C466.3 237.1 451.2 238.7 442.8 249C434.4 259.3 436 274.4 446.3 282.8C457.1 291.6 464 305 464 320C464 335 457.1 348.4 446.3 357.3C436 365.7 434.5 380.8 442.8 391.1C451.1 401.4 466.3 402.9 476.6 394.6C498.1 376.9 512 350.1 512 320C512 289.9 498.1 263.1 476.5 245.5z" />
+        </symbol>
+        <symbol id="i-volume-xmark" viewBox="0 0 640 640">
+            <path
+                d="M80 416L128 416L262.1 535.2C268.5 540.9 276.7 544 285.2 544C304.4 544 320 528.4 320 509.2L320 130.8C320 111.6 304.4 96 285.2 96C276.7 96 268.5 99.1 262.1 104.8L128 224L80 224C53.5 224 32 245.5 32 272L32 368C32 394.5 53.5 416 80 416zM399 239C389.6 248.4 389.6 263.6 399 272.9L446 319.9L399 366.9C389.6 376.3 389.6 391.5 399 400.8C408.4 410.1 423.6 410.2 432.9 400.8L479.9 353.8L526.9 400.8C536.3 410.2 551.5 410.2 560.8 400.8C570.1 391.4 570.2 376.2 560.8 366.9L513.8 319.9L560.8 272.9C570.2 263.5 570.2 248.3 560.8 239C551.4 229.7 536.2 229.6 526.9 239L479.9 286L432.9 239C423.5 229.6 408.3 229.6 399 239z" />
+        </symbol>
+        <symbol id="i-volume-off" viewBox="0 0 640 640">
+            <path
+                d="M256 416L208 416C181.5 416 160 394.5 160 368L160 272C160 245.5 181.5 224 208 224L256 224L390.1 104.8C396.5 99.1 404.7 96 413.2 96C432.4 96 448 111.6 448 130.8L448 509.2C448 528.4 432.4 544 413.2 544C404.7 544 396.5 540.9 390.1 535.2L256 416z" />
+        </symbol>
+        <symbol id="i-xmark" viewBox="0 0 640 640">
+            <path
+                d="M183.1 137.4C170.6 124.9 150.3 124.9 137.8 137.4C125.3 149.9 125.3 170.2 137.8 182.7L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7L320.5 365.3L457.9 502.6C470.4 515.1 490.7 515.1 503.2 502.6C515.7 490.1 515.7 469.8 503.2 457.3L365.8 320L503.1 182.6C515.6 170.1 515.6 149.8 503.1 137.3C490.6 124.8 470.3 124.8 457.8 137.3L320.5 274.7L183.1 137.4z" />
+        </symbol>
+        <symbol id="i-lock" viewBox="0 0 640 640">
+            <path
+                d="M256 160L256 224L384 224L384 160C384 124.7 355.3 96 320 96C284.7 96 256 124.7 256 160zM192 224L192 160C192 89.3 249.3 32 320 32C390.7 32 448 89.3 448 160L448 224C483.3 224 512 252.7 512 288L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 288C128 252.7 156.7 224 192 224z" />
+        </symbol>
+        <symbol id="i-headphones" viewBox="0 0 640 640">
+            <path
+                d="M160 288C160 199.6 231.6 128 320 128C408.4 128 480 199.6 480 288L480 325.5C470 322 459.2 320 448 320L432 320C405.5 320 384 341.5 384 368L384 496C384 522.5 405.5 544 432 544L448 544C501 544 544 501 544 448L544 288C544 164.3 443.7 64 320 64C196.3 64 96 164.3 96 288L96 448C96 501 139 544 192 544L208 544C234.5 544 256 522.5 256 496L256 368C256 341.5 234.5 320 208 320L192 320C180.8 320 170 321.9 160 325.5L160 288z" />
+        </symbol>
+        <symbol id="i-speaker" viewBox="0 0 24 24">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+                d="M17 2a3 3 0 0 1 3 3v14a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3v-14a3 3 0 0 1 3 -3zm-5 9a4 4 0 0 0 -3.995 3.8l-.005 .2a4 4 0 1 0 4 -4m0 -5a1 1 0 0 0 -1 1v.01a1 1 0 0 0 2 0v-.01a1 1 0 0 0 -1 -1" />
+        </symbol>
+        <symbol id="i-angle-right" viewBox="0 0 640 640">
+            <path
+                d="M439.1 297.4C451.6 309.9 451.6 330.2 439.1 342.7L279.1 502.7C266.6 515.2 246.3 515.2 233.8 502.7C221.3 490.2 221.3 469.9 233.8 457.4L371.2 320L233.9 182.6C221.4 170.1 221.4 149.8 233.9 137.3C246.4 124.8 266.7 124.8 279.2 137.3L439.2 297.3z" />
+        </symbol>
+    </svg>
+    <template id="quality-btn">
+        <div class="btn btn-quality">
+            <svg viewBox="0 0 640 640" aria-hidden="true">
+                <use href="#i-lock"></use>
+            </svg>
+            <div class="text">0p</div>
+        </div>
+    </template>
+    <script src="/javascript/parametrs.js"></script>
+    <script type="module" src="/javascript/pages/tplayer.js"></script>
+</body>
+
+</html>

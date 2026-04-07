@@ -39,6 +39,15 @@ export const Tunime = new class {
             }
         },
         device: {
+            log: (event = () => { }) => {
+                const url = '/logs/upload';
+
+                return {
+                    POST: async (body = {}) => {
+                        return this.fetch(url, { method: 'POST', body }, event);
+                    }
+                }
+            },
             list: (event = () => { }) => {
                 const url = '/api/user/devices';
 
@@ -94,8 +103,8 @@ export const Tunime = new class {
             }
             return url.toString();
         },
-        source: async (kodik) => {
-            const body = { src: kodik };
+        source: async (kodik, caching = true) => {
+            const body = { src: kodik, caching };
 
             if (!Hub.snapshot.state.isConnected || !Hub.snapshot.state.permissions.includes("player")) return false;
 
@@ -118,6 +127,7 @@ export const Tunime = new class {
         logout: async () => {
             return Hub.api.logout();
         }
+
     }
 }();
 

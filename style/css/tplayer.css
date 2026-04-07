@@ -1,0 +1,535 @@
+@font-face {
+  font-family: "Roboto Mono";
+  src: url("/style/fonts/RobotoMono.ttf");
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("/style/fonts/Manrope.ttf") format("truetype");
+  font-display: swap;
+}
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  font-weight: inherit;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  -webkit-text-size-adjust: none;
+}
+
+body {
+  background: #000;
+}
+body.-nocontrols .video-controller {
+  display: none;
+}
+body.-nocontrols .video-wrapper video {
+  height: 100%;
+  width: 100%;
+}
+
+.video-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #15171E;
+  background-image: url("/images/load.player.png");
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  place-items: center;
+}
+.video-loader.-hide {
+  opacity: 0;
+  pointer-events: none;
+}
+.video-loader .container {
+  width: 10.25vw;
+  max-width: 60px;
+  transform-origin: center;
+  animation: rotate4 2s linear infinite;
+}
+.video-loader .loader {
+  fill: none;
+  stroke: #3C92ED;
+  stroke-width: 10;
+  stroke-dasharray: 2, 200;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  animation: dash4 1.5s ease-in-out infinite;
+}
+@keyframes rotate4 {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dash4 {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dashoffset: -125px;
+  }
+}
+
+.video-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.video-wrapper .progress-bar-wrapper {
+  position: relative;
+  height: 20px;
+  display: flex;
+  align-items: flex-end;
+}
+.video-wrapper .progress-bar-wrapper .video-timeline-controller {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  display: grid;
+  position: relative;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+}
+.video-wrapper .progress-bar-wrapper .video-timeline-controller .current-time {
+  min-width: 1px;
+  background-color: #FFD700;
+  max-width: 100%;
+  width: 0%;
+  position: relative;
+  z-index: 10;
+}
+.video-wrapper .progress-bar-wrapper .video-timeline-controller .current-time .point {
+  position: absolute;
+  background: #15171E;
+  width: 4px;
+  right: 2px;
+  top: 2px;
+  bottom: 2px;
+  border-radius: 3px;
+  transition: 0.3s ease-in-out;
+  opacity: 0;
+}
+.video-wrapper .progress-bar-wrapper .video-timeline-controller .load-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  background: rgba(255, 217, 0, 0.3);
+  z-index: 8;
+}
+.video-wrapper .progress-bar-wrapper .video-timeline-controller.-enter {
+  height: 12px;
+}
+.video-wrapper .progress-bar-wrapper .video-timeline-controller.-enter .point {
+  opacity: 1;
+}
+.video-wrapper .progress-bar-wrapper.-hide {
+  pointer-events: none;
+}
+.video-wrapper .volume-contoller {
+  display: flex;
+  align-items: center;
+}
+.video-wrapper .volume-contoller .tag {
+  display: none;
+  background: rgba(255, 217, 0, 0.3);
+  border: 1px solid rgba(255, 217, 0, 0.4);
+  color: #FFD700;
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 33px;
+  font-family: "Roboto Mono", "Manrope", "Vazirmatn", monospace;
+  margin-right: -5px;
+  transition: 0.3s ease-in-out;
+}
+.video-wrapper .volume-contoller .tag.-show {
+  display: block;
+}
+.video-wrapper .volume-contoller .volume-slider {
+  min-width: 0px;
+  max-width: 0px;
+  height: 14px;
+  background: rgba(255, 217, 0, 0.3);
+  border: 0px solid rgba(255, 217, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+}
+.video-wrapper .volume-contoller .volume-slider .value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 30px;
+  background: #FFD700;
+}
+.video-wrapper .volume-contoller.-show .volume-slider {
+  opacity: 1;
+  min-width: 150px;
+  max-width: 150px;
+  border-width: 1px;
+}
+.video-wrapper .volume-contoller.-show .tag {
+  margin-right: 8px;
+}
+.video-wrapper .volume-contoller #media-volume-btn {
+  position: relative;
+}
+.video-wrapper .volume-contoller #media-volume-btn.v-100 .v100 {
+  display: block;
+}
+.video-wrapper .volume-contoller #media-volume-btn.v-50 .v50 {
+  display: block;
+}
+.video-wrapper .volume-contoller #media-volume-btn.v-0 .v0 {
+  display: block;
+}
+.video-wrapper .volume-contoller #media-volume-btn.-mute .v100,
+.video-wrapper .volume-contoller #media-volume-btn.-mute .v50,
+.video-wrapper .volume-contoller #media-volume-btn.-mute .v0 {
+  display: none !important;
+}
+.video-wrapper .volume-contoller #media-volume-btn.-mute .v-mute {
+  display: block !important;
+}
+.video-wrapper .volume-contoller #media-volume-btn svg {
+  display: none;
+}
+@media screen and (max-width: 520px) {
+  .video-wrapper .volume-contoller .volume-slider {
+    display: none !important;
+  }
+  .video-wrapper .volume-contoller .tag {
+    margin-left: -5px !important;
+  }
+}
+.video-wrapper .volume-controller {
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: absolute;
+  inset: 0;
+  padding: 0 10px;
+  background: rgba(21, 23, 30, 0.8);
+  backdrop-filter: blur(6px);
+  font-family: "Roboto Mono", "Manrope", "Vazirmatn", monospace;
+  font-size: 13px;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: -moz-min-content;
+  min-width: min-content;
+  min-height: -moz-min-content;
+  min-height: min-content;
+  gap: 15px;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay {
+  display: flex;
+  align-items: center;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay #media-volume-btn {
+  position: relative;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay #media-volume-btn.v-100 .v100 {
+  display: block;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay #media-volume-btn.v-50 .v50 {
+  display: block;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay #media-volume-btn.v-0 .v0 {
+  display: block;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay #media-volume-btn.-mute .v100,
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay #media-volume-btn.-mute .v50,
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay #media-volume-btn.-mute .v0 {
+  display: none !important;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay #media-volume-btn.-mute .v-mute {
+  display: block !important;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay #media-volume-btn svg {
+  display: none;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay .volume-slider {
+  min-width: 150px;
+  max-width: 150px;
+  height: 14px;
+  background: rgba(255, 217, 0, 0.3);
+  border: 1px solid rgba(255, 217, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay .volume-slider .value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 30px;
+  background: #FFD700;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay .tag {
+  display: none;
+  background: rgba(255, 217, 0, 0.3);
+  border: 1px solid rgba(255, 217, 0, 0.4);
+  color: #FFD700;
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 33px;
+  font-family: "Roboto Mono", "Manrope", "Vazirmatn", monospace;
+  margin-left: 8px;
+  transition: 0.3s ease-in-out;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .volume-controller-overlay .tag.-show {
+  display: block;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .presets-list {
+  display: flex;
+  align-items: center;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .presets-list .line {
+  height: 20px;
+  width: 1px;
+  background: #D9D9D9;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .presets-list .-select {
+  position: relative;
+}
+.video-wrapper .volume-controller .volume-controller-wrapper .presets-list .-select::after {
+  content: "";
+  width: 19px;
+  height: 1px;
+  background: #FFD700;
+  pointer-events: none;
+  position: absolute;
+  bottom: 9px;
+}
+@media screen and (min-width: 900px) {
+  .video-wrapper .volume-controller .volume-controller-wrapper {
+    gap: 35px;
+  }
+}
+.video-wrapper video {
+  height: calc(100% - 48px);
+  width: 100%;
+}
+.video-wrapper .video-controller {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  z-index: 11;
+  transition: 0.3s ease-in-out;
+}
+.video-wrapper .video-controller .interactive {
+  min-height: 48px;
+  transition: 0.3s ease-in-out;
+}
+.video-wrapper .video-controller .interactive.-hide {
+  top: 48px;
+  pointer-events: none;
+  background: rgba(21, 23, 30, 0);
+}
+.video-wrapper .video-controller .quality-select-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: -moz-min-content;
+  min-width: min-content;
+  min-height: -moz-min-content;
+  min-height: min-content;
+  gap: 15px;
+}
+.video-wrapper .video-controller .quality-selector {
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: absolute;
+  inset: 0;
+  padding: 0 10px;
+  background: rgba(21, 23, 30, 0.8);
+  backdrop-filter: blur(6px);
+  font-family: "Roboto Mono", "Manrope", "Vazirmatn", monospace;
+  font-size: 13px;
+}
+.video-wrapper .video-controller .quality-selector .quality-list {
+  display: flex;
+  gap: 5px;
+}
+.video-wrapper .video-controller .quality-selector .quality-list .btn {
+  color: #FFF;
+  height: 48px;
+  min-width: 48px;
+  padding: 0 8px;
+  display: flex;
+  gap: 5px;
+}
+.video-wrapper .video-controller .quality-selector .quality-list .btn.-select {
+  color: #FFD700;
+}
+.video-wrapper .video-controller .quality-selector .quality-list .btn.-lock {
+  color: rgba(255, 255, 255, 0.4);
+}
+.video-wrapper .video-controller .quality-selector .quality-list .btn.-lock svg {
+  display: block;
+}
+.video-wrapper .video-controller .quality-selector .quality-list .btn svg {
+  fill: #FFD700;
+  height: 14px;
+  display: none;
+}
+.video-wrapper .video-controller .quality-selector .current-quality {
+  color: #FFF;
+  height: 48px;
+  min-width: 48px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.4;
+}
+.video-wrapper .video-controller .video-controller-wrapper {
+  background: #191c21;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.video-wrapper .video-controller .video-controller-wrapper .r-controlls,
+.video-wrapper .video-controller .video-controller-wrapper .l-controlls {
+  display: flex;
+  align-items: center;
+}
+.video-wrapper .video-controller .video-controller-wrapper .vtime {
+  font-family: "Manrope", "Roboto Mono", "Vazirmatn", monospace;
+  font-size: 13px;
+  display: flex;
+  gap: 2px;
+  color: #5E676E;
+}
+.video-wrapper .video-controller .video-controller-wrapper .vtime .current-time {
+  color: #FFF;
+}
+.video-wrapper .video-controller .video-controller-wrapper .open-quality-selector {
+  height: 48px;
+  min-width: 48px;
+  padding: 0 8px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-family: "Roboto Mono", "Vazirmatn", monospace;
+  font-size: 13px;
+  color: #FFF;
+  position: relative;
+}
+.video-wrapper .video-controller .video-controller-wrapper .open-quality-selector.-auto::after {
+  content: "auto";
+  position: absolute;
+  color: #3C92ED;
+  font-size: 9px;
+  font-family: "Roboto Mono", "Manrope", "Vazirmatn", monospace;
+  bottom: 5px;
+}
+.video-wrapper .video-controller .video-controller-wrapper .btn {
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.video-wrapper .video-controller .video-controller-wrapper .btn.w48 {
+  width: 48px;
+}
+.video-wrapper .video-controller .video-controller-wrapper .btn.h48 {
+  height: 48px;
+}
+.video-wrapper .video-controller .video-controller-wrapper .btn svg {
+  fill: white;
+  height: 19px;
+}
+.video-wrapper .video-controller .video-controller-wrapper .btn.-disable {
+  cursor: default;
+  display: none;
+}
+.video-wrapper .video-controller .video-controller-wrapper #media-pip-button.-load {
+  opacity: 0.5;
+}
+.video-wrapper .video-controller .video-controller-wrapper #media-play-button {
+  position: relative;
+}
+.video-wrapper .video-controller .video-controller-wrapper #media-play-button svg {
+  position: absolute;
+}
+.video-wrapper .video-controller .video-controller-wrapper #media-play-button svg.pause {
+  display: none;
+}
+.video-wrapper .video-controller .video-controller-wrapper #media-play-button.-pause svg.play {
+  display: none;
+}
+.video-wrapper .video-controller .video-controller-wrapper #media-play-button.-pause svg.pause {
+  display: block;
+}
+.video-wrapper .skip-moment-wrapper {
+  position: absolute;
+  bottom: 54px;
+  right: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  z-index: 9;
+  font-family: "Roboto Mono", "Vazirmatn", monospace;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 10px 20px;
+  background: #FFD700;
+  transition: 0.3s ease-in-out;
+}
+.video-wrapper .skip-moment-wrapper svg {
+  height: 20px;
+}
+.video-wrapper.--bar .skip-moment-wrapper {
+  bottom: 60px;
+}
+
+@media screen and (min-width: 900px) {
+  .video-wrapper video {
+    height: 100%;
+  }
+  .video-wrapper .video-controller {
+    bottom: -54px;
+  }
+  body {
+    cursor: none;
+  }
+  body.-focus .video-wrapper .video-controller {
+    bottom: 0;
+  }
+  body.-focus {
+    cursor: default;
+  }
+}

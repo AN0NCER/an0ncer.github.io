@@ -90,7 +90,7 @@ function Events() {
             localStorage.removeItem('application_event');
             let code = prompt("Ключ авторизации:");
             if (code) {
-                window.location.href = `/login.html?code=${code}&anim`;
+                return window.location.href = `/login.html?code=${code}&anim`;
             }
         }
 
