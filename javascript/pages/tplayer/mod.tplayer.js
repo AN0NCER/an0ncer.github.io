@@ -725,7 +725,8 @@ export class Volume extends Component {
             bars: document.querySelectorAll('[data-type="volume-slider"]'),
             value: document.querySelectorAll('[data-source="volume"]'),
             tags: document.querySelectorAll('[data-type="volume-tag"]'),
-            close: document.getElementById('media-close-volume')
+            close: document.getElementById('media-close-volume'),
+            presets: document.getElementById('media-presets-volume')
         };
 
         this.interact = document.getElementById('media-volume-interactive');
@@ -778,6 +779,74 @@ export class Volume extends Component {
             // Мобильные события
             target.addEventListener('touchstart', (e) => this.startDragging(e));
         });
+
+        // Состояния громкости
+        (() => {
+            // Константы ключей
+            const SESSION_KEY = 'tvolume_default';
+            const LOCAL_KEY = 'tvolume_presets';
+
+            // Загружаем данные
+            const sessionVal = JSON.parse(sessionStorage.getItem(SESSION_KEY));
+            const localPresets = JSON.parse(localStorage.getItem(LOCAL_KEY)) || {
+                speakers: 0.5,
+                headphones: 0.3
+            };
+
+            // Определяем, какой тип был выбран последним
+            const currentType = sessionStorage.getItem('tvolume_active_type') ?? 'default';
+
+            this.state = {
+                type: currentType,
+                value: currentType === 'default'
+                    ? (sessionVal ?? 1)
+                    : (localPresets[currentType] ?? 0.5)
+            };
+
+            // Метод для смены типа
+            this.setPreset = (type) => {
+                this.dom.presets.querySelector('.-select')?.classList.remove('-select');
+                this.state.type = type;
+                if (type === 'default') {
+                    this.state.value = JSON.parse(sessionStorage.getItem(SESSION_KEY)) ?? 1;
+                } else {
+                    this.state.value = localPresets[type] ?? 0.5;
+                }
+                this.video.volume = this.state.value;
+                sessionStorage.setItem('tvolume_active_type', type);
+                this.dom.presets.querySelector(`.btn[data-id="${type}"]`)?.classList.add('-select');
+            };
+
+            let updateHandler = null;
+
+            this.setPreset(this.state.type);
+
+            this.player.on(Player.Events.VOLUME_CHANGE, () => {
+                clearTimeout(updateHandler);
+
+                updateHandler = setTimeout(() => {
+                    this.state.value = this.video.volume;
+                    if (this.state.type === 'default') {
+                        sessionStorage.setItem(SESSION_KEY, this.video.volume);
+                    } else {
+                        localPresets[this.state.type] = this.video.volume;
+                        localStorage.setItem(LOCAL_KEY, JSON.stringify(localPresets));
+                    }
+                }, 400);
+            });
+
+            this.dom.presets.addEventListener('click', (e) => {
+                /**@type {HTMLDivElement} */
+                const btn = e.target.closest('.btn[data-id]');
+                if (btn) {
+                    const id = btn.dataset.id;
+                    if (id === this.state.type) {
+                        return this.setPreset('default');
+                    }
+                    return this.setPreset(id);
+                }
+            })
+        })();
     }
 
     init() {

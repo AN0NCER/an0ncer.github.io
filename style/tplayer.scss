@@ -329,6 +329,11 @@ body {
         svg{
             height: 20px;
         }
+
+        &.-hide{
+            transform: translateX(100%);
+            opacity: 0;
+        }
     }
 
     &.--bar{

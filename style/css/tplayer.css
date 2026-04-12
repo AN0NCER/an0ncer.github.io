@@ -512,6 +512,10 @@ body.-nocontrols .video-wrapper video {
 .video-wrapper .skip-moment-wrapper svg {
   height: 20px;
 }
+.video-wrapper .skip-moment-wrapper.-hide {
+  transform: translateX(100%);
+  opacity: 0;
+}
 .video-wrapper.--bar .skip-moment-wrapper {
   bottom: 60px;
 }

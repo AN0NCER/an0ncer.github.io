@@ -16,7 +16,7 @@
         </svg>
     </div>
     <div class="video-wrapper" id="video-wrapper">
-        <div class="skip-moment-wrapper">
+        <div class="skip-moment-wrapper -hide">
             <div class="content-value">
                 Пропустить
             </div>
@@ -132,16 +132,16 @@
                                 live
                             </div>
                         </div>
-                        <div class="presets-list">
-                            <div class="btn w48 h48 -select">
+                        <div class="presets-list" id="media-presets-volume">
+                            <div class="btn w48 h48" data-id="speaker">
                                 <svg viewBox="0 0 640 640" aria-hidden="true">
-                                    <use href="#i-headphones"></use>
+                                    <use href="#i-speaker"></use>
                                 </svg>
                             </div>
                             <span class="line"></span>
-                            <div class="btn w48 h48">
+                            <div class="btn w48 h48" data-id="headphone">
                                 <svg viewBox="0 0 640 640" aria-hidden="true">
-                                    <use href="#i-speaker"></use>
+                                    <use href="#i-headphones"></use>
                                 </svg>
                             </div>
                         </div>
