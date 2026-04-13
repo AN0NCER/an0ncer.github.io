@@ -1,0 +1,138 @@
+#gesture-overlay {
+    position: absolute;
+    display: flex;
+    height: calc(100% - 48px);
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9;
+
+    .zone {
+        height: 100%;
+        flex: 1;
+        /* Все зоны равны по умолчанию */
+        -webkit-tap-highlight-color: transparent;
+        /* Отключает системную обработку жестов (скролл, зум) */
+        touch-action: none;
+    }
+
+    /* Можно настроить ширину центральной зоны, если нужно */
+    .zone.center {
+        flex: 1.5;
+    }
+}
+
+.display-points-info-wrapper {
+    position: absolute;
+    pointer-events: none;
+    height: calc(100% - 48px);
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+
+    .circle-wrapper {
+        width: 15dvw;
+        height: 15dvw;
+        max-width: 80px;
+        max-height: 80px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        opacity: 0;
+        transition: .3s ease-in-out;
+        position: relative;
+        box-sizing: border-box;
+
+
+        svg {
+            box-sizing: border-box;
+            position: absolute;
+            fill: #FFF;
+            height: 60%;
+            opacity: 0;
+            transition: .3s ease-in-out;
+        }
+    }
+
+    &[data-type="pause"] {
+        .circle-wrapper {
+            opacity: 1;
+        }
+
+        .circle-wrapper>.pause {
+            display: block;
+            opacity: 1;
+        }
+    }
+
+    &[data-type="play"] {
+        .circle-wrapper {
+            opacity: 1;
+        }
+
+        .circle-wrapper>.play {
+            display: block;
+            opacity: 1;
+        }
+    }
+
+    &[data-type="volume"] {
+        .circle-wrapper {
+            opacity: 1;
+        }
+
+        .circle-wrapper>.volume {
+            display: block;
+            opacity: 1;
+        }
+    }
+
+    &[data-type="right"] {
+        .circle-wrapper {
+            opacity: 1;
+        }
+
+        .circle-wrapper>.right {
+            display: block;
+            opacity: 1;
+        }
+    }
+
+    &[data-type="left"] {
+        .circle-wrapper {
+            opacity: 1;
+        }
+
+        .circle-wrapper>.left {
+            display: block;
+            opacity: 1;
+        }
+    }
+
+    &[data-type="speed2x"] {
+        .circle-wrapper {
+            opacity: 1;
+        }
+
+        .circle-wrapper>.speed2x {
+            display: block;
+            opacity: 1;
+        }
+    }
+
+    &[data-type="speed1x"] {
+        .circle-wrapper {
+            opacity: 1;
+        }
+
+        .circle-wrapper>.speed1x {
+            display: block;
+            opacity: 1;
+        }
+    }
+}

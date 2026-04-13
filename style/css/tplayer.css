@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: "Roboto Mono";
   src: url("/style/fonts/RobotoMono.ttf");
@@ -108,12 +109,13 @@ body.-nocontrols .video-wrapper video {
   position: relative;
   transition: 0.3s ease-in-out;
   cursor: pointer;
+  --mouse-percent: 0%;
 }
 .video-wrapper .progress-bar-wrapper .video-timeline-controller .current-time {
   min-width: 1px;
   background-color: #FFD700;
   max-width: 100%;
-  width: 0%;
+  width: var(--mouse-percent);
   position: relative;
   z-index: 10;
 }
@@ -334,6 +336,198 @@ body.-nocontrols .video-wrapper video {
     gap: 35px;
   }
 }
+.video-wrapper #gesture-overlay {
+  position: absolute;
+  display: flex;
+  height: calc(100% - 48px);
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9;
+}
+.video-wrapper #gesture-overlay .zone {
+  height: 100%;
+  flex: 1;
+  /* Все зоны равны по умолчанию */
+  -webkit-tap-highlight-color: transparent;
+  /* Отключает системную обработку жестов (скролл, зум) */
+  touch-action: none;
+}
+.video-wrapper #gesture-overlay {
+  /* Можно настроить ширину центральной зоны, если нужно */
+}
+.video-wrapper #gesture-overlay .zone.center {
+  flex: 1.5;
+}
+.video-wrapper .display-points-info-wrapper {
+  position: absolute;
+  pointer-events: none;
+  height: calc(100% - 48px);
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.video-wrapper .display-points-info-wrapper .circle-wrapper {
+  width: 15dvw;
+  height: 15dvw;
+  max-width: 80px;
+  max-height: 80px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+  position: relative;
+  box-sizing: border-box;
+}
+.video-wrapper .display-points-info-wrapper .circle-wrapper svg {
+  box-sizing: border-box;
+  position: absolute;
+  fill: #FFF;
+  height: 60%;
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+}
+.video-wrapper .display-points-info-wrapper[data-type=pause] .circle-wrapper {
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=pause] .circle-wrapper > .pause {
+  display: block;
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=play] .circle-wrapper {
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=play] .circle-wrapper > .play {
+  display: block;
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=volume] .circle-wrapper {
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=volume] .circle-wrapper > .volume {
+  display: block;
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=right] .circle-wrapper {
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=right] .circle-wrapper > .right {
+  display: block;
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=left] .circle-wrapper {
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=left] .circle-wrapper > .left {
+  display: block;
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=speed2x] .circle-wrapper {
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=speed2x] .circle-wrapper > .speed2x {
+  display: block;
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=speed1x] .circle-wrapper {
+  opacity: 1;
+}
+.video-wrapper .display-points-info-wrapper[data-type=speed1x] .circle-wrapper > .speed1x {
+  display: block;
+  opacity: 1;
+}
+.video-wrapper {
+  /* Контейнер для превью */
+}
+.video-wrapper .preview-animation-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10; /* Поверх основного постера */
+  pointer-events: none; /* Чтобы не мешало кликам по плееру */
+  overflow: hidden;
+  z-index: 1;
+}
+.video-wrapper {
+  /* Общий стиль для всех кадров */
+}
+.video-wrapper .preview-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out; /* Плавность анимации */
+}
+.video-wrapper {
+  /* Активный кадр */
+}
+.video-wrapper .preview-img.active {
+  opacity: 1;
+}
+.video-wrapper .thumbinal {
+  position: absolute;
+  top: -95px;
+  left: clamp(5px, var(--mouse-percent) - 80px, 100% - 165px);
+  width: 160px;
+  height: 90px;
+  z-index: 100;
+  pointer-events: none;
+}
+.video-wrapper .thumbinal .thumbinal-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: 0.2s ease-in-out;
+}
+.video-wrapper .thumbinal .preview {
+  background-image: var(--src);
+  background-size: 800px 450px;
+  background-position: -160px -90px;
+  width: 100%;
+  height: 100%;
+  transform: translateY(-38px);
+  background-position: -160px 0px;
+  border-radius: 4px;
+  box-shadow: 0px 3px 15px 5px rgba(0, 0, 0, 0.47);
+}
+.video-wrapper .thumbinal .totime-wrapper {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+}
+.video-wrapper .thumbinal .totime-wrapper .totime {
+  font-family: "Manrope", "Roboto Mono", "Vazirmatn", monospace;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 7px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+.video-wrapper .thumbinal.-nopreview {
+  left: clamp(-50px, var(--mouse-percent) - 80px, 100% - 111px);
+}
+.video-wrapper .thumbinal.-nopreview .preview {
+  display: none;
+}
+.video-wrapper .-drag .thumbinal .thumbinal-wrapper {
+  opacity: 1;
+}
 .video-wrapper video {
   height: calc(100% - 48px);
   width: 100%;
@@ -500,7 +694,7 @@ body.-nocontrols .video-wrapper video {
   cursor: pointer;
   display: flex;
   align-items: center;
-  z-index: 9;
+  z-index: 10;
   font-family: "Roboto Mono", "Vazirmatn", monospace;
   text-transform: uppercase;
   font-size: 13px;
@@ -508,6 +702,8 @@ body.-nocontrols .video-wrapper video {
   padding: 10px 20px;
   background: #FFD700;
   transition: 0.3s ease-in-out;
+  transform: translateX(0%);
+  opacity: 1;
 }
 .video-wrapper .skip-moment-wrapper svg {
   height: 20px;
@@ -515,12 +711,16 @@ body.-nocontrols .video-wrapper video {
 .video-wrapper .skip-moment-wrapper.-hide {
   transform: translateX(100%);
   opacity: 0;
+  pointer-events: none;
 }
 .video-wrapper.--bar .skip-moment-wrapper {
   bottom: 60px;
 }
 
 @media screen and (min-width: 900px) {
+  .video-wrapper .display-points-info-wrapper {
+    height: 100%;
+  }
   .video-wrapper video {
     height: 100%;
   }
@@ -529,6 +729,9 @@ body.-nocontrols .video-wrapper video {
   }
   body {
     cursor: none;
+  }
+  body.-focus .video-wrapper .display-points-info-wrapper {
+    height: calc(100% - 48px);
   }
   body.-focus .video-wrapper .video-controller {
     bottom: 0;

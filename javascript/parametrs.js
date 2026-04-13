@@ -36,10 +36,11 @@ const $PARAMETERS = {
         standart: true,
         full: false,
         autonekst: true,
-        alternative_full: false,
         standart_controls: false,
         autoquality: true,
         skipmoments: true,
+        skipmomentsseek: false,
+        previewseek: true,
         error_quality: true
     },
     update: {

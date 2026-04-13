@@ -1,5 +1,5 @@
 const version = '3.1.14';
-const hash = "8dd00";
+const hash = "8dd11";
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 
@@ -394,6 +394,57 @@ async function caching(filesToCache, { channel, batchSize }) {
         }
     }
 })(log('fetch event support enabled'));
+
+(() => {
+    worker.addEventListener('push', function (event) {
+        if (event.data) {
+            const data = event.data.json();
+            const options = {
+                body: data.body,
+                icon: '/images/icons/logo-x512-b.png', // Путь к иконке вашего PWA
+                badge: '/images/seasons/autum.webp',
+                data: {
+                    url: data.url
+                }
+            };
+
+            event.waitUntil(
+                worker.registration.showNotification(data.title, options)
+            );
+        }
+    });
+
+    worker.addEventListener('notificationclick', function (event) {
+        event.notification.close(); // Закрываем уведомление сразу
+
+        const targetUrl = event.notification.data.url; // Берем URL из данных уведомления
+
+        const promiseChain = clients.matchAll({
+            type: 'window',
+            includeUncontrolled: true
+        }).then((windowClients) => {
+            // 1. Ищем, нет ли уже открытой вкладки нашего приложения
+            let matchingClient = null;
+
+            for (let i = 0; i < windowClients.length; i++) {
+                const windowClient = windowClients[i];
+                // Можно проверять по домену, чтобы найти нужную вкладку
+                matchingClient = windowClient;
+                break;
+            }
+
+            // 2. Если нашли открытое приложение — фокусируемся на нем и переходим по ссылке
+            if (matchingClient) {
+                return matchingClient.navigate(targetUrl).then(client => client.focus());
+            }
+
+            // 3. Если приложение было полностью закрыто — открываем новое окно
+            return clients.openWindow(targetUrl);
+        });
+
+        event.waitUntil(promiseChain);
+    });
+})(log('notification enabled'));
 
 (() => {
     const methods = {

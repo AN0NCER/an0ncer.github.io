@@ -67,6 +67,7 @@ export class Source {
         this.qualitiesData = payload?.qualities || {};
         this.thumbinals = payload?.thumbinals || [];
         this.skips = payload?.skips || [];
+        this.tiles = payload?.tiles || {};
         this.cached = payload?.cache || false;
     }
 

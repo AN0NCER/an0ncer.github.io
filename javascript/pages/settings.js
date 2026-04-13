@@ -32,6 +32,33 @@ const setup = [
             },
             {
                 enable: () => true,
+                value: () => {
+                    const permission = Notification.permission;
+
+                    if (permission === 'granted') {
+                        return 'Доступ разрешен';
+                    } else if (permission === 'denied') {
+                        return 'Доступ заблокирован';
+                    } else {
+                        return 'Запрос еще не отправлялся (default)';
+                    }
+                },
+                click: async () => {
+                    const registration = await navigator.serviceWorker.ready;
+                    const subscription = await registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: 'BI-EM3yjiaU8W9vQMBmZL06mJdROk-Y1nMOITPJF2Q0_nkxYvj0Dvr2CD47KYwfrOQITmGwAeW-wUFrVR_URISo'
+                    });
+
+                    Tunime.api.device.notify().POST(subscription.toJSON());
+                },
+                type: 'button.event',
+                title: 'Уведомления',
+                icon: 'database',
+                description: 'Управление данными приложения: экспорт, импорт и сброс.'
+            },
+            {
+                enable: () => true,
                 value: SizeValue,
                 click: ShowStorage,
                 type: 'button.event',
@@ -273,12 +300,6 @@ const setup = [
                 description: `Установить Tunime как основной плеер для видео.`
             },
             {
-                param: 'full',
-                type: 'checkbox.tip',
-                title: 'Авто-Полноэкранный режим',
-                description: `Автоматически включает полноэкранный режим при начале воспроизведения.`,
-            },
-            {
                 param: 'quality',
                 type: 'img.select',
                 title: 'Качество видео',
@@ -306,10 +327,41 @@ const setup = [
                 ],
             },
             {
+                param: 'autoquality',
+                type: 'checkbox.tip',
+                title: 'Авто-Качество',
+                description: `Выбирает качество на основе скорости интернета. Рекомендуется включить.`,
+            },
+            {
+                param: 'full',
+                type: 'checkbox.tip',
+                title: 'Авто-Полноэкранный режим',
+                description: `Автоматически включает полноэкранный режим при начале воспроизведения.`,
+            },
+            {
+                param: 'skipmoments',
+                type: 'checkbox.tip',
+                title: 'Кнопка пропустить',
+                description: `Добавляет кнопку "Пропустить" для перемотки Опенингов и Ендингов в некоторых аниме.`
+            },
+            {
+                param: 'skipmomentsseek',
+                type: 'checkbox.tip',
+                title: 'Пропускать перемоткой',
+                description: `Добавляет возможность пропустить Опенинг и Ендинг через перемотку`,
+                dependsOn: { param: 'skipmoments', value: true }
+            },
+            {
                 param: 'autonekst',
                 type: 'checkbox.tip',
                 title: 'Авто-Переключение',
                 description: `После окончания эпизода автоматически включается следующий.`,
+            },
+            {
+                param: 'previewseek',
+                type: 'checkbox.tip',
+                title: 'Превью при перемотке',
+                description: `Будет отображаться кадр момента куда перемотать в плеере если доступно в аниме.`,
             },
             {
                 param: 'standart_controls',
@@ -317,18 +369,12 @@ const setup = [
                 title: 'Стандартный контроллер',
                 description: `Использовать встроенные элементы управления браузера в плеере Tunime.`,
             },
-            {
-                param: 'autoquality',
-                type: 'checkbox.tip',
-                title: 'Авто-Качество',
-                description: `Выбирает качество на основе скорости интернета. Рекомендуется включить.`,
-            },
-            {
-                param: 'alternative_full',
-                type: 'checkbox.tip',
-                title: 'Альтернативный полноэкран',
-                description: `Разворачивает плеер без перехода в системный fullscreen. Подходит для iOS.`,
-            }
+            // {
+            //     param: 'alternative_full',
+            //     type: 'checkbox.tip',
+            //     title: 'Альтернативный полноэкран',
+            //     description: `Разворачивает плеер без перехода в системный fullscreen. Подходит для iOS.`,
+            // }
         ]
     },
     {

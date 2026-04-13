@@ -61,6 +61,7 @@ class Listeners {
             'pause': Player.Events.PAUSE,
             'play': Player.Events.PLAY,
             'seeked': Player.Events.SEEKED,
+            'seeking': Player.Events.SEEKING,
             'timeupdate': Player.Events.TIME_UPDATE,
             'error': Player.Events.ERROR,
             'ended': Player.Events.ENDED,
@@ -157,6 +158,7 @@ export class Player extends TEvents {
         PAUSE: 'pause',
         PLAY: 'play',
         SEEKED: 'seeked',
+        SEEKING: 'seeking',
         BUFFERED: 'buffered',
         TIME_UPDATE: 'timeupdate',
         ERROR: 'error',
@@ -179,7 +181,7 @@ export class Player extends TEvents {
     }
     /**
      * @param {HTMLVideoElement} video 
-     * @param {{requiredQuality:string|number, autoQualitySelect:boolean, defaultUIControls:boolean, autoFullScreen:boolean, autoEpisodeSwitch:boolean, enableMediaSession:boolean}} [opts] 
+     * @param {{requiredQuality:string|number, autoQualitySelect:boolean, defaultUIControls:boolean, autoFullScreen:boolean, autoEpisodeSwitch:boolean, enableMediaSession:boolean, touchControls:boolean}} [opts] 
      */
     constructor(video, opts = {}) {
         super();
@@ -195,7 +197,8 @@ export class Player extends TEvents {
             autoFullScreen: opts.autoFullScreen || false,
             defaultUIControls: opts.defaultUIControls || false,
             autoEpisodeSwitch: opts.autoEpisodeSwitch || true,
-            enableMediaSession: opts.enableMediaSession || true
+            enableMediaSession: opts.enableMediaSession || true,
+            touchControls: opts.touchControls || true
         };
 
         this.device = {
@@ -298,7 +301,7 @@ export class Fullscreen extends Component {
         if (this.player.opts.autoFullScreen) {
             this.player.on(Player.Events.PLAY, () => {
                 if (!document.fullscreenElement) {
-                    this.toggleFullScreen();
+                    Fullscreen.toggleFullScreen(this.root, this.video);
                 }
             }, { once: true });
         }
@@ -592,9 +595,104 @@ export class ProgressBar extends Component {
         if (this.player.device.isHls) {
             this.player.hls.on(Hls.Events.BUFFER_APPENDED, () => onBuf());
         } else {
-            console
             this.player.on(Player.Events.PROGRESS, () => onBuf());
         }
+
+        this.player.on(Player.Events.SOURCE_LOADED, () => {
+            const source = this.player.source;
+
+            const thumb = document.querySelector('.thumbinal');
+            const preview = thumb.querySelector('.preview');
+            const timer = thumb.querySelector('.totime');
+
+            this.tiles = {
+                disable: (!source.tiles.pattern || !source.tiles.interval || !source.tiles.width) || !this.opts.preview,
+                pattern: source.tiles?.pattern,
+                interval: source.tiles?.interval,
+                width: source.tiles?.width,
+                height: 90,
+                x: source.tiles?.x,
+                y: source.tiles?.y
+            };
+
+            if (this.tiles.disable) {
+                thumb.classList.add('-nopreview');
+            } else {
+                thumb.classList.remove('-nopreview');
+            }
+
+            const tiles = this.tiles;
+
+
+            const loadedImages = new Set(); // Храним список URL, которые уже в кэше
+
+            function clearCache() {
+                document.querySelectorAll('.tile-cache-item').forEach(el => {
+                    el.remove();
+                });
+                loadedImages.clear();
+            }
+
+
+            function preloadSheet(index) {
+                const paddedIndex = String(index).padStart(4, '0');
+                const url = tiles.pattern.replace('{index}', paddedIndex);
+
+                if (!loadedImages.has(url) && index > 0) {
+                    forceCache(url);
+                    loadedImages.add(url);
+                }
+            }
+
+            clearCache();
+
+            function forceCache(url) {
+                if (document.querySelector(`img[src="${url}"]`)) return;
+
+                const hiddenImg = document.createElement('img');
+                hiddenImg.src = url;
+                hiddenImg.style.display = 'none';
+                hiddenImg.classList.add('tile-cache-item');
+                document.body.appendChild(hiddenImg);
+            }
+
+            if (this.tiles.disable) {
+                this.updateThumb = (seconds) => {
+                    timer.textContent = this.formatTime(seconds);
+                }
+            } else {
+                this.updateThumb = (seconds) => {
+                    //Математика кадров
+                    const frameIndex = Math.floor(seconds / this.tiles.interval);
+                    const framesPerSheet = this.tiles.x * this.tiles.y; // 25
+
+                    // Номер файла (tiles0001, tiles0002...)
+                    const fileIndex = Math.floor(frameIndex / framesPerSheet) + 1;
+                    const paddedIndex = String(fileIndex).padStart(4, '0');
+                    const currentUrl = this.tiles.pattern.replace('{index}', paddedIndex);
+
+                    // Позиция внутри файла
+                    const indexInSheet = frameIndex % framesPerSheet;
+                    const col = indexInSheet % this.tiles.x;
+                    const row = Math.floor(indexInSheet / this.tiles.x);
+
+                    const posX = -(col * this.tiles.width);
+                    const posY = -(row * this.tiles.height);
+
+                    // Ставим URL только если он реально изменился (экономим ресурсы)
+                    const newSrc = `url("${currentUrl}")`;
+                    if (thumb.style.getPropertyValue('--src') !== newSrc) {
+                        preloadSheet(fileIndex);
+                        preloadSheet(fileIndex + 1);
+                        preloadSheet(fileIndex - 1);
+                        thumb.style.setProperty('--src', newSrc);
+                    }
+
+                    timer.textContent = this.formatTime(seconds);
+                    preview.style.backgroundPosition = `${posX}px ${posY}px`;
+                }
+            }
+        });
     }
 
     init() {
@@ -666,7 +764,8 @@ export class ProgressBar extends Component {
     }
 
     updateBarWidth(ratio) {
-        this.bar.style.width = `${ratio * 100}%`;
+        if (!ratio) return;
+        this.controller.style.setProperty('--mouse-percent', `${ratio * 100}%`);
     }
 
     startDragging(e) {
@@ -679,7 +778,10 @@ export class ProgressBar extends Component {
         this.video.play();
         this.video.pause();
 
-        this.updateBarWidth(this.calculateProgress(this.getClientX(e)));
+        this.controller.classList.add('-drag');
+        const progress = this.calculateProgress(this.getClientX(e));
+        this.updateBarWidth(progress);
+        this.updateThumb(progress * this.duration);
 
         window.addEventListener('mousemove', this.moveHandler);
         window.addEventListener('touchmove', this.moveHandler, { passive: false });
@@ -694,18 +796,21 @@ export class ProgressBar extends Component {
         if (e.cancelable) e.preventDefault();
 
         const progress = this.calculateProgress(this.getClientX(e));
-        requestAnimationFrame(() => this.updateBarWidth(progress));
+        requestAnimationFrame(() => {
+            this.updateBarWidth(progress)
+            this.updateThumb(progress * this.duration);
+        });
     }
 
     stopDragging(e) {
         if (!this.isDragging) return;
         this.isDragging = false;
 
+        this.controller.classList.remove('-drag');
         const finalX = e.changedTouches ? e.changedTouches[0].clientX : this.getClientX(e);
         const progress = this.calculateProgress(finalX);
 
         this.video.currentTime = progress * this.duration;
-        console.log(this.video.currentTime, progress * this.duration);
 
         if (this.wasPlayingBeforeDrag) {
             this.video.play();
@@ -715,6 +820,21 @@ export class ProgressBar extends Component {
         window.removeEventListener('touchmove', this.moveHandler);
         window.removeEventListener('mouseup', this.stopHandler);
         window.removeEventListener('touchend', this.stopHandler);
+    }
+
+    formatTime(seconds) {
+        seconds = Math.floor(seconds); // отбрасываем дробную часть
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+
+        const twoDigits = (num) => num.toString().padStart(2, '0');
+
+        if (h > 0) {
+            return `${h}:${twoDigits(m)}:${twoDigits(s)}`;
+        } else {
+            return `${twoDigits(m)}:${twoDigits(s)}`;
+        }
     }
 }
 
@@ -1049,6 +1169,60 @@ export class Media extends Component {
             });
         }
     }
+    init() {
+        this.player.on(Player.Events.SOURCE_LOADED, () => {
+            this.clearPreview();
+
+            const thumbnails = this.player.source.thumbinals;
+            if (thumbnails && thumbnails.length > 0) {
+                this.startAutoPreview(thumbnails);
+            }
+        })
+
+        this.player.on(Player.Events.PLAY, () => {
+            this.clearPreview();
+        });
+    }
+
+    startAutoPreview(images) {
+        const container = this.player.root;
+
+        const previewWrapper = document.createElement('div');
+        previewWrapper.classList.add('preview-animation-wrapper');
+
+        const imageElements = images.map((src, index) => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.classList.add('preview-img');
+            if (index === 0) img.classList.add('active');
+            previewWrapper.appendChild(img);
+            return img;
+        });
+
+        container.appendChild(previewWrapper);
+
+        let currentIndex = 0;
+
+        // Запускаем бесконечный цикл
+        this.previewInterval = setInterval(() => {
+            imageElements[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % imageElements.length;
+            imageElements[currentIndex].classList.add('active');
+        }, 5000);
+    }
+
+    clearPreview() {
+        // Останавливаем таймер
+        if (this.previewInterval) {
+            clearInterval(this.previewInterval);
+            this.previewInterval = null;
+        }
+        // Удаляем старую обертку из DOM
+        const oldWrapper = this.player.root.querySelector('.preview-animation-wrapper');
+        if (oldWrapper) {
+            oldWrapper.remove();
+        }
+    }
 }
 
 export class Keyboard extends Component {
@@ -1105,8 +1279,10 @@ export class Keyboard extends Component {
     togglePlay() {
         if (this.video.paused) {
             this.video.play();
+            this.player.components.list.get('visualfeedback')?.showIcon('play');
         } else {
             this.video.pause();
+            this.player.components.list.get('visualfeedback')?.showIcon('pause');
         }
     }
 
@@ -1116,10 +1292,13 @@ export class Keyboard extends Component {
 
     seek(s) {
         this.video.currentTime = Math.max(0, this.video.currentTime + s);
+        this.player.components.list.get('visualfeedback')?.showIcon(s === 10 ? 'right' : 'left');
     }
 
     volume(v) {
         this.video.volume = Math.max(0, Math.min(1, this.video.volume + v));
+        this.player.components.list.get('visualfeedback')?.showIcon('volume', this.video.volume);
+
     }
 }
 
@@ -1145,6 +1324,8 @@ export class Skips extends Component {
                 });
             }
         });
+
+        console.log(this.opts);
     }
 
     init() {
@@ -1159,15 +1340,15 @@ export class Skips extends Component {
             lastCheckTime = Math.floor(time);
 
             // Ищем, находимся ли мы сейчас в зоне пропуска
-            const activeSkip = this.skips.find(x => time >= x.from && time <= x.to);
+            const activeSkip = this.skips.find(x => time >= x.from && time <= (x.to - 1));
 
             if (activeSkip === this.currentSkip) return;
             this.currentSkip = activeSkip;
 
             if (activeSkip) {
-                this.btn.classList.add('visible');
+                this.btn.classList.remove('-hide');
             } else {
-                this.btn.classList.remove('visible');
+                this.btn.classList.add('-hide');
             }
         });
 
@@ -1177,10 +1358,203 @@ export class Skips extends Component {
                 this.video.currentTime = this.currentSkip.to;
 
                 // Скрываем кнопку сразу после нажатия
-                this.btn.style.display = 'none';
+                this.btn.classList.add('-hide');
                 this.currentSkip = null;
             }
-        })
+        });
+
+        if (this.opts?.seeking) {
+            let previousTime = 0;
+
+            this.player.on(Player.Events.TIME_UPDATE, () => {
+                if (!this.video.seeking) {
+                    previousTime = this.video.currentTime;
+                }
+            });
+
+            this.player.on(Player.Events.SEEKING, () => {
+                const currentTime = this.video.currentTime;
+
+                if (this.currentSkip && currentTime > previousTime) {
+                    // Перематываем видео на конец отрезка
+                    this.video.currentTime = this.currentSkip.to;
+
+                    // Скрываем кнопку сразу после нажатия
+                    this.btn.classList.add('-hide');
+                    this.currentSkip = null;
+                }
+            });
+        }
+    }
+}
+
+export class Touch extends Component {
+    setup() {
+        this.overlay = this.player.root.querySelector('#gesture-overlay');
+
+        // Состояние для перемотки
+        this.lastTaps = { left: 0, right: 0 };
+        this.doubleTapDelay = 300;
+        this.longPressDelay = 1000;
+
+        this.longPressTimer = null;
+        this.isSpeedUp = false;
+        this.startY = 0;
+        this.isSwiping = false;
+    }
+
+    init() {
+        const leftZone = this.overlay.querySelector('.left');
+        const centerZone = this.overlay.querySelector('.center');
+        const rightZone = this.overlay.querySelector('.right');
+
+        // ЦЕНТР: Мгновенная пауза
+        centerZone.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            this.togglePlay();
+        });
+
+        // ЛЕВО: Только двойной тап
+        leftZone.addEventListener('pointerdown', (e) => this.handleTap(e, 'left'));
+
+        // ПРАВО: Двойной тап + Громкость + Ускорение
+        rightZone.addEventListener('pointerdown', (e) => {
+            rightZone.setPointerCapture(e.pointerId);
+
+            this.startY = e.clientY;
+            this.startX = e.clientX; // Добавим X, чтобы проверять общее смещение
+            this.isSwiping = false;
+            this.isSpeedUp = false; // Сброс при каждом нажатии
+
+            this.handleTap(e, 'right');
+
+            // Запуск таймера ускорения
+            this.longPressTimer = setTimeout(() => {
+                // Активируем ускорение, только если мы НЕ начали свайпать
+                if (!this.isSwiping) {
+                    this.startSpeedUp();
+                }
+            }, this.longPressDelay);
+
+            rightZone.setPointerCapture(e.pointerId);
+        });
+
+        rightZone.addEventListener('pointermove', (e) => {
+            // КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Если ускорение уже активно, игнорируем любые движения для громкости
+            if (this.isSpeedUp) return;
+
+            if (!rightZone.hasPointerCapture(e.pointerId)) return;
+
+            const diffY = this.startY - e.clientY;
+            const diffX = this.startX - e.clientX;
+            const totalMovement = Math.sqrt(diffX * diffX + diffY * diffY);
+
+            // Если палец сдвинулся больше чем на 20px — это осознанный свайп
+            if (totalMovement > 20 && !this.player.device.isIOS) {
+                this.isSwiping = true;
+                this.cancelLongPress(); // Отменяем будущий запуск ускорения
+
+                // Меняем громкость только если есть движение по вертикали
+                if (Math.abs(diffY) > 5) {
+                    this.changeVolume(diffY > 0 ? 0.02 : -0.02);
+                    this.startY = e.clientY;
+                }
+            }
+        });
+
+        rightZone.addEventListener('pointerup', (e) => {
+            this.stopEverything(e);
+        });
+
+        rightZone.addEventListener('pointercancel', (e) => {
+            this.stopEverything(e);
+        });
+    }
+
+    // --- Логика ускорения ---
+    startSpeedUp() {
+        if (this.isSwiping) return; // Не ускоряем, если идет свайп громкости
+        this.isSpeedUp = true;
+        this.video.playbackRate = 2.0;
+        this.player.components.list.get('visualfeedback')?.showIcon('speed2x');
+    }
+
+    stopEverything(e) {
+        this.cancelLongPress();
+
+        if (this.isSpeedUp) {
+            this.video.playbackRate = 1.0;
+            this.isSpeedUp = false;
+            this.player.components.list.get('visualfeedback')?.showIcon('speed1x');
+        }
+
+        this.isSwiping = false;
+
+        if (e && e.target.hasPointerCapture(e.pointerId)) {
+            e.target.releasePointerCapture(e.pointerId);
+        }
+    }
+
+    cancelLongPress() {
+        if (this.longPressTimer) {
+            clearTimeout(this.longPressTimer);
+            this.longPressTimer = null;
+        }
+    }
+
+    // --- Остальные методы ---
+    handleTap(e, side) {
+        const now = Date.now();
+        if (now - this.lastTaps[side] < this.doubleTapDelay) {
+            this.video.currentTime += (side === 'right' ? 10 : -10);
+            this.cancelLongPress(); // Двойной тап отменяет лонгпресс
+            this.lastTaps[side] = 0;
+            this.showFeedback(side);
+        } else {
+            this.lastTaps[side] = now;
+        }
+    }
+
+    togglePlay() {
+        this.video.paused ? this.video.play() : this.video.pause();
+        /**@type {VisualFeedback} */
+        this.player.components.list.get('visualfeedback')?.showIcon(this.video.paused ? 'pause' : 'play');
+    }
+
+    changeVolume(delta) {
+        this.video.volume = Math.max(0, Math.min(1, this.video.volume + delta));
+        this.player.components.list.get('visualfeedback')?.showIcon('volume', this.video.volume);
+    }
+
+    showFeedback(side) {
+        this.player.components.list.get('visualfeedback')?.showIcon(side, 10);
+    }
+}
+
+export class VisualFeedback extends Component {
+    setup() {
+        this.container = this.player.root.querySelector('.display-points-info-wrapper');
+        this.timer = null;
+    }
+
+    init() {
+        this.showIcon = (type, value) => {
+            clearTimeout(this.timer);
+            this.container.removeAttribute('data-type');
+
+            void this.container.offsetWidth;
+
+            this.container.setAttribute('data-type', type);
+
+            if (value !== undefined) {
+                // const textElement = this.container.querySelector('.info-value');
+                // if (textElement) textElement.textContent = value;
+            }
+
+            this.timer = setTimeout(() => {
+                this.container.removeAttribute('data-type');
+            }, 1000);
+        }
     }
 }
 

@@ -12,12 +12,13 @@
         position: relative;
         transition: .3s ease-in-out;
         cursor: pointer;
+        --mouse-percent: 0%;
 
         .current-time {
             min-width: 1px;
             background-color: #FFD700;
             max-width: 100%;
-            width: 0%;
+            width: var(--mouse-percent);
             position: relative;
             z-index: 10;
 
@@ -33,6 +34,7 @@
 
                 opacity: 0;
             }
+            
         }
 
         .load-progress{

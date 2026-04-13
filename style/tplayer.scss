@@ -32,12 +32,13 @@ body {
 body {
     background: #000;
 
-    &.-nocontrols{
-        .video-controller{
+    &.-nocontrols {
+        .video-controller {
             display: none;
         }
-        .video-wrapper{
-            video{
+
+        .video-wrapper {
+            video {
                 height: 100%;
                 width: 100%;
             }
@@ -58,7 +59,7 @@ body {
     display: grid;
     place-items: center;
 
-    &.-hide{
+    &.-hide {
         opacity: 0;
         pointer-events: none;
     }
@@ -109,8 +110,11 @@ body {
     height: 100%;
     position: relative;
 
-    @import "./tplayer/_prgressbar";
+    @import "./tplayer/prgressbar";
     @import "./tplayer/volume";
+    @import "./tplayer/overlay";
+    @import "./tplayer/preview";
+    @import "./tplayer/thumbinal";
 
     video {
         height: calc(100% - 48px);
@@ -311,33 +315,37 @@ body {
         }
     }
 
-    .skip-moment-wrapper{
+    .skip-moment-wrapper {
         position: absolute;
         bottom: 54px;
         right: 0;
         cursor: pointer;
         display: flex;
         align-items: center;
-        z-index: 9;
+        z-index: 10;
         font-family: "Roboto Mono", "Vazirmatn", monospace;
         text-transform: uppercase;
-        font-size: 13px;font-weight: bold;
+        font-size: 13px;
+        font-weight: bold;
         padding: 10px 20px;
         background: #FFD700;
         transition: .3s ease-in-out;
+        transform: translateX(0%);
+        opacity: 1;
 
-        svg{
+        svg {
             height: 20px;
         }
 
-        &.-hide{
+        &.-hide {
             transform: translateX(100%);
             opacity: 0;
+            pointer-events: none;
         }
     }
 
-    &.--bar{
-        .skip-moment-wrapper{
+    &.--bar {
+        .skip-moment-wrapper {
             bottom: 60px;
         }
     }
@@ -345,6 +353,10 @@ body {
 
 @media screen and (min-width: 900px) {
     .video-wrapper {
+        .display-points-info-wrapper {
+            height: 100%;
+        }
+
         video {
             height: 100%;
         }
@@ -359,6 +371,10 @@ body {
 
         &.-focus {
             .video-wrapper {
+                .display-points-info-wrapper {
+                    height: calc(100% - 48px);
+                }
+
                 .video-controller {
                     bottom: 0;
                 }

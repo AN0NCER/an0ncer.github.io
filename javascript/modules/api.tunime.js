@@ -48,6 +48,15 @@ export const Tunime = new class {
                     }
                 }
             },
+            notify: (event = () => { }) => {
+                const url = '/notify';
+
+                return {
+                    POST: async (body = {}) => {
+                        return this.fetch(url, { method: 'POST', body }, event)
+                    }
+                }
+            },
             list: (event = () => { }) => {
                 const url = '/api/user/devices';
 
