@@ -601,9 +601,10 @@ export class ProgressBar extends Component {
         this.player.on(Player.Events.SOURCE_LOADED, () => {
             const source = this.player.source;
 
-            const thumb = document.querySelector('.thumbinal');
+            const thumb = document.getElementById('media-thumbinal-preview');
+            const timestamp = document.getElementById('media-timestamp-preview');
             const preview = thumb.querySelector('.preview');
-            const timer = thumb.querySelector('.totime');
+            const cache = document.getElementById('media-cache-thumbinals');
 
             this.tiles = {
                 disable: (!source.tiles.pattern || !source.tiles.interval || !source.tiles.width) || !this.opts.preview,
@@ -623,44 +624,57 @@ export class ProgressBar extends Component {
 
             const tiles = this.tiles;
 
+            /**@type {Map<string,'loaded'|'loading'>} */
+            const imageCache = new Map();
 
-            const loadedImages = new Set(); // Храним список URL, которые уже в кэше
-
+            /**
+             * Очистка от старых кешей
+             */
             function clearCache() {
-                document.querySelectorAll('.tile-cache-item').forEach(el => {
-                    el.remove();
-                });
-                loadedImages.clear();
+                cache.innerHTML = '';
+                imageCache.clear();
             }
 
 
             function preloadSheet(index) {
+                if (index <= 0) return;
+
                 const paddedIndex = String(index).padStart(4, '0');
                 const url = tiles.pattern.replace('{index}', paddedIndex);
 
-                if (!loadedImages.has(url) && index > 0) {
-                    forceCache(url);
-                    loadedImages.add(url);
-                }
+                if (imageCache.has(url)) return;
+
+                imageCache.set(url, 'loading');
+
+                const hiddenImg = document.createElement('img');
+                hiddenImg.classList.add('tile-cache-item');
+                hiddenImg.style.display = 'none';
+
+                hiddenImg.onload = () => {
+                    imageCache.set(url, 'loaded');
+                };
+
+                hiddenImg.onerror = () => {
+                    // Убираем из Map чтобы можно было перепопробовать при необходимости
+                    imageCache.delete(url);
+                    hiddenImg.remove();
+                };
+
+                hiddenImg.src = url;
+                cache.appendChild(hiddenImg);
             }
 
             clearCache();
 
-            function forceCache(url) {
-                if (document.querySelector(`img[src="${url}"]`)) return;
-
-                const hiddenImg = document.createElement('img');
-                hiddenImg.src = url;
-                hiddenImg.style.display = 'none';
-                hiddenImg.classList.add('tile-cache-item');
-                document.body.appendChild(hiddenImg);
-            }
-
             if (this.tiles.disable) {
                 this.updateThumb = (seconds) => {
-                    timer.textContent = this.formatTime(seconds);
+                    timestamp.textContent = this.formatTime(seconds);
                 }
             } else {
+                // Последний успешно отображённый стейт
+                let lastLoadedSrc = null;
+                let lastLoadedPos = { x: 0, y: 0 };
+
                 this.updateThumb = (seconds) => {
                     //Математика кадров
                     const frameIndex = Math.floor(seconds / this.tiles.interval);
@@ -681,15 +695,31 @@ export class ProgressBar extends Component {
 
                     // Ставим URL только если он реально изменился (экономим ресурсы)
                     const newSrc = `url("${currentUrl}")`;
+
+                    // Подгружаем соседние листы при смене файла
                     if (thumb.style.getPropertyValue('--src') !== newSrc) {
+                        preloadSheet(fileIndex - 1);
                         preloadSheet(fileIndex);
                         preloadSheet(fileIndex + 1);
-                        preloadSheet(fileIndex - 1);
-                        thumb.style.setProperty('--src', newSrc);
                     }
 
-                    timer.textContent = this.formatTime(seconds);
-                    preview.style.backgroundPosition = `${posX}px ${posY}px`;
+                    // Показываем кадр только если лист уже загружен
+                    if (imageCache.get(currentUrl) === 'loaded') {
+                        thumb.style.setProperty('--src', newSrc);
+                        preview.style.backgroundPosition = `${posX}px ${posY}px`;
+
+                        // Запоминаем последний удачный стейт
+                        lastLoadedSrc = newSrc;
+                        lastLoadedPos = { x: posX, y: posY };
+                    } else {
+                        // Лист ещё грузится — держим последний удачный кадр
+                        if (lastLoadedSrc) {
+                            thumb.style.setProperty('--src', lastLoadedSrc);
+                            preview.style.backgroundPosition = `${lastLoadedPos.x}px ${lastLoadedPos.y}px`;
+                        }
+                    }
+
+                    timestamp.textContent = this.formatTime(seconds);
                 }
             }
         });

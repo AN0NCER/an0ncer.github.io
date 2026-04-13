@@ -60,11 +60,11 @@
                     <div class="current-time" id="media-progress-bar">
                         <div class="point"></div>
                     </div>
-                    <div class="thumbinal">
+                    <div class="thumbinal" id="media-thumbinal-preview">
                         <div class="thumbinal-wrapper">
                             <div class="preview"></div>
-                            <div class="totime-wrapper">
-                                <div class="totime">00:00</div>
+                            <div class="timestamp-wrapper">
+                                <div class="timestamp" id="media-timestamp-preview">00:00</div>
                             </div>
                         </div>
                     </div>
@@ -265,6 +265,7 @@
             <div class="text">0p</div>
         </div>
     </template>
+    <div id="media-cache-thumbinals"></div>
     <script src="/javascript/parametrs.js"></script>
     <script type="module" src="/javascript/pages/tplayer.js"></script>
 </body>

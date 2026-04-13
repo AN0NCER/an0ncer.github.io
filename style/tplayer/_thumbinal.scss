@@ -28,7 +28,7 @@
         box-shadow: 0px 3px 15px 5px rgb(0 0 0 / 47%);
     }
 
-    .totime-wrapper {
+    .timestamp-wrapper {
         position: absolute;
         bottom: 0;
         right: 0;
@@ -36,7 +36,7 @@
         display: grid;
         place-items: center;
 
-        .totime {
+        .timestamp {
             font-family: "Manrope", "Roboto Mono", "Vazirmatn", monospace;
             background: rgba(0, 0, 0, .5);
             color: #ffffffff;

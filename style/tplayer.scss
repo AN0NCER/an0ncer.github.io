@@ -351,6 +351,10 @@ body {
     }
 }
 
+#media-cache-thumbinals{
+    display: none;
+}
+
 @media screen and (min-width: 900px) {
     .video-wrapper {
         .display-points-info-wrapper {

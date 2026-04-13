@@ -503,7 +503,7 @@ body.-nocontrols .video-wrapper video {
   border-radius: 4px;
   box-shadow: 0px 3px 15px 5px rgba(0, 0, 0, 0.47);
 }
-.video-wrapper .thumbinal .totime-wrapper {
+.video-wrapper .thumbinal .timestamp-wrapper {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -511,7 +511,7 @@ body.-nocontrols .video-wrapper video {
   display: grid;
   place-items: center;
 }
-.video-wrapper .thumbinal .totime-wrapper .totime {
+.video-wrapper .thumbinal .timestamp-wrapper .timestamp {
   font-family: "Manrope", "Roboto Mono", "Vazirmatn", monospace;
   background: rgba(0, 0, 0, 0.5);
   color: white;
@@ -715,6 +715,10 @@ body.-nocontrols .video-wrapper video {
 }
 .video-wrapper.--bar .skip-moment-wrapper {
   bottom: 60px;
+}
+
+#media-cache-thumbinals {
+  display: none;
 }
 
 @media screen and (min-width: 900px) {
