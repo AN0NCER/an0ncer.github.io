@@ -177,7 +177,8 @@ export class Player extends TEvents {
         TUNIM_NEXT_EPISODE: 'tunimenextepisode',
         SOURCE_LOADED: 'sourceonload',
         FOCUS: 'onplayerfocus',
-        PROGRESS: 'progress'
+        PROGRESS: 'progress',
+        KODIK_LOADED: 'kodikloaded'
     }
     /**
      * @param {HTMLVideoElement} video 
@@ -305,6 +306,14 @@ export class Fullscreen extends Component {
                 }
             }, { once: true });
         }
+
+        this.player.on(Player.Events.FULL_SCREEN_CHANGE, (isFull) => {
+            if (isFull) {
+                this.root.classList.add('-full-screen');
+            } else {
+                this.root.classList.remove('-full-screen');
+            }
+        });
     }
 
     init() {
@@ -1132,8 +1141,27 @@ export class Volume extends Component {
 
 export class Loader extends Component {
     setup() {
+        this.loader = document.querySelector('.video-loader');
+        this.runame = document.querySelector('.title-wrapper > .ru');
+        this.enname = document.querySelector('.title-wrapper > .eng');
+        this.episode = document.querySelector('.meta > .episode');
+        this.voice = document.querySelector('.meta > .voice');
+        this.quality = document.querySelector('.meta > .q');
+    }
+
+    init() {
+        this.player.on(Player.Events.KODIK_LOADED, (meta) => {
+            this.runame.textContent = meta.titleAnime;
+            this.enname.textContent = meta.titleOrig;
+            this.episode.textContent = `Эпизод ${meta.episode} из ${meta.lastEpisode}`;
+            this.voice.textContent = meta.titleVoice;
+            this.quality.textContent = meta.quality;
+
+            this.loader.style.setProperty('--src', `url("${meta?.screenshots[0]}")`);
+        });
+
         this.player.on(Player.Events.DURATION_CHANGE, () => {
-            document.querySelector('.video-loader').classList.add('-hide');
+            this.loader.classList.add('-hide');
         });
     }
 }

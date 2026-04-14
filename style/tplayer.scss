@@ -31,6 +31,7 @@ body {
 
 body {
     background: #000;
+    cursor: none;
 
     &.-nocontrols {
         .video-controller {
@@ -44,65 +45,147 @@ body {
             }
         }
     }
+
+    .video-wrapper.-full-screen {
+        .video-controller {
+            bottom: -54px;
+        }
+    }
+
+    &.-focus {
+        cursor: default;
+
+        .video-wrapper.-full-screen {
+            .video-controller {
+                bottom: 0px;
+            }
+        }
+    }
+
+    &:not(.-focus) {
+        .video-wrapper.-full-screen {
+            .video-controller {
+                .progress-bar-wrapper {
+                    .video-timeline-controller {
+                        height: 6px;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .video-loader {
     position: fixed;
     inset: 0;
     z-index: 999;
+    transition: .3s ease-in-out;
+    opacity: 1;
 
     background: #15171E;
-    background-image: url("/images/load.player.png");
     background-size: cover;
     background-position: center;
 
     display: grid;
     place-items: center;
 
+    &>.wrapper {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+
+        .dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #185FA5;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+        }
+
+        .ring {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid #185FA5;
+            animation: pulse-ring 1.4s ease-out infinite;
+        }
+
+        .ring-1 {
+            animation: pulse-ring 1.4s ease-out infinite;
+        }
+
+        .ring-2 {
+            animation: pulse-ring 1.4s ease-out infinite 0.5s;
+            /* задержка */
+        }
+    }
+
+    .container {
+        position: absolute;
+        top: 4vw;
+        bottom: 4vw;
+        right: 0;
+        left: 6vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        z-index: 3;
+
+
+        .meta {
+            font-family: "Manrope", "Roboto Mono", "Vazirmatn", monospace;
+            color: #FFF;
+            font-size: clamp(11px, 1.44vw, 13px);
+            text-transform: uppercase;
+            display: flex;
+            gap: 4vw;
+            opacity: .3;
+        }
+
+        .title-wrapper {
+            font-family: "Manrope", "Roboto Mono", "Vazirmatn", monospace;
+            color: #FFF;
+
+            .ru {
+                font-weight: bold;
+                font-size: clamp(16px, 2.22vw, 20px);
+            }
+
+            .eng {
+                font-size: clamp(14px, 1.78vw, 16px);
+                opacity: .3;
+            }
+        }
+    }
+
+    .bg-img {
+        position: absolute;
+        inset: 0;
+        background: var(--src) center center;
+        background-size: cover;
+        opacity: .1;
+        z-index: 1;
+    }
+
     &.-hide {
         opacity: 0;
         pointer-events: none;
     }
-
-    .container {
-        width: 10.25vw;
-        max-width: 60px;
-        transform-origin: center;
-        animation: rotate4 2s linear infinite;
-    }
-
-    .loader {
-        fill: none;
-        stroke: #3C92ED;
-        stroke-width: 10;
-        stroke-dasharray: 2, 200;
-        stroke-dashoffset: 0;
-        stroke-linecap: round;
-        animation: dash4 1.5s ease-in-out infinite;
-    }
-
-    @keyframes rotate4 {
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    @keyframes dash4 {
-        0% {
-            stroke-dasharray: 1, 200;
-            stroke-dashoffset: 0;
-        }
-
-        50% {
-            stroke-dasharray: 90, 200;
-            stroke-dashoffset: -35px;
-        }
-
-        100% {
-            stroke-dashoffset: -125px;
-        }
-    }
-
 }
 
 .video-wrapper {
@@ -349,11 +432,17 @@ body {
             bottom: 60px;
         }
     }
+
+    &.-full-screen {}
 }
 
-#media-cache-thumbinals{
+#media-cache-thumbinals {
     display: none;
 }
+
+/*
+    Если экран больше 900px то применяются другие стили
+*/
 
 @media screen and (min-width: 900px) {
     .video-wrapper {
@@ -371,8 +460,6 @@ body {
     }
 
     body {
-        cursor: none;
-
         &.-focus {
             .video-wrapper {
                 .display-points-info-wrapper {
@@ -383,8 +470,6 @@ body {
                     bottom: 0;
                 }
             }
-
-            cursor: default;
         }
     }
 }
