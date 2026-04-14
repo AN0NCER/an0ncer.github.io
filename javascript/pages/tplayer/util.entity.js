@@ -40,7 +40,10 @@ export class Meta {
             this.lastEpisode = response.results[0].last_episode;
             this.animeId = response.results[0].shikimori_id;
             this.titleAnime = response.results[0].title;
+            this.titleOrig = response.results[0].title_orig;
             this.titleVoice = response.results[0].translation.title;
+            this.quality = response.results[0].quality;
+            this.screenshots = response.results[0]?.material_data?.screenshots ? response.results[0].material_data.screenshots : response.results[0]?.screenshots;
             this.#link = this.#normalizeKodikLink(response.results[0].link);
             return gen(episode ? episode : this.episode);
         } catch (e) {
