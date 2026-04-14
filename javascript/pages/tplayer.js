@@ -82,6 +82,9 @@ logger.log('INFO', 'URLSearchParams loaded', query);
 
         const meta = new Meta(query.id, query.episode);
         const url = await meta.getLink();
+
+        player.trigger(Player.Events.KODIK_LOADED, meta);
+        
         const src = await Tunime.video.source(url);
         const source = new Source(meta, src);
         player.attach(source);
