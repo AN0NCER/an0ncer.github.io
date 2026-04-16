@@ -193,13 +193,13 @@ export class Player extends TEvents {
         this.hls = new Hls();
 
         this.opts = {
-            requiredQuality: Number(opts.requiredQuality || 720),
-            autoQualitySelect: opts.autoQualitySelect || true,
-            autoFullScreen: opts.autoFullScreen || false,
-            defaultUIControls: opts.defaultUIControls || false,
-            autoEpisodeSwitch: opts.autoEpisodeSwitch || true,
-            enableMediaSession: opts.enableMediaSession || true,
-            touchControls: opts.touchControls || true
+            requiredQuality: Number(opts.requiredQuality ?? 720),
+            autoQualitySelect: opts.autoQualitySelect ?? true,
+            autoFullScreen: opts.autoFullScreen ?? false,
+            defaultUIControls: opts.defaultUIControls ?? false,
+            autoEpisodeSwitch: opts.autoEpisodeSwitch ?? true,
+            enableMediaSession: opts.enableMediaSession ?? true,
+            touchControls: opts.touchControls ?? true
         };
 
         this.device = {
@@ -370,6 +370,10 @@ export class Quality extends Component {
     }
 
     init() {
+        this.dom.values.forEach(element => {
+            element.textContent = `${this.quality}p`
+        });
+
         this.player.on(Player.Events.SOURCE_LOADED, (source) => {
             // Очистка dom от старых ресурсов качеств
             this.dom.container.replaceChildren();
