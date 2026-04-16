@@ -1,0 +1,39 @@
+import { History } from "../watch/mod_history.js";
+import { IScreenshots } from "../watch/mod.resource.js";
+import { LTransition } from "../watch/mod_transition.js";
+
+const load_image = "https://image.tmdb.org/t/p/original/nXZhu4aRWj9t8iArmf8s8Uu2NK7.jpg";
+
+LTransition.Loading.Parameters([
+    { name: "image", value: `url(${load_image})` },
+    { name: "progress-color", value: `#00c3b3` }
+]);
+
+const callback = (screenshots) => {
+    try {
+        screenshots.add({ type: "afterbegin", url: load_image, id: screenshots.list.length });
+        screenshots.list.push({ originalUrl: load_image });
+        const have = History().custom.have
+        console.log(screenshots);
+        if (!have) {
+            History().custom.init(screenshots.list.length - 1);
+        } else {
+            History().custom.click(screenshots.list.length - 1);
+        }
+    } catch {
+        console.log('Error complete script');
+    }
+
+};
+
+export default {
+    on: {
+        load: () => {
+            const screenshots = new IScreenshots();
+            screenshots.on("init", callback);
+            if (screenshots.init) {
+                callback(screenshots);
+            }
+        }
+    }
+}
