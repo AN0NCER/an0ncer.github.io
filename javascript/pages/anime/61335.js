@@ -15,7 +15,6 @@ const callback = (screenshots) => {
         screenshots.add({ type: "afterbegin", url: load_image, id: screenshots.list.length });
         screenshots.list.push({ originalUrl: load_image });
         const have = History().custom.have
-        console.log(screenshots);
         if (!have) {
             History().custom.init(screenshots.list.length - 1);
         } else {
