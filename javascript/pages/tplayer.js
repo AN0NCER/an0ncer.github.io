@@ -1,10 +1,14 @@
 import { Tunime } from "../modules/api.tunime.js";
 import { WindowApi } from "./tplayer/mod.api.js";
-import { Keyboard, Loader, Media, Player, ProgressBar, Skips, Switch, Touch, VisualFeedback, Volume } from "./tplayer/mod.tplayer.js";
-import { Meta, Source } from "./tplayer/util.entity.js";
-import { Fullscreen, PictureInPicture, PlayButton, Quality, Timer } from "./tplayer/mod.tplayer.js";
+import { Player } from "./tplayer/mod.tplayer.js";
+import { PlayButton, Timer, ProgressBar, Volume, Quality } from "./tplayer/comps/cps.playback.js";
+import { Fullscreen, PictureInPicture, VisualFeedback, Loader } from "./tplayer/comps/cps.screen.js";
+import { Keyboard, Touch, Skips } from "./tplayer/comps/cps.input.js";
+import { Media, Switch } from "./tplayer/comps/cps.system.js";
 import { ErrorHandler } from "./tplayer/mod.errors.js";
-import { err, log, logger } from "./tplayer/util.log.js";
+import { Meta, Source } from "./tplayer/utils/util.entity.js";
+import { Logger } from "./tplayer/utils/util.log.js";
+
 
 const player = new Player(document.getElementById('player'), {
     requiredQuality: $PARAMETERS.player.quality,
@@ -35,8 +39,6 @@ const query = (() => {
     }
 })();
 
-logger.log('INFO', 'URLSearchParams loaded', query);
-
 (() => {
     try {
         const components = player.components;
@@ -44,14 +46,14 @@ logger.log('INFO', 'URLSearchParams loaded', query);
         if (!player.opts.defaultUIControls) {
             components.add('play', PlayButton);
             components.add('timer', Timer);
-            components.add('progressbar', ProgressBar, { 
+            components.add('prbar', ProgressBar, {
                 preview: $PARAMETERS.player.previewseek ?? true
             });
-            components.add('fullscreen', Fullscreen);
+            components.add('fs', Fullscreen);
             components.add('pip', PictureInPicture);
             components.add('quality', Quality);
             components.add('volume', Volume);
-            components.add('visualfeedback', VisualFeedback);
+            components.add('vfeed', VisualFeedback);
 
             if (player.opts.touchControls) {
                 components.add('touch', Touch);
@@ -63,7 +65,7 @@ logger.log('INFO', 'URLSearchParams loaded', query);
         }
 
         if ($PARAMETERS.player.skipmoments) {
-            components.add('skips', Skips, { 
+            components.add('skips', Skips, {
                 seeking: $PARAMETERS.player.skipmomentsseek ?? false
             });
         }
@@ -72,7 +74,7 @@ logger.log('INFO', 'URLSearchParams loaded', query);
         components.add('keyboard', Keyboard);
         components.add('loader', Loader);
     } catch (e) {
-        err(e);
+        error.throw('COMPONENT_ERROR', 'main', e);
     }
 })();
 
@@ -84,11 +86,21 @@ logger.log('INFO', 'URLSearchParams loaded', query);
         const url = await meta.getLink();
 
         player.trigger(Player.Events.KODIK_LOADED, meta);
-        
+
         const src = await Tunime.video.source(url);
         const source = new Source(meta, src);
+
+        Logger.setMedia({
+            animeId: meta.animeId,
+            animeTitle: meta.titleAnime,
+            mediaVoice: meta.titleVoice,
+            mediaEpisode: meta.episode,
+            kodikId: meta.id,
+            kodikLink: url
+        });
+
         player.attach(source);
     } catch (e) {
-        err(e);
+        error.throw('SOURCE_LOAD', 'main', e);
     }
 })();
