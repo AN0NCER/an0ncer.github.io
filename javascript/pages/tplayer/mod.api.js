@@ -1,4 +1,5 @@
 import { Player } from "./mod.tplayer.js";
+import { log } from "./utils/util.log.js";
 
 export class WindowApi {
     /**
@@ -6,6 +7,7 @@ export class WindowApi {
      */
     constructor(player) {
         this.player = player;
+        this.player.services['api'] = this;
 
         this.#init();
         this.#messages();
@@ -47,7 +49,7 @@ export class WindowApi {
         ];
 
         tunime_api.forEach(({ type, from, value }) => {
-            this.player.on(from, () => post(type, value()));
+            this.player.on(from, (e) => post(type, value(e)));
         });
 
         ((last = null) => {
@@ -60,6 +62,8 @@ export class WindowApi {
                 }
             });
         })();
+
+        log('Слушатели инициализированы', 'api');
     }
 
     #messages() {

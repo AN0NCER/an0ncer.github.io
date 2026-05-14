@@ -1,6 +1,48 @@
-import { Kodik } from "../../modules/api.kodik.js";
-import { Tunime } from "../../modules/api.tunime.js";
-import { err } from "./util.log.js";
+import { Kodik } from "../../../modules/api.kodik.js";
+import { Tunime } from "../../../modules/api.tunime.js";
+import { ErrorHandler } from "../mod.errors.js";
+import { TEvents } from "./util.event.js";
+import { err, log } from "./util.log.js";
+
+export class Component extends TEvents {
+    /**
+     * @param {HTMLVideoElement} video 
+     * @param {Player} player 
+     * @param {string} id 
+     * @param {{}} opts 
+    */
+    constructor(video, player, id, opts = {}) {
+        super()
+
+        this.id = id;
+        this.video = video;
+        this.player = player;
+
+        this.opts = opts;
+        /**@type {ErrorHandler} */
+        this.error = this.player.services?.error;
+        /**@type {'COMPONENT_FATAL' | 'COMPONENT_MEDIUM' | 'COMPONENT_LOW'} */
+        this.err_code = 'COMPONENT_FATAL';
+    }
+
+    setup() { }
+    init() { }
+    destroy() { }
+
+    handle(fn, err_code = this.err_code) {
+        return (...args) => {
+            try {
+                fn.apply(this, args)
+            } catch (err) {
+                this.error?.throw(err_code, this.id, err);
+            }
+        }
+    }
+
+    log(msg, details = {}) {
+        log(msg, this.id, { details });
+    }
+}
 
 export class TError extends Error {
     constructor(code, msg, crit = false) {
@@ -72,6 +114,8 @@ export class Source {
         this.skips = payload?.skips || [];
         this.tiles = payload?.tiles || {};
         this.cached = payload?.cache || false;
+
+        log(`Source complete load. cached=${this.cached}`, 'source');
     }
 
     /**
