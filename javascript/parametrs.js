@@ -33,6 +33,7 @@ const $PARAMETERS = {
     },
     player: {
         quality: '720',
+        player_color: 'default',
         standart: true,
         full: false,
         autonekst: true,

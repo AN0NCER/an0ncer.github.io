@@ -300,6 +300,16 @@ const setup = [
                 description: `Установить Tunime как основной плеер для видео.`
             },
             {
+                param: 'player_color',
+                type: 'img.select',
+                title: 'Цвет акцента',
+                description: 'Выберите цвет акцента для элементов плеера.',
+                variation: [
+                    { key: 'default', val: 'Стандартный', img: 'set.default.plr.png' },
+                    { key: 'blue', val: 'Синий', img: 'set.blue.plr.png' },
+                ]
+            },
+            {
                 param: 'quality',
                 type: 'img.select',
                 title: 'Качество видео',
