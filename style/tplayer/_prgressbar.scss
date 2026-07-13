@@ -3,7 +3,7 @@
     height: 20px;
     display: flex;
     align-items: flex-end;
-    
+
     .video-timeline-controller {
         width: 100%;
         height: 6px;
@@ -16,7 +16,7 @@
 
         .current-time {
             min-width: 1px;
-            background-color: #FFD700;
+            background-color: var(--progress-bar);
             max-width: 100%;
             width: var(--mouse-percent);
             position: relative;
@@ -34,14 +34,16 @@
 
                 opacity: 0;
             }
-            
+
         }
 
-        .load-progress{
+        .load-progress {
             position: absolute;
-            top: 0; left: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            bottom: 0;
             width: 0%;
-            background: rgba(255, 217, 0, 0.3);
+            background: var(--progress-bar-load);
             z-index: 8;
         }
 
@@ -54,7 +56,7 @@
         }
     }
 
-    &.-hide{
+    &.-hide {
         pointer-events: none;
     }
 }

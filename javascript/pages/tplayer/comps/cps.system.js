@@ -39,6 +39,9 @@ export class Media extends Component {
 
                 const raw = await response.json();
 
+                if (!raw?.data?.images?.jpg?.large_image_url)
+                    return;
+
                 let metadata = {
                     title: this.player.source.meta.titleAnime,
                     artist: this.player.source.meta.titleVoice,
@@ -77,6 +80,8 @@ export class Media extends Component {
     }
 
     startAutoPreview(images) {
+        if(this.player.opts.defaultUIControls) return;
+
         const container = this.player.root;
 
         const previewWrapper = document.createElement('div');

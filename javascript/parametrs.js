@@ -16,6 +16,7 @@ const $PARAMETERS = {
     watch: {
         dubanime: false,
         episrevers: 'left',
+        epismenu: true,
         typefrc: ["TV Сериал", "Фильм", "ONA", "OVA"],
         saveinfo: false,
         previewbs: true,
@@ -42,7 +43,9 @@ const $PARAMETERS = {
         skipmoments: true,
         skipmomentsseek: false,
         previewseek: true,
-        error_quality: true
+        error_quality: true,
+        videoupscale: false,
+        typeupscale: 'ModeBB',
     },
     update: {
         updateshow: true,

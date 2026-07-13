@@ -8,6 +8,8 @@
 
 .window-selector {
     .window-content {
+        max-height: 100dvh;
+
         .content-wrapper {
             .wrapper {
                 padding-left: var(--sal);
@@ -68,12 +70,15 @@
                         border-radius: 50%;
                         display: grid;
                         width: 12px;
+                        min-width: 12px;
+                        margin-left: 10px;
                         height: 12px;
                         background: #101318;
                     }
 
                     &.-select {
                         background: #2393F1;
+
                         .circle {
                             background: #FFFFFF;
                         }

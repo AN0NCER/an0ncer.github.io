@@ -46,7 +46,9 @@ export class Fullscreen extends Component {
         }
 
         if (!document.fullscreenElement) {
-            fullscreenApi.call(container);
+            if (fullscreenApi) {
+                fullscreenApi.call(container);
+            }
         } else {
             document.exitFullscreen();
         }

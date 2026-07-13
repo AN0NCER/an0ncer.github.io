@@ -29,6 +29,8 @@ body {
     -webkit-text-size-adjust: none;
 }
 
+@import "./tplayer/colors";
+
 body {
     background: #000;
     cursor: none;
@@ -226,13 +228,69 @@ body {
             }
         }
 
-        .quality-select-wrapper {
+        .quality-select-wrapper,
+        .upscale-edit-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
             min-width: min-content;
             min-height: min-content;
             gap: 15px;
+        }
+
+        .upscale-edit-wrapper {
+
+            .btn-wrapper,
+            .list-info-wrapper {
+                display: flex;
+                gap: 10px;
+                height: 48px;
+                min-width: 48px;
+                padding: 0 8px;
+                align-items: center;
+            }
+
+            .list-info-wrapper {
+                .info-upscale {
+                    color: #ffffff;
+                    opacity: .4;
+                }
+
+                .info-upscale-value {
+                    color: #ffffff;
+                    padding: 0 8px;
+                    text-wrap: nowrap;
+                }
+            }
+
+            .btn-wrapper {
+                color: #ffffff;
+                cursor: pointer;
+
+                .icon {
+                    display: grid;
+                    place-items: center;
+
+                    svg {
+                        height: 19px;
+                        fill: #ffffff;
+                    }
+                }
+
+                .false {
+                    display: none;
+                }
+
+                &.-hide {
+                    .false {
+                        display: block;
+                    }
+
+                    .true {
+                        display: none;
+                    }
+                }
+            }
         }
 
         .quality-selector {
@@ -259,7 +317,7 @@ body {
                     gap: 5px;
 
                     &.-select {
-                        color: #FFD700;
+                        color: var(--primary);
                     }
 
                     &.-lock {
@@ -271,7 +329,7 @@ body {
                     }
 
                     svg {
-                        fill: #FFD700;
+                        fill: var(--primary);
                         height: 14px;
                         display: none;
                     }
@@ -315,7 +373,8 @@ body {
                 }
             }
 
-            .open-quality-selector {
+            .open-quality-selector,
+            .open-upscale {
                 height: 48px;
                 min-width: 48px;
                 padding: 0 8px;
@@ -411,13 +470,15 @@ body {
         font-size: 13px;
         font-weight: bold;
         padding: 10px 20px;
-        background: #FFD700;
+        background: var(--primary);
+        color: var(--skip-color);
         transition: .3s ease-in-out;
         transform: translateX(0%);
         opacity: 1;
 
         svg {
             height: 20px;
+            fill: var(--skip-color);
         }
 
         &.-hide {
@@ -460,6 +521,42 @@ body {
     }
 
     body {
+        &.-focus {
+            .video-wrapper {
+                .display-points-info-wrapper {
+                    height: calc(100% - 48px);
+                }
+
+                .video-controller {
+                    bottom: 0;
+                }
+            }
+        }
+    }
+}
+
+//Если кэран меньше 900 и landscape
+@media screen and (max-width: 900px) {
+
+    body[angle="90"],
+    body[angle="270"] {
+        .video-wrapper {
+
+            .display-points-info-wrapper,
+            #gesture-overlay {
+                height: 100%;
+            }
+
+            video {
+                height: 100%;
+            }
+
+            .video-controller {
+                bottom: -54px;
+            }
+        }
+
+
         &.-focus {
             .video-wrapper {
                 .display-points-info-wrapper {

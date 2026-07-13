@@ -92,65 +92,157 @@ class Listeners {
 }
 
 class Interface {
+
+    #locks = new Set();
     /**
      * @param {Player} player 
      */
     constructor(player) {
         this.player = player;
 
+        this.style = $PARAMETERS.player.player_color ?? 'default';
+        /**@type {HTMLDivElement} */
+        this.controls = this.player.root.querySelector('.video-controller');
+
         this.visible = true;
         this.#init();
-    }
-
-    set(val) {
-        if (this.player.video.paused)
-            return this.visible = true;
-
-        return this.visible = !!val;
     }
 
     #init() {
         if (this.player.opts.defaultUIControls) {
             this.player.video.setAttribute("controls", "controls");
-            window.document.body.classList.add('-nocontrols');
+            document.body.classList.add('-nocontrols');
+            return; // Мы не добавляем больше события потому что стандратный контролер
+        }
+
+        //Установка цветового акцента плеера
+        document.body.classList.add(`-${this.style}`);
+
+        this.displayOrientation();
+
+        this.player.on(Player.Events.PLAY, () => this.enableActivityListeners());
+        this.player.on(Player.Events.PAUSE, () => this.disableActivityListeners());
+        this.player.on(Player.Events.ENDED, () => this.forceShow());
+
+
+        this.controls.addEventListener('pointerenter', () => {
+            this.lock('controls');
+        });
+
+        this.controls.addEventListener('pointerleave', () => {
+            this.unlock('controls');
+        });
+    }
+
+    displayOrientation() {
+        const body = document.body;
+
+        let lastAngle = null;
+
+        const update = () => {
+            const angle = getAngle();
+            if (angle === lastAngle) return;
+            lastAngle = angle;
+
+            body.setAttribute('angle', String(angle));
+        };
+
+        update();
+
+        window.addEventListener('orientationchange', update, { passive: true });
+
+        if (screen?.orientation?.addEventListener) {
+            screen.orientation.addEventListener('change', update);
+        }
+
+        function getAngle() {
+            let angle = screen?.orientation?.angle ?? window.orientation ?? 0;
+            if (angle === -90) angle = 270;
+
+            return angle;
+        }
+    }
+
+    enableActivityListeners() {
+        this.player.root.addEventListener(
+            'pointermove',
+            this.onActivity,
+            { passive: true }
+        );
+
+        this.player.root.addEventListener(
+            'touchstart',
+            this.onActivity,
+            { passive: true }
+        );
+
+        this.scheduleHide();
+    }
+
+    disableActivityListeners() {
+        this.player.root.removeEventListener(
+            'pointermove',
+            this.onActivity
+        );
+
+        this.player.root.removeEventListener(
+            'touchstart',
+            this.onActivity
+        );
+
+        this.forceShow();
+    }
+
+    onActivity = () => {
+        this.show();
+        this.scheduleHide();
+    }
+
+    forceShow() {
+        clearTimeout(this.hideTimer);
+
+        this.show();
+    }
+
+    show() {
+        if (this.visible)
             return;
+
+        this.visible = true;
+
+        document.body.classList.add('-focus');
+    }
+
+    scheduleHide() {
+        clearTimeout(this.hideTimer);
+
+        this.hideTimer = setTimeout(() => {
+            this.hide();
+        }, 2500);
+    }
+
+    hide() {
+        if (!this.player.video.paused && this.canHide()) {
+            this.visible = false;
+
+            document.body.classList.remove('-focus');
         }
+    }
 
-        const handler = () => {
-            const cl = '-focus';
+    lock(name) {
+        this.#locks.add(name);
 
-            if (this.visible)
-                document.body.classList.add(cl);
-            else
-                document.body.classList.remove(cl);
+        this.show();
+    }
 
-            this.player.trigger(Player.Events.FOCUS, this.visible);
-        }
+    unlock(name) {
+        this.#locks.delete(name);
 
-        (() => {
-            let hideTimeout;
+        this.scheduleHide();
+    }
 
-            const showControls = () => {
-                clearTimeout(hideTimeout);
-
-                if (this.visible !== true) {
-                    this.set(true);
-                    handler();
-                }
-
-                hideTimeout = setTimeout(() => {
-                    if (this.set !== false) {
-                        this.set(false);
-                        handler();
-                    }
-                }, 3000);
-            }
-
-            document.addEventListener('mousemove', () => showControls());
-            document.addEventListener('click', () => showControls());
-        })();
-
-        handler();
+    canHide() {
+        return this.#locks.size === 0;
     }
 }
 
@@ -224,9 +316,13 @@ export class Player extends TEvents {
             }
 
             window.removeEventListener('click', this.onWindowClickEvent);
-        }
+            window.removeEventListener('touchstart', this.onWindowClickEvent);
+            window.removeEventListener('pointerdown', this.onWindowClickEvent);
+        };
 
         window.addEventListener('click', this.onWindowClickEvent);
+        window.addEventListener('touchstart', this.onWindowClickEvent, { passive: true });
+        window.addEventListener('pointerdown', this.onWindowClickEvent);
 
         if (this.device.isHls) {
             this.hls.attachMedia(this.video);

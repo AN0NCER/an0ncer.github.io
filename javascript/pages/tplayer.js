@@ -55,9 +55,22 @@ const query = (() => {
             components.add('volume', Volume);
             components.add('vfeed', VisualFeedback);
 
-            if (player.opts.touchControls) {
-                components.add('touch', Touch);
+            if ($PARAMETERS.player.videoupscale) {
+                import('./tplayer/comps/cps.upscale.js').then(({ Upscale, UpscaleUI }) => {
+                    components.add('upscale', Upscale, {
+                        enabled: $PARAMETERS.player.videoupscale,
+                        mode: $PARAMETERS.player.typeupscale
+                    });
+
+                    components.add('upscaleui', UpscaleUI, {
+                        io: 'upscale'
+                    });
+                });
             }
+        }
+
+        if (player.opts.touchControls) {
+            components.add('touch', Touch);
         }
 
         if (player.opts.autoEpisodeSwitch) {

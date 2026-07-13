@@ -55,10 +55,10 @@ export class Keyboard extends Component {
     togglePlay() {
         if (this.video.paused) {
             this.player.main.play();
-            this.player.components.list.get('visualfeedback')?.showIcon('play');
+            this.player.components.list.get('vfeed')?.showIcon('play');
         } else {
             this.video.pause();
-            this.player.components.list.get('visualfeedback')?.showIcon('pause');
+            this.player.components.list.get('vfeed')?.showIcon('pause');
         }
     }
 
@@ -68,12 +68,12 @@ export class Keyboard extends Component {
 
     seek(s) {
         this.video.currentTime = Math.max(0, this.video.currentTime + s);
-        this.player.components.list.get('visualfeedback')?.showIcon(s === 10 ? 'right' : 'left');
+        this.player.components.list.get('vfeed')?.showIcon(s === 10 ? 'right' : 'left');
     }
 
     volume(v) {
         this.video.volume = Math.max(0, Math.min(1, this.video.volume + v));
-        this.player.components.list.get('visualfeedback')?.showIcon('volume', this.video.volume);
+        this.player.components.list.get('vfeed')?.showIcon('volume', this.video.volume);
 
     }
 }
@@ -96,6 +96,12 @@ export class Touch extends Component {
     }
 
     init() {
+        if (this.player.opts.defaultUIControls) {
+            console.log(this.overlay);
+            this.overlay.style.display = "none";
+            return;
+        }
+
         const leftZone = this.overlay.querySelector('.left');
         const centerZone = this.overlay.querySelector('.center');
         const rightZone = this.overlay.querySelector('.right');
@@ -168,7 +174,7 @@ export class Touch extends Component {
         if (this.isSwiping) return; // Не ускоряем, если идет свайп громкости
         this.isSpeedUp = true;
         this.video.playbackRate = 2.0;
-        this.player.components.list.get('visualfeedback')?.showIcon('speed2x');
+        this.player.components.list.get('vfeed')?.showIcon('speed2x');
     }
 
     stopEverything(e) {
@@ -177,7 +183,7 @@ export class Touch extends Component {
         if (this.isSpeedUp) {
             this.video.playbackRate = 1.0;
             this.isSpeedUp = false;
-            this.player.components.list.get('visualfeedback')?.showIcon('speed1x');
+            this.player.components.list.get('vfeed')?.showIcon('speed1x');
         }
 
         this.isSwiping = false;
@@ -210,16 +216,16 @@ export class Touch extends Component {
     togglePlay() {
         this.video.paused ? this.player.main.play() : this.video.pause();
         /**@type {VisualFeedback} */
-        this.player.components.list.get('visualfeedback')?.showIcon(this.video.paused ? 'pause' : 'play');
+        this.player.components.list.get('vfeed')?.showIcon(this.video.paused ? 'pause' : 'play');
     }
 
     changeVolume(delta) {
         this.video.volume = Math.max(0, Math.min(1, this.video.volume + delta));
-        this.player.components.list.get('visualfeedback')?.showIcon('volume', this.video.volume);
+        this.player.components.list.get('vfeed')?.showIcon('volume', this.video.volume);
     }
 
     showFeedback(side) {
-        this.player.components.list.get('visualfeedback')?.showIcon(side, 10);
+        this.player.components.list.get('vfeed')?.showIcon(side, 10);
     }
 }
 

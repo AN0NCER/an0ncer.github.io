@@ -4,9 +4,9 @@
 
     .tag {
         display: none;
-        background: rgba(255, 217, 0, 0.3);
-        border: 1px solid rgba(255, 217, 0, 0.4);
-        color: #FFD700;
+        background: var(--tag-background);
+        border: 1px solid var(--tag-border);
+        color: var(--tag-color);
         font-size: 9px;
         padding: 2px 7px;
         border-radius: 33px;
@@ -24,8 +24,8 @@
         min-width: 0px;
         max-width: 0px;
         height: 14px;
-        background: rgba(255, 217, 0, 0.3);
-        border: 0px solid rgba(255, 217, 0, 0.4);
+        background: var(--volume-background);
+        border: 0px solid var(--volume-border);
         position: relative;
         overflow: hidden;
         border-radius: 10px;
@@ -39,7 +39,7 @@
             left: 0;
             bottom: 0;
             width: 30px;
-            background: #FFD700;
+            background: var(--primary);
         }
     }
 
@@ -175,8 +175,8 @@
                 min-width: 150px;
                 max-width: 150px;
                 height: 14px;
-                background: rgba(255, 217, 0, 0.3);
-                border: 1px solid rgba(255, 217, 0, 0.4);
+                background: var(--volume-background);
+                border: 1px solid var(--volume-border);
                 position: relative;
                 overflow: hidden;
                 border-radius: 10px;
@@ -188,15 +188,15 @@
                     left: 0;
                     bottom: 0;
                     width: 30px;
-                    background: #FFD700;
+                    background: var(--primary);
                 }
             }
 
             .tag {
                 display: none;
-                background: rgba(255, 217, 0, 0.3);
-                border: 1px solid rgba(255, 217, 0, 0.4);
-                color: #FFD700;
+                background: var(--tag-background);
+                border: 1px solid var(--tag-border);
+                color: var(--tag-color);
                 font-size: 9px;
                 padding: 2px 7px;
                 border-radius: 33px;
@@ -227,7 +227,7 @@
                     content: '';
                     width: 19px;
                     height: 1px;
-                    background: #FFD700;
+                    background: var(--primary);
                     pointer-events: none;
                     position: absolute;
                     bottom: 9px;

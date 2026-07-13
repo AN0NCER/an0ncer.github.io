@@ -3,6 +3,7 @@ import { Main, OAuth, sUrl } from "../core/main.core.js";
 import { TMenu } from "../core/menu.core.js";
 import { Tunime } from "../modules/api.tunime.js";
 import { ClearParams } from "../modules/functions.js";
+import { TNotifi } from "../modules/tun.notification.js";
 import { Engine } from "./settings/mod.engine.js";
 import { ClearDB, Logout } from "./settings/mod.func.js";
 import { THeader } from "./settings/mod.header.js";
@@ -33,29 +34,17 @@ const setup = [
             {
                 enable: () => true,
                 value: () => {
-                    const permission = Notification.permission;
-
-                    if (permission === 'granted') {
-                        return 'Доступ разрешен';
-                    } else if (permission === 'denied') {
-                        return 'Доступ заблокирован';
-                    } else {
-                        return 'Запрос еще не отправлялся (default)';
-                    }
+                    return '→'
                 },
                 click: async () => {
-                    const registration = await navigator.serviceWorker.ready;
-                    const subscription = await registration.pushManager.subscribe({
-                        userVisibleOnly: true,
-                        applicationServerKey: 'BI-EM3yjiaU8W9vQMBmZL06mJdROk-Y1nMOITPJF2Q0_nkxYvj0Dvr2CD47KYwfrOQITmGwAeW-wUFrVR_URISo'
-                    });
-
-                    Tunime.api.device.notify().POST(subscription.toJSON());
+                    const SetupNotificationWindow = (await import("../windows/settings/win.notification.setup.js")).default;
+                    SetupNotificationWindow();
                 },
                 type: 'button.event',
                 title: 'Уведомления',
-                icon: 'database',
-                description: 'Управление данными приложения: экспорт, импорт и сброс.'
+                classes: ['-new-icon'],
+                icon: 'bell',
+                description: 'Настройки уведомления на сайте.'
             },
             {
                 enable: () => true,
@@ -234,9 +223,16 @@ const setup = [
                 title: 'Эпизоды',
                 description: 'Выберите расположение списка эпизодов в горизонтальной ориентации.',
                 variation: [
-                    { key: "left", val: "Сбоку" },
-                    { key: "top", val: "Сверху" },
+                    { key: "left", val: "Слева (Стандарт)" },
+                    { key: "right", val: "Справа" },
+                    { key: "top", val: "Сверху" }
                 ]
+            },
+            {
+                param: 'epismenu',
+                type: 'checkbox.tip',
+                title: 'Меню эпизодов',
+                description: 'Добавляет кнопку меню для удобного управления списком эпизодов, если их больше 40.'
             },
             {
                 param: 'dubanime',
@@ -379,6 +375,49 @@ const setup = [
                 title: 'Стандартный контроллер',
                 description: `Использовать встроенные элементы управления браузера в плеере Tunime.`,
             },
+            {
+                param: 'videoupscale',
+                type: 'checkbox.tip',
+                title: 'Upscale [beta]',
+                description: 'Апскейлинг видео в реальном времени через WebGPU с помощью нейросетей Anime4K. Улучшает чёткость линий, убирает артефакты сжатия и размытие. Требует браузер с поддержкой WebGPU (Chrome / Edge). При слабом GPU возможны просадки FPS — в этом случае выберите более лёгкую модель.'
+            },
+            {
+                param: 'typeupscale',
+                type: 'btn.tip',
+                click: WindowSelector,
+                mode: 'single',
+                title: 'Upscale mode [beta]',
+                description: 'Модель обработки изображения. Пресеты (Mode A/B/C) подбираются под тип исходника, одиночные модели CNN/GAN позволяют собрать свой пайплайн. Чем крупнее вариант (M → VL → UL), тем выше качество и больше нагрузка на GPU.\n\nПресеты — готовые пайплайны под конкретный тип исходника:\nMode A — для размытого или старого аниме с сильными артефактами сжатия. Агрессивное восстановление линий.\nMode B — для 720p и даунскейл-аниме с алиасингом и звоном. Мягкое восстановление без перешарпа.\nMode C — для чистой картинки без деградации: обои, Pixiv, 1080p→480p. Максимальный PSNR, минимум артефактов.\nMode A+A — удвоенный пайплайн Mode A. Наивысшее перцептивное качество для размытого аниме, но вдвое медленнее.\nMode B+B — удвоенный пайплайн Mode B. Высокое качество для 720p, вдвое медленнее.\nMode C+A — комбинация C и A: сначала чистый апскейл, затем восстановление. Баланс PSNR и резкости.\n\nОдиночные модели — для ручной настройки:\nCNN стабильнее и предсказуемее, GAN резче, но может добавлять галлюцинации. Чем крупнее вариант (M → VL → UL), тем выше качество и больше нагрузка на GPU.',
+                variation: [
+                    // ── Upscale ───────────────────────────────────────────────────
+                    { key: "CNNx2UL", val: "CNN x2 Ultra Light" },
+                    { key: "CNNx2M", val: "CNN x2 Medium" },
+                    { key: "CNNx2VL", val: "CNN x2 Very Large" },
+                    { key: "DenoiseCNNx2VL", val: "CNN x2 VL + Denoise" },
+                    { key: "GANx3L", val: "GAN x3 Large" },
+                    { key: "GANx4UUL", val: "GAN x4 Ultra Light" },
+
+                    // ── Restore ───────────────────────────────────────────────────
+                    { key: "CNNUL", val: "Restore CNN UL" },
+                    { key: "CNNM", val: "Restore CNN M" },
+                    { key: "CNNVL", val: "Restore CNN VL" },
+                    { key: "CNNSoftM", val: "Restore Soft CNN M" },
+                    { key: "CNNSoftVL", val: "Restore Soft CNN VL" },
+                    { key: "GANUUL", val: "Restore GAN UUL" },
+
+                    // ── Denoise / Deblur ──────────────────────────────────────────
+                    { key: "BilateralMean", val: "Denoise Bilateral" },
+                    { key: "DoG", val: "Deblur DoG" },
+
+                    // ── Presets ───────────────────────────────────────────────────
+                    { key: "ModeA", val: "Mode A" },
+                    { key: "ModeB", val: "Mode B" },
+                    { key: "ModeC", val: "Mode C" },
+                    { key: "ModeAA", val: "Mode A+A" },
+                    { key: "ModeBB", val: "Mode B+B" },
+                    { key: "ModeCA", val: "Mode C+A" },
+                ]
+            }
             // {
             //     param: 'alternative_full',
             //     type: 'checkbox.tip',
