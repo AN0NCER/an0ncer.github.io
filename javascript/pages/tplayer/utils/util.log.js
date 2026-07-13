@@ -99,6 +99,9 @@ export const Logger = new class {
 
                 if (err.reason) {
                     log += `${" ".repeat(ts.length + 1)}${lvl}${_lvl_space}[${lib}]${_mod_space}${err.reason}`;
+                    if (err.reason.stack) {
+                        log += `\n${err.reason.stack}\n\n`
+                    }
                 }
             }
             console.log(ts, lib, lvl, msg, details, err);
