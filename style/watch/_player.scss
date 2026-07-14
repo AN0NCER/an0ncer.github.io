@@ -1,52 +1,663 @@
+@mixin PTitle() {
+    .player-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.2);
+
+            border-radius: 10px;
+            gap: 1px;
+            overflow: hidden;
+
+            .line {
+                height: 25px;
+                width: 1px;
+                background: rgba(255, 255, 255, 0.1);
+
+                &.-hide {
+                    display: none;
+                }
+            }
+
+            .btn {
+                $size: 45px;
+                height: $size;
+                min-width: $size;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .svg-block {
+                    min-width: $size;
+                    display: grid;
+                    place-items: center;
+
+                    svg {
+                        fill: #FFFFFF;
+                        height: 21px;
+                    }
+                }
+
+                .text {
+                    display: flex;
+                    font-size: 11px;
+                    font-weight: normal;
+                    flex-direction: column;
+                    line-height: 10px;
+                    color: rgba(255, 255, 255, 0.6);
+                    margin-right: 10px;
+
+                    // Скрыто по умолчанию
+                    max-width: 0;
+                    overflow: hidden;
+                    opacity: 0;
+                    margin-right: 0;
+                    white-space: nowrap;
+                    transition:
+                        max-width 0.25s ease,
+                        opacity 0.2s ease,
+                        margin-right 0.25s ease;
+                }
+
+                &:hover .text {
+                    max-width: 100px;
+                    opacity: 1;
+                    margin-right: 10px;
+                }
+
+                &.-hide {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+@mixin Episode() {
+    $width: 63px;
+    $height: 80px;
+
+    .episode-visible-area {
+        &.-row {}
+
+        &.-column {
+            display: none;
+        }
+    }
+
+    .episodes {
+        .episodes-wrapper {
+
+            --episod: 1;
+
+            position: relative;
+            padding: 5px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+
+            .episode {
+                display: flex;
+
+                width: $width;
+                height: $height;
+
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                z-index: 5;
+
+                color: #FFFFFF;
+                opacity: .5;
+                cursor: pointer;
+
+                font-weight: bold;
+                font-size: 18px;
+
+                .ep-name {
+                    font-size: 11px;
+                    margin-top: 3px;
+                }
+
+                &.-select {
+                    opacity: 1;
+                }
+            }
+
+            .sel {
+                display: grid;
+                position: absolute;
+                width: $width;
+                height: $height;
+                box-sizing: border-box;
+
+                background: #3C92ED;
+                border-radius: 8px;
+                padding: 3px;
+
+                transition: .2s ease-in-out;
+
+                &::after {
+                    content: ' ';
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                    background-color: #191c21;
+                    border-radius: 6px;
+                }
+            }
+        }
+
+        //TODO: Под вопросом
+        &.-row {
+            padding-left: 10px;
+            padding-right: 10px;
+
+            overflow-x: auto;
+            overflow-y: hidden;
+
+            .episodes-wrapper {
+                display: inline-flex;
+                flex-direction: row;
+
+                .sel {
+                    top: 5px;
+                    left: calc(5px + ((var(--episod) - 1) * $width));
+                }
+            }
+        }
+
+        //TODO: Под вопросом
+        &.-column {
+            display: none;
+            margin-right: 10px;
+
+            overflow-x: hidden;
+            overflow-y: auto;
+
+            .episodes-wrapper {
+                display: inline-flex;
+                flex-direction: column;
+
+                .sel {
+                    top: calc(5px + ((var(--episod) - 1) * 80px));
+                    left: 5px;
+                }
+            }
+        }
+    }
+
+    .episode-visible-area {
+        position: relative;
+
+        --episod: 1;
+        --items: 0;
+
+        .episode-wrapper {
+            display: flex;
+            flex: 1 0 0;
+            max-width: fit-content;
+            overflow: hidden;
+            position: relative;
+            padding: 5px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+
+            .episode-list {
+                .episode {
+                    display: flex;
+
+                    width: $width;
+                    height: $height;
+
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+
+                    z-index: 5;
+
+                    color: #FFFFFF;
+                    opacity: .5;
+                    cursor: pointer;
+
+                    font-weight: bold;
+                    font-size: 18px;
+
+                    .ep-name {
+                        font-size: 11px;
+                        margin-top: 3px;
+                    }
+
+                    &.-select {
+                        opacity: 1;
+                    }
+                }
+
+                .btn-win-episode {
+                    display: flex;
+
+                    width: $width;
+                    height: $height;
+
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+
+                    z-index: 10;
+
+                    color: #FFFFFF;
+
+                    cursor: pointer;
+
+                    position: sticky;
+                    background: #191c21;
+                    border-radius: 6px;
+
+                    transition: 0.94s var(--easy);
+
+                    .ep-name {
+                        font-size: 11px;
+                        margin-top: 3px;
+                    }
+
+                    svg {
+                        height: 25px;
+                        fill: #FFFFFF;
+                    }
+
+                    &::after {
+                        content: '';
+                        display: none;
+                        position: absolute;
+                        top: 25px;
+                        bottom: 25px;
+                        right: 4px;
+                        width: 2px;
+                        background: #FFFFFF;
+                        border-radius: 3px;
+                        opacity: .5;
+                    }
+                }
+            }
+        }
+
+        .episode-scroll-wrapper {
+            position: relative;
+        }
+
+        .episode-shell {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+
+            .-sel {
+                display: grid;
+                position: absolute;
+                width: $width;
+                height: $height;
+                box-sizing: border-box;
+
+                background: #3C92ED;
+                border-radius: 8px;
+                padding: 3px;
+
+                transition: 0.94s var(--easy);
+
+                &::after {
+                    content: ' ';
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                    background-color: #191c21;
+                    border-radius: 6px;
+                }
+            }
+        }
+
+        &.-row {
+            padding: 0 10px;
+            overflow: hidden;
+
+            .episode-wrapper {
+                .episode-scroll-wrapper {
+                    overflow-x: scroll;
+
+                    .episode-list {
+                        display: inline-flex;
+                        flex-direction: row;
+
+                        .btn-win-episode {
+                            left: -53px;
+                            margin-right: 5px;
+
+                            &.-show {
+                                left: 0px;
+                            }
+                        }
+                    }
+                }
+
+
+                .-sel {
+                    transform: translateX(calc(((var(--episod, 1) + var(--items, 0) - 1) * $width + (5px * var(--items, 0)))));
+                }
+            }
+        }
+
+        &.-column {
+            .episode-wrapper {
+                .episode-scroll-wrapper {
+                    overflow-y: scroll;
+
+                    .episode-list {
+                        .btn-win-episode {
+                            top: -74px;
+                            margin-bottom: 5px;
+
+                            &.-show {
+                                top: 0px;
+                            }
+                        }
+                    }
+                }
+
+                .-sel {
+                    transform: translateY(calc(((var(--episod, 1) + var(--items, 0) - 1) * $height + (5px * var(--items, 0)))));
+                }
+            }
+        }
+
+    }
+
+    body[angle="90"],
+    body[angle="270"] {
+
+        @media screen and (max-width: 1000px) {
+
+            .landscape-player.-left,
+            .landscape-player.-right {
+                .episode-visible-area {
+                    &.-row {
+                        display: none;
+                    }
+
+                    &.-column {
+                        display: flex;
+                    }
+                }
+
+                // .episodes.-row {
+                //     display: none;
+                // }
+
+                // .episodes.-column {
+                //     display: block;
+                // }
+            }
+
+            .landscape-player {
+
+                &.-right,
+                &.-left {
+                    .player-wrapper {
+                        gap: 10px;
+                    }
+                }
+            }
+
+            .landscape-player.-right {
+                .player-wrapper {
+                    flex-direction: row-reverse;
+                }
+            }
+        }
+    }
+}
+
 @mixin Player() {
+    .landscape-player {
+        margin-top: 10px;
+    }
+
+    .player-wrapper {
+        display: flex;
+        flex: 1 1 0;
+
+        margin-top: 10px;
+    }
+
     .player {
         display: flex;
+        flex: 1 1 0;
 
-        iframe{
-            margin-top: 10px;
+
+        iframe {
             width: 100%;
             aspect-ratio: 16 / 9;
+            min-height: calc((100vw * 9 / 16) + 48px);
+            max-height: 100dvh;
         }
 
-        &[data-type="tunime"][default-controls="false"]{
+        &[data-type="kodik"] {
             iframe {
-                width: 100%;
-                min-height: calc((100vw * 9 / 16) + 48px);
+                min-height: unset;
+            }
+        }
+    }
+
+    body[angle="90"],
+    body[angle="270"] {
+
+        .landscape-player {
+
+            .player-wrapper {
+                max-height: calc(100dvh - 20px);
+                margin: 0 10px;
+            }
+
+            &.-top {
+                .player-wrapper {
+                    margin-top: 10px !important;
+                }
+            }
+        }
+
+        iframe {
+            aspect-ratio: 16/9 !important;
+            min-height: auto !important;
+        }
+    }
+
+    @media screen and (min-width:900px) {
+        iframe {
+            min-height: auto !important;
+            border-radius: 5px !important;
+            aspect-ratio: 16/9 !important;
+        }
+    }
+}
+
+@mixin Dubs() {
+    .dub-wrapper {
+        margin-top: 15px;
+        padding: 0 15px;
+    }
+
+    .dub-controller {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 5px;
+        border-radius: 10px;
+
+        display: flex;
+        align-items: center;
+
+        .dub-win-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #DADADA;
+            background: #191c21;
+            font-family: 'Manrope', sans-serif;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+
+            .dub-name {
                 display: flex;
-                aspect-ratio: auto;
+                align-items: center;
+                font-size: 15px;
+                font-weight: bold;
+                line-height: 13px;
+                overflow: hidden;
+
+                .name {
+                    overflow: hidden;
+                    text-wrap-mode: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            .dub-episodes {
+                margin-right: 15px;
+                font-size: 13px;
+                text-wrap-mode: nowrap;
+            }
+
+            .dub-icon-wrapper {
+                display: grid;
+                place-items: center;
+                width: 38px;
+                height: 48px;
+
+                svg {
+                    height: 18px;
+                    fill: #DADADA;
+                }
             }
         }
 
-        @media (orientation: landscape) {
-            iframe{
-                aspect-ratio: 16/9 !important;
-                min-height: auto !important;
+        .dub-notify,
+        .dub-favorite {
+            min-width: 45px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+
+            svg {
+                height: 18px;
+                fill: #DADADA;
+
+                .solid {
+                    display: none;
+                }
+
+                .loader {
+                    display: none;
+                }
             }
         }
 
+        .dub-favorite {
+            margin-left: 1px;
+        }
 
-        @media screen and (min-width:900px) {
-            iframe {
-                min-height: auto !important;
-                border-radius: 5px !important;
-                aspect-ratio: 16/9 !important;
+        .line {
+            height: 25px;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .dub-notify,
+        .line {
+            display: none;
+        }
+
+        &.-favor {
+            .dub-favorite {
+                svg {
+                    fill: #FFFFFF;
+
+                    .regular {
+                        display: none;
+                    }
+
+                    .solid {
+                        display: block;
+                    }
+                }
             }
         }
 
-        &.fullscreen {
-            aspect-ratio: 16 / 9;
-            width: 100%;
+        &.-notify {
 
-            iframe {
-                position: fixed;
-                left: 0;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                z-index: 999;
-                margin: 0;
-                aspect-ratio: auto;
-                height: 100%;
+            .dub-notify,
+            .line {
+                display: grid;
+            }
+
+            .dub-notify {
+                margin-left: 1px;
+
+                &.-load {
+
+                    .regular,
+                    .solid {
+                        display: none;
+                    }
+
+                    svg {
+                        fill: rgba(255, 255, 255, 0.3);
+                    }
+
+                    .loader {
+                        display: block;
+                        transform-origin: 50% 50%;
+                        animation: spin 1s cubic-bezier(0.7, 0.1, 0.5, 0.9) infinite;
+
+                        @keyframes spin {
+                            to {
+                                transform: rotate(360deg);
+                            }
+                        }
+                    }
+                }
+            }
+
+            .dub-favorite {
+                margin-left: 0;
+            }
+        }
+
+        &.-on-notify {
+            .dub-notify {
+                svg {
+                    fill: #3C92ED;
+
+                    .regular {
+                        display: none;
+                    }
+
+                    .solid {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        &.-no-select {
+            .dub-win-btn {
+                .dub-episodes {
+                    display: none;
+                }
             }
         }
     }
