@@ -396,53 +396,107 @@ async function caching(filesToCache, { channel, batchSize }) {
 })(log('fetch event support enabled'));
 
 (() => {
-    worker.addEventListener('push', function (event) {
-        if (event.data) {
-            const data = event.data.json();
-            const options = {
-                body: data.body,
-                icon: '/images/icons/logo-x512-b.png', // Путь к иконке вашего PWA
-                badge: '/images/seasons/autum.webp',
-                data: {
-                    url: data.url
-                }
-            };
+    const defaults = {
+        title: 'Tunime',
+        icon: '/images/icons/logo-x512-b.png',
+        url: '/'
+    };
 
-            event.waitUntil(
-                worker.registration.showNotification(data.title, options)
-            );
+    // Маппинг типов уведомлений на URL
+    const routes = {
+        co_watch_invite: (d) => `/watch.html?id=${d.animeId}&room=${d.roomId}`,
+        new_episode: (d) => `/watch.html?id=${d.animeId}`,
+    };
+
+    /**
+     * Безопасный парсинг данных push-события
+     * @param {PushEvent} event
+     * @returns {object|null}
+     */
+    const parsePushData = (event) => {
+        if (!event.data) return null;
+        try {
+            return event.data.json();
+        } catch {
+            const text = event.data.text();
+            return text ? { body: text } : null;
         }
+    };
+
+    /**
+     * Определяет URL перехода по payload
+     * @param {object} payload
+     * @returns {string}
+     */
+    const resolveUrl = (payload) => {
+        const inner = payload.data || {};
+        if (payload.url) return payload.url;
+        if (inner.type && routes[inner.type]) return routes[inner.type](inner);
+        return defaults.url;
+    };
+
+
+    worker.addEventListener('push', (event) => {
+        const data = parsePushData(event);
+
+        if (!data) {
+            warn('push: empty or invalid payload');
+            return;
+        }
+
+        const options = {
+            body: data.body || '',
+            icon: data.icon || defaults.icon,
+            badge: data.badge,
+            image: data.image,
+            tag: data.tag,
+            silent: !!data.silent,
+            data: {
+                url: resolveUrl(data),
+                payload: data.data || {}
+            }
+        };
+
+        event.waitUntil(
+            worker.registration.showNotification(data.title || defaults.title, options)
+        );
     });
 
-    worker.addEventListener('notificationclick', function (event) {
-        event.notification.close(); // Закрываем уведомление сразу
+    worker.addEventListener('notificationclick', (event) => {
+        event.notification.close();
 
-        const targetUrl = event.notification.data.url; // Берем URL из данных уведомления
+        const { url, payload } = event.notification.data || {};
+        const targetUrl = url || defaults.url;
+        const message = { url: targetUrl, ...payload };
 
-        const promiseChain = clients.matchAll({
-            type: 'window',
-            includeUncontrolled: true
-        }).then((windowClients) => {
-            // 1. Ищем, нет ли уже открытой вкладки нашего приложения
-            let matchingClient = null;
-
-            for (let i = 0; i < windowClients.length; i++) {
-                const windowClient = windowClients[i];
-                // Можно проверять по домену, чтобы найти нужную вкладку
-                matchingClient = windowClient;
-                break;
+        event.waitUntil((async () => {
+            
+            const windowClients = await clients.matchAll({
+                type: 'window',
+                includeUncontrolled: true
+            });
+            
+            // Ищем вкладку именно нашего приложения
+            const client = windowClients.find(c =>
+                new URL(c.url).origin === self.location.origin &&
+                c.frameType === 'top-level'
+            );
+            
+            if (client) {
+                await client.focus();
+                // Открытая вкладка сама решает, что делать (роутинг без перезагрузки)
+                client.postMessage({
+                    type: 'PUSH_NOTIFICATION_CLICK',
+                    payload: message
+                });
+                return;
             }
-
-            // 2. Если нашли открытое приложение — фокусируемся на нем и переходим по ссылке
-            if (matchingClient) {
-                return matchingClient.navigate(targetUrl).then(client => client.focus());
-            }
-
-            // 3. Если приложение было полностью закрыто — открываем новое окно
+            
+            // Подстраховка для iOS: сохраняем клик, страница заберёт его
+            // через PUSH_PENDING при старте (openWindow на iOS игнорирует url)
+            await setup.setValue('pushPending', message);
             return clients.openWindow(targetUrl);
-        });
-
-        event.waitUntil(promiseChain);
+        })());
     });
 })(log('notification enabled'));
 
@@ -493,7 +547,12 @@ async function caching(filesToCache, { channel, batchSize }) {
 
             caching(appShellFilesToCache, { ...settings, ...payload });
             return { process: true };
-        }
+        },
+        'PUSH_PENDING': async () => {
+            const value = await setup.getValue('pushPending');
+            if (value) await setup.setValue('pushPending', null);
+            return value || null;
+        },
     }
 
     worker.addEventListener('message', async ({ source: client, data }) => {
