@@ -12,6 +12,7 @@
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
     <link rel="stylesheet" href="/style/css/main.css" />
     <link rel="stylesheet" href="/style/css/watch.css" />
+    <link rel="stylesheet" href="/style/win/css/win.dubs.css">
     <link rel="manifest" href="/images/icons/manifest-o.json">
 </head>
 
@@ -286,52 +287,43 @@
                 <!-- #region Player Controls Button-->
                 <div class="player-controls">
                     <div class="btn icon" id="change-player">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_268_964)">
-                                <path
-                                    d="M4.68652 4.68652C6.50879 2.86425 9.45313 2.85546 11.2871 4.65722L10.0801 5.86132C9.87793 6.06347 9.81934 6.36523 9.92773 6.6289C10.0361 6.89257 10.2939 7.0625 10.5781 7.0625H14.0791H14.3281C14.7178 7.0625 15.0312 6.74902 15.0312 6.35937V2.60937C15.0312 2.32519 14.8613 2.06738 14.5977 1.95898C14.334 1.85058 14.0322 1.90918 13.8301 2.11132L12.6113 3.33007C10.0449 0.795895 5.91113 0.804684 3.35937 3.35937C2.64453 4.07421 2.12891 4.91503 1.8125 5.81445C1.63965 6.30371 1.89746 6.83691 2.38379 7.00976C2.87012 7.18261 3.40625 6.9248 3.5791 6.43847C3.80469 5.7998 4.1709 5.19921 4.68652 4.68652ZM0.96875 9.64062V9.86328V9.88379V13.3906C0.96875 13.6748 1.13867 13.9326 1.40234 14.041C1.66602 14.1494 1.96777 14.0908 2.16992 13.8887L3.38867 12.6699C5.95508 15.2041 10.0889 15.1953 12.6406 12.6406C13.3555 11.9258 13.874 11.085 14.1904 10.1885C14.3633 9.69922 14.1055 9.16601 13.6191 8.99316C13.1328 8.82031 12.5967 9.07812 12.4238 9.56445C12.1982 10.2031 11.832 10.8037 11.3164 11.3164C9.49414 13.1387 6.5498 13.1475 4.71582 11.3457L5.91992 10.1387C6.12207 9.93652 6.18066 9.63476 6.07227 9.37109C5.96387 9.10742 5.70605 8.9375 5.42188 8.9375H1.91797H1.89746H1.67188C1.28223 8.9375 0.96875 9.25097 0.96875 9.64062Z"
-                                    fill="white" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_268_964">
-                                    <rect width="15" height="15" fill="white" transform="translate(0.5 0.5)" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-
+                        <div class="svg-block">
+                            <svg viewBox="0 0 640 640" aria-hidden="true">
+                                <use href="#i-repeat"></use>
+                            </svg>
+                        </div>
+                        <div class="text">Сменить <div>плеер</div>
+                        </div>
                     </div>
+                    <div class="line"></div>
                     <div class="btn icon -hide" id="create-room">
-                        <svg viewBox="0 0 640 640" aria-hidden="true" style="height: 21px;fill: #FFF;">
-                            <use href="#i-users"></use>
-                        </svg>
+                        <div class="svg-block">
+                            <svg viewBox="0 0 640 640" aria-hidden="true" style="height: 21px;fill: #FFF;">
+                                <use href="#i-users"></use>
+                            </svg>
+                        </div>
+                        <div class="text">Совместный <div>просмотр</div>
+                        </div>
                     </div>
+                    <div class="line -hide id-center-player"></div>
                     <div class="btn icon" id="center-player">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_268_1000)">
-                                <path
-                                    d="M8 0.5C8.51856 0.5 8.9375 0.918945 8.9375 1.4375V2.375H9.875C10.2529 2.375 10.5957 2.60352 10.7422 2.95508C10.8887 3.30664 10.8066 3.70801 10.54 3.97754L8.66504 5.85254C8.29883 6.21875 7.7041 6.21875 7.33789 5.85254L5.46289 3.97754C5.19336 3.70801 5.11426 3.30664 5.26074 2.95508C5.40723 2.60352 5.74707 2.375 6.12793 2.375H7.06543V1.4375C7.06543 0.918945 7.48438 0.5 8.00293 0.5H8ZM5.46289 12.0254L7.33789 10.1504C7.7041 9.78418 8.29883 9.78418 8.66504 10.1504L10.54 12.0254C10.8096 12.2949 10.8887 12.6963 10.7422 13.0479C10.5957 13.3994 10.2559 13.6279 9.875 13.6279H8.9375V14.5654C8.9375 15.084 8.51856 15.5029 8 15.5029C7.48145 15.5029 7.0625 15.084 7.0625 14.5654V13.625H6.125C5.74707 13.625 5.4043 13.3965 5.25781 13.0449C5.11133 12.6934 5.19336 12.292 5.45996 12.0225L5.46289 12.0254ZM1.4375 7.0625H2.375V6.125C2.375 5.74707 2.60352 5.4043 2.95508 5.25781C3.30664 5.11133 3.70801 5.19336 3.97754 5.45996L5.85254 7.33496C6.21875 7.70117 6.21875 8.2959 5.85254 8.66211L3.97754 10.5371C3.70801 10.8066 3.30664 10.8857 2.95508 10.7393C2.60352 10.5928 2.375 10.2529 2.375 9.87207V8.9375H1.4375C0.918945 8.9375 0.5 8.51856 0.5 8C0.5 7.48145 0.918945 7.0625 1.4375 7.0625ZM10.1504 8.66211C9.78418 8.2959 9.78418 7.70117 10.1504 7.33496L12.0254 5.45996C12.2949 5.19043 12.6963 5.11133 13.0479 5.25781C13.3994 5.4043 13.6279 5.74414 13.6279 6.125V7.0625H14.5654C15.084 7.0625 15.5029 7.48145 15.5029 8C15.5029 8.51856 15.084 8.9375 14.5654 8.9375H13.625V9.875C13.625 10.2529 13.3965 10.5957 13.0449 10.7422C12.6934 10.8887 12.292 10.8066 12.0225 10.54L10.1475 8.66504L10.1504 8.66211ZM8 7.0625C8.24864 7.0625 8.4871 7.16127 8.66291 7.33709C8.83873 7.5129 8.9375 7.75136 8.9375 8C8.9375 8.24864 8.83873 8.4871 8.66291 8.66291C8.4871 8.83873 8.24864 8.9375 8 8.9375C7.75136 8.9375 7.5129 8.83873 7.33709 8.66291C7.16127 8.4871 7.0625 8.24864 7.0625 8C7.0625 7.75136 7.16127 7.5129 7.33709 7.33709C7.5129 7.16127 7.75136 7.0625 8 7.0625Z"
-                                    fill="white" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_268_1000">
-                                    <rect width="15" height="15" fill="white" transform="translate(0.5 0.5)" />
-                                </clipPath>
-                            </defs>
-                        </svg>
+                        <div class="svg-block">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="#i-carousel-vertical"></use>
+                            </svg>
+                        </div>
+                        <div class="text">Центровать <div>плеер</div>
+                        </div>
                     </div>
+                    <div class="line"></div>
                     <div class="btn icon" id="download-anime">
-                        <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_268_962)">
-                                <path
-                                    d="M2.2923 1.4375C1.25364 1.4375 0.40918 2.27832 0.40918 3.3125V12.6875C0.40918 13.7217 1.25364 14.5625 2.2923 14.5625H11.7079C12.7465 14.5625 13.591 13.7217 13.591 12.6875V5.57715C13.591 5.0791 13.3939 4.60156 13.0408 4.25L10.7663 1.98535C10.4132 1.63379 9.93363 1.4375 9.43343 1.4375H2.2923ZM2.2923 4.25C2.2923 3.73145 2.71306 3.3125 3.23385 3.3125H8.88321C9.404 3.3125 9.82476 3.73145 9.82476 4.25V6.125C9.82476 6.64355 9.404 7.0625 8.88321 7.0625H3.23385C2.71306 7.0625 2.2923 6.64355 2.2923 6.125V4.25ZM7.00009 8.9375C7.49952 8.9375 7.9785 9.13504 8.33165 9.48668C8.68481 9.83831 8.88321 10.3152 8.88321 10.8125C8.88321 11.3098 8.68481 11.7867 8.33165 12.1383C7.9785 12.49 7.49952 12.6875 7.00009 12.6875C6.50065 12.6875 6.02168 12.49 5.66852 12.1383C5.31537 11.7867 5.11697 11.3098 5.11697 10.8125C5.11697 10.3152 5.31537 9.83831 5.66852 9.48668C6.02168 9.13504 6.50065 8.9375 7.00009 8.9375Z"
-                                    fill="white" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_268_962">
-                                    <rect width="13.1818" height="15" fill="white" transform="translate(0.40918 0.5)" />
-                                </clipPath>
-                            </defs>
-                        </svg>
+                        <div class="svg-block">
+                            <svg viewBox="0 0 640 640" aria-hidden="true">
+                                <use href="#i-download"></use>
+                            </svg>
+                        </div>
+                        <div class="text">Загрузчик <div>сериала</div>
+                        </div>
                     </div>
                 </div>
                 <!-- #endregion -->
@@ -341,12 +333,9 @@
                 <div class="room-info-content-wrapper">
                     <div class="users-images">
                         <div class="users-image-wrapper">
-                            <span data-id="1" class="user-image"
-                                style="--img: url('/images/ava.jpeg')"></span>
-                            <span data-id="2" class="user-image"
-                                style="--img: url('/images/ava.jpeg')"></span>
-                            <span data-id="3" class="user-image"
-                                style="--img: url('/images/ava.jpeg')"></span>
+                            <span data-id="1" class="user-image" style="--img: url('/images/ava.jpeg')"></span>
+                            <span data-id="2" class="user-image" style="--img: url('/images/ava.jpeg')"></span>
+                            <span data-id="3" class="user-image" style="--img: url('/images/ava.jpeg')"></span>
                         </div>
                         <span class="users-count-text">3</span>
                         <svg viewBox="0 0 640 640" aria-hidden="true">
@@ -359,40 +348,72 @@
             <!-- #endregion -->
 
             <div class="landscape-player">
+                <!--Episodes TOP side-->
+                <div class="episode-visible-area -row">
+                    <div class="episode-wrapper">
+                        <div class="episode-scroll-wrapper scroll-none" data-scroll="horizontal">
+                            <div class="episode-list"></div>
+                            <div class="episode-shell">
+                                <div class="-sel"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Episodes with player-->
+                <div class="player-wrapper">
+                    <!--Episodes LEFT/RIGHT side-->
+                    <div class="episode-visible-area -column">
+                        <div class="episode-wrapper">
+                            <div class="episode-scroll-wrapper scroll-none" data-scroll="vertical">
+                                <div class="episode-list"></div>
+                                <div class="episode-shell">
+                                    <div class="-sel"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Player-->
+                    <div class="player">
+                        <iframe id="kodik-player" src="404.html" scrolling="no" allowfullscreen allow="fullscreen *"
+                            frameborder="0"></iframe>
+                    </div>
+                </div>
                 <!--Episodes-->
-                <div class="episodes scroll-none" id="episodes">
+                <div class="episodes scroll-none" id="episodes" style="display: none;">
                     <div class="value">
                         <div class="sel"></div>
                     </div>
                 </div>
-                <!--Player-->
-                <div class="player">
-                    <iframe id="kodik-player" src="404.html" scrolling="no" allowfullscreen allow="fullscreen *"
-                        frameborder="0"></iframe>
-                </div>
             </div>
             <!-- #endregion -->
-            <!-- #region Translations Player-->
-            <div class="translations-wrapper">
-                <div class="button-translation">
-                    <div class="current-translation">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
-                            <path
-                                d="M192 0C139 0 96 43 96 96V256c0 53 43 96 96 96s96-43 96-96V96c0-53-43-96-96-96zM64 216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 89.1 66.2 162.7 152 174.4V464H120c-13.3 0-24 10.7-24 24s10.7 24 24 24h72 72c13.3 0 24-10.7 24-24s-10.7-24-24-24H216V430.4c85.8-11.7 152-85.3 152-174.4V216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 70.7-57.3 128-128 128s-128-57.3-128-128V216z" />
-                        </svg>
-                        <span>Не Выбрано</span>
+            <!-- #region DUB Player-->
+            <div class="dub-wrapper">
+                <div class="dub-controller -no-select" data-type="voice">
+                    <div class="dub-win-btn" btn="win">
+                        <div class="dub-name">
+                            <div class="dub-icon-wrapper">
+                                <svg viewBox="0 0 640 640" aria-hidden="true">
+                                    <use href="#i-microphone"></use>
+                                </svg>
+                            </div>
+                            <div class="name">Озвучка не выбрана</div>
+                        </div>
+                        <div class="dub-episodes">0 Ep</div>
                     </div>
-                    <div class="count-current-translation">0</div>
-                </div>
-                <div class="button-stars">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="unselected" height="1em" viewBox="0 0 576 512">
-                        <path
-                            d="M287.9 0c9.2 0 17.6 5.2 21.6 13.5l68.6 141.3 153.2 22.6c9 1.3 16.5 7.6 19.3 16.3s.5 18.1-5.9 24.5L433.6 328.4l26.2 155.6c1.5 9-2.2 18.1-9.6 23.5s-17.3 6-25.3 1.7l-137-73.2L151 509.1c-8.1 4.3-17.9 3.7-25.3-1.7s-11.2-14.5-9.7-23.5l26.2-155.6L31.1 218.2c-6.5-6.4-8.7-15.9-5.9-24.5s10.3-14.9 19.3-16.3l153.2-22.6L266.3 13.5C270.4 5.2 278.7 0 287.9 0zm0 79L235.4 187.2c-3.5 7.1-10.2 12.1-18.1 13.3L99 217.9 184.9 303c5.5 5.5 8.1 13.3 6.8 21L171.4 443.7l105.2-56.2c7.1-3.8 15.6-3.8 22.6 0l105.2 56.2L384.2 324.1c-1.3-7.7 1.2-15.5 6.8-21l85.9-85.1L358.6 200.5c-7.8-1.2-14.6-6.1-18.1-13.3L287.9 79z" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="selected" height="1em" viewBox="0 0 576 512">
-                        <path
-                            d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-                    </svg>
+                    <div class="dub-notify" btn="notify">
+                        <svg viewBox="0 0 640 640" aria-hidden="true">
+                            <use href="#i-bell" class="regular"></use>
+                            <use href="#i-bell-solid" class="solid"></use>
+                            <use href="#i-fan" class="loader"></use>
+                        </svg>
+                    </div>
+                    <div class="line"></div>
+                    <div class="dub-favorite" btn="favor">
+                        <svg viewBox="0 0 640 640" aria-hidden="true">
+                            <use href="#i-star" class="regular"></use>
+                            <use href="#i-star-solid" class="solid"></use>
+                        </svg>
+                    </div>
                 </div>
             </div>
             <!-- #endregion -->
@@ -565,7 +586,7 @@
         <span class="window-content content-score hide">
             <span class="content-wraper">
                 <div class="window-bar bar-score">
-                    <div class="window-title">Оценить</div>
+                    <div class="window-title">Аниме</div>
                     <div class="window-close">
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
                             <path
@@ -573,27 +594,19 @@
                         </svg>
                     </div>
                 </div>
-                <span class="block-score">
-                    <div class="score-list scroll-none">
-                        <div class="sc sc-1" data-score="1">1</div>
-                        <div class="sc sc-2" data-score="2">2</div>
-                        <div class="sc sc-3" data-score="3">3</div>
-                        <div class="sc sc-4" data-score="4">4</div>
-                        <div class="sc sc-5" data-score="5">5</div>
-                        <div class="sc sc-6" data-score="6">6</div>
-                        <div class="sc sc-7" data-score="7">7</div>
-                        <div class="sc sc-8" data-score="8">8</div>
-                        <div class="sc sc-9" data-score="9">9</div>
-                        <div class="sc sc-10" data-score="10">10</div>
+                <div class="score-track">
+                    <div class="score-track-wrapper">
+                        <div class="fixed-slot">
+                            <div class="fixed-circle" id="fc">✕</div>
+                        </div>
+                        <div class="scroll-area-wrapper">
+                            <div class="scroll-area" id="scrollArea">
+                                <div class="items-row" id="itemsRow"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="block-clear-score disabled">
-                        <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M4.82857 0.989076L4.57143 1.49979H1.14286C0.510714 1.49979 0 2.01051 0 2.64265C0 3.27479 0.510714 3.78551 1.14286 3.78551H14.8571C15.4893 3.78551 16 3.27479 16 2.64265C16 2.01051 15.4893 1.49979 14.8571 1.49979H11.4286L11.1714 0.989076C10.9786 0.599791 10.5821 0.356934 10.15 0.356934H5.85C5.41786 0.356934 5.02143 0.599791 4.82857 0.989076ZM14.8571 4.92836H1.14286L1.9 17.0355C1.95714 17.9391 2.70714 18.6426 3.61071 18.6426H12.3893C13.2929 18.6426 14.0429 17.9391 14.1 17.0355L14.8571 4.92836Z">
-                            </path>
-                        </svg>
-                    </div>
-                </span>
+                    <div class="lbl" id="lbl">Проведите для выбора оценки</div>
+                </div>
                 <span class="title-block">Заметки</span>
                 <textarea class="noten"
                     placeholder="Оставьте свое впечатление об просмотренном или заброшенным аниме, поделитесь со своим мнением !"></textarea>
@@ -708,42 +721,48 @@
         </span>
     </span>
     <!-- #endregion -->
-
-    <!-- #region Window-Translation-->
-    <span class="windowed window-translation hide">
+    <!-- #region Window-DUBS-->
+    <span class="windowed window-dubs hide">
         <span class="hide-window"></span>
-        <span class="window-content content-translation hide">
-            <span class="content-wraper">
-                <div class="window-bar voice-bar">
-                    <div class="window-title">Озвучки</div>
-                    <div class="window-close">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
-                            <path
-                                d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
-                            </path>
-                        </svg>
+        <span class="window-content content-dubs scroll-none hide">
+            <span class="content-wrapper">
+                <div class="wrapper">
+                    <div class="window-bar dubs-bar">
+                        <div class="window-title">Озвучки</div>
+                        <div class="window-close">
+                            <div class="ticon i-xmark"></div>
+                        </div>
                     </div>
+                    <div class="dubs-list-wrapper"></div>
                 </div>
-
-                <div class="content-voices scroll-none">
-                    <div class="voice empty">
-                        Нет доступных озвучек для аниме
+                <span class="dubs-list-search">
+                    <div class="dubs-search-wrapper">
+                        <label class="dub-checkbox">
+                            <input type="checkbox">
+                            <div class="dub-checkbox-wrapper">
+                                <svg viewBox="0 0 640 640" aria-hidden="true">
+                                    <use href="#i-star-solid"></use>
+                                </svg>
+                                <span>для франшизы</span>
+                            </div>
+                        </label>
+                        <div class="btn btn-dub-random">
+                            <svg viewBox="0 0 640 640" aria-hidden="true">
+                                <use href="#i-dice"></use>
+                            </svg>
+                        </div>
+                        <div class="btn btn-notify-clear -disable">
+                            <svg viewBox="0 0 640 640" aria-hidden="true">
+                                <use href="#i-bell-slash"></use>
+                            </svg>
+                        </div>
                     </div>
-                </div>
-
-                <label class="window-footer translation-param">
-                    <div class="title"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-                            <path
-                                d="M512 416l0-64c0-35.3-28.7-64-64-64L64 288c-35.3 0-64 28.7-64 64l0 64c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64zM64 160l0-64 144 0 16 0 0 64L64 160zm224 0l0-64 80 0c8.8 0 16 7.2 16 16l0 16-38.1 0c-21.4 0-32.1 25.9-17 41L399 239c9.4 9.4 24.6 9.4 33.9 0L503 169c15.1-15.1 4.4-41-17-41L448 128l0-16c0-44.2-35.8-80-80-80L224 32l-16 0L64 32C28.7 32 0 60.7 0 96l0 64c0 35.3 28.7 64 64 64l160 0c35.3 0 64-28.7 64-64z" />
-                        </svg>По франшизам</div>
-                    <div class="checkbox">
-                        <input type="checkbox" checked="">
-                        <div class="switch-check"></div>
-                    </div>
-                </label>
+                </span>
             </span>
         </span>
     </span>
+    <!-- #endregion -->
+    <!-- #endregion -->
     <span class="app-reload">
         <div class="wrapper">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -753,14 +772,143 @@
         </div>
     </span>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
         <symbol id="i-users" viewBox="0 0 640 640">
-            <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
             <path
                 d="M320 80C377.4 80 424 126.6 424 184C424 241.4 377.4 288 320 288C262.6 288 216 241.4 216 184C216 126.6 262.6 80 320 80zM96 152C135.8 152 168 184.2 168 224C168 263.8 135.8 296 96 296C56.2 296 24 263.8 24 224C24 184.2 56.2 152 96 152zM0 480C0 409.3 57.3 352 128 352C140.8 352 153.2 353.9 164.9 357.4C132 394.2 112 442.8 112 496L112 512C112 523.4 114.4 534.2 118.7 544L32 544C14.3 544 0 529.7 0 512L0 480zM521.3 544C525.6 534.2 528 523.4 528 512L528 496C528 442.8 508 394.2 475.1 357.4C486.8 353.9 499.2 352 512 352C582.7 352 640 409.3 640 480L640 512C640 529.7 625.7 544 608 544L521.3 544zM472 224C472 184.2 504.2 152 544 152C583.8 152 616 184.2 616 224C616 263.8 583.8 296 544 296C504.2 296 472 263.8 472 224zM160 496C160 407.6 231.6 336 320 336C408.4 336 480 407.6 480 496L480 512C480 529.7 465.7 544 448 544L192 544C174.3 544 160 529.7 160 512L160 496z" />
         </symbol>
+        <symbol id="i-repeat" viewBox="0 0 640 640">
+            <path
+                d="M534.6 182.6C547.1 170.1 547.1 149.8 534.6 137.3L470.6 73.3C461.4 64.1 447.7 61.4 435.7 66.4C423.7 71.4 416 83.1 416 96L416 128L256 128C150 128 64 214 64 320C64 337.7 78.3 352 96 352C113.7 352 128 337.7 128 320C128 249.3 185.3 192 256 192L416 192L416 224C416 236.9 423.8 248.6 435.8 253.6C447.8 258.6 461.5 255.8 470.7 246.7L534.7 182.7zM105.4 457.4C92.9 469.9 92.9 490.2 105.4 502.7L169.4 566.7C178.6 575.9 192.3 578.6 204.3 573.6C216.3 568.6 224 556.9 224 544L224 512L384 512C490 512 576 426 576 320C576 302.3 561.7 288 544 288C526.3 288 512 302.3 512 320C512 390.7 454.7 448 384 448L224 448L224 416C224 403.1 216.2 391.4 204.2 386.4C192.2 381.4 178.5 384.2 169.3 393.3L105.3 457.3z" />
+        </symbol>
+        <symbol id="i-download" viewBox="0 0 640 640">
+            <path
+                d="M352 96C352 78.3 337.7 64 320 64C302.3 64 288 78.3 288 96L288 306.7L246.6 265.3C234.1 252.8 213.8 252.8 201.3 265.3C188.8 277.8 188.8 298.1 201.3 310.6L297.3 406.6C309.8 419.1 330.1 419.1 342.6 406.6L438.6 310.6C451.1 298.1 451.1 277.8 438.6 265.3C426.1 252.8 405.8 252.8 393.3 265.3L352 306.7L352 96zM160 384C124.7 384 96 412.7 96 448L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 448C544 412.7 515.3 384 480 384L433.1 384L376.5 440.6C345.3 471.8 294.6 471.8 263.4 440.6L206.9 384L160 384zM464 440C477.3 440 488 450.7 488 464C488 477.3 477.3 488 464 488C450.7 488 440 477.3 440 464C440 450.7 450.7 440 464 440z" />
+        </symbol>
+        <symbol id="i-carousel-vertical" viewBox="0 0 24 24">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18 6h-12a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-8a2 2 0 0 0 -2 -2z" />
+            <path
+                d="M16 19a2 2 0 0 1 1.995 1.85l.005 .15v1a1 1 0 0 1 -1.993 .117l-.007 -.117v-1h-8v1a1 1 0 0 1 -1.993 .117l-.007 -.117v-1a2 2 0 0 1 1.85 -1.995l.15 -.005h8z" />
+            <path
+                d="M17 1a1 1 0 0 1 .993 .883l.007 .117v1a2 2 0 0 1 -1.85 1.995l-.15 .005h-8a2 2 0 0 1 -1.995 -1.85l-.005 -.15v-1a1 1 0 0 1 1.993 -.117l.007 .117v1h8v-1a1 1 0 0 1 1 -1z" />
+        </symbol>
+        <symbol id="i-microphone" viewBox="0 0 640 640">
+            <path
+                d="M320 64C267 64 224 107 224 160L224 288C224 341 267 384 320 384C373 384 416 341 416 288L416 160C416 107 373 64 320 64zM176 248C176 234.7 165.3 224 152 224C138.7 224 128 234.7 128 248L128 288C128 385.9 201.3 466.7 296 478.5L296 528L248 528C234.7 528 224 538.7 224 552C224 565.3 234.7 576 248 576L392 576C405.3 576 416 565.3 416 552C416 538.7 405.3 528 392 528L344 528L344 478.5C438.7 466.7 512 385.9 512 288L512 248C512 234.7 501.3 224 488 224C474.7 224 464 234.7 464 248L464 288C464 367.5 399.5 432 320 432C240.5 432 176 367.5 176 288L176 248z" />
+        </symbol>
+        <symbol id="i-bell" viewBox="0 0 640 640">
+            <path
+                d="M320 64C306.7 64 296 74.7 296 88L296 97.7C214.6 109.3 152 179.4 152 264L152 278.5C152 316.2 142 353.2 123 385.8L101.1 423.2C97.8 429 96 435.5 96 442.2C96 463.1 112.9 480 133.8 480L506.2 480C527.1 480 544 463.1 544 442.2C544 435.5 542.2 428.9 538.9 423.2L517 385.7C498 353.1 488 316.1 488 278.4L488 263.9C488 179.3 425.4 109.2 344 97.6L344 87.9C344 74.6 333.3 63.9 320 63.9zM488.4 432L151.5 432L164.4 409.9C187.7 370 200 324.6 200 278.5L200 264C200 197.7 253.7 144 320 144C386.3 144 440 197.7 440 264L440 278.5C440 324.7 452.3 370 475.5 409.9L488.4 432zM252.1 528C262 556 288.7 576 320 576C351.3 576 378 556 387.9 528L252.1 528z" />
+        </symbol>
+        <symbol id="i-bell-solid" viewBox="0 0 640 640">
+            <path
+                d="M320 64C302.3 64 288 78.3 288 96L288 99.2C215 114 160 178.6 160 256L160 277.7C160 325.8 143.6 372.5 113.6 410.1L103.8 422.3C98.7 428.6 96 436.4 96 444.5C96 464.1 111.9 480 131.5 480L508.4 480C528 480 543.9 464.1 543.9 444.5C543.9 436.4 541.2 428.6 536.1 422.3L526.3 410.1C496.4 372.5 480 325.8 480 277.7L480 256C480 178.6 425 114 352 99.2L352 96C352 78.3 337.7 64 320 64zM258 528C265.1 555.6 290.2 576 320 576C349.8 576 374.9 555.6 382 528L258 528z" />
+        </symbol>
+        <symbol id="i-star" viewBox="0 0 640 640">
+            <path
+                d="M320.1 32C329.1 32 337.4 37.1 341.5 45.1L415 189.3L574.9 214.7C583.8 216.1 591.2 222.4 594 231C596.8 239.6 594.5 249 588.2 255.4L473.7 369.9L499 529.8C500.4 538.7 496.7 547.7 489.4 553C482.1 558.3 472.4 559.1 464.4 555L320.1 481.6L175.8 555C167.8 559.1 158.1 558.3 150.8 553C143.5 547.7 139.8 538.8 141.2 529.8L166.4 369.9L52 255.4C45.6 249 43.4 239.6 46.2 231C49 222.4 56.3 216.1 65.3 214.7L225.2 189.3L298.8 45.1C302.9 37.1 311.2 32 320.2 32zM320.1 108.8L262.3 222C258.8 228.8 252.3 233.6 244.7 234.8L119.2 254.8L209 344.7C214.4 350.1 216.9 357.8 215.7 365.4L195.9 490.9L309.2 433.3C316 429.8 324.1 429.8 331 433.3L444.3 490.9L424.5 365.4C423.3 357.8 425.8 350.1 431.2 344.7L521 254.8L395.5 234.8C387.9 233.6 381.4 228.8 377.9 222L320.1 108.8z" />
+        </symbol>
+        <symbol id="i-star-solid" viewBox="0 0 640 640">
+            <path
+                d="M341.5 45.1C337.4 37.1 329.1 32 320.1 32C311.1 32 302.8 37.1 298.7 45.1L225.1 189.3L65.2 214.7C56.3 216.1 48.9 222.4 46.1 231C43.3 239.6 45.6 249 51.9 255.4L166.3 369.9L141.1 529.8C139.7 538.7 143.4 547.7 150.7 553C158 558.3 167.6 559.1 175.7 555L320.1 481.6L464.4 555C472.4 559.1 482.1 558.3 489.4 553C496.7 547.7 500.4 538.8 499 529.8L473.7 369.9L588.1 255.4C594.5 249 596.7 239.6 593.9 231C591.1 222.4 583.8 216.1 574.8 214.7L415 189.3L341.5 45.1z" />
+        </symbol>
+        <symbol id="i-play" viewBox="0 0 640 640">
+            <path
+                d="M187.2 100.9C174.8 94.1 159.8 94.4 147.6 101.6C135.4 108.8 128 121.9 128 136L128 504C128 518.1 135.5 531.2 147.6 538.4C159.7 545.6 174.8 545.9 187.2 539.1L523.2 355.1C536 348.1 544 334.6 544 320C544 305.4 536 291.9 523.2 284.9L187.2 100.9z" />
+        </symbol>
+        <symbol id="i-bookmark" viewBox="0 0 640 640">
+            <path
+                d="M192 64C156.7 64 128 92.7 128 128L128 544C128 555.5 134.2 566.2 144.2 571.8C154.2 577.4 166.5 577.3 176.4 571.4L320 485.3L463.5 571.4C473.4 577.3 485.7 577.5 495.7 571.8C505.7 566.1 512 555.5 512 544L512 128C512 92.7 483.3 64 448 64L192 64z" />
+        </symbol>
+        <symbol id="i-xmark" viewBox="0 0 640 640">
+            <path
+                d="M183.1 137.4C170.6 124.9 150.3 124.9 137.8 137.4C125.3 149.9 125.3 170.2 137.8 182.7L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7L320.5 365.3L457.9 502.6C470.4 515.1 490.7 515.1 503.2 502.6C515.7 490.1 515.7 469.8 503.2 457.3L365.8 320L503.1 182.6C515.6 170.1 515.6 149.8 503.1 137.3C490.6 124.8 470.3 124.8 457.8 137.3L320.5 274.7L183.1 137.4z" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 640 640">
+            <path
+                d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z" />
+        </symbol>
+        <symbol id="i-dice" viewBox="0 0 640 640">
+            <path
+                d="M205.4 66.3C167 56 127.5 78.8 117.3 117.2L66.5 306.7C56.2 345.1 79 384.6 117.4 394.9L306.9 445.7C345.3 456 384.8 433.2 395.1 394.8L445.9 205.3C456.2 166.9 433.4 127.4 395 117.1L205.4 66.3zM228.4 272C222.3 262.1 222.1 249.6 227.8 239.5C233.5 229.4 244.3 223.2 256 223.3C267.6 223.4 278.2 229.8 283.8 240C289.9 249.9 290.1 262.4 284.4 272.5C278.7 282.6 267.9 288.8 256.2 288.7C244.6 288.6 234 282.2 228.4 272zM143.2 284.3C153.1 278.2 165.6 278 175.7 283.7C185.8 289.4 192 300.2 191.9 311.9C191.8 323.5 185.4 334.1 175.2 339.7C165.3 345.8 152.8 346 142.7 340.3C132.6 334.6 126.4 323.8 126.5 312.1C126.6 300.5 133 289.9 143.2 284.3zM328.2 380.7C318.3 386.8 305.8 387 295.7 381.3C285.6 375.6 279.4 364.8 279.5 353.1C279.6 341.5 286 330.9 296.2 325.3C306.1 319.2 318.6 319 328.7 324.7C338.8 330.4 345 341.2 344.9 352.9C344.8 364.5 338.4 375.1 328.2 380.7zM337.2 172.3C347.1 166.2 359.6 166 369.7 171.7C379.8 177.4 386 188.2 385.9 199.9C385.8 211.5 379.4 222.1 369.2 227.7C359.3 233.8 346.8 234 336.7 228.3C326.6 222.6 320.4 211.8 320.5 200.1C320.6 188.5 327 177.9 337.2 172.3zM216.2 186.7C206.3 192.8 193.8 193 183.7 187.3C173.6 181.6 167.4 170.8 167.5 159.1C167.6 147.5 174 136.9 184.2 131.3C194.1 125.2 206.6 125 216.7 130.7C226.8 136.4 233 147.2 232.9 158.9C232.8 170.5 226.4 181.1 216.2 186.7zM482 256L441.4 407.2C424.2 471.2 358.4 509.2 294.4 492.1L256.1 481.8L256.1 512C256.1 547.3 284.8 576 320.1 576L512.1 576C547.4 576 576.1 547.3 576.1 512L576.1 320C576.1 284.7 547.4 256 512.1 256L482 256z" />
+        </symbol>
+        <symbol id="i-sliders" viewBox="0 0 640 640">
+            <path
+                d="M96 128C78.3 128 64 142.3 64 160C64 177.7 78.3 192 96 192L182.7 192C195 220.3 223.2 240 256 240C288.8 240 317 220.3 329.3 192L544 192C561.7 192 576 177.7 576 160C576 142.3 561.7 128 544 128L329.3 128C317 99.7 288.8 80 256 80C223.2 80 195 99.7 182.7 128L96 128zM96 288C78.3 288 64 302.3 64 320C64 337.7 78.3 352 96 352L342.7 352C355 380.3 383.2 400 416 400C448.8 400 477 380.3 489.3 352L544 352C561.7 352 576 337.7 576 320C576 302.3 561.7 288 544 288L489.3 288C477 259.7 448.8 240 416 240C383.2 240 355 259.7 342.7 288L96 288zM96 448C78.3 448 64 462.3 64 480C64 497.7 78.3 512 96 512L150.7 512C163 540.3 191.2 560 224 560C256.8 560 285 540.3 297.3 512L544 512C561.7 512 576 497.7 576 480C576 462.3 561.7 448 544 448L297.3 448C285 419.7 256.8 400 224 400C191.2 400 163 419.7 150.7 448L96 448z" />
+        </symbol>
+        <symbol id="i-bell-slash" viewBox="0 0 640 640">
+            <path
+                d="M73 39.1C63.6 29.7 48.4 29.7 39.1 39.1C29.8 48.5 29.7 63.7 39 73.1L567 601.1C576.4 610.5 591.6 610.5 600.9 601.1C610.2 591.7 610.3 576.5 600.9 567.2L513.4 479.7C530.6 477.3 543.9 462.4 543.9 444.5C543.9 436.4 541.2 428.6 536.1 422.3L526.3 410.1C496.4 372.5 480 325.8 480 277.7L480 256C480 178.6 425 114 352 99.2L352 96C352 78.3 337.7 64 320 64C302.3 64 288 78.3 288 96L288 99.2C249.4 107 215.8 128.8 192.8 158.9L73 39.1zM160 277.6C160 325.7 143.6 372.4 113.6 410L103.8 422.2C98.8 428.5 96 436.3 96 444.4C96 464 111.9 479.9 131.5 479.9L366.8 479.9L159.9 273L159.9 277.5zM320 576C349.8 576 374.9 555.6 382 528L258 528C265.1 555.6 290.2 576 320 576z" />
+        </symbol>
+        <symbol id="i-grip" viewBox="0 0 640 640">
+            <path
+                d="M152 160C174.1 160 192 177.9 192 200L192 248C192 270.1 174.1 288 152 288L104 288C81.9 288 64 270.1 64 248L64 200C64 177.9 81.9 160 104 160L152 160zM344 288L296 288C273.9 288 256 270.1 256 248L256 200C256 177.9 273.9 160 296 160L344 160C366.1 160 384 177.9 384 200L384 248C384 270.1 366.1 288 344 288zM536 288L488 288C465.9 288 448 270.1 448 248L448 200C448 177.9 465.9 160 488 160L536 160C558.1 160 576 177.9 576 200L576 248C576 270.1 558.1 288 536 288zM536 480L488 480C465.9 480 448 462.1 448 440L448 392C448 369.9 465.9 352 488 352L536 352C558.1 352 576 369.9 576 392L576 440C576 462.1 558.1 480 536 480zM344 352C366.1 352 384 369.9 384 392L384 440C384 462.1 366.1 480 344 480L296 480C273.9 480 256 462.1 256 440L256 392C256 369.9 273.9 352 296 352L344 352zM152 480L104 480C81.9 480 64 462.1 64 440L64 392C64 369.9 81.9 352 104 352L152 352C174.1 352 192 369.9 192 392L192 440C192 462.1 174.1 480 152 480z" />
+        </symbol>
+        <symbol id="i-fan" viewBox="0 0 640 640">
+            <path
+                d="M224 208C224 128.5 288.5 64 368 64C376.8 64 384 71.2 384 80L384 232.2C399 226.9 415.2 224 432 224C511.5 224 576 288.5 576 368C576 376.8 568.8 384 560 384L407.8 384C413.1 399 416 415.2 416 432C416 511.5 351.5 576 272 576C263.2 576 256 568.8 256 560L256 407.8C241 413.1 224.8 416 208 416C128.5 416 64 351.5 64 272C64 263.2 71.2 256 80 256L232.2 256C226.9 241 224 224.8 224 208zM320 352C337.7 352 352 337.7 352 320C352 302.3 337.7 288 320 288C302.3 288 288 302.3 288 320C288 337.7 302.3 352 320 352z" />
+        </symbol>
     </svg>
-    <!-- #endregion -->
-    <!-- #endregion -->
+    <template id="tpl-chronology">
+        <a class="card-chronology" data-bind-attr="data-id:id">
+            <div class="chronology-wrapper">
+                <div class="anime-details">
+                    <div class="--a-title" data-bind="title"></div>
+                    <div class="--a-status" data-bind-if="status" data-bind="status"></div>
+                    <div class="anime-details-wrapper">
+                        <div class="--a-type" data-bind-if="kind" data-bind="kind"></div>
+                        <div class="anime-year-score">
+                            <div class="--a-year" data-bind-if="year" data-bind="year"></div>
+                            <svg viewBox="0 0 640 640" aria-hidden="true">
+                                <use href="#i-star-solid"></use>
+                            </svg>
+                            <div class="--a-score" data-bind="score"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-status">
+                    <div class="--u-status" data-bind-attr="data-state:uStatus">
+                        <svg viewBox="0 0 640 640" aria-hidden="true">
+                            <use href="#i-play" class="watching"></use>
+                            <use href="#i-bookmark" class="planned"></use>
+                            <use href="#i-check" class="completed"></use>
+                            <use href="#i-xmark" class="dropped"></use>
+                        </svg>
+                    </div>
+                    <div class="--dub-status">
+                        <svg viewBox="0 0 640 640" aria-hidden="true">
+                            <use href="#i-microphone" class=""></use>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </template>
+    <template id="tpl-dub">
+        <div class="dub-wrapper" data-bind-attr="data-id:id">
+            <div class="dub-select-btn">
+                <div class="dub-name" data-bind="name"></div>
+                <div class="dub-ep" data-bind="count"></div>
+            </div>
+            <div class="dub-control-wrapper">
+                <div class="dub-buttons-wrapper">
+                    <div class="dub-btn btn-dub-notify">
+                        <svg viewBox="0 0 640 640" aria-hidden="true">
+                            <use href="#i-bell" class="regular"></use>
+                            <use href="#i-bell-solid" class="solid"></use>
+                        </svg>
+                    </div>
+                    <div class="dub-btn btn-dub-favorite">
+                        <svg viewBox="0 0 640 640" aria-hidden="true">
+                            <use href="#i-star" class="regular"></use>
+                            <use href="#i-star-solid" class="solid"></use>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
     <!-- #region JavaScripts-->
     <script src="/javascript/library/jqery.min.js"></script>
     <script src="/javascript/library/anime.min.js"></script>
