@@ -48,12 +48,38 @@ export const Tunime = new class {
                     }
                 }
             },
-            notify: (event = () => { }) => {
-                const url = '/notify';
+            notify: {
+                /**
+                 * Подписка на уведомления
+                 * @param {'dubEpisode' | 'roomCreate'} type 
+                 * @param {Function} event 
+                 * @returns 
+                 */
+                subscription: (type, event = () => { }) => {
+                    const url = '/notify/subscription';
 
-                return {
-                    POST: async (body = {}) => {
-                        return this.fetch(url, { method: 'POST', body }, event)
+                    return {
+                        POST: async (body = {}) => {
+                            return this.fetch(url, { method: 'POST', body: { ...body, type } }, event);
+                        },
+                        DELETE: async ({ kodik_id, anime_id } = {}) => {
+                            return this.fetch(url, { method: 'DELETE', body: { kodik_id, anime_id, type } }, event);
+                        }
+                    }
+                },
+                registration: (event = () => { }) => {
+                    const url = '/notify';
+
+                    return {
+                        POST: async (body = {}) => {
+                            return this.fetch(url, { method: 'POST', body }, event);
+                        },
+                        DELETE: async () => {
+                            return this.fetch(url, { method: 'DELETE' }, event);
+                        },
+                        PATCH: async (body) => {
+                            return this.fetch(url, { method: 'PATCH', body }, event);
+                        }
                     }
                 }
             },
