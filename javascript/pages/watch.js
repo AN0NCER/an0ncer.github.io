@@ -2,15 +2,16 @@ import { Main } from "../core/main.core.js";
 import { LTransition } from "./watch/mod_transition.js";
 import { tLoad } from "./watch/mod.resource.js";
 import { IPlayer } from "./watch/mod_player.js";
-import { AutoScrollEpisodes } from "./watch/mod_scrolling.js";
+import { AutoScrollEpisodes } from "./watch/utils/util.scroll.js";
 import { Functional } from "./watch/mod_ui.js";
 import { History } from "./watch/mod_history.js";
 import { tChronologyVoice } from "./watch/mod.chronology.js";
 import { ClearParams } from "../modules/functions.js";
 import { Private } from "./watch/mod_private.js";
-import { Tunime } from "../modules/api.tunime.js";
+import { Rooms, Tunime } from "../modules/api.tunime.js";
 import { ASynch } from "./watch/mod.synch.js";
 import { URate } from "./watch/mod.urate.js";
+import { Popup } from "../modules/tun.popup.js";
 
 //ID ресурса из Shikimori
 export const $ID = new URLSearchParams(window.location.search).get("id");
@@ -21,7 +22,9 @@ export const $SHOWPLAYER = new URLSearchParams(window.location.search).get("play
 
 export const Player = IPlayer.Init({ standart: $PARAMETERS.player.standart });
 
-ClearParams(['continue', 'player', 'iss']);
+export const $ROOM = new URLSearchParams(window.location.search).get("room");
+
+ClearParams(['continue', 'player', 'iss', 'room']);
 
 export let $RULES = undefined;
 
@@ -136,6 +139,7 @@ Main(async (e) => {
         if (Player.CEpisodes.count == Player.CEpisodes.selected) return;
         const next_episode = Player.CEpisodes.selected + 1;
         Player.PControl.Exec("set_episode", { episode: next_episode });
+        // TODO: Возможный баг во время совместного просмотра
         Player.CEpisodes.Select(next_episode);
         ASynch.save(next_episode, Player.CTranslation.id);
         History().add(false, 0, 0, next_episode);
@@ -170,13 +174,17 @@ Main(async (e) => {
             modResolver();
         }
         await LTransition.Loaded(() => {
-            if ($SHOWPLAYER) {
+            if ($SHOWPLAYER || $ROOM) {
                 const element = document.querySelector(".landscape-player");
                 element.scrollIntoView({
                     behavior: "smooth",
                     block: "center",
                     inline: "nearest",
                 });
+            }
+
+            if ($ROOM) {
+                ConnectToRoom($ROOM);
             }
             Tunime.mark.anime($ID);
         });
@@ -189,3 +197,23 @@ Main(async (e) => {
         console.log(err);
     });
 });
+
+function ConnectToRoom(id) {
+    Rooms.join(id).then(async (response) => {
+        if (!response.complete || !response.parsed) {
+            if (response.status === 404) {
+                return new Popup('wss', 'Комната не существует', 301);
+            }
+            return new Popup('wss', 'Не удалось войти', 301);
+        }
+
+        const { RoomGuest } = await import("../pages/watch/room.guest.client.js");
+
+        RoomGuest({
+            wsUrl: response.value.data.wsUrl,
+            onopen: () => {
+                new Popup('wss', 'Присоединился в комнату');
+            }
+        });
+    });
+}
