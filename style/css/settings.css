@@ -76,7 +76,7 @@ header .head-wrapper .profile {
   gap: var(--p-gap);
 }
 header .head-wrapper .profile .ava-wrapper {
-  --p-ava-img: url('/images/ava.jpeg');
+  --p-ava-img: url('/images/ava.webp');
   display: grid;
   place-items: center;
   position: relative;
