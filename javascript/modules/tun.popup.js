@@ -1,4 +1,3 @@
-import { TMenu } from "../core/menu.core.js";
 import { createTimeline, utils, spring } from "../library/anime.esm.min.js";
 
 /**@type {[Popup]} */
@@ -228,7 +227,7 @@ function generateUniqueId() {
 }
 
 function isAboveMenu(z) {
-    const hasMenu = TMenu.isOpen;
+    const hasMenu = document.body.hasAttribute('menu');;
     if (z > 80) return false
     return hasMenu;
 }

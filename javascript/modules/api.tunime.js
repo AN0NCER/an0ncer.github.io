@@ -39,6 +39,50 @@ export const Tunime = new class {
             }
         },
         device: {
+            log: (event = () => { }) => {
+                const url = '/logs/upload';
+
+                return {
+                    POST: async (body = {}) => {
+                        return this.fetch(url, { method: 'POST', body }, event);
+                    }
+                }
+            },
+            notify: {
+                /**
+                 * Подписка на уведомления
+                 * @param {'dubEpisode' | 'roomCreate'} type 
+                 * @param {Function} event 
+                 * @returns 
+                 */
+                subscription: (type, event = () => { }) => {
+                    const url = '/notify/subscription';
+
+                    return {
+                        POST: async (body = {}) => {
+                            return this.fetch(url, { method: 'POST', body: { ...body, type } }, event);
+                        },
+                        DELETE: async ({ kodik_id, anime_id } = {}) => {
+                            return this.fetch(url, { method: 'DELETE', body: { kodik_id, anime_id, type } }, event);
+                        }
+                    }
+                },
+                registration: (event = () => { }) => {
+                    const url = '/notify';
+
+                    return {
+                        POST: async (body = {}) => {
+                            return this.fetch(url, { method: 'POST', body }, event);
+                        },
+                        DELETE: async () => {
+                            return this.fetch(url, { method: 'DELETE' }, event);
+                        },
+                        PATCH: async (body) => {
+                            return this.fetch(url, { method: 'PATCH', body }, event);
+                        }
+                    }
+                }
+            },
             list: (event = () => { }) => {
                 const url = '/api/user/devices';
 
@@ -94,8 +138,8 @@ export const Tunime = new class {
             }
             return url.toString();
         },
-        source: async (kodik) => {
-            const body = { src: kodik };
+        source: async (kodik, caching = true) => {
+            const body = { src: kodik, caching };
 
             if (!Hub.snapshot.state.isConnected || !Hub.snapshot.state.permissions.includes("player")) return false;
 
@@ -118,6 +162,7 @@ export const Tunime = new class {
         logout: async () => {
             return Hub.api.logout();
         }
+
     }
 }();
 

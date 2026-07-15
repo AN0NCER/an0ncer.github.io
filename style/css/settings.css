@@ -458,6 +458,9 @@ main .block-wrapper .btn-value-wrapper.-disable > .btn::after {
   border-radius: 5px;
   backdrop-filter: blur(4px);
 }
+main .block-wrapper .btn-value-wrapper.-new-icon .btn .icon .ticon {
+  height: 18px;
+}
 main .block-wrapper .loader {
   width: 14px;
   height: 14px;
@@ -1209,6 +1212,9 @@ body.-noscrol {
   gap: 0 !important;
 }
 
+.window-selector .window-content {
+  max-height: 100dvh;
+}
 .window-selector .window-content .content-wrapper .wrapper {
   padding-left: var(--sal);
   padding-right: var(--sar);
@@ -1263,6 +1269,8 @@ body.-noscrol {
   border-radius: 50%;
   display: grid;
   width: 12px;
+  min-width: 12px;
+  margin-left: 10px;
   height: 12px;
   background: #101318;
 }

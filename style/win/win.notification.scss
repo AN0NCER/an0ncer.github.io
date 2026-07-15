@@ -1,0 +1,161 @@
+@import "./win.engine";
+$WINDOW: 'notification';
+$BAR: 'bar.v1';
+
+@include WEngine($WINDOW, $BAR);
+
+.content-#{$WINDOW} {
+    * {
+        box-sizing: border-box;
+    }
+
+    .content-wrapper {
+        .wrapper {
+            overflow: hidden;
+            margin-bottom: max(var(--sab), 20px);
+            max-height: 100%;
+            padding-bottom: unset !important;
+            display: flex;
+            flex-direction: column;
+
+            .#{$WINDOW}-list-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                margin: 10px max(var(--sar), 20px) 0 max(var(--sal), 20px);
+                height: 100%;
+                overflow-y: auto;
+                overflow-x: hidden;
+
+                .bell-wrapper {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px 0;
+
+                    svg.icon {
+                        width: 122px;
+                        fill: #2393F1;
+                    }
+
+                }
+
+                .notification-text-wrapper {
+                    max-width: 400px;
+                    text-align: center;
+                    margin: 0 auto;
+                    font-size: 14px;
+                    color: rgba(255, 255, 255, 0.3);
+                }
+
+                .access-swiper {
+                    background: rgba(0, 0, 0, 0.2);
+                    border-radius: 50px;
+                    position: relative;
+                    display: flex;
+                    padding: 6px;
+                    max-width: 500px;
+                    width: 100%;
+                    margin: 0 auto;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    margin: 0 10px;
+                    overflow: hidden;
+
+                    span {
+                        position: absolute;
+                        inset: 0;
+                        display: grid;
+                        place-items: center;
+                        text-transform: uppercase;
+                        font-size: 11px;
+                        font-weight: bold;
+                        pointer-events: none;
+                        z-index: 1;
+                    }
+
+                    .pin {
+                        background: #3587E6;
+                        width: 65px;
+                        display: grid;
+                        place-items: center;
+                        border-radius: 50px;
+                        height: 45px;
+                        cursor: pointer;
+                        position: relative;
+                        z-index: 2;
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        transition: opacity 0.3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+
+
+                        .ticon {
+                            background-color: #FFFFFF;
+                            height: 20px;
+                        }
+                    }
+
+                    section.no-robot {
+                        position: absolute;
+                        inset: 6px;
+                        z-index: 10;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        transition: 0.3s cubic-bezier(0.29, -0.81, 0.42, 1.68);
+                        transform: translateY(51px);
+                        opacity: 0;
+
+                        .icon-robot {
+                            display: grid;
+                            width: 45px;
+                            height: 45px;
+                            place-items: center;
+
+                            svg {
+                                height: 16px;
+                            }
+                        }
+
+                        .no-robot-confirm {
+                            background: #3587E6;
+                            height: 45px;
+                            border-radius: 50px;
+                            cursor: pointer;
+                            border: 1px solid rgba(255, 255, 255, 0.2);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex: 1 0 0;
+                            text-transform: uppercase;
+                            font-size: 11px;
+                            font-weight: bold;
+                        }
+                    }
+
+                    &[no-robot] {
+                        .pin {
+                            opacity: 0;
+                        }
+
+                        section.no-robot {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                }
+
+                .btn {
+                    color: #FF0000;
+                    text-transform: uppercase;
+                    font-size: 11px;
+                    cursor: pointer;
+                    width: 100px;
+                    height: 40px;
+                    display: grid;
+                    place-items: center;
+                }
+
+            }
+        }
+    }
+}

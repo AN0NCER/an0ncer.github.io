@@ -119,7 +119,8 @@ export const ACard = {
             const id = `jikan-${Math.random().toString(36).substring(2, 15)}`;
 
             try {
-                fetch(`https://api.jikan.moe/v4/anime/${anime.id}/pictures`).then(async (res) => {
+                // fetch(`https://api.jikan.moe/v4/anime/${anime.id}/pictures`).then(async (res) => { //TODO: Переделать
+                fetch(`https://api.tunime.app/v4/anime/${anime.id}/pictures`).then(async (res) => {
                     const json = await res.json();
 
                     if (json?.data[0]?.webp?.large_image_url) {

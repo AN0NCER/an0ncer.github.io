@@ -6,7 +6,7 @@ import { TCache } from "../../modules/tun.cache.js";
 import { $ID } from "../watch.js";
 import { tChronology, tReload } from "./mod.chronology.js";
 import { LTransition } from "./mod_transition.js";
-import { UserRate } from "./mod_urate.js";
+import { URate } from "./mod.urate.js";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
@@ -15,6 +15,9 @@ const _onCache = $PARAMETERS.anime.anicaching;
 const _live = parseInt($PARAMETERS.anime.anicachlive) * 24 * 60 * 60 * 1000;
 
 export let tAnime = null;
+
+const { promise: $ANIME, resolve: animeResolver } = Promise.withResolvers();
+export { $ANIME };
 
 /**
  * Загружает аниме данные
@@ -40,11 +43,13 @@ export function tLoad(e = () => { }, { logged = false } = {}) {
                 tAnime = await load($ID);
             }
 
+            animeResolver(tAnime);
+
             LTransition.Progress.NewStep();
 
             process.push(new Promise(async (resolve) => {
                 const a = await user();
-                UserRate().init(a, logged);
+                URate.init(a, logged);
                 resolve();
             }));
 
@@ -107,11 +112,12 @@ export function tLoad(e = () => { }, { logged = false } = {}) {
             resolve(tAnime);
             console.log(`[mod.res] - load: ${Date.now() - start}ms`);
 
-            UserRate().Events.OnUpdate(async () => {
+            URate.on('update', async (res, { changed }) => {
+                if (!changed.includes('status')) return;
                 const data = await chronology();
                 tAnime = { ...tAnime, ...data };
 
-                if (_onCache) tReload(tAnime["chronology"]);
+                if(_onCache) tReload(tAnime["chronology"]);
             });
         } catch (err) {
             console.log(err);

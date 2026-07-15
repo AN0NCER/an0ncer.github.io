@@ -1,21 +1,9 @@
 import { Kodik } from "../../modules/api.kodik.js";
-import { AutoScrollEpisodes } from "./mod_scrolling.js";
+import { AutoScrollEpisodes } from "./utils/util.scroll.js";
 import { $ID } from "../watch.js";
 import { watchSequence } from "./mod.chronology.js";
-
-//Функция генерация HTML перевода
-function _genVoice(id, title, episod, save = false) {
-    return `<div class="voice" data-id="${id}">
-    <div class="voice-content" data-id="${id}">
-       <span class="voice-title">${title}</span>
-       <span class="voice-count">${episod ? episod : 1}</span>
-    </div>
-    <div class="voice-save ${save ? "select" : ''}" data-id="${id}">
-       <svg xmlns="http://www.w3.org/2000/svg" class="select" height="1em" viewBox="0 0 576 512"><path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/></svg>
-       <svg xmlns="http://www.w3.org/2000/svg" class="unselect" height="1em" viewBox="0 0 576 512"><path d="M287.9 0c9.2 0 17.6 5.2 21.6 13.5l68.6 141.3 153.2 22.6c9 1.3 16.5 7.6 19.3 16.3s.5 18.1-5.9 24.5L433.6 328.4l26.2 155.6c1.5 9-2.2 18.1-9.6 23.5s-17.3 6-25.3 1.7l-137-73.2L151 509.1c-8.1 4.3-17.9 3.7-25.3-1.7s-11.2-14.5-9.7-23.5l26.2-155.6L31.1 218.2c-6.5-6.4-8.7-15.9-5.9-24.5s10.3-14.9 19.3-16.3l153.2-22.6L266.3 13.5C270.4 5.2 278.7 0 287.9 0zm0 79L235.4 187.2c-3.5 7.1-10.2 12.1-18.1 13.3L99 217.9 184.9 303c5.5 5.5 8.1 13.3 6.8 21L171.4 443.7l105.2-56.2c7.1-3.8 15.6-3.8 22.6 0l105.2 56.2L384.2 324.1c-1.3-7.7 1.2-15.5 6.8-21l85.9-85.1L358.6 200.5c-7.8-1.2-14.6-6.1-18.1-13.3L287.9 79z"/></svg>
-    </div>
- </div>`;
-}
+import { DUB } from "./mod.dubs.js";
+import { WEpisodes } from "./mod.episode.win.js";
 
 let _player = undefined;
 
@@ -37,7 +25,8 @@ const message_callabcks = {
 
 const translation_callbacks = {
     selected: [],
-    loaded: []
+    loaded: [],
+    favorite: []
 }
 
 const episodes_callbacks = {
@@ -67,31 +56,55 @@ class Episodes {
     constructor(Player) {
         this.Player = Player;
 
+        this.hasMenu = false;
+        this.wrappers = $('.episode-scroll-wrapper');
         this.selected = 1;
         this.count = 0;
+
+        //Инициализация функционала эпизода
+        this.#Functional();
     }
 
-    Init(element) {
-        //Устанавливаем количество эпизодов
-        this.count = element.last_episode;
+    /**
+     * **Управление эпизодами**
+     * 
+     * `вызывается после выбора озвучки (автоматичечски)`
+     * @param {{last_episode:number}} dub 
+     * @returns {void}
+     */
+    Init(dub) {
+        // Количество эпизодов доступных для просмотра
+        this.count = dub.last_episode;
 
-        $(".episodes > .value > .episode").remove();
+        // Добавление эпизодов в DOM
+        const e_list = $('.episode-list');
+
+        e_list.empty();
+
+        this.hasMenu = this.count > 40;
+
+        if (this.hasMenu && $PARAMETERS.watch.epismenu) {
+            //Добавление меню выбора эпизодов
+            this.wrappers.css('--items', 1);
+            e_list.append(`<div class="btn-win-episode" data-index="-1"><svg viewBox="0 0 640 640" aria-hidden="true"><use href="#i-grip"></use></svg><span class="ep-name">EPS</span></div>`);
+        } else {
+            this.wrappers.css('--items', '');
+        }
 
         for (let i = 1; i < this.count + 1; i++) {
             const html = `<span class="episode" data-index="${i}">${i}<span class="ep-name">EP</span></span>`;
-            $(".episodes > .value").append(html);
+            e_list.append(html);
         }
 
-        //Инициалзация функционала
-        this.#Functional();
-
+        // Сразу выбираем эпизод (это будет 1 если пользователь ничего не выбирал или другого жпизода не доступно)
         if (this.selected > this.count) {
-            this.selected = 1;
+            //Тогда выбираем ближайший доступный
+            this.selected = this.count;
         }
 
-        this.#Animate({ episod: this.selected, event: () => { AutoScrollEpisodes(); } })
-
+        // Авто выбор эпизода (запускает загрузку плеера для определенного эпизода)
         this.#Dispatch('selected', { episode: this.selected, translation: this.Player.CTranslation.id, user_handler: false });
+        this.#Animate({ episod: this.selected, event: () => { AutoScrollEpisodes(); } });
     }
 
     Select(e) {
@@ -105,72 +118,100 @@ class Episodes {
     }
 
     #Functional() {
-        $(`.episode[data-index]`).on("click", (e) => {
-            if (!this.Player.isOwner) return;
-            const target = e.currentTarget;
-            const episode = $(target).data("index");
+        let lastScroll = 0;
+        let lastScrollTop = 0;
+        let rafPending = false;
+
+        this.wrappers.on('scroll', (e) => {
+            if (!this.hasMenu) return;
+            if (rafPending) return;
+
+            rafPending = true;
+
+
+            requestAnimationFrame(() => {
+                rafPending = false;
+
+                const el = e.currentTarget;
+                const scrollLeft = el.scrollLeft;
+                const scrollTop = el.scrollTop;
+
+                if (scrollLeft !== lastScroll) {
+                    if (lastScroll > scrollLeft) {
+                        $('[data-scroll="horizontal"] .btn-win-episode').addClass('-show');
+                    } else {
+                        $('[data-scroll="horizontal"] .btn-win-episode').removeClass('-show');
+                    }
+                    lastScroll = scrollLeft;
+                }
+
+                if (scrollTop !== lastScrollTop) {
+                    if (lastScrollTop > scrollTop) {
+                        $('[data-scroll="vertical"] .btn-win-episode').addClass('-show');
+                    } else {
+                        $('[data-scroll="vertical"] .btn-win-episode').removeClass('-show');
+                    }
+                    lastScrollTop = scrollTop;
+                }
+            });
+        });
+
+        const selectEpisode = (episode) => {
+            if (!this.Player.isOwner) return false;
 
             //Проверяем если эпизод не выбран то выбираем его
             if (!this.selected || this.selected != episode) {
                 this.selected = episode;
-
-                this.#Animate({ episod: this.selected });
-
                 this.#Dispatch('selected', { episode, translation: this.Player.CTranslation.id, user_handler: true });
+                this.#Animate({ episod: episode });
+                return true;
             }
+
+            return false;
+        }
+
+        this.wrappers.on('click', '.btn-win-episode, .episode[data-index]', (e) => {
+            if (!this.Player.isOwner) return;
+            const episode = $(e.currentTarget).data('index');
+
+            if (episode === -1) {
+                WEpisodes(this.count, this.selected, {
+                    onselect: (episode, win) => {
+                        const selected = selectEpisode(episode);
+
+                        if (win && selected) {
+                            win.hide();
+                            AutoScrollEpisodes();
+                        }
+                    }
+                });
+                return;
+            }
+
+            selectEpisode(episode);
         });
     }
 
     #el = undefined;
 
     /**
-     * Выполняет анимацию выбора эпизода
-     * @param {Object} params - Параметры для анимации
+     * Выполняет выбор эпизода
+     * @param {Object} params - Параметры для выбора эпизода
      * @param {number} [params.episod=1] - Номер выбранного эпизода (по умолчанию 1)
-     * @param {Event} params.event - Событие, происходящее после выполнения анимации
-     * @param {Event} params.update - Событие для обновления данных анимации (передается текущая анимация)
+     * @param {Event} params.event - Событие, после выбора эпизода
      * @returns {void}
      */
-    #Animate({ episod = 1, event, update } = {}) {
-        const element = $(".episodes > .value > .episode")[episod - 1];
-        if (!element) {
-            return;
+    #Animate({ episod = 1, event } = {}) {
+        const element = $(`.episode[data-index="${episod}"]`);
+
+        $('.episode.-select').removeClass('-select');
+        $('.episodes > .value, .episodes > .episodes-wrapper, .episode-scroll-wrapper').css(`--episod`, episod);
+        
+        element.addClass('-select');
+
+        if (event) {
+            event();
         }
-        if (this.#el) {
-            anime({
-                targets: this.#el,
-                color: "#555657",
-                easing: "easeOutElastic(1, 1)",
-            });
-        }
-        this.#el = element;
-        const left = $(element).position().left;
-        const top = $(element).position().top + $(".episodes > .value").scrollTop();
-        anime({
-            targets: ".sel",
-            top: top,
-            easing: "easeOutElastic(1, 1)",
-        });
-        anime({
-            targets: ".sel",
-            left: left,
-            complete: function (anim) {
-                if (event) {
-                    event();
-                }
-            },
-            update: function (anim) {
-                if (update) {
-                    update(anim);
-                }
-            },
-            easing: "easeOutElastic(1, 1)",
-        });
-        anime({
-            targets: element,
-            color: "#020202",
-            easing: "easeOutElastic(1, 1)",
-        });
     }
 
     /**
@@ -212,7 +253,7 @@ class Translation {
         this.Player = Player;
 
         this.lskey = "save-translations";
-        this.saved = [] //Сохранненые ID озвучек (Избранное)
+        this.saved = new Set(); //Сохранненые ID озвучек (Избранное)
         this.selected = false; //Выбрана ли озвучка
         this.id = undefined; //ID Выбранной озвучки
         this.name = undefined; // Название выбранной озвучки
@@ -221,20 +262,17 @@ class Translation {
     /**
      * Инициализация озвучек
      * @param {Map<string, {translation:{id:number, title:string},last_episode:number}>} data 
+     * @param {number} [dubId] - Выбранна определенная озвучка 
      */
-    Init(data, id) {
+    Init(data, dubId) {
         if ($PARAMETERS.watch.dubanime) this.lskey = "save-translations-" + $ID;
-        this.saved = JSON.parse(localStorage.getItem(this.lskye)) || [];
+        this.saved = new Set((JSON.parse(localStorage.getItem(this.lskey)) ?? []))
 
         if ($PARAMETERS.watch.dubanime) {
             for (let i = 0; i < watchSequence.length; i++) {
                 const fid = watchSequence[i];
-                this.saved = this.saved.concat(JSON.parse(localStorage.getItem(`save-translations-${fid}`)) || [])
+                (JSON.parse(localStorage.getItem(`save-translations-${fid}`)) || []).forEach(x => this.saved.add(x));
             }
-        }
-        if (data.size != 0) {
-            //Удалить заглушку
-            $(".content-voices").empty();
         }
 
         for (const [id, item] of data) {
@@ -242,62 +280,39 @@ class Translation {
 
             let finded = false;
 
-            if (this.saved && this.saved.indexOf(translation.id) != -1) {
+            if (this.saved.has(translation.id)) {
                 finded = true;
             }
 
-            $(".content-voices").append(_genVoice(translation.id, translation.title, item.last_episode, finded));
-
-            if (!this.selected && finded && id === undefined) {
+            if (!this.selected && finded && dubId === undefined) {
                 this.Select({ id: translation.id });
             }
         }
 
-        if (!this.selected && data.size > 0 && id === undefined) {
+        if (!this.selected && data.size > 0 && dubId === undefined) {
             this.Select({ id: data.values().next().value.translation.id });
-        } else if (!this.selected && data.size > 0 && id) {
-            this.Select({ id });
+        } else if (!this.selected && data.size > 0 && dubId) {
+            this.Select({ id: dubId });
         }
-
-        //Нажатие на перевод
-        $(".voice > .voice-content").click((e) => {
-            if (!this.Player.isOwner) return;
-            this.Select({ id: $(e.currentTarget).data("id"), user_handler: true });
-        });
-
-        //Добавить в избранное
-        $(".voice > .voice-save").click((e) => {
-            this.Favorites($(e.currentTarget).data("id"));
-        });
 
         this.#Dispatch('loaded', this.Player);
     }
 
     Favorites(id) {
-        const element = $(`.voice > .voice-save[data-id="${id}"]`);
-        if (this.saved && this.saved.indexOf(id) != -1) {
+        let type = 'save';
+
+        if (this.saved.has(id)) {
+            type = 'remove';
             //Удаляем с избранных
-            const index = this.saved.indexOf(id);
-            this.saved.splice(index, 1);
-
-            element.removeClass('select');
-            //Если выбран текущий перевод
-            if (this.id == id) {
-                $(".translations-wrapper > .button-stars").removeClass("selected");
-            }
-
+            this.saved.delete(id);
         } else {
             //Добавляем в избранное
-            this.saved.push(id);
-            element.addClass('select');
-            //Если выбран текущий перевод
-            if (this.id == id) {
-                $(".translations-wrapper > .button-stars").addClass("selected");
-            }
+            this.saved.add(id);
         }
 
         //Сохраняем избранное
-        localStorage.setItem(this.lskey, JSON.stringify(this.saved));
+        localStorage.setItem(this.lskey, JSON.stringify([...this.saved]));
+        this.#Dispatch('favorite', { type, id });
     }
 
     /**
@@ -307,36 +322,15 @@ class Translation {
     Select({ id, user_handler = false }) {
         if (this.id == id || id === undefined) return;
 
-        const element = $(`.voice[data-id="${id}"]`)[0];
         const data = this.Player.resultsVoice.get(id);
 
-        if (!data) return console.log('Translation not found');
-
-        if (this.selected) {
-            $(`.voice[data-id="${this.id}"]`).removeClass("select");
-        }
+        if (!data) return console.error('Translation not found');
 
         this.id = id; //Индентификатор озвучки
         this.selected = true;
         this.name = data.translation.title; //Название озвучки
 
-        $(".current-translation > span").text(data.translation.title); //Название озвучки
-
-        if (data.last_episode) {
-            $(".count-current-translation").text(data.last_episode); //Last episode translation
-        } else if (data) {
-            $(".count-current-translation").text('1');
-            $("#episodes").addClass('hide');
-        }
-
-        $(element).addClass("select");
-
-        if (this.saved && this.saved.indexOf(id) != -1) {
-            $(".translations-wrapper > .button-stars").addClass("selected");
-        } else {
-            $(".translations-wrapper > .button-stars").removeClass("selected");
-        }
-
+        DUB.select(data, this.saved.has(id));
         this.#Dispatch('selected', { id: this.id, user_handler });
     }
 
@@ -496,6 +490,19 @@ class Message {
 class Player {
     #callbacks = player_callbacks;
 
+    #name = undefined;
+
+    set name(value) {
+        this.#name = value;
+        const el = document.querySelector('.player');
+        el.setAttribute('data-type', this.#name);
+        el.setAttribute('default-controls', $PARAMETERS.player.standart_controls);
+    }
+
+    get name() {
+        return this.#name;
+    }
+
     constructor({ standart = false } = {}) {
         this.results = new Map();
 
@@ -565,7 +572,7 @@ class Player {
         this.loaded = false;
         let url = `${uri}?hide_selectors=true&episode=${episode}`;
         if (this.name === "tunime") {
-            url = `player.html?id=${this.selected.id}&e=${episode}`
+            url = `tplayer.html?id=${this.selected.id}&e=${episode}`
         }
         document.querySelector("#kodik-player").contentWindow.location.replace(url);
         this.#Loading();

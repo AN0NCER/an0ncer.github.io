@@ -319,6 +319,10 @@ class Message {
         return new Message().on('NEW_SESSION', { payload });
     }
 
+    static PUSH_PENDING() {
+        return new Message().on('PUSH_PENDING', { timer: true, timeout: 3000 });
+    }
+
     static instance;
     constructor() {
         if (Message.instance) return Message.instance;
@@ -501,6 +505,48 @@ class Update {
     }
 }
 
+class Push {
+    constructor(pwa) {
+        /**@type {$PWA} */
+        this.pwa = pwa;
+        this.#listen();
+        this.#checkPending();
+    }
+
+    #listen() {
+        sw?.addEventListener('message', ({ data }) => {
+            // SW-роутер шлёт JSON-строки, push-события — объекты
+            if (!data || typeof data !== 'object') return;
+
+            const handlers = {
+                'PUSH_NOTIFICATION_CLICK': (payload) => {
+                    window.location.href = payload.url;
+                    // this.pwa.events.trigger('push.click', payload, { replay: true });
+                },
+                'PUSH_RESUBSCRIBED': (payload) => {
+                    // this.pwa.events.trigger('push.resubscribed', payload);
+                }
+            };
+
+            handlers[data.type]?.(data.payload);
+        });
+    }
+
+    #checkPending() {
+        this.pwa.events.on('load', async () => {
+            try {
+                const pending = await this.pwa.message.PUSH_PENDING();
+                if (pending) {
+                    window.location.href = pending.url;
+                    // this.pwa.events.trigger('push.click', pending, { replay: true });
+                }
+            } catch (e) {
+                warn(`push pending check failed: ${e}`);
+            }
+        }, { once: true, replay: true });
+    }
+}
+
 export const $PWA = new class {
     constructor() {
         this.file = '/sw.js';
@@ -510,6 +556,7 @@ export const $PWA = new class {
         this.message = Message;
         this.events = new Events();
         this.update = new Update();
+        this.push = new Push(this);
         this.session = new Session(this);
     }
 
@@ -567,6 +614,7 @@ const TUpdate = new class {
     }
 
     #init() {
+        if (window != window.top) return;
         if (!$PARAMETERS.update.updateshow || !sw.controller) return;
         if (this.exPages.includes(window.location.pathname)) return;
 

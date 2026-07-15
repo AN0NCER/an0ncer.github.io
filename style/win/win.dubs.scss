@@ -1,0 +1,196 @@
+@mixin DUBCard() {
+    $height: 50px;
+
+    font-family: 'Manrope', sans-serif;
+
+    .dub-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: $height;
+        cursor: pointer;
+
+        margin: 0 !important;
+        padding-left: 0 !important;
+        padding-right: max(var(--sar), 15px) !important;
+
+        .dub-select-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex: 1 0 0;
+            height: 100%;
+            padding-left: max(var(--sal), 15px) !important;
+
+            .dub-name {
+                font-size: 15px;
+                font-weight: bold;
+                line-height: 14px;
+            }
+
+            .dub-ep {
+                text-transform: uppercase;
+                background: rgba(0, 0, 0, 0.2);
+                padding: 4px 10px;
+                border-radius: 45px;
+                font-size: 11px;
+                text-wrap-mode: nowrap;
+            }
+        }
+
+
+        .dub-control-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            .dub-buttons-wrapper {
+                display: flex;
+
+                .dub-btn {
+                    display: grid;
+                    place-items: center;
+                    width: $height;
+                    height: $height;
+
+                    svg {
+                        height: 18px;
+                        fill: #DADADA;
+
+                        .solid {
+                            display: none;
+                        }
+                    }
+
+                    &.-e-favorite {
+                        svg {
+                            fill: #FFFFFF;
+
+                            .regular {
+                                display: none;
+                            }
+
+                            .solid {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+
+                .btn-dub-notify {
+                    display: none;
+
+                    &.-on {
+                        svg {
+                            fill: #FFFFFF;
+
+                            .regular {
+                                display: none;
+                            }
+
+                            .solid {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+
+                &.-e-notify {
+                    .btn-dub-notify {
+                        display: grid;
+                    }
+                }
+            }
+        }
+
+        &.-select {
+            background: #2393F1;
+        }
+    }
+}
+
+
+@import './win.engine';
+$WINDOW: 'dubs';
+$SEARCH: 'search.v1', 'search.v1[append]', 'search.v1[append]';
+$BAR: 'bar.v1';
+
+@include WEngine($WINDOW, $SEARCH..., $BAR);
+
+.content-#{$WINDOW} {
+    .content-wrapper {
+        .wrapper {
+            .#{$WINDOW}-list-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+
+                .grid-wrapper-list {
+                    background: #191C21;
+                    border-radius: 5px;
+                    overflow: hidden;
+
+                    @include DUBCard();
+
+                    @media screen and (max-width:910px) {
+                        border-radius: 0px;
+                    }
+                }
+            }
+        }
+
+        .#{$WINDOW}-list-search {
+            .dub-checkbox {
+                display: flex;
+
+                .dub-checkbox-wrapper {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #191C21;
+                    border: 0.2px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 20px;
+                    padding: 0 15px;
+                    cursor: pointer;
+                    transition: .3s ease-in-out;
+                    flex: 1 0 0;
+
+                    svg {
+                        height: 11px;
+                        fill: #FFFFFF;
+                        margin-right: 5px;
+                    }
+
+                    span {
+                        font-size: 10px;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                    }
+                }
+
+                input {
+                    display: none;
+                }
+
+                input:checked+.dub-checkbox-wrapper {
+                    background: #2393F1;
+                }
+            }
+
+            .btn {
+                svg {
+                    height: 18px;
+                    fill: #FFFFFF;
+                }
+            }
+
+            .btn-notify-clear {
+                &.-disable {
+                    pointer-events: none;
+                    opacity: .4;
+                }
+            }
+        }
+    }
+}

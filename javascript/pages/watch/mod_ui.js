@@ -4,11 +4,14 @@ import { Tunime } from "../../modules/api.tunime.js";
 import { $ID, Player } from "../watch.js";
 import { LTransition } from "./mod_transition.js";
 import { IScreenshots } from "./mod.resource.js";
-import { ShowTranslationWindow } from "./mod_translation.js";
-import { UserRate } from "./mod_urate.js";
 import { ShowScoreWindow } from "./mod_wscore.js";
 import { Popup } from "../../modules/tun.popup.js";
 import { Hub } from "../../core/hub.core.js";
+import { ShowDUBSWindow } from "./mod.dubs.win.js";
+import { URate } from "./mod.urate.js";
+import { TNotifi } from "../../modules/tun.notification.js";
+import { DUB } from "./mod.dubs.js";
+import { ANotifi } from "./mod.notifi.js";
 
 const anime_status = [
     { id: 0, name: "Посмотрю", sh: ["planned"] },
@@ -30,8 +33,6 @@ export function Functional() {
         { dom: "#window-score", func: ShowScoreWindow },
         { dom: "#share", func: ShareAnime },
         { dom: "#btn-scroll", func: ShowPlayer },
-        { dom: '.translations-wrapper > .button-translation', func: ShowTranslationWindow },
-        { dom: '.translations-wrapper > .button-stars', func: SaveVoice },
         { dom: '.title > .russian', func: CopyTitle }
     ];
 
@@ -46,14 +47,14 @@ export function Functional() {
         $(element.dom).click(element.func);
     }
 
-    $('.landscape-player').addClass('reverse-' + $PARAMETERS.watch.episrevers);
+    $('.landscape-player').addClass(`-${$PARAMETERS.watch.episrevers}`);
     if ($PARAMETERS.watch.episrevers == "top") {
         $("#center-player").css({ display: 'none' });
     }
 
-    UserRate().Events.OnInit((res) => {
-        UserRate().Events.OnUpdate((res) => {
-            if (res != null && res.score != 0) {
+    URate.on('init', (res) => {
+        const process = (res) => {
+            if (res !== null && res.score != 0) {
                 $("#window-score > .default").addClass('hide');
                 $("#window-score > .fill").removeClass('hide');
 
@@ -61,18 +62,19 @@ export function Functional() {
             } else {
                 $("#window-score > .default").removeClass('hide');
                 $("#window-score > .fill").addClass('hide');
+
                 $("#userscore > .content-b").text(`0 | 10`)
             }
-            SetStatusList(res);
-        });
-        if (res != null && res.score != 0) {
-            $("#window-score > .default").addClass('hide');
-            $("#window-score > .fill").removeClass('hide');
 
-            $("#userscore > .content-b").text(`${res.score} | 10`)
+            SetStatusList(res);
         }
-        SetStatusList(res);
-    });
+
+        process(res);
+
+        URate.on('update', (res) => {
+            process(res);
+        });
+    }, { replay: true });
 
     AutoLoadGallery();
     ScrollingElements();
@@ -81,11 +83,6 @@ export function Functional() {
     PageReload(document);
     LTransition.on('loaded', () => {
         AutoScrollFranchise();
-    })
-
-    //Отслеживаем изменение ориентации экрана для правильного отображения выбраного эпизода
-    window.addEventListener("orientationchange", function () {
-        OrientationChanged();
     });
 
     //Нажатие на главных героев персонажей
@@ -107,6 +104,101 @@ export function Functional() {
 
     $('.hero-anime').on('click', 'a', handle);
     $('.description').on('click', 'a.t-chracter', handle);
+
+    //Нажатие на главный элемент озвучки
+    (() => {
+        const main = document.querySelector('.dub-controller');
+        if (!main) return console.warn('Burron dub selector not found');
+        const btn_notifi = main.querySelector('.dub-notify');
+
+        let hasNotifiRequest = false;
+
+        const setNotifyRequest = (value) => {
+            hasNotifiRequest = value;
+            btn_notifi.classList.toggle('-load', value);
+        }
+
+        const events = {
+            'win': ShowDUBSWindow,
+            'notify': () => {
+                if (hasNotifiRequest) return;
+                setNotifyRequest(true);
+
+                const process = ANotifi.hasNotify() ? () => ANotifi.unsubscribe() : () => ANotifi.subscribe();
+
+                process().catch(() => new Popup(`Произошла ошибка.`)).finally(() => setNotifyRequest(false));
+            },
+            'favor': SaveVoice
+        };
+
+        main.addEventListener('click', function (e) {
+            /**@type {HTMLDivElement} */
+            const btn = e.target.closest('[btn]');
+
+            if (!btn) return;
+            const attr = btn.getAttribute('btn');
+
+            events[attr] ? events[attr]() : (() => { })();
+        });
+
+        ANotifi.on('subscribe', (dubs) => {
+            if (dubs.includes(Player.selected?.id)) {
+                main.classList.add('-on-notify');
+            }
+        });
+
+        ANotifi.on('unsubscribe', (dubs) => {
+            if (dubs.includes(Player.selected?.id)) {
+                main.classList.remove('-on-notify');
+            }
+        });
+    })();
+
+    //Ориентация экрана
+    (() => {
+        const root = document.documentElement;
+        const body = document.body;
+
+        let lastAngle = null;
+
+        const update = () => {
+            const angle = getAngle();
+            if (angle === lastAngle) return;
+            lastAngle = angle;
+
+            //Отслеживаем изменение ориентации экрана для правильного отображения выбраного эпизода
+            OrientationChanged(angle);
+
+            body.setAttribute('angle', String(angle));
+
+            // core vars на html
+            root.style.setProperty('--core-angle', `${angle}deg`);
+            root.style.setProperty('--core-angle-num', String(angle));
+        };
+
+        update();
+
+        window.addEventListener('orientationchange', update, { passive: true });
+
+        if (screen?.orientation?.addEventListener) {
+            screen.orientation.addEventListener('change', update);
+        }
+
+        function getAngle() {
+            let angle = screen?.orientation?.angle ?? window.orientation ?? 0;
+            if (angle === -90) angle = 270;
+
+            return angle;
+        }
+    })();
+
+    //Изменение состояния уведмолений
+    TNotifi.on('state', (val) => {
+        if (val === -1) {
+            DUB.el.removeClass('-notify')
+            $('.-e-notify').removeClass('-e-notify');
+        }
+    }, { replay: true })
 }
 
 export function AutoScrollFranchise() {
@@ -192,20 +284,20 @@ function ShowStatus() {
 function AnimeStatusSelect() {
     $('.cur-status > .icon').click(() => {
         const id = $('.cur-status').data('id');
-        const ur = UserRate().Get();
+        const ur = URate.uRate;
         if (ur != null) {
-            UserRate().Controls.Remove();
+            URate.remove(true);
         } else {
-            UserRate().Controls.Create(anime_status[id].sh[0]);
+            URate.setStatus(anime_status[id].sh[0], true);
         }
     });
     $('.list-status > .status').click((e) => {
         const id = $(e.currentTarget).data('id')
-        const ur = UserRate().Get();
+        const ur = URate.uRate;
         if (ur != null && ur.status == anime_status[id].sh[0]) {
-            UserRate().Controls.Remove();
+            URate.remove(true);
         } else {
-            UserRate().Controls.Create(anime_status[id].sh[0]);
+            URate.setStatus(anime_status[id].sh[0], true)
         }
     });
 }
@@ -263,7 +355,7 @@ function ScrollingElements() {
     ScrollElementWithMouse('.similiar-anime');
     ScrollElementWithMouse('.hero-anime');
     ScrollElementWithMouse('.galery-slider');
-    ScrollElementWithMouse('#episodes');
+    ScrollElementWithMouse('.episode-scroll-wrapper[data-scroll="horizontal"]')
     ScrollElementWithMouse('.genres.scroll-none');
     ScrollElementWithMouse('.list-franchise');
 }
@@ -357,6 +449,7 @@ function ShowPlayer() {
 }
 
 function OrientationChanged() {
+    if (!Player.loaded) return;
     Player.CEpisodes.Revise();
 }
 
