@@ -614,6 +614,7 @@ const TUpdate = new class {
     }
 
     #init() {
+        if (window != window.top) return;
         if (!$PARAMETERS.update.updateshow || !sw.controller) return;
         if (this.exPages.includes(window.location.pathname)) return;
 
