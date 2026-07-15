@@ -1,6 +1,6 @@
 import { DBAnime } from "./mod.db.js";
+import { URate } from "./mod.urate.js";
 import { Private } from "./mod_private.js";
-import { UserRate } from "./mod_urate.js";
 import { TEvents } from "./utils/util.event.js";
 
 /**
@@ -87,7 +87,7 @@ export const ASynch = new class extends TEvents {
         this.difference = DBAnime.get('anime', 'ldata');
         DBAnime.set('anime', 'ldata', data);
 
-        let user_rate = UserRate().Get();
+        let user_rate = URate.uRate;
 
         if (!DBAnime.get('anime', 'synch') || !user_rate) {
             return;
@@ -111,7 +111,7 @@ export const ASynch = new class extends TEvents {
         }
 
         user_rate.text += `\r\n[tunime-sync:${data.kodik_episode}:${data.kodik_dub}:${JSON.stringify(data.date_update)}]`;
-        UserRate().Controls.Note(user_rate.text);
+        URate.setNote(user_rate.text);
         this.trigger('update', data);
     }
 

@@ -1,9 +1,11 @@
 import { WindowManagement } from "../../modules/Windows.js";
-import { UserRate } from "./mod_urate.js";
 import { Private } from "./mod_private.js";
 import { IPlayer } from "./mod_player.js";
-import { ASynch } from "./mod_dbanime.js";
 import { OAuth } from "../../core/main.core.js";
+import { DBAnime } from "./mod.db.js";
+import { ASynch } from "./mod.synch.js";
+import { URate } from "./mod.urate.js";
+import { UIScore } from "./mod.score.js";
 
 const Player = IPlayer.Init();
 
@@ -29,43 +31,21 @@ const WindowScore = {
             _windowScore.hide();
         });
 
+        //Авто установка высоты input
         $('textarea.noten').bind('input', () => {
             this.auto_grow(document.querySelector('textarea.noten'));
         });
 
-        //Отслеживаем изменения оценки пользователем
-        $('.score-list > .sc').click(function () {
-            let score = $(this).attr('data-score');
-
-            let ur = UserRate().Get();
-
-            console.log(ur);
-
-            if (ur == null || ur.score == score) {
+        // Изменение оценки пользователем
+        UIScore.on('score', (value) => {
+            if (!URate.uRate) {
+                URate.setScore(0, false);
                 return;
-            }
-            $(`.sc.selected`).removeClass('selected');
-            $(this).addClass('selected');
-
-            //Устанавливает оценку
-            UserRate().Controls.Score(score)
-
-            $('.block-clear-score').removeClass('disabled');
-            $('.bar-score > .window-title').text("Оценено");
-        });
-
-        //Отслеживаем изменение нажатие на кнопку очистить оценку
-        $('.block-clear-score').click(function () {
-            if ($(this).hasClass('disabled')) {
+            } else if (URate.uRate.score === value) {
                 return;
             }
 
-            //  Устанавливает оценку 0
-            UserRate().Controls.Score(0);
-
-            $('.block-clear-score').addClass('disabled');
-            $(`.sc.selected`).removeClass('selected');
-            $('.bar-score > .window-title').text("Оценить");
+            URate.setScore(value, true);
         });
 
         //Отслеживаем сохранение заметки
@@ -101,8 +81,8 @@ const WindowScore = {
             WindowScore.auto_grow(document.querySelector('textarea.noten'));
 
             //Устанавливает заметкку
-            if (UserRate().Get().text != val)
-                UserRate().Controls.Note(val);
+            if (URate.uRate.text != val)
+                URate.setNote(val);
 
             this.hide();
             _windowScore.hide();
@@ -113,7 +93,7 @@ const WindowScore = {
         });
 
         $('#sync-anime').click(function () {
-            ASynch.Init().local.synch = this.checked;
+            DBAnime.set('anime', 'synch', this.checked);
         });
 
         $('#anime-incognito').click(function () {
@@ -124,8 +104,8 @@ const WindowScore = {
             import("./mod_collection.js").then(val => val.ShowCollectionWindow());
         })
 
-        UserRate().Events.OnInit((res) => {
-            UserRate().Events.OnUpdate((res) => {
+        URate.on('init', (res) => {
+            URate.on('update', (res) => {
                 if (res == null) {
                     SetScore(0);
                     $('textarea.noten').val('')
@@ -136,16 +116,15 @@ const WindowScore = {
                 SetNote(res.text);
             });
 
-            if (res == null) {
+            if (res === null) {
                 return;
             }
 
             SetScore(res.score);
             SetNote(res.text);
-        });
+        }, { replay: true });
 
         Player.on("inited", ({ resultsVoice }) => {
-            const aSynch = ASynch.Init();
             const callback = (data) => {
                 try {
                     if (data === undefined)
@@ -167,15 +146,15 @@ const WindowScore = {
                 }
             }
 
-            callback(aSynch.local.localData.ldata);
-            aSynch.on("inited", callback);
-            aSynch.on("updated", callback);
+            callback(DBAnime.get('anime', 'ldata'));
+            ASynch.on('loaded', callback, { once: true, replay: true });
+            ASynch.on('update', callback);
         });
     },
 
     show: function () {
         $('body').addClass('loading');
-        $('#sync-anime').attr('checked', ASynch.Init().local.synch);
+        $('#sync-anime').attr('checked', DBAnime.get('anime', 'synch'));
         $('#anime-incognito').attr('checked', Private.INCOGNITO);
         import(`/javascript/pages/watch/mod_collection.js`);
     },
@@ -195,17 +174,7 @@ const WindowScore = {
 }
 
 function SetScore(score) {
-    if (score == 0) {
-        $('.block-clear-score').addClass('disabled');
-        $(`.sc.selected`).removeClass('selected');
-        $('.bar-score > .window-title').text("Оценить");
-        return;
-    }
-    //Если есть оценка, то устанавливаем значение в input и включаем кнопку очистки значения
-    $(`.sc-${score}`).addClass('selected');
-    $('.block-clear-score').removeClass('disabled');
-    //Изменяем title на оценено
-    $('.bar-score > .window-title').text("Оценено");
+    UIScore.setScore(score);
 }
 
 let last_note;

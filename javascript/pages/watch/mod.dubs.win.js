@@ -5,6 +5,9 @@ import { IPlayer } from "./mod_player.js";
 import tmpl from "../../library/tmpl.lib.js";
 import { $ID } from "../watch.js";
 import { watchSequence } from "./mod.chronology.js";
+import { TNotifi } from "../../modules/tun.notification.js";
+import { DBAnime } from "./mod.db.js";
+import { ANotifi } from "./mod.notifi.js";
 
 const Player = IPlayer.Init();
 
@@ -58,6 +61,23 @@ const windowDUBS = new TWindow({
             Player.CTranslation.Favorites(id);
         });
 
+        let hasNotifiProcess = false;
+
+        //Нажатие подписаться на уведомления
+        $('.dubs-list-wrapper').on('click', '.btn-dub-notify', (e) => {
+            if (hasNotifiProcess) return;
+            hasNotifiProcess = true;
+
+            const div = $(e.currentTarget).closest('.dub-wrapper');
+            const id = Number(div.attr('data-id'));
+
+            const kodikId = Player.resultsVoice.get(id).id;
+
+            const process = ANotifi.hasNotify(kodikId) ? () => ANotifi.unsubscribe(kodikId) : () => ANotifi.subscribe(kodikId);
+
+            process().finally(() => hasNotifiProcess = false);
+        });
+
         //Переключение парамерта дубляжи избранное по франшизе
         $('.dub-checkbox').on('click', (e) => {
             const checked = e.target.checked;
@@ -83,7 +103,7 @@ const windowDUBS = new TWindow({
             $('.btn-dub-favorite.-e-favorite')?.removeClass('-e-favorite');
             $('.dub-controller.-favor')?.removeClass('-favor');
 
-            if(Player.CTranslation.saved.has(Player.CTranslation.id)){
+            if (Player.CTranslation.saved.has(Player.CTranslation.id)) {
                 $('.dub-controller').addClass('-favor');
             }
 
@@ -91,9 +111,65 @@ const windowDUBS = new TWindow({
                 const div = $(`.dub-wrapper[data-id="${id}"] .btn-dub-favorite`);
                 div.addClass('-e-favorite');
             });
-        })
+        });
 
         $('.dub-checkbox > input').prop('checked', $PARAMETERS.watch.dubanime);
+
+        //Кнопка отписаться от всех уведомлений
+        const clearBtn = $('.btn-notify-clear');
+
+        const updateBtnNotifi = () => {
+            const list = DBAnime.get('notifications');
+            if (list.length > 0) {
+                clearBtn.removeClass('-disable');
+            } else {
+                clearBtn.addClass('-disable');
+            }
+        }
+
+        clearBtn.on('click', () => {
+            if (hasNotifiProcess) return;
+            hasNotifiProcess = true;
+
+            TNotifi.requestWin('Вы точно хотите отписаться от всех уведомлений данного аниме?').then((permision) => {
+                if (permision === 1) {
+                    ANotifi.unsubscribeAll().finally(() => hasNotifiProcess = false);
+                } else {
+                    hasNotifiProcess = false;
+                }
+            });
+        });
+
+        //Кнопка рандомного выбора озвучки
+        $('.btn-dub-random').on('click', () => {
+            Player.CTranslation.Select({ id: getRandomWithMaxEpisodes(Player.resultsVoice) });
+        });
+
+
+        //Событие отписки и подписки уведомлений
+        ANotifi.on('subscribe', (dubs) => {
+            dubs.forEach((kodikId) => {
+                const kodik = Player.results.get(kodikId);
+                if (kodik) {
+                    const id = kodik.translation.id;
+                    $(`.dub-wrapper[data-id="${id}"] .btn-dub-notify`).addClass('-on');
+                }
+            });
+            updateBtnNotifi();
+        });
+
+        ANotifi.on('unsubscribe', (dubs) => {
+            dubs.forEach((kodikId) => {
+                const kodik = Player.results.get(kodikId);
+                if (kodik) {
+                    const id = kodik.translation.id;
+                    $(`.dub-wrapper[data-id="${id}"] .btn-dub-notify`).removeClass('-on');
+                }
+            });
+            updateBtnNotifi();
+        });
+
+        updateBtnNotifi();
     },
     onshow: () => {
         $(`.dub-wrapper.-select`)?.removeClass('-select');
@@ -125,16 +201,18 @@ windowDUBS.module.add(PullToClose, { scroll: '.window-content.content-dubs > .co
                 aired: 0
             }
 
+            const notifi = new Set(DBAnime.get("notifications") || []);
+
             //Создание DUBS карточек в window
-            resultsVoice.forEach(({ translation, episodes_count }) => {
+            resultsVoice.forEach(({ translation, last_episode }) => {
                 const { id, title } = translation;
 
-                const canNotify = status !== 'released' && episodes_count !== episodes ||
-                    status === 'released' && episodes_count !== episodes;
+                const canNotify = (typeof last_episode !== 'undefined') && (status !== 'released' && last_episode !== episodes ||
+                    status === 'released' && last_episode !== episodes);
 
-                const dubCard = __createDub(id, title, episodes_count, canNotify, saved.has(id));
+                const dubCard = __createDub(id, title, last_episode, canNotify, saved.has(id), notifi.has(Player.resultsVoice.get(id).id));
 
-                if (status !== 'released' || episodes_count !== episodes) {
+                if (status !== 'released' || last_episode !== episodes) {
                     coming.append(dubCard);
                     stat.coming++;
                 } else {
@@ -172,14 +250,14 @@ windowDUBS.module.add(PullToClose, { scroll: '.window-content.content-dubs > .co
     /**
      * Создает DUB карточку для списоков (coming, aired)
      */
-    function __createDub(id, name, count, notify = false, favor = false) {
+    function __createDub(id, name, count, notify = false, favor = false, hasSubscription = false) {
         const clone = _tmpl.clone({
             id, name,
-            count: `${count} EP`,
+            count: `${count || 1} EP`,
         });
 
 
-        if (notify) {
+        if (notify && [0, 1].includes(TNotifi.getUIState())) {
             const el_notify = clone.el.querySelector('.dub-buttons-wrapper');
             el_notify.classList.add('-e-notify');
         }
@@ -189,10 +267,22 @@ windowDUBS.module.add(PullToClose, { scroll: '.window-content.content-dubs > .co
             el_favor.classList.add('-e-favorite');
         }
 
+        if (hasSubscription) {
+            const el_notifi = clone.el.querySelector('.btn-dub-notify');
+            el_notifi.classList.add('-on');
+        }
+
         return clone.el;
     }
 })();
 
 export function ShowDUBSWindow() {
     windowDUBS.show();
+}
+
+function getRandomWithMaxEpisodes(map) {
+    const maxEpisodes = Math.max(...[...map.values()].map(v => v.last_episode));
+    const candidates = [...map.entries()].filter(([, v]) => v.last_episode === maxEpisodes);
+    const [key, value] = candidates[Math.floor(Math.random() * candidates.length)];
+    return key;
 }
