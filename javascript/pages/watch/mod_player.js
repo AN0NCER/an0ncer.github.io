@@ -195,60 +195,23 @@ class Episodes {
     #el = undefined;
 
     /**
-     * Выполняет анимацию выбора эпизода
-     * @param {Object} params - Параметры для анимации
+     * Выполняет выбор эпизода
+     * @param {Object} params - Параметры для выбора эпизода
      * @param {number} [params.episod=1] - Номер выбранного эпизода (по умолчанию 1)
-     * @param {Event} params.event - Событие, происходящее после выполнения анимации
-     * @param {Event} params.update - Событие для обновления данных анимации (передается текущая анимация)
+     * @param {Event} params.event - Событие, после выбора эпизода
      * @returns {void}
      */
-    #Animate({ episod = 1, event, update } = {}) {
+    #Animate({ episod = 1, event } = {}) {
         const element = $(`.episode[data-index="${episod}"]`);
+
         $('.episode.-select').removeClass('-select');
         $('.episodes > .value, .episodes > .episodes-wrapper, .episode-scroll-wrapper').css(`--episod`, episod);
+        
         element.addClass('-select');
+
         if (event) {
             event();
         }
-        // const element = $(".episodes > .value > .episode")[episod - 1];
-        // if (!element) {
-        //     return;
-        // }
-        // if (this.#el) {
-        //     anime({
-        //         targets: this.#el,
-        //         color: "#555657",
-        //         easing: "easeOutElastic(1, 1)",
-        //     });
-        // }
-        // this.#el = element;
-        // const left = $(element).position().left;
-        // const top = $(element).position().top + $(".episodes > .value").scrollTop();
-        // anime({
-        //     targets: ".sel",
-        //     top: top,
-        //     easing: "easeOutElastic(1, 1)",
-        // });
-        // anime({
-        //     targets: ".sel",
-        //     left: left,
-        //     complete: function (anim) {
-        //         if (event) {
-        //             event();
-        //         }
-        //     },
-        //     update: function (anim) {
-        //         if (update) {
-        //             update(anim);
-        //         }
-        //     },
-        //     easing: "easeOutElastic(1, 1)",
-        // });
-        // anime({
-        //     targets: element,
-        //     color: "#020202",
-        //     easing: "easeOutElastic(1, 1)",
-        // });
     }
 
     /**

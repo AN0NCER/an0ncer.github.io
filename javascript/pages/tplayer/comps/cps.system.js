@@ -33,7 +33,7 @@ export class Media extends Component {
             this.player.on(Player.Events.SOURCE_LOADED, this.handle(async () => {
                 this.log('Загрузка MediaMetadata для аниме');
                 // const response = await fetch(`https://api.jikan.moe/v4/anime/${this.player.source.meta.animeId}/full`); //TODO: Переделать
-                const response = await fetch(`https://tunime-hub.tail304be1.ts.net/v4/anime/${this.player.source.meta.animeId}/full`);
+                const response = await fetch(`https://api.tunime.app/v4/anime/${this.player.source.meta.animeId}/full`);
 
                 if (!response.ok)
                     return;

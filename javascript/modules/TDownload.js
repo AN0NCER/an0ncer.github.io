@@ -1233,7 +1233,7 @@ export class TDAnime {
         const jikanApi = () => {
             return new Promise(async (resolve) => {
                 try {
-                    const response = await fetch(`https://tunime-hub.tail304be1.ts.net/v4/anime/${this.anime.id}/pictures`);
+                    const response = await fetch(`https://api.tunime.app/v4/anime/${this.anime.id}/pictures`);
                     // const response = await fetch(`https://api.jikan.moe/v4/anime/${this.anime.id}/pictures`); //TODO: Переделать
                     const { data } = await response.json();
 

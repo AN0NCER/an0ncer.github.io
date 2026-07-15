@@ -120,7 +120,7 @@ export const ACard = {
 
             try {
                 // fetch(`https://api.jikan.moe/v4/anime/${anime.id}/pictures`).then(async (res) => { //TODO: Переделать
-                fetch(`https://tunime-hub.tail304be1.ts.net/v4/anime/${anime.id}/pictures`).then(async (res) => {
+                fetch(`https://api.tunime.app/v4/anime/${anime.id}/pictures`).then(async (res) => {
                     const json = await res.json();
 
                     if (json?.data[0]?.webp?.large_image_url) {

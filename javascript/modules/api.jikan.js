@@ -3,7 +3,7 @@ import { Sleep } from "./functions.js";
 import { TCache } from "./tun.cache.js";
 
 // const BASE_URL = 'https://api.jikan.moe/v4' //TODO: Переделать
-const BASE_URL = 'https://tunime-hub.tail304be1.ts.net/v4';
+const BASE_URL = 'https://api.tunime.app/v4';
 
 class JikanControls {
     static instance = null;
