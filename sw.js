@@ -1,5 +1,5 @@
 const version = '3.2.13';
-const hash = "34138"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const hash = "65533"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -70,7 +70,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/auto
     { path: "/javascript/auto/download_a.js", hash: "7c6b60bd", size: 6866 },
     // Директория: /javascript/core
-    { path: "/javascript/core/hub.core.js", hash: "3ade90bc", size: 22994 },
+    { path: "/javascript/core/hub.core.js", hash: "b9facf26", size: 22959 },
     { path: "/javascript/core/main.core.js", hash: "481710c8", size: 15217 },
     { path: "/javascript/core/menu.core.js", hash: "6053760f", size: 20564 },
     { path: "/javascript/core/menu.help.js", hash: "fd5380e3", size: 7134 },
@@ -138,16 +138,6 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/list/mod_w_anime.js", hash: "6f93870c", size: 5209 },
     // Директория: /javascript/pages/login
     { path: "/javascript/pages/login/mod.page.js", hash: "e4de02f7", size: 1669 },
-    // Директория: /javascript/pages/player
-    { path: "/javascript/pages/player/mod_animation.js", hash: "82fa29ff", size: 5847 },
-    { path: "/javascript/pages/player/mod_api.js", hash: "5263b1b7", size: 4583 },
-    { path: "/javascript/pages/player/mod_event.js", hash: "9a981651", size: 1709 },
-    { path: "/javascript/pages/player/mod_functions.js", hash: "305f2633", size: 8334 },
-    { path: "/javascript/pages/player/mod_mediasession.js", hash: "6091fd8c", size: 1449 },
-    { path: "/javascript/pages/player/mod_settings.js", hash: "de184172", size: 4493 },
-    { path: "/javascript/pages/player/mod_shortcuts.js", hash: "29a3236f", size: 1942 },
-    { path: "/javascript/pages/player/mod_stream.js", hash: "543f4f11", size: 7654 },
-    { path: "/javascript/pages/player/mod_ui.js", hash: "f7622a3c", size: 12178 },
     // Директория: /javascript/pages/search
     { path: "/javascript/pages/search/mod_card.js", hash: "2fe98da6", size: 7570 },
     { path: "/javascript/pages/search/mod_genres.js", hash: "e8d693fd", size: 65240 },
@@ -314,7 +304,6 @@ const appShellFilesToCache = [
     { path: "/list.html", hash: "20b43bdd", size: 24551 },
     { path: "/login.html", hash: "4d094eb8", size: 7130 },
     { path: "/manifest.json", hash: "85d58cdf", size: 874 },
-    { path: "/player.html", hash: "802b61dd", size: 9013 },
     { path: "/search.html", hash: "eaa636e6", size: 21615 },
     { path: "/settings.html", hash: "c08ce76f", size: 13326 },
     { path: "/tplayer.html", hash: "aedc4dfc", size: 21598 },
@@ -323,7 +312,6 @@ const appShellFilesToCache = [
 ];
 
 const servers = [
-    "https://192.168.31.45:3001",
     "https://tunime.onrender.com",
     "https://tunime-hujg.onrender.com"
 ];

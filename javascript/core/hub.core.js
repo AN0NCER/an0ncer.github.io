@@ -542,7 +542,6 @@ class Shadow {
 }
 
 const pool = new Pool([
-    'https://192.168.31.45:3001',
     'https://tunime.onrender.com',
     'https://tunime-hujg.onrender.com'
 ], { storageKey: 'hub-state' });
