@@ -1,5 +1,5 @@
 const version = '3.2.13';
-const hash = "65533"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const hash = "ab1ff"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -9,23 +9,6 @@ const cachePrefix = 'pwa-tunime-';
  * Формат: { path: string, hash: string, size: number }
  */
 const appShellFilesToCache = [
-    // Директория: /images/genres
-    { path: "/images/genres/comedy.svg", hash: "89f60bfd", size: 1521 },
-    { path: "/images/genres/dementia_psychological.svg", hash: "82b0a62e", size: 767 },
-    { path: "/images/genres/drama.svg", hash: "d8867ae6", size: 1521 },
-    { path: "/images/genres/fantasy.svg", hash: "868e4806", size: 874 },
-    { path: "/images/genres/historical.svg", hash: "24fa85c0", size: 1512 },
-    { path: "/images/genres/horror_thriller.svg", hash: "0f77a819", size: 538 },
-    { path: "/images/genres/mecha.svg", hash: "bcfba710", size: 709 },
-    { path: "/images/genres/military.svg", hash: "6289f8a8", size: 686 },
-    { path: "/images/genres/music.svg", hash: "9b6d5b0d", size: 573 },
-    { path: "/images/genres/mystery.svg", hash: "796a9863", size: 663 },
-    { path: "/images/genres/police.svg", hash: "a942fc28", size: 896 },
-    { path: "/images/genres/romance.svg", hash: "d4ec2a95", size: 367 },
-    { path: "/images/genres/slice_of_life.svg", hash: "c010907a", size: 851 },
-    { path: "/images/genres/space.svg", hash: "f3ac53bd", size: 492 },
-    { path: "/images/genres/sports.svg", hash: "c88f5b3b", size: 877 },
-    { path: "/images/genres/supernatural.svg", hash: "5d34f543", size: 452 },
     // Директория: /images/icons
     { path: "/images/icons/logo-x192-b.png", hash: "96e7fe80", size: 18615 },
     { path: "/images/icons/logo-x192-o.png", hash: "f27f6c07", size: 12924 },
@@ -52,15 +35,13 @@ const appShellFilesToCache = [
     { path: "/images/settings/set.quality.480.png", hash: "10af8c2e", size: 339329 },
     { path: "/images/settings/set.quality.720.png", hash: "c1e7f6b1", size: 369627 },
     // Директория: /images
-    { path: "/images/ava.jpeg", hash: "de5fd30a", size: 693539 },
-    { path: "/images/black-bg-player.png", hash: "a4bf2384", size: 10543 },
+    { path: "/images/ava.webp", hash: "741c9c83", size: 74142 },
     { path: "/images/collections.png", hash: "abeaf397", size: 75664 },
     { path: "/images/endlist.png", hash: "8e1c0799", size: 4290 },
     { path: "/images/error-trailers.webp", hash: "36d223a1", size: 10298 },
     { path: "/images/icon-web.png", hash: "c1a17f41", size: 3169 },
     { path: "/images/img.404a.webp", hash: "54eff25f", size: 56816 },
     { path: "/images/img.login.jpg", hash: "3bcc07c6", size: 612860 },
-    { path: "/images/load.player.png", hash: "99ae615a", size: 33377 },
     { path: "/images/noanime.png", hash: "0869213b", size: 2361 },
     { path: "/images/player-icon.png", hash: "31250187", size: 3445 },
     { path: "/images/popup.webp", hash: "266f5957", size: 3092 },
@@ -244,20 +225,19 @@ const appShellFilesToCache = [
     { path: "/style/css/min/swiper-bundle.min.css", hash: "ee1a5395", size: 16482 },
     // Директория: /style/css
     { path: "/style/css/downloads.css", hash: "2e417433", size: 38689 },
-    { path: "/style/css/index.css", hash: "6bbd6226", size: 69458 },
+    { path: "/style/css/index.css", hash: "bee060be", size: 69458 },
     { path: "/style/css/list.css", hash: "36265311", size: 32896 },
     { path: "/style/css/login.css", hash: "7bf0759b", size: 35725 },
     { path: "/style/css/main.css", hash: "a295f8c1", size: 852 },
     { path: "/style/css/notfound.css", hash: "be3e603d", size: 20882 },
-    { path: "/style/css/player.css", hash: "0544bf8f", size: 12595 },
     { path: "/style/css/pop.update.css", hash: "b096770e", size: 6138 },
     { path: "/style/css/search.css", hash: "07f62b39", size: 89326 },
-    { path: "/style/css/settings.css", hash: "1e356f7a", size: 45792 },
-    { path: "/style/css/ticons.css", hash: "b0838f45", size: 73025 },
-    { path: "/style/css/tplayer.css", hash: "7bb2f41c", size: 24724 },
+    { path: "/style/css/settings.css", hash: "a3dd3ce2", size: 44477 },
+    { path: "/style/css/ticons.css", hash: "f21da079", size: 72707 },
+    { path: "/style/css/tplayer.css", hash: "3c2ae5d7", size: 23830 },
     { path: "/style/css/user.css", hash: "6863aab9", size: 78959 },
     { path: "/style/css/verify.css", hash: "fdfe046c", size: 7716 },
-    { path: "/style/css/watch.css", hash: "41c61f52", size: 71430 },
+    { path: "/style/css/watch.css", hash: "58da5676", size: 68643 },
     // Директория: /style/fonts
     { path: "/style/fonts/Inter.ttf", hash: "32204736", size: 804612 },
     { path: "/style/fonts/Manrope.ttf", hash: "cf98436d", size: 164936 },
@@ -266,16 +246,16 @@ const appShellFilesToCache = [
     // Директория: /style/menu/css
     { path: "/style/menu/css/menu.core.css", hash: "e9414822", size: 9041 },
     // Директория: /style/win/css/setup
-    { path: "/style/win/css/setup/win.notification.setup.css", hash: "379ddd82", size: 16673 },
+    { path: "/style/win/css/setup/win.notification.setup.css", hash: "4d4fc23e", size: 16256 },
     // Директория: /style/win/css
     { path: "/style/win/css/win.character.css", hash: "91a1b97f", size: 20104 },
-    { path: "/style/win/css/win.dubs.css", hash: "eadabe7b", size: 10576 },
+    { path: "/style/win/css/win.dubs.css", hash: "806ba842", size: 10288 },
     { path: "/style/win/css/win.editor.banner.css", hash: "84818cab", size: 8318 },
     { path: "/style/win/css/win.editor.character.css", hash: "c240565a", size: 7585 },
-    { path: "/style/win/css/win.episode.css", hash: "7808fa28", size: 8135 },
-    { path: "/style/win/css/win.notification.css", hash: "0a078f9a", size: 5332 },
+    { path: "/style/win/css/win.episode.css", hash: "33031f3f", size: 7902 },
+    { path: "/style/win/css/win.notification.css", hash: "f49046b5", size: 5156 },
     { path: "/style/win/css/win.rooms.create.css", hash: "364b211f", size: 27355 },
-    { path: "/style/win/css/win.rooms.css", hash: "d55d8f71", size: 11922 },
+    { path: "/style/win/css/win.rooms.css", hash: "9f3bbe37", size: 11922 },
     { path: "/style/win/css/win.search.character.css", hash: "e0d3b9b0", size: 11190 },
     // Директория: /style/window/win/css
     { path: "/style/window/win/css/win.character.css", hash: "91a1b97f", size: 20104 },
@@ -292,23 +272,23 @@ const appShellFilesToCache = [
     { path: "/templates/win.editor.character.tpl", hash: "fe4742f6", size: 3868 },
     { path: "/templates/win.episode.tpl", hash: "ed1ff119", size: 2189 },
     { path: "/templates/win.notification.tpl", hash: "04b72cdf", size: 3886 },
-    { path: "/templates/win.rooms.create.tpl", hash: "78bb0189", size: 4525 },
-    { path: "/templates/win.rooms.tpl", hash: "45a74585", size: 8478 },
+    { path: "/templates/win.rooms.create.tpl", hash: "d489c41f", size: 4525 },
+    { path: "/templates/win.rooms.tpl", hash: "73cd7ed8", size: 8478 },
     { path: "/templates/win.search.character.tpl", hash: "14c6baa2", size: 1774 },
     { path: "/templates/win.verify.tpl", hash: "5c7ea6a1", size: 1506 },
     // Директория: /
     { path: "/404.html", hash: "ca82d9db", size: 2741 },
-    { path: "/404a.html", hash: "79046287", size: 8806 },
+    { path: "/404a.html", hash: "7b27f708", size: 8806 },
     { path: "/downloads.html", hash: "c6265b5a", size: 19976 },
-    { path: "/index.html", hash: "269ab639", size: 25570 },
+    { path: "/index.html", hash: "50f75e44", size: 25570 },
     { path: "/list.html", hash: "20b43bdd", size: 24551 },
     { path: "/login.html", hash: "4d094eb8", size: 7130 },
     { path: "/manifest.json", hash: "85d58cdf", size: 874 },
     { path: "/search.html", hash: "eaa636e6", size: 21615 },
-    { path: "/settings.html", hash: "c08ce76f", size: 13326 },
+    { path: "/settings.html", hash: "2bc78650", size: 13326 },
     { path: "/tplayer.html", hash: "aedc4dfc", size: 21598 },
-    { path: "/user.html", hash: "5d8c7403", size: 27553 },
-    { path: "/watch.html", hash: "fce1c102", size: 66820 },
+    { path: "/user.html", hash: "3937591f", size: 27553 },
+    { path: "/watch.html", hash: "afacbe77", size: 66820 },
 ];
 
 const servers = [
