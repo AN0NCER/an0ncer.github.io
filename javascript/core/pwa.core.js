@@ -629,7 +629,7 @@ const TUpdate = new class {
             'NEW_VERSION': this.handleNewVersion.bind(this),
             'CACHE_PROGRESS': this.handleCacheProgress.bind(this)
         }
-
+        
         handlers[type]?.(payload, type);
     }
 
@@ -658,7 +658,7 @@ const TUpdate = new class {
     }
 
     async processInstallRequest(payload, key = 'INSTALL_PERMISSION_REQUEST') {
-        const { hash, animations = true } = payload;
+        const { hash, downloadMB, animations = true } = payload;
 
         try {
             const mod = await this.module();
@@ -673,7 +673,7 @@ const TUpdate = new class {
                 animations: false
             }));
 
-            mod.updRequest({ version, animations }).then(request => {
+            mod.updRequest({ version, animations, downloadMB }).then(request => {
                 sessionStorage.removeItem(key);
                 $PWA.update.channel.postMessage(request);
             })

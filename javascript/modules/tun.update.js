@@ -612,6 +612,7 @@ let controller;
  */
 export function updRequest({
     version = '0.0.0',
+    downloadMB = 0,
     approved = { type: 'INSTALL_APPROVED' },
     reject = { type: 'INSTALL_REJECTED' },
     animations = true
@@ -684,7 +685,7 @@ export function updRequest({
         const control = await SWUpdate.request({ version });
         control.icon = '-download';
         control.title = `Обновление: <span>${version}</span>`;
-        control.info = 'Нажми чтобы установить';
+        control.info = `Нажми чтобы установить (${downloadMB}MB)`;
         control.components.progress.set(0);
         if (animations) await control.components.menu.hide({ live: false });
         await control.show({ live: animations });
