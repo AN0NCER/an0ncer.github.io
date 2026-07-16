@@ -1585,6 +1585,19 @@ body.-noscrol {
   font-weight: bold;
   color: #FFFFFF;
 }
+.content-update .update-content-wraper .block-content .block-text .btnElement {
+  background: #3689E8;
+  margin: 10px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.content-update .update-content-wraper .block-content .block-text .btnElement[data-state=disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
 .content-update .update-content-wraper .block-content .block-text .modTable {
   width: -moz-max-content;
   width: max-content;

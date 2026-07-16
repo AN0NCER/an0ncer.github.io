@@ -396,6 +396,21 @@
                     }
                 }
 
+                .btnElement{
+                    background: #3689E8;
+                    margin: 10px;
+                    height: 40px;
+                    display: grid;
+                    place-items: center;
+                    border-radius: 5px;
+                    cursor: pointer;
+
+                    &[data-state="disabled"]{
+                        opacity: .5;
+                        pointer-events: none;
+                    }
+                }
+
 
                 .modTable {
                     width: max-content;
