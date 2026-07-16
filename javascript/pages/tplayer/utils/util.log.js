@@ -119,7 +119,7 @@ export const Logger = new class {
 
     async send() {
         const { Tunime } = await import("../../../modules/api.tunime.js");
-        return Tunime.api.device.log().POST({ file: this.getLogFile() });
+        return Tunime.api.device.log('tplayer').POST({ file: this.getLogFile(), source: window.location.href });
     }
 
     /**Приватные функции */

@@ -39,12 +39,12 @@ export const Tunime = new class {
             }
         },
         device: {
-            log: (event = () => { }) => {
+            log: (name, event = () => { }) => {
                 const url = '/logs/upload';
 
                 return {
                     POST: async (body = {}) => {
-                        return this.fetch(url, { method: 'POST', body }, event);
+                        return this.fetch(url, { method: 'POST', body: { name, ...body } }, event);
                     }
                 }
             },
