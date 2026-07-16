@@ -1,5 +1,5 @@
-const version = '3.2.13';
-const hash = "375a9"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const version = '3.2.14';
+const hash = "eea30"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -51,7 +51,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/auto
     { path: "/javascript/auto/download_a.js", hash: "7c6b60bd", size: 6866 },
     // Директория: /javascript/core
-    { path: "/javascript/core/hub.core.js", hash: "b9facf26", size: 22959 },
+    { path: "/javascript/core/hub.core.js", hash: "3ade90bc", size: 22994 },
     { path: "/javascript/core/main.core.js", hash: "481710c8", size: 15217 },
     { path: "/javascript/core/menu.core.js", hash: "6053760f", size: 20564 },
     { path: "/javascript/core/menu.help.js", hash: "fd5380e3", size: 7134 },
@@ -73,7 +73,7 @@ const appShellFilesToCache = [
     { path: "/javascript/modules/api.jikan.js", hash: "f92e0d04", size: 7177 },
     { path: "/javascript/modules/api.kodik.js", hash: "f0075b9f", size: 1488 },
     { path: "/javascript/modules/api.shiki.js", hash: "f5a60dcc", size: 17672 },
-    { path: "/javascript/modules/api.tunime.js", hash: "5de095c9", size: 6781 },
+    { path: "/javascript/modules/api.tunime.js", hash: "8d243fcb", size: 6806 },
     { path: "/javascript/modules/Collection.js", hash: "130a5892", size: 11953 },
     { path: "/javascript/modules/EventTools.js", hash: "99abdfe2", size: 7019 },
     { path: "/javascript/modules/functions.js", hash: "190f522f", size: 18262 },
@@ -104,7 +104,7 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/index/mod_notify.js", hash: "6d5cab57", size: 19096 },
     { path: "/javascript/pages/index/mod_trailers.js", hash: "8b8a3efd", size: 12522 },
     { path: "/javascript/pages/index/mod_trailers_animation.js", hash: "4fb6ce54", size: 2092 },
-    { path: "/javascript/pages/index/mod_update.js", hash: "03f4256f", size: 30013 },
+    { path: "/javascript/pages/index/mod_update.js", hash: "c52a80e3", size: 34497 },
     { path: "/javascript/pages/index/mod_window.js", hash: "fc9bd881", size: 1521 },
     // Директория: /javascript/pages/list
     { path: "/javascript/pages/list/mod_alist.js", hash: "8ef7c24f", size: 9874 },
@@ -147,7 +147,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/pages/tplayer/utils
     { path: "/javascript/pages/tplayer/utils/util.entity.js", hash: "649d3c34", size: 6561 },
     { path: "/javascript/pages/tplayer/utils/util.event.js", hash: "0e45b5a0", size: 3944 },
-    { path: "/javascript/pages/tplayer/utils/util.log.js", hash: "65475d6b", size: 10959 },
+    { path: "/javascript/pages/tplayer/utils/util.log.js", hash: "68a2fa61", size: 10998 },
     // Директория: /javascript/pages/tplayer
     { path: "/javascript/pages/tplayer/mod.api.js", hash: "bb4c5fac", size: 4614 },
     { path: "/javascript/pages/tplayer/mod.errors.js", hash: "89bcd838", size: 6488 },
@@ -224,7 +224,7 @@ const appShellFilesToCache = [
     { path: "/style/css/min/swiper-bundle.min.css", hash: "ee1a5395", size: 16482 },
     // Директория: /style/css
     { path: "/style/css/downloads.css", hash: "2e417433", size: 38689 },
-    { path: "/style/css/index.css", hash: "bee060be", size: 69458 },
+    { path: "/style/css/index.css", hash: "225dd4ef", size: 69819 },
     { path: "/style/css/list.css", hash: "36265311", size: 32896 },
     { path: "/style/css/login.css", hash: "7bf0759b", size: 35725 },
     { path: "/style/css/main.css", hash: "a295f8c1", size: 852 },
