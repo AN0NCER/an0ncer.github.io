@@ -1,5 +1,5 @@
 const version = '3.2.13';
-const hash = "ab1ff"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const hash = "375a9"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -66,7 +66,6 @@ const appShellFilesToCache = [
     { path: "/javascript/library/jqery.min.js", hash: "9c4c5226", size: 89664 },
     { path: "/javascript/library/jsyaml.js", hash: "0947f6d6", size: 126046 },
     { path: "/javascript/library/md5.wasm.min.js", hash: "534ca617", size: 10080 },
-    { path: "/javascript/library/rxjs.umd.min.js", hash: "7701cca6", size: 88914 },
     { path: "/javascript/library/swiper-bundle.min.js", hash: "633ecc16", size: 143645 },
     { path: "/javascript/library/tmpl.lib.js", hash: "d0a364f4", size: 7551 },
     // Директория: /javascript/modules
