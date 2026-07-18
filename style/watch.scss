@@ -47,18 +47,15 @@ main {
     @include Title();
     @include ADescription();
     @include AHero();
-
-    @import "./watch/player";
-
-    @include PTitle();
-
-    
-    @include Episode();
-    @include Player();
-    @include Dubs();
-    
     @include ASimiliar();
 }
+
+@import "./watch/player";
+
+@include PTitle();
+@include Episode();
+@include Player();
+@include Dubs();
 
 @import './cards';
 @import './watch/roomstats';
