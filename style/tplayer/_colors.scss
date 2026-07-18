@@ -1,0 +1,29 @@
+body {
+    --primary: #FFD700;
+    --progress-bar: #FFD700;
+    --progress-bar-load: rgba(255, 217, 0, 0.3);
+    --skip-moment: #FFD700;
+    --skip-color: #000000;
+
+    --tag-color: #FFD700;
+    --tag-background: rgba(255, 217, 0, 0.3);
+    --tag-border: rgba(255, 217, 0, 0.4);
+
+    --volume-background: rgba(255, 217, 0, 0.3);
+    --volume-border: rgba(255, 217, 0, 0.4);
+
+    &.-blue {
+        --primary: #3C92ED;
+        --progress-bar: #3C92ED;
+        --progress-bar-load: rgba(60, 145, 237, 0.23);
+        --skip-moment: #3C92ED;
+        --skip-color: #191c21;
+
+        --tag-color: #3C92ED;
+        --tag-background: rgba(60, 145, 237, 0.3);
+        --tag-border: rgba(60, 145, 237, 0.4);
+
+        --volume-background: rgba(60, 145, 237, 0.3);
+        --volume-border: rgba(60, 145, 237, 0.4);
+    }
+}

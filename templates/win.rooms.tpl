@@ -35,7 +35,7 @@
             <div class="room-description">
                 <div class="room-owner">
                     <div class="owner-wrapper">
-                        <div class="owner-avatar" data-field="image" style="--img: url('/images/ava.jpeg')"></div>
+                        <div class="owner-avatar" data-field="image" style="--img: url('/images/ava.webp')"></div>
                         <div class="owner-text-wrapper">
                             <div class="owner-type">Комната</div>
                             <div class="owner-nickname" data-field="name">Пользователь</div>

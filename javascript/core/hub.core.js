@@ -356,13 +356,13 @@ class Client {
             'x-tun-key': session.access?.key,
             'x-tun-id': session.access?.id
         });
-        
+
         const setupBody = (body) => {
             if (!body || typeof body !== "object" || body instanceof URLSearchParams) return;
-            
+
             const fd = new FormData();
             this.#appendFormData(fd, body);
-            
+
             if (!this.#hasBinary(body)) {
                 opts.headers = {
                     ...(opts.headers || {}),
@@ -370,27 +370,27 @@ class Client {
                 }
                 return new URLSearchParams(fd);
             }
-            
+
             return fd;
         }
-        
+
         let error = null;
         let attempt = 0;
-        
+
         while (attempt < this.maxAttempts) {
             attempt++;
-            
+
             const url = this.pool.getUrl();
-            
+
             if (!url) {
                 error = new Error('No availble servers');
                 break;
             }
-            
+
             opts.body = setupBody(opts.body);
-            
+
             if (opts.method === 'GET' || opts.body === undefined) delete opts.body;
-            
+
             try {
                 const response = await window.fetch(`${url}${path}`, {
                     ...opts,
@@ -403,15 +403,15 @@ class Client {
                     status: response.status,
                     value: undefined
                 }
-                
+
                 if (this.retryStatuses.has(response.status)) {
                     this.pool.fail(url);
                     error = new Error(`Retryable status ${response.status}`);
                     continue;
                 }
-                
+
                 const [parsed, raw] = await this.#parse(response);
-                
+
                 tResp.parsed = parsed;
                 tResp.value = raw;
                 tResp.retry = () => this.fetch(path, opts, e);
@@ -425,7 +425,7 @@ class Client {
                 continue;
             }
         }
-        
+
         /**@type {tResponse} */
         const res = {
             value: undefined,
@@ -435,7 +435,7 @@ class Client {
             err: String(error),
             retry: () => this.fetch(path, opts, e)
         }
-        
+
         e(res);
         return res;
     }
@@ -541,6 +541,110 @@ class Shadow {
     }
 }
 
+class Certificate {
+    static dbName = 'hub-cert';
+    static storeName = 'keys';
+    static recordKey = 'device';
+    static algorithm = { name: 'ECDSA', namedCurve: 'P-256' }
+
+    #pair = undefined;
+    #loaded = false;
+    #dbPromise = null;
+
+    get loaded() {
+        return this.#loaded;
+    }
+
+    get hasKey() {
+        return this.#pair !== undefined;
+    }
+
+    #openDb() {
+        if (this.#dbPromise) return this.#dbPromise;
+
+        this.#dbPromise = new Promise((resolve, reject) => {
+            const req = indexedDB.open(Certificate.dbName, 1);
+            req.onupgradeneeded = () => req.result.createObjectStore(Certificate.storeName);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+
+        return this.#dbPromise;
+    }
+
+    async #get() {
+        const db = await this.#openDb();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(Certificate.storeName, 'readonly');
+            const req = tx.objectStore(Certificate.storeName).get(Certificate.recordKey);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    async #set(value) {
+        const db = await this.#openDb();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(Certificate.storeName, 'readwrite');
+            tx.objectStore(Certificate.storeName).put(value, Certificate.recordKey);
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        });
+    }
+
+    async ensure() {
+        if (this.#loaded) return this.#pair;
+
+        try {
+            let pair = await this.#get();
+
+            if (!pair) {
+                pair = await crypto.subtle.generateKey(Certificate.algorithm, false, ['sign', 'verify']);
+                await this.#set(pair);
+            }
+
+            this.#pair = pair;
+        } catch (err) {
+            console.warn('[Certificate] хранилище ключей недоступно', err);
+            this.#pair = undefined;
+        }
+
+        this.#loaded = true;
+        return this.#pair;
+    }
+
+    async publicKeyJwk() {
+        const pair = await this.ensure();
+        if (!pair) return undefined;
+        return crypto.subtle.exportKey('jwk', pair.publicKey);
+    }
+
+    async sign(message) {
+        const pair = await this.ensure();
+        if (!pair) return undefined;
+
+        const sigBuf = await crypto.subtle.sign(
+            { name: 'ECDSA', hash: 'SHA-256' },
+            pair.privateKey,
+            new TextEncoder().encode(message)
+        );
+
+        return btoa(String.fromCharCode(...new Uint8Array(sigBuf)));
+    }
+
+    async reset() {
+        const db = await this.#openDb();
+        await new Promise((resolve, reject) => {
+            const tx = db.transaction(Certificate.storeName, 'readwrite');
+            tx.objectStore(Certificate.storeName).delete(Certificate.recordKey);
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        });
+        this.#pair = undefined;
+        this.#loaded = false;
+    }
+}
+
 const pool = new Pool([
     'https://tunime.onrender.com',
     'https://tunime-hujg.onrender.com'
@@ -571,21 +675,52 @@ const Api = new class {
     }
 
     async login() {
-        const response = await this.client.fetch('/login', { method: 'POST' });
+        const pubKey = await certificate.publicKeyJwk();
+
+        const response = await this.client.fetch('/login', {
+            method: 'POST',
+            body: pubKey ? { pubKey } : undefined
+        });
 
         if (response.status !== 200 || !response.parsed) {
             return null;
         }
 
-        const { data, shiki } = response.value;
+        const { data, shiki, certRequired, loginId } = response.value;
         this.device.id = data.did;
         this.session.access = data;
 
-        if (shiki) {
+        if (certRequired) {
+            const confirmed = await this.#confirmLogin(data.did, loginId);
+
+            if (confirmed?.data) {
+                this.session.access = confirmed.data.data;
+                if (confirmed.data.shiki) OAuth.access = confirmed.data.shiki;
+            } else if (confirmed.rejected) {
+                this.device.id = undefined;
+                this.session.access = undefined;
+            }
+        } else if (shiki) {
             OAuth.access = shiki;
         }
 
-        return data;
+        return this.session.access;
+    }
+
+    async #confirmLogin(did, loginId) {
+        const sig = await certificate.sign(`${did}:${loginId}`);
+        if (!sig) return { rejected: false, data: null };
+
+        const response = await this.client.fetch('/login/confirm', {
+            method: 'POST',
+            headers: { 'x-tun-login-id': loginId, 'x-tun-sig': sig }
+        });
+
+        if (response.status === 200 && response.parsed) {
+            return { rejected: false, data: response.value };
+        }
+
+        return { rejected: response.status === 401, data: null };
     }
 
     async keepAlive() {
@@ -604,6 +739,9 @@ const Api = new class {
         return data;
     }
 }(client, session, device);
+
+export const certificate = new Certificate();
+window.certificate = certificate;
 
 //Public API
 export const Hub = new class {
@@ -682,6 +820,7 @@ function _getAppInfo(key) {
 
 (async ({ exception = [] } = {}) => {
     if (exception.includes(window.location.pathname)) return;
+    if (window.self !== window.top) return;
 
     const pwa = (await import("./pwa.core.js")).$PWA;
 
@@ -761,4 +900,4 @@ function _getAppInfo(key) {
         }
 
     }, { once: true, replay: true });
-})({ exception: ['/player.html'] });
+})({ exception: ['/player.html', '/tplayer.html'] });

@@ -1,0 +1,62 @@
+.progress-bar-wrapper {
+    position: relative;
+    height: 20px;
+    display: flex;
+    align-items: flex-end;
+
+    .video-timeline-controller {
+        width: 100%;
+        height: 6px;
+        background: rgba(0, 0, 0, 0.3);
+        display: grid;
+        position: relative;
+        transition: .3s ease-in-out;
+        cursor: pointer;
+        --mouse-percent: 0%;
+
+        .current-time {
+            min-width: 1px;
+            background-color: var(--progress-bar);
+            max-width: 100%;
+            width: var(--mouse-percent);
+            position: relative;
+            z-index: 10;
+
+            .point {
+                position: absolute;
+                background: #15171E;
+                width: 4px;
+                right: 2px;
+                top: 2px;
+                bottom: 2px;
+                border-radius: 3px;
+                transition: .3s ease-in-out;
+
+                opacity: 0;
+            }
+
+        }
+
+        .load-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 0%;
+            background: var(--progress-bar-load);
+            z-index: 8;
+        }
+
+        &.-enter {
+            height: 12px;
+
+            .point {
+                opacity: 1;
+            }
+        }
+    }
+
+    &.-hide {
+        pointer-events: none;
+    }
+}

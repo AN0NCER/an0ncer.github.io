@@ -539,6 +539,7 @@ export const TMenu = new class {
 
         // 2 -> Установка состояния меню
         this.state.isOpen = true;
+        document.body.setAttribute('menu', '');
         this.state.host = mount.host;
         this.state.menuEl = mount.menu;
         this.state.contextEl = mount.context;
@@ -592,6 +593,7 @@ export const TMenu = new class {
         const mount = await this.#render.mount({ style });
 
         this.state.isOpen = true;
+        document.body.setAttribute('menu', '');
         this.state.host = mount.host;
         this.state.menuEl = mount.menu;
         this.state.contextEl = mount.context;

@@ -63,7 +63,7 @@
     <template id="tpl-user-card">
         <div class="user-card">
             <div class="user-profile-wrapper">
-                <div class="img-wrapper" data-field="image" style="--img: url(/images/ava.jpeg)">
+                <div class="img-wrapper" data-field="image" style="--img: url(/images/ava.webp)">
                 </div>
                 <div class="user-profile-info">
                     <div class="user-profile-name" data-field="usertags">

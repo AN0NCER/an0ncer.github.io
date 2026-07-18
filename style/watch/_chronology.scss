@@ -1,0 +1,311 @@
+@mixin CTitle() {
+    .franchise-title {
+        font-size: 18px;
+        margin-top: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+        font-weight: bold;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .container-l {
+        --uib-size: 24px;
+        --uib-color: white;
+        --uib-speed: 1.5s;
+        --uib-dot-size: calc(var(--uib-size) * 0.4);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: var(--uib-dot-size);
+        width: var(--uib-size);
+    }
+
+    .container-l::before,
+    .container-l::after {
+        content: '';
+        position: absolute;
+        height: var(--uib-dot-size);
+        width: var(--uib-dot-size);
+        border-radius: 50%;
+        background-color: var(--uib-color);
+        flex-shrink: 0;
+        transition: background-color 0.3s ease;
+    }
+
+    .container-l::before {
+        animation: orbit var(--uib-speed) linear infinite;
+    }
+
+    .container-l::after {
+        animation: orbit var(--uib-speed) linear calc(var(--uib-speed) / -2) infinite;
+    }
+
+    @keyframes orbit {
+        0% {
+            transform: translateX(calc(var(--uib-size) * 0.25)) scale(0.73684);
+            opacity: 0.65;
+        }
+
+        5% {
+            transform: translateX(calc(var(--uib-size) * 0.235)) scale(0.684208);
+            opacity: 0.58;
+        }
+
+        10% {
+            transform: translateX(calc(var(--uib-size) * 0.182)) scale(0.631576);
+            opacity: 0.51;
+        }
+
+        15% {
+            transform: translateX(calc(var(--uib-size) * 0.129)) scale(0.578944);
+            opacity: 0.44;
+        }
+
+        20% {
+            transform: translateX(calc(var(--uib-size) * 0.076)) scale(0.526312);
+            opacity: 0.37;
+        }
+
+        25% {
+            transform: translateX(0%) scale(0.47368);
+            opacity: 0.3;
+        }
+
+        30% {
+            transform: translateX(calc(var(--uib-size) * -0.076)) scale(0.526312);
+            opacity: 0.37;
+        }
+
+        35% {
+            transform: translateX(calc(var(--uib-size) * -0.129)) scale(0.578944);
+            opacity: 0.44;
+        }
+
+        40% {
+            transform: translateX(calc(var(--uib-size) * -0.182)) scale(0.631576);
+            opacity: 0.51;
+        }
+
+        45% {
+            transform: translateX(calc(var(--uib-size) * -0.235)) scale(0.684208);
+            opacity: 0.58;
+        }
+
+        50% {
+            transform: translateX(calc(var(--uib-size) * -0.25)) scale(0.73684);
+            opacity: 0.65;
+        }
+
+        55% {
+            transform: translateX(calc(var(--uib-size) * -0.235)) scale(0.789472);
+            opacity: 0.72;
+        }
+
+        60% {
+            transform: translateX(calc(var(--uib-size) * -0.182)) scale(0.842104);
+            opacity: 0.79;
+        }
+
+        65% {
+            transform: translateX(calc(var(--uib-size) * -0.129)) scale(0.894736);
+            opacity: 0.86;
+        }
+
+        70% {
+            transform: translateX(calc(var(--uib-size) * -0.076)) scale(0.947368);
+            opacity: 0.93;
+        }
+
+        75% {
+            transform: translateX(0%) scale(1);
+            opacity: 1;
+        }
+
+        80% {
+            transform: translateX(calc(var(--uib-size) * 0.076)) scale(0.947368);
+            opacity: 0.93;
+        }
+
+        85% {
+            transform: translateX(calc(var(--uib-size) * 0.129)) scale(0.894736);
+            opacity: 0.86;
+        }
+
+        90% {
+            transform: translateX(calc(var(--uib-size) * 0.182)) scale(0.842104);
+            opacity: 0.79;
+        }
+
+        95% {
+            transform: translateX(calc(var(--uib-size) * 0.235)) scale(0.789472);
+            opacity: 0.72;
+        }
+
+        100% {
+            transform: translateX(calc(var(--uib-size) * 0.25)) scale(0.73684);
+            opacity: 0.65;
+        }
+    }
+}
+
+@mixin Card() {
+    a.card-chronology {
+        display: grid;
+        padding: 5px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        cursor: pointer;
+
+
+        .chronology-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px;
+            background: #191C21;
+            min-height: 100px;
+            min-width: 230px;
+            border-radius: 8px;
+
+            .anime-details {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: #fff;
+                font-family: "Manrope";
+                gap: 15px;
+
+                .--a-title {
+                    font-size: 14px;
+                    font-weight: bold;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 6;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .--a-status {
+                    font-size: 11px;
+                    font-weight: bold;
+                    line-height: 7px;
+                    background: #f7d149;
+                    color: #191c21;
+                    padding: 9px 8px;
+                    width: fit-content;
+                    border-radius: 4px;
+                }
+
+                .--a-type,
+                .--a-year,
+                .--a-score {
+                    font-size: 12px;
+                }
+
+                .anime-details-wrapper {
+                    display: flex;
+                    flex-direction: column;
+
+                    .anime-year-score {
+                        display: flex;
+                        gap: 5px;
+                        align-items: center;
+
+                        svg {
+                            height: 12px;
+                            fill: #f7d149;
+                        }
+                    }
+                }
+            }
+
+            .user-status {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                .--u-status,
+                .--dub-status {
+                    display: grid;
+                    position: relative;
+                    place-items: center;
+                    width: 25px;
+                    height: 25px;
+
+                    svg {
+                        height: 16px;
+                        fill: #3C92ED;
+                    }
+                }
+
+                .--dub-status {
+                    opacity: .1;
+
+                    &.-availble {
+                        opacity: 1;
+                    }
+                }
+
+                .--u-status {
+                    svg use {
+                        display: none;
+                    }
+
+                    &[data-state="watching"] {
+                        svg .watching {
+                            display: block;
+                        }
+                    }
+
+                    &[data-state="completed"] {
+                        svg .completed {
+                            display: block;
+                        }
+                    }
+
+                    &[data-state="planned"] {
+                        svg .planned {
+                            display: block;
+                        }
+                    }
+
+                    &[data-state="dropped"] {
+                        svg .dropped {
+                            display: block;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.-select {
+            background: #3C92ED;
+
+            .chronology-wrapper {
+                box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.25);
+            }
+        }
+
+        &.-hide {
+            display: none;
+        }
+    }
+}
+
+@include CTitle();
+
+.list-franchise {
+    margin-top: 20px;
+    display: flex;
+    gap: 5px;
+    overflow: hidden;
+    overflow-x: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    @include Card();
+}

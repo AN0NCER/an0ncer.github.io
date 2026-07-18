@@ -93,6 +93,11 @@ const update = {
                 _msg(line);
                 continue;
             }
+
+            if (line.includes('#btn')) {
+                _btn(line);
+                continue;
+            }
         }
 
         //Добавляем последние данные
@@ -256,6 +261,25 @@ const update = {
                 messageElement = { type: 'message', title, icon, content: [] };
             }
         }
+
+        function _btn(line) {
+            const regex = /<!--#btn:"([^"]+)"(?::(.+))?-->/;
+
+            const match = regex.exec(line);
+
+            if (match) {
+                const [, label, rest] = match;
+                objectContent?.content[objectContent.content.length - 1]?.content.push({ type: 'button', label, ...parseParams(rest) });
+            }
+
+            function parseParams(str = '') {
+                const params = {};
+                const re = /(\w+)="([^"]*)"/g;
+                let m;
+                while ((m = re.exec(str))) params[m[1]] = m[2];
+                return params;
+            }
+        }
     },
 
     init: function () {
@@ -281,6 +305,8 @@ const update = {
         const swiperMap = new Map();
         const swiperSet = new Set();
 
+        const buttonMap = new Map();
+
         const tRecursion = (data) => {
             for (let i = 0; i < data.length; i++) {
                 const element = data[i];
@@ -289,6 +315,7 @@ const update = {
         }
 
         let g = 1;
+        let btnId = 1;
 
         const sRecrusion = (data) => {
             for (let i = 0; i < data.length; i++) {
@@ -357,6 +384,13 @@ const update = {
                     mRecursion(element.content);
                     html += `</div></div>`;
                 }
+
+                if (element.type === "button") {
+                    const id = `updBtn${btnId}`
+                    html += `<div class="btnElement" id="${id}">${element.label}</div>`;
+                    buttonMap.set(id, element);
+                    btnId++;
+                }
             }
         }
 
@@ -369,6 +403,49 @@ const update = {
         swiperSet.forEach(css => {
             initSwiper(css);
         });
+
+        [...buttonMap.keys()].forEach((id) => {
+            /**@type {HTMLDivElement} */
+            const btn = $(`#${id}`)[0];
+
+            const rules = buttonMap.get(id);
+
+            btn.dataset.state = rules.state ?? 'idle';
+            btn.dataset.src = rules.src;
+            btn.dataset.fn = rules.fn;
+
+            if (rules?.done) btn.dataset.done = rules.done;
+
+            if (rules?.checkFn) {
+                btn.dataset.checkSrc = rules?.checkSrc || rules.src;
+                btn.dataset.checkFn = rules.checkFn;
+                btn.dataset.disableWhen = rules.disableWhen;
+            }
+
+            runInitialCheck(btn);
+
+            btn.addEventListener('click', async () => {
+                if (!btn || ['loading', 'done', 'checking', 'disabled'].includes(btn.dataset.state)) return;
+
+                const { src, fn } = btn.dataset;
+                btn.dataset.state = 'loading';
+
+                try {
+                    const { handler, ns } = await loadHandler(src, fn);
+                    await handler.call(ns, btn);
+                    btn.dataset.state = 'idle';
+                    if (btn.dataset?.checkFn) {
+                        await runInitialCheck(btn);
+                    } else {
+                        btn.dataset.state = 'done';
+                        if (btn.dataset.done) btn.textContent = btn.dataset.done;
+                    }
+                } catch (err) {
+                    btn.dataset.state = 'error';
+                    console.error(err);
+                }
+            });
+        })
 
         initControls();
 
@@ -482,6 +559,48 @@ const update = {
                     });
                 }, 5000);
             }
+        }
+
+        async function runInitialCheck(/**@type {HTMLDivElement} */ btn) {
+            if (!btn.dataset.checkFn) return;
+
+            const originalState = btn.dataset.state;
+            btn.dataset.state = 'checking';
+
+            let result = false;
+
+            try {
+                const { handler, ns } = await loadHandler(btn.dataset.checkSrc, btn.dataset.checkFn);
+                result = await handler.call(ns, btn);
+            } catch (err) {
+                console.error(`Ошибка проверки кнопки "${btn.textContent}":`, err);
+                result = false; // фолбэк на дефолтное поведение
+            }
+
+            if (`${result}` === `${btn.dataset.disableWhen}`) {
+                btn.dataset.state = 'disabled';
+                btn.disabled = true;
+                if (btn.dataset.done) btn.textContent = btn.dataset.done;
+            } else {
+                btn.dataset.state = originalState;
+            }
+        }
+
+        async function loadHandler(src, path) {
+            const mod = await import(src);
+            const { ns, methodName } = resolvePath(mod, path);
+            const handler = ns?.[methodName];
+            if (typeof handler !== 'function') {
+                throw new Error(`Метод "${path}" не найден в ${src}`);
+            }
+            return { handler, ns };
+        }
+
+        function resolvePath(mod, path) {
+            const parts = path.split('.');
+            const methodName = parts.pop();          // последний сегмент — имя метода
+            const ns = parts.reduce((acc, key) => acc?.[key], mod); // всё до него — namespace
+            return { ns, methodName };
         }
     },
 

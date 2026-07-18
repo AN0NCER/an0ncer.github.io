@@ -1,0 +1,127 @@
+@mixin Episode() {
+    $width: 63px;
+    $height: 80px;
+
+    .episode {
+        padding: 3px;
+        width: auto;
+        height: auto;
+
+        .episode-wrapper {
+            display: flex;
+
+            width: $width;
+            height: $height;
+
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            z-index: 5;
+
+            color: #FFFFFF;
+            opacity: .5;
+            cursor: pointer;
+
+            font-weight: bold;
+            font-size: 18px;
+
+            .ep-name {
+                font-size: 11px;
+                margin-top: 3px;
+            }
+        }
+
+        &.-select {
+            background: #3C92ED;
+            border-radius: 8px;
+
+            .episode-wrapper {
+                opacity: 1;
+                background-color: #191c21;
+                border-radius: 6px;
+            }
+        }
+    }
+}
+
+@import './win.engine';
+$WINDOW: 'episode';
+$SEARCH: 'search.v1';
+$BAR: 'bar.v1';
+
+@include WEngine($WINDOW, $SEARCH..., $BAR);
+
+.content-#{$WINDOW} {
+    .content-wrapper {
+        .wrapper {
+            overflow: hidden;
+            margin-bottom: 10px;
+            max-height: 100%;
+            padding-bottom: unset !important;
+            display: flex;
+            flex-direction: column;
+
+            .#{$WINDOW}-list-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin: 10px max(var(--sar), 10px) 0 max(var(--sal), 10px);
+                height: 100%;
+                overflow: hidden;
+
+                .grid-wrapper-list {
+                    background: #191C21;
+                    border-radius: 5px;
+                    overflow: auto;
+                    margin: 0;
+                    padding-top: 10px;
+                    padding-bottom: var(--space);
+
+                    .episode-grid-list {
+                        // max-width: 100%;
+                        display: grid;
+                        gap: 5px;
+                        grid-template-columns: repeat(auto-fit, 69px);
+                        grid-template-rows: repeat(auto-fit, 86px);
+                        justify-content: center;
+                    }
+
+                    @include Episode();
+                }
+            }
+        }
+
+        .#{$WINDOW}-list-search {
+
+            // position: relative !important;
+            // margin: 0 20px !important;
+            // left: auto !important;
+            // right: auto !important;
+            // bottom: auto !important;
+
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                /* display: none; <- Crashes Chrome on hover */
+                -webkit-appearance: none;
+                margin: 0;
+                /* <-- Apparently some margin are still there even though it's hidden */
+            }
+
+            .episode-search-wrapper{
+                input.-error{
+                    border-color: #942424 !important;
+                }
+            }
+
+            .btn {
+                box-sizing: border-box;
+
+                svg {
+                    height: 18px;
+                    fill: #FFFFFF;
+                }
+            }
+        }
+    }
+}
