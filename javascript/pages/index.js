@@ -1,4 +1,4 @@
-import { InitHeader, ShowUser } from "./index/mod_account.js";
+import { AvaLoader, InitHeader, ShowUser } from "./index/mod_account.js";
 import { UserRates } from "../modules/api.shiki.js";
 import { GitHubRel } from "./index/mod_github.js";
 import { Main, OAuth } from "../core/main.core.js";
@@ -11,7 +11,10 @@ import { AnimeLoaded, LoadAnimeShikimori, LoadUpdatetAnime } from "./index/mod_a
 
 TMenu.init();
 
+AvaLoader.start();
+
 Main((e) => {
+    AvaLoader.stop(e);
     ShowUser(e);
     LoadUpdatetAnime();
 }, {

@@ -1,0 +1,49 @@
+.ava-wrapper.auth-loading {
+    /* Приглушаем штатную синюю рамку — поверх неё крутится дуга */
+    border-color: rgba(35, 147, 241, 0.2) !important;
+    border: none !important;
+
+    .ava{
+        scale: .87;
+    }
+}
+
+.ava-wrapper.auth-loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #2393F1;
+    border-right-color: rgba(35, 147, 241, 0.45);
+
+    animation: claude-ava-spin 0.9s linear infinite;
+    pointer-events: none;
+}
+
+/* Лёгкая пульсация самой картинки, чтобы состояние читалось даже боковым зрением */
+.ava-wrapper.auth-loading .ava {
+    animation: claude-ava-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes claude-ava-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+@keyframes claude-ava-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.5; }
+}
+
+/* Уважение к настройке ОС "меньше движения" */
+@media (prefers-reduced-motion: reduce) {
+    .ava-wrapper.auth-loading::after {
+        animation-duration: 2.5s;
+    }
+    .ava-wrapper.auth-loading .ava {
+        animation: none;
+    }
+}

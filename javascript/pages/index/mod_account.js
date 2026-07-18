@@ -5,13 +5,54 @@ import { ShowNotifyWindow } from "./mod_window.js";
 import { OAuth } from "../../core/main.core.js";
 import { THeader } from "../settings/mod.header.js";
 
+export const AvaLoader = new class {
+    #class = 'auth-loading';
+
+    get #wrapper() {
+        return document.querySelector('.ava-wrapper');
+    }
+
+    start() {
+        // Пользователь ни разу не авторизовывался — лоадер не нужен,
+        // иконка работает как кнопка входа
+        if (!OAuth.user && !OAuth.access) return;
+
+        const el = this.#wrapper;
+        if (!el) return;
+
+        // Сразу рисуем сохранённые данные (то, что и так делает ShowUser,
+        // но не дожидаясь ответа сервера)
+        const user = OAuth.user;
+        if (user?.image?.['x160']) {
+            el.style.setProperty('--p-ava-img', `url('${user.image['x160']}')`);
+            $('.profile-content > .page-title').text(user.nickname);
+        }
+
+        $('.profile-content > .username').text('Авторизация…');
+        el.classList.add(this.#class);
+    }
+
+    /**
+     * @param {boolean} logged - чем закончилась авторизация
+     */
+    stop(logged = false) {
+        this.#wrapper?.classList.remove(this.#class);
+
+        // Успех: ShowUser(true) сам поставит "С возвращением".
+        // Неудача: возвращаем исходный текст, чтобы не висело "Авторизация…"
+        if (!logged) {
+            $('.profile-content > .username').text('Авторизация');
+        }
+    }
+}
+
 /**
  * Отображение авторизованого пользователя
  * @param {boolean} looged 
  */
 export function ShowUser(looged = false) {
     if (!looged) return;
-    
+
     let data = OAuth.user;
 
     $('.ava-wrapper').css('--p-ava-img', `url('${data.image['x160']}')`);
