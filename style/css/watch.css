@@ -681,476 +681,6 @@ main .hero-anime .val a:first-child {
 main .hero-anime .val a:last-child {
   margin-right: 20px;
 }
-main .player-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-main .player-title .player-controls {
-  display: flex;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  gap: 1px;
-  overflow: hidden;
-}
-main .player-title .player-controls .line {
-  height: 25px;
-  width: 1px;
-  background: rgba(255, 255, 255, 0.1);
-}
-main .player-title .player-controls .line.-hide {
-  display: none;
-}
-main .player-title .player-controls .btn {
-  height: 45px;
-  min-width: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-main .player-title .player-controls .btn .svg-block {
-  min-width: 45px;
-  display: grid;
-  place-items: center;
-}
-main .player-title .player-controls .btn .svg-block svg {
-  fill: #FFFFFF;
-  height: 21px;
-}
-main .player-title .player-controls .btn .text {
-  display: flex;
-  font-size: 11px;
-  font-weight: normal;
-  flex-direction: column;
-  line-height: 10px;
-  color: rgba(255, 255, 255, 0.6);
-  margin-right: 10px;
-  max-width: 0;
-  overflow: hidden;
-  opacity: 0;
-  margin-right: 0;
-  white-space: nowrap;
-  transition: max-width 0.25s ease, opacity 0.2s ease, margin-right 0.25s ease;
-}
-main .player-title .player-controls .btn:hover .text {
-  max-width: 100px;
-  opacity: 1;
-  margin-right: 10px;
-}
-main .player-title .player-controls .btn.-hide {
-  display: none;
-}
-main .episode-visible-area.-column {
-  display: none;
-}
-main .episodes .episodes-wrapper {
-  --episod: 1;
-  position: relative;
-  padding: 5px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-}
-main .episodes .episodes-wrapper .episode {
-  display: flex;
-  width: 63px;
-  height: 80px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-  color: #FFFFFF;
-  opacity: 0.5;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 18px;
-}
-main .episodes .episodes-wrapper .episode .ep-name {
-  font-size: 11px;
-  margin-top: 3px;
-}
-main .episodes .episodes-wrapper .episode.-select {
-  opacity: 1;
-}
-main .episodes .episodes-wrapper .sel {
-  display: grid;
-  position: absolute;
-  width: 63px;
-  height: 80px;
-  box-sizing: border-box;
-  background: #3C92ED;
-  border-radius: 8px;
-  padding: 3px;
-  transition: 0.2s ease-in-out;
-}
-main .episodes .episodes-wrapper .sel::after {
-  content: " ";
-  width: 100%;
-  height: 100%;
-  display: block;
-  background-color: #191c21;
-  border-radius: 6px;
-}
-main .episodes.-row {
-  padding-left: 10px;
-  padding-right: 10px;
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-main .episodes.-row .episodes-wrapper {
-  display: inline-flex;
-  flex-direction: row;
-}
-main .episodes.-row .episodes-wrapper .sel {
-  top: 5px;
-  left: calc(5px + (var(--episod) - 1) * 63px);
-}
-main .episodes.-column {
-  display: none;
-  margin-right: 10px;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-main .episodes.-column .episodes-wrapper {
-  display: inline-flex;
-  flex-direction: column;
-}
-main .episodes.-column .episodes-wrapper .sel {
-  top: calc(5px + (var(--episod) - 1) * 80px);
-  left: 5px;
-}
-main .episode-visible-area {
-  position: relative;
-  --episod: 1;
-  --items: 0;
-}
-main .episode-visible-area .episode-wrapper {
-  display: flex;
-  flex: 1 0 0;
-  max-width: -moz-fit-content;
-  max-width: fit-content;
-  overflow: hidden;
-  position: relative;
-  padding: 5px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-}
-main .episode-visible-area .episode-wrapper .episode-list .episode {
-  display: flex;
-  width: 63px;
-  height: 80px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-  color: #FFFFFF;
-  opacity: 0.5;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 18px;
-}
-main .episode-visible-area .episode-wrapper .episode-list .episode .ep-name {
-  font-size: 11px;
-  margin-top: 3px;
-}
-main .episode-visible-area .episode-wrapper .episode-list .episode.-select {
-  opacity: 1;
-}
-main .episode-visible-area .episode-wrapper .episode-list .btn-win-episode {
-  display: flex;
-  width: 63px;
-  height: 80px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  color: #FFFFFF;
-  cursor: pointer;
-  position: sticky;
-  background: #191c21;
-  border-radius: 6px;
-  transition: 0.94s var(--easy);
-}
-main .episode-visible-area .episode-wrapper .episode-list .btn-win-episode .ep-name {
-  font-size: 11px;
-  margin-top: 3px;
-}
-main .episode-visible-area .episode-wrapper .episode-list .btn-win-episode svg {
-  height: 25px;
-  fill: #FFFFFF;
-}
-main .episode-visible-area .episode-wrapper .episode-list .btn-win-episode::after {
-  content: "";
-  display: none;
-  position: absolute;
-  top: 25px;
-  bottom: 25px;
-  right: 4px;
-  width: 2px;
-  background: #FFFFFF;
-  border-radius: 3px;
-  opacity: 0.5;
-}
-main .episode-visible-area .episode-scroll-wrapper {
-  position: relative;
-}
-main .episode-visible-area .episode-shell {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
-main .episode-visible-area .episode-shell .-sel {
-  display: grid;
-  position: absolute;
-  width: 63px;
-  height: 80px;
-  box-sizing: border-box;
-  background: #3C92ED;
-  border-radius: 8px;
-  padding: 3px;
-  transition: 0.94s var(--easy);
-}
-main .episode-visible-area .episode-shell .-sel::after {
-  content: " ";
-  width: 100%;
-  height: 100%;
-  display: block;
-  background-color: #191c21;
-  border-radius: 6px;
-}
-main .episode-visible-area.-row {
-  padding: 0 10px;
-  overflow: hidden;
-}
-main .episode-visible-area.-row .episode-wrapper .episode-scroll-wrapper {
-  overflow-x: scroll;
-}
-main .episode-visible-area.-row .episode-wrapper .episode-scroll-wrapper .episode-list {
-  display: inline-flex;
-  flex-direction: row;
-}
-main .episode-visible-area.-row .episode-wrapper .episode-scroll-wrapper .episode-list .btn-win-episode {
-  left: -53px;
-  margin-right: 5px;
-}
-main .episode-visible-area.-row .episode-wrapper .episode-scroll-wrapper .episode-list .btn-win-episode.-show {
-  left: 0px;
-}
-main .episode-visible-area.-row .episode-wrapper .-sel {
-  transform: translateX(calc((var(--episod, 1) + var(--items, 0) - 1) * 63px + 5px * var(--items, 0)));
-}
-main .episode-visible-area.-column .episode-wrapper .episode-scroll-wrapper {
-  overflow-y: scroll;
-}
-main .episode-visible-area.-column .episode-wrapper .episode-scroll-wrapper .episode-list .btn-win-episode {
-  top: -74px;
-  margin-bottom: 5px;
-}
-main .episode-visible-area.-column .episode-wrapper .episode-scroll-wrapper .episode-list .btn-win-episode.-show {
-  top: 0px;
-}
-main .episode-visible-area.-column .episode-wrapper .-sel {
-  transform: translateY(calc((var(--episod, 1) + var(--items, 0) - 1) * 80px + 5px * var(--items, 0)));
-}
-@media screen and (max-width: 1000px) {
-  main body[angle="90"] .landscape-player.-left .episode-visible-area.-row,
-  main body[angle="90"] .landscape-player.-right .episode-visible-area.-row,
-  main body[angle="270"] .landscape-player.-left .episode-visible-area.-row,
-  main body[angle="270"] .landscape-player.-right .episode-visible-area.-row {
-    display: none;
-  }
-  main body[angle="90"] .landscape-player.-left .episode-visible-area.-column,
-  main body[angle="90"] .landscape-player.-right .episode-visible-area.-column,
-  main body[angle="270"] .landscape-player.-left .episode-visible-area.-column,
-  main body[angle="270"] .landscape-player.-right .episode-visible-area.-column {
-    display: flex;
-  }
-  main body[angle="90"] .landscape-player.-right .player-wrapper, main body[angle="90"] .landscape-player.-left .player-wrapper,
-  main body[angle="270"] .landscape-player.-right .player-wrapper,
-  main body[angle="270"] .landscape-player.-left .player-wrapper {
-    gap: 10px;
-  }
-  main body[angle="90"] .landscape-player.-right .player-wrapper,
-  main body[angle="270"] .landscape-player.-right .player-wrapper {
-    flex-direction: row-reverse;
-  }
-}
-main .landscape-player {
-  margin-top: 10px;
-}
-main .player-wrapper {
-  display: flex;
-  flex: 1 1 0;
-  margin-top: 10px;
-}
-main .player {
-  display: flex;
-  flex: 1 1 0;
-}
-main .player iframe {
-  width: 100%;
-  aspect-ratio: 16/9;
-  min-height: calc(56.25vw + 48px);
-  max-height: 100dvh;
-}
-main .player[data-type=kodik] iframe {
-  min-height: unset;
-}
-main body[angle="90"] .landscape-player .player-wrapper,
-main body[angle="270"] .landscape-player .player-wrapper {
-  max-height: calc(100dvh - 20px);
-  margin: 0 10px;
-}
-main body[angle="90"] .landscape-player.-top .player-wrapper,
-main body[angle="270"] .landscape-player.-top .player-wrapper {
-  margin-top: 10px !important;
-}
-main body[angle="90"] iframe,
-main body[angle="270"] iframe {
-  aspect-ratio: 16/9 !important;
-  min-height: auto !important;
-}
-@media screen and (min-width: 900px) {
-  main iframe {
-    min-height: auto !important;
-    border-radius: 5px !important;
-    aspect-ratio: 16/9 !important;
-  }
-}
-main .dub-wrapper {
-  margin-top: 15px;
-  padding: 0 15px;
-}
-main .dub-controller {
-  background: rgba(0, 0, 0, 0.2);
-  padding: 5px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-}
-main .dub-controller .dub-win-btn {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #DADADA;
-  background: #191c21;
-  font-family: "Manrope", sans-serif;
-  width: 100%;
-  border-radius: 8px;
-  cursor: pointer;
-}
-main .dub-controller .dub-win-btn .dub-name {
-  display: flex;
-  align-items: center;
-  font-size: 15px;
-  font-weight: bold;
-  line-height: 13px;
-  overflow: hidden;
-}
-main .dub-controller .dub-win-btn .dub-name .name {
-  overflow: hidden;
-  text-wrap-mode: nowrap;
-  text-overflow: ellipsis;
-}
-main .dub-controller .dub-win-btn .dub-episodes {
-  margin-right: 15px;
-  font-size: 13px;
-  text-wrap-mode: nowrap;
-}
-main .dub-controller .dub-win-btn .dub-icon-wrapper {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 48px;
-}
-main .dub-controller .dub-win-btn .dub-icon-wrapper svg {
-  height: 18px;
-  fill: #DADADA;
-}
-main .dub-controller .dub-notify,
-main .dub-controller .dub-favorite {
-  min-width: 45px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-}
-main .dub-controller .dub-notify svg,
-main .dub-controller .dub-favorite svg {
-  height: 18px;
-  fill: #DADADA;
-}
-main .dub-controller .dub-notify svg .solid,
-main .dub-controller .dub-favorite svg .solid {
-  display: none;
-}
-main .dub-controller .dub-notify svg .loader,
-main .dub-controller .dub-favorite svg .loader {
-  display: none;
-}
-main .dub-controller .dub-favorite {
-  margin-left: 1px;
-}
-main .dub-controller .line {
-  height: 25px;
-  width: 1px;
-  background: rgba(255, 255, 255, 0.1);
-}
-main .dub-controller .dub-notify,
-main .dub-controller .line {
-  display: none;
-}
-main .dub-controller.-favor .dub-favorite svg {
-  fill: #FFFFFF;
-}
-main .dub-controller.-favor .dub-favorite svg .regular {
-  display: none;
-}
-main .dub-controller.-favor .dub-favorite svg .solid {
-  display: block;
-}
-main .dub-controller.-notify .dub-notify,
-main .dub-controller.-notify .line {
-  display: grid;
-}
-main .dub-controller.-notify .dub-notify {
-  margin-left: 1px;
-}
-main .dub-controller.-notify .dub-notify.-load .regular,
-main .dub-controller.-notify .dub-notify.-load .solid {
-  display: none;
-}
-main .dub-controller.-notify .dub-notify.-load svg {
-  fill: rgba(255, 255, 255, 0.3);
-}
-main .dub-controller.-notify .dub-notify.-load .loader {
-  display: block;
-  transform-origin: 50% 50%;
-  animation: spin 1s cubic-bezier(0.7, 0.1, 0.5, 0.9) infinite;
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-main .dub-controller.-notify .dub-favorite {
-  margin-left: 0;
-}
-main .dub-controller.-on-notify .dub-notify svg {
-  fill: #3C92ED;
-}
-main .dub-controller.-on-notify .dub-notify svg .regular {
-  display: none;
-}
-main .dub-controller.-on-notify .dub-notify svg .solid {
-  display: block;
-}
-main .dub-controller.-no-select .dub-win-btn .dub-episodes {
-  display: none;
-}
 main .similiar-anime {
   margin-top: 20px;
   overflow-x: auto;
@@ -1170,6 +700,487 @@ main .similiar-anime .sentinel {
   right: 0;
   pointer-events: none;
   width: 500px;
+}
+
+.player-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.player-title .player-controls {
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  gap: 1px;
+  overflow: hidden;
+}
+.player-title .player-controls .line {
+  height: 25px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.player-title .player-controls .line.-hide {
+  display: none;
+}
+.player-title .player-controls .btn {
+  height: 45px;
+  min-width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.player-title .player-controls .btn .svg-block {
+  min-width: 45px;
+  display: grid;
+  place-items: center;
+}
+.player-title .player-controls .btn .svg-block svg {
+  fill: #FFFFFF;
+  height: 21px;
+}
+.player-title .player-controls .btn .text {
+  display: flex;
+  font-size: 11px;
+  font-weight: normal;
+  flex-direction: column;
+  line-height: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-right: 10px;
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  margin-right: 0;
+  white-space: nowrap;
+  transition: max-width 0.25s ease, opacity 0.2s ease, margin-right 0.25s ease;
+}
+.player-title .player-controls .btn:hover .text {
+  max-width: 100px;
+  opacity: 1;
+  margin-right: 10px;
+}
+.player-title .player-controls .btn.-hide {
+  display: none;
+}
+
+.episode-visible-area.-column {
+  display: none;
+}
+
+.episodes .episodes-wrapper {
+  --episod: 1;
+  position: relative;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+.episodes .episodes-wrapper .episode {
+  display: flex;
+  width: 63px;
+  height: 80px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  color: #FFFFFF;
+  opacity: 0.5;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+}
+.episodes .episodes-wrapper .episode .ep-name {
+  font-size: 11px;
+  margin-top: 3px;
+}
+.episodes .episodes-wrapper .episode.-select {
+  opacity: 1;
+}
+.episodes .episodes-wrapper .sel {
+  display: grid;
+  position: absolute;
+  width: 63px;
+  height: 80px;
+  box-sizing: border-box;
+  background: #3C92ED;
+  border-radius: 8px;
+  padding: 3px;
+  transition: 0.2s ease-in-out;
+}
+.episodes .episodes-wrapper .sel::after {
+  content: " ";
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: #191c21;
+  border-radius: 6px;
+}
+.episodes.-row {
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.episodes.-row .episodes-wrapper {
+  display: inline-flex;
+  flex-direction: row;
+}
+.episodes.-row .episodes-wrapper .sel {
+  top: 5px;
+  left: calc(5px + (var(--episod) - 1) * 63px);
+}
+.episodes.-column {
+  display: none;
+  margin-right: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.episodes.-column .episodes-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+}
+.episodes.-column .episodes-wrapper .sel {
+  top: calc(5px + (var(--episod) - 1) * 80px);
+  left: 5px;
+}
+
+.episode-visible-area {
+  position: relative;
+  --episod: 1;
+  --items: 0;
+}
+.episode-visible-area .episode-wrapper {
+  display: flex;
+  flex: 1 0 0;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+  overflow: hidden;
+  position: relative;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+.episode-visible-area .episode-wrapper .episode-list .episode {
+  display: flex;
+  width: 63px;
+  height: 80px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  color: #FFFFFF;
+  opacity: 0.5;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+}
+.episode-visible-area .episode-wrapper .episode-list .episode .ep-name {
+  font-size: 11px;
+  margin-top: 3px;
+}
+.episode-visible-area .episode-wrapper .episode-list .episode.-select {
+  opacity: 1;
+}
+.episode-visible-area .episode-wrapper .episode-list .btn-win-episode {
+  display: flex;
+  width: 63px;
+  height: 80px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  color: #FFFFFF;
+  cursor: pointer;
+  position: sticky;
+  background: #191c21;
+  border-radius: 6px;
+  transition: 0.94s var(--easy);
+}
+.episode-visible-area .episode-wrapper .episode-list .btn-win-episode .ep-name {
+  font-size: 11px;
+  margin-top: 3px;
+}
+.episode-visible-area .episode-wrapper .episode-list .btn-win-episode svg {
+  height: 25px;
+  fill: #FFFFFF;
+}
+.episode-visible-area .episode-wrapper .episode-list .btn-win-episode::after {
+  content: "";
+  display: none;
+  position: absolute;
+  top: 25px;
+  bottom: 25px;
+  right: 4px;
+  width: 2px;
+  background: #FFFFFF;
+  border-radius: 3px;
+  opacity: 0.5;
+}
+.episode-visible-area .episode-scroll-wrapper {
+  position: relative;
+}
+.episode-visible-area .episode-shell {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.episode-visible-area .episode-shell .-sel {
+  display: grid;
+  position: absolute;
+  width: 63px;
+  height: 80px;
+  box-sizing: border-box;
+  background: #3C92ED;
+  border-radius: 8px;
+  padding: 3px;
+  transition: 0.94s var(--easy);
+}
+.episode-visible-area .episode-shell .-sel::after {
+  content: " ";
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: #191c21;
+  border-radius: 6px;
+}
+.episode-visible-area.-row {
+  padding: 0 10px;
+  overflow: hidden;
+}
+.episode-visible-area.-row .episode-wrapper .episode-scroll-wrapper {
+  overflow-x: scroll;
+}
+.episode-visible-area.-row .episode-wrapper .episode-scroll-wrapper .episode-list {
+  display: inline-flex;
+  flex-direction: row;
+}
+.episode-visible-area.-row .episode-wrapper .episode-scroll-wrapper .episode-list .btn-win-episode {
+  left: -53px;
+  margin-right: 5px;
+}
+.episode-visible-area.-row .episode-wrapper .episode-scroll-wrapper .episode-list .btn-win-episode.-show {
+  left: 0px;
+}
+.episode-visible-area.-row .episode-wrapper .-sel {
+  transform: translateX(calc((var(--episod, 1) + var(--items, 0) - 1) * 63px + 5px * var(--items, 0)));
+}
+.episode-visible-area.-column .episode-wrapper .episode-scroll-wrapper {
+  overflow-y: scroll;
+}
+.episode-visible-area.-column .episode-wrapper .episode-scroll-wrapper .episode-list .btn-win-episode {
+  top: -74px;
+  margin-bottom: 5px;
+}
+.episode-visible-area.-column .episode-wrapper .episode-scroll-wrapper .episode-list .btn-win-episode.-show {
+  top: 0px;
+}
+.episode-visible-area.-column .episode-wrapper .-sel {
+  transform: translateY(calc((var(--episod, 1) + var(--items, 0) - 1) * 80px + 5px * var(--items, 0)));
+}
+
+@media screen and (max-width: 1000px) {
+  body[angle="90"] .landscape-player.-left .episode-visible-area.-row,
+  body[angle="90"] .landscape-player.-right .episode-visible-area.-row,
+  body[angle="270"] .landscape-player.-left .episode-visible-area.-row,
+  body[angle="270"] .landscape-player.-right .episode-visible-area.-row {
+    display: none;
+  }
+  body[angle="90"] .landscape-player.-left .episode-visible-area.-column,
+  body[angle="90"] .landscape-player.-right .episode-visible-area.-column,
+  body[angle="270"] .landscape-player.-left .episode-visible-area.-column,
+  body[angle="270"] .landscape-player.-right .episode-visible-area.-column {
+    display: flex;
+  }
+  body[angle="90"] .landscape-player.-right .player-wrapper, body[angle="90"] .landscape-player.-left .player-wrapper,
+  body[angle="270"] .landscape-player.-right .player-wrapper,
+  body[angle="270"] .landscape-player.-left .player-wrapper {
+    gap: 10px;
+  }
+  body[angle="90"] .landscape-player.-right .player-wrapper,
+  body[angle="270"] .landscape-player.-right .player-wrapper {
+    flex-direction: row-reverse;
+  }
+}
+
+.landscape-player {
+  margin-top: 10px;
+}
+
+.player-wrapper {
+  display: flex;
+  flex: 1 1 0;
+  margin-top: 10px;
+}
+
+.player {
+  display: flex;
+  flex: 1 1 0;
+}
+.player iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  min-height: calc(56.25vw + 48px);
+  max-height: 100dvh;
+}
+.player[data-type=kodik] iframe {
+  min-height: unset;
+}
+
+body[angle="90"] .landscape-player .player-wrapper,
+body[angle="270"] .landscape-player .player-wrapper {
+  max-height: calc(100dvh - 20px);
+  margin: 0 10px;
+}
+body[angle="90"] .landscape-player.-top .player-wrapper,
+body[angle="270"] .landscape-player.-top .player-wrapper {
+  margin-top: 10px !important;
+}
+body[angle="90"] iframe,
+body[angle="270"] iframe {
+  aspect-ratio: 16/9 !important;
+  min-height: auto !important;
+}
+
+@media screen and (min-width: 900px) {
+  iframe {
+    min-height: auto !important;
+    border-radius: 5px !important;
+    aspect-ratio: 16/9 !important;
+  }
+}
+.dub-wrapper {
+  margin-top: 15px;
+  padding: 0 15px;
+}
+
+.dub-controller {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 5px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+}
+.dub-controller .dub-win-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #DADADA;
+  background: #191c21;
+  font-family: "Manrope", sans-serif;
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.dub-controller .dub-win-btn .dub-name {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 13px;
+  overflow: hidden;
+}
+.dub-controller .dub-win-btn .dub-name .name {
+  overflow: hidden;
+  text-wrap-mode: nowrap;
+  text-overflow: ellipsis;
+}
+.dub-controller .dub-win-btn .dub-episodes {
+  margin-right: 15px;
+  font-size: 13px;
+  text-wrap-mode: nowrap;
+}
+.dub-controller .dub-win-btn .dub-icon-wrapper {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 48px;
+}
+.dub-controller .dub-win-btn .dub-icon-wrapper svg {
+  height: 18px;
+  fill: #DADADA;
+}
+.dub-controller .dub-notify,
+.dub-controller .dub-favorite {
+  min-width: 45px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.dub-controller .dub-notify svg,
+.dub-controller .dub-favorite svg {
+  height: 18px;
+  fill: #DADADA;
+}
+.dub-controller .dub-notify svg .solid,
+.dub-controller .dub-favorite svg .solid {
+  display: none;
+}
+.dub-controller .dub-notify svg .loader,
+.dub-controller .dub-favorite svg .loader {
+  display: none;
+}
+.dub-controller .dub-favorite {
+  margin-left: 1px;
+}
+.dub-controller .line {
+  height: 25px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.dub-controller .dub-notify,
+.dub-controller .line {
+  display: none;
+}
+.dub-controller.-favor .dub-favorite svg {
+  fill: #FFFFFF;
+}
+.dub-controller.-favor .dub-favorite svg .regular {
+  display: none;
+}
+.dub-controller.-favor .dub-favorite svg .solid {
+  display: block;
+}
+.dub-controller.-notify .dub-notify,
+.dub-controller.-notify .line {
+  display: grid;
+}
+.dub-controller.-notify .dub-notify {
+  margin-left: 1px;
+}
+.dub-controller.-notify .dub-notify.-load .regular,
+.dub-controller.-notify .dub-notify.-load .solid {
+  display: none;
+}
+.dub-controller.-notify .dub-notify.-load svg {
+  fill: rgba(255, 255, 255, 0.3);
+}
+.dub-controller.-notify .dub-notify.-load .loader {
+  display: block;
+  transform-origin: 50% 50%;
+  animation: spin 1s cubic-bezier(0.7, 0.1, 0.5, 0.9) infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.dub-controller.-notify .dub-favorite {
+  margin-left: 0;
+}
+.dub-controller.-on-notify .dub-notify svg {
+  fill: #3C92ED;
+}
+.dub-controller.-on-notify .dub-notify svg .regular {
+  display: none;
+}
+.dub-controller.-on-notify .dub-notify svg .solid {
+  display: block;
+}
+.dub-controller.-no-select .dub-win-btn .dub-episodes {
+  display: none;
 }
 
 .card-anime {

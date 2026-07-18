@@ -1,5 +1,5 @@
 const version = '3.2.15';
-const hash = "54614"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const hash = "dead1"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -236,7 +236,7 @@ const appShellFilesToCache = [
     { path: "/style/css/tplayer.css", hash: "3c2ae5d7", size: 23830 },
     { path: "/style/css/user.css", hash: "6863aab9", size: 78959 },
     { path: "/style/css/verify.css", hash: "fdfe046c", size: 7716 },
-    { path: "/style/css/watch.css", hash: "58da5676", size: 68643 },
+    { path: "/style/css/watch.css", hash: "04a664e2", size: 68119 },
     // Директория: /style/fonts
     { path: "/style/fonts/Inter.ttf", hash: "32204736", size: 804612 },
     { path: "/style/fonts/Manrope.ttf", hash: "cf98436d", size: 164936 },
