@@ -1,5 +1,5 @@
 const version = '3.2.15';
-const hash = "2436f"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const hash = "54614"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -97,7 +97,7 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/downloads/mod_utils.js", hash: "c3fa4e72", size: 1426 },
     { path: "/javascript/pages/downloads/mod_voice.js", hash: "47c79758", size: 7387 },
     // Директория: /javascript/pages/index
-    { path: "/javascript/pages/index/mod_account.js", hash: "18cdde70", size: 3196 },
+    { path: "/javascript/pages/index/mod_account.js", hash: "9beb1e7e", size: 4772 },
     { path: "/javascript/pages/index/mod_animes.js", hash: "a150c6fd", size: 4428 },
     { path: "/javascript/pages/index/mod_github.js", hash: "14845ba3", size: 3769 },
     { path: "/javascript/pages/index/mod_history_watch.js", hash: "49d95404", size: 5552 },
@@ -193,7 +193,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/pages
     { path: "/javascript/pages/404a.js", hash: "39b75479", size: 1830 },
     { path: "/javascript/pages/downloads.js", hash: "5b0d0b52", size: 3006 },
-    { path: "/javascript/pages/index.js", hash: "22437c60", size: 2262 },
+    { path: "/javascript/pages/index.js", hash: "d9e102b0", size: 2319 },
     { path: "/javascript/pages/list.js", hash: "5c890db4", size: 486 },
     { path: "/javascript/pages/login.js", hash: "fd345956", size: 4420 },
     { path: "/javascript/pages/player.js", hash: "cb42ed19", size: 5913 },
@@ -224,7 +224,7 @@ const appShellFilesToCache = [
     { path: "/style/css/min/swiper-bundle.min.css", hash: "ee1a5395", size: 16482 },
     // Директория: /style/css
     { path: "/style/css/downloads.css", hash: "2e417433", size: 38689 },
-    { path: "/style/css/index.css", hash: "225dd4ef", size: 69819 },
+    { path: "/style/css/index.css", hash: "01860928", size: 71116 },
     { path: "/style/css/list.css", hash: "36265311", size: 32896 },
     { path: "/style/css/login.css", hash: "7bf0759b", size: 35725 },
     { path: "/style/css/main.css", hash: "a295f8c1", size: 852 },
@@ -652,7 +652,16 @@ worker.addEventListener('install', (event) => {
                 payload: { version, hash, cacheName, ...estimate }
             });
 
-            await caching(appShellFilesToCache, s);
+            // registration.active === null -> старого SW нет, это первый визит
+            //
+            // При ОБНОВЛЕНИИ (registration.active есть) поведение прежнее
+            // один-в-один: попап с прогрессом -> полная докачка -> и только
+            // потом skipWaiting и перезагрузка в готовую новую версию.
+            const isFirstInstall = worker.registration.active === null;
+
+            if (!isFirstInstall) {
+                await caching(appShellFilesToCache, s);
+            }
 
             if (s.activate) {
                 worker.skipWaiting();
@@ -664,9 +673,25 @@ worker.addEventListener('install', (event) => {
 worker.addEventListener('activate', (event) => {
     event.waitUntil((async () => {
         await worker.clients.claim();
+        log('worker activated (fast activate, caching in background).');
+    })());
 
+    backgroundCaching();
+});
+
+async function backgroundCaching() {
+    try {
+        const cache = await caches.open(cacheName);
+        const keys = await cache.keys();
+
+        // Кэш неполон -> первая установка (или прерванная докачка)
+        if (keys.length < appShellFilesToCache.length) {
+            const s = await setup.getValue('install');
+            await caching(appShellFilesToCache, s);
+        }
+
+        // Только когда текущий кэш полон, убираем старые
         const names = await caches.keys();
-
         await Promise.all(
             names.map(name => {
                 if (name !== cacheName && name !== setup.cache.key) {
@@ -675,9 +700,11 @@ worker.addEventListener('activate', (event) => {
             })
         );
 
-        log('worker activated.');
-    })());
-});
+        log('background caching finished, old caches cleaned.');
+    } catch (error) {
+        err('background caching failed:', error);
+    }
+}
 
 /**
  * Инкрементальное кеширование.
@@ -800,7 +827,7 @@ async function caching(filesToCache, { channel, batchSize }) {
                 return fetch(new Request(request, {
                     headers: new Headers({
                         ...Object.fromEntries(request.headers),
-                        Authorization: (request.headers.get('Authorization') || '') + version
+                        Authorization: request.headers.get('Authorization') || version
                     })
                 }));
             }
@@ -812,14 +839,16 @@ async function caching(filesToCache, { channel, batchSize }) {
                 return fetch('/javascript/pages/anime/default.js');
             }
 
-            const cached = await caches.match(request);
+            const cache = await caches.open(cacheName);
+
+            const cached = await cache.match(request);
             if (cached) return cached;
 
             if (url.pathname === "/") {
-                return (await caches.match('/index.html')) || fetch(request);
+                return (await cache.match('/index.html')) || fetch(request);
             }
 
-            return (await caches.match(url.pathname)) || fetch(request);
+            return (await cache.match(url.pathname)) || fetch(request);
 
         } catch (e) {
             warn(`fetch error ${e}`);
