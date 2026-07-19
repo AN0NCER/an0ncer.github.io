@@ -1,5 +1,5 @@
 const version = '3.2.16';
-const hash = "3af73"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const hash = "3035a"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -71,7 +71,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/modules
     { path: "/javascript/modules/AnimeCard.js", hash: "38b9d59f", size: 6628 },
     { path: "/javascript/modules/api.jikan.js", hash: "f92e0d04", size: 7177 },
-    { path: "/javascript/modules/api.kodik.js", hash: "f0075b9f", size: 1488 },
+    { path: "/javascript/modules/api.kodik.js", hash: "4462178b", size: 1468 },
     { path: "/javascript/modules/api.shiki.js", hash: "f5a60dcc", size: 17672 },
     { path: "/javascript/modules/api.tunime.js", hash: "8d243fcb", size: 6806 },
     { path: "/javascript/modules/Collection.js", hash: "130a5892", size: 11953 },
@@ -139,7 +139,7 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/settings/mod.storage.js", hash: "7ae9af10", size: 11716 },
     { path: "/javascript/pages/settings/setup.update.js", hash: "03ea69b4", size: 3034 },
     // Директория: /javascript/pages/tplayer/comps
-    { path: "/javascript/pages/tplayer/comps/cps.input.js", hash: "3362a0ac", size: 11318 },
+    { path: "/javascript/pages/tplayer/comps/cps.input.js", hash: "0632a155", size: 11365 },
     { path: "/javascript/pages/tplayer/comps/cps.playback.js", hash: "33bb8a53", size: 30799 },
     { path: "/javascript/pages/tplayer/comps/cps.screen.js", hash: "23097bd7", size: 5649 },
     { path: "/javascript/pages/tplayer/comps/cps.system.js", hash: "ff9bf867", size: 4688 },
@@ -150,8 +150,8 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/tplayer/utils/util.log.js", hash: "68a2fa61", size: 10998 },
     // Директория: /javascript/pages/tplayer
     { path: "/javascript/pages/tplayer/mod.api.js", hash: "bb4c5fac", size: 4614 },
-    { path: "/javascript/pages/tplayer/mod.errors.js", hash: "89bcd838", size: 6488 },
-    { path: "/javascript/pages/tplayer/mod.tplayer.js", hash: "08fde6ec", size: 12338 },
+    { path: "/javascript/pages/tplayer/mod.errors.js", hash: "e3fb9ada", size: 8922 },
+    { path: "/javascript/pages/tplayer/mod.tplayer.js", hash: "774e95a1", size: 15477 },
     // Директория: /javascript/pages/user
     { path: "/javascript/pages/user/io.friends.js", hash: "d7452efb", size: 7162 },
     { path: "/javascript/pages/user/mod.achievements.io.js", hash: "5fb8c405", size: 1510 },
