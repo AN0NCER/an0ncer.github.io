@@ -1,5 +1,6 @@
 import { Player } from '../mod.tplayer.js';
 import { Component } from '../utils/util.entity.js';
+import { Fullscreen } from './cps.screen.js';
 
 export class Keyboard extends Component {
     setup() {

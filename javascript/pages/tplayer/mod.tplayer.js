@@ -328,14 +328,30 @@ export class Player extends TEvents {
             this.hls.attachMedia(this.video);
         }
 
+        // Возврат на вкладку после долгого простоя
+        // Обновляем источник превентивно, пока видео на паузе.
+        this.sourceLoadedAt = 0;
+        const SOURCE_STALE_MS = 60 * 60 * 1000; // 1 час
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState !== 'visible') return;
+            if (!this.source || !this.video.paused) return;
+            if (Date.now() - this.sourceLoadedAt < SOURCE_STALE_MS) return;
+
+            log('Источник устарел после простоя — обновление', 'tplayer');
+            this.refreshSource({ resume: false });
+        });
+
         Logger.setOpts({ opts: this.opts, device: this.device });
     }
 
     /**
-     * @param {Source} source 
+     * @param {Source} source
      */
     attach(source) {
         this.source = source;
+        // Момент получения ссылок — по нему определяем протухание CDN-ссылок
+        this.sourceLoadedAt = Date.now();
 
         const link = source.getSource(this.opts.requiredQuality, {
             auto: this.opts.autoQualitySelect
@@ -348,6 +364,54 @@ export class Player extends TEvents {
         }
 
         this.trigger(Player.Events.SOURCE_LOADED, source);
+    }
+
+    /**
+     * Перезапрашивает источник у tunime-hub БЕЗ кэша (свежие CDN-ссылки)
+     * и переподключает его, сохраняя позицию и состояние воспроизведения.
+     * Используется при фатальных сетевых ошибках HLS (протухшая ссылка)
+     * и при возврате на вкладку после долгого простоя.
+     * @param {{resume?: boolean}} [opts]
+     * @returns {Promise<boolean>} удалось ли обновить
+     */
+    async refreshSource({ resume = true } = {}) {
+        const meta = this.source?.meta;
+        if (!meta) return false;
+
+        try {
+            const { Tunime } = await import("../../modules/api.tunime.js");
+
+            const url = await meta.getLink();
+            if (!url) return false;
+
+            const payload = await Tunime.video.source(url, false); // caching=false
+            if (!payload) return false;
+
+            const source = new Source(meta, payload);
+            if (source.getAvailableLabels().length === 0) return false;
+
+            const time = this.video.currentTime;
+            const paused = this.video.paused;
+
+            this.attach(source);
+
+            // После фатальной ошибки hls.js останавливает загрузку —
+            // перезапускаем явно
+            if (this.device.isHls) this.hls.startLoad();
+
+            const onReady = () => {
+                this.video.removeEventListener('loadedmetadata', onReady);
+                if (time > 0 && Number.isFinite(time)) this.video.currentTime = time;
+                if (!paused && resume) this.main.play();
+            };
+            this.video.addEventListener('loadedmetadata', onReady);
+
+            log(`Источник обновлён без кэша. currentTime=${time}`, 'tplayer');
+            return true;
+        } catch (e) {
+            warn('Не удалось обновить источник без кэша', 'tplayer', { details: { error: String(e) } });
+            return false;
+        }
     }
 
     main = {
