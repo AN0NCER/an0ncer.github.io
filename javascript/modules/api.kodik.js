@@ -1,4 +1,4 @@
-const kurl = 'https://kodik-proxy.anime-tunime.workers.dev';
+const kurl = 'https://kodik.tunime.app';
 
 export const Kodik = {
     List: function (query = {}, event = () => { }, signal) {
