@@ -58,10 +58,28 @@ export class ErrorHandler {
         const module = 'hls.js';
         const video = this.player.video;
 
+        // Защита от шторма ретраев: если сеть сыпет не-фатальными ошибками
+        // подряд (протухшая ссылка -> 403 на каждый фрагмент, ~15 попыток/сек)
+        const STORM_LIMIT = 5;
+        const STORM_WINDOW_MS = 10000;
+        let networkErrors = [];
+
         this.player.hls.on(Hls.Events.ERROR, (event, data) => {
             const { type, fatal } = data;
 
             if (!fatal) {
+                if (type === Hls.ErrorTypes.NETWORK_ERROR) {
+                    const now = Date.now();
+                    networkErrors = networkErrors.filter(t => now - t < STORM_WINDOW_MS);
+                    networkErrors.push(now);
+
+                    if (networkErrors.length >= STORM_LIMIT) {
+                        networkErrors = [];
+                        this.throw('HLS_NETWORK_FATAL', module, data.error);
+                        return;
+                    }
+                }
+
                 const code = nonFatalCode(type);
                 this.throw(code, module, data.error, { currentTime: video.currentTime, paused: video.paused });
                 return;
@@ -110,10 +128,33 @@ export class ErrorHandler {
         })
     }
 
+    #freshAttempts = 0;
+    #lastFreshAt = 0;
+
+    /**
+     * Восстановление после сетевого фатала
+     * @returns {Promise<boolean>}
+     */
+    async #tryFreshSource() {
+        if (this.#freshAttempts >= 2) return false;
+        if (Date.now() - this.#lastFreshAt < 30000) return false;
+
+        this.#freshAttempts++;
+        this.#lastFreshAt = Date.now();
+
+        try {
+            log('Попытка восстановления свежим источником (без кэша)', 'api');
+            return await this.player.refreshSource();
+        } catch (e) {
+            warn('Восстановление свежим источником не удалось', 'api', { details: { error: String(e) } });
+            return false;
+        }
+    }
+
     /**
      * @param {string} code - ключ из ErrorHandler.Codes
      * @param {string} module - тип откуда произошла ошибка
-     * @param {Error|Event} [e] - оригинальное событие/ошибка 
+     * @param {Error|Event} [e] - оригинальное событие/ошибка
      */
     throw(code, module, e = null, details = null) {
         this._handling = true;
@@ -142,6 +183,16 @@ export class ErrorHandler {
 
             if (descriptor.severity === ErrorHandler.Severity.FATAL) {
                 (async () => {
+                    // Сетевой фатал чаще всего = протухшая CDN-ссылка
+                    // (кэшированный источник). Прежде чем сдаваться в
+                    // Kodik-iframe — пробуем получить свежий источник
+                    // без кэша и продолжить с того же места.
+                    if (code === 'HLS_NETWORK_FATAL' && await this.#tryFreshSource()) {
+                        log('Восстановлено свежим источником, Kodik не понадобился', 'api');
+                        Logger.send();
+                        return;
+                    }
+
                     log('Переключение на Kodik плеер', 'api');
                     await Logger.send();
                     this.player.trigger(Player.Events.ERROR, error);
