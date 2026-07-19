@@ -1,3 +1,5 @@
+import "./utils/util.polyfill-promise.js";
+
 import { OAuth } from "../../core/main.core.js";
 import { ACard } from "../../modules/AnimeCard.js";
 import { Sleep } from "../../modules/functions.js";
