@@ -1,5 +1,5 @@
-const version = '3.2.15';
-const hash = "dead1"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const version = '3.2.16';
+const hash = "3af73"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -168,6 +168,7 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/user/util.event.js", hash: "0e45b5a0", size: 3944 },
     // Директория: /javascript/pages/watch/utils
     { path: "/javascript/pages/watch/utils/util.event.js", hash: "0e45b5a0", size: 3944 },
+    { path: "/javascript/pages/watch/utils/util.polyfill-promise.js", hash: "ce76d109", size: 279 },
     { path: "/javascript/pages/watch/utils/util.scroll.js", hash: "2095edce", size: 1212 },
     // Директория: /javascript/pages/watch
     { path: "/javascript/pages/watch/mod.chronology.js", hash: "f791be39", size: 5873 },
@@ -176,7 +177,7 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/watch/mod.dubs.win.js", hash: "04fb2866", size: 10865 },
     { path: "/javascript/pages/watch/mod.episode.win.js", hash: "d85e18bf", size: 5087 },
     { path: "/javascript/pages/watch/mod.notifi.js", hash: "7027b3d5", size: 4183 },
-    { path: "/javascript/pages/watch/mod.resource.js", hash: "bafd85a0", size: 25790 },
+    { path: "/javascript/pages/watch/mod.resource.js", hash: "e37d6117", size: 25836 },
     { path: "/javascript/pages/watch/mod.score.js", hash: "63ae23ba", size: 5716 },
     { path: "/javascript/pages/watch/mod.synch.js", hash: "bd1f52f3", size: 4054 },
     { path: "/javascript/pages/watch/mod.urate.js", hash: "f4444e6a", size: 5309 },
@@ -201,7 +202,7 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/settings.js", hash: "e3939525", size: 26522 },
     { path: "/javascript/pages/tplayer.js", hash: "f20645e8", size: 3983 },
     { path: "/javascript/pages/user.js", hash: "4bf824e6", size: 4919 },
-    { path: "/javascript/pages/watch.js", hash: "cdc673ff", size: 8626 },
+    { path: "/javascript/pages/watch.js", hash: "fb6244cf", size: 8678 },
     // Директория: /javascript/services
     { path: "/javascript/services/dispatcher.js", hash: "2a790095", size: 2334 },
     { path: "/javascript/services/installing.js", hash: "dfe8f97d", size: 465 },

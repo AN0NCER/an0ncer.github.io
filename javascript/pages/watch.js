@@ -1,3 +1,5 @@
+import "./watch/utils/util.polyfill-promise.js";
+
 import { Main } from "../core/main.core.js";
 import { LTransition } from "./watch/mod_transition.js";
 import { tLoad } from "./watch/mod.resource.js";
