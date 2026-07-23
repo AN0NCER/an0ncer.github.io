@@ -1,5 +1,5 @@
 const version = '3.2.16';
-const hash = "3035a"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const hash = "f3552"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -149,8 +149,8 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/tplayer/utils/util.event.js", hash: "0e45b5a0", size: 3944 },
     { path: "/javascript/pages/tplayer/utils/util.log.js", hash: "68a2fa61", size: 10998 },
     // Директория: /javascript/pages/tplayer
-    { path: "/javascript/pages/tplayer/mod.api.js", hash: "bb4c5fac", size: 4614 },
-    { path: "/javascript/pages/tplayer/mod.errors.js", hash: "e3fb9ada", size: 8922 },
+    { path: "/javascript/pages/tplayer/mod.api.js", hash: "388df5cf", size: 4630 },
+    { path: "/javascript/pages/tplayer/mod.errors.js", hash: "8d3ca22e", size: 12460 },
     { path: "/javascript/pages/tplayer/mod.tplayer.js", hash: "774e95a1", size: 15477 },
     // Директория: /javascript/pages/user
     { path: "/javascript/pages/user/io.friends.js", hash: "d7452efb", size: 7162 },
@@ -237,7 +237,7 @@ const appShellFilesToCache = [
     { path: "/style/css/tplayer.css", hash: "3c2ae5d7", size: 23830 },
     { path: "/style/css/user.css", hash: "6863aab9", size: 78959 },
     { path: "/style/css/verify.css", hash: "fdfe046c", size: 7716 },
-    { path: "/style/css/watch.css", hash: "04a664e2", size: 68119 },
+    { path: "/style/css/watch.css", hash: "e8ad1543", size: 68863 },
     // Директория: /style/fonts
     { path: "/style/fonts/Inter.ttf", hash: "32204736", size: 804612 },
     { path: "/style/fonts/Manrope.ttf", hash: "cf98436d", size: 164936 },
