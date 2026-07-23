@@ -70,7 +70,7 @@ export class WindowApi {
         const video = this.player.video;
 
         const handlers = {
-            'play': () => { video.play(); },
+            'play': () => { video.play().catch(() => {}); },
             'pause': () => { video.pause(); },
             'seek': ({ seconds } = {}) => { video.currentTime = seconds; },
             'volume': ({ volume } = {}) => { video.volume = volume; },
