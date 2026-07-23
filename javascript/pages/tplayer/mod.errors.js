@@ -39,12 +39,19 @@ export class ErrorHandler {
         this._handling = false;
 
         window.addEventListener('error', (event) => {
+            if (isBenignError(event.error)) return;
             this.throw('UNHANDLED', 'global', event.error);
         });
 
         window.addEventListener('unhandledrejection', (event) => {
-            console.log('UNHANDLED', 'global', { reason: event.reason })
-            this.throw('UNHANDLED', 'global', { reason: event.reason });
+            const reason = event.reason;
+
+            if (isBenignError(reason)) {
+                event.preventDefault?.();
+                return;
+            }
+
+            this.throw('UNHANDLED', 'global', reason instanceof Error ? reason : { reason });
         });
 
         if (this.player.device.isHls) {
@@ -75,6 +82,7 @@ export class ErrorHandler {
 
                     if (networkErrors.length >= STORM_LIMIT) {
                         networkErrors = [];
+                        this.#markBadLevel(data);
                         this.throw('HLS_NETWORK_FATAL', module, data.error);
                         return;
                     }
@@ -84,6 +92,8 @@ export class ErrorHandler {
                 this.throw(code, module, data.error, { currentTime: video.currentTime, paused: video.paused });
                 return;
             }
+
+            if (type === Hls.ErrorTypes.NETWORK_ERROR) this.#markBadLevel(data);
 
             const code = fatalCode(type);
             this.throw(code, module, data.error);
@@ -130,6 +140,44 @@ export class ErrorHandler {
 
     #freshAttempts = 0;
     #lastFreshAt = 0;
+    #sendTimer = null;
+
+    /**
+     * Отложенная отправка лога: копит ошибки во время всплеска и грузит
+     * файл ОДИН раз, когда поток прекратился. Защита от десятков загрузок.
+     */
+    #scheduleSend() {
+        if (this.#sendTimer) clearTimeout(this.#sendTimer);
+        this.#sendTimer = setTimeout(() => {
+            this.#sendTimer = null;
+            Logger.send();
+        }, 5000);
+    }
+
+    /**
+     * Если ошибка hls относится к плейлисту конкретного качества —
+     * находит это качество по URL и заносит в player.badQualities.
+     * @param {Object} data - payload события Hls.Events.ERROR
+     */
+    #markBadLevel(data) {
+        try {
+            if (data?.context?.type !== 'level' || !data.context.url) return;
+
+            const qualities = this.player.source?.qualitiesData || {};
+            const clean = (u) => String(u).split('?')[0];
+            const failedUrl = clean(data.context.url);
+
+            for (const label in qualities) {
+                const src = qualities[label]?.[0]?.src;
+                if (src && clean(src) === failedUrl) {
+                    this.player.badQualities ??= new Set();
+                    this.player.badQualities.add(label);
+                    log(`Качество ${label} помечено недоступным (CDN не отвечает)`, 'api');
+                    return;
+                }
+            }
+        } catch { /* не мешаем основному обработчику */ }
+    }
 
     /**
      * Восстановление после сетевого фатала
@@ -198,7 +246,10 @@ export class ErrorHandler {
                     this.player.trigger(Player.Events.ERROR, error);
                 })();
             } else if (code === 'UNHANDLED') {
-                Logger.send();
+                // Не грузим файл на каждую ошибку — копим и шлём один раз
+                // (в конце всплеска). Раньше здесь был Logger.send() на
+                // КАЖДУЮ ошибку -> десятки загрузок за секунду.
+                this.#scheduleSend();
             } else {
                 this.player.trigger(Player.Events.ERROR, error);
             }
@@ -210,4 +261,29 @@ export class ErrorHandler {
     log(message, module, details = {}) {
         log(message, module, details);
     }
+}
+
+/**
+ * Безобидные, документированные браузером ошибки, которые НЕ являются
+ * сбоем плеера и не должны логироваться/слаться на сервер:
+ *  - AbortError: play() прерван pause()/новым load() (обычная перемотка,
+ *    смена качества, быстрые play/pause) — самый частый флуд в логах;
+ *  - NotAllowedError: автоплей заблокирован до жеста пользователя;
+ *  - Fullscreen request denied — отказ фуллскрина без жеста.
+ * @param {any} err
+ * @returns {boolean}
+ */
+function isBenignError(err) {
+    const reason = err?.reason ?? err;
+    if (!reason) return false;
+
+    const name = reason.name || '';
+    const msg = String(reason.message || reason || '');
+
+    if (name === 'AbortError') return true;
+    if (name === 'NotAllowedError' && /play\(\)/.test(msg)) return true;
+    if (/The play\(\) request was interrupted/.test(msg)) return true;
+    if (/Fullscreen request denied/.test(msg)) return true;
+
+    return false;
 }
