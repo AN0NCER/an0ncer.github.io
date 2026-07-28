@@ -8,7 +8,7 @@
     <meta name="page" content="index">
     <title>Tunime - PWA приложения</title>
     <meta name="description"
-        content="Смотреть аниме онлайн на сайте Tunime. Открой для себя новые миры с Tunime - лучшим сайтом для просмотра аниме!">
+        content="Смотреть аниме онлайн на сайте Tunime. Собственный плеер, коллекции, синхронизация с Shikimori и совместный просмотр.">
     <link rel="icon" type="image/png" href="/images/icon-web.png" />
     <link rel="apple-touch-icon" sizes="120x120" href="./images/icons/logo-x192-o.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="./images/icons/logo-x192-o.png" />
@@ -19,8 +19,98 @@
     <link rel="stylesheet" href="/style/css/index.css">
     <link rel="stylesheet" href="/style/css/ticons.css">
     <link rel="manifest" href="/images/icons/manifest-o.json">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Tunime">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:url" content="https://an0ncer.github.io/">
+    <meta property="og:title" content="Tunime — смотреть аниме онлайн">
+    <meta property="og:description"
+        content="Смотреть аниме онлайн на сайте Tunime. Собственный плеер, коллекции, синхронизация с Shikimori и совместный просмотр.">
+    <meta property="og:image" content="https://an0ncer.github.io/images/og-image.webp">
+    <meta property="og:image:type" content="image/webp">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="canonical" href="https://an0ncer.github.io/">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://an0ncer.github.io/#website",
+          "url": "https://an0ncer.github.io/",
+          "name": "Tunime",
+          "alternateName": ["Tunime MAX", "Тунайм"],
+          "description": "Онлайн-платформа для просмотра аниме: собственный плеер, коллекции, синхронизация с Shikimori, совместный просмотр и офлайн-загрузки.",
+          "inLanguage": "ru-RU",
+          "publisher": { "@id": "https://an0ncer.github.io/#organization" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://an0ncer.github.io/search.html?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://an0ncer.github.io/#app",
+          "name": "Tunime",
+          "alternateName": "Tunime MAX",
+          "url": "https://an0ncer.github.io/",
+          "applicationCategory": "MultimediaApplication",
+          "applicationSubCategory": "Anime streaming",
+          "operatingSystem": "Web, Android, iOS, Windows, macOS, Linux",
+          "browserRequirements": "Требуется JavaScript. Поддерживается установка как PWA.",
+          "inLanguage": "ru-RU",
+          "description": "Веб-приложение для просмотра аниме онлайн. Работает как PWA: устанавливается на главный экран и запускается как обычное приложение.",
+          "image": "https://an0ncer.github.io/images/og-image.webp",
+          "screenshot": "https://an0ncer.github.io/images/og-image.webp",
+          "featureList": [
+            "Просмотр аниме онлайн в собственном плеере",
+            "Установка как приложение (PWA, Tunime MAX)",
+            "Синхронизация списков и профиля с Shikimori",
+            "Коллекции аниме: приватные и публичные",
+            "Рекомендации аниме от пользователей",
+            "Совместный просмотр в комнатах",
+            "Офлайн-загрузка серий",
+            "Пропуск опенингов и эндингов",
+            "Уведомления о выходе новых серий"
+          ],
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "RUB",
+            "availability": "https://schema.org/InStock"
+          },
+          "author": { "@id": "https://an0ncer.github.io/#organization" },
+          "isPartOf": { "@id": "https://an0ncer.github.io/#website" }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://an0ncer.github.io/#organization",
+          "name": "Tunime",
+          "url": "https://an0ncer.github.io/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://an0ncer.github.io/images/icons/logo-x512-o.png",
+            "width": 512,
+            "height": 512
+          },
+          "sameAs": [
+            "https://t.me/tunime_hub",
+            "https://github.com/AN0NCER"
+          ]
+        }
+      ]
+    }
+    </script>
     <script src="/javascript/library/jqery.min.js"></script>
 </head>
+
 <body data-page="index" angle="0">
     <header class="unselectable">
         <div class="head-wrapper">
@@ -197,8 +287,7 @@
                         <use href="#i-envelope"></use>
                     </svg>
                 </a>
-                <a href="https://t.me/tunime_hub" target="_blank"
-                    rel="noopener noreferrer">
+                <a href="https://t.me/tunime_hub" target="_blank" rel="noopener noreferrer">
                     Telegram
                     <svg viewBox="0 0 640 640" aria-hidden="true">
                         <use href="#i-telegram"></use>
