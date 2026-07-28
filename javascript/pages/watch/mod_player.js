@@ -74,7 +74,7 @@ class Episodes {
      */
     Init(dub) {
         // Количество эпизодов доступных для просмотра
-        this.count = dub.last_episode;
+        this.count = dub.last_episode ?? 0;
 
         // Добавление эпизодов в DOM
         const e_list = $('.episode-list');
@@ -91,9 +91,14 @@ class Episodes {
             this.wrappers.css('--items', '');
         }
 
-        for (let i = 1; i < this.count + 1; i++) {
-            const html = `<span class="episode" data-index="${i}">${i}<span class="ep-name">EP</span></span>`;
-            e_list.append(html);
+        if (this.count > 0) {
+            for (let i = 1; i < this.count + 1; i++) {
+                const html = `<span class="episode" data-index="${i}">${i}<span class="ep-name">EP</span></span>`;
+                e_list.append(html);
+            }
+            $('.episode-visible-area').removeClass('-hide');
+        }else{
+            $('.episode-visible-area').addClass('-hide');
         }
 
         // Сразу выбираем эпизод (это будет 1 если пользователь ничего не выбирал или другого жпизода не доступно)
@@ -206,7 +211,7 @@ class Episodes {
 
         $('.episode.-select').removeClass('-select');
         $('.episodes > .value, .episodes > .episodes-wrapper, .episode-scroll-wrapper').css(`--episod`, episod);
-        
+
         element.addClass('-select');
 
         if (event) {

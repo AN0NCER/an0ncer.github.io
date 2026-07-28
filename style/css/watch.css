@@ -766,6 +766,9 @@ main .similiar-anime .sentinel {
 .episode-visible-area.-column {
   display: none;
 }
+.episode-visible-area.-hide {
+  display: none !important;
+}
 
 .episodes .episodes-wrapper {
   --episod: 1;
