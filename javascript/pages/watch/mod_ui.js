@@ -12,6 +12,7 @@ import { URate } from "./mod.urate.js";
 import { TNotifi } from "../../modules/tun.notification.js";
 import { DUB } from "./mod.dubs.js";
 import { ANotifi } from "./mod.notifi.js";
+import { AutoScrollEpisodes } from "./utils/util.scroll.js";
 
 const anime_status = [
     { id: 0, name: "Посмотрю", sh: ["planned"] },
@@ -174,6 +175,8 @@ export function Functional() {
             // core vars на html
             root.style.setProperty('--core-angle', `${angle}deg`);
             root.style.setProperty('--core-angle-num', String(angle));
+
+            AutoScrollEpisodes();
         };
 
         update();
