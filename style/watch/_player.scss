@@ -88,6 +88,10 @@
         &.-column {
             display: none;
         }
+
+        &.-hide{
+            display: none !important;
+        }
     }
 
     .episodes {
@@ -424,14 +428,14 @@
 
 @mixin Player() {
     .landscape-player {
-        margin-top: 10px;
+        margin-top: 15px;
     }
 
     .player-wrapper {
         display: flex;
         flex: 1 1 0;
 
-        margin-top: 10px;
+        margin-top: 15px;
     }
 
     .player {

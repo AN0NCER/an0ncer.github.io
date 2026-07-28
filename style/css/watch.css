@@ -766,6 +766,9 @@ main .similiar-anime .sentinel {
 .episode-visible-area.-column {
   display: none;
 }
+.episode-visible-area.-hide {
+  display: none !important;
+}
 
 .episodes .episodes-wrapper {
   --episod: 1;
@@ -1005,13 +1008,13 @@ main .similiar-anime .sentinel {
 }
 
 .landscape-player {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .player-wrapper {
   display: flex;
   flex: 1 1 0;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .player {

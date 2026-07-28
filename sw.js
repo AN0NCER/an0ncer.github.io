@@ -1,5 +1,5 @@
-const version = '3.2.16';
-const hash = "f3552"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const version = '3.2.17';
+const hash = "f0fc4"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -51,7 +51,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/auto
     { path: "/javascript/auto/download_a.js", hash: "7c6b60bd", size: 6866 },
     // Директория: /javascript/core
-    { path: "/javascript/core/hub.core.js", hash: "f54b003b", size: 27385 },
+    { path: "/javascript/core/hub.core.js", hash: "21dbf316", size: 28386 },
     { path: "/javascript/core/main.core.js", hash: "481710c8", size: 15217 },
     { path: "/javascript/core/menu.core.js", hash: "6053760f", size: 20564 },
     { path: "/javascript/core/menu.help.js", hash: "fd5380e3", size: 7134 },
@@ -184,10 +184,10 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/watch/mod_collection.js", hash: "64415859", size: 9780 },
     { path: "/javascript/pages/watch/mod_download.js", hash: "310b340e", size: 22904 },
     { path: "/javascript/pages/watch/mod_history.js", hash: "e4907d84", size: 4350 },
-    { path: "/javascript/pages/watch/mod_player.js", hash: "91522c7b", size: 23564 },
+    { path: "/javascript/pages/watch/mod_player.js", hash: "5f8a198d", size: 23756 },
     { path: "/javascript/pages/watch/mod_private.js", hash: "fe33885c", size: 245 },
     { path: "/javascript/pages/watch/mod_transition.js", hash: "f2e80bc7", size: 5138 },
-    { path: "/javascript/pages/watch/mod_ui.js", hash: "ffa8af0c", size: 16330 },
+    { path: "/javascript/pages/watch/mod_ui.js", hash: "30791529", size: 16429 },
     { path: "/javascript/pages/watch/mod_wscore.js", hash: "354322fb", size: 6757 },
     { path: "/javascript/pages/watch/room.guest.client.js", hash: "83214318", size: 11045 },
     { path: "/javascript/pages/watch/room.owner.client.js", hash: "990978de", size: 8842 },
@@ -237,7 +237,7 @@ const appShellFilesToCache = [
     { path: "/style/css/tplayer.css", hash: "3c2ae5d7", size: 23830 },
     { path: "/style/css/user.css", hash: "6863aab9", size: 78959 },
     { path: "/style/css/verify.css", hash: "fdfe046c", size: 7716 },
-    { path: "/style/css/watch.css", hash: "e8ad1543", size: 68863 },
+    { path: "/style/css/watch.css", hash: "8945dc5c", size: 68923 },
     // Директория: /style/fonts
     { path: "/style/fonts/Inter.ttf", hash: "32204736", size: 804612 },
     { path: "/style/fonts/Manrope.ttf", hash: "cf98436d", size: 164936 },
