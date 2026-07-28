@@ -567,6 +567,9 @@ class Certificate {
             req.onupgradeneeded = () => req.result.createObjectStore(Certificate.storeName);
             req.onsuccess = () => resolve(req.result);
             req.onerror = () => reject(req.error);
+        }).catch(err => {
+            this.#dbPromise = null;
+            throw err;
         });
 
         return this.#dbPromise;
@@ -604,12 +607,12 @@ class Certificate {
             }
 
             this.#pair = pair;
+            this.#loaded = true;
         } catch (err) {
             console.warn('[Certificate] хранилище ключей недоступно', err);
             this.#pair = undefined;
         }
 
-        this.#loaded = true;
         return this.#pair;
     }
 
@@ -686,30 +689,47 @@ const Api = new class {
             return null;
         }
 
-        const { data, shiki, certRequired, loginId } = response.value;
+        const { data, shiki, certRequired, loginId } = response.value ?? {};
+
+        if (!data?.did) return null;
+
         this.device.id = data.did;
-        this.session.access = data;
 
         if (certRequired) {
             const confirmed = await this.#confirmLogin(data.did, loginId);
 
-            if (confirmed?.data) {
+            if (confirmed.data) {
                 this.session.access = confirmed.data.data;
                 if (confirmed.data.shiki) OAuth.access = confirmed.data.shiki;
-            } else if (confirmed.rejected) {
-                this.device.id = undefined;
-                this.session.access = undefined;
+                return this.session.access;
             }
-        } else if (shiki) {
-            OAuth.access = shiki;
+
+            if (confirmed.reset) {
+                console.warn(`[hub] сброс устройства: ${confirmed.code}`);
+                this.device.id = undefined;
+            } else if (confirmed.code) {
+                console.warn(`[hub] вход не подтверждён (${confirmed.code}), did сохранён`);
+            }
+
+            this.session.access = undefined;
+            return null;
         }
+
+        this.session.access = data;
+        if (shiki) OAuth.access = shiki;
 
         return this.session.access;
     }
 
+    /**
+     * @returns {Promise<{data: Object|null, reset: boolean, code: string|null}>}
+     */
     async #confirmLogin(did, loginId) {
         const sig = await certificate.sign(`${did}:${loginId}`);
-        if (!sig) return { rejected: false, data: null };
+
+        // Подписать нечем: хранилище ключей недоступно (приватный режим,
+        // вытеснение IndexedDB).
+        if (!sig) return { data: null, reset: false, code: 'CERT_UNAVAILABLE' };
 
         const response = await this.client.fetch('/login/confirm', {
             method: 'POST',
@@ -717,10 +737,19 @@ const Api = new class {
         });
 
         if (response.status === 200 && response.parsed) {
-            return { rejected: false, data: response.value };
+            return { data: response.value, reset: false, code: null };
         }
 
-        return { rejected: response.status === 401, data: null };
+        // Сеть/таймаут/5xx
+        if (!response.parsed) {
+            return { data: null, reset: false, code: 'NETWORK' };
+        }
+
+        return {
+            data: null,
+            reset: response.value?.reset === true,
+            code: response.value?.code ?? 'UNKNOWN'
+        };
     }
 
     async keepAlive() {
