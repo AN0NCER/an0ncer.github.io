@@ -152,7 +152,8 @@ export const Tunime = new class {
 
     share = {
         anime: (id) => `${Hub.url}/l/${id}`,
-        user: (id) => `${Hub.url}/u/${id}`
+        user: (id) => `${Hub.url}/u/${id}`,
+        collection: (cid) => `${Hub.url}/c/${cid}`
     }
 
     help = {
@@ -163,6 +164,225 @@ export const Tunime = new class {
             return Hub.api.logout();
         }
 
+    }
+}();
+
+export const Collections = new class {
+    /** Зарезервированные имена вместо cid */
+    SPECIAL = {
+        RECOMMEND: 'recommend'
+    };
+
+    /** @type {{PRIVATE:'private', PUBLIC:'public'}} */
+    VISIBILITY = {
+        PRIVATE: 'private',
+        PUBLIC: 'public'
+    };
+
+    /** @type {{CUSTOM:'custom', RECOMMEND:'recommend', FEATURED:'featured'}} */
+    KIND = {
+        CUSTOM: 'custom',
+        RECOMMEND: 'recommend',
+        FEATURED: 'featured'
+    };
+
+    constructor() {
+        this.fetch = Hub.fetch;
+    }
+
+    /**
+     * Собирает query-строку, пропуская пустые значения
+     * @param {Object} params
+     * @returns {string}
+     */
+    #query(params = {}) {
+        const query = Object.entries(params)
+            .filter(([, value]) => value !== undefined && value !== null && value !== '')
+            .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+            .join('&');
+
+        return query ? `?${query}` : '';
+    }
+
+    /** Приводит одно значение или массив к массиву id */
+    #ids(value) {
+        return Array.isArray(value) ? value : [value];
+    }
+
+    /**
+     * Создать коллекцию.
+     *
+     * Состав передаётся сразу: сервер заводит коллекцию уже с аниме,
+     * так что при обрыве связи не останется пустышки
+     *
+     * @param {{title:string, visibility?:string, cover?:number[], anime?:number[]}} data
+     * @param {Function} [event]
+     */
+    create({ title, visibility = this.VISIBILITY.PRIVATE, cover = [], anime = [] } = {}, event = () => { }) {
+        return this.fetch('/api/collections', {
+            method: 'POST',
+            body: {
+                title, visibility,
+                ...(cover.length > 0 ? { cover } : {}),
+                ...(anime.length > 0 ? { anime } : {})
+            }
+        }, event);
+    }
+
+    /**
+     * Свои коллекции, включая приватные
+     * @param {{kind?:string, preview?:boolean, limit?:number}} [opts]
+     *  preview — без списка аниме (для витрин и меню выбора)
+     * @param {Function} [event]
+     */
+    list({ kind, preview, limit, rev } = {}, event = () => { }) {
+        const url = `/api/collections${this.#query({ kind, preview, limit, rev })}`;
+        return this.fetch(url, { method: 'GET' }, event);
+    }
+
+    /**
+     * Подборки от разработчика
+     * @param {{limit?:number}} [opts]
+     * @param {Function} [event]
+     */
+    featured({ limit, rev } = {}, event = () => { }) {
+        const url = `/api/collections/featured${this.#query({ limit, rev })}`;
+        return this.fetch(url, { method: 'GET' }, event);
+    }
+
+    /**
+     * Управление конкретной коллекцией.
+     * Вместо cid принимает имя особой коллекции ('recommend').
+     * @param {string} cid
+     * @param {Function} [event]
+     */
+    entity(cid, event = () => { }) {
+        const url = `/api/collections/${encodeURIComponent(cid)}`;
+
+        const patch = (body) => this.fetch(url, { method: 'PATCH', body }, event);
+
+        return {
+            /** Коллекция вместе со списком аниме */
+            GET: () => {
+                return this.fetch(url, { method: 'GET' }, event);
+            },
+
+            /** Удалить коллекцию (особые удалить нельзя) */
+            DELETE: () => {
+                return this.fetch(url, { method: 'DELETE' }, event);
+            },
+
+            /**
+             * Произвольное обновление — можно послать несколько полей сразу
+             * @param {{title?:string, visibility?:string, cover?:number[]|'auto', add?:number[], remove?:number[]}} body
+             */
+            PATCH: (body = {}) => {
+                return patch(body);
+            },
+
+            /**
+             * Переименовать
+             * @param {string} title
+             */
+            rename: (title) => {
+                return patch({ title });
+            },
+
+            /**
+             * Приватность: публичные коллекции видны в профиле
+             * @param {'private' | 'public'} value
+             */
+            visibility: (value) => {
+                return patch({ visibility: value });
+            },
+
+            cover: {
+                /**
+                 * Задать обложку вручную — 1..4 аниме из этой коллекции
+                 * @param {number[] | number} ids
+                 */
+                set: (ids) => {
+                    return patch({ cover: this.#ids(ids) });
+                },
+
+                /** Вернуть автоматическую сборку из последних добавленных */
+                auto: () => {
+                    return patch({ cover: 'auto' });
+                }
+            },
+
+            anime: {
+                /**
+                 * Добавить аниме (одно или списком)
+                 * @param {number[] | number} ids
+                 */
+                add: (ids) => {
+                    return patch({ add: this.#ids(ids) });
+                },
+
+                /**
+                 * Убрать аниме (одно или списком)
+                 * @param {number[] | number} ids
+                 */
+                remove: (ids) => {
+                    return patch({ remove: this.#ids(ids) });
+                }
+            }
+        };
+    }
+
+    /**
+     * Правка одного аниме сразу в нескольких коллекциях — одним запросом
+     * и одной транзакцией на сервере.
+     *
+     * Избранное Shikimori сюда не входит: у него свой API.
+     *
+     * @param {number} aid
+     * @param {{add?: string[], remove?: string[]}} changes
+     * @param {Function} [event]
+     */
+    apply(aid, { add = [], remove = [] } = {}, event = () => { }) {
+        return this.fetch(`/api/anime/${encodeURIComponent(aid)}/collections`, {
+            method: 'PUT',
+            body: { add, remove }
+        }, event);
+    }
+
+    /**
+     * Коллекция «Рекомендую» текущего пользователя.
+     * Заводится сама при первом добавлении, отдельно создавать не нужно.
+     * @param {Function} [event]
+     */
+    recommend(event = () => { }) {
+        return this.entity(this.SPECIAL.RECOMMEND, event);
+    }
+
+    /**
+     * Данные другого пользователя (страница профиля)
+     * @param {string | number} id
+     * @param {Function} [event]
+     */
+    user(id, event = () => { }) {
+        return {
+            /**
+             * Коллекции пользователя. Чужие — только публичные,
+             * свои — все (в ответе есть флаг `owner`)
+             * @param {{kind?:string, limit?:number}} [opts]
+             */
+            collections: ({ kind, limit } = {}) => {
+                const url = `/api/user/${id}/collections${this.#query({ kind, limit })}`;
+                return this.fetch(url, { method: 'GET' }, event);
+            },
+
+            /**
+             * Рекомендации пользователя плоским списком (новые сверху)
+             * @param {{limit?:number}} [opts]
+             */
+            recommends: ({ limit } = {}) => {
+                const url = `/api/user/${id}/recommends${this.#query({ limit })}`;
+                return this.fetch(url, { method: 'GET' }, event);
+            }
+        };
     }
 }();
 
