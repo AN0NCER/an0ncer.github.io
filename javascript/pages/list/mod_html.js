@@ -1,100 +1,109 @@
-const HtmlItemCollection = ({ count = 0, bgs = [], title, id } = {}) => {
-    return `<div class="item-collection" data-id="${id}">
-                ${getbgcollection(bgs, count)}
-                <div class="info-collection">
-                    <span class="collection-name">${title}</span>
-                    <span class="collection-counts">${count} Аниме</span>
-                </div>
-            </div>`;
+import tmpl from "../../library/tmpl.lib.js";
 
-    function getbgcollection(bg = [], count = 0) {
-        let block1 = bg.length > 0 ? bg[0] : '';
-        let previews = '';
+const TEMPLATE = {
+    item: '#tpl-collection-item',
+    preview: '#tpl-collection-preview',
+    empty: '#tpl-collection-empty'
+};
 
-        for (let i = 1; i < 4; i++) {
-            if (bg[i]) {
-                previews += `<div class="preview" style="--bg-image: url(${bg[i]})"></div>`;
-            }
-        }
+/** Обложка коллажа — четыре превью: одно крупное и три мелких */
+const COVERS = 4;
 
-        return `<div class="bg-collection count-${count}">
-                    <div class="block-1" style="--bg-image: url(${block1})"></div>
-                        <div class="block-2">
-                            ${previews}
-                        </div>
-                </div>`;
+/**
+ * Расставить обложки в готовой плитке.
+ *
+ * Отдельно от создания, потому что постеры приезжают позже самой плитки:
+ * сначала показываем название и счётчик, потом заполняем коллаж
+ *
+ * @param {HTMLElement} el - плитка
+ * @param {string[]} [bgs] - до четырёх ссылок на превью
+ */
+function covers(el, bgs = []) {
+    if (!el) return;
+
+    const block1 = el.querySelector('.bg-collection > .block-1');
+    const block2 = el.querySelector('.bg-collection > .block-2');
+
+    if (block1 && bgs[0]) {
+        block1.style.setProperty('--bg-image', `url(${bgs[0]})`);
+        block1.classList.remove('loading');
+    }
+
+    if (!block2) return;
+
+    const previews = [...block2.querySelectorAll('.preview')];
+
+    for (let i = 1; i < COVERS; i++) {
+        const preview = previews[i - 1];
+        if (!preview || !bgs[i]) continue;
+
+        preview.style.setProperty('--bg-image', `url(${bgs[i]})`);
+        preview.classList.remove('loading');
     }
 }
 
-const HtmlItemLoadCollection = ({ title, id, count } = {}) => {
-    return `<div class="item-collection" data-id="${id}">
-                ${getbgcollection(count)}
-                <div class="info-collection">
-                    <span class="collection-name">${title}</span>
-                    <span class="collection-counts">${count} Аниме</span>
-                </div>
-            </div>`;
+/**
+ * Плитка коллекции.
+ *
+ * Без `bgs` возвращается та же плитка, но с заглушками вместо постеров —
+ * это и есть состояние загрузки, отдельной разметки для него не нужно
+ *
+ * @param {{id: string, title: string, count?: number, bgs?: string[]}} data
+ * @returns {HTMLElement}
+ */
+function item({ id, title, count = 0, bgs = [] } = {}) {
+    const el = tmpl(TEMPLATE.item).el;
 
-    function getbgcollection(count = 0) {
-        let previews = '';
+    el.dataset.id = id;
+    el.querySelector('.bg-collection').classList.add(`count-${count}`);
+    el.querySelector('.collection-name').textContent = title ?? '';
+    el.querySelector('.collection-counts').textContent = `${count} Аниме`;
 
-        for (let i = 0; i < count && i < 3; i++) {
-            previews += `<div class="preview loading"></div>`;
-        }
+    // Мелких превью ровно столько, сколько аниме сверх первого: у
+    // коллекции из двух не должно быть четырёх пустых плашек
+    const block2 = el.querySelector('.bg-collection > .block-2');
+    const slots = Math.min(Math.max(count - 1, 0), COVERS - 1);
 
-        return `<div class="bg-collection count-${count}">
-                    <div class="block-1 loading"></div>
-                    <div class="block-2">
-                        ${previews}
-                    </div>
-                </div>`;
+    for (let i = 0; i < slots; i++) {
+        block2.append(tmpl(TEMPLATE.preview).el);
     }
+
+    if (bgs.length > 0) covers(el, bgs);
+
+    return el;
 }
 
-class HtmlNotFoundCollection {
-    #classes = ['item-collection', 'not-found'];
-    constructor() {
-        this.image = '/images/collections.png';
-        this.name = 'Не найдено';
-    }
+/** Заглушка «ничего не найдено» — одна на список */
+class NotFoundCollection {
+    #selector = '.item-collection.not-found';
 
     get dom() {
-        return `.${this.#classes.join('.')}`;
+        return this.#selector;
     }
 
     Get() {
-        return `<div class="${this.#classes.join(' ')}">
-                    <div class="bg-collection count-1">
-                        <div class="block-1" style="--bg-image: url(${this.image})"></div>
-                    </div>
-                    <div class="info-collection">
-                        <span class="collection-name">${this.name}</span>
-                    </div>
-                </div>`
+        return tmpl(TEMPLATE.empty).el;
     }
 
     Show(path) {
-        let element = $(`${path} > ${this.dom}`)
-        if (element.length > 0) {
-            element.show();
-        } else {
-            $(path).append(this.Get());
-        }
+        const element = $(`${path} > ${this.dom}`);
+
+        if (element.length > 0) element.show();
+        else $(path).append(this.Get());
     }
 
     Hide(path) {
-        let element = $(`${path} > ${this.dom}`)
-        if (element.length > 0) {
-            element.hide();
-        }
+        const element = $(`${path} > ${this.dom}`);
+        if (element.length > 0) element.hide();
     }
 }
 
 export const HCollection = {
-    Iteam: HtmlItemCollection,
-    Load: HtmlItemLoadCollection,
-    NotFound: new HtmlNotFoundCollection()
-}
+    Iteam: item,
+    Load: item,
+    Covers: covers,
+    NotFound: new NotFoundCollection()
+};
 
 export class ISearch {
     constructor() {
