@@ -55,6 +55,9 @@ export function WUsers({ dom = 'body',
 
         config.win = new TWindow({
             oninit: () => {
+                $dom.querySelector('.window-close').addEventListener('click', () => {
+                    config.win.hide();
+                });
                 $dom.querySelector('.btn-new').addEventListener('click', () => {
                     let access = 'public';
 
