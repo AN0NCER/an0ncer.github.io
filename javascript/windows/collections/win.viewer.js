@@ -211,6 +211,23 @@ function bind(wrapper, cid, known) {
     /** Название, приватность и удаление есть только у обычных коллекций */
     const editable = () => mine() && view.collection?.kind === 'custom';
 
+    /** @param {"public" | "private"} type Тип коллекции (публичная / приватная) */
+    const visibility = (type) => view.collection?.visibility === type;
+
+    /**
+     * Что подставить в ссылку.
+     *
+     * У своего избранного cid — просто `favourites`, без владельца: по
+     * такой ссылке получатель открыл бы своё избранное. Поэтому для него
+     * собираем адресный cid с uid
+     */
+    const shareCid = () => {
+        if (cid !== FAVOURITES) return cid;
+
+        const me = view.collection?.owner ?? OAuth.user?.id;
+        return me ? `${FAVOURITES}:${me}` : cid;
+    };
+
     /**
      * Состав правится и у избранного — просто уходит на Shikimori.
      * А вот «Рекомендую» наполняется со страницы аниме, не отсюда
@@ -240,6 +257,11 @@ function bind(wrapper, cid, known) {
 
         edit?.classList.toggle('-dissable', view.busy || !collection);
         addanime?.classList.toggle('-dissable', view.busy || !collection);
+
+        // Делиться можно только публичной, и только когда она загружена:
+        // проверяем «публичная», а не «не приватная» — иначе до ответа
+        // сервера кнопка успевала включиться
+        share?.classList.toggle('-dissable', !visibility('public'));
 
         empty();
     };
@@ -373,7 +395,9 @@ function bind(wrapper, cid, known) {
     };
 
     const onShare = () => {
-        const link = Tunime.share.collection(cid);
+        if (visibility("private")) return;
+        
+        const link = Tunime.share.collection(shareCid());
 
         try {
             navigator.share({ title: view.collection?.title ?? document.title, url: link });

@@ -11,7 +11,7 @@
                         <div class="window-subtitle"><span class="count">0</span> Аниме</div>
                     </div>
                     <div class="window-bar-wrapper">
-                        <div class="win-bar-btn collection-share">
+                        <div class="win-bar-btn collection-share -dissable">
                             <svg class="icon" viewBox="0 0 640 640" aria-hidden="true">
                                 <use href="#i-share"></use>
                             </svg>
