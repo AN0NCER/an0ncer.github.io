@@ -1,0 +1,53 @@
+.collection-group {
+    display: flex;
+    flex-direction: column;
+    grid-column: 1 / -1;
+    gap: 10px;
+
+    .group-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: sticky;
+        top: 0;
+        padding: 10px;
+        background: #101318;
+
+        .group-title {
+            font-size: 14px;
+            color: #ffffff;
+            opacity: .6;
+            line-height: 1;
+        }
+
+        .group-line {
+            display: flex;
+            flex: 1;
+            height: 1px;
+            background: #ffffff;
+            opacity: .1;
+        }
+
+        .group-note {
+            color: #ffffff;
+            opacity: .6;
+            font-size: 10px;
+            line-height: 1;
+        }
+    }
+
+    .group-list{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(354px, 1fr));
+        gap: 10px;
+    }
+
+    .group-end {
+        display: flex;
+        flex: 1;
+        min-height: 1px;
+        margin-top: 10px;
+        background: #ffffff;
+        opacity: .1;
+    }
+}

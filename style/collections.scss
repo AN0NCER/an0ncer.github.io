@@ -1,0 +1,122 @@
+$main_bg: #101318;
+
+:root {
+    --sat: env(safe-area-inset-top);
+    --sar: env(safe-area-inset-right);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    font-weight: inherit;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background: $main_bg;
+    -webkit-text-size-adjust: none;
+    /* Запрещает автоматическое изменение размера текста */
+    font-family: 'Manrope', sans-serif;
+
+    .app-wrapper {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-bottom: var(--menu-height-safe);
+    }
+}
+
+@import './windowed';
+
+@import "./collections/header";
+@import "./collections/filter";
+
+.collection-list-viewer {
+    padding: 0 10px;
+    margin-top: 20px;
+
+    .list-wrapper {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(354px, 1fr));
+        gap: 10px;
+
+        @import "./collections/cards";
+        @import "./collections/group";
+
+        .collection-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+
+            // Заглушка живёт в разметке и прячется, когда есть карточки
+            &.hide {
+                display: none;
+            }
+
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            min-height: 300px;
+
+            .btn-wrapper {
+                background: rgba(0, 0, 0, 0.2);
+                border-radius: 50px;
+                padding: 5px;
+
+                .btn-create {
+                    display: flex;
+                    align-items: center;
+                    line-height: 1;
+                    padding-right: 15px;
+                    background: #238EE8;
+                    border-radius: 50px;
+                    color: #ffffff;
+                    box-shadow: 0 4px 4px 1px rgba(0, 0, 0, .25), inset 0 2px 3px 0 rgba(255, 255, 255, .4);
+                    cursor: pointer;
+                    transition: opacity .3s ease-in-out;
+                    font-weight: bold;
+                    text-transform: uppercase;
+
+                    .icon {
+                        height: 40px;
+                        width: 40px;
+                        display: grid;
+                        place-items: center;
+
+                        svg {
+                            fill: #ffffff;
+                            height: 20px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.quick-panel>.btn#page-filter {
+    &.-active {
+        background: #238EE8;
+        .ticon{
+            background: #ffffff;
+        }
+    }
+}
+
+.i-ios-search {
+    mask-image: url('data:image/svg+xml,<svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 4C8 6.20914 6.20914 8 4 8C1.79086 8 0 6.20914 0 4C0 1.79086 1.79086 0 4 0C6.20914 0 8 1.79086 8 4ZM1.25895 4C1.25895 5.51384 2.48616 6.74105 4 6.74105C5.51384 6.74105 6.74105 5.51384 6.74105 4C6.74105 2.48616 5.51384 1.25895 4 1.25895C2.48616 1.25895 1.25895 2.48616 1.25895 4Z" fill="white"/><rect x="6.85144" y="5.7688" width="4.11406" height="1.63503" rx="0.817516" transform="rotate(45 6.85144 5.7688)" fill="white"/></svg>');
+}

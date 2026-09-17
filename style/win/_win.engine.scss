@@ -79,6 +79,47 @@
     }
 }
 
+@mixin WBarV2() {
+    .window-bar {
+        margin-top: 10px;
+        margin-left: max(env(safe-area-inset-left), 20px);
+        margin-right: max(env(safe-area-inset-right), 20px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .window-title {
+            font-size: 14px;
+            color: #FFFFFF;
+            font-weight: bold;
+        }
+
+        .window-bar-wrapper {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            gap: 5px;
+
+            .win-bar-btn {
+                display: grid;
+                place-items: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                cursor: pointer;
+
+                svg {
+                    height: 24px;
+                    fill: #D6D6D6;
+                }
+
+            }
+        }
+    }
+}
+
 @mixin WControlsV1($win, $modules) {
     $grid-template: 1fr auto;
 
@@ -252,6 +293,10 @@
 
                     @if index($modules, 'bar.v1') {
                         @include WBarV1();
+                    }
+
+                    @if index($modules, 'bar.v2') {
+                        @include WBarV2();
                     }
                 }
 
