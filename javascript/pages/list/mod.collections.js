@@ -2,15 +2,11 @@ import { GraphQl } from "../../modules/api.shiki.js";
 import { Sleep } from "../../modules/functions.js";
 import { ShowInfo } from "../../modules/Popup.js";
 import Collections from "../../modules/tun.collections.js";
-import { WindowManagement } from "../../modules/Windows.js";
 import WCollectionViewer from "../../windows/collections/win.viewer.js";
 import { HCollection } from "./mod_html.js";
 
 /** Полоса под заголовком — превью нескольких коллекций */
 const ROW = '.span-row';
-
-/** Полный список в окне «Коллекции» */
-const LIST = '.list-collection';
 
 /** Сколько коллекций показываем в полосе */
 const PREVIEW = 5;
@@ -93,27 +89,19 @@ const coverUrls = (collection) => coverIds(collection)
     .filter(Boolean);
 
 /**
- * Плитки коллекций в полосе и в окне со списком.
+ * Плитки коллекций в полосе под заголовком.
  *
  * Обложки приезжают отдельно от плиток: сперва показываем название и
  * счётчик, а постеры дорисовываем, когда ответит Shikimori.
  */
 class Board {
-    #drawn = { row: [], list: [] };
+    #drawn = { row: [] };
 
     /** Полоса: первые несколько коллекций */
     preview() {
         const list = Collections.list.slice(0, PREVIEW);
 
-        this.#draw(ROW, list, 'row');
-        this.covers(list);
-    }
-
-    /** Окно со списком: все коллекции, включая уже показанные в полосе */
-    all() {
-        const list = Collections.list;
-
-        this.#draw(LIST, list, 'list');
+        this.#draw(ROW, list);
         this.covers(list);
     }
 
@@ -172,27 +160,24 @@ class Board {
         }
     }
 
-    /** Перерисовать всё, что сейчас на экране */
+    /** Перерисовать полосу */
     refresh() {
-        this.#drawn = { row: [], list: [] };
-
-        if ($(ROW).children().length > 0) this.preview();
-        if ($(LIST).children().length > 0) this.all();
+        this.#drawn = { row: [] };
+        this.preview();
     }
 
     /**
      * @param {string} target - контейнер
      * @param {Array<Object>} list
-     * @param {'row' | 'list'} kind
      */
-    #draw(target, list, kind) {
+    #draw(target, list) {
         $(target).empty();
 
         for (const collection of list) {
             $(target).append(this.#item(collection));
         }
 
-        this.#drawn[kind] = list.map(x => x.cid);
+        this.#drawn.row = list.map(x => x.cid);
     }
 
     /** @param {Object} collection */
@@ -332,39 +317,6 @@ class Search {
 const board = new Board();
 const search = new Search();
 
-/** Окно со всем списком коллекций */
-const windowList = new WindowManagement({
-    init: function () {
-        $('.bar-collection > .close-btn').on('click', () => this.hide());
-
-        let last = '';
-
-        $('.collection-search > .wrapper > input').on('keyup', (e) => {
-            const value = e.target.value.trim();
-            if (value === last) return;
-
-            last = value;
-
-            if (!value) return $(`${LIST} > .item-collection`).show();
-
-            // Фильтруем уже нарисованное, а не перерисовываем список:
-            // так не мигают обложки и не сбрасывается прокрутка
-            const found = Collections.findAll(value).map(x => x.cid);
-
-            $(`${LIST} > .item-collection`).each((_, el) => {
-                $(el).toggle(found.includes(el.dataset.id));
-            });
-        });
-    },
-    show: function () { windowList.show(); },
-    hide: function () { windowList.hide(); },
-    verif: function () { return true; },
-    anim: {
-        showed: function () { board.all(); },
-        hided: function () { }
-    }
-}, '.window-collection');
-
 /** Открыть коллекцию: окно просмотра само сходит за составом */
 const openCollection = async (cid) => {
     if (Collections.ids(cid).length === 0) {
@@ -381,11 +333,15 @@ const openCollection = async (cid) => {
 export const InitCollections = () => {
     // Клик ловим на контейнерах: плитки перерисовываются, и вешать
     // обработчик на каждую заново — лишняя работа и источник утечек
-    $(document).on('click', `${ROW} > .item-collection[data-id], ${LIST} > .item-collection[data-id]`, function () {
+    $(document).on('click', `${ROW} > .item-collection[data-id]`, function () {
         openCollection($(this).data('id'));
     });
 
-    $('.title-block.collections').on('click', () => windowList.target.show());
+    // Заголовок ведёт на полную страницу коллекций: окна со списком
+    // больше нет, всё живёт там
+    $('.title-block.collections').on('click', () => {
+        window.location.href = '/collections.html';
+    });
 
     search.init(board);
 
