@@ -153,7 +153,7 @@ export const Tunime = new class {
     share = {
         anime: (id) => `${Hub.url}/l/${id}`,
         user: (id) => `${Hub.url}/u/${id}`,
-        collection: (cid) => `${Hub.url}/c/${cid}`
+        collection: (cid) => `${Hub.url}/c/${encodeURIComponent(cid)}`
     }
 
     help = {

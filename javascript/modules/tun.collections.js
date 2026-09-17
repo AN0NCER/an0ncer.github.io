@@ -710,12 +710,14 @@ class ShikiSource extends SyncSource {
                 const added = remote.filter(id => !before.includes(id));
                 const removed = before.filter(id => !remote.includes(id));
 
-                this.favourites = this.#build(remote);
+                const changed = added.length > 0 || removed.length > 0;
+
+                // Дату двигаем, только если состав правда разошёлся:
+                // обычная сверка без изменений её не трогает
+                this.favourites = this.#build(remote, changed ? iso() : undefined);
                 this.save();
 
-                if (added.length > 0 || removed.length > 0) {
-                    this.trigger('change', this.favourites);
-                }
+                if (changed) this.trigger('change', this.favourites);
 
                 resolve({ added, removed });
             }).GET();
@@ -781,7 +783,14 @@ class ShikiSource extends SyncSource {
         return result;
     }
 
-    #build(list = []) {
+    /**
+     * @param {number[]} list
+     * @param {string} [updatedAt] - когда состав менялся в последний раз.
+     *  Своих отметок времени у избранного нет, поэтому запоминаем момент,
+     *  в который заметили разницу. Без этого дата обновлялась бы при
+     *  каждой сборке, и в списке всегда значилось «обновлена сегодня»
+     */
+    #build(list = [], updatedAt = this.favourites?.updatedAt) {
         return {
             cid: FAVOURITES,
             kind: 'shikimori',
@@ -789,12 +798,13 @@ class ShikiSource extends SyncSource {
             visibility: 'public',
             list,
             count: list.length,
-            updatedAt: iso()
+            updatedAt: updatedAt ?? iso()
         };
     }
 
     #local(mutate) {
-        this.favourites = this.#build(mutate(this.list));
+        // Правка своими руками — это и есть изменение состава
+        this.favourites = this.#build(mutate(this.list), iso());
         this.save();
         this.trigger('change', this.favourites);
     }
