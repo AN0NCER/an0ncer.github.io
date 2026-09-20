@@ -115,6 +115,18 @@ export const MENU_CONTEXT = {
             }
         }
     ],
+    list: [
+        {
+            key: 'collections',
+            type: 'action',
+            title: 'Коллекции',
+            icon: 'box-archive',
+            enabled: async () => (await import('./main.core.js')).OAuth.auth,
+            subtitle: async () => 'Перейти',
+            run: async () => { location.href = 'collections.html'; },
+            selected: (ctx) => ctx.page === 'collections'
+        }
+    ],
     play: [
         {
             key: 'downloads',

@@ -106,6 +106,7 @@
   color: #ffffff;
   padding: 5px;
   border-radius: 30px;
+  width: -moz-min-content;
   width: min-content;
 }
 .content-collection-sorting .content-wrapper .wrapper .sorting-group .group-wrapper .group-sorting-wrapper .bg-selector {
