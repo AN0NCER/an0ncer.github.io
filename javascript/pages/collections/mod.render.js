@@ -105,9 +105,13 @@ const animes = (count) => `${count} Аниме`;
  * @param {string} [opts.dom] - контейнер списка
  * @param {(cid: string, collection: Object) => void} [opts.onOpen]
  */
-export function createRender({ dom = '.list-wrapper', onOpen = () => { } } = {}) {
+export function createRender({ dom = '.list-wrapper', own = true, onOpen = () => { } } = {}) {
     const root = document.querySelector(dom);
     const empty = root?.querySelector('.collection-empty');
+
+    // Заглушка говорит разное на своей и чужой странице: у себя это
+    // приглашение создать коллекцию, у другого — что их просто нет
+    if (empty) empty.dataset.owner = own ? 'own' : 'foreign';
 
     /** Что нарисовано сейчас — по нему обновляем обложки */
     const drawn = new Map();

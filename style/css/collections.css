@@ -663,6 +663,19 @@ header.-sticky {
 .collection-list-viewer .list-wrapper .collection-empty.hide {
   display: none;
 }
+.collection-list-viewer .list-wrapper .collection-empty .empty-own,
+.collection-list-viewer .list-wrapper .collection-empty .empty-foreign {
+  display: none;
+}
+.collection-list-viewer .list-wrapper .collection-empty[data-owner=own] .empty-own {
+  display: block;
+}
+.collection-list-viewer .list-wrapper .collection-empty[data-owner=foreign] .empty-foreign {
+  display: block;
+}
+.collection-list-viewer .list-wrapper .collection-empty[data-owner=foreign] .btn-wrapper {
+  display: none;
+}
 .collection-list-viewer .list-wrapper .collection-empty {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.6);

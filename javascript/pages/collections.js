@@ -25,13 +25,14 @@ let query = '';
 /** Порядок и автогруппы — запомнены на устройстве с прошлого раза */
 let sort = readSort();
 
-/** Отрисовка. Клик по карточке открывает окно просмотра */
-const view = createRender({
-    onOpen: (cid) => WCollectionViewer(cid).catch(() => null)
-});
-
 /** Свои или чужие. От этого зависит вообще всё на странице */
 const mine = () => !$UID || String($UID) === String(OAuth.user?.id);
+
+/** Отрисовка. Клик по карточке открывает окно просмотра */
+const view = createRender({
+    own: mine(),
+    onOpen: (cid) => WCollectionViewer(cid).catch(() => null)
+});
 
 /**
  * Свои коллекции живут в фасаде: он держит кэш, синхронизируется по
