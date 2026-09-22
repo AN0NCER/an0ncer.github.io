@@ -229,118 +229,82 @@ class Device {
  * @property {() => Promise<TextDecoderStreamResponse>} [retry]
  */
 
-class Pool {
+class Endpoint {
     /**
-     * @param {string[]} servers 
-     * @param {{storage: Storage, storageKey: string}} [opts] 
+     * @param {string} url
+     * @param {{maxAttempts?: number, baseDelay?: number, maxDelay?: number, threshold?: number, cooldown?: number}} [opts]
      */
-    constructor(servers = [], opts = {}) {
-        this.servers = servers;
-        this.storage = opts.storage || sessionStorage;
-        this.key = opts.storageKey || 'shadow-url';
+    constructor(url, opts = {}) {
+        this.url = url;
+        this.maxAttempts = opts.maxAttempts ?? 3;
+        this.baseDelay = opts.baseDelay ?? 400;
+        this.maxDelay = opts.maxDelay ?? 4000;
 
-        this.meta = {
-            id: 0,
-            blocked: false,
-            cycleCount: 0,
-            blockedTime: null
-        };
-
-        this.sync();
-        this.#checkUnlock();
-        this.#startUnlockTimer();
-    }
-
-    sync() {
-        const raw = this.storage.getItem(this.key);
-        if (!raw) return;
-
-        try {
-            const stored = JSON.parse(raw);
-
-            // Востоновление состояния
-            if (stored && typeof stored === "object") {
-                this.meta = stored;
-            }
-
-            // Нормализация id
-            if (this.servers.length === 0) this.meta.id = 0;
-            else this.meta.id = ((this.meta.id % this.servers.length) + this.servers.length) % this.servers.length;
-
-        } catch {
-            this.storage.removeItem(this.key);
-        }
+        // Здоровье сервера. downUntil обязателен числом: с undefined
+        // сравнение даёт false, и сервер считался бы вечно мёртвым
+        this.fails = 0;
+        this.downUntil = 0;
+        this.threshold = opts.threshold ?? 3;
+        this.cooldown = opts.cooldown ?? 15000;
     }
 
     getUrl() {
-        return this.servers[this.meta.id];
+        return this.url;
     }
 
-    fail(url) {
-        if (this.meta.blocked) return false;
-        const n = this.servers.length;
-        if (n === 0) return false;
-
-        this.meta.id = (this.meta.id + 1) % n;
-
-        // если замкнули круг — считаем цикл
-        if (this.meta.id === 0) {
-            this.meta.cycleCount += 1;
-        }
-
-        if (this.meta.cycleCount >= 1) {
-            this.meta.blocked = true;
-            this.meta.blockedTime = Date.now();
-            this.#save();
-            return false;
-        }
-
-        this.#save();
-        return true;
+    get alive() {
+        return Date.now() >= this.downUntil;
     }
 
-    //Helps
+    /** Отказ самого сервера: сеть или 5xx. 4xx сюда не относятся */
+    fail() {
+        if (++this.fails < this.threshold) return;
 
-    #checkUnlock() {
-        if (!this.meta.blocked || !this.meta.blockedTime) return;
-
-        const elapsed = Date.now() - this.meta.blockedTime;
-        if (elapsed >= this.meta.unlockTime) {
-            this.#reset();
-        }
+        this.downUntil = Date.now() + this.cooldown;
+        this.fails = 0;
     }
 
-    #reset() {
-        this.meta.blocked = this.fail;
-        this.meta.blockedTime = null;
-        this.meta.cycleCount = 0;
-        this.meta.id = 0;
-        this.#save();
+    ok() {
+        this.fails = 0;
+        this.downUntil = 0;
     }
 
-    #save() {
-        this.storage.setItem(this.key, JSON.stringify(this.meta));
-    }
-
-    #startUnlockTimer() {
-        setInterval(() => this.#checkUnlock(), this.meta.checkInterval);
+    /** задержка перед попыткой n (0-based), экспонента + джиттер */
+    delayFor(attempt) {
+        const exp = Math.min(this.baseDelay * 2 ** attempt, this.maxDelay);
+        return exp / 2 + Math.random() * (exp / 2);
     }
 }
 
 class Client {
     /**
-     * @param {Pool} pool 
+     * @param {Endpoint} endpoint 
      * @param {Device} device 
      * @param {Session} session
-     * @param {{retryStatuses: number[], maxAttempts: number}} [opts] 
+     * @param {{retryStatuses?: number[], open?: string[], login?: () => Promise<any>}} [opts]
      */
-    constructor(pool, device, session, opts = {}) {
-        this.pool = pool;
+    constructor(endpoint, device, session, opts = {}) {
+        this.endpoint = endpoint;
         this.device = device;
         this.session = session;
+        this.retryStatuses = new Set(opts.retryStatuses || [429, 502, 503, 504]);
 
-        this.retryStatuses = new Set(opts.retryStatuses || [502, 503, 504]);
-        this.maxAttempts = opts.maxAttempts || 3;
+        // Пути самой авторизации ждать нельзя — это и есть логин
+        this.open = new Set(opts.open || ['/login', '/login/confirm', '/keep-alive']);
+        this.login = opts.login ?? null;
+    }
+
+
+    /**
+     * Сессия для этого пути. Дедупликация живёт в Api.login() — здесь
+     * достаточно дождаться того логина, который уже идёт
+     */
+    async #auth(path) {
+        if (this.open.has(path)) return null;
+        if (this.session.access && this.session.live()) return null;
+        if (!this.login || !this.endpoint.alive) return null;
+
+        return this.login();
     }
 
     /**
@@ -350,94 +314,91 @@ class Client {
      * @returns {Promise<tResponse>}
      */
     async fetch(path, opts = { method: 'GET' }, e = () => { }) {
-        const setupHeaders = (orig = {}) => ({
-            ...orig,
-            'x-tun-did': this.device.id,
-            'x-tun-key': session.access?.key,
-            'x-tun-id': session.access?.id
-        });
-
-        const setupBody = (body) => {
-            if (!body || typeof body !== "object" || body instanceof URLSearchParams) return;
-
-            const fd = new FormData();
-            this.#appendFormData(fd, body);
-
-            if (!this.#hasBinary(body)) {
-                opts.headers = {
-                    ...(opts.headers || {}),
-                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-                }
-                return new URLSearchParams(fd);
-            }
-
-            return fd;
-        }
+        const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+        const base = { ...opts, headers: { ...(opts.headers || {}) } };
+        const body = this.#prepareBody(base);       // один раз, до цикла
+        const url = this.endpoint.getUrl();
 
         let error = null;
-        let attempt = 0;
 
-        while (attempt < this.maxAttempts) {
-            attempt++;
+        await this.#auth(path.split('?')[0]);
 
-            const url = this.pool.getUrl();
+        if (!this.endpoint.alive) {
+            const res = {
+                value: undefined, complete: false, parsed: false,
+                status: 0, offline: true,
+                retry: () => this.fetch(path, opts, e),
+            };
+            e(res);
+            return res;
+        }
 
-            if (!url) {
-                error = new Error('No availble servers');
-                break;
-            }
+        for (let attempt = 0; attempt < this.endpoint.maxAttempts; attempt++) {
+            if (attempt > 0) await sleep(this.endpoint.delayFor(attempt - 1));
 
-            opts.body = setupBody(opts.body);
-
-            if (opts.method === 'GET' || opts.body === undefined) delete opts.body;
+            const init = { ...base, cache: 'no-store', headers: this.#headers(base.headers) };
+            if (base.method === 'GET' || body === undefined) delete init.body;
+            else init.body = body;
 
             try {
-                const response = await window.fetch(`${url}${path}`, {
-                    ...opts,
-                    headers: setupHeaders(opts.headers)
-                });
-                /**@type {tResponse} */
-                const tResp = {
-                    complete: response.ok,
-                    parsed: false,
-                    status: response.status,
-                    value: undefined
-                }
+                const response = await window.fetch(`${url}${path}`, init);
 
                 if (this.retryStatuses.has(response.status)) {
-                    this.pool.fail(url);
-                    error = new Error(`Retryable status ${response.status}`);
+                    // 429 — живой сервер, который просит подождать
+                    if (response.status !== 429) this.endpoint.fail();
+
+                    error = new Error(`Retryable ${response.status}`);
                     continue;
                 }
 
                 const [parsed, raw] = await this.#parse(response);
+                const tResp = {
+                    complete: response.ok,
+                    parsed,
+                    status: response.status,
+                    value: raw,
+                    retry: () => this.fetch(path, opts, e),
+                };
 
-                tResp.parsed = parsed;
-                tResp.value = raw;
-                tResp.retry = () => this.fetch(path, opts, e);
+                // Ответ получен — сервер жив, каким бы ни был статус
+                this.endpoint.ok();
+
                 e(tResp);
                 return tResp;
             } catch (err) {
-                // network / CORS / timeout
-                this.pool.fail(url);
-                error = err;
-                // loop -> try next available server
-                continue;
+                this.endpoint.fail();
+                error = err;  // network / CORS / timeout
             }
         }
 
-        /**@type {tResponse} */
         const res = {
-            value: undefined,
-            complete: false,
-            parsed: false,
-            status: 600,
-            err: String(error),
-            retry: () => this.fetch(path, opts, e)
-        }
-
+            value: undefined, complete: false, parsed: false,
+            status: 600, err: String(error),
+            retry: () => this.fetch(path, opts, e),
+        };
         e(res);
         return res;
+    }
+
+    #headers(extra = {}) {
+        const h = { ...extra, 'x-tun-did': this.device.id };
+        const acc = this.session.access;
+        if (acc?.key) h['x-tun-key'] = acc.key;
+        if (acc?.id) h['x-tun-id'] = acc.id;
+        return h;
+    }
+
+    #prepareBody(base) {
+        const raw = base.body;
+        if (!raw || typeof raw !== 'object' || raw instanceof URLSearchParams) return raw;
+
+        const fd = new FormData();
+        this.#appendFormData(fd, raw);
+
+        if (this.#hasBinary(raw)) return fd;
+
+        base.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+        return new URLSearchParams(fd);
     }
 
     //Helps
@@ -648,10 +609,10 @@ class Certificate {
     }
 }
 
-const pool = new Pool([
-    'https://tunime.onrender.com',
-    'https://tunime-hujg.onrender.com'
-], { storageKey: 'hub-state' });
+const endpoint = new Endpoint('https://hub.tunime.app');
+
+// Сеть вернулась — не дожидаемся остатка cooldown
+window.addEventListener('online', () => endpoint.ok());
 
 const device = new Device();
 
@@ -663,13 +624,113 @@ const session = new Session({
     }
 })
 
-const client = new Client(pool, device, session);
+/**
+ * Плеер живёт в iframe и намеренно исключён из бутстрапа — авторизацией
+ * занимается только верхнее окно. У фрейма свой экземпляр модуля, и общая
+ */
+const client = new Client(endpoint, device, session, {
+    login: window.self === window.top ? () => Api.login() : null
+});
+
+/**
+ * Метаданные сессии, которые сервер прикладывает к ответам /login,
+ * /login/confirm, /keep-alive и /shiki/auth: `uid` текущего владельца и
+ * `collectionsRev` — маркер изменений коллекций.
+ *
+ * `uid` идёт в паре с маркером не для красоты: счётчики у разных
+ * пользователей растут независимо
+ */
+const meta = new class {
+    #value = { uid: null, collectionsRev: null };
+    #listeners = [];
+
+    /**
+     * Приходил ли хоть один ответ с метаданными.
+     *
+     * Отличает «сервер сказал: владельца нет» (логаут) от «мы ещё ничего
+     * не спрашивали». Без этого различия стартовое пустое значение выглядело
+     * бы как логаут — и подписчики сбрасывали бы кэш на ровном месте.
+     * Это реально случается: если сессия ещё жива, /login не вызывается,
+     * и до первого keep-alive метаданных нет вообще.
+     */
+    #seen = false;
+
+    get value() {
+        return { ...this.#value };
+    }
+
+    /** Получены ли метаданные хотя бы раз за эту загрузку страницы */
+    get seen() {
+        return this.#seen;
+    }
+
+    /**
+     * Принять поля из ответа сервера. Отсутствующие в ответе — не трогаем,
+     * поэтому роуты, которые про метаданные не знают, ничего не сбрасывают.
+     * @param {Object} payload
+     */
+    accept(payload) {
+        if (!payload || typeof payload !== 'object') return;
+        if (!('uid' in payload) && !('collectionsRev' in payload)) return;
+
+        const next = {
+            uid: 'uid' in payload
+                ? (payload.uid === null || payload.uid === undefined ? null : String(payload.uid))
+                : this.#value.uid,
+            collectionsRev: 'collectionsRev' in payload
+                ? payload.collectionsRev
+                : this.#value.collectionsRev
+        };
+
+        const changed = !this.#seen
+            || next.uid !== this.#value.uid
+            || next.collectionsRev !== this.#value.collectionsRev;
+
+        this.#value = next;
+        this.#seen = true;
+
+        if (changed) {
+            for (const listener of this.#listeners) {
+                try {
+                    listener(this.value);
+                } catch (err) {
+                    console.warn('[hub] обработчик meta упал', err);
+                }
+            }
+        }
+    }
+
+    /**
+     * Подписка. Обработчик вызывается сразу с текущим значением —
+     * подписчик может появиться позже логина и всё равно его получит.
+     * @param {(meta: {uid: string|null, collectionsRev: number|null}) => void} fn
+     */
+    on(fn) {
+        if (typeof fn !== 'function') return;
+
+        this.#listeners.push(fn);
+
+        // Сразу отдаём только то, что реально пришло с сервера. Пустое
+        // стартовое значение подписчику не показываем — он принял бы его
+        // за логаут
+        if (!this.#seen) return;
+
+        try {
+            fn(this.value);
+        } catch (err) {
+            console.warn('[hub] обработчик meta упал', err);
+        }
+    }
+}();
 
 const Api = new class {
+    /** Логин в полёте. Один на всех: гейт, бутстрап и keep-alive */
+    #logging = null;
+
     /**
-     * @param {Client} client 
-     * @param {Session} session 
-     * @param {Device} device 
+     * @param {Client} client
+     * @param {Session} session
+     * @param {Device} device
      */
     constructor(client, session, device) {
         this.client = client;
@@ -677,7 +738,19 @@ const Api = new class {
         this.device = device;
     }
 
-    async login() {
+    /**
+     * Параллельные логины недопустимы: каждый /login/confirm выдаёт новый
+     * ключ сессии, и тот, кто пришёл первым, остаётся со старым — сервер
+     * отвечает ему 401
+     */
+    login() {
+        if (this.#logging) return this.#logging;
+
+        this.#logging = this.#login().finally(() => { this.#logging = null; });
+        return this.#logging;
+    }
+
+    async #login() {
         const pubKey = await certificate.publicKeyJwk();
 
         const response = await this.client.fetch('/login', {
@@ -695,12 +768,18 @@ const Api = new class {
 
         this.device.id = data.did;
 
+        // Устройство без сертификата получает uid и маркер уже здесь;
+        // у устройств с сертификатом это ещё pending-сессия без uid,
+        // и метаданные приедут после подтверждения
+        if (!certRequired) meta.accept(response.value);
+
         if (certRequired) {
             const confirmed = await this.#confirmLogin(data.did, loginId);
 
             if (confirmed.data) {
                 this.session.access = confirmed.data.data;
                 if (confirmed.data.shiki) OAuth.access = confirmed.data.shiki;
+                meta.accept(confirmed.data);
                 return this.session.access;
             }
 
@@ -765,6 +844,9 @@ const Api = new class {
         const { data } = response.value;
         this.session.access = data;
 
+        // Маркер коллекций едет попуткой
+        meta.accept(response.value);
+
         return data;
     }
 }(client, session, device);
@@ -776,8 +858,25 @@ window.certificate = certificate;
 export const Hub = new class {
     snapshot = snapshot;
 
+    /**
+     * Метаданные сессии от сервера: { uid, collectionsRev }.
+     * Приезжают из /login, /login/confirm, /keep-alive и /shiki/auth.
+     */
+    get meta() {
+        return meta.value;
+    }
+
+    /**
+     * Подписка на метаданные. Обработчик вызывается сразу с текущим
+     * значением, так что подписаться можно в любой момент.
+     * @param {(meta: {uid: string|null, collectionsRev: number|null}) => void} fn
+     */
+    onMeta(fn) {
+        meta.on(fn);
+    }
+
     get url() {
-        return pool.getUrl();
+        return endpoint.getUrl();
     }
 
     /**
@@ -810,6 +909,10 @@ export const Hub = new class {
             const { data } = response.value;
             session.access = data;
 
+            // Привязка аккаунта: сообщаем нового владельца и его маркер —
+            // модуль коллекций по этому сигналу сбросит чужой кэш
+            meta.accept(response.value);
+
             return response;
         },
 
@@ -826,6 +929,10 @@ export const Hub = new class {
 
             if (response.parsed && response.complete) {
                 session.access = response.value.data;
+
+                // Владельца больше нет — тот же сигнал, что и при входе,
+                // только с uid: null
+                meta.accept(response.value);
             }
 
             return response.value?.data;
