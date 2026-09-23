@@ -319,9 +319,12 @@ class Client {
         const body = this.#prepareBody(base);       // один раз, до цикла
         const url = this.endpoint.getUrl();
 
-        let error = null;
+        const route = path.split('?')[0];
 
-        await this.#auth(path.split('?')[0]);
+        let error = null;
+        let relogin = false;    // перелогин по 401 — не больше одного на вызов
+
+        await this.#auth(route);
 
         if (!this.endpoint.alive) {
             const res = {
@@ -348,6 +351,19 @@ class Client {
                     if (response.status !== 429) this.endpoint.fail();
 
                     error = new Error(`Retryable ${response.status}`);
+                    continue;
+                }
+
+                // Ключ отправлен, но сервер его не знает: сессия умерла на
+                // его стороне раньше, чем истекла у нас, и по локальной дате
+                // гейт считает её живой. Перелогин и один повтор
+                if (response.status === 401 && !relogin && this.login && !this.open.has(route)) {
+                    relogin = true;
+                    this.session.access = undefined;
+
+                    await this.#auth(route);
+
+                    attempt--;  // восстановление не должно съедать попытку
                     continue;
                 }
 
@@ -962,63 +978,60 @@ function _getAppInfo(key) {
 
     const IniT = async () => {
         let timeout = undefined;
+        let planning = false;   // update() уже в полёте
 
-        promiseOnInitHub.forEach((resolve) => {
-            resolve();
-        })
+        promiseOnInitHub.forEach((resolve) => resolve());
 
-        document.addEventListener('visibilitychange', async () => {
-            if (document.visibilityState !== 'visible') {
-                clearTimeout(timeout);
-            } else {
-                clearTimeout(timeout);
+        const schedule = (ms) => {
+            clearTimeout(timeout);
+            // Меньше секунды — защита от мгновенного цикла на просроченной сессии
+            timeout = setTimeout(tick, Math.max(ms, 1000));
+            console.log(`[api] - Weiter durch ${ms} ms`);
+        };
+
+        const tick = async () => {
+            if (document.visibilityState !== 'visible') return;
+
+            try {
+                // Сессию не обнуляем: login и keepAlive присвоят свежую сами
+                const acc = session.live() ? await Api.keepAlive() : await Api.login();
+
+                if (!acc) return;
+                if (acc.code === 401 && !await Api.login()) return;
+
                 update();
+            } catch (err) {
+                console.log('[api] - цикл сессии упал', err);
             }
+        };
+
+        const update = async () => {
+            if (planning) return;
+            planning = true;
+
+            try {
+                if (session.access === undefined && !await Api.login()) return;
+
+                const acc = session.access;
+                if (!acc?.end) return;
+
+                schedule(Date.parse(acc.end) - Date.now() - 60000);
+            } finally {
+                planning = false;
+            }
+        };
+
+        document.addEventListener('visibilitychange', () => {
+            clearTimeout(timeout);
+            if (document.visibilityState === 'visible') update();
         });
 
         window.addEventListener('pageshow', (e) => {
-            if (e.persisted) {
-                clearTimeout(timeout);
-                update();
-            }
+            if (e.persisted) update();
         });
 
-        const update = async () => {
-            const time = 60000;
-
-            if (session.access === undefined) {
-                const acc = await Api.login();
-                if (!acc) {
-                    return;
-                }
-            }
-
-            const date = Date.parse(session.access.end) - Date.now() - time;
-
-            timeout = setTimeout(async () => {
-                if (document.visibilityState !== 'visible') return;
-
-                if (!session.live()) {
-                    session.access = undefined;
-                    await Api.login();
-                } else {
-                    const acc = await Api.keepAlive();
-
-                    if (!acc) {
-                        return;
-                    } else if (acc.code === 401) {
-                        await Api.login();
-                    }
-
-                    update();
-                }
-            }, date);
-
-            console.log(`[api] - Weiter durch ${date} ms`);
-        }
-
         update();
-    }
+    };
 
     pwa.events.on('load', async () => {
         try {
