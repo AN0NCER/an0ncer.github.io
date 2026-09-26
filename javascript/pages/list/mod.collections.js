@@ -116,7 +116,7 @@ class Board {
      */
     add(collection) {
         if (this.inRow(collection.cid)) {
-            return $(`${ROW} > .item-collection[data-id="${collection.cid}"]`).show();
+            return $(`${ROW} > .collection-v-card[data-cid="${collection.cid}"]`).show();
         }
 
         $(ROW).append(this.#item(collection));
@@ -131,7 +131,7 @@ class Board {
     trim(keep = []) {
         const base = Collections.list.slice(0, PREVIEW).map(x => x.cid);
 
-        $(`${ROW} > .item-collection[data-id]`).each((_, el) => {
+        $(`${ROW} > .collection-v-card[data-cid]`).each((_, el) => {
             const cid = el.dataset.id;
             if (base.includes(cid) || keep.includes(cid)) return;
 
@@ -154,7 +154,7 @@ class Board {
             const urls = coverUrls(collection);
             if (urls.length === 0) continue;
 
-            $(`.item-collection[data-id="${collection.cid}"]`).each((_, el) => {
+            $(`.collection-v-card[data-cid="${collection.cid}"]`).each((_, el) => {
                 HCollection.Covers(el, urls);
             });
         }
@@ -182,12 +182,7 @@ class Board {
 
     /** @param {Object} collection */
     #item(collection) {
-        return HCollection.Iteam({
-            id: collection.cid,
-            title: collection.title,
-            count: collection.count ?? Collections.ids(collection.cid).length,
-            bgs: coverUrls(collection)
-        });
+        return HCollection.Iteam(collection, coverUrls(collection));
     }
 }
 
@@ -256,16 +251,16 @@ class Search {
         const list = ids.map(cid => Collections.get(cid)).filter(Boolean);
 
         HCollection.NotFound.Hide(ROW);
-        $(`${ROW} > .item-collection`).hide();
+        $(`${ROW} > .collection-v-card`).hide();
 
         for (const collection of list) this.#board.add(collection);
 
         this.#shown = list.map(x => x.cid);
         this.#board.trim(this.#shown);
 
-        $(`${ROW} > .item-collection`).hide();
+        $(`${ROW} > .collection-v-card`).hide();
         for (const cid of this.#shown) {
-            $(`${ROW} > .item-collection[data-id="${cid}"]`).show();
+            $(`${ROW} > .collection-v-card[data-cid="${cid}"]`).show();
         }
 
         this.#board.covers(list);
@@ -279,7 +274,7 @@ class Search {
         const list = Collections.findAll(title).slice(0, this.#limit);
 
         if (list.length === 0) {
-            $(`${ROW} > .item-collection`).hide();
+            $(`${ROW} > .collection-v-card`).hide();
             return HCollection.NotFound.Show(ROW);
         }
 
@@ -295,7 +290,7 @@ class Search {
         this.#shown = [];
         this.#board.trim([]);
 
-        $(`${ROW} > .item-collection`).show();
+        $(`${ROW} > .collection-v-card:not(.-notfound)`).show();
     }
 
     /**
@@ -323,18 +318,18 @@ const openCollection = async (cid) => {
         return ShowInfo('Коллекция пуста', 'collection-empty');
     }
 
-    const item = $(`.item-collection[data-id="${cid}"]`);
+    const item = $(`${ROW} > .collection-v-card[data-cid="${cid}"]`);
 
-    item.addClass('loading');
+    item.addClass('-loading');
     await WCollectionViewer(cid).catch(() => null);
-    item.removeClass('loading');
+    item.removeClass('-loading');
 };
 
 export const InitCollections = () => {
     // Клик ловим на контейнерах: плитки перерисовываются, и вешать
     // обработчик на каждую заново — лишняя работа и источник утечек
-    $(document).on('click', `${ROW} > .item-collection[data-id]`, function () {
-        openCollection($(this).data('id'));
+    $(document).on('click', `${ROW} > .collection-v-card[data-cid]`, function () {
+        openCollection($(this).data('cid'));
     });
 
     // Заголовок ведёт на полную страницу коллекций: окна со списком

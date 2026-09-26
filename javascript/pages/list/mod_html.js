@@ -1,88 +1,156 @@
 import tmpl from "../../library/tmpl.lib.js";
 
 const TEMPLATE = {
-    item: '#tpl-collection-item',
-    preview: '#tpl-collection-preview',
-    empty: '#tpl-collection-empty'
+    card: '#collection-v-card'
 };
 
-/** Обложка коллажа — четыре превью: одно крупное и три мелких */
+/** Больше четырёх коллаж не показывает */
 const COVERS = 4;
 
+/** Битая ссылка — заглушка вместо пустой плитки */
+const NOIMAGE = '/images/noanime.png';
+
+/** Значок в углу — только у особых коллекций */
+const ICONS = {
+    shikimori: '#i-shikimori'
+};
+
+/** Сколько аниме в коллекции — у избранного счётчика нет, считаем сами */
+const countOf = (collection) => collection.count
+    ?? (Array.isArray(collection.list)
+        ? collection.list.length
+        : Object.keys(collection.items ?? {}).length);
+
 /**
- * Расставить обложки в готовой плитке.
+ * Когда обновляли. Коротко: карточка узкая, и подпись делит строку со
+ * значком приватности
  *
- * Отдельно от создания, потому что постеры приезжают позже самой плитки:
+ * @param {string} iso
+ */
+const updated = (iso) => {
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return '';
+
+    const days = Math.floor((Date.now() - date.getTime()) / 86400000);
+
+    if (days <= 0) return 'сегодня';
+    if (days === 1) return 'вчера';
+    if (days < 7) return `${days} дня назад`;
+
+    return date.toLocaleDateString('ru-RU');
+};
+
+/**
+ * Расставить обложки в готовой карточке.
+ *
+ * Отдельно от создания, потому что постеры приезжают позже самой карточки:
  * сначала показываем название и счётчик, потом заполняем коллаж
  *
- * @param {HTMLElement} el - плитка
+ * @param {HTMLElement} el - карточка
  * @param {string[]} [bgs] - до четырёх ссылок на превью
  */
 function covers(el, bgs = []) {
-    if (!el) return;
+    const root = el?.querySelector('.collection-preview');
+    if (!root) return;
 
-    const block1 = el.querySelector('.bg-collection > .block-1');
-    const block2 = el.querySelector('.bg-collection > .block-2');
+    const list = bgs.filter(Boolean).slice(0, COVERS);
 
-    if (block1 && bgs[0]) {
-        block1.style.setProperty('--bg-image', `url(${bgs[0]})`);
-        block1.classList.remove('loading');
+    root.dataset.count = String(list.length);
+    root.innerHTML = '';
+
+    const fragment = document.createDocumentFragment();
+
+    // Постеров нет — четыре пустые плитки: нумерацию по ним рисует CSS
+    // через data-count="0", это же и состояние загрузки
+    for (let i = 0; i < (list.length || COVERS); i++) {
+        const anime = document.createElement('div');
+        anime.className = 'anime';
+
+        if (list[i]) {
+            const img = document.createElement('img');
+
+            img.loading = 'lazy';
+            img.alt = '';
+            img.src = list[i];
+            img.addEventListener('error', () => { img.src = NOIMAGE; }, { once: true });
+
+            anime.append(img);
+        }
+
+        fragment.append(anime);
     }
 
-    if (!block2) return;
-
-    const previews = [...block2.querySelectorAll('.preview')];
-
-    for (let i = 1; i < COVERS; i++) {
-        const preview = previews[i - 1];
-        if (!preview || !bgs[i]) continue;
-
-        preview.style.setProperty('--bg-image', `url(${bgs[i]})`);
-        preview.classList.remove('loading');
-    }
+    root.append(fragment);
 }
 
 /**
- * Плитка коллекции.
+ * Карточка коллекции.
  *
- * Без `bgs` возвращается та же плитка, но с заглушками вместо постеров —
- * это и есть состояние загрузки, отдельной разметки для него не нужно
+ * Без `bgs` возвращается та же карточка с пустым коллажем — это и есть
+ * состояние загрузки, отдельной разметки для него не нужно
  *
- * @param {{id: string, title: string, count?: number, bgs?: string[]}} data
+ * @param {Object} collection - коллекция из фасада
+ * @param {string[]} [bgs] - ссылки на превью обложки
  * @returns {HTMLElement}
  */
-function item({ id, title, count = 0, bgs = [] } = {}) {
-    const el = tmpl(TEMPLATE.item).el;
+function item(collection = {}, bgs = []) {
+    const el = tmpl(TEMPLATE.card).el;
 
-    el.dataset.id = id;
-    el.querySelector('.bg-collection').classList.add(`count-${count}`);
-    el.querySelector('.collection-name').textContent = title ?? '';
-    el.querySelector('.collection-counts').textContent = `${count} Аниме`;
+    el.dataset.cid = collection.cid ?? '';
+    el.dataset.kind = collection.kind ?? 'custom';
+    el.dataset.visibility = collection.visibility ?? 'private';
 
-    // Мелких превью ровно столько, сколько аниме сверх первого: у
-    // коллекции из двух не должно быть четырёх пустых плашек
-    const block2 = el.querySelector('.bg-collection > .block-2');
-    const slots = Math.min(Math.max(count - 1, 0), COVERS - 1);
+    // Значок показываем только у особых коллекций, у остальных он
+    // остаётся скрытым
+    const symbol = ICONS[collection.kind];
+    const icon = el.querySelector('.abs-icon');
 
-    for (let i = 0; i < slots; i++) {
-        block2.append(tmpl(TEMPLATE.preview).el);
+    if (symbol && icon) {
+        icon.querySelector('use')?.setAttribute('href', symbol);
+        icon.classList.remove('-hide');
     }
 
-    if (bgs.length > 0) covers(el, bgs);
+    el.querySelector('.meta-title').textContent = collection.title ?? '';
+    el.querySelector('.meta-count').textContent = `${countOf(collection)} Аниме`;
+    el.querySelector('.meta-date').textContent = updated(collection.updatedAt);
+
+    covers(el, bgs);
 
     return el;
 }
 
 /** Заглушка «ничего не найдено» — одна на список */
 class NotFoundCollection {
-    #selector = '.item-collection.not-found';
+    #selector = '.collection-v-card.-notfound';
 
     get dom() {
         return this.#selector;
     }
 
+    /**
+     * Та же карточка коллекции, только без cid: иначе её ловили бы клик
+     * и чистка полосы как обычную коллекцию
+     */
     Get() {
-        return tmpl(TEMPLATE.empty).el;
+        const el = tmpl(TEMPLATE.card).el;
+
+        el.classList.add('-notfound');
+        el.removeAttribute('data-cid');
+
+        el.querySelector('.meta-title').textContent = 'Ничего не найдено';
+        el.querySelector('.meta-count').textContent = '';
+
+        const preview = el.querySelector('.collection-preview');
+
+        if (preview) {
+            const anime = document.createElement('div');
+            anime.className = 'anime';
+
+            preview.dataset.count = '1';
+            preview.replaceChildren(anime);
+        }
+
+        return el;
     }
 
     Show(path) {
@@ -100,7 +168,6 @@ class NotFoundCollection {
 
 export const HCollection = {
     Iteam: item,
-    Load: item,
     Covers: covers,
     NotFound: new NotFoundCollection()
 };

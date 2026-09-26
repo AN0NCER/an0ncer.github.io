@@ -1,0 +1,267 @@
+@mixin CollectionVCard() {
+    .collection-v-card {
+        --preview-h: 170px;
+        --preview-gap: 4px;
+
+        font-family: 'Manrope', sans-serif;
+        cursor: pointer;
+        box-sizing: border-box;
+
+        .card-wrapper {
+            background: #191c21;
+            padding: 10px;
+            border-radius: 10px;
+            width: 200px;
+            position: relative;
+
+            .abs-icon {
+                display: grid;
+                place-items: center;
+                height: 30px;
+                width: 30px;
+                position: absolute;
+                background: #191c21;
+                border-radius: 8px 0px 10px 0px;
+
+                svg {
+                    height: 18px;
+                    fill: #ffffff;
+                    margin-bottom: 8px;
+                    margin-right: 8px;
+                }
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+                    left: 30px;
+                    top: 0;
+
+                    background: radial-gradient(circle at 100% 100%, transparent 10px, #191c21 10px);
+                }
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+                    left: 0px;
+                    top: 30px;
+
+                    background: radial-gradient(circle at 100% 100%, transparent 10px, #191c21 10px);
+                }
+
+                &.-hide {
+                    display: none;
+                }
+            }
+
+            .collection-preview {
+                display: grid;
+                flex: 0 0 auto;
+                gap: var(--preview-gap);
+
+                width: 100%;
+                height: var(--preview-h);
+                aspect-ratio: 1;
+                border-radius: 8px;
+
+                overflow: hidden;
+
+                &[data-count="1"] {
+                    grid-template-columns: 1fr;
+                }
+
+                &[data-count="2"] {
+                    grid-template-columns: 1fr 1fr;
+                }
+
+                &[data-count="3"] {
+                    grid-template-columns: 2fr 1fr;
+                    grid-template-rows: repeat(2, 1fr);
+
+                    .anime:first-child {
+                        grid-row: span 2;
+                    }
+                }
+
+                &[data-count="4"],
+                &[data-count="0"] {
+                    grid-template-columns: 2fr 1fr;
+                    grid-template-rows: repeat(3, 1fr);
+
+                    .anime:first-child {
+                        grid-row: span 3;
+                    }
+
+                    &[data-count="0"] {
+                        .anime {
+                            display: grid;
+                            place-items: center;
+
+                            &::after {
+                                --font-size: 16px;
+                                display: block;
+                                position: relative;
+                                line-height: 1;
+                                color: rgba(255, 255, 255, 0.1);
+                                font-weight: bold;
+                                font-size: var(--font-size);
+                            }
+
+                            // ---- start for ----
+
+                            @for $i from 1 through 4 {
+                                &:nth-child(#{$i})::after {
+                                    content: "#{$i}";
+
+                                    @if $i ==1 {
+                                        --font-size: 48px;
+                                    }
+                                }
+                            }
+
+                            // ---- end for ----
+                        }
+                    }
+                }
+
+                .anime {
+                    min-width: 0;
+                    overflow: hidden;
+                    background: #303237;
+                    border-radius: 4px;
+
+                    img {
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+
+                        object-fit: cover;
+                        object-position: center;
+                    }
+                }
+            }
+
+            .card-content {
+                margin-top: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+
+                .content-meta-wrapper {
+                    display: grid;
+                    gap: 5px;
+                    width: 100%;
+
+                    .meta-title {
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        line-height: 1.1em;
+                        font-weight: 500;
+                        font-size: 14px;
+                        color: #ffffff;
+                    }
+
+                    .meta-info {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        line-height: 1;
+
+
+                        .collection-type {
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+
+                            .icon {
+                                display: flex;
+
+                                svg {
+                                    height: 16px;
+                                    width: 16px;
+                                    fill: #2393f1;
+
+                                    .private,
+                                    .public {
+                                        display: none;
+                                    }
+                                }
+                            }
+
+                        }
+
+                        .meta-count,
+                        .meta-date {
+                            font-size: 11px;
+                            font-weight: 500;
+                            color: rgba(255, 255, 255, 0.6);
+                            line-height: 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        & * {
+            box-sizing: border-box;
+        }
+
+        &[data-visibility="private"] {
+            svg {
+                .private {
+                    display: block !important;
+                }
+            }
+        }
+
+        &[data-visibility="public"] {
+            svg {
+                .public {
+                    display: block !important;
+                }
+            }
+        }
+
+        &.-notfound {
+            .card-wrapper {
+                .collection-preview {
+                    .anime {
+                        display: grid;
+                        place-items: center;
+
+                        &::after {
+                            content: '?';
+                            --font-size: 48px;
+                            display: block;
+                            position: relative;
+                            line-height: 1;
+                            color: rgba(255, 255, 255, 0.1);
+                            font-weight: bold;
+                            font-size: var(--font-size);
+                        }
+                    }
+                }
+
+                .card-content {
+                    .content-meta-wrapper {
+                        height: 36px;
+                        .meta-title {
+                            display: grid;
+                            place-items: center;
+                        }
+
+                        .meta-info {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

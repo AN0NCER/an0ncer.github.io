@@ -13,6 +13,7 @@ body {
 }
 
 @import './cards';
+@import './collection_card';
 @import './windowed';
 @import './popup';
 
@@ -37,6 +38,8 @@ body {
         @import './list/main';
         @import './list/content';
     }
+
+    @include CollectionVCard();
 
     @media screen and (min-width: 900px) {
         &>.wrapper {
