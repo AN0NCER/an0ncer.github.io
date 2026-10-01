@@ -14,6 +14,21 @@ import { createSearch } from "./collections/mod.search.js";
 /** Чьи коллекции смотрим. Без параметра — свои */
 export const $UID = new URLSearchParams(window.location.search).get("id");
 
+/** Коллекция из ссылки /c/:cid — открывается сама при входе на страницу */
+const $SHARED = new URLSearchParams(window.location.search).get("cid");
+
+const openShared = () => {
+    if (!$SHARED) return;
+
+    // Из адреса убираем: закрытое окно не должно открываться заново
+    // при каждой перезагрузке страницы
+    const url = new URL(window.location.href);
+    url.searchParams.delete('cid');
+    history.replaceState(history.state, '', url);
+
+    WCollectionViewer($SHARED).catch(() => null);
+};
+
 TMenu.init();
 
 /** Список для поиска по названиям: свои из фасада, чужие из памяти */
@@ -244,6 +259,9 @@ Main(async (e) => {
     // Чужого профиля нет — дальше идти некуда: коллекции такого
     // пользователя тоже не найдутся
     if (!owner) return console.log('[collections] - владелец не найден');
+
+    // Окно само сходит за коллекцией — список страницы ему не нужен
+    openShared();
 
     if (mine()) {
         // Создавать можно только у себя: на чужой странице кнопке нечего
