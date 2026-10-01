@@ -547,10 +547,20 @@ header .content .gallery .galery-slider {
   overflow-x: auto;
   padding: 0 20px;
   gap: 10px;
+  scroll-snap-type: x proximity;
+}
+@media (hover: none) {
+  header .content .gallery .galery-slider {
+    scroll-snap-type: x mandatory;
+  }
+}
+header .content .gallery .galery-slider.-glide {
+  scroll-snap-type: none;
 }
 header .content .gallery .galery-slider .slide {
   position: relative;
   display: flex;
+  scroll-snap-align: center;
 }
 header .content .gallery .galery-slider .slide img {
   height: 150px;
@@ -1840,6 +1850,15 @@ main > .room-controller-wrapper.-hide {
   overflow-x: auto;
   padding-left: 15px;
   padding-right: 15px;
+  scroll-snap-type: x proximity;
+}
+@media (hover: none) {
+  .list-franchise {
+    scroll-snap-type: x mandatory;
+  }
+}
+.list-franchise.-glide {
+  scroll-snap-type: none;
 }
 .list-franchise a.card-chronology {
   display: grid;
@@ -1847,6 +1866,7 @@ main > .room-controller-wrapper.-hide {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   cursor: pointer;
+  scroll-snap-align: center;
 }
 .list-franchise a.card-chronology .chronology-wrapper {
   display: flex;

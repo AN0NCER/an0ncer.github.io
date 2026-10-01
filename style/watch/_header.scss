@@ -442,9 +442,20 @@
                 padding: 0 20px;
                 gap: 10px;
 
+                scroll-snap-type: x proximity;
+
+                @media (hover: none) {
+                    scroll-snap-type: x mandatory;
+                }
+
+                &.-glide {
+                    scroll-snap-type: none;
+                }
+
                 .slide {
                     position: relative;
                     display: flex;
+                    scroll-snap-align: center;
 
                     img {
                         height: 150px;
