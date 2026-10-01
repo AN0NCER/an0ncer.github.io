@@ -4,6 +4,8 @@
         padding: 0 20px;
         flex-wrap: wrap;
         gap: 10px;
+        margin-left: var(--sal, 0px);
+        margin-right: var(--sar, 0px);
 
         .group-wrapper {
             display: flex;

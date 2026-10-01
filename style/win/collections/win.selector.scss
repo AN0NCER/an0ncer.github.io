@@ -2,6 +2,8 @@
     .collections-list-wrapper {
         padding: 10px;
         overflow: hidden;
+        margin-left: var(--sal, 0px);
+        margin-right: var(--sar, 0px);
 
         .collections-list {
             display: flex;
@@ -255,6 +257,8 @@ $BAR: 'bar.v2';
             }
 
             .type-filter-wrapper {
+                margin-left: var(--sal, 0px);
+                margin-right: var(--sar, 0px);
                 padding-left: 20px;
                 padding-right: 15px;
                 display: flex;
@@ -390,6 +394,7 @@ $BAR: 'bar.v2';
                 right: 0;
                 pointer-events: none;
                 box-sizing: border-box;
+                z-index: 20;
 
                 .win-actions {
                     display: flex;
@@ -473,7 +478,7 @@ $BAR: 'bar.v2';
                             flex: 1 0 0;
                         }
 
-                        &.-dissable{
+                        &.-dissable {
                             opacity: .5;
                             cursor: default;
                             pointer-events: none;
@@ -505,7 +510,7 @@ $BAR: 'bar.v2';
                     }
                 }
 
-                *{
+                * {
                     box-sizing: border-box;
                 }
             }

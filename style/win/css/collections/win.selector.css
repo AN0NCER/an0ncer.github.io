@@ -70,6 +70,8 @@
   fill: #ffffff !important;
 }
 .content-collection-selector .content-wrapper .wrapper .type-filter-wrapper {
+  margin-left: var(--sal, 0px);
+  margin-right: var(--sar, 0px);
   padding-left: 20px;
   padding-right: 15px;
   display: flex;
@@ -166,6 +168,8 @@
 .content-collection-selector .content-wrapper .wrapper .collections-list-wrapper {
   padding: 10px;
   overflow: hidden;
+  margin-left: var(--sal, 0px);
+  margin-right: var(--sar, 0px);
 }
 .content-collection-selector .content-wrapper .wrapper .collections-list-wrapper .collections-list {
   display: flex;
@@ -341,6 +345,7 @@
   right: 0;
   pointer-events: none;
   box-sizing: border-box;
+  z-index: 20;
 }
 .content-collection-selector .content-wrapper .wrapper .win-actions-wrapper .win-actions {
   display: flex;

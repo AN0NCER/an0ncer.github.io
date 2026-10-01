@@ -132,7 +132,8 @@ body {
 .quick-panel>.btn#page-filter {
     &.-active {
         background: #238EE8;
-        .ticon{
+
+        .ticon {
             background: #ffffff;
         }
     }
@@ -140,4 +141,19 @@ body {
 
 .i-ios-search {
     mask-image: url('data:image/svg+xml,<svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 4C8 6.20914 6.20914 8 4 8C1.79086 8 0 6.20914 0 4C0 1.79086 1.79086 0 4 0C6.20914 0 8 1.79086 8 4ZM1.25895 4C1.25895 5.51384 2.48616 6.74105 4 6.74105C5.51384 6.74105 6.74105 5.51384 6.74105 4C6.74105 2.48616 5.51384 1.25895 4 1.25895C2.48616 1.25895 1.25895 2.48616 1.25895 4Z" fill="white"/><rect x="6.85144" y="5.7688" width="4.11406" height="1.63503" rx="0.817516" transform="rotate(45 6.85144 5.7688)" fill="white"/></svg>');
+}
+
+body[angle="90"],
+body[angle="270"] {
+    @media screen and (max-width: 940px) {
+        &[angle="90"] {
+            padding-left: max(10px, var(--menu-width-safe), var(--sal));
+            padding-right: var(--sar);
+        }
+
+        &[angle="270"] {
+            padding-right: max(10px, var(--menu-width-safe), var(--sar));
+            padding-left: var(--sal);
+        }
+    }
 }
