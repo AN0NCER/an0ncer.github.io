@@ -1,5 +1,5 @@
 const version = '3.3.0';
-const hash = "fc3ba"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const hash = "35c84"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -54,7 +54,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/auto
     { path: "/javascript/auto/download_a.js", hash: "7c6b60bd", size: 6866 },
     // Директория: /javascript/core
-    { path: "/javascript/core/hub.core.js", hash: "69042188", size: 36132 },
+    { path: "/javascript/core/hub.core.js", hash: "d917cefd", size: 36136 },
     { path: "/javascript/core/main.core.js", hash: "2679f79c", size: 15807 },
     { path: "/javascript/core/menu.core.js", hash: "6053760f", size: 20564 },
     { path: "/javascript/core/menu.help.js", hash: "fa142980", size: 7577 },
@@ -211,7 +211,7 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/watch/room.owner.client.js", hash: "990978de", size: 8842 },
     // Директория: /javascript/pages
     { path: "/javascript/pages/404a.js", hash: "39b75479", size: 1830 },
-    { path: "/javascript/pages/collections.js", hash: "41b2f583", size: 11586 },
+    { path: "/javascript/pages/collections.js", hash: "e1c65d4b", size: 12377 },
     { path: "/javascript/pages/downloads.js", hash: "5b0d0b52", size: 3006 },
     { path: "/javascript/pages/index.js", hash: "d9e102b0", size: 2319 },
     { path: "/javascript/pages/list.js", hash: "da7cc570", size: 486 },
@@ -273,51 +273,51 @@ const appShellFilesToCache = [
     // Директория: /style/css/min
     { path: "/style/css/min/swiper-bundle.min.css", hash: "ee1a5395", size: 16482 },
     // Директория: /style/css
-    { path: "/style/css/collections.css", hash: "26b36fae", size: 21050 },
-    { path: "/style/css/downloads.css", hash: "068fb975", size: 40016 },
-    { path: "/style/css/index.css", hash: "729edfd9", size: 73573 },
-    { path: "/style/css/list.css", hash: "607a8d2f", size: 36515 },
-    { path: "/style/css/login.css", hash: "691ffec8", size: 36164 },
-    { path: "/style/css/main.css", hash: "b2bfa155", size: 897 },
-    { path: "/style/css/notfound.css", hash: "6298b91a", size: 21786 },
-    { path: "/style/css/pop.update.css", hash: "e4baf351", size: 6347 },
-    { path: "/style/css/search.css", hash: "bbd6b9eb", size: 91369 },
-    { path: "/style/css/settings.css", hash: "2bb95308", size: 45792 },
-    { path: "/style/css/ticons.css", hash: "b0838f45", size: 73025 },
-    { path: "/style/css/tplayer.css", hash: "7bb2f41c", size: 24724 },
-    { path: "/style/css/user.css", hash: "57c95518", size: 81106 },
-    { path: "/style/css/verify.css", hash: "0591e6af", size: 7985 },
-    { path: "/style/css/watch.css", hash: "59984fcc", size: 73802 },
+    { path: "/style/css/collections.css", hash: "3a00ceaf", size: 20698 },
+    { path: "/style/css/downloads.css", hash: "2e417433", size: 38689 },
+    { path: "/style/css/index.css", hash: "01860928", size: 71116 },
+    { path: "/style/css/list.css", hash: "b1f9d32f", size: 35170 },
+    { path: "/style/css/login.css", hash: "7bf0759b", size: 35725 },
+    { path: "/style/css/main.css", hash: "a295f8c1", size: 852 },
+    { path: "/style/css/notfound.css", hash: "be3e603d", size: 20882 },
+    { path: "/style/css/pop.update.css", hash: "b096770e", size: 6138 },
+    { path: "/style/css/search.css", hash: "07f62b39", size: 89326 },
+    { path: "/style/css/settings.css", hash: "a3dd3ce2", size: 44477 },
+    { path: "/style/css/ticons.css", hash: "f21da079", size: 72707 },
+    { path: "/style/css/tplayer.css", hash: "3c2ae5d7", size: 23830 },
+    { path: "/style/css/user.css", hash: "6863aab9", size: 78959 },
+    { path: "/style/css/verify.css", hash: "fdfe046c", size: 7716 },
+    { path: "/style/css/watch.css", hash: "66b1ffc0", size: 70842 },
     // Директория: /style/fonts
     { path: "/style/fonts/Inter.ttf", hash: "32204736", size: 804612 },
     { path: "/style/fonts/Manrope.ttf", hash: "cf98436d", size: 164936 },
     { path: "/style/fonts/NovaSquare.ttf", hash: "587aee63", size: 86120 },
     { path: "/style/fonts/RobotoMono.ttf", hash: "fb485e02", size: 181388 },
     // Директория: /style/menu/css
-    { path: "/style/menu/css/menu.core.css", hash: "b15fbf4d", size: 9322 },
+    { path: "/style/menu/css/menu.core.css", hash: "e9414822", size: 9041 },
     // Директория: /style/win/css/collections
-    { path: "/style/win/css/collections/win.anime.css", hash: "5e7af98d", size: 21101 },
-    { path: "/style/win/css/collections/win.editor.css", hash: "7313d7c4", size: 11991 },
-    { path: "/style/win/css/collections/win.selector.css", hash: "49387cbd", size: 18240 },
-    { path: "/style/win/css/collections/win.sorting.css", hash: "0c003e2c", size: 7987 },
-    { path: "/style/win/css/collections/win.viewer.css", hash: "8bd37264", size: 15114 },
+    { path: "/style/win/css/collections/win.anime.css", hash: "9cd88d0e", size: 20519 },
+    { path: "/style/win/css/collections/win.editor.css", hash: "33beb9d5", size: 11651 },
+    { path: "/style/win/css/collections/win.selector.css", hash: "b746d8cb", size: 17929 },
+    { path: "/style/win/css/collections/win.sorting.css", hash: "211cd617", size: 7823 },
+    { path: "/style/win/css/collections/win.viewer.css", hash: "ccaa6512", size: 14668 },
     // Директория: /style/win/css/setup
-    { path: "/style/win/css/setup/win.notification.setup.css", hash: "379ddd82", size: 16673 },
+    { path: "/style/win/css/setup/win.notification.setup.css", hash: "4d4fc23e", size: 16256 },
     // Директория: /style/win/css
-    { path: "/style/win/css/win.character.css", hash: "efe31b23", size: 20554 },
-    { path: "/style/win/css/win.dubs.css", hash: "eadabe7b", size: 10576 },
-    { path: "/style/win/css/win.editor.banner.css", hash: "86e8cc03", size: 8518 },
-    { path: "/style/win/css/win.editor.character.css", hash: "e835d78e", size: 7805 },
-    { path: "/style/win/css/win.episode.css", hash: "7808fa28", size: 8135 },
-    { path: "/style/win/css/win.notification.css", hash: "0a078f9a", size: 5332 },
-    { path: "/style/win/css/win.rooms.create.css", hash: "4188c9f0", size: 27796 },
-    { path: "/style/win/css/win.rooms.css", hash: "7dfcfef0", size: 12244 },
-    { path: "/style/win/css/win.search.character.css", hash: "7baab0af", size: 11472 },
+    { path: "/style/win/css/win.character.css", hash: "91a1b97f", size: 20104 },
+    { path: "/style/win/css/win.dubs.css", hash: "806ba842", size: 10288 },
+    { path: "/style/win/css/win.editor.banner.css", hash: "84818cab", size: 8318 },
+    { path: "/style/win/css/win.editor.character.css", hash: "c240565a", size: 7585 },
+    { path: "/style/win/css/win.episode.css", hash: "33031f3f", size: 7902 },
+    { path: "/style/win/css/win.notification.css", hash: "f49046b5", size: 5156 },
+    { path: "/style/win/css/win.rooms.create.css", hash: "364b211f", size: 27355 },
+    { path: "/style/win/css/win.rooms.css", hash: "9f3bbe37", size: 11922 },
+    { path: "/style/win/css/win.search.character.css", hash: "e0d3b9b0", size: 11190 },
     // Директория: /style/window/win/css
-    { path: "/style/window/win/css/win.character.css", hash: "efe31b23", size: 20554 },
-    { path: "/style/window/win/css/win.editor.banner.css", hash: "6478cc70", size: 7340 },
-    { path: "/style/window/win/css/win.editor.character.css", hash: "e835d78e", size: 7805 },
-    { path: "/style/window/win/css/win.search.character.css", hash: "7baab0af", size: 11472 },
+    { path: "/style/window/win/css/win.character.css", hash: "91a1b97f", size: 20104 },
+    { path: "/style/window/win/css/win.editor.banner.css", hash: "830fd77b", size: 7148 },
+    { path: "/style/window/win/css/win.editor.character.css", hash: "c240565a", size: 7585 },
+    { path: "/style/window/win/css/win.search.character.css", hash: "e0d3b9b0", size: 11190 },
     // Директория: /templates/collections
     { path: "/templates/collections/win.anime.tpl", hash: "45305a2b", size: 10530 },
     { path: "/templates/collections/win.editor.tpl", hash: "15a79287", size: 7925 },
