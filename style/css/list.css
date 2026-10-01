@@ -902,11 +902,14 @@ body[angle="90"] .span-row {
   box-sizing: border-box;
 }
 .app .collection-v-card .card-wrapper {
+  display: flex;
+  flex-direction: column;
   background: #191c21;
   padding: 10px;
   border-radius: 10px;
   width: 200px;
   position: relative;
+  height: 100%;
 }
 .app .collection-v-card .card-wrapper .abs-icon {
   display: grid;
@@ -1018,8 +1021,7 @@ body[angle="90"] .span-row {
 .app .collection-v-card .card-wrapper .card-content {
   margin-top: 10px;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  flex: 1;
 }
 .app .collection-v-card .card-wrapper .card-content .content-meta-wrapper {
   display: grid;

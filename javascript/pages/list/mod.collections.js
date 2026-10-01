@@ -314,10 +314,6 @@ const search = new Search();
 
 /** Открыть коллекцию: окно просмотра само сходит за составом */
 const openCollection = async (cid) => {
-    if (Collections.ids(cid).length === 0) {
-        return ShowInfo('Коллекция пуста', 'collection-empty');
-    }
-
     const item = $(`${ROW} > .collection-v-card[data-cid="${cid}"]`);
 
     item.addClass('-loading');

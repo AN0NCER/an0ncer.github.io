@@ -8,11 +8,14 @@
         box-sizing: border-box;
 
         .card-wrapper {
+            display: flex;
+            flex-direction: column;
             background: #191c21;
             padding: 10px;
             border-radius: 10px;
             width: 200px;
             position: relative;
+            height: 100%;
 
             .abs-icon {
                 display: grid;
@@ -147,8 +150,7 @@
             .card-content {
                 margin-top: 10px;
                 display: flex;
-                justify-content: space-between;
-                align-items: flex-end;
+                flex: 1;
 
                 .content-meta-wrapper {
                     display: grid;
@@ -172,7 +174,6 @@
                         justify-content: space-between;
                         align-items: center;
                         line-height: 1;
-
 
                         .collection-type {
                             display: flex;
