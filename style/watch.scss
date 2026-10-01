@@ -58,6 +58,7 @@ main {
 @include Dubs();
 
 @import './cards';
+@import './watch/cid.collection';
 @import './watch/roomstats';
 @import './watch/chronology';
 
@@ -85,7 +86,6 @@ footer {
 @import './windowed';
 
 @import './watch/score';
-@import './watch/collection';
 @import './watch/download';
 @import './watch/reload';
 @import './popup';

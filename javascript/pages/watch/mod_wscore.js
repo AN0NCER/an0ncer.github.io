@@ -6,6 +6,7 @@ import { DBAnime } from "./mod.db.js";
 import { ASynch } from "./mod.synch.js";
 import { URate } from "./mod.urate.js";
 import { UIScore } from "./mod.score.js";
+import { $ID } from "../watch.js";
 
 const Player = IPlayer.Init();
 
@@ -101,7 +102,9 @@ const WindowScore = {
         })
 
         $('.collection-select.btn').click(() => {
-            import("./mod_collection.js").then(val => val.ShowCollectionWindow());
+            import("/javascript/windows/collections/win.selector.js").then(mod => {
+                mod.WCollectionSelector(parseInt($ID));
+            })
         })
 
         URate.on('init', (res) => {
@@ -156,7 +159,6 @@ const WindowScore = {
         $('body').addClass('loading');
         $('#sync-anime').attr('checked', DBAnime.get('anime', 'synch'));
         $('#anime-incognito').attr('checked', Private.INCOGNITO);
-        import(`/javascript/pages/watch/mod_collection.js`);
     },
 
     hide: function () {

@@ -68,6 +68,24 @@
             padding: 0 20px;
         }
 
+        .title-block-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 0 20px;
+
+            .main-title {
+                font-size: 15px;
+                font-weight: bold;
+            }
+
+            .description {
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.6);
+            }
+        }
+
         .block-check {
             display: flex;
             align-items: center;
@@ -123,7 +141,10 @@
             align-items: center;
             justify-content: space-between;
             background: #191C21;
-            padding: 0 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 0 20px;
+            padding-left: 15px;
+            border-radius: 8px;
 
             .collection-name {
                 font-size: 13px;
@@ -138,16 +159,16 @@
             }
 
             .icon {
-                min-width: 40px;
-                max-width: 40px;
-                min-height: 40px;
-                max-height: 40px;
+                min-width: 45px;
+                max-width: 45px;
+                min-height: 45px;
+                max-height: 45px;
                 display: grid;
                 place-items: center;
 
                 svg {
                     fill: #D4D4D8;
-                    width: 13px;
+                    width: 18px;
                 }
             }
         }
@@ -348,10 +369,6 @@
     .content-score .content-wraper textarea {
         border-radius: 6px;
     }
-
-    .content-score .content-wraper .collection-select {
-        border-radius: 3px;
-    }
 }
 
 // New score style
@@ -456,13 +473,5 @@
             }
         }
 
-    }
-
-    .lbl {
-        margin-top: 10px;
-        max-width: $MAX-WIDTH;
-        margin: 0 auto;
-        opacity: .8;
-        font-size: 13px;
     }
 }
