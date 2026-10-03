@@ -1,100 +1,176 @@
-const HtmlItemCollection = ({ count = 0, bgs = [], title, id } = {}) => {
-    return `<div class="item-collection" data-id="${id}">
-                ${getbgcollection(bgs, count)}
-                <div class="info-collection">
-                    <span class="collection-name">${title}</span>
-                    <span class="collection-counts">${count} Аниме</span>
-                </div>
-            </div>`;
+import tmpl from "../../library/tmpl.lib.js";
 
-    function getbgcollection(bg = [], count = 0) {
-        let block1 = bg.length > 0 ? bg[0] : '';
-        let previews = '';
+const TEMPLATE = {
+    card: '#collection-v-card'
+};
 
-        for (let i = 1; i < 4; i++) {
-            if (bg[i]) {
-                previews += `<div class="preview" style="--bg-image: url(${bg[i]})"></div>`;
-            }
+/** Больше четырёх коллаж не показывает */
+const COVERS = 4;
+
+/** Битая ссылка — заглушка вместо пустой плитки */
+const NOIMAGE = '/images/noanime.png';
+
+/** Значок в углу — только у особых коллекций */
+const ICONS = {
+    shikimori: '#i-shikimori'
+};
+
+/** Сколько аниме в коллекции — у избранного счётчика нет, считаем сами */
+const countOf = (collection) => collection.count
+    ?? (Array.isArray(collection.list)
+        ? collection.list.length
+        : Object.keys(collection.items ?? {}).length);
+
+/**
+ * Когда обновляли. Коротко: карточка узкая, и подпись делит строку со
+ * значком приватности
+ *
+ * @param {string} iso
+ */
+const updated = (iso) => {
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return '';
+
+    const days = Math.floor((Date.now() - date.getTime()) / 86400000);
+
+    if (days <= 0) return 'сегодня';
+    if (days === 1) return 'вчера';
+    if (days < 7) return `${days} дня назад`;
+
+    return date.toLocaleDateString('ru-RU');
+};
+
+/**
+ * Расставить обложки в готовой карточке.
+ *
+ * Отдельно от создания, потому что постеры приезжают позже самой карточки:
+ * сначала показываем название и счётчик, потом заполняем коллаж
+ *
+ * @param {HTMLElement} el - карточка
+ * @param {string[]} [bgs] - до четырёх ссылок на превью
+ */
+function covers(el, bgs = []) {
+    const root = el?.querySelector('.collection-preview');
+    if (!root) return;
+
+    const list = bgs.filter(Boolean).slice(0, COVERS);
+
+    root.dataset.count = String(list.length);
+    root.innerHTML = '';
+
+    const fragment = document.createDocumentFragment();
+
+    // Постеров нет — четыре пустые плитки: нумерацию по ним рисует CSS
+    // через data-count="0", это же и состояние загрузки
+    for (let i = 0; i < (list.length || COVERS); i++) {
+        const anime = document.createElement('div');
+        anime.className = 'anime';
+
+        if (list[i]) {
+            const img = document.createElement('img');
+
+            img.loading = 'lazy';
+            img.alt = '';
+            img.src = list[i];
+            img.addEventListener('error', () => { img.src = NOIMAGE; }, { once: true });
+
+            anime.append(img);
         }
 
-        return `<div class="bg-collection count-${count}">
-                    <div class="block-1" style="--bg-image: url(${block1})"></div>
-                        <div class="block-2">
-                            ${previews}
-                        </div>
-                </div>`;
+        fragment.append(anime);
     }
+
+    root.append(fragment);
 }
 
-const HtmlItemLoadCollection = ({ title, id, count } = {}) => {
-    return `<div class="item-collection" data-id="${id}">
-                ${getbgcollection(count)}
-                <div class="info-collection">
-                    <span class="collection-name">${title}</span>
-                    <span class="collection-counts">${count} Аниме</span>
-                </div>
-            </div>`;
+/**
+ * Карточка коллекции.
+ *
+ * Без `bgs` возвращается та же карточка с пустым коллажем — это и есть
+ * состояние загрузки, отдельной разметки для него не нужно
+ *
+ * @param {Object} collection - коллекция из фасада
+ * @param {string[]} [bgs] - ссылки на превью обложки
+ * @returns {HTMLElement}
+ */
+function item(collection = {}, bgs = []) {
+    const el = tmpl(TEMPLATE.card).el;
 
-    function getbgcollection(count = 0) {
-        let previews = '';
+    el.dataset.cid = collection.cid ?? '';
+    el.dataset.kind = collection.kind ?? 'custom';
+    el.dataset.visibility = collection.visibility ?? 'private';
 
-        for (let i = 0; i < count && i < 3; i++) {
-            previews += `<div class="preview loading"></div>`;
-        }
+    // Значок показываем только у особых коллекций, у остальных он
+    // остаётся скрытым
+    const symbol = ICONS[collection.kind];
+    const icon = el.querySelector('.abs-icon');
 
-        return `<div class="bg-collection count-${count}">
-                    <div class="block-1 loading"></div>
-                    <div class="block-2">
-                        ${previews}
-                    </div>
-                </div>`;
+    if (symbol && icon) {
+        icon.querySelector('use')?.setAttribute('href', symbol);
+        icon.classList.remove('-hide');
     }
+
+    el.querySelector('.meta-title').textContent = collection.title ?? '';
+    el.querySelector('.meta-count').textContent = `${countOf(collection)} Аниме`;
+    el.querySelector('.meta-date').textContent = updated(collection.updatedAt);
+
+    covers(el, bgs);
+
+    return el;
 }
 
-class HtmlNotFoundCollection {
-    #classes = ['item-collection', 'not-found'];
-    constructor() {
-        this.image = '/images/collections.png';
-        this.name = 'Не найдено';
-    }
+/** Заглушка «ничего не найдено» — одна на список */
+class NotFoundCollection {
+    #selector = '.collection-v-card.-notfound';
 
     get dom() {
-        return `.${this.#classes.join('.')}`;
+        return this.#selector;
     }
 
+    /**
+     * Та же карточка коллекции, только без cid: иначе её ловили бы клик
+     * и чистка полосы как обычную коллекцию
+     */
     Get() {
-        return `<div class="${this.#classes.join(' ')}">
-                    <div class="bg-collection count-1">
-                        <div class="block-1" style="--bg-image: url(${this.image})"></div>
-                    </div>
-                    <div class="info-collection">
-                        <span class="collection-name">${this.name}</span>
-                    </div>
-                </div>`
+        const el = tmpl(TEMPLATE.card).el;
+
+        el.classList.add('-notfound');
+        el.removeAttribute('data-cid');
+
+        el.querySelector('.meta-title').textContent = 'Ничего не найдено';
+        el.querySelector('.meta-count').textContent = '';
+
+        const preview = el.querySelector('.collection-preview');
+
+        if (preview) {
+            const anime = document.createElement('div');
+            anime.className = 'anime';
+
+            preview.dataset.count = '1';
+            preview.replaceChildren(anime);
+        }
+
+        return el;
     }
 
     Show(path) {
-        let element = $(`${path} > ${this.dom}`)
-        if (element.length > 0) {
-            element.show();
-        } else {
-            $(path).append(this.Get());
-        }
+        const element = $(`${path} > ${this.dom}`);
+
+        if (element.length > 0) element.show();
+        else $(path).append(this.Get());
     }
 
     Hide(path) {
-        let element = $(`${path} > ${this.dom}`)
-        if (element.length > 0) {
-            element.hide();
-        }
+        const element = $(`${path} > ${this.dom}`);
+        if (element.length > 0) element.hide();
     }
 }
 
 export const HCollection = {
-    Iteam: HtmlItemCollection,
-    Load: HtmlItemLoadCollection,
-    NotFound: new HtmlNotFoundCollection()
-}
+    Iteam: item,
+    Covers: covers,
+    NotFound: new NotFoundCollection()
+};
 
 export class ISearch {
     constructor() {

@@ -1,0 +1,205 @@
+// Карточка коллекции в списке: коллаж превью слева, текст справа.
+
+.collection-h-card {
+    // Коллаж квадратный, так что высота задаёт и ширину. Менять можно
+    // где угодно — медиазапросом или вилкой, раскладка подстроится
+    --preview-h: 120px;
+    --preview-gap: 3px;
+
+    padding: 10px;
+    background: #191C21;
+    border-radius: 9px;
+    cursor: pointer;
+
+    .card-wrapper {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        min-width: 0;
+    }
+
+    .card-content {
+        flex: 1 1 0;
+        min-width: 0;
+
+        .collection-title span,
+        .collection-type span {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    // Коллаж: раскладка зависит от числа постеров, поэтому её задаёт
+    // data-count, который ставит отрисовка. Первый постер всегда крупный,
+    // остальные уходят в колонку справа
+    .collection-preview {
+        display: grid;
+        height: var(--preview-h);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        gap: var(--preview-gap);
+        overflow: hidden;
+        border-radius: 6px;
+
+        &[data-count="1"] {
+            grid-template-columns: 1fr;
+        }
+
+        &[data-count="2"] {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        &[data-count="3"] {
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: repeat(2, 1fr);
+
+            .anime:first-child {
+                grid-row: span 2;
+            }
+        }
+
+        &[data-count="4"] {
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: repeat(3, 1fr);
+
+            .anime:first-child {
+                grid-row: span 3;
+            }
+        }
+
+        .anime {
+            min-width: 0;
+            overflow: hidden;
+            background: #303237;
+            border-radius: 4px;
+
+            img {
+                display: block;
+                width: 100%;
+                height: 100%;
+
+                object-fit: cover;
+                object-position: center;
+            }
+        }
+    }
+
+    .card-content {
+        display: flex;
+        height: var(--preview-h);
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 5px 0;
+            width: 100%;
+
+            .title-type-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+
+                .collection-title {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    color: #ffffff;
+                    font-size: 16px;
+                    font-weight: bold;
+                    line-height: 1;
+
+                    span {
+                        text-wrap: auto;
+                    }
+
+                    .icon {
+                        svg {
+                            height: 13px;
+                            fill: #ffffff;
+                        }
+                    }
+                }
+
+                .collection-type {
+                    line-height: 1;
+                    font-size: 12px;
+                    color: #ffffff;
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+
+                    .icon {
+                        display: grid;
+                        place-items: center;
+
+                        svg {
+                            height: 12px;
+                            fill: #2393F1;
+
+                            .public {
+                                display: none;
+                            }
+
+                            .private {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    span {
+                        opacity: .8;
+                    }
+                }
+            }
+
+            .in-collection-result {
+                font-size: 10px;
+                color: #FFEA00;
+                text-transform: uppercase;
+
+                &.-hide {
+                    display: none;
+                }
+            }
+
+            .collection-meta {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+                font-size: 12px;
+
+                .anime-count {
+                    color: #ffffff;
+                    text-wrap: nowrap;
+                    line-height: 1;
+                }
+
+                .collection-update {
+                    color: rgba(255, 255, 255, .4);
+                    text-wrap: nowrap;
+                    text-overflow: ellipsis;
+                    line-height: 1;
+                }
+            }
+        }
+    }
+
+    &[data-visibility="private"] {
+        svg {
+            .private {
+                display: block !important;
+            }
+        }
+    }
+
+    &[data-visibility="public"] {
+        svg {
+            .public {
+                display: block !important;
+            }
+        }
+    }
+}

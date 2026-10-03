@@ -26,6 +26,8 @@ export const Player = IPlayer.Init({ standart: $PARAMETERS.player.standart });
 
 export const $ROOM = new URLSearchParams(window.location.search).get("room");
 
+export const $CID = new URLSearchParams(window.location.search).get("cid");
+
 ClearParams(['continue', 'player', 'iss', 'room']);
 
 export let $RULES = undefined;
@@ -49,6 +51,12 @@ Main(async (e) => {
     }
 
     Functional();
+
+    if ($CID && $PARAMETERS.anime.collectioninanime) {
+        import('./watch/mod.cid.js').then(({ InitCidCollection }) => InitCidCollection());
+    }
+
+    import('./watch/mod.collection.js').then(({ InitCollection }) => InitCollection(e));
 
     URate.on('init', (rate) => {
         ASynch.synch(rate);

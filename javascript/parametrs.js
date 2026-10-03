@@ -12,6 +12,7 @@ const $PARAMETERS = {
         customstyle: true,
         anicaching: true,
         anicachlive: '1',
+        collectioninanime: true,
     },
     watch: {
         dubanime: false,

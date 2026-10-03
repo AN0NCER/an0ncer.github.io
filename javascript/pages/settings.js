@@ -171,6 +171,12 @@ const setup = [
                 description: 'Включает пользовательские стили (моды) для некоторых аниме.'
             },
             {
+                param: 'collectioninanime',
+                type: 'checkbox.tip',
+                title: 'Лента коллекции',
+                description: 'Показывать другие аниме из коллекции, если вы перешли из неё.'
+            },
+            {
                 param: 'syncdata',
                 type: 'checkbox.tip',
                 title: 'Синхронизация',

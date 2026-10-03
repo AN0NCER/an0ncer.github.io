@@ -159,6 +159,7 @@
         background: rgba(0, 0, 0, 0.2);
         border-radius: 10px;
         cursor: pointer;
+        scroll-snap-align: center;
 
 
         .chronology-wrapper {
@@ -306,6 +307,16 @@
     overflow-x: auto;
     padding-left: 15px;
     padding-right: 15px;
+
+    scroll-snap-type: x proximity;
+
+    @media (hover: none) {
+        scroll-snap-type: x mandatory;
+    }
+
+    &.-glide {
+        scroll-snap-type: none;
+    }
 
     @include Card();
 }

@@ -1,7 +1,7 @@
 import { ACard } from "../../modules/AnimeCard.js";
 import { ShowInfo } from "../../modules/Popup.js";
 import { Carousel } from "./mod_carousel.js";
-import { CSearch } from "./mod_collections.js";
+import { CSearch } from "./mod.collections.js";
 import { ASearch } from "./mod_core.js";
 import { ISearch } from "./mod_html.js";
 /*

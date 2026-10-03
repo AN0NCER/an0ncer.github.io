@@ -111,7 +111,7 @@ class Animes extends FAV {
 
             for (const anime of list) {
                 //Добавляем елементы в DOM
-                $list.append(ACard.GenV2({ type: "a", anime, data: { page } }))
+                $list.append(ACard.GenV2({ type: "a", anime, data: { page }, query: { cid: `favourites:${this.uid}` } }));
             }
         });
 
@@ -131,7 +131,8 @@ class Animes extends FAV {
                 const $card = ACard.GenV2({
                     type: "a",
                     anime,
-                    data: { page }
+                    data: { page },
+                    query: { cid: `favourites:${this.uid}` }
                 });
 
                 // ищем позицию ТОЛЬКО среди этой страницы

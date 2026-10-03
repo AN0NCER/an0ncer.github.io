@@ -1,4 +1,3 @@
-import { ScrollElementWithMouse } from "../../modules/functions.js";
 import { ShowInfo } from "../../modules/Popup.js";
 import { Tunime } from "../../modules/api.tunime.js";
 import { $ID, Player } from "../watch.js";
@@ -13,6 +12,7 @@ import { TNotifi } from "../../modules/tun.notification.js";
 import { DUB } from "./mod.dubs.js";
 import { ANotifi } from "./mod.notifi.js";
 import { AutoScrollEpisodes } from "./utils/util.scroll.js";
+import createGlide from "./utils/util.glide.js";
 
 const anime_status = [
     { id: 0, name: "Посмотрю", sh: ["planned"] },
@@ -82,9 +82,6 @@ export function Functional() {
     CentrumPlayer();
     AnimeStatusSelect();
     PageReload(document);
-    LTransition.on('loaded', () => {
-        AutoScrollFranchise();
-    });
 
     //Нажатие на главных героев персонажей
     let onload = false;
@@ -202,31 +199,6 @@ export function Functional() {
             $('.-e-notify').removeClass('-e-notify');
         }
     }, { replay: true })
-}
-
-export function AutoScrollFranchise() {
-    try {
-        const position = $('.list-franchise > .selected').position();
-        const widthscroll = $('.list-franchise').width();
-        const widthcard = $('.list-franchise > .selected').width();
-        let scrollLeftValue = $('.list-franchise').scrollLeft()
-        if ((widthscroll - position.left) < widthcard) {
-            scrollLeftValue = scrollLeftValue + position.left - ((widthscroll - widthcard) / 2);
-        } else if (position.left < 0) {
-            scrollLeftValue = scrollLeftValue + position.left - ((widthscroll - widthcard) / 2);
-        } else {
-            return;
-        }
-
-        anime({
-            targets: '.list-franchise',
-            scrollLeft: scrollLeftValue,
-            duration: 500,
-            easing: 'easeInOutQuad'
-        });
-    } catch {
-
-    }
 }
 
 async function CopyTitle() {
@@ -355,12 +327,20 @@ function AutoLoadGallery() {
 
 
 function ScrollingElements() {
-    ScrollElementWithMouse('.similiar-anime');
-    ScrollElementWithMouse('.hero-anime');
-    ScrollElementWithMouse('.galery-slider');
-    ScrollElementWithMouse('.episode-scroll-wrapper[data-scroll="horizontal"]')
-    ScrollElementWithMouse('.genres.scroll-none');
-    ScrollElementWithMouse('.list-franchise');
+    createGlide(document.querySelector('.similiar-anime'));
+    createGlide(document.querySelector('.hero-anime'));
+    createGlide(document.querySelector('.episode-scroll-wrapper[data-scroll="horizontal"]'));
+    createGlide(document.querySelector('.genres.scroll-none'));
+
+    // С центрированием
+    
+    createGlide(document.querySelector('.galery-slider'));
+    const glideFranchise = createGlide(document.querySelector('.list-franchise'));
+
+    LTransition.on('loaded', () => {
+        glideFranchise.center(document.querySelector('.list-franchise > .-select'), { animated: true });
+    });
+
 }
 
 function ChangePlayer() {

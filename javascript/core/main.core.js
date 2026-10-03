@@ -291,7 +291,7 @@ export const OAuth = new class {
     }
 
     set user(value) {
-        if (typeof value !== "object") return;
+        if (!value || typeof value !== "object") return;
 
         const changed = value !== this.#user;
 
@@ -353,12 +353,12 @@ export const OAuth = new class {
             this.refreshing = (async () => {
                 const response = await Hub.api.refresh();
                 if (!response.complete || !response.parsed) {
-                    if(response.parsed && ["SHIKI_INVALID_GRANT", "USER_NOT_AUTHORIZED"].includes(response.value.code)){
+                    if (response.parsed && ["SHIKI_INVALID_GRANT", "USER_NOT_AUTHORIZED"].includes(response.value.code)) {
                         this.#access = null;
                         this.#user = null;
                         this.events.clear();
                     }
-                    
+
                     this.auth = false;
                     return null;
                 }
@@ -377,26 +377,40 @@ export const OAuth = new class {
             return this.refreshing;
         },
 
-        getWhoami: () => {
-            /**
-             * Выполняет запрос с попытками
-             * @param {Fetch} [request] 
-             */
-            const r = (request) => {
-                return new Promise(async (resolve) => {
-                    const response = await request.fetch();
+        getWhoami: ({ budget = 3000 } = {}) => {
+            // Страница ждёт этот запрос
+            const deadline = Date.now() + budget;
 
-                    if (response.failed) {
-                        if (response.status === 429) {
-                            await this.events.sleep(1000);
-                            return resolve(r(request));
-                        }
-                        return resolve(this.user);
+
+            const r = async () => {
+                const left = deadline - Date.now();
+                if (left <= 0) return this.user;
+
+                const control = new AbortController();
+                const timer = setTimeout(() => control.abort(), left);
+
+                const request = Fetch.get(`${sUrl}/api/users/whoami`, Headers.bearer);
+                const response = await request.fetch(control.signal);
+
+                clearTimeout(timer);
+
+                if (response.failed) {
+                    if (response.status === 429 && deadline - Date.now() > 1500) {
+                        await this.events.sleep(1000);
+                        return r();
                     }
 
-                    this.user = response;
-                    resolve(this.user);
-                });
+                    if ([401, 403].includes(response.status)) {
+                        await this.requests.refreshToken();
+                    }
+
+                    return this.user;
+                }
+
+                if (!response?.id) return this.user;
+
+                this.user = response;
+                return this.user;
             }
 
             const request = Fetch.get(`${sUrl}/api/users/whoami`, Headers.bearer);
@@ -421,10 +435,14 @@ export const Headers = new class {
     get base() {
         return { "Accept": "application/json" };
     }
+
     get bearer() {
         const { access } = OAuth;
+
+        if (!access?.access_token) return this.base;
+
         return {
-            "Authorization": `${access.token_type} ${access.access_token}`,
+            "Authorization": `${access?.token_type ?? 'bearer'} ${access.access_token}`,
             "Accept": "application/json",
         };
     }
@@ -451,6 +469,8 @@ export const Main = async (callback, opts) => {
             return callback(false);
         }
     }
+
+    if (!OAuth.user) await OAuth.requests.getWhoami();
 
     callback(OAuth.auth);
 }

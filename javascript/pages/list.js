@@ -1,6 +1,6 @@
 import { Main } from "../core/main.core.js";
 import { TMenu } from "../core/menu.core.js";
-import { InitCollections } from "./list/mod_collections.js";
+import { InitCollections } from "./list/mod.collections.js";
 import { InitCore } from "./list/mod_core.js"
 import { InitSearch } from "./list/mod_search.js";
 import { InitUI } from "./list/mod_ui.js";

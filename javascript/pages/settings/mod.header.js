@@ -403,6 +403,13 @@ class LogicPannel {
                 this.input.value = '';
                 this.io.anim.unlock();
                 this.input.blur();
+
+                // Сворачиваем сами, а не через событие blur: палец уводит
+                // фокус из поля ещё до click, и к этому моменту поле уже
+                // не активно — второго blur не будет
+                headerEl.classList.remove('-sticky');
+                this.io.anim.blur();
+
                 this.oninput(this.input.value, this.input);
                 return
             }

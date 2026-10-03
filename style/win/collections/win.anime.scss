@@ -1,0 +1,688 @@
+@mixin List {
+    .anime-list-wrapper {
+        margin-left: max(10px, var(--sal));
+        margin-right: max(10px, var(--sar));
+
+        .anime-list {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: 1fr !important;
+
+            @media screen and (min-width: 810px) {
+                grid-template-columns: 1fr 1fr !important;
+            }
+
+            .card-anime-h {
+                font-family: "Manrope", sans-serif;
+                background: #191C21;
+                padding: 10px;
+                border-radius: 5px;
+                gap: 10px;
+                display: flex;
+                position: relative;
+                min-height: 140px;
+                cursor: pointer;
+
+                .img-wrapper {
+                    display: flex;
+                    overflow: hidden;
+                    border-radius: 3px;
+                    min-width: fit-content;
+                    width: fit-content;
+                    min-height: 170px;
+
+                    img {
+                        object-fit: cover;
+                        width: 120px;
+                    }
+                }
+
+                .anime-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+
+                    .info-wrapper {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 3px;
+
+                        .title {
+                            color: #FFFFFF;
+                            font-size: 16px;
+                            line-height: 16px;
+                            font-weight: bold;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 3;
+                            -webkit-box-orient: vertical;
+                            line-clamp: 3;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            margin-bottom: 5px;
+                        }
+
+                        .season-type {
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+
+                            .type {
+                                background: #F7D149;
+                                border-radius: 2px;
+                                font-size: 12px;
+                                padding: 0 2px;
+                                color: #161616;
+                            }
+
+                            .pin {
+                                width: 5px;
+                                aspect-ratio: 1 / 1;
+                                display: flex;
+                                border-radius: 50%;
+                                background: #2393F1;
+                            }
+
+                            .seas {
+                                color: #FFFFFF;
+                                font-size: 12px;
+                                opacity: 0.5;
+                                text-transform: uppercase;
+                            }
+                        }
+
+                        .video-info {
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+
+                            .episodes {
+                                color: #FFFFFF;
+                                opacity: 0.5;
+                                font-size: 12px;
+                            }
+
+                            .status {
+                                color: #2393F1;
+                                text-transform: uppercase;
+                                font-weight: bold;
+                                font-size: 12px;
+                            }
+                        }
+                    }
+
+                    .more-wrapper {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1px;
+
+                        .in-list {
+                            display: flex;
+                            color: #FFFFFF;
+                            align-items: center;
+                            font-size: 12px;
+                            gap: 4px;
+                            opacity: 0.5;
+
+                            svg {
+                                height: 16px;
+                                fill: #FFFFFF;
+                            }
+                        }
+
+                        .anime-score {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+
+                            .shikimori {
+                                display: flex;
+                                font-size: 12px;
+                                color: #FFFFFF;
+                                align-items: center;
+                                gap: 4px;
+
+                                svg {
+                                    height: 12px;
+                                    fill: #FFFFFF;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .btn {
+                    aspect-ratio: 1 / 1;
+                    height: 35px;
+                    position: absolute;
+                    background: #101318;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    overflow: hidden;
+                    border-radius: 3px;
+                    right: 10px;
+                    bottom: 10px;
+
+                    .wrapper {
+                        position: relative;
+                        display: grid;
+                        place-items: center;
+                        width: 100%;
+                        height: 100%;
+
+                        svg {
+                            height: 16px;
+                            fill: #ffffff;
+
+                            .state {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    &[data-state="planned"] {
+                        .wrapper {
+                            svg {
+                                .planned {
+                                    display: block !important;
+                                }
+                            }
+                        }
+                    }
+
+                    &[data-state="watching"] {
+                        .wrapper {
+                            svg {
+                                .watching {
+                                    display: block !important;
+                                }
+                            }
+                        }
+                    }
+
+                    &[data-state="rewatching"] {
+                        .wrapper {
+                            svg {
+                                .rewatching {
+                                    display: block !important;
+                                }
+                            }
+                        }
+                    }
+
+                    &[data-state="on_hold"] {
+                        .wrapper {
+                            svg {
+                                .on_hold {
+                                    display: block !important;
+                                }
+                            }
+                        }
+                    }
+
+                    &[data-state="completed"] {
+                        .wrapper {
+                            svg {
+                                .completed {
+                                    display: block !important;
+                                }
+                            }
+                        }
+                    }
+
+                    &[data-state="dropped"] {
+                        .wrapper {
+                            svg {
+                                .dropped {
+                                    display: block !important;
+                                }
+                            }
+                        }
+                    }
+
+                    &[data-state="undefined"] {
+                        display: none;
+                    }
+                }
+
+                &.is-selected {
+                    background: rgba(35, 148, 241, 0.3);
+                }
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+        }
+    }
+}
+
+@mixin Loader {
+    .anime-list-loader {
+        display: grid;
+        place-items: center;
+        height: 44px;
+
+        svg {
+            height: 22px;
+            fill: #ffffff;
+            opacity: 0;
+            transition: opacity .2s ease-in-out;
+        }
+
+        &[data-state="loading"] svg {
+            opacity: .5;
+            animation: 1s linear infinite anime-list-spin;
+        }
+    }
+}
+
+@keyframes anime-list-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@mixin Empty {
+    .anime-list-empty-wrapper {
+        display: grid;
+        place-items: center;
+        padding: 44px 0;
+
+        &::before {
+            content: '';
+            grid-area: 1 / 1;
+            width: min(380px, 100%);
+            aspect-ratio: 780 / 524;
+            background: url('/images/empty.list.anime.png') center / contain no-repeat;
+        }
+
+        // Списку есть что показать — заглушки нет вовсе, вместе с картинкой
+        &[data-state="none"] {
+            display: none;
+        }
+
+        // Состояния взаимоисключающие и лежат в одной ячейке грида:
+        // видно ровно то, что выбрано в data-state
+        @each $state in (idle, loading, nofound, error) {
+            &[data-state="#{$state}"]>.anime-list-empty[data-for="#{$state}"] {
+                display: flex;
+            }
+        }
+
+        .anime-list-empty {
+            grid-area: 1 / 1;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+
+            span {
+                text-align: center;
+                font-size: 14px;
+                font-weight: bold;
+
+                svg {
+                    height: 48px;
+                }
+
+                &.query {
+                    opacity: .5;
+                    font-weight: normal;
+                }
+            }
+        }
+    }
+}
+
+@mixin Input {
+    width: 100%;
+    height: 40px;
+
+    background: #191C21;
+    box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.25);
+    border: 0.2px solid rgba(255, 255, 255, 0.2);
+    outline: none;
+
+    padding-left: 15px;
+    border-radius: 20px;
+
+    font-size: 14px;
+    color: #FFFFFF;
+
+    transition: .3s ease-in-out;
+
+    &:focus {
+        border: 0.2px solid #2394f1;
+    }
+
+    &::placeholder {
+        opacity: var(--input-placeholder-opacity, 0.5);
+    }
+}
+
+
+@import "../win.engine";
+
+$WINDOW: 'anime-list';
+
+$BAR: 'bar.v2';
+
+@include WEngine($WINDOW, $BAR);
+
+.content-#{$WINDOW} {
+    --box-sizing: border-box;
+    --ease: linear(0, 0.0145, 0.0538, 0.1126, 0.1854, 0.2678, 0.3557, 0.4457, 0.5348, 0.6207, 0.7017, 0.7762, 0.8435, 0.9029, 0.9543, 0.9976, 1.0331, 1.0612, 1.0825, 1.0976, 1.1072, 1.1121, 1.113, 1.1105, 1.1054, 1.0983, 1.0897, 1.0802, 1.0702, 1.06, 1.05, 1.0404, 1.0314, 1.0232, 1.0158, 1.0093, 1.0038, 0.9991, 0.9953, 0.9924, 0.9902, 0.9886, 0.9877, 0.9873, 0.9873, 0.9876, 0.9883, 0.9891, 0.9901, 0.9912, 0.9924, 0.9935, 0.9946, 0.9957, 0.9967, 0.9976, 0.9984, 0.9991, 0.9997, 1.0002, 1.0006, 1.0009, 1.0012, 1.0013, 1.0014, 1.0014, 1.0014, 1.0014, 1.0013, 1.0012, 1.0011, 1.001, 1.0008, 1.0007, 1.0006, 1.0005, 1.0003, 1.0002, 1.0002, 1.0001, 1, 1, 0.9999, 0.9999, 0.9999, 0.9998, 0.9998, 0.9998, 0.9998, 0.9998, 0.9999, 0.9999, 0.9999, 0.9999, 0.9999, 0.9999, 0.9999, 1, 1, 1, 1);
+
+    .content-wrapper {
+        .wrapper {
+            .window-bar {
+                margin-bottom: 10px;
+
+                .win-bar-count {
+                    background: #191C21;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+                    line-height: 0.5;
+                    height: 40px;
+                    width: 40px;
+                    display: grid;
+                    place-items: center;
+                    border-radius: 50%;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+
+                .win-bar-btn.create-collection {
+                    background: #191C21;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+
+                    svg {
+                        fill: #ffffff !important;
+                    }
+                }
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            .type-filter-wrapper {
+                padding-left: 20px;
+                padding-right: 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .name-wrapper {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    opacity: .8;
+                    font-size: 14px;
+                    font-weight: bold;
+
+                    svg {
+                        height: 17px;
+                        fill: #ffffff;
+                    }
+                }
+
+                .selector-wrapper {
+                    position: relative;
+                    background: rgba(0, 0, 0, 0.2);
+                    padding: 5px;
+                    border-radius: 30px;
+
+                    .bg-selector {
+                        position: absolute;
+                        inset: 0;
+                        z-index: 1;
+                        pointer-events: none;
+
+                        .selector {
+                            position: absolute;
+                            top: 5px;
+                            bottom: 5px;
+                            left: 5px;
+                            right: 5px;
+
+                            width: auto;
+
+                            border: .2px solid rgba(255, 255, 255, .2);
+                            background: #191C21;
+                            box-shadow: 0 4px 4px 1px rgba(0, 0, 0, .25);
+                            border-radius: 30px;
+                            will-change: left, right;
+                        }
+                    }
+
+                    .type-filter-items {
+                        display: flex;
+                        position: relative;
+                        z-index: 2;
+
+                        .item {
+                            display: grid;
+                            place-items: center;
+                            font-size: 12px;
+                            padding: 0 15px;
+                            height: 40px;
+                            opacity: .55;
+                            cursor: pointer;
+                            transition: opacity .2s;
+                            font-weight: bold;
+
+                            &.-select {
+                                opacity: 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            @media (max-width: 600px) {
+                .type-filter-wrapper {
+                    .selector-wrapper {
+                        flex: 1 1 auto;
+                        min-width: 0;
+                        max-width: 210px;
+                    }
+
+                    .type-filter-items {
+                        overflow-x: auto;
+                        scroll-snap-type: x mandatory;
+                        overscroll-behavior-x: contain;
+                        scrollbar-width: none;
+                        mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+
+                        &::-webkit-scrollbar {
+                            display: none;
+                        }
+
+                        &::before {
+                            content: '';
+                            flex: 0 0 var(--tf-pad-start, 0px);
+                        }
+
+                        &::after {
+                            content: '';
+                            flex: 0 0 var(--tf-pad-end, 0px);
+                        }
+
+                        .item {
+                            flex: 0 0 auto;
+                            scroll-snap-align: center;
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
+
+
+            @include List();
+            @include Loader();
+            @include Empty();
+
+            .safe-area-actions {
+                margin-bottom: max(calc(var(--sab) - 5px), 15px);
+                margin-left: max(var(--sal), 20px);
+                margin-right: max(var(--sar), 20px);
+                height: 52px;
+                pointer-events: none;
+                margin-top: 10px;
+            }
+
+            .win-actions-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: max(calc(var(--sab) - 5px), 15px);
+                margin-left: max(var(--sal), 20px);
+                margin-right: max(var(--sar), 20px);
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                pointer-events: none;
+
+                .win-actions {
+                    display: flex;
+                    position: relative;
+                    padding: 5px;
+                    border-radius: 30px;
+                    background: rgba(0, 0, 0, 0.2);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+                    backdrop-filter: blur(4px);
+                    max-width: 450px;
+                    overflow: hidden;
+                    will-change: width;
+                    pointer-events: all;
+
+                    &>div {
+                        display: flex;
+                        gap: 5px;
+                        width: 100%;
+
+                        &.default-wrapper {
+                            // show default
+                            transition: 0.84s var(--ease, ease-in-out);
+
+                            .filter-action {
+                                svg {
+                                    height: 15px;
+                                }
+                            }
+                        }
+
+                        &.search-wrapper {
+                            // hide default
+                            transition: 0.84s var(--ease, ease-in-out);
+                            transform: translateX(-100%);
+                            pointer-events: none;
+                        }
+                    }
+
+                    .btn-action {
+                        min-width: 40px;
+                        min-height: 40px;
+                        width: 40px;
+                        height: 40px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                        border-radius: 30px;
+                        cursor: pointer;
+                        transition: opacity 0.3s;
+                        text-wrap: nowrap;
+
+                        svg {
+                            height: 20px;
+                            fill: #ffffff;
+                        }
+
+                        &.a-fill {
+                            border: 0.2px solid rgba(255, 255, 255, 0.2);
+                            background: #191C21;
+                            box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.25);
+                        }
+
+                        &.a-text {
+                            width: auto;
+                            padding: 0 15px;
+                            font-size: 12px;
+                        }
+
+                        &.a-tt {
+                            font-weight: bold;
+                            text-transform: uppercase;
+                        }
+
+                        &.a-primary {
+                            background: #2393F1;
+                            border: 1px solid rgba(255, 255, 255, 0.3);
+                        }
+
+                        &.a-fit {
+                            flex: 1 0 0;
+                        }
+
+                        &.-dissable {
+                            opacity: .5;
+                            cursor: default;
+                            pointer-events: none;
+                        }
+
+                        &.-check {
+                            background: #2393F1;
+                            border: 1px solid rgba(255, 255, 255, 0.3);
+
+                            svg {
+                                .i-xmark {
+                                    display: none;
+                                }
+
+                                .i-check {
+                                    display: block;
+                                }
+                            }
+                        }
+
+                        svg{
+                            .i-check{
+                                display: none;
+                            }
+                        }
+                    }
+
+                    .search-wrapper {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        padding: 5px;
+
+                        input {
+                            @include Input();
+                        }
+                    }
+
+                    &.-filter-mode {
+                        .default-wrapper {
+                            transform: translateX(calc(100% - 0px));
+                        }
+
+                        .search-wrapper {
+                            transform: translateX(0%);
+                            pointer-events: all;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

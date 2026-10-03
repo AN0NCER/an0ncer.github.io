@@ -20,7 +20,7 @@ export const ACard = {
      * Генерация карточки аниме
      * @returns DOM елемента 
      */
-    Gen: function ({ id, response, link = true } = {}) {
+    Gen: function ({ id, response, link = true, query = {} } = {}) {
         let genLoad = false;
         if (id && !(response)) {
             genLoad = true;
@@ -29,7 +29,7 @@ export const ACard = {
         //Сделаит пустышку
         if (genLoad) {
             if (link) {
-                return `<a href="/watch.html?id=${id}"  class="card-anime" data-id="${id}"></a>`;
+                return `<a href="${ACard.Url(id, query)}"  class="card-anime" data-id="${id}"></a>`;
             } else {
                 return `<div  class="card-anime" data-id="${id}"></div>`;
             }
@@ -45,7 +45,7 @@ export const ACard = {
         let { image, russian, score, aired_on } = response;
 
         if (link) {
-            return `<a href="/watch.html?id=${response.id}"  class="card-anime" data-id="${response.id}">
+            return `<a href="${ACard.Url(response.id, query)}"  class="card-anime" data-id="${response.id}">
             <div class="card-content">
                 <img src="${_url}${image.original}" class="blur">
                 <img src="${_url}${image.original}">
@@ -76,13 +76,35 @@ export const ACard = {
     },
 
     /**
-     * Генерация карточки аниме
-     * @param {{ type: "a" | "div", anime: {id:string, poster: {mainUrl:string}, russian:string, airedOn: {year:number}, score:number}, data: {key:value}, exclude: [string] }} data - Данные аниме
-     * @returns DOM елемента 
+     * Ссылка на страницу аниме.
+     *
+     * `query` дописывается к адресу — так карточка может сказать, откуда
+     * по ней перешли: из коллекции (`cid`), из подборки и так далее
+     *
+     * @param {string|number} id
+     * @param {Object} [query] - пустые значения отбрасываются
+     * @returns {string}
      */
-    GenV2: function ({ type = 'a', anime, data, exclude = [], priority = false } = {}) {
+    Url: function (id, query = {}) {
+        const params = new URLSearchParams({ id: String(id) });
+
+        for (const [key, value] of Object.entries(query ?? {})) {
+            if (value === undefined || value === null || value === '') continue;
+            params.set(key, String(value));
+        }
+
+        return `/watch.html?${params}`;
+    },
+
+    /**
+     * Генерация карточки аниме
+     * @param {{ type: "a" | "div", anime: {id:string, poster: {mainUrl:string}, russian:string, airedOn: {year:number}, score:number}, data: {key:value}, exclude: [string], query: {key:value} }} data - Данные аниме.
+     *  query — что дописать к ссылке, например `{ cid }` коллекции
+     * @returns DOM елемента
+     */
+    GenV2: function ({ type = 'a', anime, data, exclude = [], priority = false, query = {} } = {}) {
         if (type == 'a') {
-            return `<a href="/watch.html?id=${anime.id}" class="card-anime" data-id="${anime.id}" ${Data()}>${Gen()}</a>`;
+            return `<a href="${ACard.Url(anime.id, query)}" class="card-anime" data-id="${anime.id}" ${Data()}>${Gen()}</a>`;
         } else {
             return `<div class="card-anime" data-id="${anime.id}" ${Data()}>${Gen()}</div>`;
         }
