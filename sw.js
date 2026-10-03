@@ -1,5 +1,5 @@
 const version = '3.3.0';
-const hash = "e31b3"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const hash = "30437"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -54,7 +54,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/auto
     { path: "/javascript/auto/download_a.js", hash: "7c6b60bd", size: 6866 },
     // Директория: /javascript/core
-    { path: "/javascript/core/hub.core.js", hash: "69042188", size: 36132 },
+    { path: "/javascript/core/hub.core.js", hash: "ae0dbcd2", size: 36117 },
     { path: "/javascript/core/main.core.js", hash: "2679f79c", size: 15807 },
     { path: "/javascript/core/menu.core.js", hash: "6053760f", size: 20564 },
     { path: "/javascript/core/menu.help.js", hash: "fa142980", size: 7577 },

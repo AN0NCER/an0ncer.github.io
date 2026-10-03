@@ -339,7 +339,7 @@ class Client {
         for (let attempt = 0; attempt < this.endpoint.maxAttempts; attempt++) {
             if (attempt > 0) await sleep(this.endpoint.delayFor(attempt - 1));
 
-            const init = { ...base, cache: 'no-store', headers: this.#headers(base.headers) };
+            const init = { ...base, headers: this.#headers(base.headers) };
             if (base.method === 'GET' || body === undefined) delete init.body;
             else init.body = body;
 
