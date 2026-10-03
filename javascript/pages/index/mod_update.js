@@ -248,7 +248,9 @@ const update = {
         }
 
         function _swiper(line) {
-            swiperElements = { type: 'swiper', content: [] };
+            const match = line.match(/<!--\s*#swiper:style="([^"]*)"\s*-->/);
+            const style = match ? match[1].trim() : '';
+            swiperElements = { type: 'swiper', style, content: [] };
         }
 
         function _msg(line) {
@@ -374,9 +376,9 @@ const update = {
                 if (element.type === "swiper") {
                     const css = 'random-class-' + Math.floor(Math.random() * 10000);
                     swiperSet.add(css);
-                    html += `<div class="uSwiperWrapper"><div class="sWrapper ${css}"><div class="swiper-wrapper">`;
+                    html += `<div class="uSwiperWrapper"><div class="sWrapper ${css}" style="${element.style}"><div class="swiper-wrapper">`;
                     sRecrusion(element.content);
-                    html += `</div><div class="swiper-pagination"></div></div></div>`;
+                    html += `</div></div><div class="swiper-pagination ${css}-pagination"></div></div>`;
                 }
 
                 if (element.type === "message") {
@@ -465,7 +467,7 @@ const update = {
                     }
                 },
                 pagination: {
-                    el: '.swiper-pagination',
+                    el: `.${css}-pagination`,
                     type: 'bullets',
                     clickable: true,
                     dynamicBullets: true,
