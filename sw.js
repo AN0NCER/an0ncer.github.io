@@ -1,5 +1,5 @@
 const version = '3.3.0';
-const hash = "df13e"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const hash = "e31b3"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -116,7 +116,7 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/index/mod_notify.js", hash: "6d5cab57", size: 19096 },
     { path: "/javascript/pages/index/mod_trailers.js", hash: "8b8a3efd", size: 12522 },
     { path: "/javascript/pages/index/mod_trailers_animation.js", hash: "4fb6ce54", size: 2092 },
-    { path: "/javascript/pages/index/mod_update.js", hash: "c52a80e3", size: 34497 },
+    { path: "/javascript/pages/index/mod_update.js", hash: "6c233411", size: 34683 },
     { path: "/javascript/pages/index/mod_window.js", hash: "fc9bd881", size: 1521 },
     // Директория: /javascript/pages/list
     { path: "/javascript/pages/list/mod.collections.js", hash: "1fcc689d", size: 11900 },
@@ -275,7 +275,7 @@ const appShellFilesToCache = [
     // Директория: /style/css
     { path: "/style/css/collections.css", hash: "3a00ceaf", size: 20698 },
     { path: "/style/css/downloads.css", hash: "2e417433", size: 38689 },
-    { path: "/style/css/index.css", hash: "01860928", size: 71116 },
+    { path: "/style/css/index.css", hash: "f49376e8", size: 71412 },
     { path: "/style/css/list.css", hash: "b1f9d32f", size: 35170 },
     { path: "/style/css/login.css", hash: "7bf0759b", size: 35725 },
     { path: "/style/css/main.css", hash: "a295f8c1", size: 852 },
