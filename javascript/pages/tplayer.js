@@ -6,7 +6,7 @@ import { Fullscreen, PictureInPicture, VisualFeedback, Loader } from "./tplayer/
 import { Keyboard, Touch, Skips } from "./tplayer/comps/cps.input.js";
 import { Media, Switch } from "./tplayer/comps/cps.system.js";
 import { ErrorHandler } from "./tplayer/mod.errors.js";
-import { Meta, Source } from "./tplayer/utils/util.entity.js";
+import { Meta, Source, TSource } from "./tplayer/utils/util.entity.js";
 import { Logger } from "./tplayer/utils/util.log.js";
 
 
@@ -98,9 +98,16 @@ const query = (() => {
         const meta = new Meta(query.id, query.episode);
         const url = await meta.getLink();
 
+        // getLink глушит ошибку и отдаёт undefined — без ссылки сервер
+        if (!url) throw new Error(`Не получена ссылка Kodik для ${query.id}`);
+
         player.trigger(Player.Events.KODIK_LOADED, meta);
 
-        const src = await Tunime.video.source(url);
+        const src = await (new TSource(url, { error })).get();
+
+        // Ошибку уже обработал TSource: плеер уходит на Kodik
+        if (src === undefined) return;
+
         const source = new Source(meta, src);
 
         Logger.setMedia({

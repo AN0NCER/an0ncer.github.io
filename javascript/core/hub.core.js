@@ -634,9 +634,13 @@ const device = new Device();
 
 const snapshot = new Shadow(device);
 
+/** Ждут сессию через Hub.access(): во фрейме она приходит событием storage */
+const waiters = new Set();
+
 const session = new Session({
     onUpdate: ({ value, session }) => {
         snapshot.update(session);
+        for (const check of waiters) check();
     }
 })
 
@@ -893,6 +897,41 @@ export const Hub = new class {
 
     get url() {
         return endpoint.getUrl();
+    }
+
+    /**
+     * Живая сессия с нужным scope. Плеер в iframe сам не логинится —
+     * сессию кладёт верхнее окно, и до неё запрос получил бы отказ.
+     * С timeout ждём её появления, но не дольше
+     * @param {{scope?: string, timeout?: number}} [opts]
+     * @returns {Promise<Object|undefined>} access или undefined, если не дождались
+     */
+    access({ scope, timeout = 0 } = {}) {
+        const ready = () => {
+            const acc = session.access;
+            if (!acc || !session.live()) return undefined;
+            if (scope && !acc.scope?.includes(scope)) return undefined;
+            return acc;
+        };
+
+        const acc = ready();
+        if (acc || timeout <= 0) return Promise.resolve(acc);
+
+        return new Promise((resolve) => {
+            const done = (value) => {
+                clearTimeout(timer);
+                waiters.delete(check);
+                resolve(value);
+            };
+
+            const check = () => {
+                const value = ready();
+                if (value) done(value);
+            };
+
+            const timer = setTimeout(() => done(undefined), timeout);
+            waiters.add(check);
+        });
     }
 
     /**

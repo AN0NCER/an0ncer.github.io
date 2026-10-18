@@ -1,3 +1,4 @@
+import { Hub } from "../../../core/hub.core.js";
 import { Kodik } from "../../../modules/api.kodik.js";
 import { Tunime } from "../../../modules/api.tunime.js";
 import { ErrorHandler } from "../mod.errors.js";
@@ -177,5 +178,59 @@ export class Source {
 
         const finalLabel = bestFit.toString();
         return this.qualitiesData[finalLabel][0].src;
+    }
+}
+
+export class TSource {
+    /** Сколько ждать, пока верхнее окно войдёт: Render может просыпаться */
+    static WAIT = 15000;
+
+    /**
+     * @param {string} url 
+     * @param {{caching:?boolean,error:?ErrorHandler}} options 
+     */
+    constructor(url, options = {}) {
+        this.url = url;
+        this.caching = options?.caching ?? true;
+        this.error = options?.error;
+    }
+
+
+    /**
+     * @typedef {Object} vResult
+     * @property {boolean} [cache] - флаг, указывающий что ресур был загружен из кэша
+     * @property {{[x:string]:[{src:string,type:string}]}} qualities - доступные качества
+     * @property {[string]} skips - моменты для перемоток
+     * @property {[string]} thumbinals - постеры для видео
+     * @property {{interval:number, pattern:string, width:number, x:number, y:number}} tiles - елементы предпросмотра видео
+     */
+
+    /**
+     * @returns {Promise<vResult|undefined>}
+     */
+    async get() {
+        // Без сессии запрос даже не уходит — ждём её от верхнего окна
+        const access = await Hub.access({ scope: 'player', timeout: TSource.WAIT });
+
+        if (!access) {
+            return this.#fail('SOURCE_NO_ACCESS', 'Сессия с доступом player не появилась.');
+        }
+
+        const raw = await Tunime.video.source(this.url, this.caching);
+
+        // Доступ был — значит отказал сам сервер, это стоит лога
+        if (typeof raw === 'boolean' && raw === false) {
+            return this.#fail('COMPONENT_FATAL', 'Сервер не получил видео данные.');
+        }
+
+        return raw;
+    }
+
+    /** @returns {undefined} */
+    #fail(code, message) {
+        if (this.error === undefined) throw new TError(code, message);
+
+        this.error.throw(code, 'tsource', new Error(message));
+        return undefined;
     }
 }
