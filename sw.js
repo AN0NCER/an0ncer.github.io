@@ -1,5 +1,5 @@
-const version = '3.3.0';
-const hash = "30437"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const version = '3.3.1';
+const hash = "5dd16"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -54,7 +54,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/auto
     { path: "/javascript/auto/download_a.js", hash: "7c6b60bd", size: 6866 },
     // Директория: /javascript/core
-    { path: "/javascript/core/hub.core.js", hash: "ae0dbcd2", size: 36117 },
+    { path: "/javascript/core/hub.core.js", hash: "207bae1f", size: 37655 },
     { path: "/javascript/core/main.core.js", hash: "2679f79c", size: 15807 },
     { path: "/javascript/core/menu.core.js", hash: "6053760f", size: 20564 },
     { path: "/javascript/core/menu.help.js", hash: "fa142980", size: 7577 },
@@ -94,7 +94,7 @@ const appShellFilesToCache = [
     { path: "/javascript/modules/win.module.js", hash: "c020a605", size: 6836 },
     { path: "/javascript/modules/Windows.js", hash: "c98d1c47", size: 3866 },
     // Директория: /javascript/pages/anime
-    { path: "/javascript/pages/anime/default.js", hash: "de1c8507", size: 1429 },
+    { path: "/javascript/pages/anime/default.js", hash: "0f3afb00", size: 1921 },
     // Директория: /javascript/pages/collections
     { path: "/javascript/pages/collections/mod.create.js", hash: "7a40a1c4", size: 1856 },
     { path: "/javascript/pages/collections/mod.filter.js", hash: "9a0b2f21", size: 5671 },
@@ -156,13 +156,13 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/tplayer/comps/cps.system.js", hash: "ff9bf867", size: 4688 },
     { path: "/javascript/pages/tplayer/comps/cps.upscale.js", hash: "99d6c9ea", size: 27240 },
     // Директория: /javascript/pages/tplayer/utils
-    { path: "/javascript/pages/tplayer/utils/util.entity.js", hash: "649d3c34", size: 6561 },
+    { path: "/javascript/pages/tplayer/utils/util.entity.js", hash: "7d7d4157", size: 8743 },
     { path: "/javascript/pages/tplayer/utils/util.event.js", hash: "0e45b5a0", size: 3944 },
     { path: "/javascript/pages/tplayer/utils/util.log.js", hash: "68a2fa61", size: 10998 },
     // Директория: /javascript/pages/tplayer
     { path: "/javascript/pages/tplayer/mod.api.js", hash: "388df5cf", size: 4630 },
-    { path: "/javascript/pages/tplayer/mod.errors.js", hash: "8d3ca22e", size: 12460 },
-    { path: "/javascript/pages/tplayer/mod.tplayer.js", hash: "774e95a1", size: 15477 },
+    { path: "/javascript/pages/tplayer/mod.errors.js", hash: "a0f4254a", size: 14187 },
+    { path: "/javascript/pages/tplayer/mod.tplayer.js", hash: "73bf55d9", size: 16279 },
     // Директория: /javascript/pages/user
     { path: "/javascript/pages/user/io.friends.js", hash: "d7452efb", size: 7162 },
     { path: "/javascript/pages/user/mod.achievements.io.js", hash: "5fb8c405", size: 1510 },
@@ -182,6 +182,14 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/watch/mod.cid/mod.owner.js", hash: "a507ad9f", size: 3513 },
     { path: "/javascript/pages/watch/mod.cid/mod.source.js", hash: "b7d61af1", size: 5439 },
     { path: "/javascript/pages/watch/mod.cid/mod.strip.js", hash: "5543acff", size: 6094 },
+    // Директория: /javascript/pages/watch/mod.ui/mod.metrics
+    { path: "/javascript/pages/watch/mod.ui/mod.metrics/mod.airing.js", hash: "ccf2770f", size: 3028 },
+    { path: "/javascript/pages/watch/mod.ui/mod.metrics/mod.mine.js", hash: "96321d09", size: 684 },
+    { path: "/javascript/pages/watch/mod.ui/mod.metrics/mod.rating.js", hash: "6c590847", size: 1571 },
+    { path: "/javascript/pages/watch/mod.ui/mod.metrics/mod.season.js", hash: "a06e20d1", size: 1645 },
+    // Директория: /javascript/pages/watch/mod.ui
+    { path: "/javascript/pages/watch/mod.ui/mod.controllers.js", hash: "72eaef07", size: 16414 },
+    { path: "/javascript/pages/watch/mod.ui/mod.metrics.js", hash: "ffb67306", size: 1282 },
     // Директория: /javascript/pages/watch/utils
     { path: "/javascript/pages/watch/utils/util.event.js", hash: "0e45b5a0", size: 3944 },
     { path: "/javascript/pages/watch/utils/util.glide.js", hash: "72b1c202", size: 7107 },
@@ -196,7 +204,7 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/watch/mod.dubs.win.js", hash: "04fb2866", size: 10865 },
     { path: "/javascript/pages/watch/mod.episode.win.js", hash: "d85e18bf", size: 5087 },
     { path: "/javascript/pages/watch/mod.notifi.js", hash: "7027b3d5", size: 4183 },
-    { path: "/javascript/pages/watch/mod.resource.js", hash: "e37d6117", size: 25836 },
+    { path: "/javascript/pages/watch/mod.resource.js", hash: "3018065a", size: 25933 },
     { path: "/javascript/pages/watch/mod.score.js", hash: "63ae23ba", size: 5716 },
     { path: "/javascript/pages/watch/mod.synch.js", hash: "bd1f52f3", size: 4054 },
     { path: "/javascript/pages/watch/mod.urate.js", hash: "f4444e6a", size: 5309 },
@@ -205,7 +213,7 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/watch/mod_player.js", hash: "5f8a198d", size: 23756 },
     { path: "/javascript/pages/watch/mod_private.js", hash: "fe33885c", size: 245 },
     { path: "/javascript/pages/watch/mod_transition.js", hash: "f2e80bc7", size: 5138 },
-    { path: "/javascript/pages/watch/mod_ui.js", hash: "aeb999b0", size: 15767 },
+    { path: "/javascript/pages/watch/mod_ui.js", hash: "49d59703", size: 15974 },
     { path: "/javascript/pages/watch/mod_wscore.js", hash: "2d7342db", size: 6805 },
     { path: "/javascript/pages/watch/room.guest.client.js", hash: "83214318", size: 11045 },
     { path: "/javascript/pages/watch/room.owner.client.js", hash: "990978de", size: 8842 },
@@ -219,9 +227,9 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/player.js", hash: "cb42ed19", size: 5913 },
     { path: "/javascript/pages/search.js", hash: "7471250a", size: 6316 },
     { path: "/javascript/pages/settings.js", hash: "5e95ffa6", size: 26838 },
-    { path: "/javascript/pages/tplayer.js", hash: "f20645e8", size: 3983 },
+    { path: "/javascript/pages/tplayer.js", hash: "829e9d41", size: 4352 },
     { path: "/javascript/pages/user.js", hash: "4bf824e6", size: 4919 },
-    { path: "/javascript/pages/watch.js", hash: "e06b7448", size: 9006 },
+    { path: "/javascript/pages/watch.js", hash: "7b9b7bbc", size: 9134 },
     // Директория: /javascript/services
     { path: "/javascript/services/dispatcher.js", hash: "2a790095", size: 2334 },
     { path: "/javascript/services/installing.js", hash: "dfe8f97d", size: 465 },
@@ -287,7 +295,7 @@ const appShellFilesToCache = [
     { path: "/style/css/tplayer.css", hash: "3c2ae5d7", size: 23830 },
     { path: "/style/css/user.css", hash: "6863aab9", size: 78959 },
     { path: "/style/css/verify.css", hash: "fdfe046c", size: 7716 },
-    { path: "/style/css/watch.css", hash: "66b1ffc0", size: 70842 },
+    { path: "/style/css/watch.css", hash: "f9ed30ee", size: 82498 },
     // Директория: /style/fonts
     { path: "/style/fonts/Inter.ttf", hash: "32204736", size: 804612 },
     { path: "/style/fonts/Manrope.ttf", hash: "cf98436d", size: 164936 },
@@ -351,7 +359,7 @@ const appShellFilesToCache = [
     { path: "/settings.html", hash: "2bc78650", size: 13326 },
     { path: "/tplayer.html", hash: "aedc4dfc", size: 21598 },
     { path: "/user.html", hash: "3937591f", size: 27553 },
-    { path: "/watch.html", hash: "e58b4fe2", size: 69293 },
+    { path: "/watch.html", hash: "e0a47334", size: 79432 },
 ];
 
 const servers = [
