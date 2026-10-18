@@ -13,6 +13,7 @@ import { DUB } from "./mod.dubs.js";
 import { ANotifi } from "./mod.notifi.js";
 import { AutoScrollEpisodes } from "./utils/util.scroll.js";
 import createGlide from "./utils/util.glide.js";
+import { SetMyScore } from "./mod.ui/mod.metrics.js";
 
 const anime_status = [
     { id: 0, name: "Посмотрю", sh: ["planned"] },
@@ -32,8 +33,8 @@ export function Functional() {
         { dom: "#back-page", func: BackToMainPage },
         { dom: "#show-status", func: ShowStatus },
         { dom: "#window-score", func: ShowScoreWindow },
+        { dom: `.my-score-metric[role="button"]`, func: ShowScoreWindow },
         { dom: "#share", func: ShareAnime },
-        { dom: "#btn-scroll", func: ShowPlayer },
         { dom: '.title > .russian', func: CopyTitle }
     ];
 
@@ -54,6 +55,10 @@ export function Functional() {
     }
 
     URate.on('init', (res) => {
+        const score = (res) => {
+            SetMyScore(res);
+        };
+
         const process = (res) => {
             if (res !== null && res.score != 0) {
                 $("#window-score > .default").addClass('hide');
@@ -71,9 +76,11 @@ export function Functional() {
         }
 
         process(res);
+        score(res);
 
         URate.on('update', (res) => {
             process(res);
+            score(res);
         });
     }, { replay: true });
 
@@ -333,7 +340,7 @@ function ScrollingElements() {
     createGlide(document.querySelector('.genres.scroll-none'));
 
     // С центрированием
-    
+
     createGlide(document.querySelector('.galery-slider'));
     const glideFranchise = createGlide(document.querySelector('.list-franchise'));
 
@@ -427,7 +434,7 @@ function ShareAnime() {
 /**
  * Функция пролистывания к плееру
  */
-function ShowPlayer() {
+export function ShowPlayer() {
     document.getElementById('kodik-player').scrollIntoView({ behavior: "smooth", block: "center" });
 }
 

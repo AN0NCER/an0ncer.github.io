@@ -1,3 +1,6 @@
+$max-width: 940px;
+$phone-width: 650px;
+
 html,
 body {
     scrollbar-width: none;
@@ -27,7 +30,7 @@ body {
 }
 
 .screen-wrapper {
-    max-width: 900px;
+    max-width: $max-width;
     margin-left: auto;
     margin-right: auto;
 }
@@ -89,6 +92,7 @@ footer {
 @import './watch/download';
 @import './watch/reload';
 @import './popup';
+@import './watch/page_controller';
 
 .card-anime {
     min-width: 195px;
@@ -123,7 +127,7 @@ footer {
     }
 }
 
-@media screen and (max-width:650px) {
+@media screen and (max-width:$phone-width) {
     header {
         flex-direction: column;
         margin-top: 0;

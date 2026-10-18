@@ -339,7 +339,9 @@ export class Player extends TEvents {
             if (Date.now() - this.sourceLoadedAt < SOURCE_STALE_MS) return;
 
             log('Источник устарел после простоя — обновление', 'tplayer');
-            this.refreshSource({ resume: false });
+            // Видео на паузе — ожидание незаметно, а сессия после простоя
+            // как раз могла истечь и сейчас обновляется верхним окном
+            this.refreshSource({ resume: false, wait: 15000 });
         });
 
         Logger.setOpts({ opts: this.opts, device: this.device });
@@ -371,18 +373,26 @@ export class Player extends TEvents {
      * и переподключает его, сохраняя позицию и состояние воспроизведения.
      * Используется при фатальных сетевых ошибках HLS (протухшая ссылка)
      * и при возврате на вкладку после долгого простоя.
-     * @param {{resume?: boolean}} [opts]
+     * @param {{resume?: boolean, wait?: number}} [opts]
+     *  wait — сколько мс ждать сессию: плеер сам не логинится, и после
+     *  простоя верхнее окно может ещё входить
      * @returns {Promise<boolean>} удалось ли обновить
      */
-    async refreshSource({ resume = true } = {}) {
+    async refreshSource({ resume = true, wait = 0 } = {}) {
         const meta = this.source?.meta;
         if (!meta) return false;
 
         try {
             const { Tunime } = await import("../../modules/api.tunime.js");
+            const { Hub } = await import("../../core/hub.core.js");
 
             const url = await meta.getLink();
             if (!url) return false;
+
+            if (!await Hub.access({ scope: 'player', timeout: wait })) {
+                warn('Нет сессии для обновления источника', 'tplayer', { details: { wait } });
+                return false;
+            }
 
             const payload = await Tunime.video.source(url, false); // caching=false
             if (!payload) return false;

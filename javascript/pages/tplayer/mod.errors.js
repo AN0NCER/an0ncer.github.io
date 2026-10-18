@@ -15,6 +15,13 @@ export class ErrorHandler {
         COMPONENT_MEDIUM: { severity: ErrorHandler.Severity.MEDIUM, message: 'Ошибка в работе компоненте. Работа продолжается' },
         COMPONENT_FATAL: { severity: ErrorHandler.Severity.FATAL, message: 'Ошибка в работе компонента. Продолжение не возможно.' },
 
+        // Источник не получен (ссылка Kodik, данные сервера) — играть нечего
+        SOURCE_LOAD: { severity: ErrorHandler.Severity.FATAL, message: 'Не удалось загрузить источник видео. Переключение на Kodik плеер.' },
+
+        // Нет сессии: не сбой плеера, лог не шлём (send: false). FATAL —
+        // страница переключает на Kodik только по фаталу (watch.js)
+        SOURCE_NO_ACCESS: { severity: ErrorHandler.Severity.FATAL, send: false, message: 'Нет доступа к серверу. Переключение на Kodik плеер.' },
+
         // Ошибки HLS — сеть
         HLS_NETWORK: { severity: ErrorHandler.Severity.MEDIUM, message: 'Ошибка сети HLS. Попытка восстановления...' },
         HLS_NETWORK_FATAL: { severity: ErrorHandler.Severity.FATAL, message: 'Фатальная ошибка сети HLS. Воспроизведение невозможно.' },
@@ -142,6 +149,12 @@ export class ErrorHandler {
     #lastFreshAt = 0;
     #sendTimer = null;
 
+    /** Восстановление после фатала в полёте: следующие фаталы — его часть */
+    #recovering = null;
+
+    /** Уже ушли на Kodik — догоняющие фаталы HLS больше ничего не решают */
+    #gaveUp = false;
+
     /**
      * Отложенная отправка лога: копит ошибки во время всплеска и грузит
      * файл ОДИН раз, когда поток прекратился. Защита от десятков загрузок.
@@ -192,7 +205,8 @@ export class ErrorHandler {
 
         try {
             log('Попытка восстановления свежим источником (без кэша)', 'api');
-            return await this.player.refreshSource();
+            // Видео стоит — долго держать перед Kodik не стоит
+            return await this.player.refreshSource({ wait: 5000 });
         } catch (e) {
             warn('Восстановление свежим источником не удалось', 'api', { details: { error: String(e) } });
             return false;
@@ -230,7 +244,12 @@ export class ErrorHandler {
             Logger[type](descriptor.message, module, { details, error: error.original });
 
             if (descriptor.severity === ErrorHandler.Severity.FATAL) {
-                (async () => {
+                // Сбой уже разбирается: эта ошибка — его часть и уже в логе.
+                // Иначе второй фатал во время восстановления уводил на Kodik,
+                // а первый следом сообщал об успехе — и каждый слал свой лог
+                if (this.#recovering || this.#gaveUp) return;
+
+                this.#recovering = (async () => {
                     // Сетевой фатал чаще всего = протухшая CDN-ссылка
                     // (кэшированный источник). Прежде чем сдаваться в
                     // Kodik-iframe — пробуем получить свежий источник
@@ -241,10 +260,11 @@ export class ErrorHandler {
                         return;
                     }
 
+                    this.#gaveUp = true;
                     log('Переключение на Kodik плеер', 'api');
-                    await Logger.send();
+                    if (descriptor.send !== false) await Logger.send();
                     this.player.trigger(Player.Events.ERROR, error);
-                })();
+                })().finally(() => { this.#recovering = null; });
             } else if (code === 'UNHANDLED') {
                 // Не грузим файл на каждую ошибку — копим и шлём один раз
                 // (в конце всплеска). Раньше здесь был Logger.send() на

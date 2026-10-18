@@ -1,0 +1,384 @@
+// Цвета статусов — одно место на пункты списка и грани кнопки
+$statuses: (
+    "i-planned": (#F7D149, rgba(247, 209, 73, 0.15)),
+    "i-watch": (#2393F1, rgba(35, 148, 241, 0.15)),
+    "i-complete": (#22C55E, rgba(34, 197, 94, 0.15)),
+    "i-dropped": (#D94041, rgba(217, 64, 64, 0.15))
+);
+
+@mixin status-colors {
+    @each $name, $pair in $statuses {
+        &.#{$name} {
+            --primary: #{nth($pair, 1)};
+            --bg: #{nth($pair, 2)};
+        }
+    }
+}
+
+@keyframes am-spin {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+.am-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 19;
+    opacity: 0;
+    background: rgba(5, 7, 12, .55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.page-controllers {
+    --gap: 16px;
+    --btn-size: 50px;
+    --btn-radius: calc(var(--btn-size) / 2);
+
+    position: fixed;
+    left: max(var(--gap), var(--sal, 0px));
+    right: max(var(--gap), var(--sar, 0px));
+    bottom: var(--gap);
+    // bottom: max(var(--sab), var(--gap));
+
+    font-family: "Manrope";
+    box-sizing: border-box;
+
+    z-index: 20;
+
+    transition: transform .6s cubic-bezier(.22, 1, .36, 1);
+
+    // Плашка стоит поверх плеера, эпизодов или озвучек — уезжает вниз
+    // целиком: своя высота + отступ снизу + запас под тень
+    &.-hidden {
+        transform: translateY(calc(100% + var(--gap) + 12px));
+        pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+
+    & * {
+        box-sizing: border-box;
+    }
+
+    .page-controllers-wrapper {
+        display: flex;
+        justify-content: space-between;
+        flex: 1 0 0;
+        max-width: $max-width;
+        margin: 0 auto;
+    }
+
+    .data-controller {
+        display: flex;
+        position: relative;
+        padding: 5px;
+        border-radius: 30px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(4px);
+        gap: 5px;
+        align-items: center;
+    }
+
+    // ─── Круглые кнопки панели ─────────────────────────────────────
+
+    .btn {
+        min-width: var(--btn-size);
+        height: var(--btn-size);
+        border-radius: 100px;
+        display: flex;
+        align-items: center;
+
+        .icon {
+            display: grid;
+            width: var(--btn-size);
+            height: var(--btn-size);
+            place-items: center;
+        }
+
+        span {
+            color: #ffffff;
+            text-transform: uppercase;
+            line-height: 1;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        svg {
+            height: 18px;
+            color: #ffffff;
+            fill: #ffffff;
+        }
+
+        &.-bg {
+            border: 0.2px solid rgba(255, 255, 255, 0.2);
+            background: #191C21;
+            box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.25);
+        }
+
+        &.-icon {
+            display: grid;
+            place-items: center;
+        }
+
+        &.-primary {
+            background: linear-gradient(180deg, #2296f0 0%, #287bf1 100%);
+            border: unset;
+            box-shadow: inset 0px 3px 5px 0px rgba(255, 255, 255, 0.45),
+                0px 4px 4px 4px rgba(0, 0, 0, 0.25);
+
+            svg {
+                height: 27px;
+            }
+        }
+
+        &.-scored{
+            background: #2393F1;
+        }
+    }
+
+    // ─── Статус аниме ──────────────────────────────────────────────
+
+    // Место под коробку в панели. Ширину во время работы задаёт JS
+    // (по замеру текущей грани); --width — только до первого замера
+    .am-wrap {
+        --width: 130px;
+
+        position: relative;
+        width: var(--width);
+        height: calc(var(--btn-size) + 2px);
+        flex: none;
+    }
+
+    // Коробка растёт вверх и вширь поверх панели, кнопка всегда внизу
+    .am-box {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: var(--width);
+        height: calc(var(--btn-size) + 2px);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        overflow: hidden;
+
+        border-radius: var(--btn-radius);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: #191C21;
+        box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.25);
+    }
+
+    // ─── Список статусов ───────────────────────────────────────────
+
+    .am-list {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 0 5px;
+    }
+
+    .am-item {
+        --primary: #AEAEAE;
+        --bg: rgba(174, 174, 174, 0.15);
+
+        width: 100%;
+        height: var(--btn-size);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 0 10px;
+
+        border: 0;
+        border-radius: var(--btn-radius);
+        background-color: transparent;
+        cursor: pointer;
+
+        // Стартовое положение для появления снизу вверх
+        transform: translateY(10px);
+        opacity: 0;
+
+        @include status-colors;
+
+        .am-item-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1;
+            white-space: nowrap;
+
+            .icon {
+                display: grid;
+                place-items: center;
+                flex: none;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background: var(--bg);
+
+                svg {
+                    height: 18px;
+                    fill: var(--primary);
+                }
+            }
+        }
+
+        .selector {
+            display: none;
+            width: 12px;
+            height: 12px;
+            margin-right: 5px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        &.-select {
+            background: var(--bg);
+
+            .selector {
+                display: block;
+            }
+        }
+    }
+
+    .am-line {
+        display: block;
+        width: 100%;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        pointer-events: none;
+
+        transform: translateY(10px);
+        opacity: 0;
+    }
+
+    .am-remove-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    // ─── Кнопка ────────────────────────────────────────────────────
+
+    // На всю ширину коробки: в раскрытом меню попасть можно в любую
+    // точку нижней строки, а не только в текст
+    .am-btn {
+        flex: none;
+        width: 100%;
+        height: var(--btn-size);
+        margin-top: 5px;
+        padding: 0 10px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: unset;
+        background: transparent;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    // Окно на всю кнопку — и по ширине, и по высоте: грань въезжает от
+    // нижнего края кнопки и уходит за верхний, а не в полосе высотой в
+    // иконку. overflow всё равно нужен — при открытом меню уходящая
+    // грань иначе наехала бы на пункты списка
+    .am-stage {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    // Все грани лежат друг на друге по центру окна. Центрирование
+    // через margin, а не translateX: transform целиком отдан anime.js
+    // под translateY. offsetWidth грани = её естественная ширина
+    .am-face {
+        --primary: #ffffff;
+        --bg: transparent;
+
+        position: absolute;
+        inset: 0;
+        width: max-content;
+        margin: 0 auto;
+
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+
+        // Ждущие грани — под окном
+        transform: translateY(100%);
+        opacity: 0;
+
+        &.-current {
+            transform: none;
+            opacity: 1;
+        }
+
+        @include status-colors;
+
+        .icon {
+            display: grid;
+            place-items: center;
+            flex: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--bg);
+
+            svg {
+                height: 18px;
+                fill: var(--primary);
+            }
+        }
+
+        .label {
+            margin-right: 13px;
+        }
+    }
+
+    // Спиннер грани «Установка» — без SVG, кольцо на ::after
+    .am-face .icon.-spin {
+        --loader-size: 20px;
+        --loader-color: #2393F1;
+
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: var(--loader-size);
+            height: var(--loader-size);
+
+            border: 2px solid transparent;
+            border-top-color: var(--loader-color);
+            border-right-color: var(--loader-color);
+            border-radius: 50%;
+
+            transform: translate(-50%, -50%);
+            animation: am-spin 0.7s linear infinite;
+        }
+    }
+}

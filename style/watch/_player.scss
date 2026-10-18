@@ -480,7 +480,7 @@
         }
     }
 
-    @media screen and (min-width:900px) {
+    @media screen and (min-width:$max-width) {
         iframe {
             min-height: auto !important;
             border-radius: 5px !important;

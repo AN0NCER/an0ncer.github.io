@@ -9,6 +9,7 @@ import { $ID } from "../watch.js";
 import { tChronology, tReload } from "./mod.chronology.js";
 import { LTransition } from "./mod_transition.js";
 import { URate } from "./mod.urate.js";
+import { SetMetrics } from "./mod.ui/mod.metrics.js";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
@@ -89,6 +90,7 @@ export function tLoad(e = () => { }, { logged = false } = {}) {
 
             process.push(new Promise(resolve => {
                 SetTitle(tAnime);
+                SetMetrics(tAnime);
                 Genres(tAnime["genres"]);
                 Duration(tAnime);
                 Status(tAnime);
@@ -129,7 +131,7 @@ export function tLoad(e = () => { }, { logged = false } = {}) {
 
     async function load(id) {
         return new Promise((resolve, reason) => {
-            const body = ["id", "russian", "name", "score", "status", "episodesAired", "episodes", "duration", "rating", "nextEpisodeAt", "descriptionHtml", "kind", { "characterRoles": ["rolesEn", { "character": ["id", "russian", { "poster": ["previewUrl"] }] }] }, { "chronology": ["id", "russian", "name", "kind", "status", "score", { "airedOn": ["year"] }, { userRate: ["status"] }] }, { "poster": ["originalUrl"] }, { "genres": ["id", "name", "russian", "kind"] }, { "studios": ["id", "name"] }, { "screenshots": ["x332Url", "originalUrl"] }];
+            const body = ["id", "russian", "name", "season", "score", "status", "episodesAired", "episodes", "duration", "rating", "nextEpisodeAt", "descriptionHtml", "kind", { "characterRoles": ["rolesEn", { "character": ["id", "russian", { "poster": ["previewUrl"] }] }] }, { "chronology": ["id", "russian", "name", "kind", "status", "score", { "airedOn": ["year"] }, { userRate: ["status"] }] }, { "poster": ["originalUrl"] }, { "genres": ["id", "name", "russian", "kind"] }, { "studios": ["id", "name"] }, { "screenshots": ["x332Url", "originalUrl"] }, {"scoresStats": ["count"]}, { "airedOn": ["year", "month", "day"] }];
 
             GraphQl.animes({ ids: `"${id}"`, limit: 1 }, async (response) => {
                 if (response.failed) {
@@ -394,7 +396,6 @@ function Gallery(data) {
 function SetTitle(data) {
     $(".title-with-raiting > .title > .russian").textContent = data.russian;
     $(".title-with-raiting > .title > .name").textContent = data.name;
-    $(".title-with-raiting > .raiting > span").textContent = data.score;
 }
 
 /**
