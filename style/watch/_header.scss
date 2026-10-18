@@ -1,7 +1,7 @@
 @mixin Preview() {
     .preview {
         position: relative;
-        max-width: 370px;
+        max-width: 400px;
         width: 100%;
         overflow: hidden;
 
@@ -10,9 +10,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100%;
 
             img.main {
                 width: 100%;
+                height: 100%;
+                object-fit: cover;
                 min-width: 370px;
                 z-index: 1;
                 position: relative;
@@ -32,6 +35,15 @@
             img.bg {
                 filter: blur(5px);
                 width: 150%;
+            }
+        }
+
+        @media screen and (max-width: $phone-width) {
+            .preview-wrapper {
+                img.main {
+                    object-fit: contain;
+                    height: auto;
+                }
             }
         }
 
@@ -316,8 +328,6 @@
             align-items: center;
 
             .title {
-                margin-right: 10px;
-
                 .russian {
                     color: #fff;
                     font-weight: bold;
@@ -325,30 +335,225 @@
                 }
 
                 .name {
-                    color: #fff;
-                    opacity: 0.5;
+                    color: rgba(255, 255, 255, 0.5);
+                    margin-top: 3px;
                     font-size: 11px;
                 }
             }
+        }
 
-            .raiting {
-                display: flex;
-                color: #fff;
-                font-weight: bold;
-                align-items: center;
+        // Оценка, год и ваша оценка: три метрики — значение, под ним подпись.
+        // Типографика как у жанров («Фэнтези / жанр»), только без плашки.
+        // Сезон задаёт data-season: цвет слова и значок
+        .year-score-wrapper {
+            $seasons: (
+                winter: #5fbef3,
+                spring: #F472B6,
+                summer: #F7D149,
+                fall: #F59E0B
+            );
 
-                svg {
-                    height: 14px;
-                    margin-right: 10px;
-                    fill: #5fbef3;
+            --season: #ffffff;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 20px 20px 0;
+
+            @each $name, $color in $seasons {
+                &[data-season="#{$name}"] {
+                    --season: #{$color};
+
+                    .season-icon .#{$name} {
+                        display: inline;
+                    }
                 }
+            }
+
+            // Сезона нет (фильмы) — ни значка, ни слова, только год
+            &:not([data-season]) {
+
+                .season-icon,
+                .season {
+                    display: none;
+                }
+            }
+
+            .metric {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                min-width: 0;
+            }
+
+            .metric-value {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                color: #ffffff;
+                line-height: 1;
+                font-variant-numeric: tabular-nums;
+            }
+
+            .metric-sub {
+                font-size: 11px;
+                line-height: 1;
+                color: rgba(255, 255, 255, 0.5);
+                white-space: nowrap;
+            }
+
+            .score-metric .metric-value {
+                font-size: 20px;
+                font-weight: 800;
+
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                    flex: none;
+                    fill: #FFD700;
+                }
+            }
+
+            .year-metric .metric-value {
+                font-size: 15px;
+                font-weight: 700;
+                line-height: 20px;
+
+                .season {
+                    color: var(--season);
+                }
+            }
+
+            .season-icon {
+                width: 13px;
+                height: 13px;
+                flex: none;
+                fill: var(--season);
+
+                // Видим только значок своего сезона
+                use {
+                    display: none;
+                }
+            }
+
+            // Статус под сезоном: точка, слово и хвост (день выхода серий,
+            // дата премьеры). Онгоинг — зелёный с пульсом, как «в эфире»;
+            // анонс — фиолетовый: синий занят вашей оценкой, жёлтый — летом
+            .status-sub {
+                --status: rgba(255, 255, 255, 0.45);
+
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                &[data-status="ongoing"] {
+                    --status: #22C55E;
+                }
+
+                &[data-status="anons"] {
+                    --status: #A78BFA;
+                }
+
+                .status-dot {
+                    width: 6px;
+                    height: 6px;
+                    flex: none;
+                    border-radius: 50%;
+                    background: var(--status);
+                }
+
+                .status-word {
+                    color: var(--status);
+                    font-weight: 700;
+                }
+
+                &[data-status="released"] .status-word {
+                    color: rgba(255, 255, 255, 0.7);
+                }
+
+                &[data-status="ongoing"] .status-dot {
+                    animation: status-pulse 2s infinite;
+
+                    @media (prefers-reduced-motion: reduce) {
+                        animation: none;
+                    }
+                }
+
+                // Хвоста нет (вышел, анонс без даты) — только точка и слово
+                .status-tail:empty {
+                    display: none;
+                }
+            }
+
+            @keyframes status-pulse {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55);
+                }
+
+                70% {
+                    box-shadow: 0 0 0 5px rgba(34, 197, 94, 0);
+                }
+
+                100% {
+                    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+                }
+            }
+
+            // Ваша оценка — синяя: синий на сайте = ваши действия,
+            // так она не путается с жёлтой оценкой Shikimori
+            .my-score-metric {
+                cursor: pointer;
+
+                .metric-value {
+                    font-size: 15px;
+                    font-weight: 700;
+                    line-height: 20px;
+
+                    .icon {
+                        width: 14px;
+                        height: 14px;
+                        flex: none;
+                        fill: #5fbef3;
+                    }
+
+                    .empty,
+                    .regular {
+                        display: none;
+                    }
+                }
+
+                // Не поставлена: «☆ Оценить» синим, звезда слева
+                &[data-state="empty"] .metric-value {
+                    color: #5fbef3;
+
+                    .value,
+                    .solid {
+                        display: none;
+                    }
+
+                    .empty,
+                    .regular {
+                        display: inline;
+                    }
+
+                    .icon {
+                        order: -1;
+                    }
+                }
+            }
+
+            .line {
+                width: 1px;
+                align-self: stretch;
+                background: rgba(255, 255, 255, 0.1);
             }
         }
 
         .genres {
             display: flex;
             padding: 0 20px;
-            margin-top: 15px;
+            margin-top: 20px;
             overflow-x: auto;
             gap: 10px;
 

@@ -365,7 +365,7 @@
     }
 }
 
-@media screen and (min-width: 900px) {
+@media screen and (min-width: $max-width) {
     .content-score .content-wraper textarea {
         border-radius: 6px;
     }
