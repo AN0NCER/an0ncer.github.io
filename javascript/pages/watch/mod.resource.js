@@ -396,7 +396,6 @@ function Gallery(data) {
 function SetTitle(data) {
     $(".title-with-raiting > .title > .russian").textContent = data.russian;
     $(".title-with-raiting > .title > .name").textContent = data.name;
-    $(".title-with-raiting > .raiting > span").textContent = data.score;
 }
 
 /**

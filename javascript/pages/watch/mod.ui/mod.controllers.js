@@ -23,6 +23,7 @@ const backdrop = document.querySelector('.am-backdrop');
 const addBtn = document.querySelector('.am-btn');
 const wrap = document.querySelector('.am-wrap');
 const playBtn = document.querySelector('.page-controllers .btn[data-action="player"]');
+const scoreBtn = document.querySelector('.page-controllers .btn[data-action="score"]');
 const box = document.querySelector('.am-box');
 const stage = addBtn.querySelector('.am-stage');
 const removeWrap = list.querySelector('.am-remove-wrapper');
@@ -186,6 +187,11 @@ const markSelected = () => {
     if (removeWrap) removeWrap.style.display = key === 'none' ? 'none' : '';
 };
 
+/** Кнопка оценки: -scored, когда у аниме есть оценка (0 у Shikimori — без оценки) */
+const markScored = () => {
+    scoreBtn?.classList.toggle('-scored', URate.uRate?.score > 0);
+};
+
 // ─── Меню ───────────────────────────────────────────────────────────
 
 function openMenu() {
@@ -338,10 +344,14 @@ const hideOverPlayer = () => {
     URate.on('init', (rate) => {
         show(faceOf(rate), { animated: false });
         markSelected();
+        markScored();
     }, { replay: true });
 
     // Статус меняется и не через кнопку: серия, синхронизация
     URate.on('update', () => {
+        // Оценку ставят в своём окне — pending смены статуса её не касается
+        markScored();
+
         if (pending) return;
 
         show(faceOf(URate.uRate));

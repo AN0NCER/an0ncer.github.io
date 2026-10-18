@@ -50,6 +50,12 @@ Main(async (e) => {
         }
     }
 
+    try {
+        await import('./watch/mod.ui/mod.controllers.js');
+    } catch (err) {
+        console.log(err);
+    }
+
     Functional();
 
     if ($CID && $PARAMETERS.anime.collectioninanime) {

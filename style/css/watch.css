@@ -3180,6 +3180,9 @@ body.-noscrol {
 .page-controllers .btn.-primary svg {
   height: 27px;
 }
+.page-controllers .btn.-scored {
+  background: #2393F1;
+}
 .page-controllers .am-wrap {
   --width: 130px;
   position: relative;
