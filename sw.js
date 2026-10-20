@@ -1,5 +1,5 @@
 const version = '3.3.1';
-const hash = "5dd16"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const hash = "33561"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -161,7 +161,7 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/tplayer/utils/util.log.js", hash: "68a2fa61", size: 10998 },
     // Директория: /javascript/pages/tplayer
     { path: "/javascript/pages/tplayer/mod.api.js", hash: "388df5cf", size: 4630 },
-    { path: "/javascript/pages/tplayer/mod.errors.js", hash: "a0f4254a", size: 14187 },
+    { path: "/javascript/pages/tplayer/mod.errors.js", hash: "858c048a", size: 15163 },
     { path: "/javascript/pages/tplayer/mod.tplayer.js", hash: "73bf55d9", size: 16279 },
     // Директория: /javascript/pages/user
     { path: "/javascript/pages/user/io.friends.js", hash: "d7452efb", size: 7162 },

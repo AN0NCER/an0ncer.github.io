@@ -46,6 +46,22 @@ export class ErrorHandler {
         this._handling = false;
 
         window.addEventListener('error', (event) => {
+            // Пустой event.error — ошибка чужого скрипта (расширение, другой домен):
+            // браузер прячет детали ("Script error."). Плееру она не мешает —
+            // только пишем в журнал, без отправки лога. Раньше каждая такая
+            // ошибка заново слала весь накопленный лог сессии (дубли)
+            if (!event.error) {
+                warn('Ошибка внешнего скрипта (без деталей)', 'global', {
+                    details: {
+                        message: event.message || null,
+                        source: event.filename || null,
+                        line: event.lineno || null,
+                        column: event.colno || null
+                    }
+                });
+                return;
+            }
+
             if (isBenignError(event.error)) return;
             this.throw('UNHANDLED', 'global', event.error);
         });
