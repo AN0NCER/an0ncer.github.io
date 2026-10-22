@@ -973,6 +973,10 @@ main .similiar-anime .sentinel {
 .episodes .episodes-wrapper .episode.-select {
   opacity: 1;
 }
+.episodes .episodes-wrapper .episode.-missing {
+  opacity: 0.15;
+  cursor: default;
+}
 .episodes .episodes-wrapper .sel {
   display: grid;
   position: absolute;
@@ -1057,6 +1061,10 @@ main .similiar-anime .sentinel {
 }
 .episode-visible-area .episode-wrapper .episode-list .episode.-select {
   opacity: 1;
+}
+.episode-visible-area .episode-wrapper .episode-list .episode.-missing {
+  opacity: 0.15;
+  cursor: default;
 }
 .episode-visible-area .episode-wrapper .episode-list .btn-win-episode {
   display: flex;

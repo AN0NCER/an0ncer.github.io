@@ -9,9 +9,14 @@ export const DUB = new class {
 
     #current = undefined;
 
-    select(dub, isFavor = false) {
+    /**
+     * @param {Object} dub - озвучка в формате Kodik
+     * @param {boolean} [isFavor]
+     * @param {boolean} [notify] - поддерживает ли озвучка уведомления (features.notify)
+     */
+    select(dub, isFavor = false, notify = true) {
         this.#current = dub;
-        const isNotifi = [0, 1].includes(TNotifi.getUIState());
+        const isNotifi = notify && [0, 1].includes(TNotifi.getUIState());
         // Массивом: removeClass берёт только первый аргумент
         this.el.removeClass(['-no-select', '-notify', '-favor']);
         this.el.attr('data-type', dub.translation.type);

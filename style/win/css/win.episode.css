@@ -215,6 +215,10 @@
   background-color: #191c21;
   border-radius: 6px;
 }
+.content-episode .content-wrapper .wrapper .episode-list-wrapper .grid-wrapper-list .episode.-missing .episode-wrapper {
+  opacity: 0.15;
+  cursor: default;
+}
 .content-episode .content-wrapper .episode-list-search input::-webkit-outer-spin-button,
 .content-episode .content-wrapper .episode-list-search input::-webkit-inner-spin-button {
   /* display: none; <- Crashes Chrome on hover */

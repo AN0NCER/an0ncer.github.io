@@ -11,7 +11,9 @@ const config = {
 const value = {
     count: 1,
     current: 1,
-    onselect: () => { }
+    onselect: () => { },
+    /** @type {(episode:number) => boolean} есть ли эпизод (пропуски в озвучке) */
+    has: () => true
 }
 
 // const { promise: $MOD, resolve: modResolver } = Promise.withResolvers();
@@ -20,10 +22,17 @@ let windowPromise = undefined;
 let win = undefined;
 let selected = undefined;
 
-export function WEpisodes(count, current, { dom = 'body', onselect = () => { } } = {}) {
+/**
+ * @param {number} count
+ * @param {number} current
+ * @param {{dom?:string, onselect?:Function, has?:(episode:number) => boolean}} [opts]
+ *  has — есть ли эпизод; отсутствующие показываются с -missing и не выбираются
+ */
+export function WEpisodes(count, current, { dom = 'body', onselect = () => { }, has = () => true } = {}) {
     value.count = count;
     value.current = current;
     value.onselect = onselect;
+    value.has = has;
 
     if (windowPromise) return windowPromise;
     if (win) return win.show();
@@ -74,7 +83,7 @@ export function WEpisodes(count, current, { dom = 'body', onselect = () => { } }
                     GlobalSelect(input[0].value, value.onselect, win);
                 })
 
-                $('.episode-grid-list').on('click', '.episode', (e) => {
+                $('.episode-grid-list').on('click', '.episode:not(.-missing)', (e) => {
                     const raw = $(e.currentTarget)?.attr('data-index');
                     if (!raw) return;
                     const episode = Number(raw ?? 0);
@@ -90,7 +99,12 @@ export function WEpisodes(count, current, { dom = 'body', onselect = () => { } }
                 clearTimeout(destroyTimeout);
                 const dom = $('.episode-grid-list');
 
-                if (showed === value.count) {
+                // Список зависит и от числа эпизодов, и от пропусков
+                const missing = [];
+                for (let i = 1; i <= value.count; i++) if (!value.has(i)) missing.push(i);
+                const key = `${value.count}:${missing.join(',')}`;
+
+                if (showed === key) {
                     //Установить выбор эпизода
                     SelectEpisode(value.current);
                     return;
@@ -99,9 +113,12 @@ export function WEpisodes(count, current, { dom = 'body', onselect = () => { } }
                 dom.empty();
 
                 for (let i = 1; i < value.count + 1; i++) {
-                    const html = `<div class="episode" data-index="${i}"><div class="episode-wrapper">${i}<span class="ep-name">EP</span></div></div>`;
+                    const cls = value.has(i) ? 'episode' : 'episode -missing';
+                    const html = `<div class="${cls}" data-index="${i}"><div class="episode-wrapper">${i}<span class="ep-name">EP</span></div></div>`;
                     dom.append(html);
                 }
+
+                showed = key;
 
                 SelectEpisode(value.current);
             },
@@ -131,7 +148,7 @@ export function WEpisodes(count, current, { dom = 'body', onselect = () => { } }
 }
 
 function CheckEpisodeBad(episode, count) {
-    return episode <= 0 || episode > count
+    return episode <= 0 || episode > count || !value.has(episode)
 }
 
 function SelectEpisode(episode) {

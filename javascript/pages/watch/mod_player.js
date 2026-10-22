@@ -206,6 +206,13 @@ class Player {
     /** Выбранная озвучка в формате Kodik */
     get selected() { return toLegacy(this.core.voice); }
 
+    /**
+     * Умеет ли озвучка feature — см. WatchPlayer.can
+     * @param {'sync'|'mark'|'download'|'notify'|'rooms'} feature
+     * @param {number|string} [id] - озвучка; по умолчанию выбранная
+     */
+    can(feature, id) { return this.core.can(feature, id); }
+
     get loaded() { return this.core.frame.loaded; }
 
     get isOwner() { return this.core.owner; }

@@ -8,8 +8,11 @@ const MENU_FROM = 40;
 
 const MENU_HTML = `<div class="btn-win-episode" data-index="-1"><svg viewBox="0 0 640 640" aria-hidden="true"><use href="#i-grip"></use></svg><span class="ep-name">EPS</span></div>`;
 
-/** @param {number} i */
-const episodeHtml = (i) => `<span class="episode" data-index="${i}">${i}<span class="ep-name">EP</span></span>`;
+/**
+ * @param {number} i
+ * @param {boolean} [missing] - эпизода нет в озвучке (пропуск в voice.list)
+ */
+const episodeHtml = (i, missing = false) => `<span class="episode${missing ? ' -missing' : ''}" data-index="${i}">${i}<span class="ep-name">EP</span></span>`;
 
 /**
  * Разметка плеера страницы просмотра: список эпизодов, кнопка озвучки, тип плеера.
@@ -27,7 +30,7 @@ export class PlayerView {
         player.on('kind', ({ kind }) => this.#applyKind(kind));
 
         player.on('voice', ({ voice }) => {
-            DUB.select(toLegacy(voice), player.favorites.has(voice.id));
+            DUB.select(toLegacy(voice), player.favorites.has(voice.id), voice.features?.notify === true);
             this.render();
         });
 
@@ -52,7 +55,7 @@ export class PlayerView {
             this.wrappers.css('--items', '');
         }
 
-        for (let i = 1; i <= count; i++) parts.push(episodeHtml(i));
+        for (let i = 1; i <= count; i++) parts.push(episodeHtml(i, !this.player.has(i)));
 
         $('.episode-list').html(parts.join(''));
         $('.episode-visible-area').toggleClass('-hide', count <= 0);
@@ -86,7 +89,7 @@ export class PlayerView {
     }
 
     #bindClicks() {
-        this.wrappers.on('click', '.btn-win-episode, .episode[data-index]', (e) => {
+        this.wrappers.on('click', '.btn-win-episode, .episode[data-index]:not(.-missing)', (e) => {
             const player = this.player;
             if (!player.owner) return;
 
@@ -94,6 +97,7 @@ export class PlayerView {
 
             if (episode === -1) {
                 WEpisodes(player.count, player.episode, {
+                    has: (n) => player.has(n),
                     onselect: (selected, win) => {
                         const changed = player.selectEpisode(selected, { user: true });
 

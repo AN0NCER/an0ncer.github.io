@@ -42,6 +42,12 @@
                 border-radius: 6px;
             }
         }
+
+        // Эпизода нет в озвучке (пропуск в voice.list)
+        &.-missing .episode-wrapper {
+            opacity: .15;
+            cursor: default;
+        }
     }
 }
 

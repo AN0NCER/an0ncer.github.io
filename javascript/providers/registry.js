@@ -7,8 +7,8 @@
  * Плагин подключается одной строкой и так же легко убирается:
  * @example
  * Providers.defer({
- *     id: 'cvh',
- *     enabled: () => $PARAMETERS.plugins?.cdnrelay === true,
+ *     id: 'thd',
+ *     enabled: () => $PARAMETERS.plugins?.thd === true,
  *     load: () => import('/javascript/plugins/cdn/relay/manifest.js')
  * });
  */
@@ -25,18 +25,41 @@
  * @property {string|number} sourceId - id материала у провайдера (Kodik: item.id)
  * @property {string} title - название озвучки
  * @property {'voice'|'subtitles'|string} type
- * @property {number|undefined} episodes - доступно эпизодов (undefined — фильм/неизвестно)
+ * @property {number|undefined} episodes - номер последнего эпизода (undefined — фильм/неизвестно)
+ * @property {number[]} [list] - номера доступных эпизодов, если есть пропуски (AnimeVost: [1, 3]); без него — подряд 1..episodes
+ * @property {Features} features - что сайт может делать с этой озвучкой (из провайдера)
  * @property {Object} [raw] - исходный объект провайдера
  * @property {Object} [legacy] - объект в формате результата Kodik для старого API
+ */
+
+/**
+ * Что сайт может делать с озвучкой. Модули смотрят сюда, а не на формат id.
+ * Не указанное провайдером — false.
+ * @typedef {Object} Features
+ * @property {boolean} sync - писать прогресс в заметку Shikimori ([tunime-sync:…] понимает только числовой id)
+ * @property {boolean} mark - отправлять выбор озвучки в статистику (Tunime.mark.voice)
+ * @property {boolean} download - загрузчик эпизодов
+ * @property {boolean} notify - уведомления о новых эпизодах
+ * @property {boolean} rooms - совместный просмотр
+ */
+
+/**
+ * @typedef {{ok:true} | {ok:false, reason:string, action?:string}} PlayCheck
+ *  reason — код причины (login, episode, provider, error…), action — что предложить пользователю
  */
 
 /**
  * @typedef {Object} Provider
  * @property {string} id - уникальный id (используется как префикс озвучек)
  * @property {string} [title]
+ * @property {number} [version=1] - версия провайдера (сверяется в комнатах)
+ * @property {Partial<Features>} [features] - возможности его озвучек
+ * @property {(voice:Voice, ctx:{episode?:number}) => PlayCheck} [canPlay] - можно ли смотреть сейчас (вход, лимиты, наличие эпизода)
+ * @property {(voice:Voice, voices:Voice[]) => Voice|null} [fallback] - замена у Kodik; по умолчанию — озвучка Kodik с тем же названием
  * @property {number} [priority=100] - порядок в списке озвучек (меньше — выше)
  * @property {boolean} [namespace=true] - добавлять ли префикс `${id}:` к id озвучек
  * @property {PlayerKind[]} [players=['tunime']] - какими плеерами умеет играть
+ * @property {number} [timeout] - сколько мс ждать voices(), по умолчанию Providers.timeout
  * @property {() => boolean} [enabled] - включён ли (настройки, авторизация)
  * @property {(ctx:{aid:string, signal:AbortSignal}) => Promise<Array<Partial<Voice>>>} voices - список озвучек аниме
  * @property {(voice:Voice, episode:number, kind:PlayerKind) => string|null} url - ссылка для iframe плеера
@@ -65,6 +88,9 @@
 const LOG = '[providers]';
 
 export const Providers = new class {
+    /** Сколько мс ждать voices() провайдера, если у него нет своего timeout */
+    timeout = 8000;
+
     /** @type {Map<string, Provider>} */
     #list = new Map()
 
@@ -112,6 +138,49 @@ export const Providers = new class {
         return this.#list.get(id);
     }
 
+    /**
+     * Можно ли смотреть озвучку сейчас
+     * @param {Voice|undefined} voice
+     * @param {{episode?:number}} [ctx]
+     * @returns {PlayCheck}
+     */
+    canPlay(voice, ctx = {}) {
+        const provider = this.get(voice?.provider);
+        if (!provider) return { ok: false, reason: 'provider' };
+        if (typeof provider.canPlay !== 'function') return { ok: true };
+
+        try {
+            return provider.canPlay(voice, ctx) ?? { ok: true };
+        } catch (err) {
+            console.warn(`${LOG} "${provider.id}" canPlay() threw`, err);
+            return { ok: false, reason: 'error' };
+        }
+    }
+
+    /**
+     * Замена озвучки у Kodik (namespace: false), если её нельзя смотреть
+     * @param {Voice|undefined} voice
+     * @param {Voice[]} voices - все озвучки аниме
+     * @returns {Voice|null}
+     */
+    fallback(voice, voices) {
+        const provider = this.get(voice?.provider);
+        if (!provider) return null;
+
+        if (typeof provider.fallback === 'function') {
+            try {
+                return provider.fallback(voice, voices) ?? null;
+            } catch (err) {
+                console.warn(`${LOG} "${provider.id}" fallback() threw`, err);
+                return null;
+            }
+        }
+
+        // По умолчанию — та же студия у провайдера без префикса
+        const title = sameTitle(voice.title);
+        return voices.find((item) => this.get(item.provider)?.namespace === false && sameTitle(item.title) === title) ?? null;
+    }
+
     /** @returns {Provider[]} все включённые провайдеры по priority */
     active() {
         return [...this.#list.values()]
@@ -149,36 +218,68 @@ export const Providers = new class {
     }
 
     /**
-     * Озвучки от всех включённых провайдеров. Упавший провайдер не ломает остальных.
-     * @param {{aid:string, signal?:AbortSignal}} ctx
-     * @returns {Promise<Voice[]>} все озвучки (возможны дубликаты id — решает потребитель)
+     * Озвучки от всех включённых провайдеров. Упавший или зависший провайдер
+     * не ломает и не задерживает остальных: у каждого свой timeout.
+     * @param {{aid:string, signal?:AbortSignal, onChunk?:(voices:Voice[], provider:Provider) => void}} ctx
+     *  onChunk — вызывается для каждого провайдера сразу, как он ответил, упал или вышло время
+     *  (тогда voices пустой); не вызывается после отмены signal
+     * @returns {Promise<Voice[]>} все озвучки по priority провайдеров (возможны дубликаты id — решает потребитель)
      */
-    async voices({ aid, signal = new AbortController().signal }) {
+    async voices({ aid, signal = new AbortController().signal, onChunk } = {}) {
         await this.ready();
 
         const providers = this.active();
-        const settled = await Promise.allSettled(providers.map((provider) => provider.voices({ aid, signal })));
+        /** @type {Voice[][]} по индексу провайдера — итог в порядке priority, а не ответов */
+        const chunks = providers.map(() => []);
 
-        /** @type {Voice[]} */
-        const out = [];
+        await Promise.all(providers.map(async (provider, i) => {
+            const items = await this.#ask(provider, { aid, signal });
+            if (signal.aborted) return;
 
-        settled.forEach((result, i) => {
-            const provider = providers[i];
+            chunks[i] = items.map((item) => normalize(item, provider)).filter(Boolean);
 
-            if (result.status !== 'fulfilled') {
-                if (!signal.aborted) console.warn(`${LOG} "${provider.id}" voices failed`, result.reason);
-                return;
+            try {
+                onChunk?.(chunks[i], provider);
+            } catch (err) {
+                console.error(`${LOG} onChunk failed for "${provider.id}"`, err);
             }
+        }));
 
-            if (!Array.isArray(result.value)) return;
+        return chunks.flat();
+    }
 
-            for (const item of result.value) {
-                const voice = normalize(item, provider);
-                if (voice) out.push(voice);
-            }
+    /**
+     * voices() одного провайдера со своим timeout и отменой
+     * @param {Provider} provider
+     * @param {{aid:string, signal:AbortSignal}} ctx
+     * @returns {Promise<Array<Partial<Voice>>>} пустой массив, если упал или вышло время
+     */
+    async #ask(provider, { aid, signal }) {
+        // Свой контроллер: по timeout отменяем запрос только этого провайдера
+        const ctrl = new AbortController();
+        const abort = () => ctrl.abort();
+        if (signal.aborted) abort();
+        else signal.addEventListener('abort', abort, { once: true });
+
+        const ms = provider.timeout ?? this.timeout;
+        let timer;
+        const timeout = new Promise((_, reject) => {
+            timer = setTimeout(() => {
+                ctrl.abort();
+                reject(new Error(`timeout ${ms} ms`));
+            }, ms);
         });
 
-        return out;
+        try {
+            const items = await Promise.race([provider.voices({ aid, signal: ctrl.signal }), timeout]);
+            return Array.isArray(items) ? items : [];
+        } catch (err) {
+            if (!signal.aborted) console.warn(`${LOG} "${provider.id}" voices failed`, err);
+            return [];
+        } finally {
+            clearTimeout(timer);
+            signal.removeEventListener('abort', abort);
+        }
     }
 }
 
@@ -199,8 +300,30 @@ function normalize(item, provider) {
         provider: provider.id,
         sourceId: item.sourceId ?? item.id,
         title: item.title ?? String(item.id),
-        type: item.type ?? 'voice'
+        type: item.type ?? 'voice',
+        list: episodeList(item.list),
+        features: { ...NO_FEATURES, ...provider.features }
     };
+}
+
+/**
+ * Номера эпизодов: целые > 0, без повторов, по возрастанию
+ * @param {unknown} list
+ * @returns {number[]|undefined} undefined — пропусков нет, эпизоды подряд
+ */
+function episodeList(list) {
+    if (!Array.isArray(list)) return undefined;
+
+    const numbers = list.map(Number).filter((n) => Number.isInteger(n) && n > 0);
+    return [...new Set(numbers)].sort((a, b) => a - b);
+}
+
+/** @type {Features} */
+const NO_FEATURES = Object.freeze({ sync: false, mark: false, download: false, notify: false, rooms: false });
+
+/** Название студии для сравнения: без регистра, пробелов и знаков (AniLibria.TV ≈ anilibria tv) */
+function sameTitle(title) {
+    return String(title ?? '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
 }
 
 function isEnabled(fn, id) {

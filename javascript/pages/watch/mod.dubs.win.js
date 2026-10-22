@@ -8,6 +8,7 @@ import { watchSequence } from "./mod.chronology.js";
 import { TNotifi } from "../../modules/tun.notification.js";
 import { DBAnime } from "./mod.db.js";
 import { ANotifi } from "./mod.notifi.js";
+import { Providers } from "../../providers/registry.js";
 
 const Player = IPlayer.Init();
 
@@ -47,7 +48,7 @@ const windowDUBS = new TWindow({
             if (!Player.isOwner) return;
             /**@type {HTMLDivElement} */
             const div = $(e.currentTarget).closest('.dub-wrapper');
-            const id = Number(div.attr('data-id'));
+            const id = parseDubId(div.attr('data-id'));
 
             Player.CTranslation.Select({ id, user_handler: true });
         });
@@ -56,7 +57,7 @@ const windowDUBS = new TWindow({
         $('.dubs-list-wrapper').on('click', '.btn-dub-favorite', (e) => {
             /**@type {HTMLDivElement} */
             const div = $(e.currentTarget).closest('.dub-wrapper');
-            const id = Number(div.attr('data-id'));
+            const id = parseDubId(div.attr('data-id'));
 
             Player.CTranslation.Favorites(id);
         });
@@ -69,7 +70,7 @@ const windowDUBS = new TWindow({
             hasNotifiProcess = true;
 
             const div = $(e.currentTarget).closest('.dub-wrapper');
-            const id = Number(div.attr('data-id'));
+            const id = parseDubId(div.attr('data-id'));
 
             const kodikId = Player.resultsVoice.get(id).id;
 
@@ -183,55 +184,85 @@ windowDUBS.module.add(PullToClose, { scroll: '.window-content.content-dubs > .co
 
 //Auto INIT
 (() => {
-    Player.on('inited', ({ resultsVoice }) => {
+    // Список строится после выбора стартовой озвучки и перестраивается,
+    // когда приходят озвучки медленных провайдеров (модов)
+    let inited = false;
+
+    Player.on('inited', () => {
+        inited = true;
+        Render();
+    });
+
+    Player.core.on('voices', () => {
+        if (inited) Render();
+    });
+
+    /**
+     * Озвучки по провайдерам (в порядке priority), внутри — «вышло» и «выходит».
+     * Заголовки групп — только если провайдеров больше одного
+     */
+    async function Render() {
+        //Ждем загрузки аниме данных
+        const anime = await $ANIME;
+        const episodes = anime?.episodes ?? undefined;
+        /**@type { 'anons' | 'ongoing' | 'released'} */
+        const status = anime.status ?? 'ongoing';
+
         // Сохраненные эпизоды
         const saved = Player.CTranslation.saved;
+        const notifi = new Set(DBAnime.get("notifications") || []);
 
-        //Ждем загрузки аниме данных
-        $ANIME.then((anime) => {
-            const episodes = anime?.episodes ?? undefined;
-            /**@type { 'anons' | 'ongoing' | 'released'} */
-            const status = anime.status ?? 'ongoing';
+        /** @type {Map<string, import('../../providers/registry.js').Voice[]>} */
+        const groups = new Map();
+        for (const voice of Player.core.voices.values()) {
+            if (!groups.has(voice.provider)) groups.set(voice.provider, []);
+            groups.get(voice.provider).push(voice);
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        groups.forEach((voices, provider) => {
+            if (groups.size > 1) {
+                fragment.append(__createTitle(Providers.get(provider)?.title ?? provider));
+            }
 
             const coming = __createList('coming');
             const aired = __createList('aired');
 
-            const stat = {
-                coming: 0,
-                aired: 0
-            }
-
-            const notifi = new Set(DBAnime.get("notifications") || []);
-
             //Создание DUBS карточек в window
-            resultsVoice.forEach(({ translation, last_episode }) => {
-                const { id, title } = translation;
-
-                const canNotify = (typeof last_episode !== 'undefined') && (status !== 'released' && last_episode !== episodes ||
+            voices.forEach(({ id, title, episodes: last_episode }) => {
+                const canNotify = Player.can('notify', id) && (typeof last_episode !== 'undefined') && (status !== 'released' && last_episode !== episodes ||
                     status === 'released' && last_episode !== episodes);
 
-                const dubCard = __createDub(id, title, last_episode, canNotify, saved.has(id), notifi.has(Player.resultsVoice.get(id).id));
+                const dubCard = __createDub(id, title, last_episode, canNotify, saved.has(id), notifi.has(Player.resultsVoice.get(id)?.id));
 
                 if (status !== 'released' || last_episode !== episodes) {
                     coming.append(dubCard);
-                    stat.coming++;
                 } else {
                     aired.append(dubCard);
-                    stat.aired++;
                 }
             });
 
             //Добавление только нужных спикох с озвучками
-            const list_wrapper = document.querySelector('.dubs-list-wrapper');
-            if (stat.aired > 0) {
-                list_wrapper.append(aired);
-            }
+            if (aired.childElementCount > 0) fragment.append(aired);
+            if (coming.childElementCount > 0) fragment.append(coming);
+        });
 
-            if (stat.coming > 0) {
-                list_wrapper.append(coming);
-            }
-        })
-    });
+        document.querySelector('.dubs-list-wrapper').replaceChildren(fragment);
+        $(`.dub-wrapper[data-id="${Player.CTranslation.id}"]`).addClass('-select');
+    }
+
+    /**
+     * Заголовок группы озвучек провайдера
+     * @param {string} title
+     * @returns {HTMLDivElement}
+     */
+    function __createTitle(title) {
+        const element = document.createElement('div');
+        element.classList.add('dubs-provider-title');
+        element.textContent = title;
+        return element;
+    }
 
     /**
      * Создает список для DUB карточек
@@ -278,6 +309,15 @@ windowDUBS.module.add(PullToClose, { scroll: '.window-content.content-dubs > .co
 
 export function ShowDUBSWindow() {
     windowDUBS.show();
+}
+
+/**
+ * id озвучки из data-id: у Kodik число (так оно хранится в избранном), у модов — строка `thd:…`
+ * @param {string} value
+ * @returns {number|string}
+ */
+function parseDubId(value) {
+    return /^\d+$/.test(value) ? Number(value) : value;
 }
 
 function getRandomWithMaxEpisodes(map) {

@@ -28,7 +28,7 @@ const anime_status = [
 export function Functional() {
     const list = [
         { dom: "#change-player", func: ChangePlayer },
-        { dom: "#download-anime", func: () => { import("./mod_download.js").then((mod) => { mod.WDManager() }) } },
+        { dom: "#download-anime", func: ShowDownload },
         { dom: "#center-player", func: SetPlayerDisplay },
         { dom: "#back-page", func: BackToMainPage },
         { dom: "#show-status", func: ShowStatus },
@@ -352,6 +352,16 @@ function ScrollingElements() {
 
 function ChangePlayer() {
     Player.Switch();
+}
+
+/**
+ * Окно загрузки эпизодов — только для озвучек с features.download
+ */
+function ShowDownload() {
+    if (!Player.can('download')) {
+        return new Popup('download', 'Загрузка недоступна для этой озвучки');
+    }
+    import("./mod_download.js").then((mod) => { mod.WDManager() });
 }
 
 /**

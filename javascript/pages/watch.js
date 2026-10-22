@@ -86,7 +86,7 @@ Main(async (e) => {
     Player.CTranslation.on('selected', ({ id, user_handler }) => {
         const episode = Player.CEpisodes.selected;
         if (user_handler && episode == 1 && id) {
-            ASynch.save(episode, id);
+            SaveSync(episode, id);
         }
     });
 
@@ -94,6 +94,9 @@ Main(async (e) => {
     Player.CMessage.on('play', () => {
         const data = ASynch.getDiff();
         if (!data[0] && !data[1])
+            return;
+        // Озвучки модов в статистику не отправляем (features.mark)
+        if (!Player.can('mark', data[0]?.kodik_dub))
             return;
         if (data[0] && !data[1]) {
             Tunime.mark.voice($ID, data[0].kodik_dub);
@@ -110,7 +113,7 @@ Main(async (e) => {
     //Этот обработчик будет сохранять последние выбраное аниме
     Player.CEpisodes.on('selected', ({ episode, translation, user_handler }) => {
         if (user_handler) {
-            ASynch.save(episode, translation);
+            SaveSync(episode, translation);
 
             //Добавляем истоию просмотра
             History().add(false, 0, 0, episode);
@@ -152,12 +155,13 @@ Main(async (e) => {
     //Обработчик события следующего эпизода
     Player.CMessage.on('next', (e) => {
         if (!$PARAMETERS.player.autonekst) return;
-        if (Player.CEpisodes.count == Player.CEpisodes.selected) return;
-        const next_episode = Player.CEpisodes.selected + 1;
+        // Следующий существующий эпизод: пропуски в озвучке перескакиваются
+        const next_episode = Player.core.nextEpisode();
+        if (next_episode === undefined) return;
         Player.PControl.Exec("set_episode", { episode: next_episode });
         // TODO: Возможный баг во время совместного просмотра
         Player.CEpisodes.Select(next_episode);
-        ASynch.save(next_episode, Player.CTranslation.id);
+        SaveSync(next_episode, Player.CTranslation.id);
         History().add(false, 0, 0, next_episode);
     });
 
@@ -213,6 +217,15 @@ Main(async (e) => {
         console.log(err);
     });
 });
+
+/**
+ * Сохраняет прогресс: локально всегда, в заметку Shikimori — если озвучка это умеет (features.sync)
+ * @param {number} episode
+ * @param {number|string} dubId
+ */
+function SaveSync(episode, dubId) {
+    ASynch.save(episode, dubId, { remote: Player.can('sync', dubId) });
+}
 
 function ConnectToRoom(id) {
     Rooms.join(id).then(async (response) => {

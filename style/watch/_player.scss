@@ -131,6 +131,12 @@
                 &.-select {
                     opacity: 1;
                 }
+
+                // Эпизода нет в озвучке (пропуск в voice.list)
+                &.-missing {
+                    opacity: .15;
+                    cursor: default;
+                }
             }
 
             .sel {
@@ -239,6 +245,12 @@
 
                     &.-select {
                         opacity: 1;
+                    }
+
+                    // Эпизода нет в озвучке (пропуск в voice.list)
+                    &.-missing {
+                        opacity: .15;
+                        cursor: default;
                     }
                 }
 

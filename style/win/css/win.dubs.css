@@ -158,6 +158,13 @@
   gap: 10px;
   margin-top: 10px;
 }
+.content-dubs .content-wrapper .wrapper .dubs-list-wrapper .dubs-provider-title {
+  padding: 6px max(var(--sal), 15px) 0;
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
 .content-dubs .content-wrapper .wrapper .dubs-list-wrapper .grid-wrapper-list {
   background: #191C21;
   border-radius: 5px;

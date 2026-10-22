@@ -140,6 +140,12 @@ async function tUpdate() {
 
     if (!dubID) return;
 
+    // Наличие озвучки в других сезонах знает только Kodik API — у модов не проверяем
+    if (Player.core.voice?.provider !== 'kodik') {
+        hideLoad();
+        return updateDubUi(dubID);
+    }
+
     const ids = new Map(
         [...listVoiceAnimeAvailble]
             .filter(([k, v]) => !v.has(dubID))

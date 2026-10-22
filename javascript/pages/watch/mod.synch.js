@@ -72,9 +72,11 @@ export const ASynch = new class extends TEvents {
     /**
      * Сохраняет данные в localStorage и в userRate
      * @param {number} episode - Номер эпизода
-     * @param {number} dubId - ID озвучки
+     * @param {number|string} dubId - ID озвучки
+     * @param {{remote?:boolean}} [opts] remote — писать ли в заметку Shikimori:
+     *  [tunime-sync:…] понимает только числовой id, озвучки модов сохраняются только локально
      */
-    save(episode, dubId) {
+    save(episode, dubId, { remote = true } = {}) {
         if (Private.INCOGNITO)
             return;
 
@@ -89,7 +91,7 @@ export const ASynch = new class extends TEvents {
 
         let user_rate = URate.uRate;
 
-        if (!DBAnime.get('anime', 'synch') || !user_rate) {
+        if (!remote || !DBAnime.get('anime', 'synch') || !user_rate) {
             return;
         }
 

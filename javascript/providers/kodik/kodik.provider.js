@@ -10,7 +10,18 @@ export const KodikProvider = {
     title: 'Kodik',
     priority: 0,
     namespace: false,
+    version: 1,
     players: ['tunime', 'kodik'],
+    features: { sync: true, mark: true, download: true, notify: true, rooms: true },
+
+    canPlay() {
+        return { ok: true };
+    },
+
+    /** Kodik и есть замена */
+    fallback(voice) {
+        return voice;
+    },
 
     async voices({ aid, signal }) {
         const response = await Kodik.Search({ shikimori_id: aid }, undefined, signal);
