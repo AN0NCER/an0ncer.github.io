@@ -7,9 +7,13 @@ export const DUB = new class {
         this.el = $('.dub-controller');
     }
 
+    #current = undefined;
+
     select(dub, isFavor = false) {
+        this.#current = dub;
         const isNotifi = [0, 1].includes(TNotifi.getUIState());
-        this.el.removeClass('-no-select', '-notify', '-favor');
+        // Массивом: removeClass берёт только первый аргумент
+        this.el.removeClass(['-no-select', '-notify', '-favor']);
         this.el.attr('data-type', dub.translation.type);
         this.el.find('.name').text(dub.translation.title);
         this.el.find('.dub-episodes').text(`${dub.last_episode || 1} EP`);
@@ -24,6 +28,8 @@ export const DUB = new class {
         }
 
         this.canNotify(dub.episodes_count).then((can) => {
+            // Пока ждали $ANIME, могли выбрать другую озвучку
+            if (this.#current !== dub) return;
             if (can && isNotifi) {
                 this.el.addClass('-notify');
             }
