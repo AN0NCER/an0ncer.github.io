@@ -15,7 +15,31 @@ export class WindowApi {
 
     #init() {
         const post = (key, value) => {
-            window.parent.postMessage({ key, value }, '*');
+            try {
+                window.parent.postMessage({ key, value }, '*');
+            } catch (e) {
+                // Safari не клонирует Error/Event/данные hls.js (DataCloneError) —
+                if (e?.name !== 'DataCloneError') throw e;
+                window.parent.postMessage({ key, value: null }, '*');
+            }
+        }
+
+        /**
+         * Ошибка плеера в простой объект: в ней лежит original (Error, MediaError,
+         * данные hls.js) — его не клонировать
+         * @param {Object|string} e
+         */
+        const plainError = (e) => {
+            if (!e || typeof e !== 'object') return { code: String(e ?? 'UNKNOWN') };
+
+            const original = e.original;
+            return {
+                code: e.code ?? 'UNKNOWN',
+                severity: e.severity,
+                message: e.message,
+                timestamp: e.timestamp,
+                reason: original ? String(original?.message ?? original?.type ?? original) : undefined
+            };
         }
 
         const video = this.player.video;
@@ -42,14 +66,19 @@ export class WindowApi {
 
         /**@type {[{type:string, from:string, value:() => Object}]} */
         const tunime_api = [
-            { type: 'tunime_error', from: Player.Events.ERROR, value: (e) => e },
+            // Нативный 'error' у <video> (Event) не шлём: без severity страница сразу
+            // уходит на Kodik. Эту же ошибку ErrorHandler разбирает сам (MEDIA_ERR_*)
+            { type: 'tunime_error', from: Player.Events.ERROR, value: plainError, skip: (e) => e instanceof Event },
             { type: 'tunime_fullscreen', from: Player.Events.ALTERNATIVE_FULLSCREEN, value: (e) => e },
             { type: 'tunime_next', from: Player.Events.TUNIM_CHANGE_EPISODE, value: (e) => e },
             // { type: 'tunime_switch', from}
         ];
 
-        tunime_api.forEach(({ type, from, value }) => {
-            this.player.on(from, (e) => post(type, value(e)));
+        tunime_api.forEach(({ type, from, value, skip }) => {
+            this.player.on(from, (e) => {
+                if (skip?.(e)) return;
+                post(type, value(e));
+            });
         });
 
         ((last = null) => {

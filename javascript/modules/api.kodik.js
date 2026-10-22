@@ -23,21 +23,26 @@ async function Fetch(query = {}, page, event = () => { }, signal) {
         }).then((response) => {
             let ret = { failed: true };
             if (!response.ok) {
-                event(ret);
-                return resolve(ret);
+                resolve(ret);
+                return event(ret);
             }
             response.json().then((val) => {
                 ret = val;
+                resolve(ret);
                 event(ret);
-                return resolve(ret);
-            }).catch((reas) => {
+            }, (reas) => {
                 console.log(reas);
+                resolve(ret);
                 event(ret);
-                return resolve(ret);
             });
-        }).catch(err => {
-            if (err?.name === "tabort") return;
-            throw err;
+        }, err => {
+            if (["AbortError", "tabort"].includes(err?.name)) return resolve({ failed: true, aborted: true });
+
+            // Сеть / CORS: как и ответ с ошибкой
+            console.log(err);
+            const ret = { failed: true };
+            resolve(ret);
+            event(ret);
         });
     });
 }
