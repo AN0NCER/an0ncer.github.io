@@ -1,5 +1,5 @@
-const version = '3.3.1';
-const hash = "5dd16"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
+const version = '3.3.2';
+const hash = "f3a7f"; // общий hash сборки — генерируется скриптом (см. вывод в консоли)
 
 const cacheName = `pwa-tunime-${hash}-v${version}`;
 const cachePrefix = 'pwa-tunime-';
@@ -74,7 +74,7 @@ const appShellFilesToCache = [
     // Директория: /javascript/modules
     { path: "/javascript/modules/AnimeCard.js", hash: "9bdbfe00", size: 7627 },
     { path: "/javascript/modules/api.jikan.js", hash: "f92e0d04", size: 7177 },
-    { path: "/javascript/modules/api.kodik.js", hash: "4462178b", size: 1468 },
+    { path: "/javascript/modules/api.kodik.js", hash: "0e0a4ee0", size: 1681 },
     { path: "/javascript/modules/api.shiki.js", hash: "f5a60dcc", size: 17672 },
     { path: "/javascript/modules/api.tunime.js", hash: "20b05747", size: 15073 },
     { path: "/javascript/modules/EventTools.js", hash: "99abdfe2", size: 7019 },
@@ -160,8 +160,8 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/tplayer/utils/util.event.js", hash: "0e45b5a0", size: 3944 },
     { path: "/javascript/pages/tplayer/utils/util.log.js", hash: "68a2fa61", size: 10998 },
     // Директория: /javascript/pages/tplayer
-    { path: "/javascript/pages/tplayer/mod.api.js", hash: "388df5cf", size: 4630 },
-    { path: "/javascript/pages/tplayer/mod.errors.js", hash: "a0f4254a", size: 14187 },
+    { path: "/javascript/pages/tplayer/mod.api.js", hash: "16dabdd6", size: 6023 },
+    { path: "/javascript/pages/tplayer/mod.errors.js", hash: "858c048a", size: 15163 },
     { path: "/javascript/pages/tplayer/mod.tplayer.js", hash: "73bf55d9", size: 16279 },
     // Директория: /javascript/pages/user
     { path: "/javascript/pages/user/io.friends.js", hash: "d7452efb", size: 7162 },
@@ -210,12 +210,12 @@ const appShellFilesToCache = [
     { path: "/javascript/pages/watch/mod.urate.js", hash: "f4444e6a", size: 5309 },
     { path: "/javascript/pages/watch/mod_download.js", hash: "310b340e", size: 22904 },
     { path: "/javascript/pages/watch/mod_history.js", hash: "e4907d84", size: 4350 },
-    { path: "/javascript/pages/watch/mod_player.js", hash: "5f8a198d", size: 23756 },
+    { path: "/javascript/pages/watch/mod_player.js", hash: "1641dd38", size: 23877 },
     { path: "/javascript/pages/watch/mod_private.js", hash: "fe33885c", size: 245 },
     { path: "/javascript/pages/watch/mod_transition.js", hash: "f2e80bc7", size: 5138 },
     { path: "/javascript/pages/watch/mod_ui.js", hash: "49d59703", size: 15974 },
     { path: "/javascript/pages/watch/mod_wscore.js", hash: "2d7342db", size: 6805 },
-    { path: "/javascript/pages/watch/room.guest.client.js", hash: "83214318", size: 11045 },
+    { path: "/javascript/pages/watch/room.guest.client.js", hash: "89ff47ec", size: 13010 },
     { path: "/javascript/pages/watch/room.owner.client.js", hash: "990978de", size: 8842 },
     // Директория: /javascript/pages
     { path: "/javascript/pages/404a.js", hash: "39b75479", size: 1830 },
