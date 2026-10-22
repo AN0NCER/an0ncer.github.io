@@ -197,6 +197,46 @@ function VEvents(ctx) {
 }
 
 // ============================================================================
+// 3) Voice — озвучка хоста у гостя
+// ============================================================================
+
+/**
+ * Ждёт, пока плеер загрузит список озвучек (Player.Init).
+ * По ссылке ?room= гость подключается раньше, чем приходит ответ Kodik
+ * @param {ctx} ctx
+ * @returns {Promise<void>}
+ */
+function PlayerReady(ctx) {
+    if (ctx.Player.inited) return Promise.resolve();
+
+    let off = () => { };
+    const ready = new Promise((resolve) => { off = ctx.Player.on('inited', resolve); });
+    // .then асинхронный — off уже присвоен, даже если on() вызвал resolve сразу (replay)
+    return ready.then(() => off());
+}
+
+/**
+ * Включает озвучку хоста. Если у гостя её нет (другой список Kodik,
+ * null от хоста) — остаётся своя озвучка, синхронизация времени работает
+ * @param {ctx} ctx
+ * @param {string|null} kodikId
+ * @returns {boolean} true — озвучка переключена (эпизод загрузит её выбор)
+ */
+function SelectVoice(ctx, kodikId) {
+    const item = kodikId == null ? undefined : ctx.Player.results.get(kodikId);
+
+    if (!item) {
+        new Popup('room_voice', 'Озвучки хоста нет у вас. Видео идёт в вашей озвучке, время синхронизируется');
+        return false;
+    }
+
+    if (ctx.Player.selected?.id === item.id) return false;
+
+    ctx.Player.CTranslation.Select({ id: item.translation.id, user_handler: true });
+    return true;
+}
+
+// ============================================================================
 // 4) Server messages
 // ============================================================================
 
@@ -222,12 +262,7 @@ function SEvents(ctx) {
 
             ctx.Player.CEpisodes.Select(episode);
 
-            if (ctx.Player.selected.id !== kodikId) {
-                ctx.Player.CTranslation.Select({
-                    id: ctx.Player.results.get(kodikId).translation.id,
-                    user_handler: true
-                });
-            } else {
+            if (!SelectVoice(ctx, kodikId)) {
                 ctx.Player.Load();
             }
         },
@@ -266,10 +301,7 @@ function SEvents(ctx) {
 
         voice_switch: ({ kodikId }) => {
             ctx.vPaused = true;
-            ctx.Player.CTranslation.Select({
-                id: ctx.Player.results.get(kodikId).translation.id,
-                user_handler: true
-            });
+            SelectVoice(ctx, kodikId);
         },
 
         pause_request: ({ uid }) => {
@@ -284,6 +316,10 @@ function SEvents(ctx) {
         }
     };
 
+    // Сообщения — только после загрузки озвучек; .then выполняются по очереди,
+    // поэтому порядок сообщений сохраняется
+    const ready = PlayerReady(ctx);
+
     const onMessage = (event) => {
         let msg;
         try {
@@ -294,7 +330,7 @@ function SEvents(ctx) {
 
         const handler = handlers[msg.type];
         if (!handler) return;
-        handler(msg);
+        ready.then(() => handler(msg));
     };
 
     ctx.ws.addEventListener("message", onMessage);
@@ -329,21 +365,24 @@ export function RoomGuest({ wsUrl, onopen = () => { }, onclose = () => { } } = {
 
         new Popup('room_closed', 'Комната была закрыта');
 
-        if (!ctx.param.save) {
-            ctx.Player.CEpisodes.Select(ctx.saveUserSession.selectedEpisode);
+        // Без room_setup гость ничего не менял — восстанавливать нечего
+        if (ctx.saveUserSession) {
+            if (!ctx.param.save) {
+                ctx.Player.CEpisodes.Select(ctx.saveUserSession.selectedEpisode);
 
-            if (ctx.Player.CTranslation.id !== ctx.saveUserSession.selectedTranslation) {
-                ctx.Player.CTranslation.Select({
-                    id: ctx.saveUserSession.selectedTranslation,
-                    user_handler: true
-                });
-            } else {
-                ctx.Player.Load();
+                if (ctx.Player.CTranslation.id !== ctx.saveUserSession.selectedTranslation) {
+                    ctx.Player.CTranslation.Select({
+                        id: ctx.saveUserSession.selectedTranslation,
+                        user_handler: true
+                    });
+                } else {
+                    ctx.Player.Load();
+                }
             }
+
+            Private.INCOGNITO = ctx.saveUserSession.isInkognito;
         }
 
-
-        Private.INCOGNITO = ctx.saveUserSession.isInkognito;
         ctx.Player.isOwner = true;
 
         onclose();

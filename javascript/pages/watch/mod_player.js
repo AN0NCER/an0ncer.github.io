@@ -523,6 +523,7 @@ class Player {
 
         this.selected = undefined;
         this.loaded = false;
+        this.inited = false; //Список озвучек загружен (Init)
         this.name = standart ? "tunime" : "kodik";
         this.isOwner = true;
 
@@ -543,6 +544,7 @@ class Player {
                 }
                 this.#buildIndexes(response.results);
                 this.CTranslation.Init(this.results, kodik_dub);
+                this.inited = true;
                 this.#Dispatch('inited', { results: this.results, resultsVoice: this.resultsVoice });
                 return resolve(this.results);
             });
