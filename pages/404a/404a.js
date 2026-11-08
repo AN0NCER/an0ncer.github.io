@@ -6,7 +6,6 @@ import { Animes } from "/javascript/modules/api.shiki.js";
 /**
  * Страница «не найдено»: 404a.html?id=59977 — тайтл не нашёлся (из watch.html),
  * без id — любая другая пропавшая страница (например, профиль из user.html).
- * Макет — artifacts/404a.html.
  *
  * Состояния (body[data-state]): none — нигде нет; check — проверяем зеркало;
  * rip — нашли в зеркале. Проверки зеркала shikimori.rip пока нет — разметка и стили
