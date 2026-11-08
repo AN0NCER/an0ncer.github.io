@@ -409,6 +409,13 @@ body {
   width: 18px;
   height: 18px;
 }
+.nf-btn .icon.-fill {
+  fill: currentColor;
+}
+.nf-btn .icon.-sm {
+  width: 15px;
+  height: 15px;
+}
 .nf-btn:active {
   transform: scale(0.97);
 }
