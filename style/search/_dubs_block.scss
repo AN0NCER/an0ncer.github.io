@@ -1,0 +1,403 @@
+// Блок «Озвучки» на странице поиска (javascript/pages/search/mod_dubs.js):
+// ленты студий, итогов и свежих серий листаются вбок.
+
+$db-block: #191C21;
+$db-line: rgba(255, 255, 255, 0.1);
+$db-sub: #9AA1AB;
+$db-white: #F2F4F7;
+$db-primary: #2393F1;
+
+.dubs-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    // На странице поиска нет общего border-box — без него ширина карточек растёт на отступы и рамку
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    &[hidden] {
+        display: none;
+    }
+
+    .sentinel {
+        height: 0;
+    }
+}
+
+.db-head {
+    padding: 4px 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    .db-title {
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: #FFFFFF;
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+    }
+
+    .db-all {
+        flex: none;
+    }
+
+    .db-all {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: #5AAEF5;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+
+        .icon {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        &[hidden] {
+            display: none;
+        }
+    }
+}
+
+.db-fresh-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+// Горизонтальная лента до краёв колонки
+.db-rail {
+    padding: 0 10px;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    // Прилипание учитывает боковой отступ — первая карточка встаёт под заголовок, а не к краю
+    scroll-padding-inline: 10px;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    &[hidden] {
+        display: none;
+    }
+
+    >* {
+        flex: none;
+        scroll-snap-align: start;
+    }
+
+    // С мышью ленту двигает скрипт (перетаскивание и колесо) — прилипание возвращало бы её обратно
+    @media (hover: hover) and (pointer: fine) {
+        scroll-snap-type: none;
+    }
+
+    // Ленты тянут мышью: браузер не должен перетаскивать ссылки и картинки
+    a,
+    img {
+        -webkit-user-drag: none;
+        user-select: none;
+    }
+}
+
+// Аватар студии из двух букв
+.db-avatar {
+    flex: none;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: linear-gradient(145deg, hsl(var(--h) 62% 50%), hsl(calc(var(--h) + 28) 58% 36%));
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+
+    &.-sm {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        font-size: 10px;
+    }
+
+    &.-xs {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        font-size: 11px;
+        box-shadow: 0 0 0 2px #1B2129;
+
+        &+.-xs {
+            margin-left: -8px;
+        }
+    }
+}
+
+// ---------- студии ----------
+
+.db-studio {
+    width: 150px;
+    padding: 12px 12px 11px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 22px;
+    border: 1px solid $db-line;
+    background: $db-block;
+    text-decoration: none;
+    transition: border-color .15s, transform .12s;
+
+    .top {
+        margin-bottom: 8px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .name {
+        margin-bottom: 4px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: $db-white;
+        font-size: 14.5px;
+        font-weight: 700;
+    }
+
+    .sub {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        color: $db-sub;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    &:active {
+        transform: scale(.98);
+    }
+
+    // Избранная студия — с синей рамкой
+    &.-mine {
+        border-color: rgba(123, 192, 247, 0.35);
+    }
+
+    // «Каталог студий» в конце ленты — того же размера, что студия
+    &.-catalog {
+        border-style: dashed;
+        border-color: rgba(123, 192, 247, 0.3);
+        background: rgba(35, 147, 241, 0.06);
+
+        .top {
+            height: 42px;
+            align-items: center;
+        }
+
+        .stack {
+            display: inline-flex;
+        }
+
+        .name {
+            color: #7BC0F7;
+        }
+
+        .sub {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+
+            .icon {
+                width: 14px;
+                height: 14px;
+                fill: none;
+                stroke: currentColor;
+                stroke-width: 2.6;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+        }
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            border-color: rgba(123, 192, 247, 0.4);
+        }
+    }
+
+    &.-sk {
+        height: 112px;
+        background: rgba(255, 255, 255, 0.04);
+        animation: db-pulse 1.4s ease-in-out infinite;
+    }
+}
+
+.db-plus {
+    height: 20px;
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: rgba(35, 147, 241, 0.18);
+    color: #D3E9FD;
+    font-size: 10.5px;
+    font-weight: 700;
+    white-space: nowrap;
+
+    // Новых серий за сутки нет
+    &.-quiet {
+        background: rgba(255, 255, 255, 0.06);
+        color: $db-sub;
+    }
+}
+
+// ---------- свежие серии ----------
+
+.db-ep {
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-decoration: none;
+
+    .shot {
+        position: relative;
+        margin-bottom: 6px;
+        aspect-ratio: 16 / 9;
+        border-radius: 16px;
+        overflow: hidden;
+        background: $db-block;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .3s;
+        }
+
+        &.-adult img {
+            filter: blur(18px);
+            transform: scale(1.15);
+        }
+
+        .adult {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            color: #FFFFFF;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        // Как бейджи «Свежих серий» на странице студии
+        .pill {
+            position: absolute;
+            top: 8px;
+            height: 22px;
+            padding: 0 8px;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            background: rgba(16, 19, 24, 0.78);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #C9CED6;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+
+            &.-ep {
+                left: 8px;
+                background: $db-primary;
+                color: #FFFFFF;
+                font-weight: 700;
+            }
+
+            &.-when {
+                right: 8px;
+            }
+        }
+
+        .db-avatar {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+        }
+    }
+
+    .name {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        color: $db-white;
+        font-size: 13.5px;
+        font-weight: 700;
+        line-height: 1.3;
+
+        &.-hidden {
+            color: $db-sub;
+        }
+    }
+
+    .sub {
+        color: $db-sub;
+        font-size: 12px;
+    }
+
+    @media (hover: hover) {
+        &:hover .shot img {
+            transform: scale(1.04);
+        }
+    }
+
+    &.-sk .shot {
+        animation: db-pulse 1.4s ease-in-out infinite;
+    }
+}
+
+@keyframes db-pulse {
+
+    0%,
+    100% {
+        opacity: .6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .db-studio.-sk,
+    .db-ep.-sk .shot {
+        animation: none;
+    }
+}

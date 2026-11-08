@@ -113,18 +113,30 @@
 
                 </div>
             </div>
-            <div class="section-title">
-                <div class="ticon i-microphone"></div>
-                <span>Озвучки</span>
-            </div>
-            <div class="voices">
+            <!-- Озвучки: избранные и популярные студии, свежие серии (search/mod_dubs.js) -->
+            <section class="dubs-block" aria-label="Озвучки">
                 <div class="sentinel"></div>
-                <div class="voice-list scroll-none" style="min-height: 172px;">
-                    <div class="line-1"></div>
-                    <div class="line-2"></div>
-                    <div class="line-3"></div>
+                <div class="db-head">
+                    <span class="db-title">Озвучки</span>
+                    <a class="db-all" href="/dubs.html">Все <span class="n"></span>
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+                    </a>
                 </div>
-            </div>
+                <div class="db-rail db-studios scroll-none">
+                    <div class="db-studio -sk"></div><div class="db-studio -sk"></div><div class="db-studio -sk"></div>
+                </div>
+                <div class="db-fresh-wrap">
+                    <div class="db-head">
+                        <span class="db-title">Свежие серии</span>
+                        <a class="db-all" href="/dubs.html?kind=fav" hidden>Все
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+                        </a>
+                    </div>
+                    <div class="db-rail db-fresh scroll-none">
+                        <div class="db-ep -sk"><span class="shot"></span></div><div class="db-ep -sk"><span class="shot"></span></div>
+                    </div>
+                </div>
+            </section>
         </div>
         <footer>
             <div class="section-title">

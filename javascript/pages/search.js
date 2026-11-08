@@ -199,8 +199,8 @@ function reset() {
         LoadGenres();
     });
 
-    import("./search/mod_voicelist.js").then(({ LoadVoiceList }) => {
-        LoadVoiceList();
+    import("./search/mod_dubs.js").then(({ LoadDubs }) => {
+        LoadDubs();
     });
 
     import("./search/mod_studios.js").then(({ LoadStudios }) => {

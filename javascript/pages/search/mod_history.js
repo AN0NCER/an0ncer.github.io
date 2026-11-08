@@ -83,7 +83,7 @@ export async function LoadHistory() {
         }
     }, { rootMargin: '0px' });
 
-    observer.observe($(`.voices > .sentinel`)[0]);
+    observer.observe($(`.dubs-block > .sentinel`)[0]);
 }
 
 function fetchHistory() {

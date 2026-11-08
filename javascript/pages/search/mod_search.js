@@ -1,5 +1,4 @@
 import { GraphQl } from "../../modules/api.shiki.js";
-import { Kodik } from "../../modules/api.kodik.js";
 import { Sleep } from "../../modules/functions.js";
 import { ACardH } from "./mod_card.js";
 import { Jikan } from "../../modules/api.jikan.js";
@@ -175,78 +174,6 @@ class DefaultSearch extends IOEngine {
         const { params } = this;
         this.fetchAnimes({ ...params, ...GetFilter() }, (animes) => {
             if (animes.length >= this.params.limit) {
-                return this.observer.observe($('.results-wrapper > .sentinel')[0]);
-            }
-            TTSearch.instance.end();
-        });
-    }
-}
-
-class VoiceSearch extends IOEngine {
-    constructor({ id, obs } = {}) {
-        super(obs, 'voice');
-
-        this.params = {
-            translation_id: id,
-            has_field: 'shikimori_id',
-            types: 'anime-serial,anime',
-            limit: 25
-        }
-
-        this['next_page'] = null;
-    }
-
-    next() {
-        const res = (response) => {
-            this['next_page'] = response['next_page'] || null;
-
-            const ids = response.results.map(x => parseInt(x['shikimori_id']));
-            this.#anime({ ids });
-        };
-
-        if (!this['next_page']) return;
-
-        const { signal } = this.controller;
-
-        $(`.results`).append(`<div class="load-wrapper"><span class="loader"></span></div>`);
-        return fetch(this['next_page'], { signal }).then((response) => {
-            response.json().then(res);
-        }).catch(err => {
-            if (err?.name === "tabort") return;
-            throw err;
-        });
-    }
-
-    search(value) {
-        super.search(value);
-        this.#search({ search: value });
-    }
-
-    #search({ search } = {}) {
-        const res = (response) => {
-            this['next_page'] = response['next_page'] || null;
-
-            if(response.results.length == 0){
-                $('.results-wrapper').removeClass('load');
-                return TTSearch.instance.empty();
-            }
-
-            const ids = response.results.map(x => parseInt(x['shikimori_id']));
-            this.#anime({ ids });
-        };
-
-        const { signal } = this.controller;
-
-        if (search) {
-            return Kodik.Search({ ...this.params, title: search }, res, signal);
-        }
-
-        Kodik.List(this.params, res, signal);
-    }
-
-    #anime({ ids } = {}) {
-        this.fetchAnimes({ ids: `"${ids.toString()}"`, limit: ids.length }, (animes) => {
-            if (this['next_page']) {
                 return this.observer.observe($('.results-wrapper > .sentinel')[0]);
             }
             TTSearch.instance.end();
@@ -507,10 +434,6 @@ class SeasonSearch extends IOEngine {
  */
 
 export class TSearchType {
-    static voice({ id, val } = {}) {
-        return new TSearchType({ id, val, engine: VoiceSearch, icon: 'i-microphone' });
-    }
-
     static genre({ id, val } = {}) {
         return new TSearchType({ id, val, engine: GenresSearch, icon: 'i-book' });
     }
