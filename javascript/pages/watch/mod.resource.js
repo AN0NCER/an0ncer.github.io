@@ -6,7 +6,7 @@ import { Sleep } from "../../modules/functions.js";
 import { Animes, GraphQl, UserRates } from "../../modules/api.shiki.js";
 import { TCache } from "../../modules/tun.cache.js";
 import { $ID } from "../watch.js";
-import { tChronology, tReload } from "./mod.chronology.js";
+import { franchiseDub, tChronology, tReload } from "./mod.chronology.js";
 import { LTransition } from "./mod_transition.js";
 import { URate } from "./mod.urate.js";
 import { SetMetrics } from "./mod.ui/mod.metrics.js";
@@ -318,20 +318,10 @@ function Chronology(data) {
         const link = e.target.closest('a');
 
         if (link && container.contains(link)) {
-            return window.location.href = `watch.html?id=${link.dataset.id}`;
+            const dub = franchiseDub(link.dataset.id);
+            return window.location.href = `watch.html?id=${link.dataset.id}${dub ? `&dub=${dub}` : ''}`;
         }
     });
-
-    // if (dubanime) {
-    //     data.forEach(({ id }) => {
-    //         const voice = JSON.parse(localStorage.getItem(`save-translations-${id}`));
-    //         if (voice && id != $ID) {
-    //             voice.forEach((el) => {
-    //                 $(`.translations--list--element--count-save--save[data-id="${el}"] > svg`).style.fill = "yellow";
-    //             });
-    //         }
-    //     })
-    // }
 }
 
 /**

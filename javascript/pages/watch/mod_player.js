@@ -270,6 +270,9 @@ class Translation {
      * @param {number} [dubId] - Выбранна определенная озвучка 
      */
     Init(data, dubId) {
+        // Озвучки нет у этого аниме — выбираем как без неё: избранная или первая
+        if (dubId !== undefined && !this.Player.resultsVoice.has(dubId)) dubId = undefined;
+
         if ($PARAMETERS.watch.dubanime) this.lskey = "save-translations-" + $ID;
         this.saved = new Set((JSON.parse(localStorage.getItem(this.lskey)) ?? []))
 

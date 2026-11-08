@@ -6,7 +6,10 @@ import { $ID, $MOD, Player } from "../watch.js";
 let inited = false;
 /**@type {Map<string, tmpl>} */
 const listChronology = new Map();
-/**@type {Map<string, Map<number, boolean>>} */
+/**
+ * Тайтл франшизы → выбранная озвучка → translation.id ветки, которой она есть на тайтле (false — нет)
+ * @type {Map<string, Map<number, number | false>>}
+ */
 const listVoiceAnimeAvailble = new Map();
 const chrType = $PARAMETERS.watch.typefrc ?? ["TV Сериал", "Фильм", "ONA", "OVA"];
 const allShow = false;
@@ -163,9 +166,25 @@ async function tUpdate() {
 }
 
 /**
+ * Какую озвучку передать при переходе на тайтл франшизы: ветку той же студии на нём,
+ * если она уже известна, иначе — текущую озвучку.
+ * @param {string} id - shikimori id тайтла
+ * @returns {number | undefined}
+ */
+export function franchiseDub(id) {
+    const dubID = Player.CTranslation.id;
+    if (!dubID) return undefined;
+
+    const branch = listVoiceAnimeAvailble.get(String(id))?.get(dubID);
+    if (branch === false) return undefined;
+    return branch ?? dubID;
+}
+
+/**
  * Вся франшиза одним запросом. Озвучка есть на тайтле, если на нём есть этот translation.id,
  * а с параметром «Ветки озвучек» — любая ветка той же студии (совместные озвучки не считаются).
- * @param {Map<string, Map<number, boolean>>} ids
+ * Сохраняется найденная ветка: тот же translation.id важнее других веток.
+ * @param {Map<string, Map<number, number | false>>} ids
  * @param {number} dubID
  */
 async function checkByDubApi(ids, dubID) {
@@ -181,19 +200,20 @@ async function checkByDubApi(ids, dubID) {
 
     ids.forEach((map, key) => {
         const branches = found.get(String(key))?.studio?.branches ?? [];
-        map.set(dubID, branches.some(branch => accepted.has(branch.id)));
+        const branch = branches.find(b => b.id === dubID) ?? branches.find(b => accepted.has(b.id));
+        map.set(dubID, branch ? branch.id : false);
     });
 }
 
 /**
  * Запасной путь: запрос в Kodik на каждый тайтл.
- * @param {Map<string, Map<number, boolean>>} ids
+ * @param {Map<string, Map<number, number | false>>} ids
  * @param {number} dubID
  */
 async function checkByKodik(ids, dubID) {
     await Promise.all([...ids].map(async ([key, map]) => {
         const { results } = await Kodik.Search({ shikimori_id: key, translation_id: dubID });
-        if (Array.isArray(results)) map.set(dubID, results.length > 0);
+        if (Array.isArray(results)) map.set(dubID, results.length > 0 ? dubID : false);
     }));
 }
 

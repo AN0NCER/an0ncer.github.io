@@ -28,7 +28,22 @@ export const $ROOM = new URLSearchParams(window.location.search).get("room");
 
 export const $CID = new URLSearchParams(window.location.search).get("cid");
 
-ClearParams(['continue', 'player', 'iss', 'room']);
+//Озвучка с прошлого аниме франшизы
+const $DUB = Number(new URLSearchParams(window.location.search).get("dub")) || undefined;
+
+ClearParams(['continue', 'player', 'iss', 'room', 'dub']);
+
+/**
+ * Озвучка с прошлого аниме франшизы — только если это аниме ещё не смотрели:
+ * нет синхронизации (её проверяет вызывающий код) и записи в истории.
+ * В комнате озвучку выбирает владелец.
+ * @returns {{kodik_dub?: number}}
+ */
+function franchiseStart() {
+    if (!$DUB || $ROOM) return {};
+    if (History().get().some(x => x.id == $ID)) return {};
+    return { kodik_dub: $DUB };
+}
 
 export let $RULES = undefined;
 
@@ -177,7 +192,7 @@ Main(async (e) => {
 
     //Начинает загрузку плеера после получения синхронизированных данных
     ASynch.on('loaded', (data) => {
-        Player.Init(data ? data : {});
+        Player.Init(data ? data : franchiseStart());
     }, { replay: true, once: true });
 
     //Загружаем аниме
