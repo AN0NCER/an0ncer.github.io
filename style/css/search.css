@@ -702,7 +702,9 @@ header .search-wrapper .btn.btn-filter .ticon {
 .db-rail a,
 .db-rail img {
   -webkit-user-drag: none;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
 .db-avatar {
@@ -853,7 +855,8 @@ header .search-wrapper .btn.btn-filter .ticon {
 .db-ep .shot img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   display: block;
   transition: transform 0.3s;
 }
@@ -940,7 +943,6 @@ header .search-wrapper .btn.btn-filter .ticon {
     animation: none;
   }
 }
-
 .world-card {
   position: relative;
   display: block;
@@ -1053,7 +1055,6 @@ header .search-wrapper .btn.btn-filter .ticon {
     height: 52px;
   }
 }
-
 .studios .studios-list {
   display: flex;
   flex-direction: column;

@@ -131,6 +131,9 @@ header .page-controll-wrapper .page-title-wrapper .sub {
   font: inherit;
   font-size: 14px;
 }
+.page-search-wrapper input::-moz-placeholder {
+  color: #9AA1AB;
+}
 .page-search-wrapper input::placeholder {
   color: #9AA1AB;
 }

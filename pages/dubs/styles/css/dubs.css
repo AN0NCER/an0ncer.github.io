@@ -131,6 +131,9 @@ header .page-controll-wrapper .page-title-wrapper .sub {
   font: inherit;
   font-size: 14px;
 }
+.page-search-wrapper input::-moz-placeholder {
+  color: #9AA1AB;
+}
 .page-search-wrapper input::placeholder {
   color: #9AA1AB;
 }
@@ -439,7 +442,6 @@ body.-noscrol {
   opacity: 1;
   transition: 0.3s ease-in-out;
   background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   cursor: pointer;
 }
@@ -803,7 +805,7 @@ body.-noscrol {
 .sort-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 6px;
 }
 
 .sort-item {
@@ -932,7 +934,7 @@ body.-noscrol {
 .kind-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 6px;
 }
 
 .kind-item {
@@ -1042,7 +1044,8 @@ body.-noscrol {
 }
 @media screen and (min-width: 1280px) {
   .studios-layout {
-    grid-template-columns: 270px minmax(0, 1fr);
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 28px;
   }
 }
 @media screen and (min-width: 2200px) {

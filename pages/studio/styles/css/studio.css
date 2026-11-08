@@ -131,6 +131,9 @@ header .page-controll-wrapper .page-title-wrapper .sub {
   font: inherit;
   font-size: 14px;
 }
+.page-search-wrapper input::-moz-placeholder {
+  color: #9AA1AB;
+}
 .page-search-wrapper input::placeholder {
   color: #9AA1AB;
 }
@@ -432,7 +435,6 @@ body.-noscrol {
   opacity: 1;
   transition: 0.3s ease-in-out;
   background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   cursor: pointer;
 }
@@ -982,6 +984,7 @@ header .page-controll-wrapper .share-btn.-done {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  gap: 6px;
 }
 .branches .branch {
   transform: translateY(-6px);
@@ -1301,7 +1304,8 @@ header .page-controll-wrapper .share-btn.-done {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   transition: transform 0.3s;
 }
 .fresh-card .badge.-ep {
@@ -1367,7 +1371,8 @@ header .page-controll-wrapper .share-btn.-done {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   transition: transform 0.3s, filter 0.3s;
 }
 .title-tile .pbar {
@@ -1954,8 +1959,10 @@ b.out {
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.04em;
-  break-inside: avoid;
-  break-after: avoid;
+  -moz-column-break-inside: avoid;
+       break-inside: avoid;
+  -moz-column-break-after: avoid;
+       break-after: avoid;
 }
 .g-letter:first-child {
   padding-top: 6px;
@@ -2169,6 +2176,9 @@ b.out {
 .window-genres .win-actions .search-wrapper input:focus {
   border-color: #2394F1;
 }
+.window-genres .win-actions .search-wrapper input::-moz-placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
 .window-genres .win-actions .search-wrapper input::placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
@@ -2319,6 +2329,9 @@ b.out {
     color: #F2F4F7;
     font: inherit;
     font-size: 14px;
+  }
+  .window-genres .genres-desk-search input::-moz-placeholder {
+    color: #9AA1AB;
   }
   .window-genres .genres-desk-search input::placeholder {
     color: #9AA1AB;
@@ -2514,12 +2527,16 @@ b.out {
   }
   .window-genres .gd-themes .g-rows {
     display: block;
-    columns: 3;
-    column-gap: 0;
-    column-rule: 1px solid rgba(255, 255, 255, 0.05);
+    -moz-columns: 3;
+         columns: 3;
+    -moz-column-gap: 0;
+         column-gap: 0;
+    -moz-column-rule: 1px solid rgba(255, 255, 255, 0.05);
+         column-rule: 1px solid rgba(255, 255, 255, 0.05);
   }
   .window-genres .gd-themes .g-row {
-    break-inside: avoid;
+    -moz-column-break-inside: avoid;
+         break-inside: avoid;
   }
   .window-genres .g-head {
     padding: 0 2px 6px;
@@ -2625,12 +2642,14 @@ b.out {
   }
   .window-genres .genres-loading,
   .window-genres .studios-empty {
-    column-span: all;
+    -moz-column-span: all;
+         column-span: all;
   }
 }
 @media screen and (min-width: 900px) and (max-width: 1199px) {
   .window-genres .gd-themes .g-rows {
-    columns: 2;
+    -moz-columns: 2;
+         columns: 2;
   }
 }
 @media screen and (min-width: 2200px) {
