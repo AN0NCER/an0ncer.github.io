@@ -1849,13 +1849,13 @@ b.out {
 .g-age {
   position: relative;
   min-width: 0;
-  min-height: 56px;
-  padding: 8px 10px;
+  min-height: 84px;
+  padding: 13px 12px 12px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  border-radius: 14px;
+  justify-content: space-between;
+  gap: 6px;
+  border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: #191C21;
   font: inherit;
@@ -1864,27 +1864,27 @@ b.out {
   transition: background 0.15s, border-color 0.15s, transform 0.12s;
 }
 .g-age .nm {
-  padding-right: 20px;
+  padding-right: 14px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   color: #F2F4F7;
-  font-size: 14px;
+  font-size: clamp(13px, 3.75vw, 15px);
   font-weight: 800;
-  line-height: 22px;
-  margin-bottom: 3px;
+  line-height: 24px;
 }
 .g-age .age-badge {
   align-self: flex-start;
-  max-width: calc(100% - 20px);
-  margin-bottom: 3px;
+  max-width: calc(100% - 24px);
+  height: 24px;
+  font-size: 13px;
 }
 .g-age .hint {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   color: #9AA1AB;
-  font-size: 11px;
+  font-size: 12px;
 }
 .g-age .hint .c {
   color: #C9CED6;
@@ -1893,10 +1893,10 @@ b.out {
 }
 .g-age .mark {
   position: absolute;
-  top: 9px;
-  right: 9px;
-  width: 18px;
-  height: 18px;
+  top: 12px;
+  right: 11px;
+  width: 20px;
+  height: 20px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -1946,6 +1946,22 @@ b.out {
   border-radius: 18px;
   display: flex;
   flex-direction: column;
+}
+
+.g-letter {
+  padding: 10px 10px 4px;
+  color: #7BC0F7;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  break-inside: avoid;
+  break-after: avoid;
+}
+.g-letter:first-child {
+  padding-top: 6px;
+}
+.g-letter + .g-row {
+  border-top-color: transparent;
 }
 
 .g-row {
@@ -2019,17 +2035,6 @@ b.out {
 .g-btn.-out[aria-pressed=true] {
   background: #FF8A80;
   color: #3A0F0B;
-}
-
-.g-more {
-  height: 40px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  background: transparent;
-  color: #2393F1;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
 }
 
 .window-genres {
@@ -2406,6 +2411,30 @@ b.out {
     height: 56px;
     background: rgba(255, 255, 255, 0.03);
   }
+  .window-genres .gd-top .g-age {
+    min-height: 56px;
+    padding: 8px 10px;
+    justify-content: center;
+    gap: 2px;
+    border-radius: 14px;
+  }
+  .window-genres .gd-top .g-age .nm {
+    font-size: 14px;
+    line-height: 22px;
+  }
+  .window-genres .gd-top .g-age .age-badge {
+    height: 22px;
+    font-size: 12px;
+  }
+  .window-genres .gd-top .g-age .hint {
+    font-size: 11px;
+  }
+  .window-genres .gd-top .g-age .mark {
+    top: 9px;
+    right: 9px;
+    width: 18px;
+    height: 18px;
+  }
   .window-genres .gd-top .g-age:not(.-in):not(.-out) {
     background: rgba(255, 255, 255, 0.03);
   }
@@ -2483,12 +2512,13 @@ b.out {
   .window-genres .g-chip.-out .c {
     color: #FFB3AC;
   }
-  .window-genres .gd-themes {
+  .window-genres .gd-themes .g-rows {
+    display: block;
     columns: 3;
-    column-gap: 24px;
+    column-gap: 0;
+    column-rule: 1px solid rgba(255, 255, 255, 0.05);
   }
-  .window-genres .gd-themes .g-section {
-    margin-bottom: 16px;
+  .window-genres .gd-themes .g-row {
     break-inside: avoid;
   }
   .window-genres .g-head {
@@ -2599,7 +2629,7 @@ b.out {
   }
 }
 @media screen and (min-width: 900px) and (max-width: 1199px) {
-  .window-genres .gd-themes {
+  .window-genres .gd-themes .g-rows {
     columns: 2;
   }
 }
@@ -2614,38 +2644,47 @@ b.out {
   bottom: 8px;
 }
 
-.u-mark {
-  padding: 0 6px;
-  gap: 3px;
+.badge.u-mark {
+  height: 28px;
+  padding: 0 9px 0 7px;
+  gap: 4px;
+  background: rgba(16, 19, 24, 0.86);
+  box-shadow: inset 0 0 0 1.5px currentColor, 0 2px 8px rgba(0, 0, 0, 0.35);
 }
-.u-mark.-watching {
+.badge.u-mark.-watching {
   color: #2393F1;
 }
-.u-mark.-completed {
+.badge.u-mark.-completed {
   color: #4FD18F;
 }
-.u-mark.-planned {
+.badge.u-mark.-planned {
   color: #7BC0F7;
 }
-.u-mark.-on_hold {
+.badge.u-mark.-on_hold {
   color: #FFD700;
 }
-.u-mark.-dropped {
+.badge.u-mark.-dropped {
   color: #FF8A80;
 }
-.u-mark .icon {
-  width: 12px;
-  height: 12px;
+.badge.u-mark .icon {
+  width: 15px;
+  height: 15px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2.8;
+  stroke-width: 2.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.u-mark span {
+.badge.u-mark span {
   color: #F2F4F7;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
+}
+.badge.u-mark.-round {
+  width: 28px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .chip.-mine .icon {

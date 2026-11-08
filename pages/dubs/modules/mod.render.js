@@ -1,5 +1,5 @@
 import { isFav } from "/javascript/modules/dubs/dubs.favorites.js";
-import { ago, hue, initials, num, plural } from "/javascript/modules/dubs/dubs.format.js";
+import { ago, hue, num, plural } from "/javascript/modules/dubs/dubs.format.js";
 import { KIND_LABEL, KIND_NAME, state } from "./mod.state.js";
 
 /** Сколько студий дорисовывать за раз: их почти тысяча */
@@ -53,7 +53,7 @@ function fillCommon(el, s) {
     markFav(el.querySelector('.fav-btn'), isFav(s.id));
 
     const $av = el.querySelector('.avatar');
-    $av.textContent = initials(s.name);
+    $av.textContent = s.short;
     $av.style.setProperty('--h', hue(s.name));
 
     const $name = el.querySelector('.name');

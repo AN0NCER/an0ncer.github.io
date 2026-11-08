@@ -22,16 +22,17 @@ export const KIND_NAME = {
  * и иконка (path svg 24×24, обводка).
  */
 export const STATES = {
-    complete: { label: 'Озвучено полностью', short: 'полностью', color: '#4FD18F', icon: 'M5 12.5l4.5 4.5L19 7.5' },
-    caught: { label: 'Онгоинг: догнали Японию', short: 'догнали', color: '#2393F1', icon: 'M4 12h4l3-7 4 14 3-7h2' },
-    behind: { label: 'Онгоинг: отстают', short: 'отстают', color: '#7BC0F7', icon: 'M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z' },
-    inprogress: { label: 'Не доозвучено', short: 'не доозвучено', color: '#FFD700', icon: 'M12 3a9 9 0 1 0 9 9M12 3v9h9' },
+    complete: { label: 'Озвучено полностью', short: 'озвучено', color: '#4FD18F', icon: 'M5 12.5l4.5 4.5L19 7.5' },
+    inprogress: { label: 'Озвучка идёт', short: 'в процессе', color: '#FFD700', icon: 'M12 3a9 9 0 1 0 9 9M12 3v9h9' },
     abandoned: { label: 'Брошено', short: 'брошено', color: '#FF8A80', icon: 'M6 6l12 12M18 6L6 18' },
     unknown: { label: 'Нет данных', short: 'нет данных', color: '#5D636C', icon: 'M6 12h12' },
 };
 
+/** Онгоинги (`caught`, `behind`) показываются как «в процессе» */
+export const stateKey = (state) => (state === 'caught' || state === 'behind' ? 'inprogress' : state);
+
 /** Порядок состояний в полосе и легенде */
-export const STATE_ORDER = ['complete', 'caught', 'behind', 'inprogress', 'abandoned', 'unknown'];
+export const STATE_ORDER = ['complete', 'inprogress', 'abandoned', 'unknown'];
 
 /** Тип тайтла: tv → TV, movie → Фильм… */
 export const TITLE_KIND = {
@@ -74,17 +75,6 @@ export function ago(iso) {
     if (d < 60) return `${Math.round(d / 7)} нед`;
     if (d < 365) return `${Math.round(d / 30)} мес`;
     return `${Math.round(d / 365)} г`;
-}
-
-/** Логотипов у студий нет — аватар из двух букв названия */
-export function initials(name) {
-    const clean = name.replace(/\(.*?\)/g, '').trim() || name;
-    const words = clean.split(/[\s&,.]+/).filter(Boolean);
-    if (words.length > 1) return (words[0][0] + words[1][0]).toUpperCase();
-
-    const caps = clean.match(/[A-ZА-ЯЁ0-9]/g) || [];
-    if (caps.length >= 2) return caps[0] + caps[1];
-    return clean.slice(0, 2).toUpperCase();
 }
 
 /** Оттенок аватара: у одной студии всегда один и тот же цвет */

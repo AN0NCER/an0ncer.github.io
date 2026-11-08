@@ -2,7 +2,7 @@ import { TWindow } from "/javascript/core/window.core.js";
 import { WindowIntercator } from "/javascript/modules/win.module.js";
 import { getStudioGenres } from "/javascript/modules/dubs/api.dubs.js";
 import { num, plural } from "/javascript/modules/dubs/dubs.format.js";
-import { AGE_HINT, AGE_LABEL, AUDIENCE_HINT, AGES, CENSORED_AGES, CENSORED_GENRES, COLLAPSED_ROWS, GROUPS, LABEL, OTHER } from "../modules/mod.genres.js";
+import { AGE_HINT, AGE_LABEL, AGES, CENSORED_AGES, CENSORED_GENRES, GROUPS, LABEL, THEMES_GROUP } from "../modules/mod.genres.js";
 import { CENSORED, esc } from "../modules/mod.ui.js";
 import { createSlider } from "../modules/mod.slider.js";
 import { animateWidth, pressable } from "/javascript/modules/tun.animate.js";
@@ -30,8 +30,8 @@ const ELL = '.window-genres';
  * @typedef {Object} TGenresContext
  * @property {number} studioId
  * @property {TPicked} picked - уже применённый выбор
- * @property {(picked: TPicked, signal: AbortSignal) => Promise<number|null>} count
- *  сколько тайтлов будет с таким выбором (null — посчитать нельзя)
+ * @property {(picked: TPicked, signal: AbortSignal) => Promise<number>} count
+ *  сколько тайтлов будет с таким выбором
  * @property {(picked: TPicked) => void} apply
  */
 
@@ -60,8 +60,7 @@ let genres = [];
 let ages = [];
 let loadedFor = null;
 
-/** Раскрытые группы («Ещё N») и строка поиска */
-const expanded = new Set();
+/** Строка поиска */
 let query = '';
 
 let countTimer = 0;
@@ -90,7 +89,6 @@ export async function WGenres(opts) {
         ...ageIn.map((a) => [AGE + a, 'in']), ...ageOut.map((a) => [AGE + a, 'out']),
     ]);
     query = '';
-    expanded.clear();
 
     if (!win) win = create();
     search.reset();
@@ -111,11 +109,7 @@ export async function WGenres(opts) {
             loadedFor = opts.studioId;
         } catch (err) {
             console.warn('[studio] жанры не загрузились', err);
-            $body().innerHTML = `<div class="studios-empty"><b>${err.status === 404
-                ? 'Фильтр по жанрам пока недоступен'
-                : 'Не удалось загрузить жанры'}</b><p>${err.status === 404
-                ? 'Попробуйте позже.'
-                : 'Сервер озвучек не ответил. Попробуйте ещё раз позже.'}</p></div>`;
+            $body().innerHTML = '<div class="studios-empty"><b>Не удалось загрузить жанры</b><p>Сервер озвучек не ответил. Попробуйте ещё раз позже.</p></div>';
             return;
         }
     }
@@ -261,13 +255,13 @@ function grouped() {
     for (const group of GROUPS) {
         const items = group.names.map((n) => byName.get(n)).filter(Boolean);
         items.forEach((g) => used.add(g.name));
-        // Аудитория — в своём порядке, остальное — по числу тайтлов
-        if (!group.tiles) items.sort((a, b) => b.count - a.count);
+        // Аудитория — в своём порядке, жанры и темы — по алфавиту
+        if (!group.tiles) items.sort(byLabel);
         if (items.length) out.push({ ...group, items });
     }
 
-    const rest = genres.filter((g) => !used.has(g.name)).sort((a, b) => b.count - a.count);
-    if (rest.length) out.push({ ...OTHER, items: rest });
+    const rest = genres.filter((g) => !used.has(g.name)).sort(byLabel);
+    if (rest.length) out.push({ ...THEMES_GROUP, items: rest });
 
     // Возрастной рейтинг — плитками сразу после аудитории
     if (ages.length) {
@@ -292,14 +286,16 @@ function stateClass(name) {
 function pickChip(g) {
     const st = pick.get(g.name);
     const age = isAge(g.name);
-    const meaning = age ? AGE_HINT[g.name.slice(AGE.length)] || '' : AUDIENCE_HINT[g.name] || '';
+    // У аудитории — «730 аниме», у рейтинга — число и расшифровка
+    const count = age ? num(g.count) : `${num(g.count)} аниме`;
+    const meaning = age ? AGE_HINT[g.name.slice(AGE.length)] || '' : '';
     const hint = st === 'in' ? '+ есть' : st === 'out' ? '− нет' : meaning;
     const title = age
         ? `<b class="age-badge">${esc(label(g.name))}</b>`
         : `<b class="nm">${esc(label(g.name))}</b>`;
     return `<button type="button" class="g-age${stateClass(g.name)}" data-genre="${esc(g.name)}" data-act="cycle" aria-pressed="${Boolean(st)}" title="${esc(meaning)}">
         ${title}
-        <span class="hint"><span class="c">${num(g.count)}</span> · ${esc(hint)}</span>
+        <span class="hint"><span class="c">${count}</span>${hint ? ` · ${esc(hint)}` : ''}</span>
         <span class="mark" aria-hidden="true">${st === 'in' ? '+' : st === 'out' ? '−' : ''}</span>
     </button>`;
 }
@@ -320,6 +316,20 @@ function tile(g) {
     return `<button type="button" class="g-tile${stateClass(g.name)}" data-genre="${esc(g.name)}" data-act="cycle" aria-pressed="${Boolean(st)}"${hint}>
         <b>${esc(label(g.name))}</b><span>${esc(sub)}</span>
     </button>`;
+}
+
+/** По алфавиту по подписи */
+const byLabel = (a, b) => label(a.name).localeCompare(label(b.name), 'ru');
+
+/** Строки с буквами-разделителями: «А», «Б»… перед первым словом на букву */
+function withLetters(items) {
+    let prev = '';
+    return items.map((g) => {
+        const letter = label(g.name).charAt(0).toUpperCase();
+        const head = letter !== prev ? `<div class="g-letter" aria-hidden="true">${esc(letter)}</div>` : '';
+        prev = letter;
+        return head + row(g);
+    }).join('');
 }
 
 function row(g) {
@@ -367,15 +377,6 @@ function sectionHtml(group, desk) {
 
     const view = viewOf(group, desk);
 
-    // Свёрнуто (телефон): первые строки + выбранные из хвоста, остальное — за «Ещё N»
-    let hidden = 0;
-    if (!query && !desk && view === 'rows' && !expanded.has(group.key) && items.length > COLLAPSED_ROWS) {
-        const head = items.slice(0, COLLAPSED_ROWS);
-        const chosen = items.slice(COLLAPSED_ROWS).filter((g) => pick.has(g.name));
-        hidden = items.length - head.length - chosen.length;
-        items = [...head, ...chosen];
-    }
-
     let body;
     switch (view) {
         case 'ages':
@@ -393,8 +394,7 @@ function sectionHtml(group, desk) {
             body = `<div class="g-cloud">${items.map(cloudChip).join('')}</div>`;
             break;
         default:
-            body = `<div class="g-rows">${items.map(row).join('')}
-                ${hidden > 0 ? `<button type="button" class="g-more" data-more="${group.key}">Ещё ${hidden} ›</button>` : ''}</div>`;
+            body = `<div class="g-rows">${withLetters(items)}</div>`;
     }
 
     return `<section class="g-section -${view}" data-group="${group.key}">
@@ -488,8 +488,8 @@ function setPick(name, st) {
 
 /* ---------- плавающий быстрый переход (над нижней панелью) ---------- */
 
-/** Группы тем: «Темы» ведёт к первой из них и подсвечивается на любой */
-const THEMES = ['world', 'fight', 'mood', 'stage', 'other'];
+/** Группа «Темы» */
+const THEMES = ['themes'];
 
 /** К какому переходу относится группа */
 const jumpOf = (key) => (THEMES.includes(key) ? 'themes' : key);
@@ -562,14 +562,6 @@ function onJumpClick(e) {
 }
 
 function onBodyClick(e) {
-
-    const more = e.target.closest('[data-more]');
-    if (more) {
-        expanded.add(more.dataset.more);
-        drawSections();
-        return;
-    }
-
     const act = e.target.closest('[data-act]');
     if (!act) return;
     const name = act.closest('[data-genre]')?.dataset.genre;

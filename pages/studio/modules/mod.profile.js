@@ -1,5 +1,5 @@
 import { isFav } from "/javascript/modules/dubs/dubs.favorites.js";
-import { ago, hours, hue, initials, KIND_NAME, num, plural, STATE_ORDER, STATES, TITLE_KIND } from "/javascript/modules/dubs/dubs.format.js";
+import { ago, hours, hue, KIND_NAME, num, plural, STATE_ORDER, STATES, TITLE_KIND } from "/javascript/modules/dubs/dubs.format.js";
 import { animeUrl, esc, estimate, HIDDEN_NAME, isHidden18, stateBadge, studioUrl, svgPath } from "./mod.ui.js";
 
 /**
@@ -18,9 +18,9 @@ const ROLE = {
 
 const TITLES = ['тайтл', 'тайтла', 'тайтлов'];
 
-/** Аватар из инициалов, цвет — от названия */
-const avatar = (name, cls = 'avatar') =>
-    `<span class="${cls}" style="--h:${hue(name)}" aria-hidden="true">${esc(initials(name))}</span>`;
+/** Аватар студии: сокращение, цвет — от названия */
+const avatar = (s, cls = 'avatar') =>
+    `<span class="${cls}" style="--h:${hue(s.name)}" aria-hidden="true">${esc(s.short)}</span>`;
 
 /* ---------- шапка студии ---------- */
 
@@ -43,7 +43,7 @@ export function renderHero(s) {
 
     $('.hero').innerHTML = `
         <div class="hero-head">
-            ${avatar(s.name)}
+            ${avatar(s)}
             <span class="hero-info">
                 <h1 class="hero-name">${esc(s.name)}</h1>
                 <span class="sub">${esc(facts)}</span>
@@ -93,7 +93,7 @@ export function renderKpis(s) {
     $('.kpis').innerHTML = [
         tile(num(s.titles), plural(s.titles, TITLES), `${num(s.serials)} ${plural(s.serials, ['сериал', 'сериала', 'сериалов'])} · ${num(s.movies)} ${plural(s.movies, ['фильм', 'фильма', 'фильмов'])}`),
         tile(num(s.episodes), plural(s.episodes, ['серия', 'серии', 'серий'])),
-        tile(num(s.ongoing), plural(s.ongoing, ['онгоинг', 'онгоинга', 'онгоингов']), s.ongoing ? `догнали ${num(st.caught || 0)} · отстают ${num(st.behind || 0)}` : ''),
+        tile(num(s.ongoing), plural(s.ongoing, ['онгоинг', 'онгоинга', 'онгоингов']), s.ongoing ? `без задержки ${num(st.caught || 0)} · с задержкой ${num(st.behind || 0)}` : ''),
         tile(num(s.exclusives), plural(s.exclusives, ['эксклюзивное аниме', 'эксклюзивных аниме', 'эксклюзивных аниме']), 'только у этой студии'),
         s.completionRate != null ? tile(`${num(s.completionRate)}%`, 'аниме озвучено до конца', 'из тех, что уже вышли целиком') : '',
         lag,
@@ -109,10 +109,12 @@ export function renderKpis(s) {
 /* ---------- состояния ---------- */
 
 /** Какой фильтр тайтлов открывает клик по состоянию в легенде */
-const STATE_FILTER = { complete: 'complete', caught: 'caught', behind: 'behind', inprogress: 'inprogress', abandoned: 'abandoned' };
+const STATE_FILTER = { complete: 'complete', inprogress: 'inprogress', abandoned: 'abandoned' };
 
 export function renderStates(s) {
-    const st = s.states || {};
+    const raw = s.states || {};
+    // Онгоинги без задержки и с задержкой входят в «в процессе»
+    const st = { ...raw, inprogress: (raw.caught || 0) + (raw.behind || 0) + (raw.inprogress || 0) };
     const total = STATE_ORDER.reduce((sum, k) => sum + (st[k] || 0), 0);
 
     // Маленькие сегменты всё равно видны тонкой полоской
@@ -174,7 +176,7 @@ export function renderBranches(s) {
 
     const links = (title, list) => list.length
         ? `<div class="links"><span class="sub">${title}</span>${list.map((c) =>
-            `<a class="chip sm" href="${studioUrl(c.id)}">${avatar(c.name, 'avatar -xs')}${esc(c.name)}${c.titles != null ? ` <span class="c">${num(c.titles)}</span>` : ''}</a>`).join('')}</div>`
+            `<a class="chip sm" href="${studioUrl(c.id)}">${avatar(c, 'avatar -xs')}${esc(c.name)}${c.titles != null ? ` <span class="c">${num(c.titles)}</span>` : ''}</a>`).join('')}</div>`
         : '';
 
     $box.innerHTML = `
@@ -238,6 +240,7 @@ export function renderGenres(s) {
     $('.genres').hidden = false;
 }
 
+/** Аниме студии по году выхода в Японии */
 export function renderYears(s) {
     const years = Object.entries(s.years || {}).map(([y, n]) => [Number(y), n]).filter(([y]) => y > 1900);
     if (years.length < 2) return;
@@ -253,14 +256,16 @@ export function renderYears(s) {
     const list = [...buckets];
     const max = Math.max(...list.map(([, n]) => n));
     const mid = list[Math.floor(list.length / 2)][0];
+    const bar = (n, title) =>
+        `<span style="height:${Math.max(3, n / max * 100).toFixed(0)}%" title="${title}: ${num(n)} ${plural(n, TITLES)}"></span>`;
 
     $('.years').innerHTML = `
         <div class="s-head">
-            <span class="s-title">Годы выхода</span>
+            <span class="s-title">Аниме по годам выхода</span>
             <span class="sub">${step > 1 ? 'по 2 года' : 'по годам'}</span>
         </div>
         <div class="vbars">${list.map(([y, n]) =>
-            `<span style="height:${Math.max(3, n / max * 100).toFixed(0)}%" title="${y}${step > 1 ? `–${y + 1}` : ''}: ${num(n)} ${plural(n, TITLES)}"></span>`).join('')}
+            bar(n, `${y}${step > 1 ? `–${y + 1}` : ''}`)).join('')}
         </div>
         <div class="vbars-axis sub"><span>${first}</span><span>${mid}</span><span>${last}</span></div>`;
     $('.years').hidden = false;

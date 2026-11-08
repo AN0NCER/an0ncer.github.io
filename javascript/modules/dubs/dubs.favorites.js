@@ -31,6 +31,9 @@ export const isFav = (id) => ids.has(id);
 
 export const favCount = () => ids.size;
 
+/** id всех избранных студий */
+export const favIds = () => [...ids];
+
 /**
  * Добавить или убрать.
  * @param {number} id

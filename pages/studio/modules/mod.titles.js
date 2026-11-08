@@ -1,5 +1,5 @@
 import { getStudioTitles } from "/javascript/modules/dubs/api.dubs.js";
-import { ago, num, plural, TITLE_KIND } from "/javascript/modules/dubs/dubs.format.js";
+import { ago, num, plural, stateKey, TITLE_KIND } from "/javascript/modules/dubs/dubs.format.js";
 import { AGE_LABEL, AGES, CENSORED_AGES, CENSORED_GENRES, GROUPS } from "./mod.genres.js";
 import { animeUrl, CENSORED, esc, HIDDEN_NAME, isHidden18, progressBar, progressText, stateBadge } from "./mod.ui.js";
 import { WGenres } from "../windows/win.genres.js";
@@ -14,18 +14,13 @@ import { applyMarks, loadMyList, userMark } from "./mod.mylist.js";
 const AUDIENCE = new Set(GROUPS.find((g) => g.key === 'audience')?.names || []);
 
 /**
- * Жанры «+» для запроса: несколько аудиторий — в any (хотя бы одна),
- * остальное — в genres (все). Одна аудитория — в genres.
+ * Жанры «+» для запроса: аудитории — в any (хотя бы одна), остальное — в genres (все)
  * @param {string[]} include
  */
-function genreQuery(include) {
-    const audience = include.filter((g) => AUDIENCE.has(g));
-    if (audience.length < 2) return { genres: include, any: [] };
-    return { genres: include.filter((g) => !AUDIENCE.has(g)), any: audience };
-}
-
-/** В ответе нет any — аудитории не применились */
-const anyUnsupported = (any, res) => any.length > 0 && !('any' in (res.genres || {}));
+const genreQuery = (include) => ({
+    genres: include.filter((g) => !AUDIENCE.has(g)),
+    any: include.filter((g) => AUDIENCE.has(g)),
+});
 
 /** Сколько тайтлов догружать за раз */
 const PAGE = 60;
@@ -34,11 +29,9 @@ const PAGE = 60;
 const FILTERS = [
     ['', 'Все', (s) => s.titles],
     ['ongoing', 'Онгоинги', (s) => s.ongoing],
-    ['caught', 'Догнали', (s) => s.states?.caught],
-    ['behind', 'Отстают', (s) => s.states?.behind],
-    ['complete', 'Полностью', (s) => s.states?.complete],
-    // «Не доозвучено» включает и «брошено»
-    ['inprogress', 'Не доозвучено', (s) => (s.states?.inprogress || 0) + (s.states?.abandoned || 0)],
+    ['complete', 'Озвучено', (s) => s.states?.complete],
+    // «В процессе» — онгоинги и вышедшие, которые ещё озвучиваются; «брошено» — отдельно
+    ['inprogress', 'В процессе', (s) => ['caught', 'behind', 'inprogress'].reduce((n, k) => n + (s.states?.[k] || 0), 0)],
     ['abandoned', 'Брошено', (s) => s.states?.abandoned],
     ['exclusive', 'Эксклюзивы', (s) => s.exclusives],
     ['movies', 'Фильмы', (s) => s.movies],
@@ -77,7 +70,8 @@ const $search = document.querySelector('#title-search');
 /** Выбор живёт в адресе (?state=&sort=&branch=&g=&xg=) — ссылкой можно поделиться */
 const view = (() => {
     const p = new URLSearchParams(location.search);
-    const st = p.get('state') || '';
+    // Ссылки с ?state=caught / behind ведут в «В процессе»
+    const st = stateKey(p.get('state') || '');
     const sort = p.get('sort');
     const branch = Number(p.get('branch')) || null;
     // Жанры, скрытые цензурой, из ссылки не берём
@@ -188,9 +182,6 @@ function openGenres() {
                 ...stateQuery(), branch: view.branch, q: view.q.trim(),
                 genres, any, exclude, age: ageIn, xage: ageOut, limit: 1,
             }, signal);
-            // Фильтр не применился — число было бы неверным
-            if (!('genres' in res) || ((ageIn.length || ageOut.length) && !('ages' in res))) return null;
-            if (anyUnsupported(any, res)) return null;
             return res.total;
         },
         apply: ({ include, exclude, ageIn, ageOut }) => {
@@ -338,38 +329,6 @@ async function more() {
 
         if (ctrl.signal.aborted) return;
 
-        // Фильтр не применился — не выдаём весь список за отфильтрованный
-        if (view.branch && !('branch' in res)) {
-            total = 0;
-            $count.textContent = '';
-            message('Фильтр по ветке пока недоступен', 'Сбросьте ветку, чтобы увидеть все тайтлы.');
-            return;
-        }
-        if ((view.ageIn.length || view.ageOut.length) && !('ages' in res)) {
-            total = 0;
-            $count.textContent = '';
-            message('Фильтр по возрастному рейтингу пока недоступен', 'Сбросьте рейтинг в фильтре, чтобы увидеть все тайтлы.');
-            return;
-        }
-        if (view.state === MINE && !('ids' in res)) {
-            total = 0;
-            $count.textContent = '';
-            message('Фильтр «Мои» пока недоступен', 'Попробуйте позже.');
-            return;
-        }
-        if (anyUnsupported(any, res)) {
-            total = 0;
-            $count.textContent = '';
-            message('Несколько аудиторий сразу пока недоступно', 'Пока оставьте в фильтре одну аудиторию.');
-            return;
-        }
-        if ((view.include.length || view.exclude.length) && !('genres' in res)) {
-            total = 0;
-            $count.textContent = '';
-            message('Фильтр по жанрам пока недоступен', 'Сбросьте жанры, чтобы увидеть все тайтлы.');
-            return;
-        }
-
         total = res.total;
         offset += res.items.length;
         if (!res.items.length) total = offset; // защита от бесконечной догрузки
@@ -445,8 +404,7 @@ export function initTitles(s, { branchChange = () => { } } = {}) {
 }
 
 /**
- * Список пользователя: значки на постерах и чип «Мои».
- * Чип появляется, только если фильтр по id применился и у студии есть такие тайтлы.
+ * Список пользователя: значки на постерах и чип «Мои» (если у студии есть такие тайтлы).
  */
 async function initMine() {
     const ids = await loadMyList();
@@ -455,7 +413,7 @@ async function initMine() {
     if (!ids.length || !studio) return;
     try {
         const res = await getStudioTitles(studio.id, { ids, limit: 1 });
-        if (!('ids' in res) || !res.total) return;
+        if (!res.total) return;
         mineIds = ids;
         mineCount = res.total;
         drawControls(studio);

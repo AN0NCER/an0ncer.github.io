@@ -402,13 +402,13 @@ b.out {
 .g-age {
     position: relative;
     min-width: 0;
-    min-height: 56px;
-    padding: 8px 10px;
+    min-height: 84px;
+    padding: 13px 12px 12px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 2px;
-    border-radius: 14px;
+    justify-content: space-between;
+    gap: 6px;
+    border-radius: 16px;
     border: 1px solid $line;
     background: $block;
     font: inherit;
@@ -418,22 +418,23 @@ b.out {
 
     // Название аудитории — вместо значка рейтинга
     .nm {
-        padding-right: 20px; // место под кружок
+        padding-right: 14px; // место под кружок
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
         color: $white;
-        font-size: 14px;
+        // на узких телефонах чуть мельче, чтобы «Детское» влезало целиком
+        font-size: clamp(13px, 3.75vw, 15px);
         font-weight: 800;
-        line-height: 22px;
-        margin-bottom: 3px;
+        line-height: 24px;
     }
 
     // Значок рейтинга — слева сверху, справа от него кружок-галочка
     .age-badge {
         align-self: flex-start;
-        max-width: calc(100% - 20px);
-        margin-bottom: 3px;
+        max-width: calc(100% - 24px);
+        height: 24px;
+        font-size: 13px;
     }
 
     .hint {
@@ -441,7 +442,7 @@ b.out {
         white-space: nowrap;
         text-overflow: ellipsis;
         color: $sub;
-        font-size: 11px;
+        font-size: 12px;
 
         .c {
             color: $soft;
@@ -453,10 +454,10 @@ b.out {
     // Кружок в углу: пустой, «+» или «−»
     .mark {
         position: absolute;
-        top: 9px;
-        right: 9px;
-        width: 18px;
-        height: 18px;
+        top: 12px;
+        right: 11px;
+        width: 20px;
+        height: 20px;
         display: grid;
         place-items: center;
         border-radius: 50%;
@@ -513,6 +514,25 @@ b.out {
     border-radius: 18px;
     display: flex;
     flex-direction: column;
+}
+
+// Буква-разделитель в списке жанров и тем
+.g-letter {
+    padding: 10px 10px 4px;
+    color: $acc3;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    break-inside: avoid;
+    break-after: avoid;
+
+    &:first-child {
+        padding-top: 6px;
+    }
+
+    & + .g-row {
+        border-top-color: transparent;
+    }
 }
 
 .g-row {
@@ -595,17 +615,6 @@ b.out {
         background: $g-out;
         color: #3A0F0B;
     }
-}
-
-.g-more {
-    height: 40px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    background: transparent;
-    color: $primary;
-    font: inherit;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
 }
 
 // ---------- нижняя панель действий ----------
@@ -1067,6 +1076,36 @@ b.out {
                 background: rgba(255, 255, 255, 0.03);
             }
 
+            // На ПК чипы компактнее, чем на телефоне
+            .g-age {
+                min-height: 56px;
+                padding: 8px 10px;
+                justify-content: center;
+                gap: 2px;
+                border-radius: 14px;
+
+                .nm {
+                    font-size: 14px;
+                    line-height: 22px;
+                }
+
+                .age-badge {
+                    height: 22px;
+                    font-size: 12px;
+                }
+
+                .hint {
+                    font-size: 11px;
+                }
+
+                .mark {
+                    top: 9px;
+                    right: 9px;
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+
             .g-age:not(.-in):not(.-out) {
                 background: rgba(255, 255, 255, 0.03);
             }
@@ -1163,12 +1202,16 @@ b.out {
         }
 
         // Темы — компактные строки в колонках
+        // Темы — одна карточка, строки в три колонки
         .gd-themes {
-            columns: 3;
-            column-gap: 24px;
+            .g-rows {
+                display: block;
+                columns: 3;
+                column-gap: 0;
+                column-rule: 1px solid rgba(255, 255, 255, 0.05);
+            }
 
-            .g-section {
-                margin-bottom: 16px;
+            .g-row {
                 break-inside: avoid;
             }
         }
@@ -1304,7 +1347,7 @@ b.out {
 
 // Узкий ПК — две колонки
 @media screen and (min-width: 900px) and (max-width: 1199px) {
-    .window-genres .gd-themes {
+    .window-genres .gd-themes .g-rows {
         columns: 2;
     }
 }

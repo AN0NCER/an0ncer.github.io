@@ -1,4 +1,4 @@
-import { num, STATES } from "/javascript/modules/dubs/dubs.format.js";
+import { num, stateKey, STATES } from "/javascript/modules/dubs/dubs.format.js";
 
 /** Экранирование для вставки в разметку */
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -36,11 +36,11 @@ export const studioUrl = (id) => `/studio.html?id=${encodeURIComponent(id)}`;
 
 /**
  * Значок состояния: иконка + короткая подпись цветом состояния.
- * @param {string} key - ключ из STATES
+ * @param {string} key - состояние тайтла или ключ из STATES
  * @param {boolean} [pill] - на подложке
  */
 export function stateBadge(key, pill = false) {
-    const st = STATES[key] || STATES.unknown;
+    const st = STATES[stateKey(key)] || STATES.unknown;
     return `<span class="st${pill ? ' -pill' : ''}" style="--st:${st.color}">${svgPath(st.icon, 'icon')}${esc(st.short)}</span>`;
 }
 
@@ -54,7 +54,7 @@ export function progressBar(t) {
     const total = t.total || Math.max(aired, ep) * 1.02 || 1;
     const air = Math.min(100, aired / total * 100);
     const dub = Math.min(100, ep / total * 100);
-    const color = (STATES[t.state] || STATES.unknown).color;
+    const color = (STATES[stateKey(t.state)] || STATES.unknown).color;
     const label = `Озвучено ${ep} из ${aired} вышедших${t.total ? `, всего ${t.total}` : ''}`;
 
     return `<span class="pbar" role="img" aria-label="${esc(label)}"><span class="air" style="width:${air.toFixed(1)}%"></span><span class="dub" style="width:${dub.toFixed(1)}%;background:${color}"></span></span>`;

@@ -1,4 +1,4 @@
-/** API озвучек — для каталога студий (dubs.html) и страницы студии (studio.html) */
+/** API озвучек — каталог студий, страница студии, блок «Озвучки» на поиске, франшиза на странице просмотра */
 const DEFAULT_BASE = 'https://dub.tunime.app/api/v1';
 
 /** Адрес API можно подменить через localStorage['tun-dub-api'] */
@@ -77,6 +77,26 @@ export async function getStudios() {
 }
 
 /**
+ * Лента озвучки: новые серии (`ep`) и новые озвучки (`new`), от новых к старым.
+ * @param {{days?: number, types?: string, limit?: number, studios?: number[]}} [opts]
+ *  studios — только эти студии
+ * @param {AbortSignal} [signal]
+ */
+export function getFeed({ days = 1, types = 'ep,new', limit = 100, studios = [] } = {}, signal) {
+    const q = new URLSearchParams({ days: String(days), types, limit: String(limit) });
+    if (studios.length) q.set('studios', studios.join(','));
+    return get(`/feed?${q}`, signal);
+}
+
+/**
+ * Короткая сводка: число студий, последний день, самые быстрые студии, онгоинги с озвучкой.
+ * @param {AbortSignal} [signal]
+ */
+export function getOverview(signal) {
+    return get('/overview?fastest=3', signal);
+}
+
+/**
  * Профиль студии: ветки, цифры, состояния, жанры, годы…
  *
  * @param {number|string} id - id студии или translation.id любой её ветки
@@ -125,8 +145,8 @@ export function getStudio(id, signal) {
  * @param {AbortSignal} [signal]
  * @returns {Promise<{total: number, offset: number, limit: number, items: TStudioTitle[],
  *  branch?: {id: number, name: string, role: string}|null,
- *  genres?: {include: string[], exclude: string[]}}>} branch / genres — какие фильтры применены
- *  (нет поля — фильтр не применён)
+ *  genres?: {include: string[], exclude: string[], any: string[]}, ids?: number|null}>}
+ *  branch / genres / ids — какие фильтры применены
  */
 export function getStudioTitles(id, params = {}, signal) {
     const q = new URLSearchParams();
@@ -141,9 +161,46 @@ export function getStudioTitles(id, params = {}, signal) {
     return get(`/studios/${encodeURIComponent(id)}/titles?${q}`, signal);
 }
 
+/** Сколько id принимает `/titles` за один запрос */
+export const TITLES_IDS_LIMIT = 200;
+
 /**
- * Все жанры тайтлов студии с числами — для окна «Жанры и темы».
- * 404 — фильтр по жанрам недоступен.
+ * Тайтл из `/titles?studio=`: есть ли на нём студия и какими ветками.
+ *
+ * @typedef {Object} TStudioOnTitle
+ * @property {string} id - shikimori id
+ * @property {boolean} inKodik
+ * @property {{has: boolean, ep?: number|null, season?: number|null, state?: string,
+ *  branches?: {id: number, name: string|null, role: string|null, collab?: {id: number, name: string}}[]}} studio
+ *  branches — translation.id, которыми студия есть на тайтле (свои ветки и совместные озвучки)
+ */
+
+/**
+ * Есть ли студия на тайтлах из списка — одним запросом на каждые 200 id.
+ *
+ * @param {(number|string)[]} ids - shikimori id
+ * @param {number|string} studio - id студии или translation.id любой её ветки
+ * @param {AbortSignal} [signal]
+ * @returns {Promise<{studio: {id: number, name: string, kind: string, members: {id: number, name: string, role: string, type: string}[]}|null,
+ *  items: TStudioOnTitle[]}>} studio.members — ветки студии
+ */
+export async function getTitles(ids, studio, signal) {
+    const chunks = [];
+    for (let i = 0; i < ids.length; i += TITLES_IDS_LIMIT) {
+        chunks.push(ids.slice(i, i + TITLES_IDS_LIMIT));
+    }
+    const pages = await Promise.all(chunks.map((part) => {
+        const q = new URLSearchParams({ ids: part.join(','), studio: String(studio) });
+        return get(`/titles?${q}`, signal);
+    }));
+    return {
+        studio: pages[0]?.studio ?? null,
+        items: pages.flatMap(page => page.items || []),
+    };
+}
+
+/**
+ * Все жанры и возрастные рейтинги тайтлов студии с числами — для окна «Жанры и темы».
  * @param {number|string} id
  * @param {AbortSignal} [signal]
  * @returns {Promise<{total: number, items: {name: string, count: number}[]}>}

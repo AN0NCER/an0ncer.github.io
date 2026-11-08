@@ -44,7 +44,7 @@ export function userMark(shiki) {
     const st = STATUS[statusOf(r.status)];
     if (!st) return '';
     const score = r.status === 'completed' && r.score ? `<span>${r.score}</span>` : '';
-    return `<span class="badge -bl u-mark ${st.cls}" title="В вашем списке: ${st.label.toLowerCase()}">${svgPath(st.d, 'icon stroke')}${score}</span>`;
+    return `<span class="badge -bl u-mark ${st.cls}${score ? '' : ' -round'}" title="В вашем списке: ${st.label.toLowerCase()}">${svgPath(st.d, 'icon stroke')}${score}</span>`;
 }
 
 /** Расставить значки на уже нарисованных постерах (список пришёл позже карточек) */
