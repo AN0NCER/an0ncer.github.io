@@ -1,0 +1,20 @@
+// Каталог студий озвучки (dubs.html).
+// Общая основа со страницей студии — в style/dubs/ (переменные, шапка, чипы, избранное, заглушки).
+
+@import '../../../style/dubs/dubs.vars';
+@import '../../../style/dubs/dubs.base';
+
+main.studios {
+    padding: 14px var(--gutter) 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@import '../../../style/windowed';
+
+@import './filter';
+@import './list';
+@import './cards';
+@import './sort';
+@import './side';

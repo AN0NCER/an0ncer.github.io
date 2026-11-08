@@ -1,0 +1,57 @@
+// Общие переменные и миксины страниц озвучек: каталог (pages/dubs) и студия (pages/studio).
+// Подключается первым, до _dubs.base.scss и стилей страницы.
+
+$bg: #101318;
+$white: #F2F4F7;
+$sub: #9AA1AB;
+$elements-bg: rgba(255, 255, 255, 0.08);
+$block: #191C21;
+$soft: #C9CED6;
+$dim: #6B717B;
+$line: rgba(255, 255, 255, 0.08);
+$line2: rgba(255, 255, 255, 0.14);
+$acc3: #7BC0F7;
+$gold: #FFD700;
+// Основной цвет выделения в приложении (как $primary в style/index.scss)
+$primary: #2393F1;
+$acc-bg: rgba(35, 147, 241, 0.18);
+$acc-line: rgba(123, 192, 247, 0.65);
+
+/// Аватар студии из инициалов; оттенок — CSS-переменная --h (считается в JS)
+@mixin avatar($size: 44px, $font: 16px) {
+    flex: none;
+    width: $size;
+    height: $size;
+    display: grid;
+    place-items: center;
+    border-radius: 30%;
+    color: #fff;
+    font-size: $font;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(145deg, hsl(var(--h) 62% 50%), hsl(calc(var(--h) + 28) 58% 36%));
+}
+
+/// Карточка-блок на тёмном фоне
+@mixin card($padding: 16px) {
+    padding: $padding;
+    border-radius: 22px;
+    border: 1px solid $line;
+    background: $block;
+}
+
+/// Выбранный пункт списка: мягкая «пилюля» (как у сортировки и типа в каталоге)
+@mixin pill-on {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+/// Липкая боковая колонка, которая может быть выше окна: едет со страницей
+/// и прилипает, когда показался её низ. Высоту колонки (--side-h) ставит
+/// javascript/modules/dubs/dubs.sticky.js → stickySide(el)
+@mixin sticky-side {
+    position: sticky;
+    top: min(0px, calc(100dvh - var(--menu-height-safe, 0px) - var(--side-h, 0px)));
+}

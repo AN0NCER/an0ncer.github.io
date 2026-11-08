@@ -1,0 +1,155 @@
+// Сортировка: на телефоне — шторка, на ПК — панель слева от списка.
+// Логика в windows/win.sort.js, пункты одинаковые в обоих местах.
+// Выбранный пункт — «пилюля» с тенью, как переключатель в окне сортировки коллекций
+// (style/win/collections/win.sorting.scss → .selector), иконка залита основным цветом.
+
+// ---------- пункт сортировки (общий) ----------
+
+.sort-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sort-item {
+    position: relative;
+    width: 100%;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 18px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background .2s, border-color .2s, box-shadow .2s, transform .12s;
+
+    .bubble {
+        flex: none;
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.06);
+        color: #D6D6D6;
+        transition: background .2s, color .2s;
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    }
+
+    .text {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
+
+    .label {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 1.25;
+        transition: color .2s;
+    }
+
+    .hint {
+        color: $sub;
+        font-size: 11.5px;
+        line-height: 1.3;
+    }
+
+    &:active {
+        transform: scale(.98);
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background: rgba(255, 255, 255, 0.03);
+
+            .label {
+                color: #FFFFFF;
+            }
+        }
+    }
+
+    &.-on {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12); // мягкая, почти незаметная тень
+
+        .bubble {
+            background: $primary;
+            color: #FFFFFF;
+        }
+
+        .label {
+            color: #FFFFFF;
+        }
+    }
+}
+
+// ---------- телефон: шторка ----------
+// Фон, скругление и шапка — как у остальных окон приложения
+// (style/_windowed.scss + WBarV2 из style/win/_win.engine.scss)
+
+.window-dubs-sort {
+    .window-content .content-wrapper {
+        padding-top: 0;
+        padding-left: 0;
+        padding-right: 0;
+        gap: 0;
+    }
+
+    .window-bar {
+        margin-top: 10px;
+        margin-left: max(var(--sal), 20px);
+        margin-right: max(var(--sar), 20px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+
+        .window-title {
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .window-close {
+            width: 40px;
+            height: 40px;
+            margin-right: -12px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+
+            .icon {
+                width: 16px;
+                height: 16px;
+                fill: #D6D6D6;
+            }
+        }
+    }
+
+    // Пузыри выровнены по заголовку окна: у пункта свой отступ 10 px
+    .sort-list {
+        margin-top: 6px;
+        padding-left: calc(max(var(--sal), 20px) - 10px);
+        padding-right: calc(max(var(--sar), 20px) - 10px);
+    }
+}
+

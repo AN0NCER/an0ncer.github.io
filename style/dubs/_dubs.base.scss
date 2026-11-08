@@ -1,0 +1,441 @@
+// Общая основа страниц озвучек: каталог (pages/dubs) и студия (pages/studio).
+// Каркас страницы, шапка с кнопкой «назад» и поиском, чипы, звёздочка «В избранное»,
+// заглушки загрузки и пустое состояние. Нужен _dubs.vars.scss перед ним.
+
+:root {
+    --sat: env(safe-area-inset-top);
+    --sar: env(safe-area-inset-right);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    font-weight: inherit;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background: $bg;
+
+    -webkit-text-size-adjust: none;
+    /* Запрещает автоматическое изменение размера текста */
+    font-family: "Manrope", sans-serif;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+// --gutter — боковой отступ страницы; на ПК его увеличивает страница
+.body-wrapper {
+    --gutter: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: var(--menu-height-safe);
+}
+
+.sub {
+    color: $sub;
+    font-size: 12px;
+}
+
+// ---------- шапка ----------
+
+header {
+    padding: max(20px, var(--sat)) var(--gutter) 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .page-controll-wrapper {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+
+        .btn {
+            flex: none;
+            display: grid;
+            place-items: center;
+            aspect-ratio: 1 / 1;
+            width: 44px;
+            height: 44px;
+            background: $elements-bg;
+            border-radius: 50%;
+            color: $white;
+            cursor: pointer;
+
+            .icon {
+                height: 16px;
+                fill: $white;
+            }
+        }
+
+        .page-title-wrapper {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+
+            .page {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                font-size: 22px;
+                font-weight: 800;
+                letter-spacing: -0.02em;
+                line-height: 1.1;
+                color: $white;
+            }
+
+            .sub {
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+// Поле поиска: в шапке каталога и в блоке тайтлов студии
+.page-search-wrapper {
+    height: 44px;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    transition: border-color .2s, box-shadow .2s;
+
+    // Фокус: синяя обводка и мягкое кольцо вокруг
+    &:focus-within {
+        border-color: rgba(35, 147, 241, 0.75);
+        box-shadow: 0 0 0 5px rgba(35, 147, 241, 0.2);
+
+        .icon-wrapper .icon {
+            fill: $white;
+        }
+    }
+
+    .icon-wrapper {
+        display: grid;
+        place-items: center;
+
+        .icon {
+            width: 14px;
+            height: 14px;
+            fill: $sub;
+        }
+    }
+
+    input {
+        flex: 1;
+        min-width: 0;
+        height: 100%;
+        background: transparent;
+        outline: none;
+        color: $white;
+        caret-color: $primary;
+        font: inherit;
+        font-size: 14px;
+
+        &::placeholder {
+            color: $sub;
+        }
+
+        &::-webkit-search-cancel-button {
+            filter: grayscale(1) brightness(1.6);
+        }
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .body-wrapper {
+        --gutter: 32px;
+    }
+
+    // Заголовок слева, поиск справа в одну строку
+    header {
+        flex-direction: row;
+        align-items: center;
+        gap: 16px;
+
+        .page-controll-wrapper {
+            flex: 1;
+            min-width: 0;
+
+            .page-title-wrapper .page {
+                font-size: 26px;
+            }
+        }
+
+        .page-search-wrapper {
+            flex: none;
+            width: 420px;
+        }
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .body-wrapper {
+        --gutter: 40px;
+    }
+}
+
+@media screen and (min-width: 2200px) {
+    .body-wrapper {
+        --gutter: 56px;
+    }
+
+    header .page-search-wrapper {
+        width: 480px;
+    }
+}
+
+// Боковое меню при повороте телефона — как на остальных страницах
+body[angle="90"],
+body[angle="270"] {
+    @media screen and (max-width: 940px) {
+        &[angle="90"] {
+            padding-left: max(10px, var(--menu-width-safe), var(--sal));
+            padding-right: var(--sar);
+        }
+
+        &[angle="270"] {
+            padding-right: max(10px, var(--menu-width-safe), var(--sar));
+            padding-left: var(--sal);
+        }
+    }
+}
+
+// ---------- чип ----------
+
+.chip {
+    flex: none;
+    height: 34px;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    border: 1px solid $line;
+    background: rgba(255, 255, 255, 0.05);
+    color: $soft;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, transform .12s;
+
+    &:active {
+        transform: scale(.96);
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: $line2;
+        }
+    }
+
+    .c {
+        font-size: 11px;
+        color: $sub;
+    }
+
+    .icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .icon.star {
+        fill: transparent;
+    }
+
+    &.-on {
+        background: $acc-bg;
+        border-color: $acc-line;
+        color: #D3E9FD;
+
+        .c {
+            color: #BFE0FB;
+        }
+
+        .icon.star {
+            fill: currentColor;
+        }
+    }
+
+    &.sm {
+        height: 30px;
+        padding: 0 11px;
+        font-size: 12px;
+    }
+}
+
+// Ряд чипов: на телефоне листается вбок до краёв экрана
+.chips-row {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 0 var(--gutter);
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+// ---------- избранное: звёздочка и кнопка с подписью ----------
+
+.fav-btn {
+    flex: none;
+    width: 38px;
+    height: 38px;
+    margin-right: -4px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: transparent;
+    color: $dim;
+    cursor: pointer;
+    transition: background .15s, color .15s, transform .12s;
+
+    .icon {
+        width: 20px;
+        height: 20px;
+        fill: transparent;
+        transition: fill .15s;
+    }
+
+    &:active {
+        transform: scale(.88);
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background: $elements-bg;
+            color: $soft;
+        }
+    }
+
+    &.-on {
+        color: $gold;
+
+        .icon {
+            fill: $gold;
+        }
+    }
+
+    // С подписью «В избранное / В избранном»
+    &.-pill {
+        width: auto;
+        height: 34px;
+        margin: 0;
+        padding: 0 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        border: 1px solid $line2;
+        background: $elements-bg;
+        color: #E3E6EA;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+
+        .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                background: rgba(255, 255, 255, 0.12);
+                color: $white;
+            }
+        }
+
+        &.-on {
+            border-color: rgba(255, 215, 0, 0.5);
+            background: rgba(255, 215, 0, 0.12);
+            color: #F5E7A8;
+
+            .icon {
+                color: $gold;
+                fill: $gold;
+            }
+        }
+    }
+}
+
+// ---------- загрузка ----------
+
+.sk {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.11) 50%, rgba(255, 255, 255, 0.05) 75%);
+    background-size: 200% 100%;
+    animation: dubs-sk 1.4s linear infinite;
+}
+
+.sk.line {
+    display: block;
+    height: 10px;
+    border-radius: 6px;
+
+    &.w40 { width: 40%; }
+    &.w60 { width: 60%; }
+    &.w80 { width: 80%; }
+}
+
+@keyframes dubs-sk {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sk {
+        animation: none;
+    }
+}
+
+// ---------- пусто / ошибка ----------
+
+.studios-empty {
+    margin-top: 8px;
+    padding: 26px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    border-radius: 22px;
+    border: 1px dashed $line2;
+    background: rgba(255, 255, 255, 0.02);
+
+    b {
+        color: $white;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    p {
+        max-width: 34ch;
+        color: $sub;
+        font-size: 13px;
+        line-height: 1.45;
+    }
+}

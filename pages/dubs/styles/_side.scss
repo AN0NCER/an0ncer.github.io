@@ -1,0 +1,156 @@
+// ПК: левая колонка — карточки «Тип» и «Сортировка».
+// На телефоне её нет: типы — чипы над списком, сортировка — шторка.
+// Пункты сортировки описаны в _sort.scss, здесь — раскладка, карточки и пункты типа.
+
+.side-panel {
+    display: none;
+}
+
+// ---------- пункт типа ----------
+
+.kind-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.kind-item {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    font: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    cursor: pointer;
+    transition: background .2s, border-color .2s, box-shadow .2s, color .2s, transform .12s;
+
+    .icon.star {
+        flex: none;
+        width: 15px;
+        height: 15px;
+        fill: transparent;
+    }
+
+    .label {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .c {
+        flex: none;
+        color: $sub;
+        font-size: 12px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &:active {
+        transform: scale(.98);
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: #FFFFFF;
+        }
+    }
+
+    // Выбранный — та же «пилюля», что у сортировки; число основным цветом
+    &.-on {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12); // мягкая, почти незаметная тень
+        color: #FFFFFF;
+
+        .icon.star {
+            fill: currentColor;
+        }
+
+        .c {
+            color: $primary;
+            font-weight: bold;
+        }
+    }
+}
+
+// ---------- раскладка ПК ----------
+
+@media screen and (min-width: 900px) {
+    .studios-layout {
+        padding: 0 var(--gutter);
+        display: grid;
+        grid-template-columns: 250px minmax(0, 1fr);
+        gap: 24px;
+        align-items: start;
+    }
+
+    main.studios {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    // Две карточки могут не влезть по высоте — колонка едет со страницей
+    // и прилипает, когда показался её низ (без своей прокрутки — см. dubs.sticky.js)
+    .side-panel {
+        @include sticky-side;
+        padding: 14px 0 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .side-card {
+        flex: none;
+        padding: 14px 8px 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        border-radius: 22px;
+        border: 1px solid $line;
+        background: $block;
+
+        .side-title {
+            padding: 0 10px;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        // На фоне карточки пилюля чуть светлее, чем в шторке
+        .sort-item.-on {
+            background: rgba(255, 255, 255, 0.07);
+        }
+    }
+
+    // Типы и сортировка — слева, поэтому над списком на ПК ничего нет:
+    // ни чипов, ни строки «N студий · сортировка» (число и так есть в шапке и у «Тип»).
+    // Открытую шторку при расширении окна закрывает win.sort.js
+    .kind-chips,
+    .studios-toolbar {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .studios-layout {
+        grid-template-columns: 270px minmax(0, 1fr);
+    }
+}
+
+@media screen and (min-width: 2200px) {
+    .studios-layout {
+        grid-template-columns: 300px minmax(0, 1fr);
+        gap: 28px;
+    }
+}

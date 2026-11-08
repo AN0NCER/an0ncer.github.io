@@ -1,0 +1,26 @@
+// Чипы типов и строка «N студий · сортировка» над списком (телефон).
+// Поиск в шапке и сам .chip — общие, в style/dubs/_dubs.base.scss
+
+.kind-chips {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 0 var(--gutter);
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.studios-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    .studios-count {
+        font-variant-numeric: tabular-nums;
+    }
+}
