@@ -1,5 +1,6 @@
 import tmpl from "../../library/tmpl.lib.js";
 import { Kodik } from "../../modules/api.kodik.js";
+import { getTitles } from "../../modules/dubs/api.dubs.js";
 import { $ID, $MOD, Player } from "../watch.js";
 
 let inited = false;
@@ -145,27 +146,55 @@ async function tUpdate() {
             .filter(([k, v]) => !v.has(dubID))
     );
 
-    const promise = [];
+    if (ids.size > 0) {
+        try {
+            await checkByDubApi(ids, dubID);
+        } catch (err) {
+            console.warn(`[mod.chronology] - dub api: ${err.message}`);
+            await checkByKodik(ids, dubID);
+        }
+    }
+
+    // Пока шёл запрос, пользователь мог выбрать другую озвучку
+    if (Player.CTranslation.id !== dubID) return;
+
+    hideLoad();
+    updateDubUi(dubID);
+}
+
+/**
+ * Вся франшиза одним запросом. Озвучка есть на тайтле, если на нём есть этот translation.id,
+ * а с параметром «Ветки озвучек» — любая ветка той же студии (совместные озвучки не считаются).
+ * @param {Map<string, Map<number, boolean>>} ids
+ * @param {number} dubID
+ */
+async function checkByDubApi(ids, dubID) {
+    const { studio, items } = await getTitles([...ids.keys()], dubID);
+    const found = new Map(items.map(item => [String(item.id), item]));
+
+    const accepted = new Set([dubID]);
+    if ($PARAMETERS.watch.dubbranches) {
+        (studio?.members ?? [])
+            .filter(member => member.type !== 'subtitles')
+            .forEach(member => accepted.add(member.id));
+    }
 
     ids.forEach((map, key) => {
-        promise.push(new Promise(async (resolve) => {
-            try {
-                await Kodik.Search({ shikimori_id: key, translation_id: dubID }, ({ results }) => {
-                    if (results <= 0)
-                        map.set(dubID, false);
-                    else
-                        map.set(dubID, true);
-                });
-            } finally {
-                resolve();
-            }
-        }))
+        const branches = found.get(String(key))?.studio?.branches ?? [];
+        map.set(dubID, branches.some(branch => accepted.has(branch.id)));
     });
+}
 
-    Promise.all(promise).then(() => {
-        hideLoad();
-        updateDubUi(dubID);
-    });
+/**
+ * Запасной путь: запрос в Kodik на каждый тайтл.
+ * @param {Map<string, Map<number, boolean>>} ids
+ * @param {number} dubID
+ */
+async function checkByKodik(ids, dubID) {
+    await Promise.all([...ids].map(async ([key, map]) => {
+        const { results } = await Kodik.Search({ shikimori_id: key, translation_id: dubID });
+        if (Array.isArray(results)) map.set(dubID, results.length > 0);
+    }));
 }
 
 function updateDubUi(dubID) {
