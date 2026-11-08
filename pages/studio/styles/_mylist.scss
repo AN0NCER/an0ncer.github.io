@@ -1,0 +1,49 @@
+// Список пользователя на странице студии (modules/mod.mylist.js):
+// значок статуса в левом нижнем углу постеров и чип «Мои».
+// Цвета статусов: смотрю — основной синий, просмотрено — зелёный, в планах — голубой,
+// отложено — золотой, брошено — красный (как «брошено» в состояниях озвучки).
+
+@mixin ml-colors($prop) {
+    &.-watching { #{$prop}: $primary; }
+    &.-completed { #{$prop}: #4FD18F; }
+    &.-planned { #{$prop}: $acc3; }
+    &.-on_hold { #{$prop}: $gold; }
+    &.-dropped { #{$prop}: #FF8A80; }
+}
+
+.badge.-bl {
+    left: 8px;
+    bottom: 8px;
+}
+
+.u-mark {
+    padding: 0 6px;
+    gap: 3px;
+    @include ml-colors(color);
+
+    .icon {
+        width: 12px;
+        height: 12px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    span {
+        color: $white;
+        font-size: 11px;
+        font-weight: 800;
+    }
+}
+
+// Чип «Мои» — с закладкой
+.chip.-mine .icon {
+    width: 13px;
+    height: 13px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.4;
+    stroke-linejoin: round;
+}

@@ -1,0 +1,257 @@
+// Раскладка страницы студии и общие куски её блоков.
+//
+// Телефон: колонки .profile и .studio-main «растворяются» (display: contents),
+// и все блоки встают одной лентой в порядке data-o:
+//   шапка студии → цифры → состояния → ветки → новые серии → тайтлы → лучшие → жанры → годы → тип.
+// ПК: слева липкий профиль, справа состояния, новые серии и тайтлы.
+
+.studio-layout {
+    padding: 14px var(--gutter) 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.profile,
+.studio-main {
+    display: contents;
+}
+
+@for $i from 1 through 10 {
+    [data-o="#{$i}"] {
+        order: $i;
+    }
+}
+
+// Студию не нашли / сеть — сообщение вместо всей страницы
+.page-state {
+    margin-top: 20px;
+
+    .chip {
+        margin-top: 4px;
+    }
+}
+
+// ---------- шапка страницы: кнопка «Поделиться» ----------
+
+header .page-controll-wrapper .share-btn {
+    transition: background .2s, color .2s;
+
+    .icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    &.-done {
+        background: $acc-bg;
+        color: $primary;
+    }
+}
+
+// ---------- общие куски блоков ----------
+
+// Блок без данных скрыт атрибутом hidden — свой display его не перебивает
+[hidden] {
+    display: none !important;
+}
+
+.s-card {
+    @include card;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.s-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    min-width: 0;
+}
+
+.s-title {
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+// Иконка-обводка (svg с path без своих атрибутов)
+.icon.stroke {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+// Значок состояния озвучки: цвет приходит из --st
+.st {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+    color: var(--st);
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    // В узкой плитке подпись обрезается, а не наезжает на числа
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .icon {
+        flex: none;
+        width: 13px;
+        height: 13px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+}
+
+// Полоска «вышло / озвучено»
+.pbar {
+    position: relative;
+    display: block;
+    height: 6px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+
+    .air,
+    .dub {
+        position: absolute;
+        inset: 0 auto 0 0;
+        border-radius: 99px;
+    }
+
+    .air {
+        background: rgba(255, 255, 255, 0.16);
+    }
+
+    .dub.-grad {
+        background: linear-gradient(90deg, $primary, $acc3);
+    }
+}
+
+// «≈ оценка» у приблизительных цифр
+.est {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+    padding: 0 7px;
+    border-radius: 999px;
+    border: 1px dashed rgba(255, 215, 0, 0.5);
+    color: #FFE35C;
+    font-size: 10.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: help;
+}
+
+.tag {
+    flex: none;
+    height: 24px;
+    padding: 0 9px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: $soft;
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+// Подписи на картинках
+.badge {
+    position: absolute;
+    z-index: 1;
+    height: 22px;
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 999px;
+    background: rgba(16, 19, 24, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: $white;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+
+    &.-tl {
+        top: 6px;
+        left: 6px;
+    }
+
+    &.-tr {
+        top: 6px;
+        right: 6px;
+    }
+
+    &.-gold {
+        background: $gold;
+        color: #1A1600;
+    }
+}
+
+// ---------- ПК ----------
+
+@media screen and (min-width: 900px) {
+    .studio-layout {
+        padding-top: 0;
+        display: grid;
+        grid-template-columns: 320px minmax(0, 1fr);
+        gap: 24px;
+        align-items: start;
+    }
+
+    // Профиль едет со страницей и прилипает, когда показался его низ
+    // (без своей прокрутки и обрезки карточек — см. dubs.sticky.js)
+    .profile {
+        @include sticky-side;
+        padding: 14px 0 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .studio-main {
+        min-width: 0;
+        padding: 14px 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .page-state {
+        grid-column: 1 / -1;
+    }
+}
+
+// Ширины как у каталога: FHD и QHD
+@media screen and (min-width: 1280px) {
+    .body-wrapper {
+        max-width: 1560px;
+    }
+
+    .studio-layout {
+        grid-template-columns: 340px minmax(0, 1fr);
+    }
+}
+
+@media screen and (min-width: 2200px) {
+    .body-wrapper {
+        max-width: 2040px;
+    }
+
+    .studio-layout {
+        grid-template-columns: 380px minmax(0, 1fr);
+        gap: 28px;
+    }
+}

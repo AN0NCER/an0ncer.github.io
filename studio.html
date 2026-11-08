@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="page" content="studio">
+    <title>Tunime - Студия озвучки</title>
+    <link rel="icon" type="image/png" href="/images/icon-web.png" />
+    <link rel="preload" as="style" href="/style/css/main.css">
+    <link rel="preload" as="style" href="/pages/studio/styles/css/studio.css">
+    <link rel="stylesheet" href="/style/css/main.css">
+    <link rel="stylesheet" href="/pages/studio/styles/css/studio.css">
+    <link rel="stylesheet" href="/style/menu/css/menu.core.css">
+    <link rel="stylesheet" href="/style/css/ticons.css">
+    <link rel="manifest" href="/images/icons/manifest-o.json">
+    <link rel="preload" href="/style/fonts/Manrope.ttf" as="font" type="font/woff2" crossorigin>
+</head>
+
+<body class="unselectable" data-page="studio" angle="0">
+    <div class="body-wrapper">
+        <header>
+            <div class="page-controll-wrapper">
+                <div class="btn back-btn" role="button" tabindex="0" aria-label="Назад">
+                    <svg class="icon" viewBox="0 0 640 640" aria-hidden="true">
+                        <use href="#i-angle-left"></use>
+                    </svg>
+                </div>
+                <span class="page-title-wrapper">
+                    <span class="page">Студия озвучки</span>
+                    <span class="sub head-sub">Загрузка…</span>
+                </span>
+                <div class="btn share-btn" role="button" tabindex="0" aria-label="Поделиться ссылкой" title="Поделиться">
+                    <svg class="icon stroke" viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="#i-link"></use>
+                    </svg>
+                </div>
+            </div>
+        </header>
+
+        <!--
+            На ПК: слева липкий профиль студии, справа состояния, новые серии и все тайтлы.
+            На телефоне обе колонки «растворяются» (display: contents), и блоки
+            встают одной лентой в порядке data-o (см. _layout.scss).
+        -->
+        <div class="studio-layout">
+            <aside class="profile scroll-none">
+                <section class="s-card hero" data-o="1"></section>
+                <section class="kpis" data-o="2" aria-label="Цифры студии"></section>
+                <section class="s-card branches" data-o="4" hidden></section>
+                <section class="s-card genres" data-o="8" hidden></section>
+                <section class="s-card years" data-o="9" hidden></section>
+                <section class="s-card kinds" data-o="10" hidden></section>
+            </aside>
+
+            <main class="studio-main">
+                <section class="s-card states" data-o="3"></section>
+                <section class="fresh" data-o="5" hidden>
+                    <div class="s-head">
+                        <span class="s-title">Свежие серии</span>
+                        <span class="sub">недавно вышли в озвучке студии</span>
+                    </div>
+                    <div class="fresh-rail scroll-none"></div>
+                </section>
+                <section class="titles" data-o="6" id="titles">
+                    <div class="s-head">
+                        <span class="s-title">Все тайтлы</span>
+                        <span class="sub titles-count"></span>
+                    </div>
+                    <div class="titles-controls">
+                        <div class="titles-search-row">
+                            <div class="page-search-wrapper titles-search">
+                                <div class="icon-wrapper">
+                                    <svg class="icon" viewBox="0 0 10 10" aria-hidden="true">
+                                        <use href="#i-ios-search"></use>
+                                    </svg>
+                                </div>
+                                <input type="search" id="title-search" placeholder="Найти аниме в озвучке" autocomplete="off" enterkeyhint="search">
+                            </div>
+                            <button type="button" class="genres-btn" aria-haspopup="dialog" aria-label="Жанры и темы" title="Жанры и темы">
+                                <svg class="icon stroke" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M4 7h10M18 7h2M4 17h4M12 17h8M16 5v4M10 15v4"></path>
+                                </svg>
+                                <span class="genres-count" hidden></span>
+                            </button>
+                        </div>
+                        <div class="chips-row title-filters" role="group" aria-label="Состояние"></div>
+                        <div class="chips-row title-sorts" role="group" aria-label="Сортировка"></div>
+                    </div>
+                    <div class="title-grid" aria-live="polite"></div>
+                    <div class="title-grid-sentinel"></div>
+                </section>
+                <section class="s-card top" data-o="7" hidden></section>
+            </main>
+        </div>
+    </div>
+    <div id="app-menu-host"></div>
+
+    <!-- Окно «Жанры и темы»: содержимое собирает pages/studio/windows/win.genres.js -->
+    <span class="windowed window-genres unselectable hide">
+        <span class="hide-window"></span>
+        <span class="window-content scroll-none hide">
+            <span class="content-wrapper">
+                <div class="window-bar">
+                    <div class="window-title">Жанры и темы</div>
+                    <!-- ПК: поиск, легенда и действия — в шапке окна.
+                         На телефоне скрыты: там поиск и кнопки в нижней панели -->
+                    <label class="genres-desk-search desk-only">
+                        <svg class="icon" viewBox="0 0 10 10" aria-hidden="true">
+                            <use href="#i-ios-search"></use>
+                        </svg>
+                        <input type="search" class="genres-desk-input" placeholder="Найти жанр" autocomplete="off" aria-label="Найти жанр">
+                    </label>
+                    <span class="genres-desk-legend desk-only"><b class="in">+</b> есть <b class="out">−</b> нет</span>
+                    <button type="button" class="desk-btn genres-reset -desk desk-only">Сбросить</button>
+                    <button type="button" class="desk-btn -primary genres-apply desk-only">Готово</button>
+                    <div class="win-bar-btn window-close" role="button" tabindex="0" aria-label="Закрыть">
+                        <svg class="icon" viewBox="0 0 640 640" aria-hidden="true">
+                            <use href="#i-xmark"></use>
+                        </svg>
+                    </div>
+                </div>
+                <div class="genres-body"></div>
+                <!-- ПК: выбранное внизу окна — чипами, крестик снимает -->
+                <div class="genres-deskfoot desk-only"><span class="genres-picked-foot"></span></div>
+                <!-- Нижняя панель действий — как в окнах коллекций (templates/collections/win.*.tpl) -->
+                <div class="win-actions-wrapper">
+                    <!-- Быстрый переход к разделам окна — переключатель как «Все / Публичные / Приватные»
+                         в коллекциях (подсветка едет пружиной). Пункты собирает win.genres.js -->
+                    <nav class="win-jumps" aria-label="Разделы фильтра" hidden>
+                        <div class="bg-selector">
+                            <div class="selector"></div>
+                        </div>
+                        <div class="jump-items"></div>
+                    </nav>
+                    <!-- Поиск сложен в кнопку-лупу и разъезжается на всю панель — как в окнах коллекций -->
+                    <div class="win-actions">
+                        <div class="search-wrapper">
+                            <button type="button" class="btn-action a-fill filter-close" aria-label="Закрыть поиск">
+                                <svg class="icon" viewBox="0 0 640 640" aria-hidden="true">
+                                    <use href="#i-xmark"></use>
+                                </svg>
+                            </button>
+                            <input type="search" class="genres-search-input" placeholder="Найти жанр: «исэкай», «школа»…" autocomplete="off" enterkeyhint="search">
+                        </div>
+                        <div class="default-wrapper">
+                            <button type="button" class="btn-action a-fill filter-action" aria-label="Найти жанр">
+                                <svg class="icon" viewBox="0 0 10 10" aria-hidden="true">
+                                    <use href="#i-ios-search"></use>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn-action a-fill a-text a-tt genres-reset" hidden>Сбросить</button>
+                            <button type="button" class="btn-action a-text a-tt a-primary genres-apply">Готово</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="safe-area-actions"></div>
+            </span>
+        </span>
+    </span>
+    <footer style="visibility: hidden;">
+        <template id="tpl-menu-default">
+            <div class="app-menu-context -hide">
+                <div class="context-close-area"></div>
+                <div class="context-wrapper">
+                    <div class="context-controls -hide"></div>
+                </div>
+            </div>
+            <div class="app-menu unselectable">
+                <div class="menu-wrapper">
+                    <div class="menu-controls">
+                        <div class="menu-btn" data-id="index">
+                            <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                                <use href="#i-home"></use>
+                            </svg>
+                        </div>
+                        <div class="menu-btn" data-id="search">
+                            <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                                <use href="#i-search"></use>
+                            </svg>
+                        </div>
+                        <div class="menu-btn primary" data-id="play">
+                            <svg class="menu-icon" viewBox="0 0 640 640" aria-hidden="true">
+                                <use href="#i-play"></use>
+                            </svg>
+                        </div>
+                        <div class="menu-btn" data-id="list">
+                            <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                                <use href="#i-list"></use>
+                            </svg>
+                        </div>
+                        <div class="menu-btn" data-id="user">
+                            <svg class="menu-icon" viewBox="0 0 512 512" aria-hidden="true">
+                                <use href="#i-user"></use>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <svg xmlns="http://www.w3.org/2000/svg" style="width:0;height:0;overflow:hidden;">
+            <defs>
+                <linearGradient id="menu-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#51B1FE" />
+                    <stop offset="100%" stop-color="#2774DB" />
+                </linearGradient>
+            </defs>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="i-home" viewBox="0 0 512 512">
+                <path
+                    d="M302.8,54.3l133,115c21.5,18.6,33.9,37,33.9,65.4v187.2c0,29.4-23.9,53.3-53.3,53.3h-75.2 c-23.1,0-41.8-18.7-41.8-41.8v-73.5c0-23.9-19.4-43.3-43.3-43.3h0h0h0c-23.9,0-43.3,19.4-43.3,43.3v73.5 c0,23.1-18.7,41.8-41.8,41.8H95.6c-29.4,0-53.3-23.9-53.3-53.3V234.6c0-28.4,12.4-46.8,33.9-65.4l133-115 C236.1,31.1,275.9,31.1,302.8,54.3z" />
+            </symbol>
+            <symbol id="i-search" viewBox="0 0 512 512">
+                <path
+                    d="M213.333 42.6667C168.07 42.6667 124.66 60.6476 92.6539 92.6538C60.6477 124.66 42.6667 168.07 42.6667 213.333C42.6667 258.597 60.6477 302.007 92.6539 334.013C124.66 366.019 168.07 384 213.333 384C258.597 384 302.007 366.019 334.013 334.013C366.019 302.007 384 258.597 384 213.333C384 168.07 366.019 124.66 334.013 92.6538C302.007 60.6476 258.597 42.6667 213.333 42.6667Z M463.083 463.083C459.082 467.082 453.657 469.329 448 469.329C442.343 469.329 436.918 467.082 432.917 463.083L358.251 388.416C354.365 384.392 352.214 379.004 352.263 373.41C352.312 367.817 354.555 362.466 358.511 358.511C362.466 354.555 367.817 352.312 373.41 352.263C379.004 352.214 384.393 354.365 388.416 358.251L463.083 432.917C467.082 436.918 469.329 442.343 469.329 448C469.329 453.657 467.082 459.082 463.083 463.083Z" />
+            </symbol>
+            <symbol id="i-play" viewBox="0 0 640 640">
+                <path
+                    d="M187.2 100.9C174.8 94.1 159.8 94.4 147.6 101.6C135.4 108.8 128 121.9 128 136L128 504C128 518.1 135.5 531.2 147.6 538.4C159.7 545.6 174.8 545.9 187.2 539.1L523.2 355.1C536 348.1 544 334.6 544 320C544 305.4 536 291.9 523.2 284.9L187.2 100.9z" />
+            </symbol>
+            <symbol id="i-list" viewBox="0 0 512 512">
+                <path
+                    d="M298.667 42.6667C326.957 42.6667 354.088 53.9047 374.091 73.9086C394.095 93.9125 405.333 121.044 405.333 149.333V448C405.334 451.862 404.286 455.652 402.301 458.966C400.317 462.279 397.47 464.991 394.064 466.813C390.659 468.635 386.823 469.499 382.965 469.311C379.107 469.124 375.373 467.893 372.16 465.749L256 388.309L139.861 465.749C136.817 467.787 133.299 469.006 129.647 469.289C125.995 469.573 122.331 468.911 119.009 467.368C115.686 465.825 112.817 463.452 110.678 460.478C108.539 457.504 107.202 454.03 106.795 450.389L106.667 448V149.333C106.667 121.044 117.905 93.9125 137.909 73.9086C157.913 53.9047 185.044 42.6667 213.333 42.6667H298.667Z" />
+            </symbol>
+            <symbol id="i-user" viewBox="0 0 512 512">
+                <path
+                    d="M256 85.5C233.368 85.5 211.663 94.508 195.66 110.542C179.657 126.577 170.667 148.324 170.667 171C170.667 193.676 179.657 215.423 195.66 231.458C211.663 247.492 233.368 256.5 256 256.5C278.632 256.5 300.337 247.492 316.34 231.458C332.343 215.423 341.333 193.676 341.333 171C341.333 148.324 332.343 126.577 316.34 110.542C300.337 94.508 278.632 85.5 256 85.5ZM213.333 277.875C190.702 277.875 168.997 286.883 152.994 302.917C136.99 318.952 128 340.699 128 363.375V384.75C128 396.088 132.495 406.962 140.497 414.979C148.498 422.996 159.351 427.5 170.667 427.5H341.333C352.649 427.5 363.502 422.996 371.503 414.979C379.505 406.962 384 396.088 384 384.75V363.375C384 340.699 375.01 318.952 359.006 302.917C343.003 286.883 321.298 277.875 298.667 277.875H213.333Z" />
+            </symbol>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="i-angle-left" viewBox="0 0 640 640">
+                <path
+                    d="M201.4 297.4C188.9 309.9 188.9 330.2 201.4 342.7L361.4 502.7C373.9 515.2 394.2 515.2 406.7 502.7C419.2 490.2 419.2 469.9 406.7 457.4L269.3 320L406.6 182.6C419.1 170.1 419.1 149.8 406.6 137.3C394.1 124.8 373.8 124.8 361.3 137.3L201.3 297.3z" />
+            </symbol>
+            <symbol id="i-ios-search" viewBox="0 0 10 10">
+                <path
+                    d="M8 4C8 6.20914 6.20914 8 4 8C1.79086 8 0 6.20914 0 4C0 1.79086 1.79086 0 4 0C6.20914 0 8 1.79086 8 4ZM1.25895 4C1.25895 5.51384 2.48616 6.74105 4 6.74105C5.51384 6.74105 6.74105 5.51384 6.74105 4C6.74105 2.48616 5.51384 1.25895 4 1.25895C2.48616 1.25895 1.25895 2.48616 1.25895 4Z"
+                    fill="white" />
+                <rect x="6.85144" y="5.7688" width="4.11406" height="1.63503" rx="0.817516"
+                    transform="rotate(45 6.85144 5.7688)" fill="white" />
+            </symbol>
+            <symbol id="i-xmark" viewBox="0 0 640 640">
+                <path
+                    d="M183.1 137.4C170.6 124.9 150.3 124.9 137.8 137.4C125.3 149.9 125.3 170.2 137.8 182.7L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7L320.5 365.3L457.9 502.6C470.4 515.1 490.7 515.1 503.2 502.6C515.7 490.1 515.7 469.8 503.2 457.3L365.8 320L503.1 182.6C515.6 170.1 515.6 149.8 503.1 137.3C490.6 124.8 470.3 124.8 457.8 137.3L320.5 274.7L183.1 137.4z" />
+            </symbol>
+            <symbol id="i-sort" viewBox="0 0 24 24">
+                <path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-star" viewBox="0 0 24 24">
+                <path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" stroke="currentColor"
+                    stroke-width="2" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-link" viewBox="0 0 24 24">
+                <path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1" fill="none"
+                    stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-chevron-down" viewBox="0 0 24 24">
+                <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-layers" viewBox="0 0 24 24">
+                <path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-check" viewBox="0 0 24 24">
+                <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+        </svg>
+    </footer>
+    <script src="/javascript/library/jqery.min.js"></script>
+    <script src="/javascript/services/dispatcher.js" type="module"></script>
+    <script src="/javascript/parametrs.js"></script>
+    <script src="/javascript/core/pwa.core.js" type="module"></script>
+    <script src="/pages/studio/studio.js" type="module"></script>
+</body>
+
+</html>

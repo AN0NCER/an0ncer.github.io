@@ -1,0 +1,13 @@
+// Страница студии озвучки (studio.html).
+// Общая основа с каталогом — в style/dubs/ (переменные, шапка, поиск, чипы, избранное, заглушки).
+
+@import '../../../style/dubs/dubs.vars';
+@import '../../../style/dubs/dubs.base';
+
+@import '../../../style/windowed';
+
+@import './layout';
+@import './profile';
+@import './titles';
+@import './genres';
+@import './mylist';

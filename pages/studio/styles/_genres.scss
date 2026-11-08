@@ -1,0 +1,1318 @@
+// Фильтр по жанрам: кнопка «Жанры» у поиска тайтлов и окно «Жанры и темы».
+// Окно — общий .windowed приложения (style/_windowed.scss), содержимое — windows/win.genres.js.
+// «Есть» — зелёный, «нет» — красный: те же цвета, что у состояний «полностью» и «брошено».
+
+$g-in: #4FD18F;
+$g-in-soft: #8FE6B8;
+$g-out: #FF8A80;
+$g-out-soft: #FFB3AC;
+
+// <b> в общих стилях сайта может быть блочным — здесь это знак внутри строки
+b.in,
+b.out {
+    display: inline;
+}
+
+b.in {
+    color: $g-in;
+}
+
+b.out {
+    color: $g-out;
+}
+
+// ---------- кнопка «Жанры» рядом с поиском ----------
+
+.titles-search-row {
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+
+    .page-search-wrapper {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+// Только значок (и «+2 −1», когда жанры выбраны): без выбора — круглая кнопка 44×44
+.genres-btn {
+    flex: none;
+    height: 44px;
+    min-width: 44px;
+    padding: 0 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.07);
+    color: $soft;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s, transform .12s;
+
+    .icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .genres-count {
+        height: 20px;
+        padding: 0 7px;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        background: $primary;
+        color: #FFFFFF;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    &:active {
+        transform: scale(.96);
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background: rgba(255, 255, 255, 0.11);
+            color: $white;
+        }
+    }
+
+    &.-on {
+        background: $acc-bg;
+        border-color: $acc-line;
+        color: #D3E9FD;
+    }
+}
+
+// ---------- окно ----------
+
+.window-genres {
+    // Поиск, легенда и кнопки в шапке, итог внизу — только на ПК (см. ниже «Окно на ПК»)
+    .desk-only {
+        display: none !important;
+    }
+
+    // Прокручивается содержимое, а не сама панель окна: тогда нижняя панель действий
+    // (position: fixed внутри сдвинутого transform-ом окна) стоит на месте — как в коллекциях
+    .window-content {
+        max-height: calc(100dvh - max(var(--sat), 20px) - 12px);
+        overflow: hidden;
+
+        .content-wrapper {
+            max-height: inherit;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            scrollbar-width: none;
+            padding: 0 !important;
+            gap: 0 !important;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            // Колонка с ограниченной высотой сжимала детей: отступ под плавающими
+            // панелями становился 0 px, и низ списка оставался под ними
+            > * {
+                flex-shrink: 0;
+            }
+        }
+    }
+
+    // Шапка окна прилипает к верху, пока листаешь жанры
+    .window-bar {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        padding: 10px max(var(--sar), 20px) 8px max(var(--sal), 20px);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: $bg;
+
+        .window-title {
+            flex: 1;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .window-close {
+            width: 40px;
+            height: 40px;
+            margin-right: -12px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+
+            .icon {
+                width: 16px;
+                height: 16px;
+                fill: #D6D6D6;
+            }
+        }
+    }
+}
+
+.genres-body {
+    padding: 2px max(var(--sar), 20px) 14px max(var(--sal), 20px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.genres-loading {
+    padding: 10px 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+// ---------- выбранное и пояснение ----------
+
+.genres-summary[hidden] {
+    display: none;
+}
+
+.genres-summary {
+    @include card(12px);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    p {
+        font-size: 12.5px;
+        line-height: 1.45;
+    }
+}
+
+.g-picked-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.g-picked {
+    height: 30px;
+    padding: 0 9px 0 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    border: 1px solid;
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+
+    .mark {
+        width: 20px;
+        height: 20px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        color: #101318;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .x {
+        opacity: .7;
+        font-size: 15px;
+    }
+
+    &.-in {
+        border-color: rgba(79, 209, 143, 0.45);
+        background: rgba(79, 209, 143, 0.12);
+        color: $g-in-soft;
+
+        .mark {
+            background: $g-in;
+        }
+    }
+
+    &.-out {
+        border-color: rgba(255, 138, 128, 0.45);
+        background: rgba(255, 138, 128, 0.12);
+        color: $g-out-soft;
+
+        .mark {
+            background: $g-out;
+        }
+    }
+}
+
+.genres-jump {
+    display: flex;
+    flex-wrap: wrap; // четыре перехода + легенда не влезают в узкий телефон
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 10px;
+
+    .jump-chips {
+        display: flex;
+        gap: 6px;
+    }
+
+    // Не .legend — так называется легенда полосы состояний (сетка в 2 колонки)
+    .genres-legend {
+        flex: none;
+        color: $sub;
+        font-size: 12px;
+        white-space: nowrap;
+
+        b {
+            margin-left: 6px;
+        }
+    }
+}
+
+// ---------- группы ----------
+
+.genres-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.g-section {
+    scroll-margin-top: 64px; // под прилипшую шапку окна
+}
+
+.g-head {
+    padding: 0 2px 8px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+
+    .g-title {
+        color: $sub;
+        font-size: 11.5px;
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+    }
+
+    .sub {
+        font-size: 11px;
+    }
+}
+
+// Аудитория — плитками
+// Все плитки (5 аудиторий, 6 рейтингов) в один ряд даже на узком телефоне
+.g-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+    gap: 6px;
+}
+
+.g-tile {
+    min-width: 0;
+    height: 58px;
+    padding: 0 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    border-radius: 14px;
+    border: 1px solid $line;
+    background: $block;
+    font: inherit;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, transform .12s;
+
+    b {
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: $white;
+        font-size: 12.5px;
+        font-weight: 700;
+    }
+
+    span {
+        color: $sub;
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &:active {
+        transform: scale(.96);
+    }
+
+    &.-in {
+        border-color: rgba(79, 209, 143, 0.55);
+        background: rgba(79, 209, 143, 0.12);
+
+        span {
+            color: $g-in-soft;
+        }
+    }
+
+    &.-out {
+        border-color: rgba(255, 138, 128, 0.55);
+        background: rgba(255, 138, 128, 0.12);
+
+        span {
+            color: $g-out-soft;
+        }
+    }
+}
+
+.g-tip {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+}
+
+// Обозначение рейтинга (G, PG-13, R-17…) — жёлтый контурный значок-пилюля
+.age-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 22px;
+    padding: 0 8px;
+    border: 1.5px solid $gold;
+    border-radius: 999px;
+    color: $gold;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: .01em;
+    white-space: nowrap;
+}
+
+// Возрастной рейтинг — чипы в три колонки: значок, число + расшифровка, кружок в углу.
+// Как у аудитории: «+ есть» — зелёный с «+», «− нет» — красный с «−»
+.g-ages {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.g-age {
+    position: relative;
+    min-width: 0;
+    min-height: 56px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    border-radius: 14px;
+    border: 1px solid $line;
+    background: $block;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, transform .12s;
+
+    // Название аудитории — вместо значка рейтинга
+    .nm {
+        padding-right: 20px; // место под кружок
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: $white;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 22px;
+        margin-bottom: 3px;
+    }
+
+    // Значок рейтинга — слева сверху, справа от него кружок-галочка
+    .age-badge {
+        align-self: flex-start;
+        max-width: calc(100% - 20px);
+        margin-bottom: 3px;
+    }
+
+    .hint {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: $sub;
+        font-size: 11px;
+
+        .c {
+            color: $soft;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    // Кружок в углу: пустой, «+» или «−»
+    .mark {
+        position: absolute;
+        top: 9px;
+        right: 9px;
+        width: 18px;
+        height: 18px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        border: 1.5px solid rgba(255, 255, 255, 0.22);
+        color: #FFFFFF;
+        font-size: 13px;
+        font-weight: 800;
+        line-height: 1;
+        transition: background .15s, border-color .15s;
+    }
+
+    &:active {
+        transform: scale(.96);
+    }
+
+    &.-in {
+        border-color: rgba(79, 209, 143, 0.55);
+        background: rgba(79, 209, 143, 0.12);
+
+        .hint,
+        .hint .c {
+            color: $g-in-soft;
+        }
+
+        .mark {
+            border-color: #2A9A5F;
+            background: #2A9A5F;
+        }
+    }
+
+    &.-out {
+        border-color: rgba(255, 138, 128, 0.55);
+        background: rgba(255, 138, 128, 0.12);
+
+        .hint,
+        .hint .c {
+            color: $g-out-soft;
+        }
+
+        .mark {
+            border-color: #C2412F;
+            background: #C2412F;
+        }
+
+        .age-badge {
+            opacity: .6;
+        }
+    }
+}
+
+// Остальные группы — строками с «+» и «−»
+.g-rows {
+    @include card(4px 6px);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+.g-row {
+    min-height: 46px;
+    padding: 6px 4px 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: background .15s;
+
+    &:first-child {
+        border-top-color: transparent;
+    }
+
+    .g-name {
+        min-width: 0;
+        color: $white;
+        font-size: 14px;
+        font-weight: 600;
+
+        .c {
+            margin-left: 4px;
+            color: $sub;
+            font-size: 11.5px;
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    &.-in {
+        background: rgba(79, 209, 143, 0.08);
+    }
+
+    &.-out {
+        background: rgba(255, 138, 128, 0.08);
+    }
+}
+
+.g-btns {
+    flex: none;
+    display: flex;
+    gap: 6px;
+}
+
+.g-btn {
+    width: 38px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: $soft;
+    font: inherit;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .15s, color .15s, transform .12s;
+
+    &:active {
+        transform: scale(.92);
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background: rgba(255, 255, 255, 0.11);
+            color: $white;
+        }
+    }
+
+    &.-in[aria-pressed="true"] {
+        background: $g-in;
+        color: #0F2A1D;
+    }
+
+    &.-out[aria-pressed="true"] {
+        background: $g-out;
+        color: #3A0F0B;
+    }
+}
+
+.g-more {
+    height: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: transparent;
+    color: $primary;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+// ---------- нижняя панель действий ----------
+// Как в окнах коллекций: style/win/collections/win.editor.scss → Action() и .btn-action
+// (a-fill — тёмная, a-text / a-tt — подпись заглавными, a-primary — основная синяя)
+
+.window-genres {
+    // Кривая пружины для сворачивания поиска — та же, что в окнах коллекций
+    --ease: linear(0, 0.0145, 0.0538, 0.1126, 0.1854, 0.2678, 0.3557, 0.4457, 0.5348, 0.6207, 0.7017, 0.7762, 0.8435, 0.9029, 0.9543, 0.9976, 1.0331, 1.0612, 1.0825, 1.0976, 1.1072, 1.1121, 1.113, 1.1105, 1.1054, 1.0983, 1.0897, 1.0802, 1.0702, 1.06, 1.05, 1.0404, 1.0314, 1.0232, 1.0158, 1.0093, 1.0038, 0.9991, 0.9953, 0.9924, 0.9902, 0.9886, 0.9877, 0.9873, 0.9873, 0.9876, 0.9883, 0.9891, 0.9901, 0.9912, 0.9924, 0.9935, 0.9946, 0.9957, 0.9967, 0.9976, 0.9984, 0.9991, 0.9997, 1.0002, 1.0006, 1.0009, 1.0012, 1.0013, 1.0014, 1.0014, 1.0014, 1.0014, 1.0013, 1.0012, 1.0011, 1.001, 1.0008, 1.0007, 1.0006, 1.0005, 1.0003, 1.0002, 1.0002, 1.0001, 1, 1, 0.9999, 0.9999, 0.9999, 0.9998, 0.9998, 0.9998, 0.9998, 0.9998, 0.9999, 0.9999, 0.9999, 0.9999, 0.9999, 0.9999, 0.9999, 1, 1, 1, 1);
+
+    // Отступ под обе плавающие панели (переходы 50 × .78 + зазор 6 + действия 52)
+    .safe-area-actions {
+        margin: max(calc(var(--sab) - 5px), 15px) max(var(--sar), 20px) max(calc(var(--sab) - 5px), 15px) max(var(--sal), 20px);
+        height: 97px;
+        pointer-events: none;
+    }
+
+    .win-actions-wrapper {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 20;
+        margin: 0 max(var(--sar), 20px) max(calc(var(--sab) - 5px), 15px) max(var(--sal), 20px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        pointer-events: none;
+    }
+
+    // Плавающий быстрый переход над панелью действий — переключатель как
+    // «Все / Публичные / Приватные» в коллекциях (style/collections/_filter.scss →
+    // .collection-filter): подсветка .selector едет пружиной (modules/mod.slider.js)
+    .win-jumps {
+        position: relative;
+        max-width: 100%;
+        padding: 5px;
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        color: #FFFFFF;
+        pointer-events: all;
+
+        // В покое — компактнее (меньше закрывает список), от касания разворачивается
+        // пружиной (класс -big ставит win.genres.js). Низ прижат к панели действий
+        transform: scale(.78);
+        transform-origin: 50% 100%;
+        transition: transform .5s var(--ease, ease-out);
+
+        &.-big {
+            transform: scale(1);
+        }
+
+        .bg-selector {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+
+            .selector {
+                position: absolute;
+                top: 5px;
+                bottom: 5px;
+                left: 5px;
+                right: 5px;
+                border: .2px solid rgba(255, 255, 255, .2);
+                border-radius: 30px;
+                background: #191C21;
+                box-shadow: 0 4px 4px 1px rgba(0, 0, 0, .25);
+                will-change: left, right;
+            }
+        }
+
+        .jump-items {
+            position: relative;
+            z-index: 2;
+            display: flex;
+        }
+
+        .item {
+            height: 40px;
+            padding: 0 12px;
+            display: grid;
+            place-items: center;
+            background: transparent;
+            color: #FFFFFF;
+            font: inherit;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+            opacity: .55;
+            cursor: pointer;
+            transition: opacity .2s;
+
+            &.-select {
+                opacity: 1;
+            }
+        }
+    }
+
+    .win-actions {
+        position: relative;
+        max-width: 450px;
+        padding: 5px;
+        display: flex;
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        pointer-events: all;
+        overflow: hidden;
+        will-change: width;
+
+        > div {
+            width: 100%;
+            display: flex;
+            gap: 5px;
+        }
+
+        .default-wrapper {
+            transition: .84s var(--ease, ease-in-out);
+        }
+
+        // Поиск: лупа разъезжается в строку на всю панель (win.genres.js → createSearch)
+        .search-wrapper {
+            position: absolute;
+            inset: 0;
+            padding: 5px 50px 5px 5px; // справа остаётся видна лупа
+            transform: translateX(-100%);
+            transition: .84s var(--ease, ease-in-out);
+            pointer-events: none;
+
+            input {
+                flex: 1;
+                min-width: 0;
+                height: 40px;
+                padding: 0 15px;
+                border-radius: 20px;
+                border: 0.2px solid rgba(255, 255, 255, 0.2);
+                background: #191C21;
+                box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.25);
+                outline: none;
+                color: #FFFFFF;
+                caret-color: $primary;
+                font: inherit;
+                font-size: 14px;
+                transition: .3s ease-in-out;
+
+                &:focus {
+                    border-color: #2394F1;
+                }
+
+                &::placeholder {
+                    color: rgba(255, 255, 255, 0.5);
+                }
+
+                &::-webkit-search-cancel-button {
+                    display: none;
+                }
+            }
+        }
+
+        &.-filter-mode {
+            .default-wrapper {
+                transform: translateX(calc(100% - 40px));
+            }
+
+            .search-wrapper {
+                transform: translateX(0%);
+                pointer-events: all;
+            }
+        }
+
+        .filter-action .icon {
+            height: 15px;
+            width: 15px;
+            fill: #FFFFFF;
+        }
+
+        .filter-close .icon {
+            height: 14px;
+            width: 14px;
+            fill: #FFFFFF;
+        }
+    }
+
+    .btn-action {
+        min-width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 30px;
+        background: transparent;
+        color: #FFFFFF;
+        font: inherit;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: opacity .3s, filter .15s;
+
+        &.a-fill {
+            border: 0.2px solid rgba(255, 255, 255, 0.2);
+            background: #191C21;
+            box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.25);
+        }
+
+        &.a-text {
+            padding: 0 15px;
+            font-size: 12px;
+        }
+
+        &.a-tt {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        &.a-primary {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: $primary;
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                filter: brightness(1.1);
+            }
+        }
+
+        &:disabled {
+            opacity: .5;
+            cursor: default;
+            pointer-events: none;
+        }
+    }
+}
+
+// ---------- ПК ----------
+
+@media screen and (min-width: 900px) {
+    .titles-search-row {
+        max-width: 560px;
+    }
+
+}
+
+// ---------- окно на ПК ----------
+// Большое окно по центру: в шапке — поиск, легенда, «Сбросить» и «Готово · N»,
+// внизу — выбранное чипами. Нижняя панель, быстрые переходы и подсказки телефона
+// здесь не нужны.
+
+@media screen and (min-width: 900px) {
+    .window-genres {
+        .hide-window {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        // Центр задают отступы (inset 0 + margin auto): transform занят анимацией появления
+        .window-content {
+            inset: 0;
+            width: min(1240px, calc(100vw - 48px));
+            height: min(820px, calc(100dvh - 48px));
+            max-height: none;
+            margin: auto;
+            border-radius: 32px !important;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(30, 33, 39, 0.97);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 40px 100px rgba(0, 0, 0, 0.6);
+
+            .content-wrapper {
+                max-width: none;
+                height: 100%;
+                max-height: none;
+                margin: 0;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        .desk-only {
+            display: flex !important;
+        }
+
+        .win-actions-wrapper,
+        .safe-area-actions,
+        .genres-summary,
+        .genres-jump,
+        .g-tip {
+            display: none !important;
+        }
+
+        .window-bar {
+            position: static;
+            flex: none;
+            padding: 20px 24px;
+            gap: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            background: transparent;
+
+            .window-title {
+                flex: none;
+                font-size: 22px;
+                font-weight: 800;
+            }
+
+            // Закрыть — кликом мимо окна или Esc
+            .window-close {
+                display: none;
+            }
+        }
+
+        .genres-desk-search {
+            flex: 1;
+            max-width: 420px;
+            height: 42px;
+            padding: 0 14px;
+            align-items: center;
+            gap: 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            background: rgba(255, 255, 255, 0.07);
+            color: $sub;
+            cursor: text;
+            transition: border-color .15s, box-shadow .15s;
+
+            .icon {
+                flex: none;
+                width: 14px;
+                height: 14px;
+                fill: currentColor;
+            }
+
+            input {
+                flex: 1;
+                min-width: 0;
+                border: 0;
+                outline: none;
+                background: transparent;
+                color: $white;
+                font: inherit;
+                font-size: 14px;
+
+                &::placeholder {
+                    color: $sub;
+                }
+
+                &::-webkit-search-cancel-button {
+                    display: none;
+                }
+            }
+
+            &:focus-within {
+                border-color: rgba(35, 147, 241, 0.6);
+                box-shadow: 0 0 0 4px rgba(35, 147, 241, 0.12);
+            }
+        }
+
+        .genres-desk-legend {
+            margin-left: auto;
+            align-items: center;
+            gap: 4px;
+            color: $sub;
+            font-size: 12px;
+            white-space: nowrap;
+
+            b {
+                margin-left: 6px;
+                font-weight: 800;
+            }
+        }
+
+        .desk-btn {
+            flex: none;
+            height: 40px;
+            padding: 0 14px;
+            align-items: center;
+            border: 0;
+            border-radius: 999px;
+            background: transparent;
+            color: #FF9D94;
+            font: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: filter .15s, background .15s, opacity .15s, transform .12s;
+
+            &:hover:not(:disabled) {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            &:active:not(:disabled) {
+                transform: scale(.97);
+            }
+
+            &:disabled {
+                opacity: .35;
+                cursor: default;
+            }
+
+            &.-primary {
+                height: 42px;
+                padding: 0 20px;
+                background: $primary;
+                color: #FFFFFF;
+                font-weight: 700;
+
+                &:hover:not(:disabled) {
+                    background: $primary;
+                    filter: brightness(1.12);
+                }
+            }
+        }
+
+        // Разделы — в три колонки, прокручиваются внутри окна
+        .genres-body {
+            flex: 1;
+            min-height: 0;
+            padding: 20px 24px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+        }
+
+        // Разные подачи для разных групп: сверху две карточки (аудитория плитками,
+        // рейтинг чипами), ниже жанры облаком, внизу темы компактными строками в колонках
+        .genres-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .gd-top {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+
+            .g-section {
+                padding: 14px 14px 16px;
+                border-radius: 20px;
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                background: $block;
+            }
+
+            .g-head {
+                padding: 0 2px 10px;
+            }
+
+            .g-tile {
+                height: 56px;
+                background: rgba(255, 255, 255, 0.03);
+            }
+
+            .g-age:not(.-in):not(.-out) {
+                background: rgba(255, 255, 255, 0.03);
+            }
+
+            // Плиток и чипов по 5 — в один ряд
+            .g-ages {
+                grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+            }
+        }
+
+        // Жанры — облако чипов
+        .g-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .g-chip {
+            height: 36px;
+            padding: 0 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: $block;
+            color: $white;
+            font: inherit;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .15s, border-color .15s, transform .12s;
+
+            .c {
+                color: $dim;
+                font-size: 11px;
+                font-weight: 500;
+                font-variant-numeric: tabular-nums;
+            }
+
+            .mk {
+                margin-left: -4px;
+                width: 18px;
+                height: 18px;
+                display: grid;
+                place-items: center;
+                border-radius: 50%;
+                font-size: 14px;
+                font-weight: 800;
+                line-height: 1;
+            }
+
+            &:hover {
+                background: #20242A;
+                border-color: rgba(255, 255, 255, 0.12);
+            }
+
+            &:active {
+                transform: scale(.96);
+            }
+
+            &.-in {
+                border-color: rgba(79, 209, 143, 0.55);
+                background: rgba(79, 209, 143, 0.12);
+
+                .mk {
+                    background: #2A9A5F;
+                    color: #FFFFFF;
+                }
+
+                .c {
+                    color: $g-in-soft;
+                }
+            }
+
+            &.-out {
+                border-color: rgba(255, 138, 128, 0.5);
+                background: rgba(255, 138, 128, 0.1);
+
+                .nm {
+                    color: #FFC9C3;
+                    text-decoration: line-through;
+                }
+
+                .mk {
+                    background: #C2412F;
+                    color: #FFFFFF;
+                }
+
+                .c {
+                    color: $g-out-soft;
+                }
+            }
+        }
+
+        // Темы — компактные строки в колонках
+        .gd-themes {
+            columns: 3;
+            column-gap: 24px;
+
+            .g-section {
+                margin-bottom: 16px;
+                break-inside: avoid;
+            }
+        }
+
+        .g-head {
+            padding: 0 2px 6px;
+
+            .g-title {
+                color: #8A919B;
+                font-size: 11px;
+                font-weight: 700;
+            }
+
+            .sub {
+                color: $dim;
+            }
+        }
+
+        .g-rows {
+            padding: 0;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: $block;
+            overflow: hidden;
+            gap: 0;
+        }
+
+        .g-row {
+            min-height: 38px;
+            padding: 0 6px 0 12px;
+            gap: 8px;
+            border-radius: 0;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.04);
+            }
+
+            .g-name {
+                flex: 1;
+                display: flex;
+                align-items: baseline;
+                min-width: 0;
+                font-size: 13px;
+                font-weight: 400;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                .c {
+                    margin-left: auto;
+                    padding-left: 8px;
+                    color: $dim;
+                    font-size: 11px;
+                    font-weight: 400;
+                }
+            }
+
+            &.-in {
+                background: rgba(63, 191, 127, 0.07);
+
+                .g-name {
+                    font-weight: 600;
+                }
+            }
+
+            &.-out {
+                background: rgba(240, 106, 95, 0.07);
+
+                .age-badge {
+                    text-decoration: none;
+                    opacity: .6;
+                }
+
+                .g-name {
+                    font-weight: 600;
+                    color: #FFC9C3;
+                    text-decoration: line-through;
+
+                    .c {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+
+        .g-btns {
+            gap: 2px;
+        }
+
+        .g-btn {
+            width: 28px;
+            height: 26px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #8A919B;
+            font-size: 15px;
+            font-weight: 700;
+
+            &.-in[aria-pressed="true"] {
+                background: #2A9A5F;
+                color: #FFFFFF;
+            }
+
+            &.-out[aria-pressed="true"] {
+                background: #C2412F;
+                color: #FFFFFF;
+            }
+        }
+
+        .genres-deskfoot {
+            flex: none;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(255, 255, 255, 0.02);
+
+            .genres-picked-foot {
+                min-height: 30px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 6px;
+            }
+        }
+
+        .genres-loading,
+        .studios-empty {
+            column-span: all;
+        }
+    }
+}
+
+// Узкий ПК — две колонки
+@media screen and (min-width: 900px) and (max-width: 1199px) {
+    .window-genres .gd-themes {
+        columns: 2;
+    }
+}
+
+// QHD — окно крупнее
+@media screen and (min-width: 2200px) {
+    .window-genres .window-content {
+        width: min(1500px, calc(100vw - 48px));
+        height: min(980px, calc(100dvh - 48px));
+    }
+}
