@@ -1,22 +1,25 @@
 /**
- * Избранные студии.
+ * Избранные студии — это избранные озвучки плеера (`save-translations`, translation.id).
  *
- * Живут в `localStorage`: это закладки устройства, аккаунт для них не нужен.
- * Храним id студии из API — это translation.id её основной ветки, он не меняется.
+ * Студия в избранном, если там есть любая её ветка. id студии из API — translation.id
+ * её основной ветки: его и добавляем, убираем — все ветки студии.
  */
 
-const KEY = 'tun-dubs-favorites';
+const KEY = 'save-translations';
+/** Прежний отдельный список избранных студий — переносится в KEY один раз */
+const OLD_KEY = 'tun-dubs-favorites';
 
-const read = () => {
+/** @param {string} key */
+const readList = (key) => {
     try {
-        const raw = JSON.parse(localStorage.getItem(KEY));
+        const raw = JSON.parse(localStorage.getItem(key));
         return Array.isArray(raw) ? raw.filter(Number.isInteger) : [];
     } catch {
         return [];
     }
 };
 
-const ids = new Set(read());
+const ids = new Set(readList(KEY));
 
 const save = () => {
     try {
@@ -26,23 +29,47 @@ const save = () => {
     }
 };
 
-/** @param {number} id */
-export const isFav = (id) => ids.has(id);
+(() => {
+    const old = readList(OLD_KEY);
+    if (!old.length) return;
+    old.forEach((id) => ids.add(id));
+    save();
+    try { localStorage.removeItem(OLD_KEY); } catch { }
+})();
 
-export const favCount = () => ids.size;
+// Избранное могли поменять в плеере в другой вкладке
+window.addEventListener('storage', (e) => {
+    if (e.key !== KEY) return;
+    ids.clear();
+    readList(KEY).forEach((id) => ids.add(id));
+});
 
-/** id всех избранных студий */
+/**
+ * @typedef {number | {id: number, members?: {id: number}[]}} TFavStudio
+ *  студия из API (с ветками) или просто её id
+ */
+
+/** @param {TFavStudio} s */
+const studioIds = (s) => (typeof s === 'object' && s
+    ? [s.id, ...(s.members || []).map((m) => m.id)]
+    : [s]);
+
+/** @param {TFavStudio} s */
+export const isFav = (s) => studioIds(s).some((id) => ids.has(id));
+
+/** Все избранные translation.id — API озвучек сам находит по ним студии */
 export const favIds = () => [...ids];
 
 /**
  * Добавить или убрать.
- * @param {number} id
+ * @param {TFavStudio} s
  * @returns {boolean} в избранном ли теперь
  */
-export function toggleFav(id) {
-    if (ids.has(id)) ids.delete(id);
-    else ids.add(id);
+export function toggleFav(s) {
+    const all = studioIds(s);
+    if (all.some((id) => ids.has(id))) all.forEach((id) => ids.delete(id));
+    else ids.add(all[0]);
 
     save();
-    return ids.has(id);
+    return isFav(s);
 }

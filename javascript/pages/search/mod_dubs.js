@@ -43,7 +43,7 @@ function studioCard(s, eps) {
     const tag = eps
         ? `<span class="db-plus">+${num(eps)} ${plural(eps, ['серия', 'серии', 'серий'])}</span>`
         : '<span class="db-plus -quiet">тихо</span>';
-    return `<a class="db-studio${isFav(s.id) ? ' -mine' : ''}" href="/studio.html?id=${encodeURIComponent(s.id)}" draggable="false">
+    return `<a class="db-studio${isFav(s) ? ' -mine' : ''}" href="/studio.html?id=${encodeURIComponent(s.id)}" draggable="false">
         <span class="top">${avatar(s)}${tag}</span>
         <span class="name" title="${esc(s.name)}">${esc(s.name)}</span>
         <span class="sub">${num(s.ongoing)} ${plural(s.ongoing, ['онгоинг', 'онгоинга', 'онгоингов'])}</span>
@@ -66,9 +66,9 @@ function catalogCard(next, total) {
 /** Сначала избранные (у кого были серии — выше), потом популярные */
 function pickStudios(all, eps) {
     const byDay = (a, b) => (eps.get(b.id) || 0) - (eps.get(a.id) || 0);
-    const mine = all.filter((s) => isFav(s.id)).sort(byDay);
+    const mine = all.filter((s) => isFav(s)).sort(byDay);
     const popular = all
-        .filter((s) => !isFav(s.id) && RANKED.has(s.kind))
+        .filter((s) => !isFav(s) && RANKED.has(s.kind))
         .sort((a, b) => byDay(a, b) || (b.active30 || 0) - (a.active30 || 0) || b.titles - a.titles);
     const shown = [...mine, ...popular].slice(0, STUDIOS_SHOWN);
     const rest = popular.filter((s) => !shown.includes(s));

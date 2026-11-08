@@ -62,7 +62,7 @@ export function renderHero(s) {
             </button>
         </div>`;
 
-    markFav($('.hero .fav-btn'), isFav(s.id));
+    markFav($('.hero .fav-btn'), isFav(s));
 }
 
 /**

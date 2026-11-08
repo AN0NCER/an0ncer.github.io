@@ -100,7 +100,7 @@ export function apply(all) {
     const q = state.q.trim().toLowerCase();
 
     return all
-        .filter(s => state.kind === 'all' || (state.kind === 'fav' ? isFav(s.id) : s.kind === state.kind))
+        .filter(s => state.kind === 'all' || (state.kind === 'fav' ? isFav(s) : s.kind === state.kind))
         .filter(s => !q || s.name.toLowerCase().includes(q) || s.members?.some(m => m.name.toLowerCase().includes(q)))
         .sort(SORTS[state.sort].cmp);
 }
@@ -110,7 +110,7 @@ export function countKinds(all) {
     const out = { all: all.length, fav: 0 };
     for (const s of all) {
         out[s.kind] = (out[s.kind] || 0) + 1;
-        if (isFav(s.id)) out.fav++;
+        if (isFav(s)) out.fav++;
     }
     return out;
 }

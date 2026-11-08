@@ -124,7 +124,7 @@ async function load() {
 
 /** Число у «Избранного» (чип и левая колонка) — только по студиям, которые есть в списке */
 function updateFavChip() {
-    const n = num(all.filter(s => isFav(s.id)).length);
+    const n = num(all.filter(s => isFav(s)).length);
     document.querySelectorAll('[data-kind="fav"] .c').forEach(($c) => { $c.textContent = n; });
 }
 
@@ -153,7 +153,8 @@ document.querySelector('.studio-list').addEventListener('click', (e) => {
         return;
     }
 
-    const on = toggleFav(Number(btn.closest('[data-id]').dataset.id));
+    const id = Number(btn.closest('[data-id]').dataset.id);
+    const on = toggleFav(all.find(s => s.id === id) ?? id);
     markFav(btn, on);
     updateFavChip();
 

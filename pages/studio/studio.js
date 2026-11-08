@@ -34,6 +34,9 @@ function fail(title, text) {
         </div>`;
 }
 
+/** Профиль студии — для избранного нужны её ветки */
+let profile = null;
+
 async function load() {
     if (!ID) {
         fail('Студия не выбрана', 'Откройте студию из каталога озвучек.');
@@ -52,6 +55,7 @@ async function load() {
         return;
     }
 
+    profile = s;
     document.title = `${s.name} — озвучка · Tunime`;
     $page.textContent = s.name;
     $headSub.textContent = `Студия озвучки · ${KIND_NAME[s.kind] || s.kind}`;
@@ -75,7 +79,7 @@ async function load() {
 document.querySelector('.hero').addEventListener('click', (e) => {
     const fav = e.target.closest('.fav-btn');
     if (fav) {
-        markFav(fav, toggleFav(Number(fav.dataset.id)));
+        markFav(fav, toggleFav(profile ?? Number(fav.dataset.id)));
         return;
     }
     if (e.target.closest('[data-act="search"]')) focusSearch();

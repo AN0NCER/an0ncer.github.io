@@ -50,7 +50,7 @@ function fillCommon(el, s) {
     el.setAttribute('role', 'link');
     el.tabIndex = 0;
     el.setAttribute('aria-label', `Студия ${s.name}`);
-    markFav(el.querySelector('.fav-btn'), isFav(s.id));
+    markFav(el.querySelector('.fav-btn'), isFav(s));
 
     const $av = el.querySelector('.avatar');
     $av.textContent = s.short;
