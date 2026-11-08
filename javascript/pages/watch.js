@@ -209,7 +209,7 @@ Main(async (e) => {
         tChronologyVoice();
     }, { logged: e }).catch((err) => {
         if (err.message.startsWith('mod.resource.e.'))
-            return document.location.replace('404a.html');
+            return document.location.replace(`/404a.html?id=${encodeURIComponent($ID)}`);
         console.log(err);
     });
 });

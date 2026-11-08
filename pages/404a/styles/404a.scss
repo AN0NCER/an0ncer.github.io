@@ -1,0 +1,792 @@
+// Страница «не найдено» (404a.html): аниме по ?id=… или любая пропавшая страница.
+
+@import '../../../style/dubs/dubs.vars';
+@import '../../../style/dubs/dubs.base';
+
+$green: #4FD18F;
+$green2: #8FE6B8;
+$gold2: #FFE35C;
+
+body {
+    // Мягкое синее свечение за иллюстрацией
+    background: radial-gradient(70% 60% at 25% 35%, rgba(35, 147, 241, 0.10), transparent 70%), $bg;
+    background-attachment: fixed;
+    color: $white;
+}
+
+// Кнопки страницы: основная синяя и «призрачная» — пилюли, как кнопки шапки
+.nf-btn {
+    height: 50px;
+    padding: 0 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 999px;
+    background: $primary;
+    color: #FFFFFF;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: filter .15s, background .15s, transform .12s, opacity .15s;
+
+    .icon {
+        flex: none;
+        width: 18px;
+        height: 18px;
+    }
+
+    &:active {
+        transform: scale(.97);
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            filter: brightness(1.12);
+        }
+    }
+
+    &.ghost {
+        background: $elements-bg;
+        color: $white;
+    }
+
+    &.sm {
+        height: 42px;
+        padding: 0 16px;
+        font-size: 14px;
+    }
+
+    &:disabled {
+        opacity: .5;
+        cursor: default;
+    }
+}
+
+// Скрытый footer с шаблоном меню и svg-иконками занимал строку (~22 px) под страницей —
+// из-за неё появлялась прокрутка, даже когда всё влезало. Убираем его из потока
+body>footer {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+// Содержимое — по центру экрана по вертикали: шапка сверху, остальное место (до меню) делит main
+.body-wrapper {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+main.nf {
+    flex: 1;
+    align-content: center;
+    padding: 4px var(--gutter) 32px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+}
+
+// ---------- иллюстрация: ряд постеров, одного не хватает ----------
+
+.nf-shelf {
+    position: relative;
+    height: 330px;
+    margin: 0 calc(var(--gutter) * -1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.nf-poster {
+    --x: 0px;
+    --r: 0deg;
+    --s: 1;
+    position: absolute;
+    width: 130px;
+    aspect-ratio: 2 / 3;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5);
+    background-size: cover;
+    background-position: center;
+    transform: translateX(var(--x)) rotate(var(--r)) scale(var(--s));
+
+    // Затемнение снизу и две «строчки названия»
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent 55%, rgba(10, 12, 16, 0.7));
+    }
+
+    span {
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        z-index: 1;
+        height: 8px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.28);
+
+        &+span {
+            right: 50px;
+            bottom: 26px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+    }
+
+    // Постер подгрузился (реальные онгоинги) — «строчки» не нужны
+    &.-img span {
+        display: none;
+    }
+
+    &.p1 {
+        --x: -130px;
+        --r: -9deg;
+        --s: .86;
+        opacity: .8;
+        background-image: radial-gradient(60% 50% at 30% 30%, hsla(205, 80%, 70%, .55), transparent 70%), linear-gradient(160deg, #1F3A5C, #12202F);
+    }
+
+    &.p2 {
+        --x: -70px;
+        --r: -4deg;
+        --s: .94;
+        z-index: 1;
+        background-image: radial-gradient(60% 50% at 70% 25%, hsla(48, 90%, 70%, .45), transparent 70%), linear-gradient(165deg, #4A3D22, #1D1A14);
+    }
+
+    &.p4 {
+        --x: 70px;
+        --r: 4deg;
+        --s: .94;
+        z-index: 1;
+        background-image: radial-gradient(60% 50% at 40% 30%, hsla(150, 60%, 65%, .45), transparent 70%), linear-gradient(160deg, #1F4A3A, #12201B);
+    }
+
+    &.p5 {
+        --x: 130px;
+        --r: 9deg;
+        --s: .86;
+        opacity: .8;
+        background-image: radial-gradient(60% 50% at 60% 30%, hsla(0, 70%, 72%, .4), transparent 70%), linear-gradient(165deg, #4A2530, #1D1216);
+    }
+}
+
+.nf-hole {
+    position: relative;
+    z-index: 2;
+    width: 150px;
+    aspect-ratio: 2 / 3;
+    border-radius: 20px;
+    border: 2px dashed $acc-line;
+    background: #0C0F13;
+    overflow: hidden;
+    box-shadow: 0 0 0 8px rgba(16, 19, 24, 0.9), 0 30px 70px rgba(0, 0, 0, 0.6);
+    animation: nf-float 6s ease-in-out infinite;
+    transition: border-color .3s;
+
+    .nf-noise {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: .5;
+    }
+
+    .nf-scan {
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0 2px, transparent 2px 4px);
+    }
+
+    .nf-code {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+
+        b {
+            font-size: 44px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: $white;
+            text-shadow: -3px 0 rgba(35, 147, 241, 0.85), 3px 0 rgba(255, 215, 0, 0.6);
+        }
+
+        i {
+            font-style: normal;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: $acc3;
+        }
+    }
+}
+
+.nf-tag {
+    position: absolute;
+    z-index: 3;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 32px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    border: 1px solid $line2;
+    background: #22262C;
+    color: $soft;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    em {
+        font-style: normal;
+        font-weight: 800;
+        color: $gold2;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+@keyframes nf-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+// ---------- текст и действия ----------
+
+.nf-text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.nf-eyebrow {
+    align-self: flex-start;
+    height: 30px;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    background: $acc-bg;
+    color: #D3E9FD;
+    font-size: 13px;
+    font-weight: 700;
+
+    &::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 99px;
+        background: $primary;
+        box-shadow: 0 0 0 4px rgba(35, 147, 241, 0.25);
+    }
+}
+
+h1 {
+    font-size: clamp(30px, 4.4vw, 50px);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    text-wrap: balance;
+}
+
+.nf-lead {
+    margin-top: -6px;
+    max-width: 54ch;
+    color: $soft;
+    font-size: 15px;
+    line-height: 1.5;
+
+    code {
+        padding: 1px 6px;
+        border-radius: 6px;
+        background: rgba(255, 215, 0, 0.1);
+        color: $gold2;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 14px;
+    }
+}
+
+// Зеркало: «проверяем…» и найденный тайтл — по data-state у body
+.nf-checking {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    color: $sub;
+    font-size: 14px;
+
+    i {
+        width: 16px;
+        height: 16px;
+        border-radius: 99px;
+        border: 2px solid rgba(123, 192, 247, 0.3);
+        border-top-color: $acc3;
+        animation: nf-spin .8s linear infinite;
+    }
+}
+
+@keyframes nf-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.nf-found {
+    display: none;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 22px;
+    border: 1px solid rgba(79, 209, 143, 0.35);
+    background: linear-gradient(135deg, rgba(79, 209, 143, 0.13), $block 65%);
+
+    .ps {
+        flex: none;
+        width: 72px;
+        aspect-ratio: 2 / 3;
+        border-radius: 12px;
+        background: radial-gradient(60% 50% at 40% 30%, hsla(150, 60%, 65%, .5), transparent 70%), linear-gradient(160deg, #1F4A3A, #12201B);
+        background-size: cover;
+        background-position: center;
+    }
+
+    .t {
+        flex: 1 1 180px;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+
+        small {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: $green2;
+            font-size: 12.5px;
+            font-weight: 700;
+
+            .icon {
+                width: 14px;
+                height: 14px;
+                fill: none;
+                stroke: currentColor;
+                stroke-width: 2.6;
+            }
+        }
+
+        strong {
+            font-size: 17px;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        span {
+            color: $sub;
+            font-size: 13px;
+        }
+    }
+
+    .nf-btn {
+        flex: 1 1 100%;
+    }
+}
+
+body[data-state="check"] .nf-checking {
+    display: flex;
+}
+
+body[data-state="rip"] {
+    .nf-found {
+        display: flex;
+    }
+
+    .nf-why .r-rip {
+        display: none;
+    }
+
+    .nf-hole {
+        border-color: rgba(79, 209, 143, 0.6);
+    }
+}
+
+// Поиск: общая пилюля .page-search-wrapper + кнопка «Искать»
+.nf-search {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    // В колонке (телефон) flex: 1 сжал бы высоту до нуля — растягиваемся только в строке на ПК
+    .page-search-wrapper {
+        flex: none;
+        min-width: 0;
+        height: 50px;
+        cursor: text;
+
+        input {
+            font-size: 15px;
+        }
+    }
+
+    .nf-btn {
+        width: 100%;
+    }
+}
+
+.nf-acts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .nf-btn {
+        flex: 1 1 150px;
+    }
+}
+
+// «Почему так бывает» — карточка как блоки на страницах озвучек
+.nf-why {
+    border-radius: 22px;
+    border: 1px solid $line;
+    background: $block;
+    overflow: hidden;
+
+    h2 {
+        padding: 16px 18px 6px;
+        color: $sub;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    li {
+        padding: 13px 18px;
+        display: flex;
+        gap: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+        &:first-child {
+            border-top: 0;
+        }
+
+        >span:last-child {
+            min-width: 0;
+        }
+    }
+
+    .n {
+        flex: none;
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border-radius: 11px;
+        background: rgba(255, 255, 255, 0.06);
+        color: $acc3;
+
+        .icon {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    b {
+        display: block;
+        color: $white;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    span span {
+        color: $sub;
+        font-size: 13.5px;
+        line-height: 1.45;
+    }
+}
+
+.nf-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 14px;
+    color: $dim;
+    font-size: 12.5px;
+
+    code {
+        color: $sub;
+        font-family: ui-monospace, Menlo, Consolas, monospace;
+    }
+
+    button {
+        background: none;
+        color: #5AAEF5;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+    }
+}
+
+// Пропала не страница аниме — пункты про тайтл и номер id не нужны
+body[data-kind="page"] .only-anime {
+    display: none !important;
+}
+
+// ---------- ПК ----------
+
+@media screen and (min-width: 900px) {
+    main.nf {
+        padding-top: 24px;
+        padding-bottom: 32px;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+        gap: 56px;
+    }
+
+    .nf-shelf {
+        height: 460px;
+        margin: 0;
+        overflow: visible;
+    }
+
+    .nf-poster {
+        width: 180px;
+
+        &.p1 {
+            --x: -190px;
+            --s: .88;
+        }
+
+        &.p2 {
+            --x: -98px;
+            --s: .95;
+        }
+
+        &.p4 {
+            --x: 98px;
+            --s: .95;
+        }
+
+        &.p5 {
+            --x: 190px;
+            --s: .88;
+        }
+    }
+
+    .nf-hole {
+        width: 200px;
+
+        .nf-code b {
+            font-size: 58px;
+        }
+    }
+
+    .nf-text {
+        gap: 22px;
+    }
+
+    .nf-lead {
+        font-size: 16px;
+    }
+
+    .nf-search {
+        flex-direction: row;
+
+        .page-search-wrapper {
+            flex: 1;
+            height: 54px;
+        }
+
+        .nf-btn {
+            width: auto;
+            height: 54px;
+        }
+    }
+
+    .nf-acts .nf-btn {
+        flex: 0 0 auto;
+    }
+
+    .nf-found .nf-btn {
+        flex: 0 0 auto;
+    }
+}
+
+// Широкий ПК — чуть шире колонка
+@media screen and (min-width: 1600px) {
+    .body-wrapper {
+        max-width: 1400px;
+    }
+}
+
+// QHD — всё крупнее, чтобы страница не терялась посреди экрана
+@media screen and (min-width: 2200px) {
+    .body-wrapper {
+        max-width: 1840px;
+    }
+
+    main.nf {
+        gap: 96px;
+    }
+
+    .nf-shelf {
+        height: 620px;
+    }
+
+    .nf-poster {
+        width: 240px;
+        border-radius: 22px;
+
+        &.p1 {
+            --x: -252px;
+        }
+
+        &.p2 {
+            --x: -130px;
+        }
+
+        &.p4 {
+            --x: 130px;
+        }
+
+        &.p5 {
+            --x: 252px;
+        }
+    }
+
+    .nf-hole {
+        width: 268px;
+        border-radius: 26px;
+
+        .nf-code {
+            b {
+                font-size: 76px;
+            }
+
+            i {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .nf-tag {
+        height: 38px;
+        padding: 0 18px;
+        font-size: 15px;
+    }
+
+    .nf-text {
+        gap: 28px;
+    }
+
+    .nf-eyebrow {
+        height: 36px;
+        padding: 0 16px;
+        font-size: 15px;
+    }
+
+    h1 {
+        font-size: 66px;
+    }
+
+    .nf-lead {
+        font-size: 19px;
+
+        code {
+            font-size: 17px;
+        }
+    }
+
+    .nf-search {
+        gap: 10px;
+
+        .page-search-wrapper {
+            height: 62px;
+            padding: 0 20px;
+
+            input {
+                font-size: 17px;
+            }
+        }
+
+        .nf-btn {
+            height: 62px;
+            padding: 0 28px;
+            font-size: 17px;
+        }
+    }
+
+    .nf-btn.sm {
+        height: 50px;
+        padding: 0 20px;
+        font-size: 16px;
+    }
+
+    .nf-why {
+        border-radius: 26px;
+
+        h2 {
+            padding: 20px 22px 8px;
+            font-size: 13px;
+        }
+
+        li {
+            padding: 16px 22px;
+            gap: 16px;
+        }
+
+        .n {
+            width: 40px;
+            height: 40px;
+            border-radius: 13px;
+        }
+
+        b {
+            font-size: 17px;
+        }
+
+        span span {
+            font-size: 15px;
+        }
+    }
+
+    .nf-foot {
+        font-size: 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .nf-hole,
+    .nf-checking i {
+        animation: none;
+    }
+}
