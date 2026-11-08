@@ -941,6 +941,119 @@ header .search-wrapper .btn.btn-filter .ticon {
   }
 }
 
+.world-card {
+  position: relative;
+  display: block;
+  height: 300px;
+  margin-top: 8px;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: radial-gradient(90% 70% at 50% 100%, rgba(35, 147, 241, 0.22), rgba(255, 255, 255, 0.03) 70%), #101318;
+  color: #F2F4F7;
+  text-decoration: none;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.world-card:active {
+  transform: scale(0.985);
+}
+@media (hover: hover) {
+  .world-card:hover {
+    border-color: rgba(123, 192, 247, 0.35);
+  }
+  .world-card:hover .wc-go {
+    background: rgba(35, 147, 241, 0.35);
+  }
+}
+.world-card .world-globe {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.world-card .wc-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(16, 19, 24, 0.85) 0%, rgba(16, 19, 24, 0.2) 45%, rgba(16, 19, 24, 0) 60%);
+  pointer-events: none;
+}
+.world-card .wc-head {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.world-card .wc-title {
+  font-size: 20px;
+  font-weight: 800;
+}
+.world-card .wc-chip {
+  flex: none;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #C9CED6;
+  font-size: 11px;
+  font-weight: 700;
+}
+.world-card .wc-go {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(123, 192, 247, 0.45);
+  background: rgba(16, 19, 24, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #D3E9FD;
+  transition: background 0.15s;
+}
+.world-card .wc-go svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media screen and (min-width: 600px) {
+  .world-card {
+    height: 320px;
+    border-radius: 30px;
+  }
+  .world-card .wc-head {
+    left: 26px;
+    right: 26px;
+    top: 22px;
+  }
+  .world-card .wc-title {
+    font-size: 26px;
+  }
+  .world-card .wc-chip {
+    padding: 5px 11px;
+    font-size: 12px;
+  }
+  .world-card .wc-go {
+    right: 20px;
+    bottom: 20px;
+    width: 52px;
+    height: 52px;
+  }
+}
+
 .studios .studios-list {
   display: flex;
   flex-direction: column;

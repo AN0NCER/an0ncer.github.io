@@ -211,5 +211,9 @@ function reset() {
         LoadHistory();
     });
 
+    import("./search/mod_world.js").then(({ LoadWorld }) => {
+        LoadWorld();
+    });
+
     new TCache().cleanup();
 }

@@ -115,6 +115,27 @@ export const MENU_CONTEXT = {
             }
         }
     ],
+    search: [
+        {
+            key: 'dubs',
+            type: 'action',
+            title: 'Студии озвучки',
+            icon: 'microphone',
+            enabled: async () => true,
+            subtitle: async () => 'Перейти',
+            run: async () => { location.href = 'dubs.html'; },
+            selected: (ctx) => ctx.page === 'dubs'
+        },
+        {
+            key: 'world',
+            type: 'action',
+            title: 'Аниме в мире',
+            icon: 'globe',
+            enabled: async () => true,
+            subtitle: async () => 'Перейти',
+            run: async () => { location.href = 'https://world.tunime.app'; }
+        }
+    ],
     list: [
         {
             key: 'collections',

@@ -16,6 +16,7 @@ const $PARAMETERS = {
     },
     watch: {
         dubanime: false,
+        dubbranches: true,
         episrevers: 'left',
         epismenu: true,
         typefrc: ["TV Сериал", "Фильм", "ONA", "OVA"],

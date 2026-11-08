@@ -247,6 +247,12 @@ const setup = [
                 description: `Позволяет сохранять избранные озвучки отдельно для каждой франшизы аниме.`
             },
             {
+                param: 'dubbranches',
+                type: 'checkbox.tip',
+                title: 'Ветки озвучек',
+                description: `Во франшизе отмечать аниме, где озвучка есть у той же студии под другим названием (например, AniLibria.TV и AniLiberty).`
+            },
+            {
                 param: 'previewbs',
                 type: 'checkbox.tip',
                 title: 'Экран блокировки',
