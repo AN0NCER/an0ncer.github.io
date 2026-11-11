@@ -133,7 +133,7 @@ export const MENU_CONTEXT = {
             icon: 'globe',
             enabled: async () => true,
             subtitle: async () => 'Перейти',
-            run: async () => { location.href = 'https://world.tunime.app'; }
+            run: async () => { window.open('https://world.tunime.app/?from=tunime', '_blank'); }
         }
     ],
     list: [

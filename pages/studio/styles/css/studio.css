@@ -1286,11 +1286,11 @@ header .page-controll-wrapper .share-btn.-done {
 
 .fresh-card {
   flex: none;
-  width: 228px;
+  width: min(300px, 80vw);
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 .fresh-card .shot {
   position: relative;
@@ -1314,11 +1314,39 @@ header .page-controll-wrapper .share-btn.-done {
   background: #2393F1;
   color: #FFFFFF;
 }
-.fresh-card .badge.-when {
+.fresh-card .shot::after {
+  content: "";
+  position: absolute;
+  inset: 40% 0 0;
+  background: linear-gradient(to top, rgba(10, 12, 16, 0.94) 10%, rgba(10, 12, 16, 0));
+  pointer-events: none;
+}
+.fresh-card .tile-over {
+  position: absolute;
+  z-index: 1;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fresh-card .tile-over .tile-foot .sub {
+  color: #F2F4F7;
+  font-weight: 700;
+}
+.fresh-card .pbar {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.fresh-card .pbar .air {
+  background: rgba(255, 255, 255, 0.38);
+}
+.fresh-card .badge.u-mark {
   top: 8px;
   right: 8px;
-  color: #C9CED6;
-  font-weight: 600;
+  bottom: auto;
+  left: auto;
 }
 @media (hover: hover) {
   .fresh-card[href]:hover .shot img {
@@ -1375,8 +1403,42 @@ header .page-controll-wrapper .share-btn.-done {
      object-fit: cover;
   transition: transform 0.3s, filter 0.3s;
 }
+.title-tile .poster::after {
+  content: "";
+  position: absolute;
+  inset: 48% 0 0;
+  background: linear-gradient(to top, rgba(10, 12, 16, 0.94) 10%, rgba(10, 12, 16, 0));
+  pointer-events: none;
+}
+.title-tile .tile-over {
+  position: absolute;
+  z-index: 1;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.title-tile .tile-over .tile-foot .sub {
+  color: #F2F4F7;
+  font-weight: 700;
+}
 .title-tile .pbar {
   height: 5px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.title-tile .pbar .air {
+  background: rgba(255, 255, 255, 0.38);
+}
+.title-tile .badge.u-mark {
+  top: 8px;
+  right: 8px;
+  bottom: auto;
+  left: auto;
+}
+.title-tile .badge.-tr ~ .badge.u-mark {
+  top: 34px;
 }
 .title-tile .badge {
   height: 20px;
@@ -1406,14 +1468,14 @@ header .page-controll-wrapper .share-btn.-done {
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
     overflow: visible;
   }
   .fresh-card {
     width: auto;
   }
-  .fresh-card:nth-child(n+9) {
+  .fresh-card:nth-child(n+7) {
     display: none;
   }
   .titles-controls {
@@ -1439,15 +1501,20 @@ header .page-controll-wrapper .share-btn.-done {
     gap: 20px 14px;
   }
 }
-@media screen and (min-width: 2200px) {
-  .fresh-card:nth-child(n+9) {
+@media screen and (min-width: 1700px) {
+  .fresh-rail {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .fresh-card:nth-child(n+7) {
     display: flex;
   }
-  .fresh-card:nth-child(n+11) {
+  .fresh-card:nth-child(n+9) {
     display: none;
   }
+}
+@media screen and (min-width: 2200px) {
   .title-grid {
-    grid-template-columns: repeat(auto-fill, minmax(172px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   }
 }
 .poster.-adult img,
@@ -2659,8 +2726,8 @@ b.out {
   }
 }
 .badge.-bl {
-  left: 8px;
-  bottom: 8px;
+  left: 6px;
+  bottom: 6px;
 }
 
 .badge.u-mark {

@@ -278,7 +278,7 @@ $db-primary: #2393F1;
 // ---------- свежие серии ----------
 
 .db-ep {
-    width: 220px;
+    width: min(300px, 80vw);
     display: flex;
     flex-direction: column;
     gap: 4px;

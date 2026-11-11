@@ -220,11 +220,9 @@ function tile(t) {
     ].join('');
 
     const inner = `
-        <span class="poster${hidden ? ' -adult' : ''}">${img(t.poster, hidden ? '' : t.name)}${badges}${hidden ? ADULT_MARK : ''}${userMark(t.shiki)}</span>
+        <span class="poster${hidden ? ' -adult' : ''}">${img(t.poster, hidden ? '' : t.name)}${badges}${hidden ? ADULT_MARK : ''}${userMark(t.shiki)}<span class="tile-over"><span class="tile-foot">${stateBadge(t.state)}<span class="sub">${esc(progressText(t))}</span></span>${progressBar(t)}</span></span>
         <span class="tile-name${hidden ? ' -hidden' : ''}"${hidden ? '' : ` title="${esc(t.name)}"`}>${esc(name)}</span>
-        <span class="sub tile-meta">${esc(meta)}${t.voices > 1 ? ` · ${num(t.voices)} ${plural(t.voices, ['озвучка', 'озвучки', 'озвучек'])}` : ''}</span>
-        ${progressBar(t)}
-        <span class="tile-foot">${stateBadge(t.state)}<span class="sub">${esc(progressText(t))}</span></span>`;
+        <span class="sub tile-meta">${esc(meta)}${t.voices > 1 ? ` · ${num(t.voices)} ${plural(t.voices, ['озвучка', 'озвучки', 'озвучек'])}` : ''}</span>`;
 
     // data-shiki — чтобы значок статуса из списка встал и на уже нарисованные плитки
     return url
@@ -240,12 +238,11 @@ function freshCard(t) {
     const inner = `
         <span class="shot${hidden ? ' -adult' : ''}">${img(t.shot || t.poster, hidden ? '' : t.name)}
             <span class="badge -tl -ep">${num(t.ep)} серия</span>
-            ${when ? `<span class="badge -tr -when">${when} назад</span>` : ''}
             ${hidden ? ADULT_MARK : ''}${userMark(t.shiki)}
+            <span class="tile-over"><span class="tile-foot">${stateBadge(t.state)}<span class="sub">${esc(progressText(t))}</span></span>${progressBar(t)}</span>
         </span>
         <span class="tile-name -one${hidden ? ' -hidden' : ''}"${hidden ? '' : ` title="${esc(t.name)}"`}>${esc(hidden ? HIDDEN_NAME : t.name)}</span>
-        ${progressBar(t)}
-        <span class="tile-foot">${stateBadge(t.state)}<span class="sub">${esc(progressText(t))}</span></span>`;
+        ${when ? `<span class="sub tile-meta">${when} назад</span>` : ''}`;
 
     return url ? `<a class="fresh-card" href="${url}" data-shiki="${esc(t.shiki)}">${inner}</a>` : `<div class="fresh-card">${inner}</div>`;
 }

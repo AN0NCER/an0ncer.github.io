@@ -838,7 +838,7 @@ header .search-wrapper .btn.btn-filter .ticon {
 }
 
 .db-ep {
-  width: 220px;
+  width: min(300px, 80vw);
   display: flex;
   flex-direction: column;
   gap: 4px;
