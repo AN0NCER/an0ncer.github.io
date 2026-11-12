@@ -1,0 +1,115 @@
+// Удар по экрану (html.hit) и анимации
+
+.hit {
+    .bars {
+        animation: jolt .45s steps(5);
+    }
+
+    .card {
+        animation: shake .45s;
+    }
+
+    .noise {
+        opacity: .75;
+        transition: none;
+    }
+}
+
+@keyframes roll {
+    to {
+        top: 110%;
+    }
+}
+
+@keyframes marquee {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, .55);
+    }
+
+    70%,
+    100% {
+        box-shadow: 0 0 0 8px rgba(255, 215, 0, 0);
+    }
+}
+
+@keyframes glitch {
+    0%,
+    91%,
+    100% {
+        transform: none;
+    }
+
+    92% {
+        transform: translateX(-4px) skewX(-10deg);
+    }
+
+    94% {
+        transform: translateX(4px) skewX(6deg);
+    }
+
+    96% {
+        transform: none;
+    }
+}
+
+@keyframes pop {
+    from {
+        transform: translateY(-40%);
+        opacity: 0;
+    }
+}
+
+@keyframes jolt {
+    0% {
+        transform: translate(0, 6%) skewX(0);
+    }
+
+    25% {
+        transform: translate(-3%, -9%) skewX(-6deg);
+    }
+
+    50% {
+        transform: translate(2%, 14%) skewX(4deg);
+    }
+
+    75% {
+        transform: translate(-1%, -4%) skewX(-2deg);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes shake {
+    20% {
+        transform: translate(-5px, 2px) rotate(-1.2deg);
+    }
+
+    40% {
+        transform: translate(5px, -2px) rotate(1deg);
+    }
+
+    60% {
+        transform: translate(-3px, 1px) rotate(-.5deg);
+    }
+
+    80% {
+        transform: translate(2px, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

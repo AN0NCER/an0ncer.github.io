@@ -1,0 +1,44 @@
+// Заглушка в iframe плеера и 404 сайта (404.html).
+// Состояние — html[data-state]: loading | empty | error | notfound.
+
+@import 'vars';
+
+@font-face {
+    font-family: 'Manrope';
+    src: url('/style/fonts/Manrope.ttf');
+    font-weight: 200 800;
+    font-display: swap;
+}
+
+:root {
+    color-scheme: dark;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    position: relative;
+    background: $screen;
+    color: $white;
+    font-family: $font;
+    font-size: 14px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+@import 'screen';
+@import 'card';
+@import 'pow';
+@import 'motion';

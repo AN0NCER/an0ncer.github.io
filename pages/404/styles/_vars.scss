@@ -1,0 +1,48 @@
+$bg: #101318;
+$screen: #07090C;
+$primary: #2393F1;
+$primary3: #7BC0F7;
+$gold: #FFD700;
+$white: #F2F4F7;
+$soft: #C9CED6;
+$muted: #9AA1AB;
+$line: rgba(255, 255, 255, .14);
+
+$font: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+$spring: cubic-bezier(.34, 1.56, .64, 1);
+
+// Цветное расслоение, как на сбитой картинке
+$split: rgba(35, 147, 241, .85);
+$split2: rgba(255, 215, 0, .6);
+
+// Страница живёт в iframe плеера, поэтому сжимается и по ширине, и по высоте
+@mixin wide {
+    @media (min-width: 1000px) and (min-height: 560px) {
+        @content;
+    }
+}
+
+@mixin compact {
+    @media (max-width: 760px), (max-height: 420px) {
+        @content;
+    }
+}
+
+@mixin small {
+    @media (max-width: 460px), (max-height: 260px) {
+        @content;
+    }
+}
+
+@mixin tiny {
+    @media (max-width: 340px), (max-height: 190px) {
+        @content;
+    }
+}
+
+// Низкий iframe плеера на телефоне: карточка ужата, кот крупнее
+@mixin low {
+    @media (max-height: 420px) {
+        @content;
+    }
+}

@@ -1,113 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Not Found</title>
-</head>
+    <meta name="robots" content="noindex">
+    <meta name="page" content="404">
+    <title>Tunime - 404</title>
+    <link rel="icon" type="image/png" href="/images/icon-web.png" />
+    <link rel="preload" as="style" href="/pages/404/styles/css/404.css">
+    <link rel="stylesheet" href="/pages/404/styles/css/404.css">
+    <link rel="preload" href="/style/fonts/Manrope.ttf" as="font" type="font/ttf" crossorigin></head>
 
 <body>
-    <div class="unselectable" title="404">404</div>
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Fira+Mono:400');
+    <!-- Настроечная таблица -->
+    <div class="bars" aria-hidden="true">
+        <div>
+            <i style="background:#c9ced6"></i><i style="background:#FFD700"></i><i style="background:#4fd1c5"></i><i
+                style="background:#4fd18f"></i><i style="background:#c77dff"></i><i style="background:#ff8a80"></i><i
+                style="background:#2393F1"></i>
+        </div>
+        <div>
+            <i style="background:#2393F1"></i><i style="background:#101318"></i><i style="background:#ff8a80"></i><i
+                style="background:#101318"></i><i style="background:#4fd1c5"></i><i style="background:#101318"></i><i
+                style="background:#c9ced6"></i>
+        </div>
+        <div class="r3">
+            <i style="background:#0b2a4a"></i><i style="background:#f2f4f7"></i><i style="background:#2a1a4a"></i><i
+                style="background:#101318"></i><i style="background:#07090c"></i><i style="background:#191C21"></i><i
+                style="background:#22262C"></i>
+        </div>
+    </div>
+    <canvas class="noise" width="96" height="54" aria-hidden="true"></canvas>
+    <div class="scan" aria-hidden="true"></div>
+    <div class="roll" aria-hidden="true"></div>
 
-        body {
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            background: #151d26;
-            color: #fff;
-            font-size: 96px;
-            font-family: 'Fira Mono', monospace;
-            letter-spacing: -7px;
-        }
+    <main class="stage">
+        <div class="card">
+            <div class="sign" aria-hidden="true"><canvas class="mascot"></canvas></div>
+            <div class="text">
+                <span class="pill"><i></i><span id="pill"></span></span>
+                <h1 id="title" role="status"></h1>
+                <span class="sub" id="sub"></span>
+                <a class="home" href="/">На главную</a>
+            </div>
+        </div>
+    </main>
 
-        .unselectable {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
+    <div class="ticker" aria-hidden="true">
+        <div class="tk" id="tk"></div>
+    </div>
 
-        div {
-            animation: glitch 1s linear infinite;
-        }
-
-        @keyframes glitch {
-
-            2%,
-            64% {
-                transform: translate(2px, 0) skew(0deg);
-            }
-
-            4%,
-            60% {
-                transform: translate(-2px, 0) skew(0deg);
-            }
-
-            62% {
-                transform: translate(0, 0) skew(5deg);
-            }
-        }
-
-        div:before,
-        div:after {
-            content: attr(title);
-            position: absolute;
-            left: 0;
-        }
-
-        div:before {
-            animation: glitchTop 1s linear infinite;
-            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
-            -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
-        }
-
-        @keyframes glitchTop {
-
-            2%,
-            64% {
-                transform: translate(2px, -2px);
-            }
-
-            4%,
-            60% {
-                transform: translate(-2px, 2px);
-            }
-
-            62% {
-                transform: translate(13px, -1px) skew(-13deg);
-            }
-        }
-
-        div:after {
-            animation: glitchBotom 1.5s linear infinite;
-            clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
-            -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
-        }
-
-        @keyframes glitchBotom {
-
-            2%,
-            64% {
-                transform: translate(-2px, 0);
-            }
-
-            4%,
-            60% {
-                transform: translate(-2px, 0);
-            }
-
-            62% {
-                transform: translate(-22px, 5px) skew(21deg);
-            }
-        }
-    </style>
+    <script src="/pages/404/404.js" type="module"></script>
 </body>
 
 </html>

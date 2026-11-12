@@ -545,6 +545,9 @@ class Player {
                 if (kodik_episode) {
                     this.CEpisodes.selected = kodik_episode;
                 }
+                // Плеер не появится — заглушка в iframe показывает причину
+                if (response.failed) this.#Stub('error');
+                else if (!response.results?.length) this.#Stub('empty');
                 this.#buildIndexes(response.results);
                 this.CTranslation.Init(this.results, kodik_dub);
                 this.inited = true;
@@ -586,6 +589,14 @@ class Player {
         }
         document.querySelector("#kodik-player").contentWindow.location.replace(url);
         this.#Loading();
+    }
+
+    /**
+     * Переключает состояние заглушки в iframe
+     * @param {'loading' | 'empty' | 'error'} state
+     */
+    #Stub(state) {
+        document.querySelector("#kodik-player").contentWindow.location.replace(`404.html#${state}`);
     }
 
     #loadCount = 0;

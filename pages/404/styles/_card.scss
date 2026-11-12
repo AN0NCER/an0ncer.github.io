@@ -1,0 +1,250 @@
+// Карточка по центру: маскот, плашка, заголовок, подпись
+
+.stage {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px 20px 46px;
+
+    @include compact {
+        padding-bottom: 36px;
+    }
+
+    @include small {
+        padding: 10px 10px 30px;
+    }
+
+    @include tiny {
+        padding: 8px;
+    }
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    // Ширина не зависит от текста: подписи меняются, карточка — нет
+    width: min(100%, 340px);
+    padding: 22px 28px 24px;
+    border-radius: 26px;
+    background: rgba(9, 11, 15, .84);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid $line;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .65), inset 0 1px 0 rgba(255, 255, 255, .06);
+
+    // Пока состояние не выбрано, текста в карточке нет
+    html:not([data-state]) & {
+        visibility: hidden;
+    }
+
+    @include wide {
+        zoom: 1.32;
+    }
+
+    @include compact {
+        padding: 16px 24px 18px;
+        border-radius: 20px;
+        gap: 8px;
+    }
+
+    @include small {
+        padding: 10px 16px 12px;
+        border-radius: 16px;
+        gap: 5px;
+    }
+
+    // Низкий iframe плеера: отступы карточки ужаты, высота достаётся коту
+    @include low {
+        // У́же, чем обычно: в широком и низком iframe карточка не должна тянуться на весь экран
+        width: min(100%, 240px);
+        padding: 8px 14px 10px;
+        border-radius: 16px;
+        gap: 5px;
+    }
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: inherit;
+    width: 100%;
+
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .07);
+    border: 1px solid $line;
+    font-size: 12px;
+    font-weight: 800;
+    color: $soft;
+    white-space: nowrap;
+
+    i {
+        width: 8px;
+        height: 8px;
+        border-radius: 99px;
+        background: $gold;
+        animation: pulse 1.8s infinite;
+    }
+
+    @include small {
+        display: none;
+    }
+
+    @include low {
+        display: none;
+    }
+}
+
+// Маскот на светлом круге во весь рисунок: без него чёрные кот и хэйсю сливаются с карточкой
+.sign {
+    position: relative;
+    flex: none;
+    width: min(60vw, 40vh, 230px);
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0 2%;
+        border-radius: 50%;
+        background: radial-gradient(circle at 50% 40%, rgba(211, 233, 253, .4), rgba(35, 147, 241, .2) 75%);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12);
+    }
+
+    @include wide {
+        width: 220px;
+    }
+
+    @include low {
+        width: min(60vw, 48vh, 230px);
+
+        // С кнопкой «На главную» коту остаётся меньше места
+        [data-state="notfound"]:not(.framed) & {
+            width: min(60vw, 32vh, 230px);
+        }
+    }
+
+    // Совсем низкий iframe: коту — вся высота, что осталась от отступов, заголовка
+    // и двух строк подписи (124px); 1.04 — отношение сторон рисунка
+    @media (max-height: 260px) {
+        width: min(60vw, calc((100vh - 124px) * 1.04));
+
+        [data-state="notfound"]:not(.framed) & {
+            width: min(60vw, calc((100vh - 175px) * 1.04));
+        }
+    }
+
+    // Подписи и бегущей строки уже нет — кот ещё крупнее
+    @include tiny {
+        width: min(60vw, 62vh, 230px);
+    }
+}
+
+.mascot {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 260 / 250;
+    // Цветное расслоение по силуэту и редкий сбой, как у сбитой картинки
+    filter: drop-shadow(-3px 0 $split) drop-shadow(3px 0 $split2);
+    animation: glitch 5s infinite;
+
+    @include small {
+        filter: drop-shadow(-2px 0 $split) drop-shadow(2px 0 $split2);
+    }
+}
+
+h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+
+    @include compact {
+        font-size: 18px;
+    }
+
+    @include small {
+        font-size: 16px;
+    }
+}
+
+.sub {
+    // Место сразу под две строки, чтобы карточка не прыгала при смене подписи
+    min-height: 2.9em;
+    text-wrap: balance;
+    font-size: 13px;
+    font-weight: 600;
+    color: $muted;
+
+    &.pop {
+        animation: pop .4s $spring;
+    }
+
+    @include compact {
+        font-size: 12px;
+    }
+
+    @include small {
+        font-size: 11.5px;
+    }
+
+    @include tiny {
+        display: none;
+    }
+}
+
+// Кнопка только на отдельной странице: внутри iframe переход загрузил бы сайт в плеер
+.home {
+    display: none;
+    margin-top: 6px;
+    height: 44px;
+    padding: 0 20px;
+    border-radius: 999px;
+    background: $primary;
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 14px;
+    text-decoration: none;
+    align-items: center;
+    transition: transform .3s $spring, background .15s;
+
+    [data-state="notfound"]:not(.framed) & {
+        display: inline-flex;
+    }
+
+    &:hover {
+        background: #3AA1F5;
+    }
+
+    &:active {
+        transform: scale(.94);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $primary3;
+        outline-offset: 2px;
+    }
+
+    @include compact {
+        height: 38px;
+        padding: 0 16px;
+        font-size: 13px;
+    }
+
+    @include low {
+        margin-top: 4px;
+    }
+}
